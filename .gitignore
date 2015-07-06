@@ -35,3 +35,11 @@
 
 # Composer PHAR
 /composer.phar
+
+# PHPStorm
+.idea
+.idea/*
+
+# SASS
+.sass-cache
+.sass-cache/*
