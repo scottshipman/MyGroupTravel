@@ -1,0 +1,45 @@
+html {
+  font-family: sans-serif;
+  font-size: $p-font-size;
+  line-height: $p-line-height;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: $text_link_light;
+  text-decoration: underline;
+
+  &:hover {
+    text-decoration: none;
+  }
+
+}
+
+h1, h2, h3, h4, h5 {
+  font-weight: normal;
+}
+
+h1 {
+  @include font-sizer(24);
+  margin: 0 0 0.75em;
+}
+
+h2 {
+  @include font-sizer(20);
+  margin: 0 0 0.75em;
+}
+
+h3 {
+  @include font-sizer(18);
+  margin: 0 0 0.5em;
+}
+
+h4 {
+  @include font-sizer(16);
+  margin: 0 0 0.5em;
+}
+
+h5, h6 {
+  @include font-sizer(16);
+  margin: 0 0 0.5em;
+}

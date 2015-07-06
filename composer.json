@@ -1,0 +1,80 @@
+{
+    "name": "root/Toolkit",
+    "license": "proprietary",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "": "src/",
+            "SymfonyStandard\\": "app/SymfonyStandard/"
+        }
+    },
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=5.3.9",
+        "symfony/symfony": "2.7.*",
+        "doctrine/orm": "~2.2,>=2.2.3,<2.5",
+        "doctrine/dbal": "<2.5",
+        "doctrine/doctrine-bundle": "~1.4",
+        "doctrine/data-fixtures": "~1.0",
+        "doctrine/doctrine-cache-bundle": "~1.0",
+        "doctrine/phpcr-bundle": "1.0.*",
+        "doctrine/phpcr-odm": "1.0.*",
+        "symfony/assetic-bundle": "~2.3",
+        "symfony/swiftmailer-bundle": "~2.3",
+        "symfony/monolog-bundle": "~2.4",
+        "sensio/distribution-bundle": "~4.0",
+        "sensio/framework-extra-bundle": "~3.0,>=3.0.2",
+        "incenteev/composer-parameter-handler": "~2.0",
+        "twig/extensions": "~1.0",
+        "jackalope/jackalope-doctrine-dbal": "1.0.*",
+        "nelmio/alice": "~1.0",
+        "doctrine/doctrine-fixtures-bundle": "^2.2",
+        "friendsofsymfony/user-bundle": "~2.0@dev",
+        "knplabs/knp-menu-bundle": "~2",
+        "components/jquery": "1.11.1",
+        "symfony/filesystem": "^2.7",
+        "sonata-project/classification-bundle": "^2.2",
+        "sonata-project/easy-extends-bundle": "^2.1",
+        "sonata-project/intl-bundle": "^2.2",
+        "sonata-project/media-bundle": "^2.3"
+
+    },
+    "require-dev": {
+        "liip/functional-test-bundle": "~1.0",
+        "sensio/generator-bundle": "~2.3"
+    },
+    "scripts": {
+        "post-root-package-install": [
+            "SymfonyStandard\\Composer::hookRootPackageInstall"
+        ],
+        "post-install-cmd": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::removeSymfonyStandardFiles",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
+        ],
+        "post-update-cmd": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::removeSymfonyStandardFiles",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
+        ]
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "extra": {
+        "symfony-app-dir": "app",
+        "symfony-web-dir": "web",
+        "symfony-assets-install": "relative",
+        "incenteev-parameters": {
+            "file": "app/config/parameters.yml"
+        }
+    }
+}

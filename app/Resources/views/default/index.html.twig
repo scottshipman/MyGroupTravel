@@ -1,0 +1,14 @@
+{# do not need to extend 'base.html.twig'  because its handled via FOSUSerBundle already #}
+
+{% block body %}
+
+    <div class="main_login"></div>
+    {{ render(controller('FOSUserBundle:Security:login')) }}
+        <div class="login_reset">
+            <a href="{{ path('fos_user_resetting_request') }}">Forgot password ?</a>
+        </div>
+    </div>
+    <p>This is the default Homepage template (index.html.twig), found in app/Resources/views/default and
+        <br />and right now embeds the default FosUserBundle:Security:login controller if not authenticated.</p>
+
+{% endblock %}

@@ -1,0 +1,117 @@
+sonata_core: ~
+
+sonata_block:
+    default_contexts: [cms]
+    blocks:
+        # Enable the SonataAdminBundle block
+        sonata.admin.block.admin_list:
+            contexts:   [admin]
+        # Your other blocks
+sonata_classification:
+    # ...
+
+doctrine:
+    orm:
+        entity_managers:
+            default:
+                #metadata_cache_driver: apc
+                #query_cache_driver: apc
+                #result_cache_driver: apc
+                mappings:
+                    SonataClassificationBundle: ~
+                    ClassificationBundle: ~
+                    SonataMediaBundle: ~
+                    MediaBundle: ~
+    dbal:
+         types:
+             json: Sonata\Doctrine\Types\JsonType
+
+
+sonata_doctrine_orm_admin:
+    # default value is null, so doctrine uses the value defined in the configuration
+    entity_manager: ~
+
+    templates:
+        form:
+            - SonataDoctrineORMAdminBundle:Form:form_admin_fields.html.twig
+        filter:
+            - SonataDoctrineORMAdminBundle:Form:filter_admin_fields.html.twig
+        types:
+            list:
+                array:      SonataAdminBundle:CRUD:list_array.html.twig
+                boolean:    SonataAdminBundle:CRUD:list_boolean.html.twig
+                date:       SonataAdminBundle:CRUD:list_date.html.twig
+                time:       SonataAdminBundle:CRUD:list_time.html.twig
+                datetime:   SonataAdminBundle:CRUD:list_datetime.html.twig
+                text:       SonataAdminBundle:CRUD:base_list_field.html.twig
+                trans:      SonataAdminBundle:CRUD:list_trans.html.twig
+                string:     SonataAdminBundle:CRUD:base_list_field.html.twig
+                smallint:   SonataAdminBundle:CRUD:base_list_field.html.twig
+                bigint:     SonataAdminBundle:CRUD:base_list_field.html.twig
+                integer:    SonataAdminBundle:CRUD:base_list_field.html.twig
+                decimal:    SonataAdminBundle:CRUD:base_list_field.html.twig
+                identifier: SonataAdminBundle:CRUD:base_list_field.html.twig
+                currency:   SonataAdminBundle:CRUD:list_currency.html.twig
+                percent:    SonataAdminBundle:CRUD:list_percent.html.twig
+                choice:     SonataAdminBundle:CRUD:list_choice.html.twig
+                url:        SonataAdminBundle:CRUD:list_url.html.twig
+
+            show:
+                array:      SonataAdminBundle:CRUD:show_array.html.twig
+                boolean:    SonataAdminBundle:CRUD:show_boolean.html.twig
+                date:       SonataAdminBundle:CRUD:show_date.html.twig
+                time:       SonataAdminBundle:CRUD:show_time.html.twig
+                datetime:   SonataAdminBundle:CRUD:show_datetime.html.twig
+                text:       SonataAdminBundle:CRUD:base_show_field.html.twig
+                trans:      SonataAdminBundle:CRUD:show_trans.html.twig
+                string:     SonataAdminBundle:CRUD:base_show_field.html.twig
+                smallint:   SonataAdminBundle:CRUD:base_show_field.html.twig
+                bigint:     SonataAdminBundle:CRUD:base_show_field.html.twig
+                integer:    SonataAdminBundle:CRUD:base_show_field.html.twig
+                decimal:    SonataAdminBundle:CRUD:base_show_field.html.twig
+                currency:   SonataAdminBundle:CRUD:base_currency.html.twig
+                percent:    SonataAdminBundle:CRUD:base_percent.html.twig
+                choice:     SonataAdminBundle:CRUD:show_choice.html.twig
+                url:        SonataAdminBundle:CRUD:show_url.html.twig
+sonata_media:
+    # if you don't use default namespace configuration
+    #class:
+    #    media: MyVendor\MediaBundle\Entity\Media
+    #    gallery: MyVendor\MediaBundle\Entity\Gallery
+    #    gallery_has_media: MyVendor\MediaBundle\Entity\GalleryHasMedia
+    default_context: default
+    db_driver: doctrine_orm # or doctrine_mongodb, doctrine_phpcr it is mandatory to choose one here
+    default_context: default # you need to set a context
+    contexts:
+        default:  # the default context is mandatory
+            providers:
+                #- sonata.media.provider.dailymotion
+                - sonata.media.provider.youtube
+                - sonata.media.provider.image
+                - sonata.media.provider.file
+
+            formats:
+                small: { width: 100 , quality: 70}
+                big:   { width: 500 , quality: 70}
+
+        users: # sample context for Toolkit
+            providers:
+                - sonata.media.provider.image
+
+            formats:
+                small: { width: 150 , quality: 95} # profile circle
+                big:   { width: 500 , quality: 90} # profile page?
+
+    cdn:
+        server:
+            path: /uploads/media # http://media.sonata-project.org/
+
+    filesystem:
+        local:
+            directory:  %kernel.root_dir%/../web/uploads/media
+            create:     false
+
+twig:
+    form:
+        resources:
+            - 'SonataMediaBundle:Form:media_widgets.html.twig'

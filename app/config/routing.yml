@@ -1,0 +1,74 @@
+tui_toolkit_board_basis:
+    resource: "@BoardBasisBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+tui_toolkit_quote:
+    resource: "@TUIToolkitQuoteBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+brand:
+    resource: "@BrandBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+app:
+    resource: "@AppBundle/Controller/"
+    type:     annotation
+
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+#    prefix: "/account"
+
+#fos_user_registration_register:
+#    path: "/account/register"
+#    defaults:  { _controller: "FOSUserBundle:Registration:register" }
+#
+#fos_user_security_login:
+#    path: "/account/login"
+#    defaults: {_controller: "FOSUserBundle:Security:login" }
+
+tui_toolkit_user:
+    resource:  "@TUIToolkitUserBundle/Resources/config/routing.yml"
+    prefix:   "/user"
+
+
+# temporary routes until real ones are implemented
+# @todo REMOVE THESE WITH REAL FUNCTIONALITY LATER
+
+_manage_tour_home:
+  path: /
+_tui_toolkit_reports:
+  path: /
+_tui_toolkit_reports_modification:
+  path: /
+_tui_toolkit_reports_opportunity:
+  path: /
+_tui_toolkit_tools:
+  path: /
+_tui_toolkit_manage_company:
+  path: /
+_tui_toolkit_manage_company_recipients:
+  path: /
+_tui_toolkit_manage_company_divisions:
+  path: /
+_tui_toolkit_manage_company_boardbasis:
+  path: /
+_tui_toolkit_manage_company_transport:
+  path: /
+_tui_toolkit_manage_company_currency:
+  path: /
+_tui_toolkit_manage_company_opportunity:
+  path: /
+_tui_toolkit_manage_company_institution:
+  path: /
+
+# This is for Sonata Media Bundle
+gallery:
+    resource: '@SonataMediaBundle/Resources/config/routing/gallery.xml'
+    prefix: /media/gallery
+
+media:
+    resource: '@SonataMediaBundle/Resources/config/routing/media.xml'
+    prefix: /media

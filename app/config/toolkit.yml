@@ -1,0 +1,11 @@
+parameters:
+  responsibility:
+    #list classes here that apply
+    responsibility_class:
+     - TUI/Toolkit/QuoteBundle/Document/Quote
+    #list roles here that apply
+    responsibility_roles:
+      - 'organizer'
+      - 'assistant'
+      - 'parent'
+      - 'passenger'

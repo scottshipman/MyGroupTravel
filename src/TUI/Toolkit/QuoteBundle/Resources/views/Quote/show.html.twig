@@ -1,0 +1,108 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Quote</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ entity.status }}</td>
+            </tr>
+            <tr>
+                <th>Displaytabs</th>
+                <td>{{ entity.displayTabs }}</td>
+            </tr>
+            <tr>
+                <th>Expirydate</th>
+                <td>{{ entity.expiryDate|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Freeplaces</th>
+                <td>{{ entity.freePlaces }}</td>
+            </tr>
+            <tr>
+                <th>Locked</th>
+                <td>{{ entity.locked }}</td>
+            </tr>
+            <tr>
+                <th>Maxpax</th>
+                <td>{{ entity.maxPax }}</td>
+            </tr>
+            <tr>
+                <th>Minpax</th>
+                <td>{{ entity.minPax }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ entity.name }}</td>
+            </tr>
+            <tr>
+                <th>Payingplaces</th>
+                <td>{{ entity.payingPlaces }}</td>
+            </tr>
+            <tr>
+                <th>Departuredate</th>
+                <td>{{ entity.departureDate|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Reference</th>
+                <td>{{ entity.reference }}</td>
+            </tr>
+            <tr>
+                <th>Setupcomplete</th>
+                <td>{{ entity.setupComplete }}</td>
+            </tr>
+            <tr>
+                <th>Signupdeadline</th>
+                <td>{{ entity.signupDeadline|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Quotedays</th>
+                <td>{{ entity.quoteDays }}</td>
+            </tr>
+            <tr>
+                <th>Quotenights</th>
+                <td>{{ entity.quoteNights }}</td>
+            </tr>
+            <tr>
+                <th>Totalprice</th>
+                <td>{{ entity.totalPrice }}</td>
+            </tr>
+            <tr>
+                <th>Tripstatus</th>
+                <td>{{ entity.tripStatus }}</td>
+            </tr>
+            <tr>
+                <th>Boardbasis</th>
+                <td>{{ entity.boardBasis }}</td>
+            </tr>
+            <tr>
+                <th>Transporttype</th>
+                <td>{{ entity.transportType }}</td>
+            </tr>
+            <tr>
+                <th>Deleted</th>
+                <td>{{ entity.deleted }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('_manage_quote') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('_manage_quote_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}

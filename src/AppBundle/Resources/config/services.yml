@@ -1,0 +1,10 @@
+services:
+    security.access.responsibility_voter:
+        class:      AppBundle\Security\Authorization\Voter\ResponsibilityVoter
+        # set the arguments as an array of responsiblity strings in DESC order,
+        # so that the first string is the name of most authorized and last is least autorized
+        public:     false
+        calls:
+           - [ setContainer,[ @service_container ] ]
+        tags:
+           - { name: security.voter }

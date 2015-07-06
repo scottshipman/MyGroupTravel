@@ -1,0 +1,21 @@
+@mixin font-sizer($f) {
+  font-size: ($f / ($p-font-size/100% * 16) ) * 1em;
+}
+
+@mixin fa-standard() { // Font Awesome default styling, usually for pseudos
+  -moz-osx-font-smoothing: grayscale;
+  @include inline-block-vertical(top);
+  font-family: FontAwesome;
+  font-feature-settings: normal;
+  font-kerning: auto;
+  font-language-override: normal;
+  font-size: inherit;
+  font-size-adjust: none;
+  font-stretch: normal;
+  font-style: normal;
+  font-synthesis: weight style;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: inherit;
+  text-rendering: auto;
+}

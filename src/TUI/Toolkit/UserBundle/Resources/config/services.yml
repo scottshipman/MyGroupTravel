@@ -1,0 +1,4 @@
+services:
+#    tui_toolkit_user.example:
+#        class: TUI\Toolkit\UserBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]

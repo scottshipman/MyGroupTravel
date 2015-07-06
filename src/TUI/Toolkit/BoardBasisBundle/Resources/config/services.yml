@@ -1,0 +1,4 @@
+#services:
+#    board_basis.example:
+#        class: TUI\Toolkit\BoardBasisBundle\Example
+#        arguments: ['@service_id', plain_value, '%parameter_name%']

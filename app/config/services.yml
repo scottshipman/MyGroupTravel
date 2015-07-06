@@ -1,0 +1,23 @@
+# Learn more about services, parameters and containers at
+# http://symfony.com/doc/current/book/service_container.html
+parameters:
+#    parameter_name: value
+
+services:
+#    service_name:
+#        class: AppBundle\Directory\ClassName
+#        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
+     app.slugger:
+        class: AppBundle\Utils\Slugger
+
+     app.menu_builder:
+        class: AppBundle\Menu\MenuBuilder
+        arguments: ["@knp_menu.factory"]
+
+     # create different menu services by reproducing the following, replacing main with menu name
+     app.main_menu:
+        class: Knp\Menu\MenuItem # the service definition requires setting the class
+        factory: ["@app.menu_builder", createAdminMenu] # replace createMainMenu with method name from AppBundle/Menu/MenuBuilder.php
+        arguments: ["@request_stack"]
+        tags:
+            - { name: knp_menu.menu, alias: admin_menu } # The alias is what is used to retrieve the menu

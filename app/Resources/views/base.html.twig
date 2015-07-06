@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="UTF-8" />
+
+    <title>{% block title %}Welcome{% endblock %} | eToolkit</title>
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome.css">
+
+    {# HEY LOOK HERE:  All this crap is required for Sonata Datepicker form field types - figure out to use with assetic.
+    <script type="text/javascript" src="/bundles/sonatacore/public/vendor/moment/min/moment.min.js"></script>
+    <script type="text/javascript" src="path_to_bootstrap.min.js"></script>
+    <script type="text/javascript" src="/bundles/sonatacore/public/vendor/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+    <link rel="stylesheet" href="/bundles/sonatacore/public/vendor/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+#}
+    {% stylesheets filter="compass" "@AppBundle/Resources/assets/css/sass/main.scss" %}
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+
+</head>
+
+<body>
+
+    <div class="header-top">
+
+        {# Display admin menu only if the user is BRAND or higher ROLE #}
+        {% if is_granted("ROLE_BRAND") %}
+            <div class="admin-menu">
+                {% block admin_menu %}
+                    {{ knp_menu_render('admin_menu', {'currentClass': 'active'})  }}
+                {% endblock %}
+            </div>
+        {% endif %}
+
+        <div class="login">
+            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |
+                <a href="{{ path('fos_user_security_logout') }}">
+                    {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+                </a>
+            {% else %}
+              {#   <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a> #}
+            {% endif %}
+        </div>
+        <div class="brand_logo">
+            {{ render(controller('BrandBundle:Default:index')) }}
+        </div>
+
+    </div>
+
+    <div class="flash-messages">
+        {% for flashMessage in app.session.flashbag.get('notice') %}
+            <div class="flash-message-notice">   {{ flashMessage }}  </div>
+        {% endfor %}
+        {% for flashMessage in app.session.flashbag.get('error') %}
+            <div class="flash-message-error">   {{ flashMessage }}  </div>
+        {% endfor %}
+    </div>
+
+    <div class="content">
+        {% block body %}{% endblock %}
+    </div>
+
+    {% javascripts '@jquery' %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+</body>
+
+</html>

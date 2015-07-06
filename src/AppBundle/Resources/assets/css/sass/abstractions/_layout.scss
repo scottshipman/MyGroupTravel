@@ -1,0 +1,19 @@
+@mixin clear-fix() {
+
+  &:after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+
+}
+
+@mixin inline-block-vertical( $v: top ) {
+  display: inline-block;
+  vertical-align: $v;
+}
+
+@mixin not-selectable() {
+  -webkit-touch-callout: none;
+  @include vendor-prefix(user-select, none);
+}

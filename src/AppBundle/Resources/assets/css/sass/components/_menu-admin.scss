@@ -1,0 +1,63 @@
+.admin-menu {
+  position: relative;
+  @include font-sizer(12);
+  z-index: 999;
+  border-bottom: 1px solid #000;
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  > ul {
+    width: 80%;
+    margin: 0 auto;
+    @include clear-fix();
+  }
+
+  li {
+    float: left;
+    position: relative;
+
+    ul {
+      display: none;
+      background: $bg_grey_d;
+      border-top: 1px solid #000;
+      position: absolute;
+      top: 100%;
+      left: 0;
+
+      li {
+        float: none;
+      }
+
+    }
+
+    &:hover {
+      background: #444;
+
+      ul {
+        display: block;
+      }
+
+    }
+
+  }
+
+  a {
+    display: block;
+    color: $white;
+    padding: 0.5em 1em;
+
+    &:hover {
+      background: #444;
+    }
+
+  }
+
+  .active a {
+    color: $text_link_dark;
+  }
+
+}
