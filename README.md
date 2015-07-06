@@ -5,6 +5,7 @@ _A Symfony 2 Thing_
 
 1. The Toolkit is intended to run as a site under the Precip VM, so start by getting that:
 [clwdev/precip](https://github.com/clwdev/precip)
+
 2. Set up your config.rb file in the precip root similar to:
 ```ruby
 drupal_sites = {
@@ -17,17 +18,20 @@ drupal_sites = {
   }
 }
 ```
+
 3. Boot the VM with `vagrant up`. If it's already built, `vagrant reload --provision`.
 ```
 $ cd [your workspace]/precip
 $ vagrant up
 ```
+
 4. SSH into the VM and install Symfony
 ```
 $ vagrant ssh default
 $ cd /srv/www/Toolkit
 $ sudo composer install
 ```
+
 5. Init the app
 ```
 $ sudo php app/console doctrine:phpcr:init:dbal
@@ -36,11 +40,13 @@ $ sudo php app/console doctrine:schema:update
 $ sudo php app/console doctrine:phpcr:fixtures:load
 $ sudo php app/console doctrine:fixtures:load
 ```
+
 6. Load the assets and clear cache
 ```
 $ sudo php app/console assetic:dump --env=prod --no-debug
 $ sudo app/console cache:clear --env=prod --no-debug
 ```
+
 7. You can also run the Symfony shell and run commands in that shell
 ```
 $ sudo php app/console --shell
