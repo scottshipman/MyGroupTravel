@@ -1,0 +1,30 @@
+user:
+    path:     /
+    defaults: { _controller: "TUIToolkitUserBundle:User:index" }
+
+user_show:
+    path:     /{id}/show
+    defaults: { _controller: "TUIToolkitUserBundle:User:show" }
+
+user_new:
+    path:     /new
+    defaults: { _controller: "TUIToolkitUserBundle:User:new" }
+
+user_create:
+    path:     /create
+    defaults: { _controller: "TUIToolkitUserBundle:User:create" }
+    methods:  POST
+
+user_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "TUIToolkitUserBundle:User:edit" }
+
+user_update:
+    path:     /{id}/update
+    defaults: { _controller: "TUIToolkitUserBundle:User:update" }
+    methods:  [POST, PUT]
+
+user_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "TUIToolkitUserBundle:User:delete" }
+    methods:  [POST, DELETE]

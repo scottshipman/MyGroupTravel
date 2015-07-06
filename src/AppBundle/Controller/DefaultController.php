@@ -27,11 +27,11 @@ class DefaultController extends Controller
             'ROLE_BRAND'
           )) {
           // user is Brand or higher, redirect to Brand default Dashboard
-          return $this->redirect($this->generateUrl('_tui_toolkit_user_homepage', array('id'=>$userId)));
+          return $this->redirect($this->generateUrl('user_show', array('id'=>$userId)));
 
         } else {
           // user is Customer (organizer, assistant, parent, passenger etc), redirect to Customer Dashboard
-          return $this->redirect($this->generateUrl('_tui_toolkit_user_homepage', array('id'=>$userId)));
+          return $this->redirect($this->generateUrl('user_show', array('id'=>$userId)));
         }
       }
 

@@ -19,19 +19,14 @@ app:
 
 fos_user:
     resource: "@FOSUserBundle/Resources/config/routing/all.xml"
-#    prefix: "/account"
 
-#fos_user_registration_register:
-#    path: "/account/register"
-#    defaults:  { _controller: "FOSUserBundle:Registration:register" }
-#
-#fos_user_security_login:
-#    path: "/account/login"
-#    defaults: {_controller: "FOSUserBundle:Security:login" }
+tui_toolkit_user_user:
+    resource: "@TUIToolkitUserBundle/Resources/config/routing/user.yml"
+    prefix:   /user
 
-tui_toolkit_user:
-    resource:  "@TUIToolkitUserBundle/Resources/config/routing.yml"
-    prefix:   "/user"
+#tui_toolkit_user:
+#    resource:  "@TUIToolkitUserBundle/Resources/config/routing.yml"
+#    prefix:   "/user"
 
 
 # temporary routes until real ones are implemented
@@ -49,17 +44,11 @@ _tui_toolkit_tools:
   path: /
 _tui_toolkit_manage_company:
   path: /
-_tui_toolkit_manage_company_recipients:
-  path: /
 _tui_toolkit_manage_company_divisions:
-  path: /
-_tui_toolkit_manage_company_boardbasis:
   path: /
 _tui_toolkit_manage_company_transport:
   path: /
 _tui_toolkit_manage_company_currency:
-  path: /
-_tui_toolkit_manage_company_opportunity:
   path: /
 _tui_toolkit_manage_company_institution:
   path: /

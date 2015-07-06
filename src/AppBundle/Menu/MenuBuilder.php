@@ -28,7 +28,7 @@ class MenuBuilder
     $menu->addChild('Home', array('route' => '_homepage'));
     $menu->addChild('Quotes', array('route' => '_manage_quote'));
     $menu->addChild('Tours', array('route' => '_manage_tour_home'));
-    $menu->addChild('Users', array('route' => '_tui_toolkit_user_list'));
+    $menu->addChild('Users', array('route' => 'user'));
 
     $menu->addChild('Reports', array('route' => '_tui_toolkit_reports'))
           ->setAttribute('dropdown', true);

@@ -1,15 +1,17 @@
-_tui_toolkit_user_homepage:
-    path:     /view/{id}
-    defaults: { _controller: TUIToolkitUserBundle:Default:index }
 
-_tui_toolkit_user_list:
-    path:     /list
-    defaults: { _controller: TUIToolkitUserBundle:Default:list }
 
-_tui_toolkit_user_edit:
-    path:     /edit/{id}
-    defaults: { _controller: TUIToolkitUserBundle:Default:edit }
-
-_tui_toolkit_user_disable:
-    path:     /disable/{id}
-    defaults: { _controller: TUIToolkitUserBundle:Default:disable }
+#_tui_toolkit_user_homepage:
+#    path:     /view/{id}
+#    defaults: { _controller: TUIToolkitUserBundle:Default:index }
+#
+#_tui_toolkit_user_list:
+#    path:     /list
+#    defaults: { _controller: TUIToolkitUserBundle:Default:list }
+#
+#_tui_toolkit_user_edit:
+#    path:     /edit/{id}
+#    defaults: { _controller: TUIToolkitUserBundle:Default:edit }
+#
+#_tui_toolkit_user_disable:
+#    path:     /disable/{id}
+#    defaults: { _controller: TUIToolkitUserBundle:Default:disable }
