@@ -20,6 +20,10 @@
     float: left;
     position: relative;
 
+    &.active {
+      background: #444;
+    }
+
     ul {
       display: none;
       background: $bg_grey_d;
