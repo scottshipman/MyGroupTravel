@@ -1,23 +1,35 @@
 {% extends '::base.html.twig' %}
 
 {% block body -%}
-    <h1>User list</h1>
+    <h1>User List</h1>
 
     <table class="records_list">
         <thead>
             <tr>
-                <th>Id</th>
+                <th>ID</th>
+                <th>Roles</th>
                 <th>Responsibility</th>
-                <th>Userparent</th>
+                <th>User Parent</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for entity in entities %}
             <tr>
-                <td><a href="{{ path('user_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{% for role in entity.roles %}{{ role |e }}; {% endfor %}</td>
-                <td>{% for responsibility in entity.responsibility %}{{ responsibility |e }}{% endfor %}</td>
+                <td><a href="{{ path('user_show', { 'id': entity.id }) }}">{{ entity.username }}</a> ({{ entity.id }})</td>
+                <td>
+                  <ul>
+                  {% for role in entity.roles %}
+                    <li>{{ role |e }}</li>
+                  {% endfor %}
+                  </ul>
+                </td>
+                <td>
+                  <ul>
+                  {% for responsibility in entity.responsibility %}
+                    <li>{{ responsibility |e }}</li>
+                  {% endfor %}
+                </td>
                 <td>{{ entity.userParent }}</td>
                 <td>
                 <ul>
