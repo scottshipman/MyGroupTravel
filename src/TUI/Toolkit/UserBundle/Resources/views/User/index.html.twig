@@ -16,7 +16,7 @@
         <tbody>
         {% for entity in entities %}
             <tr>
-                <td><a href="{{ path('user_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td><a href="{{ path('user_show', { 'id': entity.id }) }}">{{ entity.username }}</a> ({{ entity.id }})</td>
                 <td>
                   <ul>
                   {% for role in entity.roles %}
