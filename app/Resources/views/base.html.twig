@@ -24,7 +24,11 @@
 
 </head>
 
-<body>
+{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+  <body class="user-{{app.user.id}}">
+{% else %}
+  <body class="user-0">
+{% endif %}
 
     <div class="header-top">
 
