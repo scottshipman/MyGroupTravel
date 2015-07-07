@@ -1,0 +1,66 @@
+{% extends '::base.html.twig' %}
+{% block title %}Manage Institution{% endblock %}
+
+{% block body -%}
+    <h1>Institution list</h1>
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Address1</th>
+                <th>Address2</th>
+                <th>City</th>
+                <th>County</th>
+                <th>State</th>
+                <th>Postcode</th>
+                <th>Localauthority</th>
+                <th>Country</th>
+                <th>Code</th>
+                <th>Type</th>
+                <th>Websiteaddress</th>
+                <th>Logo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('manage_institution_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.name }}</td>
+                <td>{{ entity.address1 }}</td>
+                <td>{{ entity.address2 }}</td>
+                <td>{{ entity.city }}</td>
+                <td>{{ entity.county }}</td>
+                <td>{{ entity.state }}</td>
+                <td>{{ entity.postCode }}</td>
+                <td>{{ entity.localAuthority }}</td>
+                <td>{{ entity.country }}</td>
+                <td>{{ entity.code }}</td>
+                <td>{{ entity.type }}</td>
+                <td>{{ entity.websiteAddress }}</td>
+                <td>{{ entity.logo }}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('manage_institution_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('manage_institution_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+        <ul>
+        <li>
+            <a href="{{ path('manage_institution_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+    {% endblock %}

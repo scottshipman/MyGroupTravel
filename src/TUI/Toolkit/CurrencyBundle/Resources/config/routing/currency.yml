@@ -1,0 +1,30 @@
+manage_currency:
+    path:     /
+    defaults: { _controller: "CurrencyBundle:Currency:index" }
+
+manage_currency_show:
+    path:     /{id}/show
+    defaults: { _controller: "CurrencyBundle:Currency:show" }
+
+manage_currency_new:
+    path:     /new
+    defaults: { _controller: "CurrencyBundle:Currency:new" }
+
+manage_currency_create:
+    path:     /create
+    defaults: { _controller: "CurrencyBundle:Currency:create" }
+    methods:  POST
+
+manage_currency_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "CurrencyBundle:Currency:edit" }
+
+manage_currency_update:
+    path:     /{id}/update
+    defaults: { _controller: "CurrencyBundle:Currency:update" }
+    methods:  [POST, PUT]
+
+manage_currency_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "CurrencyBundle:Currency:delete" }
+    methods:  [POST, DELETE]

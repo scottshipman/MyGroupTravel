@@ -1,0 +1,11 @@
+content_blocks_manage_layouttype:
+    resource: "@ContentBlocksBundle/Resources/config/routing/layouttype.yml"
+    prefix:   /manage/layouttype
+
+content_blocks_manage_contentblocks:
+    resource: "@ContentBlocksBundle/Resources/config/routing/contentblock.yml"
+    prefix:   /manage/contentblocks
+
+content_blocks_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: ContentBlocksBundle:Default:index }

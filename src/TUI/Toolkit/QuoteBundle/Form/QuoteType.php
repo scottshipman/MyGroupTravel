@@ -15,26 +15,15 @@ class QuoteType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('status')
-            ->add('displayTabs')
-            ->add('expiryDate')
-            ->add('freePlaces')
-            ->add('locked')
-            ->add('maxPax')
-            ->add('minPax')
             ->add('name')
-            ->add('payingPlaces')
-            ->add('departureDate')
             ->add('reference')
-            ->add('setupComplete')
-            ->add('signupDeadline')
-            ->add('quoteDays')
-            ->add('quoteNights')
-            ->add('totalPrice')
-            ->add('tripStatus')
-            ->add('boardBasis')
-            ->add('transportType')
+            ->add('organizer')
+            ->add('converted')
             ->add('deleted')
+            ->add('setupComplete')
+            ->add('locked')
+            ->add('salesAgent')
+            ->add('isTemplate')
         ;
     }
     

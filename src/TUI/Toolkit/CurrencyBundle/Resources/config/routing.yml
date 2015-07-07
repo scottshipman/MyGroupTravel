@@ -1,0 +1,7 @@
+currency_manage_currency:
+    resource: "@CurrencyBundle/Resources/config/routing/currency.yml"
+    prefix:   /manage/currency
+
+currency_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: CurrencyBundle:Default:index }

@@ -1,0 +1,30 @@
+manage_transport:
+    path:     /
+    defaults: { _controller: "TransportBundle:Transport:index" }
+
+manage_transport_show:
+    path:     /{id}/show
+    defaults: { _controller: "TransportBundle:Transport:show" }
+
+manage_transport_new:
+    path:     /new
+    defaults: { _controller: "TransportBundle:Transport:new" }
+
+manage_transport_create:
+    path:     /create
+    defaults: { _controller: "TransportBundle:Transport:create" }
+    methods:  POST
+
+manage_transport_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "TransportBundle:Transport:edit" }
+
+manage_transport_update:
+    path:     /{id}/update
+    defaults: { _controller: "TransportBundle:Transport:update" }
+    methods:  [POST, PUT]
+
+manage_transport_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "TransportBundle:Transport:delete" }
+    methods:  [POST, DELETE]

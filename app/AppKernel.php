@@ -16,17 +16,23 @@ class AppKernel extends Kernel
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-            new AppBundle\AppBundle(),
-
-            // In addition to Standard Edition bundles...
-            //new Doctrine\Bundle\PHPCRBundle\DoctrinePHPCRBundle(),
+            new FOS\UserBundle\FOSUserBundle(),
             new Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle(),
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
-            new TUI\Toolkit\QuoteBundle\TUIToolkitQuoteBundle(),
-            new FOS\UserBundle\FOSUserBundle(),
+
+
+            // In Toolkit Project ( in /src directory) bundles...
+
+            new AppBundle\AppBundle(),
+            new TUI\Toolkit\QuoteBundle\QuoteBundle(),
             new TUI\Toolkit\UserBundle\TUIToolkitUserBundle(),
             new TUI\Toolkit\BrandBundle\BrandBundle(),
             new TUI\Toolkit\BoardBasisBundle\BoardBasisBundle(),
+            new TUI\Toolkit\TransportBundle\TransportBundle(),
+            new TUI\Toolkit\TripStatusBundle\TripStatusBundle(),
+            new TUI\Toolkit\ContentBlocksBundle\ContentBlocksBundle(),
+            new TUI\Toolkit\InstitutionBundle\InstitutionBundle(),
+            new TUI\Toolkit\CurrencyBundle\CurrencyBundle(),
 
             // All of this just to use Sonata Media Bundle (but some good stuff in there, like date picker)
             new Sonata\EasyExtendsBundle\SonataEasyExtendsBundle(),

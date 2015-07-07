@@ -1,0 +1,16 @@
+{% extends '::base.html.twig' %}
+{% block title %}Create Trip Status{% endblock %}
+
+{% block body -%}
+    <h1>TripStatus creation</h1>
+
+    {{ form(form) }}
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('manage_tripstatus') }}">
+            Back to the list
+        </a>
+    </li>
+</ul>
+{% endblock %}

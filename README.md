@@ -34,17 +34,14 @@ $ sudo composer install
 
 5. Init the app
 ```
-$ sudo php app/console doctrine:phpcr:init:dbal
-$ sudo php app/console doctrine:phpcr:repository:init
-$ sudo php app/console doctrine:schema:update
-$ sudo php app/console doctrine:phpcr:fixtures:load
+$ sudo php app/console doctrine:schema:create  #subsequent use is doctrine:schema:update
 $ sudo php app/console doctrine:fixtures:load
 ```
 
 6. Load the assets and clear cache
 ```
-$ sudo php app/console assetic:dump --env=prod --no-debug
-$ sudo app/console cache:clear --env=prod --no-debug
+$ sudo php app/console assetic:dump    # option are --env=prod --no-debug
+$ sudo app/console cache:clear    # possible options are --env=prod --no-debug
 ```
 
 7. You can also run the Symfony shell and run commands in that shell

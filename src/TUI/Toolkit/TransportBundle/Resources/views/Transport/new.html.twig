@@ -1,0 +1,16 @@
+{% extends '::base.html.twig' %}
+{% block title %}Create Transportation Type{% endblock %}
+
+{% block body -%}
+    <h1>Transport creation</h1>
+
+    {{ form(form) }}
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('manage_transport') }}">
+            Back to the list
+        </a>
+    </li>
+</ul>
+{% endblock %}

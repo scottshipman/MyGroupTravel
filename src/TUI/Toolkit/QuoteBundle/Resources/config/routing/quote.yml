@@ -1,0 +1,30 @@
+manage_quote:
+    path:     /
+    defaults: { _controller: "QuoteBundle:Quote:index" }
+
+manage_quote_show:
+    path:     /{id}/show
+    defaults: { _controller: "QuoteBundle:Quote:show" }
+
+manage_quote_new:
+    path:     /new
+    defaults: { _controller: "QuoteBundle:Quote:new" }
+
+manage_quote_create:
+    path:     /create
+    defaults: { _controller: "QuoteBundle:Quote:create" }
+    methods:  POST
+
+manage_quote_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "QuoteBundle:Quote:edit" }
+
+manage_quote_update:
+    path:     /{id}/update
+    defaults: { _controller: "QuoteBundle:Quote:update" }
+    methods:  [POST, PUT]
+
+manage_quote_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "QuoteBundle:Quote:delete" }
+    methods:  [POST, DELETE]

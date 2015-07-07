@@ -1,0 +1,30 @@
+manage_contentblocks:
+    path:     /
+    defaults: { _controller: "ContentBlocksBundle:ContentBlock:index" }
+
+manage_contentblocks_show:
+    path:     /{id}/show
+    defaults: { _controller: "ContentBlocksBundle:ContentBlock:show" }
+
+manage_contentblocks_new:
+    path:     /new
+    defaults: { _controller: "ContentBlocksBundle:ContentBlock:new" }
+
+manage_contentblocks_create:
+    path:     /create
+    defaults: { _controller: "ContentBlocksBundle:ContentBlock:create" }
+    methods:  POST
+
+manage_contentblocks_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ContentBlocksBundle:ContentBlock:edit" }
+
+manage_contentblocks_update:
+    path:     /{id}/update
+    defaults: { _controller: "ContentBlocksBundle:ContentBlock:update" }
+    methods:  [POST, PUT]
+
+manage_contentblocks_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ContentBlocksBundle:ContentBlock:delete" }
+    methods:  [POST, DELETE]

@@ -4,16 +4,13 @@ namespace TUI\Toolkit\QuoteBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
 use TUI\Toolkit\QuoteBundle\Entity\Quote;
 use TUI\Toolkit\QuoteBundle\Form\QuoteType;
 
 /**
  * Quote controller.
  *
- * @Route("/manage/quote")
  */
 class QuoteController extends Controller
 {
@@ -21,26 +18,20 @@ class QuoteController extends Controller
     /**
      * Lists all Quote entities.
      *
-     * @Route("/", name="_manage_quote")
-     * @Method("GET")
-     * @Template()
      */
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('TUIToolkitQuoteBundle:Quote')->findAll();
+        $entities = $em->getRepository('QuoteBundle:Quote')->findAll();
 
-        return array(
+        return $this->render('QuoteBundle:Quote:index.html.twig', array(
             'entities' => $entities,
-        );
+        ));
     }
     /**
      * Creates a new Quote entity.
      *
-     * @Route("/", name="_manage_quote_create")
-     * @Method("POST")
-     * @Template("TUIToolkitQuoteBundle:Quote:new.html.twig")
      */
     public function createAction(Request $request)
     {
@@ -53,13 +44,13 @@ class QuoteController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('_manage_quote_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('manage_quote_show', array('id' => $entity->getId())));
         }
 
-        return array(
+        return $this->render('QuoteBundle:Quote:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
-        );
+        ));
     }
 
     /**
@@ -72,7 +63,7 @@ class QuoteController extends Controller
     private function createCreateForm(Quote $entity)
     {
         $form = $this->createForm(new QuoteType(), $entity, array(
-            'action' => $this->generateUrl('_manage_quote_create'),
+            'action' => $this->generateUrl('manage_quote_create'),
             'method' => 'POST',
         ));
 
@@ -84,33 +75,27 @@ class QuoteController extends Controller
     /**
      * Displays a form to create a new Quote entity.
      *
-     * @Route("/new", name="_manage_quote_new")
-     * @Method("GET")
-     * @Template()
      */
     public function newAction()
     {
         $entity = new Quote();
         $form   = $this->createCreateForm($entity);
 
-        return array(
+        return $this->render('QuoteBundle:Quote:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
-        );
+        ));
     }
 
     /**
      * Finds and displays a Quote entity.
      *
-     * @Route("/{id}", name="_manage_quote_show")
-     * @Method("GET")
-     * @Template()
      */
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('TUIToolkitQuoteBundle:Quote')->find($id);
+        $entity = $em->getRepository('QuoteBundle:Quote')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Quote entity.');
@@ -118,24 +103,21 @@ class QuoteController extends Controller
 
         $deleteForm = $this->createDeleteForm($id);
 
-        return array(
+        return $this->render('QuoteBundle:Quote:show.html.twig', array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
-        );
+        ));
     }
 
     /**
      * Displays a form to edit an existing Quote entity.
      *
-     * @Route("/{id}/edit", name="_manage_quote_edit")
-     * @Method("GET")
-     * @Template()
      */
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('TUIToolkitQuoteBundle:Quote')->find($id);
+        $entity = $em->getRepository('QuoteBundle:Quote')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Quote entity.');
@@ -144,11 +126,11 @@ class QuoteController extends Controller
         $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        return array(
+        return $this->render('QuoteBundle:Quote:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-        );
+        ));
     }
 
     /**
@@ -161,7 +143,7 @@ class QuoteController extends Controller
     private function createEditForm(Quote $entity)
     {
         $form = $this->createForm(new QuoteType(), $entity, array(
-            'action' => $this->generateUrl('_manage_quote_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('manage_quote_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
 
@@ -172,15 +154,12 @@ class QuoteController extends Controller
     /**
      * Edits an existing Quote entity.
      *
-     * @Route("/{id}", name="_manage_quote_update")
-     * @Method("PUT")
-     * @Template("TUIToolkitQuoteBundle:Quote:edit.html.twig")
      */
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('TUIToolkitQuoteBundle:Quote')->find($id);
+        $entity = $em->getRepository('QuoteBundle:Quote')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Quote entity.');
@@ -193,20 +172,18 @@ class QuoteController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('_manage_quote_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('manage_quote_edit', array('id' => $id)));
         }
 
-        return array(
+        return $this->render('QuoteBundle:Quote:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-        );
+        ));
     }
     /**
      * Deletes a Quote entity.
      *
-     * @Route("/{id}", name="_manage_quote_delete")
-     * @Method("DELETE")
      */
     public function deleteAction(Request $request, $id)
     {
@@ -215,7 +192,7 @@ class QuoteController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('TUIToolkitQuoteBundle:Quote')->find($id);
+            $entity = $em->getRepository('QuoteBundle:Quote')->find($id);
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Quote entity.');
@@ -225,7 +202,7 @@ class QuoteController extends Controller
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('_manage_quote'));
+        return $this->redirect($this->generateUrl('manage_quote'));
     }
 
     /**
@@ -238,7 +215,7 @@ class QuoteController extends Controller
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('_manage_quote_delete', array('id' => $id)))
+            ->setAction($this->generateUrl('manage_quote_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()

@@ -1,0 +1,7 @@
+institution_manage_institution:
+    resource: "@InstitutionBundle/Resources/config/routing/institution.yml"
+    prefix:   /manage/institution
+
+institution_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: InstitutionBundle:Default:index }

@@ -1,0 +1,7 @@
+quote_manage_quote:
+    resource: "@QuoteBundle/Resources/config/routing/quote.yml"
+    prefix:   /manage/quote
+
+quote_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: QuoteBundle:Default:index }

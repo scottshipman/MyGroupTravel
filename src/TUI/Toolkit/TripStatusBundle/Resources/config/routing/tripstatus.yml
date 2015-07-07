@@ -1,0 +1,30 @@
+manage_tripstatus:
+    path:     /
+    defaults: { _controller: "TripStatusBundle:TripStatus:index" }
+
+manage_tripstatus_show:
+    path:     /{id}/show
+    defaults: { _controller: "TripStatusBundle:TripStatus:show" }
+
+manage_tripstatus_new:
+    path:     /new
+    defaults: { _controller: "TripStatusBundle:TripStatus:new" }
+
+manage_tripstatus_create:
+    path:     /create
+    defaults: { _controller: "TripStatusBundle:TripStatus:create" }
+    methods:  POST
+
+manage_tripstatus_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "TripStatusBundle:TripStatus:edit" }
+
+manage_tripstatus_update:
+    path:     /{id}/update
+    defaults: { _controller: "TripStatusBundle:TripStatus:update" }
+    methods:  [POST, PUT]
+
+manage_tripstatus_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "TripStatusBundle:TripStatus:delete" }
+    methods:  [POST, DELETE]

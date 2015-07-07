@@ -1,0 +1,46 @@
+{% extends '::base.html.twig' %}
+{% block title %}Manage Currency{% endblock %}
+
+{% block body -%}
+    <h1>Currency list</h1>
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Code</th>
+                <th>Htmlsymbol</th>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('manage_currency_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.code }}</td>
+                <td>{{ entity.htmlSymbol }}</td>
+                <td>{{ entity.name }}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('manage_currency_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('manage_currency_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+        <ul>
+        <li>
+            <a href="{{ path('manage_currency_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+    {% endblock %}

@@ -1,11 +1,18 @@
+content_blocks:
+    resource: "@ContentBlocksBundle/Resources/config/routing.yml"
+    prefix:   /
+
+trip_status:
+    resource: "@TripStatusBundle/Resources/config/routing.yml"
+    prefix:   /
+
 tui_toolkit_board_basis:
     resource: "@BoardBasisBundle/Controller/"
     type:     annotation
     prefix:   /
 
 tui_toolkit_quote:
-    resource: "@TUIToolkitQuoteBundle/Controller/"
-    type:     annotation
+    resource: "@QuoteBundle/Resources/config/routing.yml"
     prefix:   /
 
 brand:
@@ -24,34 +31,38 @@ tui_toolkit_user_user:
     resource: "@TUIToolkitUserBundle/Resources/config/routing/user.yml"
     prefix:   /user
 
-#tui_toolkit_user:
-#    resource:  "@TUIToolkitUserBundle/Resources/config/routing.yml"
-#    prefix:   "/user"
+tui_toolkit_transport:
+    resource: "@TransportBundle/Resources/config/routing.yml"
+    prefix:   /
 
+tui_toolkit_tripstatus:
+    resource: "@TripStatusBundle/Resources/config/routing.yml"
+    prefix:   /
+
+tui_toolkit_contentblocks:
+    resource: "@ContentBlocksBundle/Resources/config/routing.yml"
+    prefix:   /
+
+tui_toolkit_institution:
+    resource: "@InstitutionBundle/Resources/config/routing.yml"
+    prefix:   /
+
+tui_toolkit_currency:
+    resource: "@CurrencyBundle/Resources/config/routing.yml"
+    prefix:   /
 
 # temporary routes until real ones are implemented
 # @todo REMOVE THESE WITH REAL FUNCTIONALITY LATER
 
 _manage_tour_home:
   path: /
-_tui_toolkit_reports:
-  path: /
 _tui_toolkit_reports_modification:
   path: /
 _tui_toolkit_reports_opportunity:
   path: /
-_tui_toolkit_tools:
-  path: /
-_tui_toolkit_manage_company:
-  path: /
-_tui_toolkit_manage_company_divisions:
-  path: /
-_tui_toolkit_manage_company_transport:
-  path: /
 _tui_toolkit_manage_company_currency:
   path: /
-_tui_toolkit_manage_company_institution:
-  path: /
+
 
 # This is for Sonata Media Bundle
 gallery:

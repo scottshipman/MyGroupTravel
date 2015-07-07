@@ -1,0 +1,4 @@
+services:
+#    currency.example:
+#        class: TUI\Toolkit\CurrencyBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]

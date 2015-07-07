@@ -1,0 +1,30 @@
+manage_institution:
+    path:     /
+    defaults: { _controller: "InstitutionBundle:Institution:index" }
+
+manage_institution_show:
+    path:     /{id}/show
+    defaults: { _controller: "InstitutionBundle:Institution:show" }
+
+manage_institution_new:
+    path:     /new
+    defaults: { _controller: "InstitutionBundle:Institution:new" }
+
+manage_institution_create:
+    path:     /create
+    defaults: { _controller: "InstitutionBundle:Institution:create" }
+    methods:  POST
+
+manage_institution_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "InstitutionBundle:Institution:edit" }
+
+manage_institution_update:
+    path:     /{id}/update
+    defaults: { _controller: "InstitutionBundle:Institution:update" }
+    methods:  [POST, PUT]
+
+manage_institution_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "InstitutionBundle:Institution:delete" }
+    methods:  [POST, DELETE]

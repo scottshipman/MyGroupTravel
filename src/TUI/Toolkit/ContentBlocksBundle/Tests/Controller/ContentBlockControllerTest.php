@@ -1,10 +1,10 @@
 <?php
 
-namespace TUI\Toolkit\QuoteBundle\Tests\Controller;
+namespace TUI\Toolkit\ContentBlocksBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class BoardBasisControllerTest extends WebTestCase
+class ContentBlockControllerTest extends WebTestCase
 {
     /*
     public function testCompleteScenario()
@@ -13,13 +13,13 @@ class BoardBasisControllerTest extends WebTestCase
         $client = static::createClient();
 
         // Create a new entry in the database
-        $crawler = $client->request('GET', '/manage/boardbasis/');
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "Unexpected HTTP status code for GET /manage/boardbasis/");
+        $crawler = $client->request('GET', '/manage/contentblocks/');
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "Unexpected HTTP status code for GET /manage/contentblocks/");
         $crawler = $client->click($crawler->selectLink('Create a new entry')->link());
 
         // Fill in the form and submit it
         $form = $crawler->selectButton('Create')->form(array(
-            'tui_toolkit_quotebundle_boardbasis[field_name]'  => 'Test',
+            'tui_toolkit_contentblocksbundle_contentblock[field_name]'  => 'Test',
             // ... other fields to fill
         ));
 
@@ -33,7 +33,7 @@ class BoardBasisControllerTest extends WebTestCase
         $crawler = $client->click($crawler->selectLink('Edit')->link());
 
         $form = $crawler->selectButton('Update')->form(array(
-            'tui_toolkit_quotebundle_boardbasis[field_name]'  => 'Foo',
+            'tui_toolkit_contentblocksbundle_contentblock[field_name]'  => 'Foo',
             // ... other fields to fill
         ));
 

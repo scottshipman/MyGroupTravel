@@ -1,0 +1,16 @@
+{% extends '::base.html.twig' %}
+{% block title %}Create Institution{% endblock %}
+
+{% block body -%}
+    <h1>Institution creation</h1>
+
+    {{ form(form) }}
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('manage_institution') }}">
+            Back to the list
+        </a>
+    </li>
+</ul>
+{% endblock %}

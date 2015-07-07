@@ -1,5 +1,5 @@
 {% extends '::base.html.twig' %}
-
+{% block title %}Manage Quotes{% endblock %}
 {% block body -%}
     <h1>Quote list</h1>
 
@@ -7,26 +7,15 @@
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Status</th>
-                <th>Displaytabs</th>
-                <th>Expirydate</th>
-                <th>Freeplaces</th>
-                <th>Locked</th>
-                <th>Maxpax</th>
-                <th>Minpax</th>
                 <th>Name</th>
-                <th>Payingplaces</th>
-                <th>Departuredate</th>
                 <th>Reference</th>
-                <th>Setupcomplete</th>
-                <th>Signupdeadline</th>
-                <th>Quotedays</th>
-                <th>Quotenights</th>
-                <th>Totalprice</th>
-                <th>Tripstatus</th>
-                <th>Boardbasis</th>
-                <th>Transporttype</th>
+                <th>Organizer</th>
+                <th>Converted</th>
                 <th>Deleted</th>
+                <th>Setupcomplete</th>
+                <th>Locked</th>
+                <th>Salesagent</th>
+                <th>Istemplate</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -34,33 +23,22 @@
         {% for entity in entities %}
             <tr>
                 <td><a href="{{ path('manage_quote_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.status }}</td>
-                <td>{{ entity.displayTabs }}</td>
-                <td>{% if entity.expiryDate %}{{ entity.expiryDate|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{{ entity.freePlaces }}</td>
-                <td>{{ entity.locked }}</td>
-                <td>{{ entity.maxPax }}</td>
-                <td>{{ entity.minPax }}</td>
                 <td>{{ entity.name }}</td>
-                <td>{{ entity.payingPlaces }}</td>
-                <td>{% if entity.departureDate %}{{ entity.departureDate|date('Y-m-d H:i:s') }}{% endif %}</td>
                 <td>{{ entity.reference }}</td>
-                <td>{{ entity.setupComplete }}</td>
-                <td>{% if entity.signupDeadline %}{{ entity.signupDeadline|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{{ entity.quoteDays }}</td>
-                <td>{{ entity.quoteNights }}</td>
-                <td>{{ entity.totalPrice }}</td>
-                <td>{{ entity.tripStatus }}</td>
-                <td>{{ entity.boardBasis }}</td>
-                <td>{{ entity.transportType }}</td>
+                <td>{{ entity.organizer }}</td>
+                <td>{{ entity.converted }}</td>
                 <td>{{ entity.deleted }}</td>
+                <td>{{ entity.setupComplete }}</td>
+                <td>{{ entity.locked }}</td>
+                <td>{{ entity.salesAgent }}</td>
+                <td>{{ entity.isTemplate }}</td>
                 <td>
                 <ul>
                     <li>
-                        <a href="{{ path('_manage_quote_show', { 'id': entity.id }) }}">show</a>
+                        <a href="{{ path('manage_quote_show', { 'id': entity.id }) }}">show</a>
                     </li>
                     <li>
-                        <a href="{{ path('_manage_quote_edit', { 'id': entity.id }) }}">edit</a>
+                        <a href="{{ path('manage_quote_edit', { 'id': entity.id }) }}">edit</a>
                     </li>
                 </ul>
                 </td>
@@ -71,7 +49,7 @@
 
         <ul>
         <li>
-            <a href="{{ path('_manage_quote_new') }}">
+            <a href="{{ path('manage_quote_new') }}">
                 Create a new entry
             </a>
         </li>
