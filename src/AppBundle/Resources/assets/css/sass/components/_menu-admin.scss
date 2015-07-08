@@ -11,7 +11,7 @@
   }
 
   > ul {
-    width: 80%;
+    width: $page_width;
     margin: 0 auto;
     @include clear-fix();
   }

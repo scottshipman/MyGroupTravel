@@ -9,7 +9,7 @@
   .login {
     text-align: right;
     @include font-sizer(12);
-    width: 80%;
+    width: $page_width;
     margin: 0 auto;
     padding: 0.5em 0;
     @include clear-fix();
@@ -20,4 +20,9 @@
 
   }
 
+}
+
+.brand_logo {
+  width: $page_width;
+  margin: 0 auto;
 }

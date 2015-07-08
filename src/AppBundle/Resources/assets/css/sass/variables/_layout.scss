@@ -1,0 +1,8 @@
+// Tablet initial page widths
+$fluid_width : 100%;
+
+// Desktop initial page widths and calculations
+$page_width : 80%;
+$page_width_reset : (100% / $page_width) * 100%; // 125%
+$page_gutter: (100% - $page_width) / 2; // 10%
+$page_gutter_reset: ($page_width_reset - 100%) / 2; // 12.5%

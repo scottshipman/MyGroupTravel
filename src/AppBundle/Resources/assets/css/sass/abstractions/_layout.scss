@@ -8,6 +8,16 @@
 
 }
 
+/* @mixin full-width-element() {
+  width: $fluid_width;
+
+  @include breakpoint($desktop) {
+    width: $page_width_reset;
+    margin-left: -$page_gutter_reset;
+  }
+
+} */
+
 @mixin inline-block-vertical( $v: top ) {
   display: inline-block;
   vertical-align: $v;
