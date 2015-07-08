@@ -1,0 +1,15 @@
+{% extends '::base.html.twig' %}
+{% block title %}Create Quote Version{% endblock %}
+{% block body -%}
+    <h1>QuoteVersion creation</h1>
+
+    {{ form(form) }}
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('manage_quoteversion') }}">
+            Back to the list
+        </a>
+    </li>
+</ul>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends '::base.html.twig' %}
+{% block title %}Manage Quote Version{% endblock %}
+{% block body -%}
+    <h1>QuoteVersion list</h1>
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Boardbasis</th>
+                <th>Content</th>
+                <th>Expirydate</th>
+                <th>Freeplaces</th>
+                <th>Maxpax</th>
+                <th>Minpax</th>
+                <th>Payingplaces</th>
+                <th>Departuredate</th>
+                <th>Parent</th>
+                <th>Signupdeadline</th>
+                <th>Quotedays</th>
+                <th>Quotenights</th>
+                <th>Totalprice</th>
+                <th>Tripstatus</th>
+                <th>Transporttype</th>
+                <th>Welcomemsg</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('manage_quoteversion_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.boardBasis }}</td>
+                <td>{{ entity.content }}</td>
+                <td>{% if entity.expiryDate %}{{ entity.expiryDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ entity.freePlaces }}</td>
+                <td>{{ entity.maxPax }}</td>
+                <td>{{ entity.minPax }}</td>
+                <td>{{ entity.payingPlaces }}</td>
+                <td>{% if entity.departureDate %}{{ entity.departureDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ entity.parent }}</td>
+                <td>{% if entity.signupDeadline %}{{ entity.signupDeadline|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ entity.quoteDays }}</td>
+                <td>{{ entity.quoteNights }}</td>
+                <td>{{ entity.totalPrice }}</td>
+                <td>{{ entity.tripStatus }}</td>
+                <td>{{ entity.transportType }}</td>
+                <td>{{ entity.welcomeMsg }}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('manage_quoteversion_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('manage_quoteversion_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+        <ul>
+        <li>
+            <a href="{{ path('manage_quoteversion_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+    {% endblock %}
