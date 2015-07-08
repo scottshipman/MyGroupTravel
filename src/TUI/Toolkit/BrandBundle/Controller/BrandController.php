@@ -9,6 +9,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use TUI\Toolkit\BrandBundle\Entity\Brand;
 use TUI\Toolkit\BrandBundle\Form\BrandType;
+use Application\Sonata\ClassificationBundle\ApplicationSonataClassificationBundle;
+use Application\Sonata\MediaBundle\ApplicationSonataMediaBundle;
 
 /**
  * Brand controller.
@@ -69,6 +71,7 @@ class BrandController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
+    protected $getLogo;
     private function createCreateForm(Brand $entity)
     {
         $form = $this->createForm(new BrandType(), $entity, array(
@@ -76,7 +79,8 @@ class BrandController extends Controller
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form
+            ->add('submit', 'submit', array('label' => 'Create'));
 
         return $form;
     }
@@ -208,6 +212,7 @@ class BrandController extends Controller
      * @Route("/{id}", name="_manage_brand_delete")
      * @Method("DELETE")
      */
+
     public function deleteAction(Request $request, $id)
     {
         $form = $this->createDeleteForm($id);
