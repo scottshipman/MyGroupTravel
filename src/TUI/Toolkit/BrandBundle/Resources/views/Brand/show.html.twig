@@ -3,7 +3,9 @@
 
 {% block body -%}
     <h1>Brand</h1>
-    <div class="logo">{% path media, 'small' %}</div>
+    {% if entity.media %}
+        <div class="logo">{% media entity.media, 'small' %}</div>
+    {% endif %}
 
     <table class="record_properties">
         <tbody>

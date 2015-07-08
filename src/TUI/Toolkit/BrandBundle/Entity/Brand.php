@@ -186,7 +186,7 @@ class Brand
     {
         return $this->hoverColor;
     }
-    
+
 
     /**
      * @var \Application\Sonata\MediaBundle\Entity\Media
