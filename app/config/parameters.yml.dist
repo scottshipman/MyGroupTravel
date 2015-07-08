@@ -17,3 +17,6 @@ parameters:
 
     # A secret key that's used to generate certain security-related tokens
     secret:            Zend1234!
+
+    # brand_id is added after crated in db so it can be mapped
+    brand_id:   1
