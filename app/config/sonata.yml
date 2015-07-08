@@ -18,10 +18,11 @@ doctrine:
                 #query_cache_driver: apc
                 #result_cache_driver: apc
                 mappings:
-                    SonataClassificationBundle: ~
-                    ClassificationBundle: ~
-                    SonataMediaBundle: ~
-                    MediaBundle: ~
+                    ApplicationSonataClassificationBundle: ~
+                    #ClassificationBundle: ~
+                    #SonataMediaBundle: ~
+                    #MediaBundle: ~
+                    ApplicationSonataMediaBundle: ~
     dbal:
          types:
              json: Sonata\Doctrine\Types\JsonType
@@ -101,6 +102,13 @@ sonata_media:
             formats:
                 small: { width: 150 , quality: 95} # profile circle
                 big:   { width: 500 , quality: 90} # profile page?
+        brand:
+            providers:
+                 - sonata.media.provider.image
+
+            formats:
+                 small: { width: 150 , quality: 95} # profile circle
+                 big:   { width: 500 , quality: 90} # profile page?
 
     cdn:
         server:

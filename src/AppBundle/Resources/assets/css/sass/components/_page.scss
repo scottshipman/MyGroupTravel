@@ -1,3 +1,28 @@
+*, *:before, *:after {
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		-o-box-sizing: border-box;
+		box-sizing: border-box;
+	}
+
 html {
   background: $bg_grey_l1;
+}
+
+.content {
+
+  .inner {
+    width: $page_width;
+    margin: 0 auto;
+
+    > h1 {
+      color: $text_white;
+      background: $bg_grey_d;
+      width: $page_width_reset;
+      margin-left: -$page_gutter_reset;
+      padding: 0.5em $page_gutter_reset;
+    }
+
+  }
+
 }

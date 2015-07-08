@@ -7,6 +7,7 @@
 namespace TUI\Toolkit\BrandBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Sonata\MediaBundle\Model\MediaInterface;
 
 /**
  * Brand
@@ -64,7 +65,7 @@ class Brand
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -87,7 +88,7 @@ class Brand
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -110,7 +111,7 @@ class Brand
     /**
      * Get division
      *
-     * @return string 
+     * @return string
      */
     public function getDivision()
     {
@@ -133,7 +134,7 @@ class Brand
     /**
      * Get primaryColor
      *
-     * @return string 
+     * @return string
      */
     public function getPrimaryColor()
     {
@@ -156,7 +157,7 @@ class Brand
     /**
      * Get buttonColor
      *
-     * @return string 
+     * @return string
      */
     public function getButtonColor()
     {
@@ -179,10 +180,35 @@ class Brand
     /**
      * Get hoverColor
      *
-     * @return string 
+     * @return string
      */
     public function getHoverColor()
     {
         return $this->hoverColor;
     }
+    
+
+    /**
+     * @var \Application\Sonata\MediaBundle\Entity\Media
+     * @ORM\ManyToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Media", cascade={"persist"}, fetch="LAZY")
+     */
+    protected $media;
+
+    /**
+     * @param MediaInterface $media
+     */
+    public function setMedia($media)
+    {
+        $this->media = $media;
+    }
+
+    /**
+     * @return MediaInterface
+     */
+    public function getMedia()
+    {
+        return $this->media;
+    }
+
+
 }
