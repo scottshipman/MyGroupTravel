@@ -43,6 +43,7 @@ class TripStatusController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
+          $this->get('session')->getFlashBag()->add('notice', 'Trip Status Saved: '. $entity->getName());
 
             return $this->redirect($this->generateUrl('manage_tripstatus_show', array('id' => $entity->getId())));
         }
@@ -171,6 +172,7 @@ class TripStatusController extends Controller
 
         if ($editForm->isValid()) {
             $em->flush();
+          $this->get('session')->getFlashBag()->add('notice', 'Trip Status Saved: '. $entity->getName());
 
             return $this->redirect($this->generateUrl('manage_tripstatus_edit', array('id' => $id)));
         }
@@ -200,6 +202,7 @@ class TripStatusController extends Controller
 
             $em->remove($entity);
             $em->flush();
+          $this->get('session')->getFlashBag()->add('notice', 'Trip Status Deleted: '. $entity->getName());
         }
 
         return $this->redirect($this->generateUrl('manage_tripstatus'));

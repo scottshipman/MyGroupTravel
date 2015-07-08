@@ -43,8 +43,10 @@ class CurrencyController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
+          $this->get('session')->getFlashBag()->add('notice', 'Currency Saved: '. $entity->getName());
 
-            return $this->redirect($this->generateUrl('manage_currency_show', array('id' => $entity->getId())));
+
+          return $this->redirect($this->generateUrl('manage_currency_show', array('id' => $entity->getId())));
         }
 
         return $this->render('CurrencyBundle:Currency:new.html.twig', array(
@@ -171,6 +173,7 @@ class CurrencyController extends Controller
 
         if ($editForm->isValid()) {
             $em->flush();
+          $this->get('session')->getFlashBag()->add('notice', 'Currency Saved: '. $entity->getName());
 
             return $this->redirect($this->generateUrl('manage_currency_edit', array('id' => $id)));
         }
@@ -200,6 +203,7 @@ class CurrencyController extends Controller
 
             $em->remove($entity);
             $em->flush();
+          $this->get('session')->getFlashBag()->add('notice', 'Currency Deleted: '. $entity->getName());
         }
 
         return $this->redirect($this->generateUrl('manage_currency'));

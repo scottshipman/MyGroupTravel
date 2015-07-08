@@ -5,6 +5,7 @@ namespace TUI\Toolkit\QuoteBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class QuoteType extends AbstractType
 {
@@ -14,16 +15,16 @@ class QuoteType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
+      $builder
             ->add('name')
             ->add('reference')
-            ->add('organizer')
-            ->add('converted')
-            ->add('deleted')
-            ->add('setupComplete')
-            ->add('locked')
-            ->add('salesAgent')
-            ->add('isTemplate')
+            ->add('organizer', 'email')
+            //->add('salesAgent', 'choice')
+            ->add('converted', 'checkbox', array('required'=> FALSE,))
+            ->add('deleted', 'checkbox', array('required'=> FALSE,))
+            ->add('setupComplete', 'checkbox', array('required'=> FALSE,))
+            ->add('locked', 'checkbox', array('required'=> FALSE,))
+            ->add('isTemplate', 'checkbox', array('required'=> FALSE,))
         ;
     }
     

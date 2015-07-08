@@ -54,7 +54,7 @@ class User extends BaseUser
 */
       }
 
-  public function setResponsibility($object, $responsibility)
+  public function addResponsibility($object, $responsibility)
   {
     $old_responsibility = $this->responsibility;
 

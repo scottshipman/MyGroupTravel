@@ -52,8 +52,10 @@ class BrandController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
+          $this->get('session')->getFlashBag()->add('notice', 'Brand Saved: '. $entity->getName());
 
-            return $this->redirect($this->generateUrl('_manage_brand_show', array('id' => $entity->getId())));
+
+          return $this->redirect($this->generateUrl('_manage_brand_show', array('id' => $entity->getId())));
         }
 
         return array(
@@ -192,8 +194,10 @@ class BrandController extends Controller
 
         if ($editForm->isValid()) {
             $em->flush();
+          $this->get('session')->getFlashBag()->add('notice', 'Brand Saved: '. $entity->getName());
 
-            return $this->redirect($this->generateUrl('_manage_brand_edit', array('id' => $id)));
+
+          return $this->redirect($this->generateUrl('_manage_brand_edit', array('id' => $id)));
         }
 
         return array(
@@ -223,6 +227,8 @@ class BrandController extends Controller
 
             $em->remove($entity);
             $em->flush();
+          $this->get('session')->getFlashBag()->add('notice', 'Brand Deleted: '. $entity->getName());
+
         }
 
         return $this->redirect($this->generateUrl('_manage_brand'));

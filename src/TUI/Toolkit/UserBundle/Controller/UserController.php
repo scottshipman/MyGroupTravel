@@ -44,6 +44,7 @@ class UserController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
+          $this->get('session')->getFlashBag()->add('notice', 'User Saved: '. $entity->getName());
 
             return $this->redirect($this->generateUrl('user_show', array('id' => $entity->getId())));
         }
@@ -172,6 +173,7 @@ class UserController extends Controller
 
         if ($editForm->isValid()) {
             $em->flush();
+          $this->get('session')->getFlashBag()->add('notice', 'User Saved: '. $entity->getName());
 
             return $this->redirect($this->generateUrl('user_edit', array('id' => $id)));
         }
@@ -201,6 +203,7 @@ class UserController extends Controller
 
             $em->remove($entity);
             $em->flush();
+          $this->get('session')->getFlashBag()->add('notice', 'User Deleted: '. $entity->getName());
         }
 
         return $this->redirect($this->generateUrl('user'));

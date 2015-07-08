@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use TUI\Toolkit\QuoteBundle\Entity\Quote;
 use TUI\Toolkit\QuoteBundle\Form\QuoteType;
+use TUI\Toolkit\UserBundle\Controller\UserController;
 
 /**
  * Quote controller.
@@ -43,7 +44,7 @@ class QuoteController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-
+            $this->get('session')->getFlashBag()->add('notice', 'Quote Saved: '. $entity->getName());
             return $this->redirect($this->generateUrl('manage_quote_show', array('id' => $entity->getId())));
         }
 
@@ -62,12 +63,21 @@ class QuoteController extends Controller
      */
     private function createCreateForm(Quote $entity)
     {
+        $choices = $this->getBrandUsers();
+
         $form = $this->createForm(new QuoteType(), $entity, array(
             'action' => $this->generateUrl('manage_quote_create'),
             'method' => 'POST',
         ));
+        $form->add('salesAgent', 'choice', array(
+          'placeholder' => 'Select',
+        'choices' => $choices,
+          ));
 
         $form->add('submit', 'submit', array('label' => 'Create'));
+
+        $choices = array();
+
 
         return $form;
     }
@@ -171,6 +181,7 @@ class QuoteController extends Controller
 
         if ($editForm->isValid()) {
             $em->flush();
+          $this->get('session')->getFlashBag()->add('notice', 'Quote Saved: '. $entity->getName());
 
             return $this->redirect($this->generateUrl('manage_quote_edit', array('id' => $id)));
         }
@@ -200,6 +211,7 @@ class QuoteController extends Controller
 
             $em->remove($entity);
             $em->flush();
+          $this->get('session')->getFlashBag()->add('notice', 'Quote Deleted: '. $entity->getName());
         }
 
         return $this->redirect($this->generateUrl('manage_quote'));
@@ -221,4 +233,24 @@ class QuoteController extends Controller
             ->getForm()
         ;
     }
+
+  function getBrandUsers()
+  {
+    $choices=array();
+    $em = $this->getDoctrine()->getManager();
+    $qb = $em->createQueryBuilder('TUIToolkitUserBundle:User');
+    $qb->select('u.id, u.username')
+      ->from('TUIToolkitUserBundle:User', 'u')
+      ->where(
+        $qb->expr()->like('u.roles', '?1')
+      )
+      ->orderBy('u.username', 'ASC')
+      ->setParameter(1, '%ROLE_BRAND%');
+    $query = $qb->getQuery();
+    $users = $query->getArrayResult();
+    foreach($users as $user){
+      $choices[$user['id']] = $user['username'];
+    }
+    return $choices;
+  }
 }
