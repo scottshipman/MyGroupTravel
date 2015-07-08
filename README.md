@@ -68,3 +68,6 @@ It treats it like a base_url.
 * how to [Handle forms](http://symfony.com/doc/current/best_practices/forms.html)
 * custom User event [HTML emails](https://github.com/TUI-SAS-Web-Development/Toolkit/tree/Sym2-core-only)
 * adding [invitations to registration](https://github.com/FriendsOfSymfony/FOSUserBundle/blob/master/Resources/doc/adding_invitation_registration.md) (require token to register)
+* form API [reference field types](http://symfony.com/doc/current/reference/forms/types.html)
+* Ice Age - Dont miss the [migrations](http://symfony.com/doc/current/bundles/DoctrineMigrationsBundle/index.html)
+* Doctrine query builder [API](http://doctrine-orm.readthedocs.org/en/latest/reference/query-builder.html)
