@@ -7,8 +7,7 @@
     <table class="records_list">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Name</th>
+                <th>Name (ID)</th>
                 <th>Division</th>
                 <th>Primarycolor</th>
                 <th>Buttoncolor</th>
@@ -19,12 +18,11 @@
         <tbody>
         {% for entity in entities %}
             <tr>
-                <td><a href="{{ path('_manage_brand_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.name }}</td>
+                <td><a href="{{ path('_manage_brand_show', { 'id': entity.id }) }}">{{ entity.name }}</a> ({{ entity.id }})</td>
                 <td>{{ entity.division }}</td>
-                <td>{{ entity.primaryColor }}</td>
-                <td>{{ entity.buttonColor }}</td>
-                <td>{{ entity.hoverColor }}</td>
+                <td style="background-color: {{ entity.primaryColor }}"></td>
+                <td style="background-color: {{ entity.buttonColor }}"></td>
+                <td style="background-color: {{ entity.hoverColor }}"></td>
                 <td>
                 <ul>
                     <li>
