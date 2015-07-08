@@ -14,12 +14,17 @@ class UserType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+
+      // todo: Add logic so you cant add any role greater than your own
         $builder
             ->add('email')
             ->add('username')
-            ->add('responsibility')
             ->add('userParent')
-            ->add('roles')
+            ->add('roles', 'choice', array(
+            'choices'  => array('ROLE_USER' => 'User', 'ROLE_CUSTOMER' => 'CUSTOMER', 'ROLE_BRAND'=> 'BRAND', 'ROLE_ADMIN'=>'ADMIN',),
+            'multiple' => true,
+            'expanded' => TRUE,
+          ))
         ;
     }
     

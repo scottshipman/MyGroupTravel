@@ -15,7 +15,6 @@
         <th>eMail</th>
         <th>Parent</th>
         <th>Roles</th>
-        <th>Responsibilities</th>
         <th>Last Login</th>
     </tr>
     {% for user in users %}
@@ -31,7 +30,6 @@
         <td>{{ user.email  }}</td>
         <td>{{ user.userParent  }}</td>
         <td>{% for role in user.roles %}{{ role |e }}; {% endfor %}</td>
-        <td>{% for responsibility in user.responsibility %}{{ responsibility |e }}{% endfor %}</td>
         <td>{{ user.lastLogin|date('Y-m-d H:i:s') }}</td>
     </tr>
     {% endfor %}
