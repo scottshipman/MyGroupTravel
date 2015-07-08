@@ -24,11 +24,6 @@ class User extends BaseUser
     protected $id;
 
   /**
-   * @ORM\Column(type="json_array")
-   */
-  protected $responsibility=array();
-
-  /**
    * @ORM\Column(type="string", nullable=true)
    */
   protected $userParent = null;
@@ -53,19 +48,6 @@ class User extends BaseUser
 
 */
       }
-
-  public function addResponsibility($object, $responsibility)
-  {
-    $old_responsibility = $this->responsibility;
-
-    // add to json array whatever is passed in
-  }
-
-  public function getResponsibility()
-  {
-    $responsibility = $this->responsibility;
-    return array_unique($responsibility);
-  }
 
   /**
    * @param mixed $user_parent

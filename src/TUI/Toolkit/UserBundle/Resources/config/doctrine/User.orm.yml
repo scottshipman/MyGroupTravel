@@ -7,8 +7,6 @@ TUI\Toolkit\UserBundle\Entity\User:
             generator:
                 strategy: AUTO
     fields:
-        responsibility:
-            type: json_array
         userParent:
             type: string
             column: user_parent

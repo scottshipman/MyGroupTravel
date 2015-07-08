@@ -8,7 +8,6 @@
             <tr>
                 <th>Username (ID)</th>
                 <th>Roles</th>
-                <th>Responsibility</th>
                 <th>User Parent</th>
                 <th>Actions</th>
             </tr>
@@ -23,12 +22,6 @@
                     <li>{{ role |e }}</li>
                   {% endfor %}
                   </ul>
-                </td>
-                <td>
-                  <ul>
-                  {% for responsibility in entity.responsibility %}
-                    <li>{{ responsibility |e }}</li>
-                  {% endfor %}
                 </td>
                 <td>{{ entity.userParent }}</td>
                 <td>
