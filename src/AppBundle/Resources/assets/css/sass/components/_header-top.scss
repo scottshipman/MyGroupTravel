@@ -25,4 +25,9 @@
 .brand_logo {
   width: $page_width;
   margin: 0 auto;
+
+  img {
+    max-width: 120px;
+  }
+
 }

@@ -1,4 +1,5 @@
-{% if brand.media  %}
-    <div class="logo">{% media brand.media, 'small' %}</div>
+{% if brand.media %}
+    <div class="logo">{% media brand.media, 'reference' %}</div>
+{% else %}
+    {{ brand.name }}
 {% endif %}
-    {{  brand.name }}
