@@ -200,6 +200,8 @@ class Brand
     public function setMedia($media)
     {
         $this->media = $media;
+
+        return $media;
     }
 
     /**

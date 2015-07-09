@@ -63,5 +63,28 @@ class User extends BaseUser
     return $this->userParent;
   }
 
+    /**
+     * @var \Application\Sonata\MediaBundle\Entity\Media
+     * @ORM\ManyToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Media", cascade={"persist"}, fetch="LAZY")
+     */
+    protected $avatar;
+
+    /**
+     * @param MediaInterface $media
+     */
+    public function setAvatar($avatar)
+    {
+        $this->avatar = $avatar;
+
+        return $avatar;
+    }
+
+    /**
+     * @return MediaInterface
+     */
+    public function getAvatar()
+    {
+        return $this->avatar;
+    }
 
 } 

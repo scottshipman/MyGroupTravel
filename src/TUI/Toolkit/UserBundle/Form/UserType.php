@@ -34,6 +34,11 @@ class UserType extends AbstractType
             'multiple' => true,
             'expanded' => TRUE,
           ))
+            ->add('avatar', 'sonata_media_type', array(
+                'provider' => 'sonata.media.provider.image',
+                'context' => 'users'
+
+            ));
         ;
     }
     
