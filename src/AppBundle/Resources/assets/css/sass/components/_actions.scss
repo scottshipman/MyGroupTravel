@@ -1,0 +1,13 @@
+ul.record_actions {
+  padding: 0;
+  list-style: none;
+
+  li {
+    @include inline-block-vertical(top);
+  }
+
+  a, button {
+    @extend .cta;
+  }
+
+}

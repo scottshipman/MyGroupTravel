@@ -21,7 +21,7 @@
     position: relative;
 
     &.active {
-      background: #444;
+      background: rgba(0,0,0,0.2);
     }
 
     ul {
@@ -39,7 +39,7 @@
     }
 
     &:hover {
-      background: #444;
+      background: rgba(0,0,0,0.2);
 
       ul {
         display: block;
@@ -49,15 +49,14 @@
 
   }
 
-  a , span {
+  a, span {
     display: block;
     color: $white;
     padding: 0.5em 1em;
+  }
 
-    &:hover {
-      background: #444;
-    }
-
+  span {
+    cursor: default;
   }
 
   .active a {
