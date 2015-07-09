@@ -4,7 +4,7 @@
 {% block body -%}
     <h1>Brand list</h1>
 
-    <table class="records_list">
+    <table class="brands_table records_list">
         <thead>
             <tr>
                 <th>Name (ID)</th>
@@ -12,6 +12,7 @@
                 <th>Primarycolor</th>
                 <th>Buttoncolor</th>
                 <th>Hovercolor</th>
+                <th>Logo</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -23,6 +24,7 @@
                 <td style="background-color: {{ entity.primaryColor }}"></td>
                 <td style="background-color: {{ entity.buttonColor }}"></td>
                 <td style="background-color: {{ entity.hoverColor }}"></td>
+                <td class="logo">{% media entity.media, 'small' %}</td>
                 <td>
                 <ul>
                     <li>
