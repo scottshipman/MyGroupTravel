@@ -1,5 +1,5 @@
 {% if brand.media %}
-    <div class="logo">{% media brand.media, 'reference' %}</div>
+    <div class="logo">{% media brand.media, 'reference' with {'title': (brand.name), 'alt': (brand.name)} %}</div>
 {% else %}
     {{ brand.name }}
 {% endif %}
