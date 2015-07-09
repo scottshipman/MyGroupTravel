@@ -1,19 +1,12 @@
-.admin-menu {
+.admin-menu,
+.login {
   position: relative;
   @include font-sizer(12);
-  z-index: 999;
-  border-bottom: 1px solid #000;
 
   ul {
     margin: 0;
     padding: 0;
     list-style: none;
-  }
-
-  > ul {
-    width: $page_width;
-    margin: 0 auto;
-    @include clear-fix();
   }
 
   li {
@@ -30,7 +23,6 @@
       border-top: 1px solid #000;
       position: absolute;
       top: 100%;
-      left: 0;
 
       li {
         float: none;
@@ -61,6 +53,40 @@
 
   .active a {
     color: $text_link_dark;
+  }
+
+}
+
+
+
+
+
+.admin-menu {
+
+  li {
+
+    ul {
+      left: 0;
+    }
+
+  }
+
+}
+
+
+
+
+
+.login {
+
+  li {
+    white-space: nowrap;
+    text-align: right;
+
+    ul {
+      right: 0;
+    }
+
   }
 
 }

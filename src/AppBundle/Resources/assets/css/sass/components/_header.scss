@@ -1,0 +1,15 @@
+.header {
+  background: $bg_grey_d;
+  padding: 0 $page_gutter;
+
+  .brand_logo {
+    padding: 1em 0;
+    text-align: right;
+
+    img {
+      max-width: 120px;
+    }
+
+  }
+
+}

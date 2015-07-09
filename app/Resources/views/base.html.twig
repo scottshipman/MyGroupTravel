@@ -43,14 +43,27 @@
 
         {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
             <div class="login">
-                {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |
-                <a href="{{ path('fos_user_security_logout') }}">
-                    {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
-                </a>
+                <ul>
+                    <li>
+                        <span>My account</span>
+                        <ul>
+                            <li><span>{{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }}</span></li>
+                            <li>
+                                <a href="{{ path('fos_user_security_logout') }}">
+                                    {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
             </div>
         {% else %}
             {# <div class="login"><a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a></div> #}
         {% endif %}
+
+    </div>
+
+    <div class="header">
 
         <div class="brand_logo">
             {{ render(controller('BrandBundle:Default:index')) }}
