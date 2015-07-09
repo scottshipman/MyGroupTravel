@@ -21,9 +21,9 @@ class DefaultCurrency implements FixtureInterface
   {
     // load default Transport Types in the database.
     $currency_array=array(
-        '1'=>array( 'GBP', '&pound', 'Pound sterling'),
+        '1'=>array( 'GBP', '&pound;', 'Pound sterling'),
         '2'=>array( 'USD', '$', 'US dollar'),
-        '3'=>array( 'EUR', '&euro', 'Euro'),
+        '3'=>array( 'EUR', '&euro;', 'Euro'),
         '4'=>array( 'AUD', '$', 'Australian dollar'),
         '5'=>array( 'NZD', '$', 'New Zealand dollar')
     );
@@ -39,4 +39,4 @@ class DefaultCurrency implements FixtureInterface
 
     $manager->flush();
   }
-} 
+}
