@@ -60,7 +60,9 @@
             </tr>
             <tr>
                 <th>Logo</th>
-                <td>{{ entity.logo }}</td>
+                {% if entity.media %}
+                    <td class="logo">{% media entity.media, 'small' %}</td>
+                {% endif %}
             </tr>
         </tbody>
     </table>

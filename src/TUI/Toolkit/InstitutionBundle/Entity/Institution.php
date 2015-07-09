@@ -3,6 +3,8 @@
 namespace TUI\Toolkit\InstitutionBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Sonata\MediaBundle\Model\Media;
+use Application\Sonata\MediaBundle;
 
 /**
  * Institution
@@ -104,13 +106,6 @@ class Institution
      * @ORM\Column(name="websiteAddress", type="string", length=255)
      */
     private $websiteAddress;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="logo", type="string", length=255)
-     */
-    private $logo;
 
 
     /**
@@ -400,25 +395,26 @@ class Institution
     }
 
     /**
-     * Set logo
-     *
-     * @param string $logo
-     * @return Institution
+     * @var \Application\Sonata\MediaBundle\Entity\Media
+     * @ORM\ManyToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Media", cascade={"persist"}, fetch="LAZY")
      */
-    public function setLogo($logo)
-    {
-        $this->logo = $logo;
+    protected $media;
 
-        return $this;
+    /**
+     * @param MediaInterface $media
+     */
+    public function setMedia($media)
+    {
+        $this->media = $media;
+
+        return $media;
     }
 
     /**
-     * Get logo
-     *
-     * @return string 
+     * @return MediaInterface
      */
-    public function getLogo()
+    public function getMedia()
     {
-        return $this->logo;
+        return $this->media;
     }
 }

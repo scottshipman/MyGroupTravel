@@ -6,6 +6,9 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+use Sonata\MediaBundle\Model\Media;
+use Application\Sonata\MediaBundle;
+
 class InstitutionType extends AbstractType
 {
     /**
@@ -27,8 +30,12 @@ class InstitutionType extends AbstractType
             ->add('code')
             ->add('type')
             ->add('websiteAddress')
-            ->add('logo')
-        ;
+            ->add('media', 'sonata_media_type', array(
+                'provider' => 'sonata.media.provider.image',
+                'context' => 'institution'
+
+            ));
+
     }
     
     /**

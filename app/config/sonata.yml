@@ -95,7 +95,7 @@ sonata_media:
                 small: { width: 100 , quality: 70}
                 big:   { width: 500 , quality: 70}
 
-        users: # sample context for Toolkit
+        users:
             providers:
                 - sonata.media.provider.image
 
@@ -103,6 +103,13 @@ sonata_media:
                 small: { width: 150 , quality: 95} # profile circle
                 big:   { width: 500 , quality: 90} # profile page?
         brand:
+            providers:
+                 - sonata.media.provider.image
+
+            formats:
+                 small: { width: 150 , quality: 95} # profile circle
+                 big:   { width: 500 , quality: 90} # profile page?
+        institution:
             providers:
                  - sonata.media.provider.image
 
