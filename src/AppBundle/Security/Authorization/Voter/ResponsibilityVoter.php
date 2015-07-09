@@ -54,7 +54,7 @@ class ResponsibilityVoter extends ContainerAware implements VoterInterface
 
     // if user ROLE is BRAND or Higher, grant access.
     $intersect = array_intersect($user->getRoles(), array('ROLE_BRAND', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN'));
-    if ($intersect){
+    if (!empty($intersect)){
       return TRUE;
     }
 
@@ -77,14 +77,14 @@ class ResponsibilityVoter extends ContainerAware implements VoterInterface
 
           Or maybe allow passing in array of responsibility roles (parent, passenger,etc),
           and just see if there is an array instersection of User['responsibility'] to attributes.
-    */
+
       $user_privelege=1; $responsibility_privelege = 1; // temporary, delete when above is done
 
     if($user_privelege <= $responsibility_privelege){
       return TRUE;
     }
+*/
 
-
-    return VoterInterface::ACCESS_DENIED;
+    //return VoterInterface::ACCESS_DENIED;
   }
 } 

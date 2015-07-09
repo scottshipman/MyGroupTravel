@@ -19,6 +19,15 @@ class UserType extends AbstractType
         $builder
             ->add('email')
             ->add('username')
+            ->add('plainPassword', 'repeated', array(
+            'type' => 'password',
+            'options' => array('translation_domain' => 'FOSUserBundle'),
+            'first_options' => array('label' => 'form.new_password'),
+            'second_options' => array('label' => 'form.new_password_confirmation'),
+            'invalid_message' => 'fos_user.password.mismatch',
+            'required' => false,
+          ))
+            ->add('enabled')
             ->add('userParent')
             ->add('roles', 'choice', array(
             'choices'  => array('ROLE_USER' => 'User', 'ROLE_CUSTOMER' => 'CUSTOMER', 'ROLE_BRAND'=> 'BRAND', 'ROLE_ADMIN'=>'ADMIN',),

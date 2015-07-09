@@ -31,10 +31,13 @@ security:
                 path: /logout
                 target: /
             anonymous:    true
+            security: true
 
     access_control:
+            - { path: ^/admin/, role: ROLE_ADMIN }
+            - { path: ^/manage/, role: ROLE_BRAND }
+            - { path: ^/user/, role: ROLE_BRAND }
+            - { path: ^/profile/, role: ROLE_CUSTOMER }
             - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
             - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
             - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
-            - { path: ^/admin/, role: ROLE_ADMIN }
-            - { path: ^/manage/, role: ROLE_BRAND }
