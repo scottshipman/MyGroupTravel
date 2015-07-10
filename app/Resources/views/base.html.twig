@@ -13,7 +13,7 @@
     {# HEY LOOK HERE:  All this crap is required for Sonata Datepicker form field types - figure out to use with assetic.
         <script type="text/javascript" src="/bundles/sonatacore/public/vendor/moment/min/moment.min.js"></script>
         <script type="text/javascript" src="path_to_bootstrap.min.js"></script>
-        <script type="text/javascript" src="/bundles/sonatacore/public/vendor/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+        <script type="text/javascript"  src="/bundles/sonatacore/public/vendor/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
         <link rel="stylesheet" href="/bundles/sonatacore/public/vendor/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
     #}
 
@@ -22,6 +22,10 @@
     {% endstylesheets %}
 
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+
+    {% javascripts '@jquery' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 
 </head>
 
@@ -86,10 +90,6 @@
             {% block body %}{% endblock %}
         </div>
     </div>
-
-    {% javascripts '@jquery' %}
-        <script src="{{ asset_url }}"></script>
-    {% endjavascripts %}
 
 </body>
 
