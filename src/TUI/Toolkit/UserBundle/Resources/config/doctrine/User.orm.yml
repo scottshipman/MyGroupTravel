@@ -8,6 +8,25 @@ TUI\Toolkit\UserBundle\Entity\User:
                 strategy: AUTO
     fields:
         userParent:
-            type: string
+            type: integer
             column: user_parent
             nullable: TRUE
+        honorific:
+            type: string
+            column: honorific
+            nullable: TRUE
+        firstName:
+            type: string
+            column: first_name
+            nullable: TRUE
+        lastName:
+            type: string
+            column: last_name
+            nullable: TRUE
+        phoneNumber:
+            type: phone_number
+            column: phone_number
+            nullable: TRUE
+    properties:
+        phoneNumber:
+            - PhoneNumber: ~

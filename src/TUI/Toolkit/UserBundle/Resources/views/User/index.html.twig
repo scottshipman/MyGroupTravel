@@ -7,6 +7,9 @@
         <thead>
             <tr>
                 <th>Username (ID)</th>
+                <th>Name</th>
+                <th>Phone Number</th>
+                <th>Email</th>
                 <th>Roles</th>
                 <th>User Parent</th>
                 <th>Actions</th>
@@ -16,6 +19,9 @@
         {% for entity in entities %}
             <tr>
                 <td><a href="{{ path('user_show', { 'id': entity.id }) }}">{{ entity.username }}</a> ({{ entity.id }})</td>
+                <td>{{ entity.honorific }} {{ entity.firstName }} {{ entity.lastName }}</td>
+                <td>entity.phoneNumber</td>
+                <td>entity.email</td>
                 <td>
                   <ul>
                   {% for role in entity.roles %}

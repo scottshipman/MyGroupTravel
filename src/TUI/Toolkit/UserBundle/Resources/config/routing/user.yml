@@ -28,3 +28,7 @@ user_delete:
     path:     /{id}/delete
     defaults: { _controller: "TUIToolkitUserBundle:User:delete" }
     methods:  [POST, DELETE]
+
+parent_add_child:
+  path: /add/child
+  defaults: { _controller: TUIToolkitUserBundle:User:create }

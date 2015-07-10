@@ -69,6 +69,31 @@ class UserController extends Controller
             'method' => 'POST',
         ));
 
+      // get current user's roles and add form elements
+
+      if($this->get('security.context')->isGranted('ROLE_ADMIN')){
+        $form->add('enabled')
+              ->add('roles', 'choice', array(
+                'choices'  => array('ROLE_USER' => 'User', 'ROLE_CUSTOMER' => 'CUSTOMER', 'ROLE_BRAND'=> 'BRAND', 'ROLE_ADMIN'=>'ADMIN',),
+                'multiple' => true,
+                'expanded' => TRUE,
+              ));
+      }
+
+      if($this->get('security.context')->isGranted('ROLE_BRAND')){
+        //what does Brand add?
+      }
+
+      //    if(!$this->get('security.context')->isGranted('ROLE_BRAND')){
+      //is a CUSTOMER role so they must be creating a chiuld so set parent to them
+      $curr_user = $this->get('security.context')->getToken()->getUser();
+      $form->add('userParent', 'hidden', array(
+        'data' => $curr_user->getID(),
+      ));
+      //   }
+
+
+
         $form->add('submit', 'submit', array('label' => 'Create'));
 
         return $form;

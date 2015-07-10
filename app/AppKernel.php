@@ -19,6 +19,7 @@ class AppKernel extends Kernel
             new FOS\UserBundle\FOSUserBundle(),
             new Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle(),
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
+            new Misd\PhoneNumberBundle\MisdPhoneNumberBundle(),
 
 
             // In Toolkit Project ( in /src directory) bundles...

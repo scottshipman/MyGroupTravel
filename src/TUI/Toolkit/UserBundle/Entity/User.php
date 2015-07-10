@@ -8,7 +8,7 @@ namespace TUI\Toolkit\UserBundle\Entity;
 
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints\Null;
+use Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumber;
 
 /**
  * @ORM\Entity
@@ -24,9 +24,37 @@ class User extends BaseUser
     protected $id;
 
   /**
+   * @ORM\Column(type="integer", nullable=true)
+   */
+    protected $userParent = null;
+
+  /**
    * @ORM\Column(type="string", nullable=true)
    */
-  protected $userParent = null;
+    protected $firstName = null;
+
+  /**
+   * @ORM\Column(type="string", nullable=true)
+   */
+    protected $lastName = null;
+
+  /**
+   * @ORM\Column(type="string", nullable=true)
+   */
+    protected $honorific = null;
+
+  /**
+   * @ORM\Column(type="phone_number", nullable=true)
+   */
+    protected $phoneNumber = null;
+
+  /**
+   * @var \Application\Sonata\MediaBundle\Entity\Media
+   * @ORM\ManyToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Media", cascade={"persist"}, fetch="LAZY")
+   */
+    protected $avatar;
+
+
 
     public function __construct()
       {
@@ -64,12 +92,6 @@ class User extends BaseUser
   }
 
     /**
-     * @var \Application\Sonata\MediaBundle\Entity\Media
-     * @ORM\ManyToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Media", cascade={"persist"}, fetch="LAZY")
-     */
-    protected $avatar;
-
-    /**
      * @param MediaInterface $media
      */
     public function setAvatar($avatar)
@@ -87,4 +109,60 @@ class User extends BaseUser
         return $this->avatar;
     }
 
+  /**
+   * @param mixed $honorific
+   */
+  public function setHonorific($honorific) {
+    $this->honorific = $honorific;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getHonorific() {
+    return $this->honorific;
+  }
+
+
+  /**
+   * @param mixed $firstName
+   */
+  public function setFirstName($firstName) {
+    $this->firstName = $firstName;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getFirstName() {
+    return $this->firstName;
+  }
+
+  /**
+   * @param mixed $lastName
+   */
+  public function setLastName($lastName) {
+    $this->lastName = $lastName;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getLastName() {
+    return $this->lastName;
+  }
+
+  /**
+   * @param mixed $phoneNumber
+   */
+  public function setPhoneNumber($phoneNumber) {
+    $this->phoneNumber = $phoneNumber;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getPhoneNumber() {
+    return $this->phoneNumber;
+  }
 } 

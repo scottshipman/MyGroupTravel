@@ -5,6 +5,9 @@ namespace TUI\Toolkit\UserBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use libphonenumber\PhoneNumberUtils;
+use libphonenumber\PhoneNumberFormat;
+
 
 class UserType extends AbstractType
 {
@@ -17,28 +20,36 @@ class UserType extends AbstractType
 
       // todo: Add logic so you cant add any role greater than your own
         $builder
-            ->add('email')
+          ->add('honorific', 'choice', array(
+              'choices' => array(
+                'Mr' => 'Mr',
+                'Mrs' => 'Mrs',
+                'Ms' => 'Ms',
+                'Miss' => 'Miss',
+                'Dr' => 'Dr',
+                )
+              ))
+          ->add('firstName', 'text', array(
+            'label' => 'First Name',
+              ))
+          ->add('lastName', 'text', array(
+            'label' => 'Last Name',
+              ))
+          ->add('email')
+          ->add('phoneNumber', 'tel', array(
+            'label' => 'Phone Number',
+            'default_region' => 'US',
+            'format' => PhoneNumberFormat::NATIONAL
+              ))
             ->add('username')
             ->add('plainPassword', 'repeated', array(
-            'type' => 'password',
-            'options' => array('translation_domain' => 'FOSUserBundle'),
-            'first_options' => array('label' => 'form.new_password'),
-            'second_options' => array('label' => 'form.new_password_confirmation'),
-            'invalid_message' => 'fos_user.password.mismatch',
-            'required' => false,
-          ))
-            ->add('enabled')
-            ->add('userParent')
-            ->add('roles', 'choice', array(
-            'choices'  => array('ROLE_USER' => 'User', 'ROLE_CUSTOMER' => 'CUSTOMER', 'ROLE_BRAND'=> 'BRAND', 'ROLE_ADMIN'=>'ADMIN',),
-            'multiple' => true,
-            'expanded' => TRUE,
-          ))
-            ->add('avatar', 'sonata_media_type', array(
-                'provider' => 'sonata.media.provider.image',
-                'context' => 'users'
-
-            ));
+                'type' => 'password',
+                'options' => array('translation_domain' => 'FOSUserBundle'),
+                'first_options' => array('label' => 'form.new_password'),
+                'second_options' => array('label' => 'form.new_password_confirmation'),
+                'invalid_message' => 'fos_user.password.mismatch',
+                'required' => false,
+              ))
         ;
     }
     

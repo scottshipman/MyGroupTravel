@@ -1,5 +1,4 @@
 
-
 #_tui_toolkit_user_homepage:
 #    path:     /view/{id}
 #    defaults: { _controller: TUIToolkitUserBundle:Default:index }
