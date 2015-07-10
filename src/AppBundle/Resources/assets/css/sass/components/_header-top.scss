@@ -1,8 +1,7 @@
 .header-top {
   background: $bg_grey_d;
   color: $text_white;
-  padding: 0 $page_gutter;
-  border-bottom: 1px solid #000;
+  border-bottom: 1px solid $border_grey_d;
   @include clear-fix();
 
   a {

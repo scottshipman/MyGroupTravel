@@ -1,0 +1,104 @@
+// Form elements styles from Style Guide
+fieldset {
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+legend {
+  display: block;
+  width: 100%;
+}
+
+button, input[type="submit"] {
+  @extend .cta;
+}
+
+label {
+  @include inline-block-vertical();
+  @include font-sizer(16);
+  padding-bottom: 0.25em;
+  cursor: pointer;
+}
+
+.textinput {
+  border: 1px solid $text_black;
+  margin: 0;
+  color: $text_black;
+  background: $bg_white;
+  box-shadow: none;
+  box-sizing: border-box;
+  border-radius: 0;
+  min-width: 25em;
+  max-width: 100%;
+  line-height: 1;
+  @include font-sizer(14);
+}
+
+textarea,
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"] {
+  @extend .textinput;
+}
+
+textarea {
+  padding: 5px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"] {
+  height: 32px;
+  padding: 0 5px;
+}
+
+select {
+  border: 1px solid $text_black;
+  background: $bg_white;
+  @include inline-block-vertical(top);
+  max-width: 100%;
+  height: 32px;
+  @include font-sizer(14);
+  color: $text_black;
+}
+
+.select-wrap {
+  margin: 0;
+  border: 1px solid $text_black;
+  background: $bg_white;
+  @include inline-block-vertical(top);
+  position: relative;
+  overflow: hidden;
+
+  &:after {
+    content: "\f107";
+    @include fa-standard();
+    display: block;
+    line-height: inherit;
+    height: 30px;
+    width: 20px;
+    text-align: center;
+    background: $bg_white;
+    color: $text_black;
+    @include font-sizer(20);
+    line-height: 30px;
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+
+  select {
+    box-sizing: content-box;
+    border: 0;
+    height: 30px;
+    max-width: none;
+    background: transparent;
+    position: relative;
+    z-index: 1;
+  }
+
+}

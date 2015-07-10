@@ -1,18 +1,18 @@
 .cta {
+  @include font-sizer(16);
+  @include inline-block-vertical(top);
   height: 36px;
   line-height: 36px;
+  margin: 0;
+  padding: 0 0.625em;
   border: 1px solid $bg_grey_d;
   color: $text_white;
   background-color: $bg_grey_d;
-  @include font-sizer(16);
-  padding: 0 0.625em;
-  margin: 0;
-  cursor: pointer;
-  @include inline-block-vertical(top);
-  border-radius: 4px;
+  border-radius: 0;
   font-weight: normal;
   text-shadow: none;
   text-decoration: none;
+  cursor: pointer;
 
   &:hover {
     background-color: $bg_white;
@@ -22,9 +22,9 @@
   }
 
   &:disabled {
-    background-color: #eee;
-    color: gray;
-    border-color: gray;
+    background-color: $bg_grey_l1;
+    color: $border_grey_l;
+    border-color: $border_grey_l;
     cursor: auto;
   }
 
