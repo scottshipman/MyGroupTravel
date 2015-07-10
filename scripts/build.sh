@@ -112,4 +112,15 @@ php app/console cache:clear --env=$application_env
 # echo "Tests"
 # echo $'=============================================\n'
 
+if [ "$1" != "vm" ]
+then
+  echo $'\n============================================='
+  echo "Cleaning up old builds"
+  echo "============================================="
+
+  (cd .. && find releases -maxdepth 1 -mindepth 1 -type d | sort | head -n -5 | xargs sudo rm -rf)
+
+  echo " - Done!"
+fi
+
 echo $'\nAll Done!\n'
