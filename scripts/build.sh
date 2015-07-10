@@ -58,6 +58,17 @@ echo $'=============================================\n'
 
 /usr/local/bin/composer install --no-progress --no-plugins --prefer-dist -v $composer_params
 
+if [ "$1" = "prod" ]
+then
+  echo $'\n============================================='
+  echo "Removing app_dev.php and config.php from /web"
+  echo "============================================="
+  
+  [ -f web/app_dev.php ] && rm -rf web/app_dev.php
+  [ -f web/config.php ] && rm -rf web/config.php
+  echo $'\n  - Done!\n'
+fi
+
 if [ "$1" != "vm" ]
 then
   echo $'\n============================================='
