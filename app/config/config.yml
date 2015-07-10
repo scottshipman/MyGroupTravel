@@ -88,6 +88,7 @@ doctrine:
         #     path:     "%database_path%"
         types:
           json:     Sonata\Doctrine\Types\JsonType
+          phone_number: Misd\PhoneNumberBundle\Doctrine\DBAL\Types\PhoneNumberType
 
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
