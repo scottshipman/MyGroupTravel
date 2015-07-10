@@ -26,21 +26,21 @@
                 <td style="background-color: {{ entity.hoverColor }}"></td>
                 <td class="logo">{% media entity.media, 'small' %}</td>
                 <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('_manage_brand_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('_manage_brand_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
+                    <ul class="record_actions">
+                        <li>
+                            <a href="{{ path('_manage_brand_show', { 'id': entity.id }) }}">Show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('_manage_brand_edit', { 'id': entity.id }) }}">Edit</a>
+                        </li>
+                    </ul>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-        <ul>
+        <ul class="record_actions">
         <li>
             <a href="{{ path('_manage_brand_new') }}">
                 Create a new entry
