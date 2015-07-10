@@ -56,7 +56,7 @@ echo $'\n============================================='
 echo "Installing Composer dependencies (this may take awhile)"
 echo $'=============================================\n'
 
-/usr/local/bin/composer install --no-plugins --prefer-dist -v $composer_params
+/usr/local/bin/composer install --no-progress --no-plugins --prefer-dist -v $composer_params
 
 if [ "$1" != "vm" ]
 then
@@ -65,6 +65,7 @@ then
   echo "============================================="
   
   ln -sfn `pwd` ../../live
+  echo $'\n  - Done!\n'
 fi
 
 echo $'\n============================================='
@@ -76,8 +77,8 @@ then
   cd ../../live
 fi
 
-app/console assetic:dump --env=$application_env
-app/console cache:clear --env=$application_env
+php app/console assetic:dump --env=$application_env
+php app/console cache:clear --env=$application_env
 
 # @TODO: Database Migrations! (run earlier?)
 # echo $'\n============================================='
@@ -89,4 +90,4 @@ app/console cache:clear --env=$application_env
 # echo "Tests"
 # echo $'=============================================\n'
 
-echo $'\n  - Done!\n'
+echo $'\nAll Done!\n'
