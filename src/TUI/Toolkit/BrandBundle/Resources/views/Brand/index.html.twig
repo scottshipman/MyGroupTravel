@@ -9,9 +9,9 @@
             <tr>
                 <th>Name (ID)</th>
                 <th>Division</th>
-                <th>Primarycolor</th>
-                <th>Buttoncolor</th>
-                <th>Hovercolor</th>
+                <th>Primary color</th>
+                <th>Button color</th>
+                <th>Hover color</th>
                 <th>Logo</th>
                 <th>Actions</th>
             </tr>
@@ -24,7 +24,11 @@
                 <td style="background-color: {{ entity.primaryColor }}"></td>
                 <td style="background-color: {{ entity.buttonColor }}"></td>
                 <td style="background-color: {{ entity.hoverColor }}"></td>
-                <td class="logo">{% media entity.media, 'small' %}</td>
+                <td class="logo">
+                    {% if entity.media %}
+                        {% media entity.media, 'small' %}
+                    {% endif %}
+                </td>
                 <td>
                     <ul class="record_actions">
                         <li>
