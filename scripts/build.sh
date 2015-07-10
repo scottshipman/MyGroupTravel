@@ -91,6 +91,17 @@ fi
 php app/console assetic:dump --env=$application_env
 php app/console cache:clear --env=$application_env
 
+# @TODO: Asset Refresh from Prod (once we have prod)
+# if [ "$1" = "dev" -o "$1" = "uat" ]
+#   echo $'\n============================================='
+#   echo "rsync assets from Prod"
+#   echo $'=============================================\n'
+# 
+#   rsync -ah --stats tuisas-servers@www1-prod.tuistudent.com:/srv/www/uke-ed-tk-prod/web/upload web/upload
+# 
+#   echo $'\n  - Done!\n'
+# fi
+
 # @TODO: Database Migrations! (run earlier?)
 # echo $'\n============================================='
 # echo "Database Migrations"
