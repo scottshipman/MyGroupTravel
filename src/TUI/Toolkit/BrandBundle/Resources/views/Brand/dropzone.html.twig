@@ -1,0 +1,18 @@
+{% block stylesheets %}
+    {% stylesheets '@BrandBundle/Resources/public/css/dropzone.css' filter='cssrewrite' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block dropzone %}
+<form enctype="multipart/form-data" class="dropzone" action="{{ app.request.uri }}" method="post" name="brand_dropzone_form" id="brand_dropzone_form">
+        {{ form_widget(form) }}
+    {{ form_end(form) }}
+
+
+    {% block js %}
+    {% javascripts '@BrandBundle/Resources/public/js/dropzone.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    {% endblock %}
+{% endblock %}

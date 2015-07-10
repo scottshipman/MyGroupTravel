@@ -6,6 +6,8 @@
 
     {{ form(edit_form) }}
 
+    {{ render(controller('BrandBundle:Brand:createD')) }}
+
     <ul class="record_actions">
         <li>
             <a href="{{ path('_manage_brand') }}">Back to the list</a>

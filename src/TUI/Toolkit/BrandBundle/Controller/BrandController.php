@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use TUI\Toolkit\BrandBundle\Entity\Brand;
 use TUI\Toolkit\BrandBundle\Form\BrandType;
+use Application\Sonata\MediaBundle\Entity\Media;
 use Application\Sonata\ClassificationBundle\ApplicationSonataClassificationBundle;
 use Application\Sonata\MediaBundle\ApplicationSonataMediaBundle;
 
@@ -37,6 +38,7 @@ class BrandController extends Controller
             'entities' => $entities,
         );
     }
+
     /**
      * Creates a new Brand entity.
      *
@@ -54,15 +56,15 @@ class BrandController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-          $this->get('session')->getFlashBag()->add('notice', 'Brand Saved: '. $entity->getName());
+            $this->get('session')->getFlashBag()->add('notice', 'Brand Saved: ' . $entity->getName());
 
 
-          return $this->redirect($this->generateUrl('_manage_brand_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('_manage_brand_show', array('id' => $entity->getId())));
         }
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'form' => $form->createView(),
         );
     }
 
@@ -73,7 +75,6 @@ class BrandController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    protected $getLogo;
     private function createCreateForm(Brand $entity)
     {
         $form = $this->createForm(new BrandType(), $entity, array(
@@ -97,11 +98,11 @@ class BrandController extends Controller
     public function newAction()
     {
         $entity = new Brand();
-        $form   = $this->createCreateForm($entity);
+        $form = $this->createCreateForm($entity);
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'form' => $form->createView(),
         );
     }
 
@@ -125,7 +126,7 @@ class BrandController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
-            'entity'      => $entity,
+            'entity' => $entity,
             'delete_form' => $deleteForm->createView(),
         );
     }
@@ -151,19 +152,19 @@ class BrandController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
     }
 
     /**
-    * Creates a form to edit a Brand entity.
-    *
-    * @param Brand $entity The entity
-    *
-    * @return \Symfony\Component\Form\Form The form
-    */
+     * Creates a form to edit a Brand entity.
+     *
+     * @param Brand $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
     private function createEditForm(Brand $entity)
     {
         $form = $this->createForm(new BrandType(), $entity, array(
@@ -175,6 +176,7 @@ class BrandController extends Controller
 
         return $form;
     }
+
     /**
      * Edits an existing Brand entity.
      *
@@ -196,20 +198,30 @@ class BrandController extends Controller
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
+
         if ($editForm->isValid()) {
             $em->flush();
-          $this->get('session')->getFlashBag()->add('notice', 'Brand Saved: '. $entity->getName());
+            $this->get('session')->getFlashBag()->add('notice', 'Brand Saved: ' . $entity->getName());
+            // Getting sonata media manager service
+            $mediaManager = $this->container->get('sonata.media.manager.media');
+
+            // Getting sonata media object and saving media
+            $media = new Media;
+            $media->setBinaryContent($request->files->get('file'));
+            $media->setContext('brand');
+            $media->setProviderName('sonata.media.provider.image');
+            $mediaManager->save($media);
 
 
-          return $this->redirect($this->generateUrl('_manage_brand_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('_manage_brand_edit', array('id' => $id)));
         }
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
             'delete_form' => $deleteForm->createView(),
         );
     }
+
     /**
      * Deletes a Brand entity.
      *
@@ -232,7 +244,7 @@ class BrandController extends Controller
 
             $em->remove($entity);
             $em->flush();
-          $this->get('session')->getFlashBag()->add('notice', 'Brand Deleted: '. $entity->getName());
+            $this->get('session')->getFlashBag()->add('notice', 'Brand Deleted: ' . $entity->getName());
 
         }
 
@@ -252,7 +264,39 @@ class BrandController extends Controller
             ->setAction($this->generateUrl('_manage_brand_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-        ;
+            ->getForm();
+    }
+
+    /**
+     * Displays a form to edit an existing Brand entity.
+     *
+     * @Route("/{id}/upload", name="_manage_brand_upload")
+     * @Method("GET")
+     * @Template()
+     */
+    public function createDropZoneFormAction(Request $request)
+    {
+        $form = $this->createFormBuilder()->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+
+            // Getting sonata media manager service
+            $mediaManager = $this->container->get('sonata.media.manager.media');
+
+            // Getting sonata media object and saving media
+            $media = new Media;
+            $media->setBinaryContent($request->files->get('file'));
+            $media->setContext('brand');
+            $media->setProviderName('sonata.media.provider.image');
+            $mediaManager->save($media);
+
+
+        }
+
+        return $this->render('BrandBundle:Brand:dropzone.html.twig', array(
+            'form' => $form->createView()
+        ));
     }
 }
