@@ -66,7 +66,7 @@ then
   
   [ -f web/app_dev.php ] && rm -rf web/app_dev.php
   [ -f web/config.php ] && rm -rf web/config.php
-  echo $'\n  - Done!\n'
+  echo $'\n  - Done!'
 fi
 
 if [ "$1" != "vm" ]
@@ -76,7 +76,7 @@ then
   echo "============================================="
   
   ln -sfn `pwd` ../../live
-  echo $'\n  - Done!\n'
+  echo $'\n  - Done!'
 fi
 
 echo $'\n============================================='
@@ -89,7 +89,9 @@ then
 fi
 
 php app/console assetic:dump --env=$application_env
+echo $'\n'
 php app/console cache:clear --env=$application_env
+echo $'\n'
 
 # @TODO: Asset Refresh from Prod (once we have prod)
 # if [ "$1" = "dev" -o "$1" = "uat" ]
@@ -120,7 +122,7 @@ then
 
   (cd .. && find releases -maxdepth 1 -mindepth 1 -type d | sort | head -n -5 | xargs sudo rm -rf)
 
-  echo " - Done!"
+  echo $'\n  - Done!'
 fi
 
 echo $'\nAll Done!\n'
