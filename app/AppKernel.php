@@ -20,6 +20,7 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle(),
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
             new Misd\PhoneNumberBundle\MisdPhoneNumberBundle(),
+            new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
 
 
             // In Toolkit Project ( in /src directory) bundles...

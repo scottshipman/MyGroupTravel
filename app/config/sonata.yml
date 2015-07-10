@@ -119,7 +119,7 @@ sonata_media:
 
     cdn:
         server:
-            path: /uploads/media # http://media.sonata-project.org/
+            path: /static/uploads/media # http://media.sonata-project.org/
 
     filesystem:
         local:

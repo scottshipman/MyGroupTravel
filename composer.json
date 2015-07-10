@@ -37,7 +37,9 @@
         "sonata-project/easy-extends-bundle": "^2.1",
         "sonata-project/intl-bundle": "^2.2",
         "sonata-project/media-bundle": "^2.3",
-        "misd/phone-number-bundle": "^1.0"
+        "misd/phone-number-bundle": "^1.0",
+        "doctrine/migrations": "1.0.*@dev",
+        "doctrine/doctrine-migrations-bundle": "1.0.*"
 
     },
     "require-dev": {

@@ -52,6 +52,7 @@ twig:
 # Assetic Configuration
 assetic:
     debug:          "%kernel.debug%"
+    read_from:            '%kernel.root_dir%/../web/static'
     use_controller: false
     bundles:        [BrandBundle]
     #java: /usr/bin/java
@@ -97,6 +98,12 @@ doctrine:
         auto_generate_proxy_classes: "%kernel.debug%"
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
+
+doctrine_migrations:
+    dir_name: %kernel.root_dir%/DoctrineMigrations
+    namespace: Application\Migrations
+    table_name: migration_versions
+    name: Application Migrations
 
 
 # Swiftmailer Configuration
