@@ -64,21 +64,21 @@
 
     </div>
 
+    <div class="flash-messages">
+        {% for flashMessage in app.session.flashbag.get('notice') %}
+            <div class="flash-message flash-message-notice">Notice:<br>{{ flashMessage }}</div>
+        {% endfor %}
+        {% for flashMessage in app.session.flashbag.get('error') %}
+            <div class="flash-message flash-message-error">Error:<br>{{ flashMessage }}</div>
+        {% endfor %}
+    </div>
+
     <div class="header">
 
         <div class="brand_logo">
             {{ render(controller('BrandBundle:Default:index')) }}
         </div>
 
-    </div>
-
-    <div class="flash-messages">
-        {% for flashMessage in app.session.flashbag.get('notice') %}
-            <div class="flash-message-notice">   {{ flashMessage }}  </div>
-        {% endfor %}
-        {% for flashMessage in app.session.flashbag.get('error') %}
-            <div class="flash-message-error">   {{ flashMessage }}  </div>
-        {% endfor %}
     </div>
 
     <div class="content">
