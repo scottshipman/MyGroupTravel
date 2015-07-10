@@ -20,8 +20,8 @@
             <tr>
                 <td><a href="{{ path('user_show', { 'id': entity.id }) }}">{{ entity.username }}</a> ({{ entity.id }})</td>
                 <td>{{ entity.honorific }} {{ entity.firstName }} {{ entity.lastName }}</td>
-                <td>entity.phoneNumber</td>
-                <td>entity.email</td>
+                <td>{{ entity.phoneNumber }}</td>
+                <td><a href="mailto:{{ entity.email }}">{{ entity.email }}</a></td>
                 <td>
                   <ul>
                   {% for role in entity.roles %}

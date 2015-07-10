@@ -22,11 +22,11 @@ class UserType extends AbstractType
         $builder
           ->add('honorific', 'choice', array(
               'choices' => array(
-                'Mr' => 'Mr',
-                'Mrs' => 'Mrs',
-                'Ms' => 'Ms',
+                'Mr.' => 'Mr.',
+                'Mrs.' => 'Mrs.',
+                'Ms.' => 'Ms.',
                 'Miss' => 'Miss',
-                'Dr' => 'Dr',
+                'Dr.' => 'Dr.',
                 )
               ))
           ->add('firstName', 'text', array(
@@ -52,7 +52,7 @@ class UserType extends AbstractType
               ))
         ;
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */
