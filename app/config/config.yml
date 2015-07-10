@@ -71,6 +71,9 @@ assetic:
                 inputs:
                     - "%kernel.root_dir%/../vendor/components/jquery/jquery.min.js"
                     # - /srv/www/Toolkit/vendor/components/jquery/jquery.min.js
+            toolkit:
+                inputs:
+                    - @AppBundle/Resources/assets/js/toolkit.js
 
 
 
