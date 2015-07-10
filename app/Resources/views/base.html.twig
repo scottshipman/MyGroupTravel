@@ -11,11 +11,12 @@
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome.css">
 
     {# HEY LOOK HERE:  All this crap is required for Sonata Datepicker form field types - figure out to use with assetic.
-    <script type="text/javascript" src="/bundles/sonatacore/public/vendor/moment/min/moment.min.js"></script>
-    <script type="text/javascript" src="path_to_bootstrap.min.js"></script>
-    <script type="text/javascript" src="/bundles/sonatacore/public/vendor/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
-    <link rel="stylesheet" href="/bundles/sonatacore/public/vendor/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
-#}
+        <script type="text/javascript" src="/bundles/sonatacore/public/vendor/moment/min/moment.min.js"></script>
+        <script type="text/javascript" src="path_to_bootstrap.min.js"></script>
+        <script type="text/javascript" src="/bundles/sonatacore/public/vendor/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+        <link rel="stylesheet" href="/bundles/sonatacore/public/vendor/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+    #}
+
     {% stylesheets filter="compass" "@AppBundle/Resources/assets/css/sass/main.scss" %}
         <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
     {% endstylesheets %}
@@ -58,7 +59,7 @@
                 </ul>
             </div>
         {% else %}
-            {# <div class="login"><a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a></div> #}
+            {# <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a> #}
         {% endif %}
 
     </div>
