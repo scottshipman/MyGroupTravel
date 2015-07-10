@@ -46,6 +46,9 @@ twig:
     form:
       resources:
         - 'SonataCoreBundle:Form:datepicker.html.twig'
+    form_themes:
+      - '%kernel.root_dir%/Resources/views/form/fields.html.twig'
+
 
 # Assetic Configuration
 assetic:
