@@ -34,17 +34,8 @@ then
   
   echo " - Cleaning up & symlinking static asset directories"
 
-  [ -d web/assetic ] && rm -rf web/assetic
-  [ ! -L web/assetic ] && ln -s `pwd`/../../static/assetic web/assetic
-
-  [ -d web/css ] && rm -rf web/css
-  [ ! -L web/css ] && ln -s `pwd`/../../static/css web/css
-  
-  [ -d web/js ] && rm -rf web/js
-  [ ! -L web/js ] && ln -s `pwd`/../../static/js web/js
-  
-  [ -d web/upload ] && rm -rf web/upload
-  [ ! -L web/upload ] && ln -s `pwd`/../../static/upload web/upload
+  [ -d web/static ] && rm -rf web/static
+  [ ! -L web/static ] && ln -s `pwd`/../../static web/static
   
   echo " - Cleaning up & copying parameters.yml"
   
@@ -80,6 +71,12 @@ then
 fi
 
 echo $'\n============================================='
+echo "Database Migrations"
+echo $'=============================================\n'
+
+php app/console doctrine:migrations:migrate -n --env=$application_env
+
+echo $'\n============================================='
 echo "Assetic Dump & Cache Clear"
 echo $'=============================================\n'
 
@@ -103,11 +100,6 @@ echo ""
 # 
 #   echo $'\n  - Done!\n'
 # fi
-
-# @TODO: Database Migrations! (run earlier?)
-# echo $'\n============================================='
-# echo "Database Migrations"
-# echo $'=============================================\n'
 
 # @TODO: Tests! (run earlier?)
 # echo $'\n============================================='
