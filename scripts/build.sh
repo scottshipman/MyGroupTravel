@@ -71,6 +71,12 @@ then
 fi
 
 echo $'\n============================================='
+echo "Database Migrations"
+echo $'=============================================\n'
+
+php app/console doctrine:migrations:migrate -n --env=$application_env
+
+echo $'\n============================================='
 echo "Assetic Dump & Cache Clear"
 echo $'=============================================\n'
 
@@ -94,11 +100,6 @@ echo ""
 # 
 #   echo $'\n  - Done!\n'
 # fi
-
-# @TODO: Database Migrations! (run earlier?)
-# echo $'\n============================================='
-# echo "Database Migrations"
-# echo $'=============================================\n'
 
 # @TODO: Tests! (run earlier?)
 # echo $'\n============================================='
