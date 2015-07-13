@@ -53,7 +53,7 @@ class Version20150710163906 extends AbstractMigration implements ContainerAwareI
         $this->addSql('ALTER TABLE institution ADD CONSTRAINT FK_3A9F98E5EA9FDD75 FOREIGN KEY (media_id) REFERENCES media__media (id)');
 
       // here you have to define fixtures dir
-      $this->loadFixtures();
+      //$this->loadFixtures();
     }
 
     /**
