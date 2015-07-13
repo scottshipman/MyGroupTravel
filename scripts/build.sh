@@ -1,4 +1,6 @@
 #!/bin/bash
+set -e
+
 if [ "$1" = "" ]
 then
   echo "The Toolkit Build Script"
