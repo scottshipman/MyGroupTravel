@@ -22,11 +22,12 @@ class BrandType extends AbstractType
             ->add('primaryColor')
             ->add('buttonColor')
             ->add('hoverColor')
-            ->add('media', 'sonata_media_type', array(
-                'provider' => 'sonata.media.provider.image',
-                'context' => 'brand'
-
-            ));
+//            ->add('media', 'sonata_media_type', array(
+//                'provider' => 'sonata.media.provider.image',
+//                'context' => 'brand'
+//
+//            ))
+        ;
     }
 
     /**

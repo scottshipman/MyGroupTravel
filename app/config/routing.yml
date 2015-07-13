@@ -67,8 +67,12 @@ _tui_toolkit_manage_company_currency:
 # This is for Sonata Media Bundle
 gallery:
     resource: '@SonataMediaBundle/Resources/config/routing/gallery.xml'
-    prefix: /media/gallery
+    prefix: static/media/gallery
 
 media:
     resource: '@SonataMediaBundle/Resources/config/routing/media.xml'
-    prefix: /media
+    prefix: static/media
+
+oneup_uploader:
+    resource: .
+    type: uploader

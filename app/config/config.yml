@@ -144,3 +144,10 @@ knp_menu:
     # the renderer to use, list is also available by default
     default_renderer: twig
 
+
+#One Uploader Config
+oneup_uploader:
+    mappings:
+        gallery:
+            frontend: dropzone # or any uploader you use in the frontend
+

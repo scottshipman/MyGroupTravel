@@ -202,17 +202,6 @@ class BrandController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
             $this->get('session')->getFlashBag()->add('notice', 'Brand Saved: ' . $entity->getName());
-            // Getting sonata media manager service
-            $mediaManager = $this->container->get('sonata.media.manager.media');
-
-            // Getting sonata media object and saving media
-            $media = new Media;
-            $media->setBinaryContent($request->files->get('file'));
-            $media->setContext('brand');
-            $media->setProviderName('sonata.media.provider.image');
-            $mediaManager->save($media);
-
-
             return $this->redirect($this->generateUrl('_manage_brand_edit', array('id' => $id)));
         }
 
@@ -268,11 +257,11 @@ class BrandController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing Brand entity.
+     * Edits an existing Brand entity.
      *
      * @Route("/{id}/upload", name="_manage_brand_upload")
      * @Method("GET")
-     * @Template()
+     * @Template("BrandBundle:Brand:dropzone.html.twig")
      */
     public function createDropZoneFormAction(Request $request)
     {
