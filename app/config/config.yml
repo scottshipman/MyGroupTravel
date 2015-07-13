@@ -150,4 +150,6 @@ oneup_uploader:
     mappings:
         gallery:
             frontend: dropzone # or any uploader you use in the frontend
+        brand:
+            frontend: dropzone
 
