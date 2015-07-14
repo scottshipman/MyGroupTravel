@@ -5,8 +5,14 @@ namespace TUI\Toolkit\UserBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
 use TUI\Toolkit\UserBundle\Entity\User;
 use TUI\Toolkit\UserBundle\Form\UserType;
+use Application\Sonata\MediaBundle\Entity\Media;
+use Application\Sonata\MediaBundle\ApplicationSonataMediaBundle;
 
 /**
  * User controller.
@@ -249,5 +255,38 @@ class UserController extends Controller
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
+    }
+
+    /**
+     * Edits an existing User entity.
+     *
+     * @Route("/{id}/upload", name="user_upload")
+     * @Method("GET")
+     * @Template("TUIToolkitUserBundle:User:dropzone.html.twig")
+     */
+    public function createDropZoneFormAction(Request $request)
+    {
+        $form = $this->createFormBuilder()->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+
+            // Getting sonata media manager service
+            $mediaManager = $this->container->get('sonata.media.manager.media');
+
+            // Getting sonata media object and saving media
+            $media = new Media;
+            $media->setBinaryContent($request->files->get('file'));
+            $media->setContext('user');
+            $media->setProviderName('sonata.media.provider.image');
+            $mediaManager->save($media);
+
+
+        }
+
+        return $this->render('TUIToolkitUserBundle:User:dropzone.html.twig', array(
+            'form' => $form->createView()
+        ));
     }
 }

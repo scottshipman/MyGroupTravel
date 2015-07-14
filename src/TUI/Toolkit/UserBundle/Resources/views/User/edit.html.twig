@@ -5,6 +5,8 @@
 
     {{ form(edit_form) }}
 
+    {{ render(controller('TUIToolkitUserBundle:User:createDropZoneForm')) }}
+
         <ul class="record_actions">
     <li>
         <a href="{{ path('user') }}">

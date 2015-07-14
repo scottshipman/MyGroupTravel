@@ -52,9 +52,9 @@ twig:
 # Assetic Configuration
 assetic:
     debug:          "%kernel.debug%"
-    read_from:            '%kernel.root_dir%/../web/static'
+    read_from:      '%kernel.root_dir%/../web/uploads'
     use_controller: false
-    bundles:        [BrandBundle]
+    bundles:        [BrandBundle, TUIToolkitUserBundle]
     #java: /usr/bin/java
     filters:
         cssrewrite: ~
@@ -150,6 +150,17 @@ oneup_uploader:
     mappings:
         gallery:
             frontend: dropzone # or any uploader you use in the frontend
+            namer: oneup_uploader.namer.uniqid
+            error_handler: oneup_uploader.error_handler.noop
         brand:
             frontend: dropzone
-
+            namer: oneup_uploader.namer.uniqid
+            error_handler: oneup_uploader.error_handler.noop
+            enable_progress:      true
+            enable_cancelation:   true
+        user:
+            frontend: dropzone
+            namer: oneup_uploader.namer.uniqid
+            error_handler: oneup_uploader.error_handler.noop
+            enable_progress:      true
+            enable_cancelation:   true

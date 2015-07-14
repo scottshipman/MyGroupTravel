@@ -24,6 +24,11 @@ user_update:
     defaults: { _controller: "TUIToolkitUserBundle:User:update" }
     methods:  [POST, PUT]
 
+user_upload:
+    path:     /{id}/upload
+    defaults: { _controller: "TUIToolkitUserBundle:User:createDropZoneForm" }
+    methods:  [POST, PUT, GET]
+
 user_delete:
     path:     /{id}/delete
     defaults: { _controller: "TUIToolkitUserBundle:User:delete" }
