@@ -42,6 +42,18 @@ $ cd /srv/www/Toolkit
 $ sudo composer install
 ```
 
+
+If you have the config.rb with bin command settings,
+instead of SSH into vagrant box and running commands as 'sudo php app/console',
+you can do stuff like below from your host machine precip directory:
+
+```
+~/www/precip (master)$ bin/toolkit-console cache:clear --env=dev
+
+~/www/precip (master)$ bin/toolkit-composer require [package-provider/package-name]
+~/www/precip (master)$ bin/toolkit-composer install
+```
+
 5. Init the app
 ```
 $ sudo php app/console doctrine:schema:create  #subsequent use is doctrine:schema:update
@@ -82,12 +94,16 @@ It treats it like a base_url.
 * Ice Age - Dont miss the [migrations](http://symfony.com/doc/current/bundles/DoctrineMigrationsBundle/index.html)
 * Doctrine query builder [API](http://doctrine-orm.readthedocs.org/en/latest/reference/query-builder.html)
 
-## Running composer and console commands from CLI
-
-If you have the config.rb with bin commands settings, you can do stuff like:
-
+## Source Control and Developer Best Practices
+* If you install or update a bundle, or do anything that changes schema, like add a field, change a field mapping etc,
+then you'll need to generate a Doctrine Migration so others can run Migrations when they pull latest source code.
 ```
-~/www/precip (master)$ bin/toolkit-console cache:clear --env=dev
+\\ to generate a migration file - you'll need to add and commit to source control
+$ bin/toolkit-console doctrine:migrations:diff
 
-~/www/precip (master)$ bin/toolkit-composer require [package-provider/package-name]
+\\ to run all migrations still pending
+$ bin/toolkit-console doctrine:migrations:migrate
+
+\\ to check migrations status
+$ bin/toolkit-console doctrine:migrations:status
 ```
