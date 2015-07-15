@@ -67,10 +67,12 @@ $ sudo php app/console doctrine:schema:create  #subsequent use is doctrine:schem
 $ sudo php app/console doctrine:fixtures:load
 ```
 
+Note: this will likely get replaced by running a migration 0 (doctrine:migrations:migrate)
+
 6. Load the assets and clear cache
 ```
-$ sudo php app/console assetic:dump    # option are --env=prod --no-debug
 $ sudo app/console cache:clear    # possible options are --env=prod --no-debug
+$ sudo php app/console assetic:dump    # option are --env=prod --no-debug
 ```
 
 7. You can also run the Symfony shell and run commands in that shell
