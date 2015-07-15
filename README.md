@@ -10,13 +10,23 @@ _A Symfony 2 Thing_
 ```ruby
 drupal_sites = {
   "toolkit" => {
-    "host" => "toolkit.vm",
-    "path" => "Toolkit/web",
-    "drupal" => "false",
-    "git_url" => "git@github.com:TUI-SAS-Web-Development/Toolkit.git",
-    "git_dir" => "Toolkit",
+      "host" => "toolkit.vm",
+      "path" => "Toolkit/web",
+      "drupal" => "false",
+      "git_url" => "git@github.com:TUI-SAS-Web-Development/Toolkit.git",
+      "git_dir" => "Toolkit",
+      "commands" => {
+        "toolkit-composer" => {
+          "path" => "/srv/www/Toolkit",
+          "cmd" => "sudo composer",
+        },
+        "toolkit-console" => {
+          "path" => "/srv/www/Toolkit",
+          "cmd" => "sudo php app/console",
+        }
+      }
+    }
   }
-}
 ```
 
 3. Boot the VM with `vagrant up`. If it's already built, `vagrant reload --provision`.
@@ -71,3 +81,13 @@ It treats it like a base_url.
 * form API [reference field types](http://symfony.com/doc/current/reference/forms/types.html)
 * Ice Age - Dont miss the [migrations](http://symfony.com/doc/current/bundles/DoctrineMigrationsBundle/index.html)
 * Doctrine query builder [API](http://doctrine-orm.readthedocs.org/en/latest/reference/query-builder.html)
+
+## Running composer and console commands from CLI
+
+If you have the config.rb with bin commands settings, you can do stuff like:
+
+```
+~/www/precip (master)$ bin/toolkit-console cache:clear --env=dev
+
+~/www/precip (master)$ bin/toolkit-composer require [package-provider/package-name]
+```
