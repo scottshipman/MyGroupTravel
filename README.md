@@ -47,6 +47,13 @@ If you have the config.rb with bin command settings,
 instead of SSH into vagrant box and running commands as 'sudo php app/console',
 you can do stuff like below from your host machine precip directory:
 
+you may need to run the two commands below first:
+```
+$ vagrant plugin install vagrant-exec
+$ vagrant exec --binstubs
+```
+
+
 ```
 ~/www/precip (master)$ bin/toolkit-console cache:clear --env=dev
 
