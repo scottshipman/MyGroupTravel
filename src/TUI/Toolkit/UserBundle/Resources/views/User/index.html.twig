@@ -3,36 +3,36 @@
 {% block body -%}
     <h1>User list</h1>
 
-    <table class="records_list">
+    <table class="mdl-data-table mdl-js-data-table records_list">
         <thead>
             <tr>
-                <th>Username (ID)</th>
+                <th class="mdl-data-table__cell--non-numeric">Username (ID)</th>
                 <th>Enabled</th>
-                <th>Name</th>
-                <th>Phone Number</th>
-                <th>Email</th>
-                <th>Roles</th>
-                <th>User Parent</th>
-                <th>Actions</th>
+                <th class="mdl-data-table__cell--non-numeric">Name</th>
+                <th class="mdl-data-table__cell--non-numeric">Phone Number</th>
+                <th class="mdl-data-table__cell--non-numeric">Email</th>
+                <th class="mdl-data-table__cell--non-numeric">Roles</th>
+                <th class="mdl-data-table__cell--non-numeric">User Parent</th>
+                <th class="mdl-data-table__cell--non-numeric">Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for entity in entities %}
             <tr>
-                <td><a href="{{ path('user_show', { 'id': entity.id }) }}">{{ entity.username }}</a> ({{ entity.id }})</td>
+                <td class="mdl-data-table__cell--non-numeric"><a href="{{ path('user_show', { 'id': entity.id }) }}">{{ entity.username }}</a> ({{ entity.id }})</td>
                 <td>{{ entity.enabled }}</td>
-                <td>{{ entity.honorific }} {{ entity.firstName }} {{ entity.lastName }}</td>
-                <td>{{ entity.phoneNumber }}</td>
-                <td><a href="mailto:{{ entity.email }}">{{ entity.email }}</a></td>
-                <td>
+                <td class="mdl-data-table__cell--non-numeric">{{ entity.honorific }} {{ entity.firstName }} {{ entity.lastName }}</td>
+                <td class="mdl-data-table__cell--non-numeric">{{ entity.phoneNumber }}</td>
+                <td class="mdl-data-table__cell--non-numeric"><a href="mailto:{{ entity.email }}">{{ entity.email }}</a></td>
+                <td class="mdl-data-table__cell--non-numeric">
                   <ul>
                   {% for role in entity.roles %}
                     <li>{{ role |e }}</li>
                   {% endfor %}
                   </ul>
                 </td>
-                <td>{{ entity.userParent }}</td>
-                <td>
+                <td class="mdl-data-table__cell--non-numeric">{{ entity.userParent }}</td>
+                <td class="mdl-data-table__cell--non-numeric">
                 <ul>
                     <li>
                         <a href="{{ path('user_show', { 'id': entity.id }) }}">show</a>
@@ -47,9 +47,9 @@
         </tbody>
     </table>
 
-        <ul>
+        <ul class="record_actions">
         <li>
-            <a href="{{ path('user_new') }}">
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('user_new') }}">
                 Create a new entry
             </a>
         </li>

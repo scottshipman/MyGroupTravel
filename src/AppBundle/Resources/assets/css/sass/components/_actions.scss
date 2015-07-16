@@ -10,8 +10,4 @@ ul.record_actions {
     @include inline-block-vertical(top);
   }
 
-  a {
-    @extend .cta;
-  }
-
 }

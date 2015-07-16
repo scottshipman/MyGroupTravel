@@ -52,7 +52,7 @@ twig:
 # Assetic Configuration
 assetic:
     debug:          "%kernel.debug%"
-    read_from:      '%kernel.root_dir%/../web/uploads'
+    read_from:      '%kernel.root_dir%/../web/static'
     use_controller: false
     bundles:        [BrandBundle, TUIToolkitUserBundle]
     #java: /usr/bin/java
