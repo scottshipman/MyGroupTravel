@@ -28,3 +28,23 @@ manage_quote_delete:
     path:     /{id}/delete
     defaults: { _controller: "QuoteBundle:Quote:delete" }
     methods:  [POST, DELETE]
+
+manage_quote_active:
+    path:     /active
+    defaults: { _controller: "QuoteBundle:Quote:index" }
+
+manage_quote_converted:
+    path:     /converted
+    defaults: { _controller: "QuoteBundle:Quote:converted" }
+
+manage_quote_templates:
+    path:     /templates
+    defaults: { _controller: "QuoteBundle:Quote:templates" }
+
+manage_quote_deleted:
+    path:     /deleted
+    defaults: { _controller: "QuoteBundle:Quote:showDeleted" }
+
+manage_quote_restore:
+    path:     /{id}/restore
+    defaults: { _controller: "QuoteBundle:Quote:restore" }

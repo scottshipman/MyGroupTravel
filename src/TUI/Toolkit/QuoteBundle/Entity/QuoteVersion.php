@@ -141,7 +141,29 @@ class QuoteVersion
      */
     private $welcomeMsg;
 
+  /**
+   * @var float
+   *
+   * @ORM\Column(name="pricePerson", type="float")
+   */
+  private $pricePerson;
 
+  /**
+   * @var DateTime
+   *
+   * @ORM\Column(name="returnDate", type="date")
+   */
+  private $returnDate;
+
+  /**
+   * @var integer
+   *
+   * @ORM\Column(name="currency", type="integer")
+   *
+   * @ORM\ManyToOne(targetEntity="TUI\Toolkit\CurrencyBundle\Entity\Currency", cascade={"all"}, fetch="EAGER", inversedBy = "id")
+   *
+   */
+  private $currency;
     /**
      * Get id
      *
@@ -519,4 +541,73 @@ class QuoteVersion
     {
         return $this->welcomeMsg;
     }
+
+  /**
+   * Set pricePerson
+   *
+   * @param string $pricePerson
+   * @return QuoteVersion
+   */
+  public function setPricePerson($pricePerson)
+  {
+    $this->pricePerson = $pricePerson;
+
+    return $this;
+  }
+
+  /**
+   * Get pricePerson
+   *
+   * @return float
+   */
+  public function getPricePerson()
+  {
+    return $this->pricePerson;
+  }
+
+  /**
+   * Set returnDate
+   *
+   * @param string $returnDate
+   * @return QuoteVersion
+   */
+  public function setReturnDate($returnDate)
+  {
+    $this->returnDate = $returnDate;
+
+    return $this;
+  }
+
+  /**
+   * Get returnDate
+   *
+   * @return date
+   */
+  public function getReturnDate()
+  {
+    return $this->returnDate;
+  }
+
+  /**
+   * Set currency
+   *
+   * @param string $currency
+   * @return QuoteVersion
+   */
+  public function setCurrency($currency)
+  {
+    $this->currency = $currency;
+
+    return $this;
+  }
+
+  /**
+   * Get currency
+   *
+   * @return float
+   */
+  public function getCurrency()
+  {
+    return $this->currency;
+  }
 }

@@ -1,24 +1,24 @@
 {% extends '::base.html.twig' %}
 {% block title %}Manage Quotes{% endblock %}
 {% block body -%}
-    <h1>Quote Dashboard</h1>
+    <h1>Quote list</h1>
     {% embed "QuoteBundle:Quote:quote_tabs.html.twig" %}
-        {% block active_tab %}
-            <a class='active_tab' href="#">Active Quotes</a>
+        {% block templates_tab %}
+            <a class='active_tab' href="#">Templates</a>
         {% endblock %}
     {% endembed %}
     <table class="records_list">
         <thead>
-            <tr>
-                <th>Institution / Town</th>
-                <th>Name</th>
-                <th>Reference</th>
-                <th>Created</th>
-                <th>Views</th>
-                <th>Shared Views</th>
-                <th>Business Admin</th>
-                <th>Actions</th>
-            </tr>
+        <tr>
+            <th>Institution / Town</th>
+            <th>Name</th>
+            <th>Reference</th>
+            <th>Created</th>
+            <th>Views</th>
+            <th>Shared Views</th>
+            <th>Business Admin</th>
+            <th>Actions</th>
+        </tr>
         </thead>
         <tbody>
         {% for entity in entities %}
@@ -31,14 +31,14 @@
                 <td>{{ entity.shareViews }}</td>
                 <td>{{ entity.salesAgent }}</td>
                 <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('manage_quote_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('manage_quote_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
+                    <ul>
+                        <li>
+                            <a href="{{ path('manage_quote_show', { 'id': entity.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('manage_quote_edit', { 'id': entity.id }) }}">edit</a>
+                        </li>
+                    </ul>
                 </td>
             </tr>
         {% endfor %}
