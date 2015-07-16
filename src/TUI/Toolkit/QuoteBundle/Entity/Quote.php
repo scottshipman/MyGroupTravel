@@ -4,12 +4,14 @@ namespace TUI\Toolkit\QuoteBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Annotations;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Quote
  *
  * @ORM\Table(name="quote", uniqueConstraints={@ORM\UniqueConstraint(name="reference", columns={"reference"})})
  * @ORM\Entity
+ * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
  *
  */
 class Quote
@@ -52,9 +54,9 @@ class Quote
     private $converted;
 
     /**
-     * @var boolean
+     * @var date
      *
-     * @ORM\Column(name="deleted", type="boolean")
+     * @ORM\Column(name="deleted", type="date", nullable=true)
      */
     private $deleted;
 
@@ -90,7 +92,48 @@ class Quote
     private $isTemplate;
 
 
-    /**
+  /**
+   * @var DateTime
+   *
+   * @ORM\Column(name="created", type="date")
+   *
+   */
+  private $created;
+
+  /**
+   * @var integer
+   *
+   * @ORM\Column(name="views", type="integer")
+   *
+   */
+  private $views;
+
+  /**
+ * @var integer
+ *
+ * @ORM\Column(name="shareViews", type="integer")
+ *
+ */
+  private $shareViews;
+
+  /**
+   * @var integer
+   *
+   * @ORM\Column(name="institution", type="integer")
+   *
+   * @ORM\ManyToOne(targetEntity="TUI\Toolkit\InstitutionBundle\Entity\Institution", cascade={"all"}, fetch="EAGER", inversedBy = "id")
+   *
+   */
+  private $institution;
+
+  public function __construct()
+  {
+    $this->created = new \DateTime();
+    $this->views = 0;
+    $this->shareViews = 0;
+  }
+
+  /**
      * Get id
      *
      * @return integer 
@@ -306,4 +349,99 @@ class Quote
     {
         return $this->isTemplate;
     }
+
+  /**
+   * Set views
+   *
+   * @param integer $views
+   * @return Quote
+   */
+  public function setViews($views)
+  {
+    $this->views = $views;
+
+    return $this;
+  }
+
+  /**
+   * Get views
+   *
+   * @return integer
+   */
+  public function getViews()
+  {
+    return $this->views;
+  }
+
+  /**
+   * Set shareViews
+   *
+   * @param integer $shareViews
+   * @return Quote
+   */
+  public function setShareViewsiews($shareViews)
+  {
+    $this->shareViews = $shareViews;
+
+    return $this;
+  }
+
+  /**
+   * Get shareViews
+   *
+   * @return integer
+   */
+  public function getShareViews()
+  {
+    return $this->shareViews;
+  }
+
+  /**
+   * Set institution
+   *
+   * @param integer $institution
+   * @return Quote
+   */
+  public function setInstitution($institution)
+  {
+    $this->institution = $institution;
+
+    return $this;
+  }
+
+  /**
+   * Get institution
+   *
+   * @return integer
+   */
+  public function getInstitution()
+  {
+    return $this->institution;
+  }
+
+  /**
+   * Set created
+   *
+   * @param date $created
+   * @return Quote
+   */
+  public function setCreated($created)
+  {
+    if(!$created){
+      $created = new \DateTime();
+    }
+    $this->created = $created;
+
+    return $this;
+  }
+
+  /**
+   * Get created
+   *
+   * @return date
+   */
+  public function getCreated()
+  {
+    return $this->created;
+  }
 }

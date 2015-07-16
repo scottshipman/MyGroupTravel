@@ -24,12 +24,72 @@ class QuoteController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('QuoteBundle:Quote')->findAll();
+        $entities = $em->getRepository('QuoteBundle:Quote')->findByConverted(FALSE);
 
         return $this->render('QuoteBundle:Quote:index.html.twig', array(
             'entities' => $entities,
         ));
     }
+
+
+
+  /**
+   * Lists all CONVERTED Quote entities.
+   *
+   */
+  public function convertedAction()
+  {
+    $em = $this->getDoctrine()->getManager();
+
+    $entities = $em->getRepository('QuoteBundle:Quote')->findByConverted(TRUE);
+
+    return $this->render('QuoteBundle:Quote:converted.html.twig', array(
+      'entities' => $entities,
+    ));
+  }
+
+
+
+  /**
+   * Lists all DELETED Quote entities.
+   *
+   */
+  public function showDeletedAction()
+  {
+    $em = $this->getDoctrine()->getManager();
+    $filters = $em->getFilters();
+    $filters->disable('softdeleteable');
+
+    $criteria = new \Doctrine\Common\Collections\Criteria();
+// Add a not equals parameter to your criteria
+    $criteria->where($criteria->expr()->neq('deleted', null));
+    $entities = $em->getRepository('QuoteBundle:Quote')->matching($criteria);
+
+    return $this->render('QuoteBundle:Quote:deleted.html.twig', array(
+      'entities' => $entities,
+    ));
+  }
+
+
+
+  /**
+   * Lists all DELETED Quote entities.
+   *
+   */
+  public function templatesAction()
+  {
+    $em = $this->getDoctrine()->getManager();
+
+    // TODO need to implement soft delete filter disable here
+
+    $entities = $em->getRepository('QuoteBundle:Quote')->findByIsTemplate(TRUE);
+
+    return $this->render('QuoteBundle:Quote:templates.html.twig', array(
+      'entities' => $entities,
+    ));
+  }
+
+
     /**
      * Creates a new Quote entity.
      *
@@ -63,7 +123,8 @@ class QuoteController extends Controller
      */
     private function createCreateForm(Quote $entity)
     {
-        $choices = $this->getBrandUsers();
+        $brandUsers = $this->getBrandUsers();
+        $institutions = $this->getInstitutionList();
 
         $form = $this->createForm(new QuoteType(), $entity, array(
             'action' => $this->generateUrl('manage_quote_create'),
@@ -71,8 +132,12 @@ class QuoteController extends Controller
         ));
         $form->add('salesAgent', 'choice', array(
           'placeholder' => 'Select',
-        'choices' => $choices,
+        'choices' => $brandUsers,
           ));
+      $form->add('institution', 'choice', array(
+        'placeholder' => 'Select',
+        'choices' => $institutions,
+      ));
 
         $form->add('submit', 'submit', array('label' => 'Create'));
 
@@ -234,6 +299,54 @@ class QuoteController extends Controller
         ;
     }
 
+
+  /**
+   * Restores a Deleted Quote entity.
+   *
+   */
+  public function restoreAction(Request $request, $id)
+  {
+
+      $em = $this->getDoctrine()->getManager();
+      // dont forget to disable softdelete filter so doctrine can *find* the deleted entity
+      $filters = $em->getFilters();
+      $filters->disable('softdeleteable');
+      $entity = $em->getRepository('QuoteBundle:Quote')->find($id);
+
+      if (!$entity) {
+        throw $this->createNotFoundException('Unable to find Quote entity.');
+      }
+      $entity->setDeleted(NULL);
+      $em->persist($entity);
+      $em->flush();
+      $this->get('session')->getFlashBag()->add('notice', 'Quote Restored: '. $entity->getName());
+
+    return $this->redirect($this->generateUrl('manage_quote'));
+  }
+
+  /**
+   * Creates a form to Restore a deleted Quote entity by id.
+   *
+   * @param mixed $id The entity id
+   *
+   * @return \Symfony\Component\Form\Form The form
+   */
+  private function createRestoreForm($id)
+  {
+    return $this->createFormBuilder()
+      ->setAction($this->generateUrl('manage_quote_restore', array('id' => $id)))
+      ->setMethod('POST')
+      ->add('submit', 'submit', array('label' => 'RESTORE'))
+      ->getForm()
+      ;
+  }
+
+
+
+
+
+
+
   function getBrandUsers()
   {
     $choices=array();
@@ -250,6 +363,27 @@ class QuoteController extends Controller
     $users = $query->getArrayResult();
     foreach($users as $user){
       $choices[$user['id']] = $user['username'];
+    }
+    return $choices;
+  }
+
+  function getInstitutionList()
+  {
+    $choices=array();
+    $em = $this->getDoctrine()->getManager();
+    $qb = $em->createQueryBuilder('InstitutionBundle:Institution');
+    $qb->select('i.id, i.name')
+      ->from('InstitutionBundle:Institution', 'i')
+     // ->where(
+     //   $qb->expr()->like('u.roles', '?1')
+     // )
+      ->orderBy('i.name', 'ASC')
+    //  ->setParameter(1, '%ROLE_BRAND%')
+    ;
+    $query = $qb->getQuery();
+    $institutions = $query->getArrayResult();
+    foreach($institutions as $institution){
+      $choices[$institution['id']] = $institution['name'];
     }
     return $choices;
   }

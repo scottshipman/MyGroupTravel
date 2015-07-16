@@ -5,7 +5,7 @@ namespace TUI\Toolkit\QuoteBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Doctrine\ORM\EntityRepository;
 
 class QuoteType extends AbstractType
 {
@@ -21,7 +21,6 @@ class QuoteType extends AbstractType
             ->add('organizer', 'email')
             //->add('salesAgent', 'choice')
             ->add('converted', 'checkbox', array('required'=> FALSE,))
-            ->add('deleted', 'checkbox', array('required'=> FALSE,))
             ->add('setupComplete', 'checkbox', array('required'=> FALSE,))
             ->add('locked', 'checkbox', array('required'=> FALSE,))
             ->add('isTemplate', 'checkbox', array('required'=> FALSE,))
