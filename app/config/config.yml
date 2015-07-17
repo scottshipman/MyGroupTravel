@@ -54,7 +54,7 @@ assetic:
     debug:          "%kernel.debug%"
     read_from:            '%kernel.root_dir%/../web/static'
     use_controller: false
-    bundles:        [BrandBundle, TUIToolkitUserBundle]
+    bundles:        [BrandBundle, TUIToolkitUserBundle, QuoteBundle, InstitutionBundle]
     #java: /usr/bin/java
     filters:
         cssrewrite: ~
