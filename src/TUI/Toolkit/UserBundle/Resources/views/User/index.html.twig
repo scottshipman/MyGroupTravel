@@ -13,6 +13,7 @@
                 <th>Email</th>
                 <th>Roles</th>
                 <th>User Parent</th>
+                <th>Avatar</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -32,6 +33,9 @@
                   </ul>
                 </td>
                 <td>{{ entity.userParent }}</td>
+                {% if entity.media %}
+                    <td>{% media entity.media, 'small' %}</td>
+                {% endif %}
                 <td>
                 <ul>
                     <li>

@@ -187,7 +187,6 @@ class Brand
         return $this->hoverColor;
     }
 
-
     /**
      * @var \Application\Sonata\MediaBundle\Entity\Media
      * @ORM\ManyToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Media", cascade={"persist"}, fetch="LAZY")

@@ -95,7 +95,7 @@ sonata_media:
                 small: { width: 100 , quality: 70}
                 big:   { width: 500 , quality: 70}
 
-        users:
+        user:
             providers:
                 - sonata.media.provider.image
 
@@ -116,18 +116,27 @@ sonata_media:
             formats:
                  small: { width: 150 , quality: 95} # profile circle
                  big:   { width: 500 , quality: 90} # profile page?
+        quote:
+            providers:
+                 - sonata.media.provider.image
+                 - sonata.media.provider.file
+
+            formats:
+                 small: { width: 150 , quality: 95} # profile circle
+                 big:   { width: 500 , quality: 90} # profile page?
 
     cdn:
         server:
-            path: static/uploads/media # http://media.sonata-project.org/
+            path: /static/uploads/media # http://media.sonata-project.org/
 
     filesystem:
         local:
             directory:  %kernel.root_dir%/../web/static/uploads/media
-            create:     false
+            create:     true
 
 twig:
     form:
         resources:
             - 'SonataMediaBundle:Form:media_widgets.html.twig'
 #             - 'BrandBundle:Brand:dropzone.html.twig'
+

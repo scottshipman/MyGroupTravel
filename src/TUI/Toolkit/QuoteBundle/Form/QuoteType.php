@@ -15,18 +15,22 @@ class QuoteType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-      $builder
+        $builder
             ->add('name')
             ->add('reference')
             ->add('organizer', 'email')
             //->add('salesAgent', 'choice')
-            ->add('converted', 'checkbox', array('required'=> FALSE,))
-            ->add('setupComplete', 'checkbox', array('required'=> FALSE,))
-            ->add('locked', 'checkbox', array('required'=> FALSE,))
-            ->add('isTemplate', 'checkbox', array('required'=> FALSE,))
-        ;
+            ->add('converted', 'checkbox', array('required' => FALSE,))
+            ->add('setupComplete', 'checkbox', array('required' => FALSE,))
+            ->add('locked', 'checkbox', array('required' => FALSE,))
+            ->add('isTemplate', 'checkbox', array('required' => FALSE,))
+            ->add('media', 'sonata_media_type', array(
+                'provider' => 'sonata.media.provider.image',
+                'context' => 'quote'
+
+            ));
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */
