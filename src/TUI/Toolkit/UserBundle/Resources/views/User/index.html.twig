@@ -13,6 +13,7 @@
                 <th class="mdl-data-table__cell--non-numeric">Email</th>
                 <th class="mdl-data-table__cell--non-numeric">Roles</th>
                 <th class="mdl-data-table__cell--non-numeric">User Parent</th>
+                <th class="mdl-data-table__cell--non-numeric">Avatar</th>
                 <th class="mdl-data-table__cell--non-numeric">Actions</th>
             </tr>
         </thead>
@@ -33,14 +34,19 @@
                 </td>
                 <td class="mdl-data-table__cell--non-numeric">{{ entity.userParent }}</td>
                 <td class="mdl-data-table__cell--non-numeric">
-                <ul>
-                    <li>
-                        <a href="{{ path('user_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('user_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
+                {% if entity.media %}
+                    {% media entity.media, 'small' %}
+                {% endif %}
+                </td>
+                <td class="mdl-data-table__cell--non-numeric">
+                    <ul>
+                        <li>
+                            <a href="{{ path('user_show', { 'id': entity.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('user_edit', { 'id': entity.id }) }}">edit</a>
+                        </li>
+                    </ul>
                 </td>
             </tr>
         {% endfor %}

@@ -13,6 +13,12 @@
                 <th>Userparent</th>
                 <td>{{ entity.userParent }}</td>
             </tr>
+        <tr>
+            <th>Avatar</th>
+            {% if entity.media %}
+                <td>{% media entity.media, 'small' %}</td>
+            {% endif %}
+        </tr>
         </tbody>
     </table>
 

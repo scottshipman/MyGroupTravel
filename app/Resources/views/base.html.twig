@@ -8,7 +8,7 @@
     <title>{% block title %}Welcome{% endblock %} | eToolkit</title>
 
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css">
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome.css">
+    {# <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome.css"> #}
 
     {# Google Material Design (Lite) Stuff #}
     <link rel="stylesheet" href="//storage.googleapis.com/code.getmdl.io/1.0.0/material.indigo-pink.min.css">
@@ -35,11 +35,39 @@
 
 </head>
 
-{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-  <body class="user-{{app.user.id}}">
-{% else %}
-  <body class="user-0">
-{% endif %}
+<body class="user-{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}{{ app.user.id }}{% else %}0{% endif %}">
+  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--overlay-drawer-button">
+
+    <div class="mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
+        <header class="demo-drawer-header">
+            <img src="//www.getmdl.io/templates/dashboard/images/user.jpg" class="demo-avatar">
+            <div class="demo-avatar-dropdown">
+                <span>hello@example.com</span>
+                <div class="mdl-layout-spacer"></div>
+                <button id="accbtn" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+                    <i class="material-icons">arrow_drop_down</i>
+                </button>
+                <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="accbtn">
+                    <li class="mdl-menu__item">hello@example.com</li>
+                    <li class="mdl-menu__item">info@example.com</li>
+                    <li class="mdl-menu__item"><i class="material-icons">add</i>Add another account...</li>
+                </ul>
+            </div>
+        </header>
+        <span class="mdl-layout-title">Title</span>
+        <nav class="mdl-navigation">
+            <a class="mdl-navigation__link" href="">Link</a>
+            <a class="mdl-navigation__link" href="">Link</a>
+            <a class="mdl-navigation__link" href="">Link</a>
+            <a class="mdl-navigation__link" href="">Link</a>
+        </nav>
+    </div><!-- mdl-layout__drawer -->
+
+    <main class="mdl-layout__content">
+
+
+
+
 
     <div class="header-top">
 
@@ -96,6 +124,10 @@
             {% block body %}{% endblock %}
         </div>
     </div>
+
+    </main>
+
+  </div>
 
     {% javascripts '@toolkit' %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
