@@ -1,0 +1,17 @@
+{# error.html.twig #}
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css">
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome.css">
+<link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+
+
+{% use "WebfactoryExceptionsBundle:Exception:blocks.html.twig" %}
+
+{# example security usage, see below #}
+    {% if app.user and is_granted('IS_AUTHENTICATED_FULLY') %}
+        {# ... #}
+    {% endif %}
+
+{% block myMainContentContainer %}
+    {{ block('webfactory_exceptions_standardExceptionPage') }}
+{% endblock %}
