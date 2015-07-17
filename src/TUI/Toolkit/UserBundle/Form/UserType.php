@@ -50,6 +50,11 @@ class UserType extends AbstractType
                 'invalid_message' => 'fos_user.password.mismatch',
                 'required' => false,
               ))
+            ->add('media', 'sonata_media_type', array(
+                'provider' => 'sonata.media.provider.image',
+                'context' => 'user'
+
+            ))
         ;
     }
 
