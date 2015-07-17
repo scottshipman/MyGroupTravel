@@ -52,7 +52,7 @@ twig:
 # Assetic Configuration
 assetic:
     debug:          "%kernel.debug%"
-    read_from:            '%kernel.root_dir%/../web/static'
+    read_from:            '%kernel.root_dir%/../web/static/uploads/'
     use_controller: false
     bundles:        [BrandBundle, TUIToolkitUserBundle]
     #java: /usr/bin/java
@@ -60,12 +60,12 @@ assetic:
         cssrewrite: ~
         sass: ~
         compass:  ~
-        yui_js:
-             jar: "%kernel.root_dir%/Resources/java/yuicompressor-2.4.7.jar"
+#        yui_js:
+#             jar: "%kernel.root_dir%/Resources/java/yuicompressor-2.4.7.jar"
         #closure:
         #    jar: "%kernel.root_dir%/Resources/java/compiler.jar"
-        yui_css:
-            jar: "%kernel.root_dir%/Resources/java/yuicompressor.jar"
+#        yui_css:
+#            jar: "%kernel.root_dir%/Resources/java/yuicompressor.jar"
     assets:
             jquery:
                 inputs:
@@ -149,7 +149,7 @@ knp_menu:
     default_renderer: twig
 
 
-#One Uploader Config
+##One Uploader Config
 oneup_uploader:
     mappings:
         gallery:
