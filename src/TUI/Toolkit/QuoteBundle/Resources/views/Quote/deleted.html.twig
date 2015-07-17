@@ -4,20 +4,20 @@
     <h1>Quote list</h1>
     {% embed "QuoteBundle:Quote:quote_tabs.html.twig" %}
         {% block deleted_tab %}
-            <a class='active_tab' href="#">Deleted Quotes</a>
+            <a class="mdl-tabs__tab is-active" href="{{ path('manage_quote_deleted') }}">Deleted Quotes</a>
         {% endblock %}
     {% endembed %}
     <table class="records_list">
         <thead>
         <tr>
-            <th>Institution / Town</th>
-            <th>Name</th>
-            <th>Reference</th>
-            <th>Created</th>
-            <th>Views</th>
-            <th>Shared Views</th>
-            <th>Business Admin</th>
-            <th>Actions</th>
+            <th{% if entities.isSorted('entity.institution') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(entities, 'Institution / Town', 'entity.institution') }}</th>
+            <th{% if entities.isSorted('entity.name') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(entities, 'Name', 'entity.name') }}</th>
+            <th{% if entities.isSorted('entity.reference') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(entities, 'Reference', 'entity.reference') }}</th>
+            <th{% if entities.isSorted('entity.created') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(entities, 'Created', 'entity.created') }}</th>
+            <th{% if entities.isSorted('entity.views') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(entities, 'Views', 'entity.views') }}</th>
+            <th{% if entities.isSorted('entity.sharedViews') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(entities, 'Shared Views', 'entity.sharedViews') }}</th>
+            <th{% if entities.isSorted('entity.salesAgent') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(entities, 'Business Admin', 'entity.salesAgent') }}</th>
+            <thActions</th>
         </tr>
         </thead>
         <tbody>
@@ -47,12 +47,5 @@
         {% endfor %}
         </tbody>
     </table>
-
-        <ul>
-        <li>
-            <a href="{{ path('manage_quote_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
+    {{ render(controller("QuoteBundle:Quote:pageRange", {'entities':entities})) }}
     {% endblock %}

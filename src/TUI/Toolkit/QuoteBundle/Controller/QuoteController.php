@@ -20,11 +20,20 @@ class QuoteController extends Controller
      * Lists all Quote entities.
      *
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
+        $paginator  = $this->get('knp_paginator');
+        $pageRange = $request->query->getInt('pageRange', 10);
 
-        $entities = $em->getRepository('QuoteBundle:Quote')->findByConverted(FALSE);
+        $dql   = "SELECT entity FROM QuoteBundle:Quote entity WHERE entity.converted=FALSE AND entity.isTemplate = FALSE ORDER BY entity.name";
+        $query = $em->createQuery($dql);
+
+        $entities = $paginator->paginate(
+          $query,
+          $request->query->getInt('page', 1)/*page number*/,
+          $pageRange  /*limit per page*/
+        );
 
         return $this->render('QuoteBundle:Quote:index.html.twig', array(
             'entities' => $entities,
@@ -37,11 +46,20 @@ class QuoteController extends Controller
    * Lists all CONVERTED Quote entities.
    *
    */
-  public function convertedAction()
+  public function convertedAction(Request $request)
   {
     $em = $this->getDoctrine()->getManager();
+    $paginator  = $this->get('knp_paginator');
+    $pageRange = $request->query->getInt('pageRange', 10);
 
-    $entities = $em->getRepository('QuoteBundle:Quote')->findByConverted(TRUE);
+    $dql   = "SELECT entity FROM QuoteBundle:Quote entity WHERE entity.converted=TRUE ORDER BY entity.name";
+    $query = $em->createQuery($dql);
+
+    $entities = $paginator->paginate(
+      $query,
+      $request->query->getInt('page', 1)/*page number*/,
+      $pageRange  /*limit per page*/
+    );
 
     return $this->render('QuoteBundle:Quote:converted.html.twig', array(
       'entities' => $entities,
@@ -54,16 +72,28 @@ class QuoteController extends Controller
    * Lists all DELETED Quote entities.
    *
    */
-  public function showDeletedAction()
+  public function showDeletedAction(Request $request)
   {
     $em = $this->getDoctrine()->getManager();
     $filters = $em->getFilters();
     $filters->disable('softdeleteable');
 
-    $criteria = new \Doctrine\Common\Collections\Criteria();
-// Add a not equals parameter to your criteria
-    $criteria->where($criteria->expr()->neq('deleted', null));
-    $entities = $em->getRepository('QuoteBundle:Quote')->matching($criteria);
+    $paginator  = $this->get('knp_paginator');
+    $pageRange = $request->query->getInt('pageRange', 10);
+
+//    $criteria = new \Doctrine\Common\Collections\Criteria();
+//    // Add a not equals parameter to your criteria
+//    $criteria->where($criteria->expr()->neq('deleted', null));
+//    $results = $em->getRepository('QuoteBundle:Quote')->matching($criteria);
+
+    $dql   = "SELECT entity FROM QuoteBundle:Quote entity WHERE entity.deleted <> 'NULL' ORDER BY entity.name";
+    $query = $em->createQuery($dql);
+
+    $entities = $paginator->paginate(
+      $query,
+      $request->query->getInt('page', 1)/*page number*/,
+      $pageRange  /*limit per page*/
+    );
 
     return $this->render('QuoteBundle:Quote:deleted.html.twig', array(
       'entities' => $entities,
@@ -76,13 +106,21 @@ class QuoteController extends Controller
    * Lists all DELETED Quote entities.
    *
    */
-  public function templatesAction()
+  public function templatesAction(Request $request)
   {
     $em = $this->getDoctrine()->getManager();
+    $paginator  = $this->get('knp_paginator');
+    $pageRange = $request->query->getInt('pageRange', 10);
 
-    // TODO need to implement soft delete filter disable here
 
-    $entities = $em->getRepository('QuoteBundle:Quote')->findByIsTemplate(TRUE);
+    $dql   = "SELECT entity FROM QuoteBundle:Quote entity WHERE entity.isTemplate=TRUE ORDER BY entity.name";
+    $query = $em->createQuery($dql);
+
+    $entities = $paginator->paginate(
+      $query,
+      $request->query->getInt('page', 1)/*page number*/,
+      $pageRange  /*limit per page*/
+    );
 
     return $this->render('QuoteBundle:Quote:templates.html.twig', array(
       'entities' => $entities,
@@ -323,6 +361,38 @@ class QuoteController extends Controller
 
     return $this->redirect($this->generateUrl('manage_quote'));
   }
+
+
+  /**
+   * Set Pagination Items.
+   *
+   */
+  public function pageRangeAction(Request $request, $entities = NULL)
+  {
+    $query='';
+    $pageRange = '10';
+    $requestUrl = $_SERVER['REDIRECT_URL'];
+    $query_str =  $_SERVER['QUERY_STRING'];
+    if(!empty($query_str)){
+      $query_arr =  explode('&', $query_str);
+      foreach($query_arr as $key=>$attr){
+        if(strpos($attr, 'pageRange') !== FALSE){
+          $range=explode('=', $attr);
+          $pageRange = $range[1];
+        } else {
+        $query.= '&' . $attr;
+        }
+      }
+    }
+    return $this->render('QuoteBundle:Quote:pagination.html.twig', array(
+      'pageRange'      => $pageRange,
+      'paginationUrl'  => $requestUrl,
+      'query'       => $query,
+      'entities'      => $entities,
+    ));
+  }
+
+
 
   /**
    * Creates a form to Restore a deleted Quote entity by id.
