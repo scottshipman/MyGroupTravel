@@ -1,14 +1,14 @@
-<div class="quote_tabs">
+<div class="mdl-tabs__tab-bar">
     {% block active_tab %}
-    <a class='active_tab' href="{{ path('manage_quote_active') }}">Active Quotes</a>
+    <a class='mdl-tabs__tab' href="{{ path('manage_quote_active') }}">Active Quotes</a>
     {% endblock %}
 
     {% block converted_tab %}
-    <a class='tab' href="{{ path('manage_quote_converted') }}">Converted Quotes</a>
+    <a class='mdl-tabs__tab' href="{{ path('manage_quote_converted') }}">Converted Quotes</a>
     {% endblock %}
 
     {% block templates_tab %}
-    <a class='tab' href="{{ path('manage_quote_templates') }}">Templates</a>
+    <a class='mdl-tabs__tab' href="{{ path('manage_quote_templates') }}">Templates</a>
     {% endblock %}
 
 
@@ -16,7 +16,7 @@
     {% if is_granted("ROLE_ADMIN") %}
 
         {% block deleted_tab %}
-        <a class='tab' href="{{ path('manage_quote_deleted') }}">Deleted Quotes</a>
+        <a class='mdl-tabs__tab' href="{{ path('manage_quote_deleted') }}">Deleted Quotes</a>
         {% endblock %}
 
     {% endif %}

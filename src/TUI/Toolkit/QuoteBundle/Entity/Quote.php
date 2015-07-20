@@ -92,51 +92,57 @@ class Quote
     private $isTemplate;
 
 
-  /**
-   * @var DateTime
-   *
-   * @ORM\Column(name="created", type="date")
-   *
-   */
-  private $created;
+    /**
+     * @var DateTime
+     *
+     * @ORM\Column(name="created", type="date")
+     *
+     */
+    private $created;
 
-  /**
-   * @var integer
-   *
-   * @ORM\Column(name="views", type="integer")
-   *
-   */
-  private $views;
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="views", type="integer")
+     *
+     */
+    private $views;
 
-  /**
- * @var integer
- *
- * @ORM\Column(name="shareViews", type="integer")
- *
- */
-  private $shareViews;
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="shareViews", type="integer")
+     *
+     */
+    private $shareViews;
 
-  /**
-   * @var integer
-   *
-   * @ORM\Column(name="institution", type="integer")
-   *
-   * @ORM\ManyToOne(targetEntity="TUI\Toolkit\InstitutionBundle\Entity\Institution", cascade={"all"}, fetch="EAGER", inversedBy = "id")
-   *
-   */
-  private $institution;
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="institution", type="integer")
+     *
+     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\InstitutionBundle\Entity\Institution", cascade={"all"}, fetch="EAGER", inversedBy = "id")
+     *
+     */
+    private $institution;
 
-  public function __construct()
-  {
-    $this->created = new \DateTime();
-    $this->views = 0;
-    $this->shareViews = 0;
-  }
+    /**
+     * @var \Application\Sonata\MediaBundle\Entity\Media
+     * @ORM\ManyToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Media", cascade={"persist"}, fetch="LAZY")
+     */
+    protected $media;
 
-  /**
+    public function __construct()
+    {
+        $this->created = new \DateTime();
+        $this->views = 0;
+        $this->shareViews = 0;
+    }
+
+    /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -159,7 +165,7 @@ class Quote
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -182,7 +188,7 @@ class Quote
     /**
      * Get reference
      *
-     * @return string 
+     * @return string
      */
     public function getReference()
     {
@@ -205,7 +211,7 @@ class Quote
     /**
      * Get organizer
      *
-     * @return string 
+     * @return string
      */
     public function getOrganizer()
     {
@@ -228,7 +234,7 @@ class Quote
     /**
      * Get converted
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getConverted()
     {
@@ -251,7 +257,7 @@ class Quote
     /**
      * Get deleted
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getDeleted()
     {
@@ -274,7 +280,7 @@ class Quote
     /**
      * Get setupComplete
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getSetupComplete()
     {
@@ -297,7 +303,7 @@ class Quote
     /**
      * Get locked
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getLocked()
     {
@@ -320,7 +326,7 @@ class Quote
     /**
      * Get salesAgent
      *
-     * @return integer 
+     * @return integer
      */
     public function getSalesAgent()
     {
@@ -343,105 +349,123 @@ class Quote
     /**
      * Get isTemplate
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsTemplate()
     {
         return $this->isTemplate;
     }
 
-  /**
-   * Set views
-   *
-   * @param integer $views
-   * @return Quote
-   */
-  public function setViews($views)
-  {
-    $this->views = $views;
+    /**
+     * Set views
+     *
+     * @param integer $views
+     * @return Quote
+     */
+    public function setViews($views)
+    {
+        $this->views = $views;
 
-    return $this;
-  }
-
-  /**
-   * Get views
-   *
-   * @return integer
-   */
-  public function getViews()
-  {
-    return $this->views;
-  }
-
-  /**
-   * Set shareViews
-   *
-   * @param integer $shareViews
-   * @return Quote
-   */
-  public function setShareViewsiews($shareViews)
-  {
-    $this->shareViews = $shareViews;
-
-    return $this;
-  }
-
-  /**
-   * Get shareViews
-   *
-   * @return integer
-   */
-  public function getShareViews()
-  {
-    return $this->shareViews;
-  }
-
-  /**
-   * Set institution
-   *
-   * @param integer $institution
-   * @return Quote
-   */
-  public function setInstitution($institution)
-  {
-    $this->institution = $institution;
-
-    return $this;
-  }
-
-  /**
-   * Get institution
-   *
-   * @return integer
-   */
-  public function getInstitution()
-  {
-    return $this->institution;
-  }
-
-  /**
-   * Set created
-   *
-   * @param date $created
-   * @return Quote
-   */
-  public function setCreated($created)
-  {
-    if(!$created){
-      $created = new \DateTime();
+        return $this;
     }
-    $this->created = $created;
 
-    return $this;
-  }
+    /**
+     * Get views
+     *
+     * @return integer
+     */
+    public function getViews()
+    {
+        return $this->views;
+    }
 
-  /**
-   * Get created
-   *
-   * @return date
-   */
-  public function getCreated()
-  {
-    return $this->created;
-  }
+    /**
+     * Set shareViews
+     *
+     * @param integer $shareViews
+     * @return Quote
+     */
+    public function setShareViewsiews($shareViews)
+    {
+        $this->shareViews = $shareViews;
+
+        return $this;
+    }
+
+    /**
+     * Get shareViews
+     *
+     * @return integer
+     */
+    public function getShareViews()
+    {
+        return $this->shareViews;
+    }
+
+    /**
+     * Set institution
+     *
+     * @param integer $institution
+     * @return Quote
+     */
+    public function setInstitution($institution)
+    {
+        $this->institution = $institution;
+
+        return $this;
+    }
+
+    /**
+     * Get institution
+     *
+     * @return integer
+     */
+    public function getInstitution()
+    {
+        return $this->institution;
+    }
+
+    /**
+     * Set created
+     *
+     * @param date $created
+     * @return Quote
+     */
+    public function setCreated($created)
+    {
+        if (!$created) {
+            $created = new \DateTime();
+        }
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * Get created
+     *
+     * @return date
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * @param MediaInterface $media
+     */
+    public function setMedia($media)
+    {
+        $this->media = $media;
+
+        return $media;
+    }
+
+    /**
+     * @return MediaInterface
+     */
+    public function getMedia()
+    {
+        return $this->media;
+    }
 }
