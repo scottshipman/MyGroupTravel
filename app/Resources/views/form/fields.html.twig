@@ -3,13 +3,13 @@
 
 {% block form_widget_simple %}
     {% set type = type|default('text') %}
-    {% if type != "hidden" %}
+    {% if (type == "hidden") or (type == "file") %}
+        <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}>
+    {% else %}
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
             <input class="mdl-textfield__input" type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}>
             <label class="mdl-textfield__label" for="{{ id }}">{{ form_label(form) }}</label>
         </div>
-    {% else %}
-        <input class="mdl-textfield__input" type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}>
     {% endif %}
 {% endblock form_widget_simple %}
 

@@ -3,12 +3,14 @@
 
 <head>
 
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>{% block title %}Welcome{% endblock %} | eToolkit</title>
 
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css">
-    {# <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome.css"> #}
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome.css">
 
     {# Google Material Design (Lite) Stuff #}
     <link rel="stylesheet" href="//storage.googleapis.com/code.getmdl.io/1.0.0/material.indigo-pink.min.css">
@@ -38,69 +40,42 @@
 <body class="user-{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}{{ app.user.id }}{% else %}0{% endif %}">
   <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--overlay-drawer-button">
 
-    <div class="mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
-        <header class="demo-drawer-header">
-            <img src="//www.getmdl.io/templates/dashboard/images/user.jpg" class="demo-avatar">
-            <div class="demo-avatar-dropdown">
-                <span>hello@example.com</span>
+    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+    <div class="mdl-layout__drawer">
+        <header class="tui-drawer-header">
+            {% if app.user.firstName and app.user.lastName %}
+                <span class="tui-text-avatar mdl-typography--headline">{{ app.user.firstName[:1] }}{{ app.user.lastName[:1] }}</span>
+            {% else %}
+                <span class="tui-text-avatar mdl-typography--headline">{{ app.user.username[:1] }}</span>
+            {% endif %}
+            <div class="tui-avatar-dropdown">
+                <span>{{ app.user.username }}</span>
                 <div class="mdl-layout-spacer"></div>
                 <button id="accbtn" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
                     <i class="material-icons">arrow_drop_down</i>
                 </button>
                 <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="accbtn">
-                    <li class="mdl-menu__item">hello@example.com</li>
-                    <li class="mdl-menu__item">info@example.com</li>
-                    <li class="mdl-menu__item"><i class="material-icons">add</i>Add another account...</li>
+                    <li><a class="mdl-menu__item" href="{{ path('user_show', { 'id': app.user.id }) }}">View</a></li>
+                    <li><a class="mdl-menu__item" href="{{ path('user_edit', { 'id': app.user.id }) }}">Edit</a></li>
+                    <li><a class="mdl-menu__item" href="{{ path('fos_user_security_logout') }}">
+                        {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+                    </a></li>
                 </ul>
             </div>
         </header>
-        <span class="mdl-layout-title">Title</span>
-        <nav class="mdl-navigation">
-            <a class="mdl-navigation__link" href="">Link</a>
-            <a class="mdl-navigation__link" href="">Link</a>
-            <a class="mdl-navigation__link" href="">Link</a>
-            <a class="mdl-navigation__link" href="">Link</a>
-        </nav>
-    </div><!-- mdl-layout__drawer -->
-
-    <main class="mdl-layout__content">
-
-
-
-
-
-    <div class="header-top">
 
         {# Display admin menu only if the user is BRAND or higher ROLE #}
         {% if is_granted("ROLE_BRAND") %}
-            <div class="admin-menu">
+            <nav class="mdl-navigation">
                 {% block admin_menu %}
                     {{ knp_menu_render('admin_menu', {'currentClass': 'active'})  }}
                 {% endblock %}
-            </div>
+            </nav>
         {% endif %}
+    </div><!-- mdl-layout__drawer -->
+    {% endif %}
 
-        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-            <div class="login">
-                <ul>
-                    <li>
-                        <span>My account</span>
-                        <ul>
-                            <li><span>{{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }}</span></li>
-                            <li>
-                                <a href="{{ path('fos_user_security_logout') }}">
-                                    {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        {% else %}
-            {# <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a> #}
-        {% endif %}
-
-    </div>
+    <main class="mdl-layout__content">
 
     <div class="flash-messages">
         {% for flashMessage in app.session.flashbag.get('notice') %}

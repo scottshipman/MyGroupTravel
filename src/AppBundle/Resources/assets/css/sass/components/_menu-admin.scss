@@ -1,3 +1,45 @@
+.tui-drawer-header {
+  display: flex;
+  flex-direction: column;
+  height: 151px;
+  justify-content: flex-end;
+  padding: 16px;
+
+  .tui-image-avatar {
+    border-radius: 24px;
+    height: 48px;
+    width: 48px;
+  }
+
+  .tui-text-avatar {
+    border-radius: 24px;
+    height: 48px;
+    line-height: 48px;
+    width: 48px;
+    color: white;
+    background: black;
+    text-align: center;
+  }
+
+  .tui-avatar-dropdown {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    width: 100%;
+  }
+
+}
+
+.mdl-navigation {
+
+  ul {
+    margin: 0;
+    padding: 0;
+  }
+
+}
+
 .admin-menu,
 .login {
   position: relative;
