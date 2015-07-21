@@ -23,7 +23,7 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             new APY\DataGridBundle\APYDataGridBundle(),
-            new Webfactory\Bundle\ExceptionsBundle\WebfactoryExceptionsBundle();
+            new Webfactory\Bundle\ExceptionsBundle\WebfactoryExceptionsBundle(),
 
 
             // In Toolkit Project ( in /src directory) bundles...
@@ -55,7 +55,6 @@ class AppKernel extends Kernel
             new Application\Sonata\MediaBundle\ApplicationSonataMediaBundle(),
             new Application\Sonata\ClassificationBundle\ApplicationSonataClassificationBundle(),
             new Oneup\UploaderBundle\OneupUploaderBundle(),
-            new Webfactory\Bundle\ExceptionsBundle\WebfactoryExceptionsBundle(),
 
         );
 
