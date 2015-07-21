@@ -1,4 +1,8 @@
 <?php
+/*
+ * DataGridBundle documentation:
+ * https://github.com/Abhoryo/APYDataGridBundle/blob/master/Resources/doc/summary.md
+ */
 
 namespace TUI\Toolkit\QuoteBundle\Controller;
 
@@ -7,7 +11,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use TUI\Toolkit\QuoteBundle\Entity\Quote;
 use TUI\Toolkit\QuoteBundle\Form\QuoteType;
-use TUI\Toolkit\UserBundle\Controller\UserController;
+use APY\DataGridBundle\Grid\Source\Entity;
+use APY\DataGridBundle\Grid\Export\CSVExport;
 
 /**
  * Quote controller.
@@ -17,27 +22,54 @@ class QuoteController extends Controller
 {
 
     /**
-     * Lists all Quote entities.
+     * Lists all unconverted Quote entities.
      *
      */
     public function indexAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $paginator  = $this->get('knp_paginator');
-        $pageRange = $request->query->getInt('pageRange', 10);
+     // list hidden columns
+      $hidden = array(
+        'isTemplate',
+        'deleted',
+        'converted',
+        'setupComplete',
+        'locked',
+        'destination',
+        'salesAgent.firstName',
+        'salesAgent.lastName',
+        'organizer.firstName',
+        'organizer.lastName'
+      );
 
-        $dql   = "SELECT entity FROM QuoteBundle:Quote entity WHERE entity.converted=FALSE AND entity.isTemplate = FALSE ORDER BY entity.name";
-        $query = $em->createQuery($dql);
+     // Creates simple grid based on your entity (ORM)
+      $source = new Entity('QuoteBundle:Quote');
 
-        $entities = $paginator->paginate(
-          $query,
-          $request->query->getInt('page', 1)/*page number*/,
-          $pageRange  /*limit per page*/
-        );
+      //add WHERE clause
+      $tableAlias=$source->getTableAlias();
+      $source->manipulateQuery(
+        function ($query) use ($tableAlias)
+        {
+          $query->andWhere($tableAlias . '.converted = false');
+        }
+      );
 
-        return $this->render('QuoteBundle:Quote:index.html.twig', array(
-            'entities' => $entities,
-        ));
+      /* @var $grid \APY\DataGridBundle\Grid\Grid */
+      $grid = $this->get('grid');
+
+      // Attach the source to the grid
+      $grid->setSource($source);
+      $grid->setId('quotegrid');
+      $grid->hideColumns($hidden);
+
+      // Set the selector of the number of items per page
+      $grid->setLimits(array(10, 25, 50, 100));
+
+      // Export of the grid
+      $grid->addExport(new CSVExport("Active Quotes as CSV", "activeQuotes", array('delimiter'=>','), "UTF-8", "ROLE_BRAND"));
+
+      // Manage the grid redirection, exports and the response of the controller
+      return $grid->getGridResponse('QuoteBundle:Quote:index.html.twig');
+
     }
 
 
@@ -48,23 +80,50 @@ class QuoteController extends Controller
    */
   public function convertedAction(Request $request)
   {
-    $em = $this->getDoctrine()->getManager();
-    $paginator  = $this->get('knp_paginator');
-    $pageRange = $request->query->getInt('pageRange', 10);
-
-    $dql   = "SELECT entity FROM QuoteBundle:Quote entity WHERE entity.converted=TRUE ORDER BY entity.name";
-    $query = $em->createQuery($dql);
-
-    $entities = $paginator->paginate(
-      $query,
-      $request->query->getInt('page', 1)/*page number*/,
-      $pageRange  /*limit per page*/
+    // list hidden columns
+    $hidden = array(
+      'isTemplate',
+      'deleted',
+      'converted',
+      'setupComplete',
+      'locked',
+      'destination',
+      'salesAgent.firstName',
+      'salesAgent.lastName',
+      'organizer.firstName',
+      'organizer.lastName'
     );
 
-    return $this->render('QuoteBundle:Quote:converted.html.twig', array(
-      'entities' => $entities,
-    ));
-  }
+      // Creates simple grid based on your entity (ORM)
+      $source = new Entity('QuoteBundle:Quote');
+
+      //add WHERE clause
+      $tableAlias=$source->getTableAlias();
+      $source->manipulateQuery(
+        function ($query) use ($tableAlias)
+        {
+          $query->andWhere($tableAlias . '.converted = true');
+        }
+      );
+
+      /* @var $grid \APY\DataGridBundle\Grid\Grid */
+      $grid = $this->get('grid');
+
+      // Attach the source to the grid
+      $grid->setSource($source);
+      $grid->setId('quotegrid');
+      $grid->hideColumns($hidden);
+
+      // Set the selector of the number of items per page
+      $grid->setLimits(array(10, 25, 50, 100));
+
+      // Export of the grid
+      $grid->addExport(new CSVExport("Converted Quotes as CSV", "convertedQuotes", array('delimiter'=>','), "UTF-8", "ROLE_BRAND"));
+
+
+    // Manage the grid redirection, exports and the response of the controller
+      return $grid->getGridResponse('QuoteBundle:Quote:converted.html.twig');
+   }
 
 
 
@@ -78,26 +137,49 @@ class QuoteController extends Controller
     $filters = $em->getFilters();
     $filters->disable('softdeleteable');
 
-    $paginator  = $this->get('knp_paginator');
-    $pageRange = $request->query->getInt('pageRange', 10);
-
-//    $criteria = new \Doctrine\Common\Collections\Criteria();
-//    // Add a not equals parameter to your criteria
-//    $criteria->where($criteria->expr()->neq('deleted', null));
-//    $results = $em->getRepository('QuoteBundle:Quote')->matching($criteria);
-
-    $dql   = "SELECT entity FROM QuoteBundle:Quote entity WHERE entity.deleted <> 'NULL' ORDER BY entity.name";
-    $query = $em->createQuery($dql);
-
-    $entities = $paginator->paginate(
-      $query,
-      $request->query->getInt('page', 1)/*page number*/,
-      $pageRange  /*limit per page*/
+    // list hidden columns
+    $hidden = array(
+      'isTemplate',
+      'deleted',
+      'converted',
+      'setupComplete',
+      'locked',
+      'destination',
+      'salesAgent.firstName',
+      'salesAgent.lastName',
+      'organizer.firstName',
+      'organizer.lastName'
     );
 
-    return $this->render('QuoteBundle:Quote:deleted.html.twig', array(
-      'entities' => $entities,
-    ));
+    // Creates simple grid based on your entity (ORM)
+    $source = new Entity('QuoteBundle:Quote');
+
+    //add WHERE clause
+    $tableAlias=$source->getTableAlias();
+    $source->manipulateQuery(
+      function ($query) use ($tableAlias)
+      {
+        $query->andWhere($tableAlias . '.deleted IS NOT NULL');
+      }
+    );
+
+    /* @var $grid \APY\DataGridBundle\Grid\Grid */
+    $grid = $this->get('grid');
+
+    // Attach the source to the grid
+    $grid->setSource($source);
+    $grid->setId('quotegrid');
+    $grid->hideColumns($hidden);
+
+    // Set the selector of the number of items per page
+    $grid->setLimits(array(10, 25, 50, 100));
+
+    // Export of the grid
+    $grid->addExport(new CSVExport("Deleted Quotes as CSV", "deletedQuotes", array('delimiter'=>','), "UTF-8", "ROLE_BRAND"));
+
+
+    // Manage the grid redirection, exports and the response of the controller
+    return $grid->getGridResponse('QuoteBundle:Quote:deleted.html.twig');
   }
 
 
@@ -108,23 +190,49 @@ class QuoteController extends Controller
    */
   public function templatesAction(Request $request)
   {
-    $em = $this->getDoctrine()->getManager();
-    $paginator  = $this->get('knp_paginator');
-    $pageRange = $request->query->getInt('pageRange', 10);
-
-
-    $dql   = "SELECT entity FROM QuoteBundle:Quote entity WHERE entity.isTemplate=TRUE ORDER BY entity.name";
-    $query = $em->createQuery($dql);
-
-    $entities = $paginator->paginate(
-      $query,
-      $request->query->getInt('page', 1)/*page number*/,
-      $pageRange  /*limit per page*/
+    // list hidden columns
+    $hidden = array(
+      'isTemplate',
+      'deleted',
+      'converted',
+      'setupComplete',
+      'locked',
+      'destination',
+      'salesAgent.firstName',
+      'salesAgent.lastName',
+      'organizer.firstName',
+      'organizer.lastName'
     );
 
-    return $this->render('QuoteBundle:Quote:templates.html.twig', array(
-      'entities' => $entities,
-    ));
+   // Creates simple grid based on your entity (ORM)
+    $source = new Entity('QuoteBundle:Quote');
+
+    //add WHERE clause
+    $tableAlias=$source->getTableAlias();
+    $source->manipulateQuery(
+      function ($query) use ($tableAlias)
+      {
+        $query->andWhere($tableAlias . '.isTemplate = true');
+      }
+    );
+
+    /* @var $grid \APY\DataGridBundle\Grid\Grid */
+    $grid = $this->get('grid');
+
+    // Attach the source to the grid
+    $grid->setSource($source);
+    $grid->setId('quotegrid');
+    $grid->hideColumns($hidden);
+
+    // Set the selector of the number of items per page
+    $grid->setLimits(array(10, 25, 50, 100));
+
+    // Export of the grid
+    $grid->addExport(new CSVExport("Quote Templates as CSV", "templatesQuotes", array('delimiter'=>','), "UTF-8", "ROLE_BRAND"));
+
+
+    // Manage the grid redirection, exports and the response of the controller
+    return $grid->getGridResponse('QuoteBundle:Quote:templates.html.twig');
   }
 
 
