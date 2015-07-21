@@ -13,7 +13,9 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
  * @ORM\Table(name="quote", uniqueConstraints={@ORM\UniqueConstraint(name="reference", columns={"reference"})})
  * @ORM\Entity
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
- * @GRID\Source(columns="id, name, destination, reference, institution.name, created, views, shareViews, organizer.username, salesAgent.username", filterable=false, sortable=true)
+ * @GRID\Source(columns="id, name, destination, reference, institution.name, created, views, shareViews, orgfullname, organizer.firstName, organizer.lastName, bizfullname, salesAgent.firstName, salesAgent.lastName, converted, deleted, setupComplete, locked, isTemplate", filterable=false, sortable=true)
+ * @GRID\Column(id="bizfullname", type="join", title="Business Admin", columns={"salesAgent.firstName", "salesAgent.lastName"}, filterable=true, operatorsVisible=false)
+ * @GRID\Column(id="orgfullname", type="join", title="Organizer", columns={"organizer.firstName", "organizer.lastName"}, filterable=true, operatorsVisible=false)
  */
 class Quote
 {
@@ -23,7 +25,7 @@ class Quote
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @GRID\Column(visible=false, filterable=false)
+     * @GRID\Column(visible=false, filterable=false, export=true)
      */
     private $id;
 
@@ -31,7 +33,7 @@ class Quote
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
-     * @GRID\Column(title="Name", filterable=true, operatorsVisible=false)
+     * @GRID\Column(title="Name", filterable=true, operatorsVisible=false, export=true)
      *
      */
     private $name;
@@ -40,15 +42,16 @@ class Quote
      * @var string
      *
      * @ORM\Column(name="reference", type="string", length=255)
-     * @GRID\Column(title="Quote Reference", filterable=true, operatorsVisible=false)
+     * @GRID\Column(title="Quote Reference", filterable=true, operatorsVisible=false, export=true)
      */
     private $reference;
 
     /**
      * @var integer
-     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\UserBundle\Entity\User", inversedBy="id")
+     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="organizer", referencedColumnName="id")
-     * @GRID\Column(field="organizer.username", type="text", title="Organizer", filterable=true, operatorsVisible=false)
+     * @GRID\Column(field="organizer.firstName", type="text", title="Organizer First", export=true)
+     * @GRID\Column(field="organizer.lastName", type="text", title="Organizer Last", export=true)
      */
     private $organizer;
 
@@ -56,7 +59,7 @@ class Quote
      * @var boolean
      *
      * @ORM\Column(name="converted", type="boolean")
-     *
+     * @GRID\Column(visible=false, filterable=false, export=true)
      */
     private $converted;
 
@@ -64,6 +67,7 @@ class Quote
      * @var date
      *
      * @ORM\Column(name="deleted", type="date", nullable=true)
+     * @GRID\Column(visible=false, filterable=false, export=true)
      */
     private $deleted;
 
@@ -71,6 +75,7 @@ class Quote
      * @var boolean
      *
      * @ORM\Column(name="setupComplete", type="boolean")
+     * @GRID\Column(visible=false, filterable=false, export=true)
      */
     private $setupComplete;
 
@@ -78,15 +83,18 @@ class Quote
      * @var boolean
      *
      * @ORM\Column(name="locked", type="boolean")
+     * @GRID\Column(visible=false, filterable=false, export=true)
      */
     private $locked;
 
     /**
      * @var integer
      *
-     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\UserBundle\Entity\User", inversedBy="id")
+     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="salesAgent", referencedColumnName="id")
-     * @GRID\Column(field="salesAgent.username", type="text", title="Business Admin", filterable=true, operatorsVisible=false)
+     * @GRID\Column(field="salesAgent.firstName", type="text", title="Business Admin first", filterable=false, export=true)
+     * @GRID\Column(field="salesAgent.lastName", type="text", title="Business Admin last", filterable=false, export=true)
+     *
      */
     private $salesAgent;
 
@@ -94,7 +102,7 @@ class Quote
      * @var boolean
      *
      * @ORM\Column(name="isTemplate", type="boolean")
-     *
+     * @GRID\Column(visible=false, filterable=false, export=true)
      */
     private $isTemplate;
 
@@ -103,7 +111,7 @@ class Quote
      * @var DateTime
      *
      * @ORM\Column(name="created", type="date")
-     * @GRID\Column(title="Created On", filterable=false)
+     * @GRID\Column(title="Created On", filterable=false, export=true)
      */
     private $created;
 
@@ -111,7 +119,7 @@ class Quote
      * @var integer
      *
      * @ORM\Column(name="views", type="integer")
-     * @GRID\Column(title="Views", filterable=false)
+     * @GRID\Column(title="Views", filterable=false, export=true)
      */
     private $views;
 
@@ -119,15 +127,15 @@ class Quote
      * @var integer
      *
      * @ORM\Column(name="shareViews", type="integer")
-     * @GRID\Column(title="Shared Views", filterable=false)
+     * @GRID\Column(title="Shared Views", filterable=false, export=true)
      */
     private $shareViews;
 
     /**
      * @var integer
      * @ORM\JoinColumn(name="institution", referencedColumnName="id")
-     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\InstitutionBundle\Entity\Institution", cascade={"all"}, fetch="EAGER", inversedBy = "id")
-     * @GRID\Column(field="institution.name", title="Institution", filterable=true, operatorsVisible=false)
+     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\InstitutionBundle\Entity\Institution", cascade={"all"}, fetch="EAGER")
+     * @GRID\Column(field="institution.name", title="Institution", filterable=true, operatorsVisible=false, export=true)
      */
     private $institution;
 
@@ -136,14 +144,14 @@ class Quote
    * @var string
    *
    * @ORM\Column(name="destination", type="string")
-   *
+   * @GRID\Column(title="Destination", filterable=true, operatorsVisible=false, sortable=true, export=true)
    */
   private $destination;
 
     /**
      * @var \Application\Sonata\MediaBundle\Entity\Media
      * @ORM\ManyToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Media", cascade={"persist"}, fetch="LAZY")
-     * @GRID\Column(title="Destination", filterable=true, operatorsVisible=false, sortable=true)
+     *
      */
     protected $media;
 

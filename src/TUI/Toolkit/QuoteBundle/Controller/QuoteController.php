@@ -27,6 +27,20 @@ class QuoteController extends Controller
      */
     public function indexAction(Request $request)
     {
+     // list hidden columns
+      $hidden = array(
+        'isTemplate',
+        'deleted',
+        'converted',
+        'setupComplete',
+        'locked',
+        'destination',
+        'salesAgent.firstName',
+        'salesAgent.lastName',
+        'organizer.firstName',
+        'organizer.lastName'
+      );
+
      // Creates simple grid based on your entity (ORM)
       $source = new Entity('QuoteBundle:Quote');
 
@@ -45,7 +59,7 @@ class QuoteController extends Controller
       // Attach the source to the grid
       $grid->setSource($source);
       $grid->setId('quotegrid');
-
+      $grid->hideColumns($hidden);
 
       // Set the selector of the number of items per page
       $grid->setLimits(array(10, 25, 50, 100));
@@ -66,6 +80,16 @@ class QuoteController extends Controller
    */
   public function convertedAction(Request $request)
   {
+    // list hidden columns
+    $hidden = array(
+      'isTemplate',
+      'deleted',
+      'converted',
+      'setupComplete',
+      'locked',
+      'destination'
+    );
+
       // Creates simple grid based on your entity (ORM)
       $source = new Entity('QuoteBundle:Quote');
 
@@ -84,7 +108,7 @@ class QuoteController extends Controller
       // Attach the source to the grid
       $grid->setSource($source);
       $grid->setId('quotegrid');
-
+      $grid->hideColumns($hidden);
 
       // Set the selector of the number of items per page
       $grid->setLimits(array(10, 25, 50, 100));
@@ -109,6 +133,16 @@ class QuoteController extends Controller
     $filters = $em->getFilters();
     $filters->disable('softdeleteable');
 
+    // list hidden columns
+    $hidden = array(
+      'isTemplate',
+      'deleted',
+      'converted',
+      'setupComplete',
+      'locked',
+      'destination'
+    );
+
     // Creates simple grid based on your entity (ORM)
     $source = new Entity('QuoteBundle:Quote');
 
@@ -127,7 +161,7 @@ class QuoteController extends Controller
     // Attach the source to the grid
     $grid->setSource($source);
     $grid->setId('quotegrid');
-
+    $grid->hideColumns($hidden);
 
     // Set the selector of the number of items per page
     $grid->setLimits(array(10, 25, 50, 100));
@@ -148,6 +182,16 @@ class QuoteController extends Controller
    */
   public function templatesAction(Request $request)
   {
+    // list hidden columns
+    $hidden = array(
+      'isTemplate',
+      'deleted',
+      'converted',
+      'setupComplete',
+      'locked',
+      'destination'
+    );
+
    // Creates simple grid based on your entity (ORM)
     $source = new Entity('QuoteBundle:Quote');
 
@@ -166,7 +210,7 @@ class QuoteController extends Controller
     // Attach the source to the grid
     $grid->setSource($source);
     $grid->setId('quotegrid');
-
+    $grid->hideColumns($hidden);
 
     // Set the selector of the number of items per page
     $grid->setLimits(array(10, 25, 50, 100));
