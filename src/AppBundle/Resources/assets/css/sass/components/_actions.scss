@@ -1,10 +1,6 @@
-ul.record_actions {
+.record_actions {
   padding: 0;
   list-style: none;
-
-  td & {
-    text-align: center;
-  }
 
   li {
     @include inline-block-vertical(top);

@@ -2,35 +2,38 @@
 {% block title %}Manage Brand{% endblock %}
 
 {% block body -%}
+
     <h1>Brand list</h1>
 
-    <table class="brands_table records_list">
+    <table class="mdl-data-table mdl-js-data-table">
         <thead>
             <tr>
-                <th>Name (ID)</th>
-                <th>Division</th>
-                <th>Primary color</th>
-                <th>Button color</th>
-                <th>Hover color</th>
-                <th>Logo</th>
-                <th>Actions</th>
+                <th class="mdl-data-table__cell--non-numeric">Name (ID)</th>
+                <th class="mdl-data-table__cell--non-numeric">Division</th>
+                <th class="mdl-data-table__cell--non-numeric">Primary color</th>
+                <th class="mdl-data-table__cell--non-numeric">Button color</th>
+                <th class="mdl-data-table__cell--non-numeric">Hover color</th>
+                <th class="mdl-data-table__cell--non-numeric center">Logo</th>
+                <th class="mdl-data-table__cell--non-numeric">Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for entity in entities %}
             <tr>
-                <td><a href="{{ path('_manage_brand_show', { 'id': entity.id }) }}">{{ entity.name }}</a> ({{ entity.id }})</td>
-                <td>{{ entity.division }}</td>
-                <td style="background-color: {{ entity.primaryColor }}"></td>
-                <td style="background-color: {{ entity.buttonColor }}"></td>
-                <td style="background-color: {{ entity.hoverColor }}"></td>
-                <td class="logo">
+                <td class="mdl-data-table__cell--non-numeric">
+                    <a href="{{ path('_manage_brand_show', { 'id': entity.id }) }}">{{ entity.name }}</a> ({{ entity.id }})
+                </td>
+                <td class="mdl-data-table__cell--non-numeric">{{ entity.division }}</td>
+                <td class="mdl-data-table__cell--non-numeric" style="background-color: {{ entity.primaryColor }}"></td>
+                <td class="mdl-data-table__cell--non-numeric" style="background-color: {{ entity.buttonColor }}"></td>
+                <td class="mdl-data-table__cell--non-numeric" style="background-color: {{ entity.hoverColor }}"></td>
+                <td class="mdl-data-table__cell--non-numeric center">
                     {% if entity.media %}
                         {% media entity.media, 'small' %}
                     {% endif %}
                 </td>
-                <td>
-                    <ul class="record_actions">
+                <td class="mdl-data-table__cell--non-numeric">
+                    <ul class="table-actions">
                         <li>
                             <a href="{{ path('_manage_brand_show', { 'id': entity.id }) }}">Show</a>
                         </li>
@@ -44,11 +47,10 @@
         </tbody>
     </table>
 
-        <ul class="record_actions">
+    <ul class="record_actions">
         <li>
-            <a href="{{ path('_manage_brand_new') }}">
-                Create a new entry
-            </a>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('_manage_brand_new') }}">Create a new entry</a>
         </li>
     </ul>
-    {% endblock %}
+
+{% endblock %}
