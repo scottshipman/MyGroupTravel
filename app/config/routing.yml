@@ -73,6 +73,6 @@ media:
     resource: '@SonataMediaBundle/Resources/config/routing/media.xml'
     prefix: uploads/static/media
 
-oneup_uploader:
-    resource: .
-    type: uploader
+#oneup_uploader:
+#    resource: .
+#    type: uploader
