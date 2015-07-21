@@ -17,6 +17,7 @@ class QuoteType extends AbstractType
     {
         $builder
             ->add('name')
+            ->add('destination')
             ->add('reference')
             ->add('organizer', 'email')
             //->add('salesAgent', 'choice')

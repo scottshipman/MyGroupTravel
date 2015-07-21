@@ -48,3 +48,7 @@ manage_quote_deleted:
 manage_quote_restore:
     path:     /{id}/restore
     defaults: { _controller: "QuoteBundle:Quote:restore" }
+
+manage_quote_grid:
+    path: /grid
+    defaults: { _controller: "QuoteBundle:Quote:grid" }

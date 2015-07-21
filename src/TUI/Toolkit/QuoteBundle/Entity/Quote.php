@@ -5,6 +5,7 @@ namespace TUI\Toolkit\QuoteBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Annotations;
 use Gedmo\Mapping\Annotation as Gedmo;
+use APY\DataGridBundle\Grid\Mapping as GRID;
 
 /**
  * Quote
@@ -12,7 +13,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Table(name="quote", uniqueConstraints={@ORM\UniqueConstraint(name="reference", columns={"reference"})})
  * @ORM\Entity
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
- *
+ * @GRID\Source(columns="id, name, destination, reference, institution.name, created, views, shareViews, organizer.username, salesAgent.username", filterable=false, sortable=true)
  */
 class Quote
 {
@@ -22,6 +23,7 @@ class Quote
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @GRID\Column(visible=false, filterable=false)
      */
     private $id;
 
@@ -29,6 +31,8 @@ class Quote
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     * @GRID\Column(title="Name", filterable=true, operatorsVisible=false)
+     *
      */
     private $name;
 
@@ -36,13 +40,15 @@ class Quote
      * @var string
      *
      * @ORM\Column(name="reference", type="string", length=255)
+     * @GRID\Column(title="Quote Reference", filterable=true, operatorsVisible=false)
      */
     private $reference;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="organizer", type="string", length=255)
+     * @var integer
+     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\UserBundle\Entity\User", inversedBy="id")
+     * @ORM\JoinColumn(name="organizer", referencedColumnName="id")
+     * @GRID\Column(field="organizer.username", type="text", title="Organizer", filterable=true, operatorsVisible=false)
      */
     private $organizer;
 
@@ -50,6 +56,7 @@ class Quote
      * @var boolean
      *
      * @ORM\Column(name="converted", type="boolean")
+     *
      */
     private $converted;
 
@@ -77,9 +84,9 @@ class Quote
     /**
      * @var integer
      *
-     * @ORM\Column(name="salesAgent", type="integer")
-     *
-     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\UserBundle\Entity\User", cascade={"all"}, fetch="EAGER", inversedBy = "id")
+     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\UserBundle\Entity\User", inversedBy="id")
+     * @ORM\JoinColumn(name="salesAgent", referencedColumnName="id")
+     * @GRID\Column(field="salesAgent.username", type="text", title="Business Admin", filterable=true, operatorsVisible=false)
      */
     private $salesAgent;
 
@@ -96,7 +103,7 @@ class Quote
      * @var DateTime
      *
      * @ORM\Column(name="created", type="date")
-     *
+     * @GRID\Column(title="Created On", filterable=false)
      */
     private $created;
 
@@ -104,7 +111,7 @@ class Quote
      * @var integer
      *
      * @ORM\Column(name="views", type="integer")
-     *
+     * @GRID\Column(title="Views", filterable=false)
      */
     private $views;
 
@@ -112,23 +119,31 @@ class Quote
      * @var integer
      *
      * @ORM\Column(name="shareViews", type="integer")
-     *
+     * @GRID\Column(title="Shared Views", filterable=false)
      */
     private $shareViews;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="institution", type="integer")
-     *
+     * @ORM\JoinColumn(name="institution", referencedColumnName="id")
      * @ORM\ManyToOne(targetEntity="TUI\Toolkit\InstitutionBundle\Entity\Institution", cascade={"all"}, fetch="EAGER", inversedBy = "id")
-     *
+     * @GRID\Column(field="institution.name", title="Institution", filterable=true, operatorsVisible=false)
      */
     private $institution;
+
+
+  /**
+   * @var string
+   *
+   * @ORM\Column(name="destination", type="string")
+   *
+   */
+  private $destination;
 
     /**
      * @var \Application\Sonata\MediaBundle\Entity\Media
      * @ORM\ManyToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Media", cascade={"persist"}, fetch="LAZY")
+     * @GRID\Column(title="Destination", filterable=true, operatorsVisible=false, sortable=true)
      */
     protected $media;
 
@@ -425,7 +440,31 @@ class Quote
         return $this->institution;
     }
 
-    /**
+  /**
+   * Set destination
+   *
+   * @param integer $destination
+   * @return Quote
+   */
+  public function setDestination($destination)
+  {
+    $this->destination = $destination;
+
+    return $this;
+  }
+
+  /**
+   * Get destination
+   *
+   * @return integer
+   */
+  public function getDestination()
+  {
+    return $this->destination;
+  }
+
+
+  /**
      * Set created
      *
      * @param date $created

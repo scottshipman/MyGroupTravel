@@ -24,7 +24,7 @@ class QuoteVersion
     /**
      * @var integer
      *
-     * @ORM\Column(name="boardBasis", type="integer")
+     * @ORM\JoinColumn(name="boardBasis", referencedColumnName="id")
      *
      * @ORM\ManyToOne(targetEntity="TUI\Toolkit\BoardBasisBundle\Entity\BoardBasis", cascade={"all"}, fetch="EAGER", inversedBy = "id")
      */
@@ -128,7 +128,7 @@ class QuoteVersion
     /**
      * @var integer
      *
-     * @ORM\Column(name="transportType", type="integer")
+     * @ORM\JoinColumn(name="transportType", referencedColumnName="id")
      *
      * @ORM\ManyToOne(targetEntity="TUI\Toolkit\TransportBundle\Entity\Transport", cascade={"all"}, fetch="EAGER", inversedBy = "id")
      */
@@ -158,7 +158,7 @@ class QuoteVersion
   /**
    * @var integer
    *
-   * @ORM\Column(name="currency", type="integer")
+   * @ORM\JoinColumn(name="currency", referencedColumnName="id")
    *
    * @ORM\ManyToOne(targetEntity="TUI\Toolkit\CurrencyBundle\Entity\Currency", cascade={"all"}, fetch="EAGER", inversedBy = "id")
    *
