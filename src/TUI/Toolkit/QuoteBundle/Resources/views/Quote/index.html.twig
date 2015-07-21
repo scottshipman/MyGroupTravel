@@ -5,7 +5,7 @@
 
     <h1>Quote Dashboard</h1>
 
-    <ul>
+    <ul class="record_actions">
         <li>
             <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quote_new') }}">
                 Create a new Quote
@@ -18,7 +18,9 @@
             <a class="mdl-tabs__tab is-active" href="{{ path('manage_quote') }}">Active Quotes</a>
         {% endblock %}
     {% endembed %}
+
     {{ grid_search(grid) }}
+
     {{ grid(grid, 'QuoteBundle:Quote:grid.html.twig') }}
 
 {% endblock %}
