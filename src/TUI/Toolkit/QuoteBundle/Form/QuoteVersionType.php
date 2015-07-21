@@ -63,7 +63,8 @@ class QuoteVersionType extends AbstractType
                   'required' => false,
                   'label' => 'When does this quote expire?'
                     ))
-            ->add('signupDeadline', 'date', array(
+            ->add('signupDeadline', 'genemu_jquerydate', array(
+                   'widget' => 'single_text',
                    'required' => false,
                    'label' => 'When is the Signup Deadline?'
                     ))
