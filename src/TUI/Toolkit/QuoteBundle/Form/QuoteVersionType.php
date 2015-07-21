@@ -16,12 +16,15 @@ class QuoteVersionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('version', 'integer', array('read_only' => true, 'label' => 'Version Number'))
             // add the QuoteType form first
             ->add('quoteReference', new QuoteType(), array(
               'label' => 'Quote details'
           ))
             // now the versionable fields
             ->add('tripStatus','entity', array(
+            'label' => 'Trip Status',
+            'required' => false,
             'placeholder' => 'Select',
             'class' => 'TripStatusBundle:TripStatus',
             'property' => 'name',
@@ -31,7 +34,12 @@ class QuoteVersionType extends AbstractType
                   ->orderBy('ts.name', 'ASC');
                 },
               ))
+            ->add('welcomeMsg', 'text', array(
+                'label' => 'Welcome Message',
+              ))
             ->add('boardBasis','entity', array(
+            'label' => 'Board Basis',
+            'required' => false,
             'placeholder' => 'Select',
             'class' => 'BoardBasisBundle:BoardBasis',
             'property' => 'name',
@@ -40,19 +48,38 @@ class QuoteVersionType extends AbstractType
                   ->orderBy('b.name', 'ASC');
                 },
               ))
-            ->add('expiryDate')
+            ->add('transportType','entity', array(
+              'required' => false,
+              'placeholder' => 'Select',
+              'class' => 'TransportBundle:Transport',
+              'property' => 'name',
+              'query_builder' => function (EntityRepository $er) {
+                  return $er->createQueryBuilder('t')
+                    ->orderBy('t.name', 'ASC');
+                    },
+                ))
+            ->add('expiryDate', 'genemu_jquerydate', array(
+                  'widget' => 'single_text',
+                  'required' => false,
+                  'label' => 'When does this quote expire?'
+                    ))
+            ->add('signupDeadline', 'date', array(
+                   'required' => false,
+                   'label' => 'When is the Signup Deadline?'
+                    ))
             ->add('freePlaces')
             ->add('payingPlaces')
             ->add('maxPax')
             ->add('minPax')
-            ->add('departureDate')
-            ->add('returnDate')
-            ->add('signupDeadline')
+            ->add('departureDate', 'date', array('required' => false))
+            ->add('returnDate', 'date', array('required' => false))
+
             ->add('quoteDays')
             ->add('quoteNights')
             ->add('totalPrice')
             ->add('pricePerson')
             ->add('currency', 'entity', array(
+                'required' => false,
                 'placeholder' => 'Select',
                 'class' => 'CurrencyBundle:Currency',
                 'property'  =>  'name',
@@ -60,18 +87,6 @@ class QuoteVersionType extends AbstractType
                     return $er->createQueryBuilder('c')
                     ->orderBy('c.name', 'ASC');
                     },
-              ))
-            ->add('transportType','entity', array(
-                'placeholder' => 'Select',
-                'class' => 'TransportBundle:Transport',
-                'property' => 'name',
-                'query_builder' => function (EntityRepository $er) {
-                  return $er->createQueryBuilder('t')
-                  ->orderBy('t.name', 'ASC');
-                  },
-              ))
-            ->add('welcomeMsg', 'text', array(
-                'label' => 'Welcome Message',
               ))
             ->add('content', 'hidden', array(
                 'empty_data' => 0, //'set this to whatever is the parent'

@@ -1,36 +1,7 @@
 form {
 
-  .form-row,
   .button-row {
     margin-bottom: 1em;
-  }
-
-}
-
-.checkbox-replace {
-  position: relative;
-  @include font-sizer(14);
-  padding: 0 0 0 28px;
-  margin-bottom: 0;
-
-  &:before {
-    content: '';
-    @include fa-standard();
-    @include font-sizer(14);
-    display: block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 20px;
-    height: 20px;
-    line-height: 18px;
-    text-align: center;
-    border: 1px solid $text_black;
-    background: $bg_white;
-  }
-
-  &.checked:before {
-    content: '\f00d';
   }
 
 }

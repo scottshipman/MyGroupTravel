@@ -24,6 +24,7 @@ class AppKernel extends Kernel
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             new APY\DataGridBundle\APYDataGridBundle(),
             new Webfactory\Bundle\ExceptionsBundle\WebfactoryExceptionsBundle(),
+            new Genemu\Bundle\FormBundle\GenemuFormBundle(),
 
 
             // In Toolkit Project ( in /src directory) bundles...
