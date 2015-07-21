@@ -6,3 +6,9 @@ $page_width : 80%;
 $page_width_reset : (100% / $page_width) * 100%; // 125%
 $page_gutter: (100% - $page_width) / 2; // 10%
 $page_gutter_reset: ($page_width_reset - 100%) / 2; // 12.5%
+
+// Desktop admin page widths
+$admin_page_width : 90%;
+$admin_page_width_reset : (100% / $admin_page_width) * 100%; // 111.1111%
+$admin_page_gutter: (100% - $admin_page_width) / 2; // 5%
+$admin_page_gutter_reset: ($admin_page_width_reset - 100%) / 2; // 5.5556%
