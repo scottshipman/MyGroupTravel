@@ -525,10 +525,10 @@ class QuoteController extends Controller
 
 
 
-  function getBrandUsers()
+  function getBrandUsers($controller)
   {
     $choices=array();
-    $em = $this->getDoctrine()->getManager();
+    $em = $controller->getDoctrine()->getManager();
     $qb = $em->createQueryBuilder('TUIToolkitUserBundle:User');
     $qb->select('u.id, u.username')
       ->from('TUIToolkitUserBundle:User', 'u')
@@ -545,10 +545,10 @@ class QuoteController extends Controller
     return $choices;
   }
 
-  function getInstitutionList()
+  function getInstitutionList($controller)
   {
     $choices=array();
-    $em = $this->getDoctrine()->getManager();
+    $em = $controller->getDoctrine()->getManager();
     $qb = $em->createQueryBuilder('InstitutionBundle:Institution');
     $qb->select('i.id, i.name')
       ->from('InstitutionBundle:Institution', 'i')

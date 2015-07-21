@@ -15,19 +15,50 @@ class QuoteType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+
+
         $builder
+            ->add('isTemplate', 'checkbox', array('required' => FALSE, 'label' => "Is this a template?"))
             ->add('name')
             ->add('destination')
             ->add('reference')
             ->add('organizer', 'entity', array(
-              'class' => 'TUI\Toolkit\UserBundle\Entity\User'
-          ))
-            //->add('salesAgent', 'choice')
-            ->add('converted', 'checkbox', array('required' => FALSE,))
-            ->add('setupComplete', 'checkbox', array('required' => FALSE,))
-            ->add('locked', 'checkbox', array('required' => FALSE,))
-            ->add('isTemplate', 'checkbox', array('required' => FALSE,))
+              'required' => false,
+              'placeholder' => 'Select',
+              'class' => 'TUI\Toolkit\UserBundle\Entity\User',
+              'query_builder' => function (EntityRepository $er) {
+                  return $er->createQueryBuilder('u')
+                    ->where('u.roles LIKE :role')
+                    ->setParameters(array('role' => "%ROLE_CUSTOMER%"))
+                    ->orderBy('u.email', 'ASC');
+                },
+              ))
+            ->add('institution', 'entity', array(
+              'required' => false,
+              'placeholder' => 'Select',
+              'class' => 'TUI\Toolkit\InstitutionBundle\Entity\Institution',
+              'property' => 'name',
+              'query_builder' => function (EntityRepository $er) {
+                  return $er->createQueryBuilder('i')
+                    ->orderBy('i.name', 'ASC');
+                },
+              ))
+            ->add('salesAgent','entity', array(
+              'required' => false,
+              'placeholder' => 'Select',
+              'class' => 'TUI\Toolkit\UserBundle\Entity\User',
+              'query_builder' => function (EntityRepository $er) {
+                  return $er->createQueryBuilder('u')
+                    ->where('u.roles LIKE :role')
+                    ->setParameters(array('role' => "%ROLE_BRAND%"))
+                    ->orderBy('u.email', 'ASC');
+                    },
+                ))
+            ->add('converted', 'hidden', array('required' => FALSE,))
+            ->add('setupComplete', 'hidden', array('required' => FALSE,))
+            ->add('locked', 'hidden', array('required' => FALSE,))
             ->add('media', 'sonata_media_type', array(
+                'required' => false,
                 'provider' => 'sonata.media.provider.image',
                 'context' => 'quote'
 

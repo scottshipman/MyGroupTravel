@@ -185,3 +185,6 @@ stof_doctrine_extensions:
     orm:
         default:
           softdeleteable: true
+
+genemu_form:
+    date: ~
