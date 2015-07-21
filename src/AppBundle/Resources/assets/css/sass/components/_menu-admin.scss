@@ -56,108 +56,18 @@
 
       .mdl-navigation__link {
         font-weight: 400;
-        padding: 12px $layout-header-desktop-indent 12px ($layout-header-desktop-indent * 2);
+        padding: 10px $layout-header-desktop-indent 10px ($layout-header-desktop-indent * 2);
 
         @media screen and (max-width: $layout-screen-size-threshold) {
-          padding: 12px $layout-header-mobile-indent 12px ($layout-header-mobile-indent * 2);
+          padding: 10px $layout-header-mobile-indent 10px ($layout-header-mobile-indent * 2);
         }
 
       }
 
-    }
-
-  }
-
-}
-
-.admin-menu,
-.login {
-  position: relative;
-  @include font-sizer(12);
-
-  ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  li {
-    float: left;
-    position: relative;
-
-    &.active {
-      background: rgba(0,0,0,0.2);
-    }
-
-    ul {
-      display: none;
-      background: rgba(0,0,0,0.2);
-      border-top: 1px solid #000;
-      position: absolute;
-      top: 100%;
-      z-index: 10;
-
-      li {
-        float: none;
+      .active a {
+        color: $color-primary;
       }
 
-    }
-
-    &:hover {
-      background: rgba(0,0,0,0.2);
-
-      ul {
-        display: block;
-      }
-
-    }
-
-  }
-
-  a, span {
-    display: block;
-    color: $white;
-    padding: 0.5em 1em;
-  }
-
-  span {
-    cursor: default;
-  }
-
-  .active a {
-    color: $text_link_dark;
-  }
-
-}
-
-
-
-
-
-.admin-menu {
-
-  li {
-
-    ul {
-      left: 0;
-    }
-
-  }
-
-}
-
-
-
-
-
-.login {
-
-  li {
-    white-space: nowrap;
-    text-align: right;
-
-    ul {
-      right: 0;
     }
 
   }

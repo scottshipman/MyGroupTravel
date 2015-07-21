@@ -1,41 +1,40 @@
 {% extends '::base.html.twig' %}
+{% block title %}Manage Boards{% endblock %}
 
 {% block body -%}
-    <h1>BoardBasis list</h1>
 
-    <table class="records_list">
+    <h1>Board Basis list</h1>
+
+    <table class="mdl-data-table mdl-js-data-table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Actions</th>
+                <th class="mdl-data-table__cell--non-numeric">Name (ID)</th>
+                <th class="mdl-data-table__cell--non-numeric">Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for entity in entities %}
             <tr>
-                <td><a href="{{ path('_manage_boardbasis_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.name }}</td>
-                <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('_manage_boardbasis_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('_manage_boardbasis_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
+                <td class="mdl-data-table__cell--non-numeric"><a href="{{ path('_manage_boardbasis_show', { 'id': entity.id }) }}">{{ entity.name }}</a> ({{ entity.id }})</td>
+                <td class="mdl-data-table__cell--non-numeric">
+                    <ul class="table-actions">
+                        <li>
+                            <a href="{{ path('_manage_boardbasis_show', { 'id': entity.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('_manage_boardbasis_edit', { 'id': entity.id }) }}">edit</a>
+                        </li>
+                    </ul>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-        <ul>
+    <ul class="record_actions">
         <li>
-            <a href="{{ path('_manage_boardbasis_new') }}">
-                Create a new entry
-            </a>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('_manage_boardbasis_new') }}">Create a new entry</a>
         </li>
     </ul>
-    {% endblock %}
+
+{% endblock %}

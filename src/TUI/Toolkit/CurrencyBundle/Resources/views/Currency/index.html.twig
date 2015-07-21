@@ -2,45 +2,43 @@
 {% block title %}Manage Currency{% endblock %}
 
 {% block body -%}
+
     <h1>Currency list</h1>
 
-    <table class="records_list">
+    <table class="mdl-data-table mdl-js-data-table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Code</th>
-                <th>Htmlsymbol</th>
-                <th>Name</th>
-                <th>Actions</th>
+                <th class="mdl-data-table__cell--non-numeric">Code (ID)</th>
+                <th class="mdl-data-table__cell--non-numeric">Htmlsymbol</th>
+                <th class="mdl-data-table__cell--non-numeric">Name</th>
+                <th class="mdl-data-table__cell--non-numeric">Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for entity in entities %}
             <tr>
-                <td><a href="{{ path('manage_currency_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.code }}</td>
-                <td>{{ entity.htmlSymbol }}</td>
-                <td>{{ entity.name }}</td>
-                <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('manage_currency_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('manage_currency_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
+                <td class="mdl-data-table__cell--non-numeric"><a href="{{ path('manage_currency_show', { 'id': entity.id }) }}">{{ entity.code }}</a> ({{ entity.id }})</td>
+                <td class="mdl-data-table__cell--non-numeric">{{ entity.htmlSymbol }}</td>
+                <td class="mdl-data-table__cell--non-numeric">{{ entity.name }}</td>
+                <td class="mdl-data-table__cell--non-numeric">
+                    <ul class="table-actions">
+                        <li>
+                            <a href="{{ path('manage_currency_show', { 'id': entity.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('manage_currency_edit', { 'id': entity.id }) }}">edit</a>
+                        </li>
+                    </ul>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-        <ul>
+    <ul class="record_actions">
         <li>
-            <a href="{{ path('manage_currency_new') }}">
-                Create a new entry
-            </a>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_currency_new') }}">Create a new entry</a>
         </li>
     </ul>
-    {% endblock %}
+
+{% endblock %}

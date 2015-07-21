@@ -2,10 +2,17 @@
 
   $('.mdl-layout__drawer .menu_level_1').each( function() {
     var t = $(this);
-    t.parent().addClass('collapsed');
-    t.prev().addClass('menu-parent');
-    t.children('span').css( 'margin-top', '-' + $(this).css('height') );
-    t.css('overflow', 'hidden').hide();
+    t.prev().addClass('menu-parent'); // add to link-like span
+    t.css('overflow', 'hidden');
+    if ( t.parent().hasClass('current_ancestor') ) {
+      t.parent().addClass('expanded');
+      t.children('span').css( 'margin-top', 0 );
+      t.show();
+    } else {
+      t.parent().addClass('collapsed');
+      t.children('span').css( 'margin-top', '-' + $(this).css('height') );
+      t.hide();
+    }
   });
 
   $('.menu-parent').click( function() { // $(this) is the link-like span
