@@ -72,8 +72,14 @@ class QuoteVersionType extends AbstractType
             ->add('payingPlaces')
             ->add('maxPax')
             ->add('minPax')
-            ->add('departureDate', 'date', array('required' => false))
-            ->add('returnDate', 'date', array('required' => false))
+            ->add('departureDate', 'genemu_jquerydate', array(
+                  'widget' => 'single_text',
+                  'required' => false
+                  ))
+            ->add('returnDate', 'genemu_jquerydate', array(
+                  'widget' => 'single_text',
+                  'required' => false
+                  ))
 
             ->add('quoteDays')
             ->add('quoteNights')

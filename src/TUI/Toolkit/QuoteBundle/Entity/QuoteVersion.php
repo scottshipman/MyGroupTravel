@@ -41,49 +41,49 @@ class QuoteVersion
     /**
      * @var array
      *
-     * @ORM\Column(name="content", type="json_array")
+     * @ORM\Column(name="content", type="json_array", nullable=true)
      */
     private $content;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="expiryDate", type="date")
+     * @ORM\Column(name="expiryDate", type="date", nullable=true)
      */
     private $expiryDate;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="freePlaces", type="integer")
+     * @ORM\Column(name="freePlaces", type="integer", nullable=true)
      */
     private $freePlaces;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="maxPax", type="integer")
+     * @ORM\Column(name="maxPax", type="integer", nullable=true)
      */
     private $maxPax;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="minPax", type="integer")
+     * @ORM\Column(name="minPax", type="integer", nullable=true)
      */
     private $minPax;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="payingPlaces", type="integer")
+     * @ORM\Column(name="payingPlaces", type="integer", nullable=true)
      */
     private $payingPlaces;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="departureDate", type="date")
+     * @ORM\Column(name="departureDate", type="date", nullable=true)
      */
     private $departureDate;
 
@@ -98,7 +98,7 @@ class QuoteVersion
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="signupDeadline", type="date")
+     * @ORM\Column(name="signupDeadline", type="date", nullable=true)
      *
      * @ORM\ManyToOne(targetEntity="TUI\Toolkit\QuoteBundle\Entity\Quote", cascade={"all"}, fetch="EAGER", inversedBy = "id")
      */
@@ -107,21 +107,21 @@ class QuoteVersion
     /**
      * @var integer
      *
-     * @ORM\Column(name="quoteDays", type="integer")
+     * @ORM\Column(name="quoteDays", type="integer", nullable=true)
      */
     private $quoteDays;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="quoteNights", type="integer")
+     * @ORM\Column(name="quoteNights", type="integer", nullable=true)
      */
     private $quoteNights;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="totalPrice", type="float")
+     * @ORM\Column(name="totalPrice", type="float", nullable=true)
      */
     private $totalPrice;
 
@@ -146,7 +146,7 @@ class QuoteVersion
     /**
      * @var string
      *
-     * @ORM\Column(name="welcomeMsg", type="text")
+     * @ORM\Column(name="welcomeMsg", type="text", nullable=true)
      */
     private $welcomeMsg;
 
@@ -160,7 +160,7 @@ class QuoteVersion
   /**
    * @var DateTime
    *
-   * @ORM\Column(name="returnDate", type="date")
+   * @ORM\Column(name="returnDate", type="date", nullable=true)
    */
   private $returnDate;
 

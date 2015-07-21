@@ -1,49 +1,42 @@
-{% extends '::base.html.twig' %}
-{% block title %}Quote Version {{ entity.quoteReference.name }}:{{ entity.id }}{% endblock %}
-{% block body -%}
-    <h1>QuoteVersion</h1>
+
 
     <table class="record_properties">
         <tbody>
             <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
+                <th>Version</th>
+                <td>{{ entity.version }}</td>
             </tr>
             <tr>
-                <th>Boardbasis</th>
-                <td>{{ entity.boardBasis.name }}</td>
+                <th>Board basis</th>
+                <td>{% if entity.boardBasis %}{{ entity.boardBasis.name }}{% endif %}</td>
             </tr>
             <tr>
                 <th>Content</th>
                 <td>{{ entity.content }}</td>
             </tr>
             <tr>
-                <th>Expirydate</th>
+                <th>Expiry date</th>
                 <td>{{ entity.expiryDate|date('Y-m-d H:i:s') }}</td>
             </tr>
             <tr>
-                <th>Freeplaces</th>
+                <th>Free places</th>
                 <td>{{ entity.freePlaces }}</td>
             </tr>
             <tr>
-                <th>Maxpax</th>
+                <th>Max passengers</th>
                 <td>{{ entity.maxPax }}</td>
             </tr>
             <tr>
-                <th>Minpax</th>
+                <th>Min passengers</th>
                 <td>{{ entity.minPax }}</td>
             </tr>
             <tr>
-                <th>Payingplaces</th>
+                <th>Paying places</th>
                 <td>{{ entity.payingPlaces }}</td>
             </tr>
             <tr>
-                <th>Departuredate</th>
+                <th>Departure date</th>
                 <td>{{ entity.departureDate|date('Y-m-d H:i:s') }}</td>
-            </tr>
-            <tr>
-                <th>Parent</th>
-                <td>{{ entity.quoteReference.name }}</td>
             </tr>
             <tr>
                 <th>Signupdeadline</th>
@@ -63,11 +56,11 @@
             </tr>
             <tr>
                 <th>Tripstatus</th>
-                <td>{{ entity.tripStatus.name }}</td>
+                <td>{% if entity.tripStatus %}{{ entity.tripStatus.name }}{% endif %}</td>
             </tr>
             <tr>
                 <th>Transporttype</th>
-                <td>{{ entity.transportType.name }}</td>
+                <td>{% if entity.transportType %}{{ entity.transportType.name }}{% endif %}</td>
             </tr>
             <tr>
                 <th>Welcomemsg</th>
@@ -89,4 +82,4 @@
     </li>
     <li>{{ form(delete_form) }}</li>
 </ul>
-{% endblock %}
+
