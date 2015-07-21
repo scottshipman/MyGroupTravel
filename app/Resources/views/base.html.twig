@@ -77,32 +77,30 @@
 
     <main class="mdl-layout__content">
 
-    <div class="flash-messages">
-        {% for flashMessage in app.session.flashbag.get('notice') %}
-            <div class="flash-message flash-message-notice">Notice:<br>{{ flashMessage }}</div>
-        {% endfor %}
-        {% for flashMessage in app.session.flashbag.get('error') %}
-            <div class="flash-message flash-message-error">Error:<br>{{ flashMessage }}</div>
-        {% endfor %}
-    </div>
-
-    <div class="header">
-
-        <div class="brand_logo">
-            {{ render(controller('BrandBundle:Default:index')) }}
+        <div class="flash-messages">
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+                <div class="flash-message flash-message-notice">Notice:<br>{{ flashMessage }}</div>
+            {% endfor %}
+            {% for flashMessage in app.session.flashbag.get('error') %}
+                <div class="flash-message flash-message-error">Error:<br>{{ flashMessage }}</div>
+            {% endfor %}
         </div>
 
-    </div>
-
-    <div class="content">
-        <div class="inner">
-            {% block body %}{% endblock %}
+        <div class="header">
+            <div class="brand_logo">
+                {{ render(controller('BrandBundle:Default:index')) }}
+            </div>
         </div>
-    </div>
+
+        <div class="content">
+            <div class="inner">
+                {% block body %}{% endblock %}
+            </div>
+        </div>
 
     </main>
 
-  </div>
+  </div><!-- mdl-layout -->
 
     {% javascripts '@toolkit' %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
