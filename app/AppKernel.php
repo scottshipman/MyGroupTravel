@@ -54,6 +54,7 @@ class AppKernel extends Kernel
             new Application\Sonata\MediaBundle\ApplicationSonataMediaBundle(),
             new Application\Sonata\ClassificationBundle\ApplicationSonataClassificationBundle(),
             new Oneup\UploaderBundle\OneupUploaderBundle(),
+            new Webfactory\Bundle\ExceptionsBundle\WebfactoryExceptionsBundle(),
 
         );
 
