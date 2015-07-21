@@ -26,7 +26,7 @@ class QuoteVersion
      *
      * @ORM\JoinColumn(name="boardBasis", referencedColumnName="id")
      *
-     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\BoardBasisBundle\Entity\BoardBasis", cascade={"all"}, fetch="EAGER", inversedBy = "id")
+     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\BoardBasisBundle\Entity\BoardBasis", cascade={"all"}, fetch="EAGER")
      */
     private $boardBasis;
 
@@ -82,9 +82,10 @@ class QuoteVersion
     /**
      * @var integer
      *
-     * @ORM\Column(name="parent", type="integer")
+     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\QuoteBundle\Entity\Quote", cascade={"persist"})
+     * @ORM\JoinColumn(name="quoteReference", referencedColumnName="id")
      */
-    private $parent;
+    private $quoteReference;
 
     /**
      * @var \DateTime
@@ -119,9 +120,9 @@ class QuoteVersion
     /**
      * @var integer
      *
-     * @ORM\Column(name="tripStatus", type="integer")
+     * @ORM\JoinColumn(name="tripStatus", referencedColumnName="id")
      *
-     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\TripStatusBundle\Entity\TripStatus", cascade={"all"}, fetch="EAGER", inversedBy = "id")
+     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\TripStatusBundle\Entity\TripStatus", cascade={"all"}, fetch="EAGER")
      */
     private $tripStatus;
 
@@ -130,7 +131,7 @@ class QuoteVersion
      *
      * @ORM\JoinColumn(name="transportType", referencedColumnName="id")
      *
-     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\TransportBundle\Entity\Transport", cascade={"all"}, fetch="EAGER", inversedBy = "id")
+     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\TransportBundle\Entity\Transport", cascade={"all"}, fetch="EAGER")
      */
     private $transportType;
 
@@ -144,7 +145,7 @@ class QuoteVersion
   /**
    * @var float
    *
-   * @ORM\Column(name="pricePerson", type="float")
+   * @ORM\Column(name="pricePerson", type="float", nullable=true)
    */
   private $pricePerson;
 
@@ -160,7 +161,7 @@ class QuoteVersion
    *
    * @ORM\JoinColumn(name="currency", referencedColumnName="id")
    *
-   * @ORM\ManyToOne(targetEntity="TUI\Toolkit\CurrencyBundle\Entity\Currency", cascade={"all"}, fetch="EAGER", inversedBy = "id")
+   * @ORM\ManyToOne(targetEntity="TUI\Toolkit\CurrencyBundle\Entity\Currency", cascade={"all"}, fetch="EAGER")
    *
    */
   private $currency;
@@ -359,26 +360,26 @@ class QuoteVersion
     }
 
     /**
-     * Set parent
+     * Set quoteReference
      *
-     * @param integer $parent
+     * @param integer $quoteReference
      * @return QuoteVersion
      */
-    public function setParent($parent)
+    public function setQuoteReference($quoteReference)
     {
-        $this->parent = $parent;
+        $this->quoteReference = $quoteReference;
 
         return $this;
     }
 
     /**
-     * Get parent
+     * Get quoteReference
      *
      * @return integer 
      */
-    public function getParent()
+    public function getQuoteReference()
     {
-        return $this->parent;
+        return $this->quoteReference;
     }
 
     /**

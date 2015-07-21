@@ -16,6 +16,11 @@ class QuoteVersionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            // add the QuoteType form first
+            ->add('quoteReference', new QuoteType(), array(
+              'label' => 'Quote details'
+          ))
+            // now the versionable fields
             ->add('tripStatus','entity', array(
             'placeholder' => 'Select',
             'class' => 'TripStatusBundle:TripStatus',
@@ -41,10 +46,21 @@ class QuoteVersionType extends AbstractType
             ->add('maxPax')
             ->add('minPax')
             ->add('departureDate')
+            ->add('returnDate')
             ->add('signupDeadline')
             ->add('quoteDays')
             ->add('quoteNights')
             ->add('totalPrice')
+            ->add('pricePerson')
+            ->add('currency', 'entity', array(
+                'placeholder' => 'Select',
+                'class' => 'CurrencyBundle:Currency',
+                'property'  =>  'name',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('c')
+                    ->orderBy('c.name', 'ASC');
+                    },
+              ))
             ->add('transportType','entity', array(
                 'placeholder' => 'Select',
                 'class' => 'TransportBundle:Transport',
@@ -60,7 +76,6 @@ class QuoteVersionType extends AbstractType
             ->add('content', 'hidden', array(
                 'empty_data' => 0, //'set this to whatever is the parent'
               ))
-            ->add('parent', 'hidden')
         ;
     }
     

@@ -8,7 +8,7 @@ manage_quote_show:
 
 manage_quote_new:
     path:     /new
-    defaults: { _controller: "QuoteBundle:Quote:new" }
+    defaults: { _controller: "QuoteBundle:QuoteVersion:new" }
 
 manage_quote_create:
     path:     /create

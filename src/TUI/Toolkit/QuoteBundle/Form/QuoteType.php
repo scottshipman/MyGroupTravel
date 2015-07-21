@@ -19,7 +19,9 @@ class QuoteType extends AbstractType
             ->add('name')
             ->add('destination')
             ->add('reference')
-            ->add('organizer', 'email')
+            ->add('organizer', 'entity', array(
+              'class' => 'TUI\Toolkit\UserBundle\Entity\User'
+          ))
             //->add('salesAgent', 'choice')
             ->add('converted', 'checkbox', array('required' => FALSE,))
             ->add('setupComplete', 'checkbox', array('required' => FALSE,))
@@ -29,7 +31,8 @@ class QuoteType extends AbstractType
                 'provider' => 'sonata.media.provider.image',
                 'context' => 'quote'
 
-            ));
+            ))
+        ;
     }
 
     /**

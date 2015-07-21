@@ -87,7 +87,11 @@ class QuoteController extends Controller
       'converted',
       'setupComplete',
       'locked',
-      'destination'
+      'destination',
+      'salesAgent.firstName',
+      'salesAgent.lastName',
+      'organizer.firstName',
+      'organizer.lastName'
     );
 
       // Creates simple grid based on your entity (ORM)
@@ -140,7 +144,11 @@ class QuoteController extends Controller
       'converted',
       'setupComplete',
       'locked',
-      'destination'
+      'destination',
+      'salesAgent.firstName',
+      'salesAgent.lastName',
+      'organizer.firstName',
+      'organizer.lastName'
     );
 
     // Creates simple grid based on your entity (ORM)
@@ -189,7 +197,11 @@ class QuoteController extends Controller
       'converted',
       'setupComplete',
       'locked',
-      'destination'
+      'destination',
+      'salesAgent.firstName',
+      'salesAgent.lastName',
+      'organizer.firstName',
+      'organizer.lastName'
     );
 
    // Creates simple grid based on your entity (ORM)
