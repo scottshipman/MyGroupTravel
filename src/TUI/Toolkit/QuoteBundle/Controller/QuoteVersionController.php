@@ -45,7 +45,7 @@ class QuoteVersionController extends Controller
             $em->flush();
           $this->get('session')->getFlashBag()->add('notice', 'Quote Version Saved: '. $entity->getQuoteReference()->getName());
 
-            return $this->redirect($this->generateUrl('manage_quoteversion_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('manage_quote_show', array('id' => $entity->getQuoteReference()->getId())));
         }
 
         return $this->render('QuoteBundle:QuoteVersion:new.html.twig', array(
@@ -91,21 +91,30 @@ class QuoteVersionController extends Controller
     /**
      * Finds and displays a QuoteVersion entity.
      *
+     * param $id quoteReference id
+     *
      */
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+      // Get all Quote versions referencing Parent Quote object
+      $entity = $em->getRepository('QuoteBundle:QuoteVersion')->findByQuoteReference($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find QuoteVersion entity.');
         }
 
+      // Get the quote with highest Version number and order array DESC
+      usort($entity, function ($a, $b) {
+        if ($a->getVersion() == $b->getVersion()) return 0;
+        return $a->getVersion() > $b->getVersion() ? -1 : 1;
+      });
+      $quote = $entity[0];
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('QuoteBundle:QuoteVersion:show.html.twig', array(
-            'entity'      => $entity,
+            'entity'      => $quote,
             'delete_form' => $deleteForm->createView(),
         ));
     }

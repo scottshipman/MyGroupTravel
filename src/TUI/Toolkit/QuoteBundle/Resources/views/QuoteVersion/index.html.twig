@@ -30,7 +30,7 @@
         {% for entity in entities %}
             <tr>
                 <td><a href="{{ path('manage_quoteversion_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.boardBasis }}</td>
+                <td>{% if entity.boardBasis %}{{ entity.boardBasis.name }}{% endif %}</td>
                 <td>{{ entity.content }}</td>
                 <td>{% if entity.expiryDate %}{{ entity.expiryDate|date('Y-m-d H:i:s') }}{% endif %}</td>
                 <td>{{ entity.freePlaces }}</td>
@@ -38,13 +38,13 @@
                 <td>{{ entity.minPax }}</td>
                 <td>{{ entity.payingPlaces }}</td>
                 <td>{% if entity.departureDate %}{{ entity.departureDate|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{{ entity.parent }}</td>
+                <td>{{ entity.quoteReference.name }}</td>
                 <td>{% if entity.signupDeadline %}{{ entity.signupDeadline|date('Y-m-d H:i:s') }}{% endif %}</td>
                 <td>{{ entity.quoteDays }}</td>
                 <td>{{ entity.quoteNights }}</td>
                 <td>{{ entity.totalPrice }}</td>
-                <td>{{ entity.tripStatus }}</td>
-                <td>{{ entity.transportType }}</td>
+                <td>{% if entity.tripStatus %}{{ entity.tripStatus.name }}{% endif %}</td>
+                <td>{% if entity.transportType %}{{ entity.transportType.name }}{% endif %}</td>
                 <td>{{ entity.welcomeMsg }}</td>
                 <td>
                 <ul>
