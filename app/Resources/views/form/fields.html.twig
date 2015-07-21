@@ -1,14 +1,103 @@
 {# app/Resources/views/form/fields.html.twig #}
 {% extends 'form_div_layout.html.twig' %}
 
+{% block form_widget_simple %}
+    {% set type = type|default('text') %}
+    {% if (type == "hidden") or (type == "file") %}
+        <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}>
+    {% else %}
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}>
+            <label class="mdl-textfield__label" for="{{ id }}">{{ form_label(form) }}</label>
+        </div>
+    {% endif %}
+{% endblock form_widget_simple %}
+
+{% block textarea_widget %}
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <textarea {{ block('widget_attributes') }}>{{ value }}</textarea>
+        <label class="mdl-textfield__label" for="{{ id }}">{{ form_label(form) }}</label>
+    </div>
+{% endblock textarea_widget %}
+
+{% block choice_widget_expanded %}
+    <div {{ block('widget_container_attributes') }}>
+        {% for child in form %}
+            {{ form_widget(child) }}
+        {% endfor %}
+    </div>
+{% endblock choice_widget_expanded %}
+
+{% block choice_widget_collapsed %}
+    {% if required and placeholder is none and not placeholder_in_choices and not multiple %}
+        {% set required = false %}
+    {% endif %}
+    <label for="{{ id }}">{{ form_label(form) }}</label>
+    <select {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %}>
+        {% if placeholder is not none %}
+            <option value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ placeholder != '' ? placeholder|trans({}, translation_domain) }}</option>
+        {% endif %}
+        {% if preferred_choices|length > 0 %}
+            {% set options = preferred_choices %}
+            {{ block('choice_widget_options') }}
+            {% if choices|length > 0 and separator is not none %}
+                <option disabled="disabled">{{ separator }}</option>
+            {% endif %}
+        {% endif %}
+        {% set options = choices %}
+        {{ block('choice_widget_options') }}
+    </select>
+{% endblock choice_widget_collapsed %}
+
+{% block checkbox_widget %}
+    {% spaceless %}
+    <label class="mdl-checkbox mdl-js-checkbox">
+        <input type="checkbox" class="mdl-checkbox__input" {{ block('widget_attributes') }} {% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %}>
+        {% if (label) %}
+            <span class="mdl-checkbox__label">{{ label }}</span>
+        {% else %}
+            <span class="mdl-checkbox__label">{{ form_label(form) }}</span>
+        {% endif %}
+    </label>
+    {% endspaceless %}
+{% endblock checkbox_widget %}
+
+{% block radio_widget %}
+    {% spaceless %}
+    <label class="mdl-radio mdl-js-radio">
+        <input type="radio" class="mdl-radio__button" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %}>
+        {% if (label) %}
+            <span class="mdl-radio__label">{{ label }}</span>
+        {% else %}
+            <span class="mdl-radio__label">{{ form_label(form) }}</span>
+        {% endif %}
+    </label>
+    {% endspaceless %}
+{% endblock radio_widget %}
+
+{% block form_label %}
+    {% if label is not sameas(false) %}
+        {% if label is empty %}
+            {% if label_format is not empty %}
+                {% set label = label_format|replace({
+                    '%name%': name,
+                    '%id%': id,
+                }) %}
+            {% else %}
+                {% set label = name|humanize %}
+            {% endif %}
+        {% endif %}
+        <span>{{ translation_domain is sameas(false) ? label : label|trans({}, translation_domain) }}</span>
+    {% endif %}
+{% endblock form_label %}
+
 {% block form_row %}
     <div class="form-row">
-        <div class="label">{{ form_label(form) }}</div>
-        {{ form_errors(form) }}
+        {# form_label(form) #}
         {{ form_widget(form) }}
+        {{ form_errors(form) }}
     </div>
 {% endblock form_row %}
-
 
 {% block button_row %}
     <div class="button-row">

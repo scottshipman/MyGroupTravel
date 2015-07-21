@@ -1,61 +1,64 @@
 {% extends '::base.html.twig' %}
+{% block title %}Manage Users{% endblock %}
 
 {% block body -%}
+
     <h1>User list</h1>
 
-    <table class="records_list">
+    <table class="mdl-data-table mdl-js-data-table">
         <thead>
             <tr>
-                <th>Username (ID)</th>
+                <th class="mdl-data-table__cell--non-numeric">Username (ID)</th>
                 <th>Enabled</th>
-                <th>Name</th>
-                <th>Phone Number</th>
-                <th>Email</th>
-                <th>Roles</th>
-                <th>User Parent</th>
-                <th>Avatar</th>
-                <th>Actions</th>
+                <th class="mdl-data-table__cell--non-numeric">Name</th>
+                {# <th class="mdl-data-table__cell--non-numeric">Phone Number</th> #}
+                <th class="mdl-data-table__cell--non-numeric">Email</th>
+                <th class="mdl-data-table__cell--non-numeric">Roles</th>
+                <th class="mdl-data-table__cell--non-numeric">User Parent</th>
+                <th class="mdl-data-table__cell--non-numeric center">Avatar</th>
+                <th class="mdl-data-table__cell--non-numeric">Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for entity in entities %}
             <tr>
-                <td><a href="{{ path('user_show', { 'id': entity.id }) }}">{{ entity.username }}</a> ({{ entity.id }})</td>
+                <td class="mdl-data-table__cell--non-numeric"><a href="{{ path('user_show', { 'id': entity.id }) }}">{{ entity.username }}</a> ({{ entity.id }})</td>
                 <td>{{ entity.enabled }}</td>
-                <td>{{ entity.honorific }} {{ entity.firstName }} {{ entity.lastName }}</td>
-                <td>{{ entity.phoneNumber }}</td>
-                <td><a href="mailto:{{ entity.email }}">{{ entity.email }}</a></td>
-                <td>
-                  <ul>
-                  {% for role in entity.roles %}
-                    <li>{{ role |e }}</li>
-                  {% endfor %}
-                  </ul>
+                <td class="mdl-data-table__cell--non-numeric">{{ entity.honorific }} {{ entity.firstName }} {{ entity.lastName }}</td>
+                {# <td class="mdl-data-table__cell--non-numeric">{{ entity.phoneNumber }}</td> #}
+                <td class="mdl-data-table__cell--non-numeric"><a href="mailto:{{ entity.email }}">{{ entity.email }}</a></td>
+                <td class="mdl-data-table__cell--non-numeric">
+                    <ul>
+                        {% for role in entity.roles %}
+                            <li>{{ role |e }}</li>
+                        {% endfor %}
+                    </ul>
                 </td>
-                <td>{{ entity.userParent }}</td>
-                {% if entity.media %}
-                    <td>{% media entity.media, 'small' %}</td>
-                {% endif %}
-                <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('user_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('user_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
+                <td class="mdl-data-table__cell--non-numeric">{{ entity.userParent }}</td>
+                <td class="mdl-data-table__cell--non-numeric center">
+                    {% if entity.media %}
+                        {% media entity.media, 'small' %}
+                    {% endif %}
+                </td>
+                <td class="mdl-data-table__cell--non-numeric">
+                    <ul class="table-actions">
+                        <li>
+                            <a href="{{ path('user_show', { 'id': entity.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('user_edit', { 'id': entity.id }) }}">edit</a>
+                        </li>
+                    </ul>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-        <ul>
+    <ul class="record_actions">
         <li>
-            <a href="{{ path('user_new') }}">
-                Create a new entry
-            </a>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('user_new') }}">Create a new entry</a>
         </li>
     </ul>
-    {% endblock %}
+
+{% endblock %}
