@@ -16,43 +16,11 @@
             <a class="mdl-tabs__tab is-active" href="{{ path('manage_quote_converted') }}">Converted Quotes</a>
         {% endblock %}
     {% endembed %}
-    <table class="records_list">
-        <thead>
-        <tr>
-            <th{% if entities.isSorted('entity.institution') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(entities, 'Institution / Town', 'entity.institution') }}</th>
-            <th{% if entities.isSorted('entity.name') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(entities, 'Name', 'entity.name') }}</th>
-            <th{% if entities.isSorted('entity.reference') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(entities, 'Reference', 'entity.reference') }}</th>
-            <th{% if entities.isSorted('entity.created') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(entities, 'Created', 'entity.created') }}</th>
-            <th{% if entities.isSorted('entity.views') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(entities, 'Views', 'entity.views') }}</th>
-            <th{% if entities.isSorted('entity.sharedViews') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(entities, 'Shared Views', 'entity.sharedViews') }}</th>
-            <th{% if entities.isSorted('entity.salesAgent') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(entities, 'Business Admin', 'entity.salesAgent') }}</th>
-            <thActions</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for entity in entities %}
-            <tr>
-                <td>{{ entity.institution }}<br />town placeholder</td>
-                <td>{{ entity.name }}</td>
-                <td>{{ entity.reference }}</td>
-                <td>{{ entity.created|localizeddate('short', 'none') }}</td>
-                <td>{{ entity.views }}</td>
-                <td>{{ entity.shareViews }}</td>
-                <td>{{ entity.salesAgent }}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('manage_quote_show', { 'id': entity.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('manage_quote_edit', { 'id': entity.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    {{ render(controller("QuoteBundle:Quote:pageRange", {'entities':entities})) }}
+
+
+    {{ grid_search(grid) }}
+    {{ grid(grid, 'QuoteBundle:Quote:grid.html.twig') }}
+
+    {% block grid_filters %}{% endblock %}
 
     {% endblock %}

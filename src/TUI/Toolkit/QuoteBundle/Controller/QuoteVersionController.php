@@ -43,7 +43,7 @@ class QuoteVersionController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-          $this->get('session')->getFlashBag()->add('notice', 'Quote Version Saved: '. $entity->getName());
+          $this->get('session')->getFlashBag()->add('notice', 'Quote Version Saved: '. $entity->getQuoteReference()->getName());
 
             return $this->redirect($this->generateUrl('manage_quoteversion_show', array('id' => $entity->getId())));
         }
@@ -118,6 +118,8 @@ class QuoteVersionController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
+        // Maybe change this to get Quote ID and look up Quote Versions where quoteReference = $id
+        //  and max(version id), to get latest version for provided quote
         $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
 
         if (!$entity) {
