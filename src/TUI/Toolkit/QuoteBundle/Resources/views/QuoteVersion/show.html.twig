@@ -1,5 +1,5 @@
 {% extends '::base.html.twig' %}
-{% block title %}Quote Version {{ entity.parent }}:{{ entity.id }}{% endblock %}
+{% block title %}Quote Version {{ entity.quoteReference.name }}:{{ entity.id }}{% endblock %}
 {% block body -%}
     <h1>QuoteVersion</h1>
 
@@ -11,7 +11,7 @@
             </tr>
             <tr>
                 <th>Boardbasis</th>
-                <td>{{ entity.boardBasis }}</td>
+                <td>{{ entity.boardBasis.name }}</td>
             </tr>
             <tr>
                 <th>Content</th>
@@ -43,7 +43,7 @@
             </tr>
             <tr>
                 <th>Parent</th>
-                <td>{{ entity.parent }}</td>
+                <td>{{ entity.quoteReference.name }}</td>
             </tr>
             <tr>
                 <th>Signupdeadline</th>
@@ -63,11 +63,11 @@
             </tr>
             <tr>
                 <th>Tripstatus</th>
-                <td>{{ entity.tripStatus }}</td>
+                <td>{{ entity.tripStatus.name }}</td>
             </tr>
             <tr>
                 <th>Transporttype</th>
-                <td>{{ entity.transportType }}</td>
+                <td>{{ entity.transportType.name }}</td>
             </tr>
             <tr>
                 <th>Welcomemsg</th>
@@ -78,12 +78,12 @@
 
         <ul class="record_actions">
     <li>
-        <a href="{{ path('manage_quoteversion') }}">
+        <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quote') }}">
             Back to the list
         </a>
     </li>
     <li>
-        <a href="{{ path('manage_quoteversion_edit', { 'id': entity.id }) }}">
+        <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quoteversion_edit', { 'id': entity.id }) }}">
             Edit
         </a>
     </li>

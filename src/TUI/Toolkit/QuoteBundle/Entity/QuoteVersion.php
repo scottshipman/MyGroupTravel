@@ -24,6 +24,14 @@ class QuoteVersion
     /**
      * @var integer
      *
+     * @ORM\Column(name="version", type="integer")
+     *
+     */
+    private $version = 1;
+
+    /**
+     * @var integer
+     *
      * @ORM\JoinColumn(name="boardBasis", referencedColumnName="id")
      *
      * @ORM\ManyToOne(targetEntity="TUI\Toolkit\BoardBasisBundle\Entity\BoardBasis", cascade={"all"}, fetch="EAGER")
@@ -610,5 +618,28 @@ class QuoteVersion
   public function getCurrency()
   {
     return $this->currency;
+  }
+
+  /**
+   * Set version
+   *
+   * @param integer $version
+   * @return QuoteVersion
+   */
+  public function setVersion($version)
+  {
+    $this->version = $version;
+
+    return $this;
+  }
+
+  /**
+   * Get version
+   *
+   * @return integer
+   */
+  public function getVersion()
+  {
+    return $this->version;
   }
 }
