@@ -17,7 +17,7 @@ manage_quote_create:
 
 manage_quote_edit:
     path:     /{id}/edit
-    defaults: { _controller: "QuoteBundle:Quote:edit" }
+    defaults: { _controller: "QuoteBundle:QuoteVersion:edit" }
 
 manage_quote_update:
     path:     /{id}/update
@@ -48,7 +48,3 @@ manage_quote_deleted:
 manage_quote_restore:
     path:     /{id}/restore
     defaults: { _controller: "QuoteBundle:Quote:restore" }
-
-manage_quote_grid:
-    path: /grid
-    defaults: { _controller: "QuoteBundle:Quote:grid" }
