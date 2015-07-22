@@ -43,9 +43,9 @@ class QuoteVersionController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-          $this->get('session')->getFlashBag()->add('notice', 'Quote Version Saved: '. $entity->getQuoteReference()->getName());
+            $this->get('session')->getFlashBag()->add('notice', 'Quote Saved: '. $entity->getQuoteReference()->getName());
 
-            return $this->redirect($this->generateUrl('manage_quote_show', array('id' => $entity->getQuoteReference()->getId())));
+            return $this->redirect($this->generateUrl('manage_quote'));
         }
 
         return $this->render('QuoteBundle:QuoteVersion:new.html.twig', array(
@@ -54,7 +54,35 @@ class QuoteVersionController extends Controller
         ));
     }
 
-    /**
+  /**
+   * Creates a new Quote Template .
+   *
+   */
+  public function createTemplateAction(Request $request)
+  {
+    $entity = new QuoteVersion();
+    $form = $this->createTemplateCreateForm($entity);
+    $form->handleRequest($request);
+
+    if ($form->isValid()) {
+      $em = $this->getDoctrine()->getManager();
+      $em->persist($entity);
+      $em->flush();
+      $this->get('session')->getFlashBag()->add('notice', 'Quote Template Saved: '. $entity->getQuoteReference()->getName());
+
+      return $this->redirect($this->generateUrl('manage_quote_templates'));
+    }
+
+    return $this->render('QuoteBundle:QuoteVersion:new.html.twig', array(
+      'entity' => $entity,
+      'form'   => $form->createView(),
+      'template' => 'Template'
+    ));
+  }
+
+
+
+  /**
      * Creates a form to create a QuoteVersion entity.
      *
      * @param QuoteVersion $entity The entity
@@ -73,6 +101,25 @@ class QuoteVersionController extends Controller
         return $form;
     }
 
+  /**
+   * Creates a form to create a Quote Template entity.
+   *
+   * @param QuoteVersion $entity The entity
+   *
+   * @return \Symfony\Component\Form\Form The form
+   */
+  private function createTemplateCreateForm(QuoteVersion $entity)
+  {
+    $form = $this->createForm(new QuoteVersionType(), $entity, array(
+      'action' => $this->generateUrl('manage_quoteversion_createtemplate'),
+      'method' => 'POST',
+    ));
+
+    $form->add('submit', 'submit', array('label' => 'Create Template'));
+
+    return $form;
+  }
+
     /**
      * Displays a form to create a new QuoteVersion entity.
      *
@@ -87,6 +134,7 @@ class QuoteVersionController extends Controller
             'form'   => $form->createView(),
         ));
     }
+
 
     /**
      * Finds and displays a QuoteVersion entity.
@@ -121,27 +169,36 @@ class QuoteVersionController extends Controller
 
     /**
      * Displays a form to edit an existing QuoteVersion entity.
-     *
+     * @param $id id of the parent Quote object
      */
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        // Maybe change this to get Quote ID and look up Quote Versions where quoteReference = $id
-        //  and max(version id), to get latest version for provided quote
-        $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+      // Get all Quote versions referencing Parent Quote object
+      $entity = $em->getRepository('QuoteBundle:QuoteVersion')->findByQuoteReference($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find QuoteVersion entity.');
+            throw $this->createNotFoundException('Unable to find QuoteVersion entity.' . $id);
         }
 
-        $editForm = $this->createEditForm($entity);
+        // order array DESC by Version # & Get the quote version with highest Version number
+        usort($entity, function ($a, $b) {
+          if ($a->getVersion() == $b->getVersion()) return 0;
+          return $a->getVersion() > $b->getVersion() ? -1 : 1;
+        });
+        $quote = $entity[0];
+         if($quote->getQuoteReference()->getIsTemplate()){
+           $template='Template';
+         } else {$template='';}
+        $editForm = $this->createEditForm($quote);
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('QuoteBundle:QuoteVersion:edit.html.twig', array(
-            'entity'      => $entity,
+            'entity'      => $quote,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+            'template'    => $template,
         ));
     }
 
@@ -177,22 +234,27 @@ class QuoteVersionController extends Controller
             throw $this->createNotFoundException('Unable to find QuoteVersion entity.');
         }
 
+        if($entity->getQuoteReference()->getIsTemplate()){
+          $template='Template'; $route = '_templates';
+        } else {$template=''; $route = '';}
+
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
             $em->flush();
-          $this->get('session')->getFlashBag()->add('notice', 'Quote Version Saved: '. $entity->getName());
+          $this->get('session')->getFlashBag()->add('notice', 'Quote Saved: '. $entity->getQuoteReference()->getName());
 
 
-          return $this->redirect($this->generateUrl('manage_quoteversion_edit', array('id' => $id)));
+          return $this->redirect($this->generateUrl('manage_quote' . $route));
         }
 
         return $this->render('QuoteBundle:QuoteVersion:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+            'template'    => $template,
         ));
     }
     /**
@@ -214,7 +276,7 @@ class QuoteVersionController extends Controller
 
             $em->remove($entity);
             $em->flush();
-          $this->get('session')->getFlashBag()->add('notice', 'Quote Version Deleted: '. $entity->getName());
+          $this->get('session')->getFlashBag()->add('notice', 'Quote Deleted: '. $entity->getName());
 
         }
 
@@ -222,7 +284,7 @@ class QuoteVersionController extends Controller
     }
 
     /**
-     * Creates a form to delete a QuoteVersion entity by id.
+     * Creates a form to delete a Quote entity by id. (we dont delete quoteversions)
      *
      * @param mixed $id The entity id
      *
@@ -231,7 +293,7 @@ class QuoteVersionController extends Controller
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('manage_quoteversion_delete', array('id' => $id)))
+            ->setAction($this->generateUrl('manage_quote_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()

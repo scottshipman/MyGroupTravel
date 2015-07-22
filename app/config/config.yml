@@ -188,3 +188,4 @@ stof_doctrine_extensions:
 
 genemu_form:
     date: ~
+    autocomplete: ~

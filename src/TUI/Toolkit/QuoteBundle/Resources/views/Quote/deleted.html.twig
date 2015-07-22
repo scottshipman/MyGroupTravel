@@ -1,7 +1,7 @@
 {% extends '::base.html.twig' %}
 {% block title %}Manage Quotes{% endblock %}
 {% block body -%}
-    <h1>Quote list</h1>
+    <h1>Quote Dashboard - Deleted</h1>
     {% embed "QuoteBundle:Quote:quote_tabs.html.twig" %}
         {% block deleted_tab %}
             <a class="mdl-tabs__tab is-active" href="{{ path('manage_quote_deleted') }}">Deleted Quotes</a>

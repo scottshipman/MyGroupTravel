@@ -1,6 +1,5 @@
 {# ------------------------------------------------------ grid ------------------------------------------------------ #}
 
-
 {% block grid %}
     <div class="grid">
         {% if grid.totalCount > 0 or grid.isFiltered or grid.noDataMessage is sameas(false) %}
@@ -42,7 +41,7 @@
     </div>
 {% endblock grid %}
 {# --------------------------------------------------- grid_no_data ------------------------------------------------- #}
-{% block grid_no_data %}<p class="no_data">{{ grid.noDataMessage|default('No data')|trans|raw }}</p>{% endblock grid_no_data %}
+{% block grid_no_data %}<div class="grid-no_data">{{ grid.noDataMessage|default('No data')|trans|raw }}</div>{% endblock grid_no_data %}
 {# --------------------------------------------------- grid_no_result ------------------------------------------------- #}
 {% block grid_no_result %}
     {% spaceless %}

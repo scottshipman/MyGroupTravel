@@ -102,6 +102,7 @@ It treats it like a base_url.
 * form API [reference field types](http://symfony.com/doc/current/reference/forms/types.html)
 * Ice Age - Dont miss the [migrations](http://symfony.com/doc/current/bundles/DoctrineMigrationsBundle/index.html)
 * Doctrine query builder [API](http://doctrine-orm.readthedocs.org/en/latest/reference/query-builder.html)
+* Custom form field types and manipulation [here](http://symfony.com/doc/current/cookbook/form/data_transformers.html)
 
 ## Source Control and Developer Best Practices
 * If you install or update a bundle, or do anything that changes schema, like add a field, change a field mapping etc,

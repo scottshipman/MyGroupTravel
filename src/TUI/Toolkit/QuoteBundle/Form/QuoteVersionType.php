@@ -34,7 +34,7 @@ class QuoteVersionType extends AbstractType
                   ->orderBy('ts.name', 'ASC');
                 },
               ))
-            ->add('welcomeMsg', 'text', array(
+            ->add('welcomeMsg', 'textarea', array(
                 'label' => 'Welcome Message',
               ))
             ->add('boardBasis','entity', array(

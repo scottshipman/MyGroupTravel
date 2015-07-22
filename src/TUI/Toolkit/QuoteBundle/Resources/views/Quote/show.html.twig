@@ -1,7 +1,7 @@
 {% extends '::base.html.twig' %}
 {% block title %}Quote {{ entity.name }}{% endblock %}
 {% block body -%}
-    <h1>Quote</h1>
+    <h1>Quote {% if isTemplate %} Template {% endif %}</h1>
 
     <table class="record_properties">
         <tbody>
