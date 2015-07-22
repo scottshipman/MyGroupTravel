@@ -40,7 +40,7 @@ class QuoteType extends AbstractType
         // CASE: New Object - hidden isTemplate w value of newTemplate
         if($isNew){
           $form->add('isTemplate', 'hidden', array(
-            'data' => $newTemplate,
+            'empty_data' => $newTemplate,
           ));
           if (!$newTemplate){$showAll = true;}
         }
