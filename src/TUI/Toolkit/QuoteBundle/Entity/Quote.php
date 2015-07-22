@@ -58,7 +58,7 @@ class Quote
     /**
      * @var boolean
      *
-     * @ORM\Column(name="converted", type="boolean")
+     * @ORM\Column(name="converted", type="boolean", nullable=true)
      * @GRID\Column(visible=false, filterable=false, export=true)
      */
     private $converted;
@@ -74,7 +74,7 @@ class Quote
     /**
      * @var boolean
      *
-     * @ORM\Column(name="setupComplete", type="boolean")
+     * @ORM\Column(name="setupComplete", type="boolean", nullable=true)
      * @GRID\Column(visible=false, filterable=false, export=true)
      */
     private $setupComplete;
@@ -82,7 +82,7 @@ class Quote
     /**
      * @var boolean
      *
-     * @ORM\Column(name="locked", type="boolean")
+     * @ORM\Column(name="locked", type="boolean", nullable=true)
      * @GRID\Column(visible=false, filterable=false, export=true)
      */
     private $locked;
