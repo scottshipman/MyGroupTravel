@@ -10,6 +10,10 @@ manage_quote_new:
     path:     /new
     defaults: { _controller: "QuoteBundle:QuoteVersion:new" }
 
+manage_quote_newtemplate:
+    path:     /new/template
+    defaults: { _controller: "QuoteBundle:QuoteVersion:createtemplate" }
+
 manage_quote_create:
     path:     /create
     defaults: { _controller: "QuoteBundle:Quote:create" }

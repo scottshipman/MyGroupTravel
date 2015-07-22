@@ -13,6 +13,7 @@ use TUI\Toolkit\QuoteBundle\Entity\Quote;
 use TUI\Toolkit\QuoteBundle\Form\QuoteType;
 use APY\DataGridBundle\Grid\Source\Entity;
 use APY\DataGridBundle\Grid\Export\CSVExport;
+use APY\DataGridBundle\Grid\Action\RowAction;
 
 /**
  * Quote controller.
@@ -49,7 +50,9 @@ class QuoteController extends Controller
       $source->manipulateQuery(
         function ($query) use ($tableAlias)
         {
-          $query->andWhere($tableAlias . '.converted = false');
+          $query
+            ->andWhere($tableAlias . '.converted = false')
+            ->andWhere($tableAlias . '.isTemplate = false');
         }
       );
 
@@ -61,8 +64,17 @@ class QuoteController extends Controller
       $grid->setId('quotegrid');
       $grid->hideColumns($hidden);
 
+      // Add action column
+      $editAction = new RowAction('Edit', 'manage_quote_edit');
+      $grid->addRowAction($editAction);
+      $showAction = new RowAction('View', 'manage_quote_show');
+      $grid->addRowAction($showAction);
+
       // Set the selector of the number of items per page
       $grid->setLimits(array(10, 25, 50, 100));
+
+      //set no data message
+      $grid->setNoDataMessage("There are no quotes to show. Please check your filter settings and try again.");
 
       // Export of the grid
       $grid->addExport(new CSVExport("Active Quotes as CSV", "activeQuotes", array('delimiter'=>','), "UTF-8", "ROLE_BRAND"));
@@ -117,7 +129,11 @@ class QuoteController extends Controller
       // Set the selector of the number of items per page
       $grid->setLimits(array(10, 25, 50, 100));
 
-      // Export of the grid
+      //set no data message
+      $grid->setNoDataMessage("There are no converted quotes to show. Please check your filter settings and try again.");
+
+
+    // Export of the grid
       $grid->addExport(new CSVExport("Converted Quotes as CSV", "convertedQuotes", array('delimiter'=>','), "UTF-8", "ROLE_BRAND"));
 
 
@@ -171,8 +187,16 @@ class QuoteController extends Controller
     $grid->setId('quotegrid');
     $grid->hideColumns($hidden);
 
+    // Add action column
+    $restoreAction = new RowAction('Restore', 'manage_quote_restore');
+    $grid->addRowAction($restoreAction);
+
     // Set the selector of the number of items per page
     $grid->setLimits(array(10, 25, 50, 100));
+
+    //set no data message
+    $grid->setNoDataMessage("There are no deleted quotes to show. Please check your filter settings and try again.");
+
 
     // Export of the grid
     $grid->addExport(new CSVExport("Deleted Quotes as CSV", "deletedQuotes", array('delimiter'=>','), "UTF-8", "ROLE_BRAND"));
@@ -226,6 +250,14 @@ class QuoteController extends Controller
 
     // Set the selector of the number of items per page
     $grid->setLimits(array(10, 25, 50, 100));
+
+    // Add action column
+    $editAction = new RowAction('Edit', 'manage_quote_edit');
+    $grid->addRowAction($editAction);
+
+    //set no data message
+    $grid->setNoDataMessage("There are no quote templates to show. Please check your filter settings and try again.");
+
 
     // Export of the grid
     $grid->addExport(new CSVExport("Quote Templates as CSV", "templatesQuotes", array('delimiter'=>','), "UTF-8", "ROLE_BRAND"));
@@ -323,10 +355,12 @@ class QuoteController extends Controller
         }
 
         $deleteForm = $this->createDeleteForm($id);
+        $isTemplate = $entity->getIsTemplate();
 
         return $this->render('QuoteBundle:Quote:show.html.twig', array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
+            'isTemplate'  => $isTemplate,
         ));
     }
 

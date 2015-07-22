@@ -15,6 +15,11 @@ manage_quoteversion_create:
     defaults: { _controller: "QuoteBundle:QuoteVersion:create" }
     methods:  POST
 
+manage_quoteversion_createtemplate:
+    path:     /create/template
+    defaults: { _controller: "QuoteBundle:QuoteVersion:createTemplate" }
+    methods:  POST
+
 manage_quoteversion_edit:
     path:     /{id}/edit
     defaults: { _controller: "QuoteBundle:QuoteVersion:edit" }
