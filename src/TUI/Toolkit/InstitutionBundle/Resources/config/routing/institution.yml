@@ -2,6 +2,10 @@ manage_institution:
     path:     /
     defaults: { _controller: "InstitutionBundle:Institution:index" }
 
+manage_institution_deleted:
+    path:     /deleted
+    defaults: { _controller: "InstitutionBundle:Institution:deleted" }
+
 manage_institution_show:
     path:     /{id}/show
     defaults: { _controller: "InstitutionBundle:Institution:show" }
@@ -28,3 +32,13 @@ manage_institution_delete:
     path:     /{id}/delete
     defaults: { _controller: "InstitutionBundle:Institution:delete" }
     methods:  [POST, DELETE]
+
+manage_institution_quick_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "InstitutionBundle:Institution:quickdelete" }
+    methods:  [POST, DELETE, GET]
+
+manage_institution_restore:
+    path:     /{id}/restore
+    defaults: { _controller: "InstitutionBundle:Institution:restore" }
+    methods:  [POST, DELETE, GET]

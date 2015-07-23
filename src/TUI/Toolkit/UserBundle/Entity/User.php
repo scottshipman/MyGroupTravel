@@ -36,7 +36,7 @@ class User extends BaseUser
    * @var date
    *
    * @ORM\Column(name="created", type="date", nullable=false)
-   * @GRID\Column(visible=true, export=true)
+   * @GRID\Column(visible=true, export=true, operatorsVisible=false)
    */
   private $created;
 

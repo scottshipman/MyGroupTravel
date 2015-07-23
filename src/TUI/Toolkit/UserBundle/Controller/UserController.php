@@ -47,6 +47,14 @@ class UserController extends Controller
     $grid->setId('usergrid');
     $grid->hideColumns($hidden);
 
+
+    // add roles filter
+    $column = $grid->getColumn('roles');
+    $column->setFilterable(true);
+    $column->setTitle('Role');
+    $column->setFilterType('select');
+    $column->setOperatorsVisible(false);
+
     // Add action column
     $editAction = new RowAction('Edit', 'user_edit');
     $grid->addRowAction($editAction);
