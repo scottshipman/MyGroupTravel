@@ -17,19 +17,21 @@
     'rgb(205, 220, 57)': 'lime',
     'rgb(255, 235, 59)': 'yellow',
     'rgb(255, 193, 7)': 'amber',
-    'rgb(255, 152, 0)': 'orange',
-    'rgb(0,0,0)': 'black',
-    'rgb(255,255,255)': 'white'
+    'rgb(255, 152, 0)': 'orange'
 } %}
 
 {% set TUIColorPrimary, TUIColorSecondary = '', '' %}
 
 {% for key, value in TUIColorArray %}
     {% if brand.primaryColor == key  %}
-      {% set TUIColorPrimary = value %}
+        {% set TUIColorPrimary = value %}
+    {% else %}
+        {% set TUIColorPrimary = 'blue_grey' %}
     {% endif %}
     {% if brand.buttonColor == key  %}
-      {% set TUIColorSecondary = value %}
+        {% set TUIColorSecondary = value %}
+    {% else %}
+        {% set TUIColorSecondary = 'blue' %}
     {% endif %}
 {% endfor %}
 
