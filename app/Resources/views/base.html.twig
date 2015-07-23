@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome.css">
 
     {# Google Material Design (Lite) Stuff #}
-    <link rel="stylesheet" href="//storage.googleapis.com/code.getmdl.io/1.0.0/material.blue-red.min.css">
+    {{ render(controller('BrandBundle:Default:colors')) }}
     <script src="//storage.googleapis.com/code.getmdl.io/1.0.0/material.min.js"></script>
     <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
@@ -35,7 +35,10 @@
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
-    {{ render(controller('BrandBundle:Default:colors')) }}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.7.0/spectrum.min.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.6.1/spectrum.min.css">
+
+    {{ render(controller('BrandBundle:Default:styles')) }}
 
 </head>
 
