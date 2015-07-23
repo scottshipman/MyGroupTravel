@@ -2,6 +2,9 @@
 {% block title %}Manage Quotes{% endblock %}
 {% block body -%}
     <h1>Quote Dashboard - Deleted</h1>
+
+    {% embed "QuoteBundle:Quote:buttons.html.twig" %}{% endembed %}
+
     {% embed "QuoteBundle:Quote:quote_tabs.html.twig" %}
         {% block deleted_tab %}
             <a class="mdl-tabs__tab is-active" href="{{ path('manage_quote_deleted') }}">Deleted Quotes</a>
@@ -9,7 +12,6 @@
     {% endembed %}
 
     {{ grid_search(grid) }}
-    {{ grid(grid, 'QuoteBundle:Quote:grid.html.twig') }}
+    {{ grid(grid, 'AppBundle:Grid:grid.html.twig') }}
 
-    {% block grid_filters %}{% endblock %}
     {% endblock %}

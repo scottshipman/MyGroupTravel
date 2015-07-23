@@ -1,0 +1,27 @@
+.quote_buttons {
+  list-style:none;
+  li {
+    display:inline;
+  }
+}
+
+.mdl-tabs__tab.is-active{
+    text-decoration: underline;
+  }
+
+.grid-search {
+  padding: 1em;
+  border: 1px solid $border_grey_l;
+  .odd {
+    padding:1em;
+    float:left;
+  }
+  .even {
+    padding:1em;
+    float:left;
+  }
+  .grid-search-action{
+    clear:both;
+
+  }
+}

@@ -3,15 +3,7 @@
 {% block body -%}
     <h1>Quote Dashboard - Converted</h1>
 
-
-    <ul>
-        <li>
-            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quote_new') }}">Create a new Quote</a>
-        </li>
-        <li>
-            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quote_newtemplate') }}">Create a new Template</a>
-        </li>
-    </ul>
+    {% embed "QuoteBundle:Quote:buttons.html.twig" %}{% endembed %}
     {% embed "QuoteBundle:Quote:quote_tabs.html.twig" %}
         {% block converted_tab %}
             <a class="mdl-tabs__tab is-active" href="{{ path('manage_quote_converted') }}">Converted Quotes</a>
@@ -20,8 +12,6 @@
 
 
     {{ grid_search(grid) }}
-    {{ grid(grid, 'QuoteBundle:Quote:grid.html.twig') }}
-
-    {% block grid_filters %}{% endblock %}
+    {{ grid(grid, 'AppBundle:Grid:grid.html.twig') }}
 
     {% endblock %}

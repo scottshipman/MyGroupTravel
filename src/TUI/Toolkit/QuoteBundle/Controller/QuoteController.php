@@ -56,6 +56,16 @@ class QuoteController extends Controller
         }
       );
 
+
+      // inject a class into each row
+      $source->manipulateRow(function ($row)
+        {
+          $row->setClass('mdl-data-table__cell--non-numeric');  // add a css class to the <tr> tag
+          return $row;
+        }
+      );
+
+
       /* @var $grid \APY\DataGridBundle\Grid\Grid */
       $grid = $this->get('grid');
 
@@ -69,6 +79,10 @@ class QuoteController extends Controller
       $grid->addRowAction($editAction);
       $showAction = new RowAction('View', 'manage_quote_show');
       $grid->addRowAction($showAction);
+
+      // Set the default order of the grid
+      $grid->setDefaultOrder('created', 'DESC');
+
 
       // Set the selector of the number of items per page
       $grid->setLimits(array(10, 25, 50, 100));
@@ -125,6 +139,9 @@ class QuoteController extends Controller
       $grid->setSource($source);
       $grid->setId('quotegrid');
       $grid->hideColumns($hidden);
+
+      // Set the default order of the grid
+      $grid->setDefaultOrder('created', 'DESC');
 
       // Set the selector of the number of items per page
       $grid->setLimits(array(10, 25, 50, 100));
@@ -187,6 +204,10 @@ class QuoteController extends Controller
     $grid->setId('quotegrid');
     $grid->hideColumns($hidden);
 
+
+    // Set the default order of the grid
+    $grid->setDefaultOrder('created', 'DESC');
+
     // Add action column
     $restoreAction = new RowAction('Restore', 'manage_quote_restore');
     $grid->addRowAction($restoreAction);
@@ -247,6 +268,10 @@ class QuoteController extends Controller
     $grid->setSource($source);
     $grid->setId('quotegrid');
     $grid->hideColumns($hidden);
+
+
+    // Set the default order of the grid
+    $grid->setDefaultOrder('created', 'DESC');
 
     // Set the selector of the number of items per page
     $grid->setLimits(array(10, 25, 50, 100));
