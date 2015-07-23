@@ -56,16 +56,6 @@ class QuoteController extends Controller
         }
       );
 
-
-      // inject a class into each row
-      $source->manipulateRow(function ($row)
-        {
-          $row->setClass('mdl-data-table__cell--non-numeric');  // add a css class to the <tr> tag
-          return $row;
-        }
-      );
-
-
       /* @var $grid \APY\DataGridBundle\Grid\Grid */
       $grid = $this->get('grid');
 
@@ -79,6 +69,10 @@ class QuoteController extends Controller
       $grid->addRowAction($editAction);
       $showAction = new RowAction('View', 'manage_quote_show');
       $grid->addRowAction($showAction);
+      $deleteAction = new RowAction('Delete', 'manage_quote_quick_delete');
+      $deleteAction->setRole('ROLE_ADMIN');
+      $deleteAction->setConfirm(true);
+      $grid->addRowAction($deleteAction);
 
       // Set the default order of the grid
       $grid->setDefaultOrder('created', 'DESC');
@@ -139,6 +133,16 @@ class QuoteController extends Controller
       $grid->setSource($source);
       $grid->setId('quotegrid');
       $grid->hideColumns($hidden);
+
+      // Add action column
+      $editAction = new RowAction('Edit', 'manage_quote_edit');
+      $grid->addRowAction($editAction);
+      $showAction = new RowAction('View', 'manage_quote_show');
+      $grid->addRowAction($showAction);
+      $deleteAction = new RowAction('Delete', 'manage_quote_quick_delete');
+      $deleteAction->setRole('ROLE_ADMIN');
+      $deleteAction->setConfirm(true);
+      $grid->addRowAction($deleteAction);
 
       // Set the default order of the grid
       $grid->setDefaultOrder('created', 'DESC');
@@ -220,7 +224,7 @@ class QuoteController extends Controller
 
 
     // Export of the grid
-    $grid->addExport(new CSVExport("Deleted Quotes as CSV", "deletedQuotes", array('delimiter'=>','), "UTF-8", "ROLE_BRAND"));
+    $grid->addExport(new CSVExport("Deleted Quotes as CSV", "deletedQuotes", array('delimiter'=>','), "UTF-8", "ROLE_ADMIN"));
 
 
     // Manage the grid redirection, exports and the response of the controller
@@ -279,6 +283,10 @@ class QuoteController extends Controller
     // Add action column
     $editAction = new RowAction('Edit', 'manage_quote_edit');
     $grid->addRowAction($editAction);
+    $deleteAction = new RowAction('Delete', 'manage_quote_quick_delete');
+    $deleteAction->setRole('ROLE_ADMIN');
+    $deleteAction->setConfirm(true);
+    $grid->addRowAction($deleteAction);
 
     //set no data message
     $grid->setNoDataMessage("There are no quote templates to show. Please check your filter settings and try again.");
@@ -525,6 +533,28 @@ class QuoteController extends Controller
       $em->persist($entity);
       $em->flush();
       $this->get('session')->getFlashBag()->add('notice', 'Quote Restored: '. $entity->getName());
+
+    return $this->redirect($this->generateUrl('manage_quote'));
+  }
+
+  /**
+   * quickly Deletes Quote entity.
+   *
+   */
+  public function quickdeleteAction(Request $request, $id)
+  {
+
+    $em = $this->getDoctrine()->getManager();
+    // dont forget to disable softdelete filter so doctrine can *find* the deleted entity
+
+    $entity = $em->getRepository('QuoteBundle:Quote')->find($id);
+
+    if (!$entity) {
+      throw $this->createNotFoundException('Unable to find Quote entity.');
+    }
+    $em->remove($entity);
+    $em->flush();
+    $this->get('session')->getFlashBag()->add('notice', 'Quote Deleted: '. $entity->getName());
 
     return $this->redirect($this->generateUrl('manage_quote'));
   }
