@@ -36,6 +36,7 @@
   // Color picker
   $('#tui_toolkit_brandbundle_brand_primaryColor').addClass('color_picker');
   $('#tui_toolkit_brandbundle_brand_buttonColor').addClass('color_picker');
+  $('#tui_toolkit_brandbundle_brand_hoverColor').addClass('color_picker');
 
   $('input.color_picker').spectrum({
     preferredFormat: "rgb",

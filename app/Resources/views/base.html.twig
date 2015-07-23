@@ -96,12 +96,9 @@
         </div>
 
         <div class="header">
-            {# Display admin menu only if the user is BRAND or higher ROLE #}
-            {% if is_granted("ROLE_BRAND") %}
-                <div class="brand_logo">
-                    {{ render(controller('BrandBundle:Default:index')) }}
-                </div>
-            {% endif %}
+            <div class="brand_logo">
+                {{ render(controller('BrandBundle:Default:index')) }}
+            </div>
         </div>
 
         <div class="content">
