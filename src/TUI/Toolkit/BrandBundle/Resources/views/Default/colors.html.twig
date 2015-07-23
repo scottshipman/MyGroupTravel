@@ -1,0 +1,36 @@
+{% set TUIColorArray = {
+    'rgb(121, 85, 72)': 'brown',
+    'rgb(96, 125, 139)': 'blue_grey',
+    'rgb(158, 158, 158)': 'grey',
+    'rgb(255, 87, 34)': 'deep_orange',
+    'rgb(244, 67, 54)': 'red',
+    'rgb(233, 30, 99)': 'pink',
+    'rgb(156, 39, 176)': 'purple',
+    'rgb(103, 58, 183)': 'deep_purple',
+    'rgb(63, 81, 181)': 'indigo',
+    'rgb(33, 150, 243)': 'blue',
+    'rgb(3, 169, 244)': 'light_blue',
+    'rgb(0, 188, 212)': 'cyan',
+    'rgb(0, 150, 136)': 'teal',
+    'rgb(76, 175, 80)': 'green',
+    'rgb(139, 195, 74)': 'light_green',
+    'rgb(205, 220, 57)': 'lime',
+    'rgb(255, 235, 59)': 'yellow',
+    'rgb(255, 193, 7)': 'amber',
+    'rgb(255, 152, 0)': 'orange',
+    'rgb(0,0,0)': 'black',
+    'rgb(255,255,255)': 'white'
+} %}
+
+{% set TUIColorPrimary, TUIColorSecondary = '', '' %}
+
+{% for key, value in TUIColorArray %}
+    {% if brand.primaryColor == key  %}
+      {% set TUIColorPrimary = value %}
+    {% endif %}
+    {% if brand.buttonColor == key  %}
+      {% set TUIColorSecondary = value %}
+    {% endif %}
+{% endfor %}
+
+<link rel="stylesheet" href="//storage.googleapis.com/code.getmdl.io/1.0.0/material.{{ TUIColorPrimary }}-{{ TUIColorSecondary }}.min.css">
