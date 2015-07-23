@@ -7,22 +7,65 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityRepository;
 
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+
 class QuoteType extends AbstractType
 {
-    /**
+  /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+      // Complex event listener for dealing with Templates
+      $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+        // is this an existing Quote and is a template
+        $entity = $event->getData();
+        $form = $event->getForm();
+        $request = explode('/', $_SERVER['REQUEST_URI']);
+        $newTemplate = false;
+        $isNew=false;
+        $hasTemplate=false;
+        $showAll = false;
 
+        if(!$entity || null===$entity->getId()){
+          $isNew = true;
+        } elseif ($entity->getIsTemplate()==true){
+          $hasTemplate = true;
+        }
+        if(isset($request[3]) && ($request[3]=="new" || $request[3] == 'create') && isset($request[4]) && $request[4]=="template")
+        { $newTemplate = true;}
 
-        $builder
-            ->add('isTemplate', 'checkbox', array('required' => FALSE, 'label' => "Is this a template?"))
-            ->add('name')
-            ->add('destination')
-            ->add('reference')
+        // CASE: New Object - hidden isTemplate w value of newTemplate
+        if($isNew && $newTemplate){
+          $form->add('isTemplate', 'hidden', array(
+            'data' => true,
+          ));
+          if (!$newTemplate){$showAll = true;}
+        }
+
+        // CASE: Editing an existing Template - hidden isTemplate w/ true value
+        if((!$isNew && $hasTemplate)){
+          $form->add('isTemplate', 'hidden', array(
+            'data' => $hasTemplate,
+          ));
+        }
+
+        // CASE Editing an existing quote - hide isTemplate - show other fields
+         if(!$isNew && !$hasTemplate){
+            $form->add('isTemplate', 'checkbox', array(
+              'required' => FALSE,
+              'label' => "Convert to Template?",
+            ));
+           $showAll = true;
+         }
+
+        // CASE Editing a quote or creating a new quote - show non-Template fields
+        if($showAll){
+          $form
             ->add('organizer', 'entity', array(
+              'label' => 'Organizer',
               'required' => false,
               'placeholder' => 'Select',
               'class' => 'TUI\Toolkit\UserBundle\Entity\User',
@@ -32,7 +75,7 @@ class QuoteType extends AbstractType
                     ->setParameters(array('role' => "%ROLE_CUSTOMER%"))
                     ->orderBy('u.email', 'ASC');
                 },
-              ))
+            ))
             ->add('institution', 'entity', array(
               'required' => false,
               'placeholder' => 'Select',
@@ -42,7 +85,16 @@ class QuoteType extends AbstractType
                   return $er->createQueryBuilder('i')
                     ->orderBy('i.name', 'ASC');
                 },
-              ))
+            ));
+
+        }
+
+      });
+
+          $builder
+            ->add('name')
+            ->add('destination')
+            ->add('reference')
             ->add('salesAgent','entity', array(
               'required' => false,
               'placeholder' => 'Select',
@@ -54,9 +106,6 @@ class QuoteType extends AbstractType
                     ->orderBy('u.email', 'ASC');
                     },
                 ))
-            ->add('converted', 'hidden', array('required' => FALSE,))
-            ->add('setupComplete', 'hidden', array('required' => FALSE,))
-            ->add('locked', 'hidden', array('required' => FALSE,))
             ->add('media', 'sonata_media_type', array(
                 'required' => false,
                 'provider' => 'sonata.media.provider.image',

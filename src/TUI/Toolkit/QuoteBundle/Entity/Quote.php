@@ -10,7 +10,7 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
 /**
  * Quote
  *
- * @ORM\Table(name="quote", uniqueConstraints={@ORM\UniqueConstraint(name="reference", columns={"reference"})})
+ * @ORM\Table(name="quote")
  * @ORM\Entity
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
  * @GRID\Source(columns="id, name, destination, reference, institution.name, created, views, shareViews, orgfullname, organizer.firstName, organizer.lastName, bizfullname, salesAgent.firstName, salesAgent.lastName, converted, deleted, setupComplete, locked, isTemplate", filterable=false, sortable=true)
@@ -58,10 +58,10 @@ class Quote
     /**
      * @var boolean
      *
-     * @ORM\Column(name="converted", type="boolean", nullable=true)
+     * @ORM\Column(name="converted", type="boolean")
      * @GRID\Column(visible=false, filterable=false, export=true)
      */
-    private $converted;
+    private $converted = false;
 
     /**
      * @var date
@@ -74,18 +74,18 @@ class Quote
     /**
      * @var boolean
      *
-     * @ORM\Column(name="setupComplete", type="boolean", nullable=true)
+     * @ORM\Column(name="setupComplete", type="boolean")
      * @GRID\Column(visible=false, filterable=false, export=true)
      */
-    private $setupComplete;
+    private $setupComplete = false;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="locked", type="boolean", nullable=true)
+     * @ORM\Column(name="locked", type="boolean")
      * @GRID\Column(visible=false, filterable=false, export=true)
      */
-    private $locked;
+    private $locked = false;
 
     /**
      * @var integer
@@ -104,7 +104,7 @@ class Quote
      * @ORM\Column(name="isTemplate", type="boolean")
      * @GRID\Column(visible=false, filterable=false, export=true)
      */
-    private $isTemplate;
+    private $isTemplate = false;
 
 
     /**

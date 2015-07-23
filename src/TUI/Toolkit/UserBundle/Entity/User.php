@@ -74,7 +74,7 @@ class User extends BaseUser
 
   public function __toString()
   {
-    return $this->firstName . ' ' . $this->lastName;
+    return $this->firstName . ' ' . $this->lastName . ' ['. $this->email . ']';
   }
 
     /**

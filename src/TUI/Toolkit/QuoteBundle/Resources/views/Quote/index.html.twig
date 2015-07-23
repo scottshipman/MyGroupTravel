@@ -3,13 +3,14 @@
 {% block title %}Manage Quotes{% endblock %}
 {% block body %}
 
-    <h1>Quote Dashboard</h1>
+    <h1>Quote Dashboard - Active</h1>
 
     <ul class="record_actions">
         <li>
-            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quote_new') }}">
-                Create a new Quote
-            </a>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quote_new') }}">Create a new Quote</a>
+        </li>
+        <li>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quote_newtemplate') }}">Create a new Template</a>
         </li>
     </ul>
 
@@ -22,5 +23,4 @@
     {{ grid_search(grid) }}
 
     {{ grid(grid, 'QuoteBundle:Quote:grid.html.twig') }}
-
 {% endblock %}

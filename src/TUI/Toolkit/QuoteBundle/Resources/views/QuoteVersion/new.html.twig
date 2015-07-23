@@ -1,7 +1,7 @@
 {% extends '::base.html.twig' %}
-{% block title %}Create Quote Version{% endblock %}
+{% block title %}Create Quote {% if template is defined %}{{ template }} {% endif %}{% endblock %}
 {% block body -%}
-    <h1>New Quote</h1>
+    <h1>New Quote {% if template is defined %}{{ template }} {% endif %}</h1>
 
     {{  form(form) }}
 
