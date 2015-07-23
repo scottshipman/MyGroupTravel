@@ -5,12 +5,17 @@ namespace TUI\Toolkit\InstitutionBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Sonata\MediaBundle\Model\Media;
 use Application\Sonata\MediaBundle;
+use Gedmo\Mapping\Annotation as Gedmo;
+use APY\DataGridBundle\Grid\Mapping as GRID;
 
 /**
  * Institution
  *
  * @ORM\Table()
  * @ORM\Entity
+ * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
+ * @GRID\Source(columns="id, location, name, type, localAuthority, code, city, state, country", filterable=false, sortable=true)
+ * @GRID\Column(id="location", type="join", title="Location", columns={"city", "state", "country"}, filterable=true, operatorsVisible=false)
  */
 class Institution
 {
@@ -20,13 +25,24 @@ class Institution
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
      */
     private $id;
+
+    /**
+     * @var date
+     *
+     * @ORM\Column(name="deleted", type="date", nullable=true)
+     * @GRID\Column(visible=false, filterable=false, export=true)
+     *
+     */
+    private $deleted;
 
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     * @GRID\Column(title="Name", visible=true, filterable=true, operatorsVisible=false, export=true)
      */
     private $name;
 
@@ -34,6 +50,7 @@ class Institution
      * @var string
      *
      * @ORM\Column(name="address1", type="string", length=255)
+     * @GRID\Column(visible=false, filterable=false, export=true)
      */
     private $address1;
 
@@ -41,6 +58,7 @@ class Institution
      * @var string
      *
      * @ORM\Column(name="address2", type="string", length=255)
+     * @GRID\Column(visible=false, filterable=false, export=true)
      */
     private $address2;
 
@@ -48,6 +66,7 @@ class Institution
      * @var string
      *
      * @ORM\Column(name="city", type="string", length=255)
+     * @GRID\Column(visible=false, filterable=false, export=true)
      */
     private $city;
 
@@ -55,6 +74,7 @@ class Institution
      * @var string
      *
      * @ORM\Column(name="county", type="string", length=255)
+     * @GRID\Column(visible=false, filterable=false, export=true)
      */
     private $county;
 
@@ -62,6 +82,7 @@ class Institution
      * @var string
      *
      * @ORM\Column(name="state", type="string", length=255)
+     * @GRID\Column(visible=false, filterable=false, export=true)
      */
     private $state;
 
@@ -69,6 +90,7 @@ class Institution
      * @var string
      *
      * @ORM\Column(name="post_code", type="string", length=255)
+     * @GRID\Column(visible=false, filterable=false, export=true)
      */
     private $postCode;
 
@@ -76,6 +98,7 @@ class Institution
      * @var string
      *
      * @ORM\Column(name="localAuthority", type="string", length=255)
+     * @GRID\Column(title="Local Authority", visible=true, filterable=true, operatorsVisible=false, export=true)
      */
     private $localAuthority;
 
@@ -83,6 +106,7 @@ class Institution
      * @var string
      *
      * @ORM\Column(name="country", type="string", length=255)
+     * @GRID\Column(visible=false, filterable=false, export=true)
      */
     private $country;
 
@@ -90,6 +114,7 @@ class Institution
      * @var integer
      *
      * @ORM\Column(name="code", type="integer")
+     * @GRID\Column(title="Code", visible=true, filterable=true, operatorsVisible=false, export=true)
      */
     private $code;
 
@@ -97,6 +122,7 @@ class Institution
      * @var string
      *
      * @ORM\Column(name="type", type="string", length=255)
+     * @GRID\Column(title="Type", visible=true, filterable=true, operatorsVisible=false, export=true)
      */
     private $type;
 
@@ -104,6 +130,7 @@ class Institution
      * @var string
      *
      * @ORM\Column(name="websiteAddress", type="string", length=255)
+     * @GRID\Column(visible=false, filterable=false, export=true)
      */
     private $websiteAddress;
 
@@ -417,4 +444,28 @@ class Institution
     {
         return $this->media;
     }
+
+
+  /**
+   * Set deleted
+   *
+   * @param date $deleted
+   * @return Institution
+   */
+  public function setDeleted($deleted)
+  {
+    $this->deleted = $deleted;
+
+    return $this;
+  }
+
+  /**
+   * Get deleted
+   *
+   * @return date
+   */
+  public function getDeleted()
+  {
+    return $this->deleted;
+  }
 }
