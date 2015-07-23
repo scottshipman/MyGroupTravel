@@ -34,13 +34,13 @@ class QuoteType extends AbstractType
         } elseif ($entity->getIsTemplate()==true){
           $hasTemplate = true;
         }
-        if(isset($request[3]) && $request[3]=="new" && isset($request[4]) && $request[4]=="template")
+        if(isset($request[3]) && ($request[3]=="new" || $request[3] == 'create') && isset($request[4]) && $request[4]=="template")
         { $newTemplate = true;}
 
         // CASE: New Object - hidden isTemplate w value of newTemplate
-        if($isNew){
+        if($isNew && $newTemplate){
           $form->add('isTemplate', 'hidden', array(
-            'empty_data' => $newTemplate,
+            'data' => true,
           ));
           if (!$newTemplate){$showAll = true;}
         }
