@@ -76,3 +76,7 @@ media:
 #oneup_uploader:
 #    resource: .
 #    type: uploader
+
+genemu_image:
+    resource: "@GenemuFormBundle/Resources/config/routing/image.xml"
+

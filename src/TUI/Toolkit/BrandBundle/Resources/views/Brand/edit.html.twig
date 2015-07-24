@@ -6,7 +6,7 @@
 
     {{ form(edit_form) }}
 
-    {#{{ render(controller('BrandBundle:Brand:createDropZoneForm')) }}#}
+    {{ render(controller('BrandBundle:Brand:createDropZoneForm')) }}
 
     {#{{ oneup_uploader_endpoint('gallery') }}#}
 
@@ -16,4 +16,5 @@
         </li>
         <li>{{ form(delete_form) }}</li>
     </ul>
+    {#{{ form_javascript(form) }}#}
 {% endblock %}

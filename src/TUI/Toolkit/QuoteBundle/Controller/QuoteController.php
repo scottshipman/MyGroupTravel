@@ -14,6 +14,7 @@ use TUI\Toolkit\QuoteBundle\Form\QuoteType;
 use APY\DataGridBundle\Grid\Source\Entity;
 use APY\DataGridBundle\Grid\Export\CSVExport;
 use APY\DataGridBundle\Grid\Action\RowAction;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Quote controller.
@@ -654,4 +655,29 @@ class QuoteController extends Controller
     }
     return $choices;
   }
+
+    public function retrieve_organizers_nameAction(Request $request)
+    {
+        $value = $request->get('term');
+
+        $em = $this->getDoctrine()->getEntityManager();
+        //retriving users
+        $organizers = $em->getRepository('TUI\Toolkit\UserBundle\Entity\User')->findAll($value);
+
+        // convert the result to array
+        $search = array();
+        foreach ($organizers as $organizer) {
+            $search[] = array(
+//                'label' => $organizer -> getFirstName(),
+                'value' => $organizer -> getId(),
+        );
+        }
+
+        $response = new Response();
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setContent(json_encode($search));
+
+        return $response;
+    }
+
 }
