@@ -1,6 +1,5 @@
 .header {
-  background: $bg_grey_d;
-  padding: 0 $page_gutter;
+  margin: 0 0 2em;
 
   .brand_logo {
     padding: 1em 0;
@@ -17,4 +16,15 @@
 
   }
 
+  h1 {
+    margin: 0;
+    padding: 0.25em 0;
+  }
+
+}
+
+.mdl-layout__header {
+  display: block;
+  min-height: auto;
+  max-height: none;
 }

@@ -74,12 +74,12 @@ assetic:
             toolkit:
                 inputs:
                     - @AppBundle/Resources/assets/js/toolkit.js
-            jqueryui:
-                inputs:
-                    - "%kernel.root_dir%/../components/jquery-ui/jquery-ui.js"
-            jqueryuicss:
-                inputs:
-                    - "%kernel.root_dir%/../components/jquery-ui/jquery-ui.css"
+            # jqueryui:
+                # inputs:
+                    # - "%kernel.root_dir%/../components/jquery-ui/jquery-ui.js"
+            # jqueryuicss:
+                # inputs:
+                    # - "%kernel.root_dir%/../components/jquery-ui/jquery-ui.css"
 
 
 

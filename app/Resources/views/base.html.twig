@@ -30,13 +30,13 @@
         <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
     {% endstylesheets %}
 
-    {% stylesheets filter="cssrewrite" "@jqueryuicss"%}
+    {% stylesheets filter="cssrewrite" %}
         <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
     {% endstylesheets %}
 
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
 
-    {% javascripts '@jquery' '@jqueryui' %}
+    {% javascripts '@jquery' %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
@@ -91,19 +91,23 @@
 
     <main class="mdl-layout__content">
 
-        <div class="flash-messages">
-            {% for flashMessage in app.session.flashbag.get('notice') %}
-                <div class="flash-message flash-message-notice">Notice:<br>{{ flashMessage }}</div>
-            {% endfor %}
-            {% for flashMessage in app.session.flashbag.get('error') %}
-                <div class="flash-message flash-message-error">Error:<br>{{ flashMessage }}</div>
-            {% endfor %}
-        </div>
+        <div class="header mdl-layout__header">
+            <div class="flash-messages">
+                {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="flash-message flash-message-notice">Notice:<br>{{ flashMessage }}</div>
+                {% endfor %}
+                {% for flashMessage in app.session.flashbag.get('error') %}
+                    <div class="flash-message flash-message-error">Error:<br>{{ flashMessage }}</div>
+                {% endfor %}
+            </div>
 
-        <div class="header">
             <div class="brand_logo">
                 {{ render(controller('BrandBundle:Default:index')) }}
             </div>
+
+            <h1 class="page-title">
+              {% block page_title %}{% endblock %}
+            </h1>
         </div>
 
         <div class="content">
