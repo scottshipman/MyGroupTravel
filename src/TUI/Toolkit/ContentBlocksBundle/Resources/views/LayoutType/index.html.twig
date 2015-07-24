@@ -1,45 +1,44 @@
 {% extends '::base.html.twig' %}
+{% block title %}Manage Layout Types{% endblock %}
 
 {% block body -%}
-    <h1>LayoutType list</h1>
 
-    <table class="records_list">
+    <h1>Layout Types</h1>
+
+    <table class="mdl-data-table mdl-js-data-table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Icon</th>
-                <th>Classname</th>
-                <th>Actions</th>
+                <th class="mdl-data-table__cell--non-numeric">Name (ID)</th>
+                <th class="mdl-data-table__cell--non-numeric center">Icon</th>
+                <th class="mdl-data-table__cell--non-numeric">Class Name</th>
+                <th class="mdl-data-table__cell--non-numeric">Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for entity in entities %}
             <tr>
-                <td><a href="{{ path('manage_layouttype_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.name }}</td>
-                <td>{{ entity.icon }}</td>
-                <td>{{ entity.className }}</td>
-                <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('manage_layouttype_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('manage_layouttype_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
+                <td class="mdl-data-table__cell--non-numeric"><a href="{{ path('manage_layouttype_show', { 'id': entity.id }) }}">{{ entity.name }}</a> ({{ entity.id }})</td>
+                <td class="mdl-data-table__cell--non-numeric center">{{ entity.icon }}</td>
+                <td class="mdl-data-table__cell--non-numeric">{{ entity.className }}</td>
+                <td class="mdl-data-table__cell--non-numeric">
+                    <ul class="table-actions">
+                        <li>
+                            <a href="{{ path('manage_layouttype_show', { 'id': entity.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('manage_layouttype_edit', { 'id': entity.id }) }}">edit</a>
+                        </li>
+                    </ul>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-        <ul>
+    <ul class="record_actions">
         <li>
-            <a href="{{ path('manage_layouttype_new') }}">
-                Create a new entry
-            </a>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_layouttype_new') }}">Create a new entry</a>
         </li>
     </ul>
-    {% endblock %}
+
+{% endblock %}

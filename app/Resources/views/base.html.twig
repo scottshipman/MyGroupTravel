@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome.css">
 
     {# Google Material Design (Lite) Stuff #}
-    <link rel="stylesheet" href="//storage.googleapis.com/code.getmdl.io/1.0.0/material.indigo-pink.min.css">
+    {{ render(controller('BrandBundle:Default:colors')) }}
     <script src="//storage.googleapis.com/code.getmdl.io/1.0.0/material.min.js"></script>
     <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet"
@@ -27,20 +27,23 @@
     #}
 
     {% stylesheets filter="compass" "@AppBundle/Resources/assets/css/sass/main.scss" %}
-    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
     {% endstylesheets %}
 
     {% stylesheets filter="cssrewrite" "@jqueryuicss"%}
-    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
     {% endstylesheets %}
-
 
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
 
-    {% javascripts '@jquery'
-    '@jqueryui' %}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% javascripts '@jquery' '@jqueryui' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.7.0/spectrum.min.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.6.1/spectrum.min.css">
+
+    {{ render(controller('BrandBundle:Default:styles')) }}
 
 </head>
 
@@ -48,41 +51,42 @@
 <div class="mdl-layout mdl-js-layout{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %} mdl-layout--fixed-drawer mdl-layout--overlay-drawer-button{% endif %}">
 
     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-        <div class="mdl-layout__drawer">
-            <header class="tui-drawer-header">
-                {% if app.user.firstName and app.user.lastName %}
-                    <span class="tui-text-avatar mdl-typography--headline">{{ app.user.firstName[:1] }}{{ app.user.lastName[:1] }}</span>
-                {% else %}
-                    <span class="tui-text-avatar mdl-typography--headline">{{ app.user.username[:1] }}</span>
-                {% endif %}
-                <div class="tui-avatar-dropdown">
-                    <span>{{ app.user.username }}</span>
+    <div class="mdl-layout__drawer">
 
-                    <div class="mdl-layout-spacer"></div>
-                    <button id="accbtn" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
-                        <i class="material-icons">arrow_drop_down</i>
-                    </button>
-                    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="accbtn">
-                        <li><a class="mdl-menu__item" href="{{ path('user_show', { 'id': app.user.id }) }}">View</a>
-                        </li>
-                        <li><a class="mdl-menu__item" href="{{ path('user_edit', { 'id': app.user.id }) }}">Edit</a>
-                        </li>
-                        <li><a class="mdl-menu__item" href="{{ path('fos_user_security_logout') }}">
-                                {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
-                            </a></li>
-                    </ul>
-                </div>
-            </header>
-
-            {# Display admin menu only if the user is BRAND or higher ROLE #}
-            {% if is_granted("ROLE_BRAND") %}
-                <nav class="mdl-navigation">
-                    {% block admin_menu %}
-                        {{ knp_menu_render('admin_menu', {'currentClass': 'active'}) }}
-                    {% endblock %}
-                </nav>
+        <header class="tui-drawer-header">
+            {% if app.user.media %}
+                <span class="tui-image-avatar">{% media app.user.media, 'small' %}</span>
+            {% elseif app.user.firstName and app.user.lastName %}
+                <span class="tui-text-avatar mdl-typography--headline">{{ app.user.firstName[:1] }}{{ app.user.lastName[:1] }}</span>
+            {% else %}
+                <span class="tui-text-avatar mdl-typography--headline">{{ app.user.username[:1] }}</span>
             {% endif %}
-        </div><!-- mdl-layout__drawer -->
+            <div class="tui-avatar-dropdown">
+                <span>{{ app.user.username }}</span>
+                <div class="mdl-layout-spacer"></div>
+                <button id="accbtn" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+                    <i class="material-icons">arrow_drop_down</i>
+                </button>
+                <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="accbtn">
+                    <li><a class="mdl-menu__item" href="{{ path('user_show', { 'id': app.user.id }) }}">View</a></li>
+                    <li><a class="mdl-menu__item" href="{{ path('user_edit', { 'id': app.user.id }) }}">Edit</a></li>
+                    <li><a class="mdl-menu__item" href="{{ path('fos_user_security_logout') }}">
+                        {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+                    </a></li>
+                </ul>
+            </div>
+        </header>
+
+        {# Display admin menu only if the user is BRAND or higher ROLE #}
+        {% if is_granted("ROLE_BRAND") %}
+            <nav class="mdl-navigation">
+                {% block admin_menu %}
+                    {{ knp_menu_render('admin_menu', {'currentClass': 'active'})  }}
+                {% endblock %}
+            </nav>
+        {% endif %}
+
+    </div><!-- mdl-layout__drawer -->
     {% endif %}
 
     <main class="mdl-layout__content">

@@ -7,6 +7,10 @@
     text-align: right;
     color: $text_white;
 
+    .user-0 & {
+      text-align: center;
+    }
+
     img {
       max-width: 120px;
     }

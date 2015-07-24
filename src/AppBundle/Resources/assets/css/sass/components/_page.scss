@@ -1,19 +1,39 @@
+// Page layout styling
+
 html {
-  // background: $bg_grey_l1;
+  background: $bg_white;
+}
+
+.content .inner,
+.header,
+.flash-messages .flash-message {
+  padding-left: $page_gutter;
+  padding-right: $page_gutter;
+
+  .mdl-layout--fixed-drawer & {
+    padding-left: $admin_page_gutter;
+    padding-right: $admin_page_gutter;
+  }
+
 }
 
 .content {
 
   .inner {
-    width: $page_width;
-    margin: 0 auto;
 
     > h1 {
       color: $text_white;
       background: $bg_grey_d;
       width: $page_width_reset;
       margin-left: -$page_gutter_reset;
-      padding: 0.5em $page_gutter_reset;
+      padding: 0.25em $page_gutter_reset;
+
+      .mdl-layout--fixed-drawer & {
+        width: $admin_page_width_reset;
+        margin-left: -$admin_page_gutter_reset;
+        padding: 0.25em $admin_page_gutter_reset;
+      }
+
     }
 
   }

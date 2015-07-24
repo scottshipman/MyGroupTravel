@@ -75,6 +75,20 @@
     {% endspaceless %}
 {% endblock radio_widget %}
 
+{% block button_widget %}
+    {% if label is empty %}
+        {% if label_format is not empty %}
+            {% set label = label_format|replace({
+                '%name%': name,
+                '%id%': id,
+            }) %}
+        {% else %}
+            {% set label = name|humanize %}
+        {% endif %}
+    {% endif %}
+    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type="{{ type|default('button') }}" {{ block('button_attributes') }}>{{ label|trans({}, translation_domain) }}</button>
+{% endblock button_widget %}
+
 {% block form_label %}
     {% if label is not sameas(false) %}
         {% if label is empty %}
