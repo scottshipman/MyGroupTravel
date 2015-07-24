@@ -463,4 +463,29 @@ class UserController extends Controller
             'form' => $form->createView()
         ));
     }
+
+    public function retrieve_organizers_nameAction(Request $request)
+    {
+        $value = $request->get('term');
+
+        $em = $this->getDoctrine()->getEntityManager();
+        //retriving users
+        $organizers = $em->getRepository('TUI\Toolkit\UserBundle\Entity\User')->findByFirstName($value);
+//           ->findByFirstName($value);
+        // convert the result to array
+//        $search = array();
+//        foreach ($organizers as $organizer) {
+//            $search[] = array(
+//                'label' => $organizer -> getFirstName(),
+//                'value' => $organizer -> getId(),
+////            $search[$organizer->getId()] = $organizer->getFirstName();
+//            );
+//        }
+//
+//        $response = new Response();
+//        $response->headers->set('Content-Type', 'application/json');
+//        $response->setContent(json_encode($search));
+
+        return $organizers;
+    }
 }

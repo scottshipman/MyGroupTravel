@@ -57,3 +57,11 @@ manage_quote_deleted:
 manage_quote_restore:
     path:     /{id}/restore
     defaults: { _controller: "QuoteBundle:Quote:restore" }
+
+ajax:
+    path: /ajax
+    defaults: { _controller: "QuoteBundle:Quote:ajax" }
+
+retrieve_organizers_name:
+    path:   /retrieve-organizers-name
+    defaults: { _controller: "QuoteBundle:Quote:retrieve_organizers_name" }
