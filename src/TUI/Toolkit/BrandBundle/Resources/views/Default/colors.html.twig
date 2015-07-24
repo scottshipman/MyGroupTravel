@@ -20,18 +20,14 @@
     'rgb(255, 152, 0)': 'orange'
 } %}
 
-{% set TUIColorPrimary, TUIColorSecondary = '', '' %}
+{% set TUIColorPrimary, TUIColorSecondary = 'blue_grey', 'blue' %}
 
 {% for key, value in TUIColorArray %}
     {% if brand.primaryColor == key  %}
         {% set TUIColorPrimary = value %}
-    {% else %}
-        {% set TUIColorPrimary = 'blue_grey' %}
     {% endif %}
     {% if brand.buttonColor == key  %}
         {% set TUIColorSecondary = value %}
-    {% else %}
-        {% set TUIColorSecondary = 'blue' %}
     {% endif %}
 {% endfor %}
 

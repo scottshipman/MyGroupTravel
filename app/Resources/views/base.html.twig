@@ -27,19 +27,17 @@
     #}
 
     {% stylesheets filter="compass" "@AppBundle/Resources/assets/css/sass/main.scss" %}
-    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
     {% endstylesheets %}
 
     {% stylesheets filter="cssrewrite" "@jqueryuicss"%}
-    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
     {% endstylesheets %}
-
 
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
 
-    {% javascripts '@jquery'
-    '@jqueryui' %}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% javascripts '@jquery' '@jqueryui' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.7.0/spectrum.min.js"></script>
