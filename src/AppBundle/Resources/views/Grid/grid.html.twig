@@ -10,7 +10,7 @@
                     {% endif %}
                 </div>
                 <div class="grid_body">
-                    <table>
+                    <table class="mdl-data-table mdl-js-data-table is-upgraded">
                         {% if grid.isTitleSectionVisible %}
                             {{ grid_titles(grid) }}
                         {% endif %}
@@ -52,7 +52,7 @@
             {% endif %}
         {% endfor %}
         <tr class="grid-row-cells">
-            <td class="last-column last-row" colspan="{{ nbColumns }}" style="text-align: center;">{{ grid.noResultMessage|default('No result')|trans|raw }}</td>
+            <td class="last-column last-row mdl-data-table__cell--non-numeric" colspan="{{ nbColumns }}" style="text-align: center;">{{ grid.noResultMessage|default('No result')|trans|raw }}</td>
         </tr>
     {% endspaceless %}
 {% endblock grid_no_result %}
@@ -61,7 +61,7 @@
     <tr class="grid-row-titles">
         {% for column in grid.columns %}
             {% if column.visible(grid.isReadyForExport) %}
-                <th class="{% if column.align != 'left'%}align-{{ column.align }}{% endif %}{% if column.class %} {{ column.class }}{% endif %}{% if loop.last %} last-column{% endif %}"{% if(column.size > -1) %} style="width:{{ column.size }}px;"{% endif %}>
+                <th class="mdl-data-table__cell--non-numeric {% if column.align != 'left'%}align-{{ column.align }}{% endif %}{% if column.class %} {{ column.class }}{% endif %}{% if loop.last %} last-column{% endif %}"{% if(column.size > -1) %} style="width:{{ column.size }}px;"{% endif %}>
                     {%- spaceless %}
                         {% if column.type == 'massaction' %}
                             <input type="checkbox" class="grid-mass-selector" onclick="{{ grid.hash }}_markVisible(this.checked);"/>
@@ -93,13 +93,13 @@
 {% endblock grid_titles %}
 {# -------------------------------------------------- grid_filters -------------------------------------------------- #}
 {% block grid_filters %}
-    <tr class="grid-row-filters">
+{#    <tr class="grid-row-filters">
         {% for column in grid.columns %}
             {% if column.visible(grid.isReadyForExport) %}
                 <th class="{% if column.class %}{{ column.class }}{% endif %}{% if loop.last %} last-column{% endif %}"{% if(column.size > -1) %} style="width:{{ column.size }}px;"{% endif %}>{% if column.filterable %}{{ grid_filter(column, grid)|raw }}{% endif %}</th>
             {% endif %}
         {% endfor %}
-    </tr>
+    </tr>#}
 {% endblock grid_filters %}
 {# -------------------------------------------------- grid_search -------------------------------------------------- #}
 {% block grid_search %}
@@ -129,7 +129,7 @@
             {% set gridColumns %}
             {% for column in grid.columns %}
                 {% if column.visible(grid.isReadyForExport) %}
-                    <td class="grid-column-{{ column.renderBlockId }}{% if column.class %} {{ column.class }}{% endif %}{% if column.align != 'left'%} align-{{ column.align }}{% endif %}{% if loop.last %} last-column{% endif %}{% if last_row %} last-row{% endif %}">{{ grid_cell(column, row, grid)|raw }}</td>
+                    <td class="mdl-data-table__cell--non-numeric grid-column-{{ column.renderBlockId }}{% if column.class %} {{ column.class }}{% endif %}{% if column.align != 'left'%} align-{{ column.align }}{% endif %}{% if loop.last %} last-column{% endif %}{% if last_row %} last-row{% endif %}">{{ grid_cell(column, row, grid)|raw }}</td>
                 {% endif %}
             {% endfor %}
             {% endset %}

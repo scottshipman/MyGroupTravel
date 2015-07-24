@@ -7,6 +7,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use TUI\Toolkit\InstitutionBundle\Entity\Institution;
 use TUI\Toolkit\InstitutionBundle\Form\InstitutionType;
+use APY\DataGridBundle\Grid\Source\Entity;
+use APY\DataGridBundle\Grid\Export\CSVExport;
+use APY\DataGridBundle\Grid\Action\RowAction;
 
 /**
  * Institution controller.
@@ -21,14 +24,111 @@ class InstitutionController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
+     // list hidden columns
+      $hidden = array(
+      );
 
-        $entities = $em->getRepository('InstitutionBundle:Institution')->findAll();
+      // Creates simple grid based on your entity (ORM)
+      $source = new Entity('InstitutionBundle:Institution');
 
-        return $this->render('InstitutionBundle:Institution:index.html.twig', array(
-            'entities' => $entities,
-        ));
-    }
+      /* @var $grid \APY\DataGridBundle\Grid\Grid */
+      $grid = $this->get('grid');
+
+      // Attach the source to the grid
+      $grid->setSource($source);
+      $grid->setId('institutiongrid');
+      $grid->hideColumns($hidden);
+
+      // Add action column
+      $editAction = new RowAction('Edit', 'manage_institution_edit');
+      $grid->addRowAction($editAction);
+      $showAction = new RowAction('View', 'manage_institution_show');
+      $grid->addRowAction($showAction);
+      $deleteAction = new RowAction('Delete', 'manage_institution_quick_delete');
+      $deleteAction->setRole('ROLE_ADMIN');
+      $deleteAction->setConfirm(true);
+      $grid->addRowAction($deleteAction);
+
+      //manipulate the Columns
+/*      $column = $grid->getColumn('lastLogin');
+      $column->setTitle('Last Login');*/
+
+      // Set the default order of the grid
+      $grid->setDefaultOrder('name', 'ASC');
+
+
+      // Set the selector of the number of items per page
+      $grid->setLimits(array(10, 25, 50, 100));
+
+      //set no data message
+      $grid->setNoDataMessage("There are no Institutions to show. Please check your filter settings and try again.");
+
+      // Export of the grid
+      $grid->addExport(new CSVExport("Institutions as CSV", "currentInstitutions", array('delimiter'=>','), "UTF-8", "ROLE_BRAND"));
+
+      // Manage the grid redirection, exports and the response of the controller
+      return $grid->getGridResponse('InstitutionBundle:Institution:index.html.twig');
+
+  }
+
+  /**
+   * Lists all Institution entities.
+   *
+   */
+  public function deletedAction()
+  {
+    // list hidden columns
+    $hidden = array(
+    );
+    $em = $this->getDoctrine()->getManager();
+    $filters = $em->getFilters();
+    $filters->disable('softdeleteable');
+
+    // Creates simple grid based on your entity (ORM)
+    $source = new Entity('InstitutionBundle:Institution');
+
+    //add WHERE clause
+    $tableAlias=$source->getTableAlias();
+    $source->manipulateQuery(
+      function ($query) use ($tableAlias)
+      {
+        $query->andWhere($tableAlias . '.deleted IS NOT NULL');
+      }
+    );
+
+    /* @var $grid \APY\DataGridBundle\Grid\Grid */
+    $grid = $this->get('grid');
+
+    // Attach the source to the grid
+    $grid->setSource($source);
+    $grid->setId('institutiongrid');
+    $grid->hideColumns($hidden);
+
+    // Add action column
+    $restoreAction = new RowAction('Restore', 'manage_institution_restore');
+    $grid->addRowAction($restoreAction);
+
+    //manipulate the Columns
+    /*      $column = $grid->getColumn('lastLogin');
+          $column->setTitle('Last Login');*/
+
+    // Set the default order of the grid
+    $grid->setDefaultOrder('name', 'ASC');
+
+
+    // Set the selector of the number of items per page
+    $grid->setLimits(array(10, 25, 50, 100));
+
+    //set no data message
+    $grid->setNoDataMessage("There are no Deleted Institutions to show. Please check your filter settings and try again.");
+
+    // Export of the grid
+    $grid->addExport(new CSVExport("Deleted Institutions as CSV", "deletedInstitutions", array('delimiter'=>','), "UTF-8", "ROLE_BRAND"));
+
+    // Manage the grid redirection, exports and the response of the controller
+    return $grid->getGridResponse('InstitutionBundle:Institution:deleted.html.twig');
+
+  }
     /**
      * Creates a new Institution entity.
      *
@@ -224,4 +324,50 @@ class InstitutionController extends Controller
             ->getForm()
         ;
     }
+
+  /**
+   * Quickly Delete an Institution entity.
+   *
+   */
+  public function quickdeleteAction(Request $request, $id)
+  {
+
+    $em = $this->getDoctrine()->getManager();
+    $entity = $em->getRepository('InstitutionBundle:Institution')->find($id);
+
+    if (!$entity) {
+      throw $this->createNotFoundException('Unable to find an Institution entity with id:.' . $id);
+    }
+    $em->remove($entity);
+    $em->flush();
+    $this->get('session')->getFlashBag()->add('notice', 'Institution Deleted: '. $entity->getname());
+
+    return $this->redirect($this->generateUrl('manage_institution'));
+  }
+
+  /**
+   * Restores a Deleted Institution entity.
+   *
+   */
+  public function restoreAction(Request $request, $id)
+  {
+
+    $em = $this->getDoctrine()->getManager();
+    // dont forget to disable softdelete filter so doctrine can *find* the deleted entity
+    $filters = $em->getFilters();
+    $filters->disable('softdeleteable');
+    $entity = $em->getRepository('InstitutionBundle:Institution')->find($id);
+
+    if (!$entity) {
+      throw $this->createNotFoundException('Unable to find an Institution entity with id:' . $id);
+    }
+    $entity->setDeleted(NULL);
+    $em->persist($entity);
+    $em->flush();
+    $this->get('session')->getFlashBag()->add('notice', 'Institution Restored: '. $entity->getname());
+
+    return $this->redirect($this->generateUrl('manage_institution'));
+  }
+
+
 }

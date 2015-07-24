@@ -42,8 +42,9 @@ class QuoteType extends AbstractType
           $form->add('isTemplate', 'hidden', array(
             'data' => true,
           ));
-          if (!$newTemplate){$showAll = true;}
+
         }
+        if ($isNew && !$newTemplate){$showAll = true;}
 
         // CASE: Editing an existing Template - hidden isTemplate w/ true value
         if((!$isNew && $hasTemplate)){

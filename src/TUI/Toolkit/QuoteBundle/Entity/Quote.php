@@ -48,7 +48,7 @@ class Quote
 
     /**
      * @var integer
-     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\UserBundle\Entity\User", cascade={"persist"})
      * @ORM\JoinColumn(name="organizer", referencedColumnName="id")
      * @GRID\Column(field="organizer.firstName", type="text", title="Organizer First", export=true)
      * @GRID\Column(field="organizer.lastName", type="text", title="Organizer Last", export=true)
@@ -90,7 +90,7 @@ class Quote
     /**
      * @var integer
      *
-     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\UserBundle\Entity\User", cascade={"persist"})
      * @ORM\JoinColumn(name="salesAgent", referencedColumnName="id")
      * @GRID\Column(field="salesAgent.firstName", type="text", title="Business Admin first", filterable=false, export=true)
      * @GRID\Column(field="salesAgent.lastName", type="text", title="Business Admin last", filterable=false, export=true)

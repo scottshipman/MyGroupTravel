@@ -13,6 +13,9 @@ use TUI\Toolkit\UserBundle\Entity\User;
 use TUI\Toolkit\UserBundle\Form\UserType;
 use Application\Sonata\MediaBundle\Entity\Media;
 use Application\Sonata\MediaBundle\ApplicationSonataMediaBundle;
+use APY\DataGridBundle\Grid\Source\Entity;
+use APY\DataGridBundle\Grid\Export\CSVExport;
+use APY\DataGridBundle\Grid\Action\RowAction;
 
 /**
  * User controller.
@@ -22,11 +25,137 @@ use Application\Sonata\MediaBundle\ApplicationSonataMediaBundle;
 class UserController extends Controller
 {
 
-    /**
+  /**
+   * Lists all unconverted Quote entities.
+   *
+   */
+  public function indexAction(Request $request)
+  {
+    // list hidden columns
+    $hidden = array(
+
+    );
+
+    // Creates simple grid based on your entity (ORM)
+    $source = new Entity('TUIToolkitUserBundle:User');
+
+    /* @var $grid \APY\DataGridBundle\Grid\Grid */
+    $grid = $this->get('grid');
+
+    // Attach the source to the grid
+    $grid->setSource($source);
+    $grid->setId('usergrid');
+    $grid->hideColumns($hidden);
+
+
+    // add roles filter
+    $column = $grid->getColumn('roles');
+    $column->setFilterable(true);
+    $column->setTitle('Role');
+    $column->setFilterType('select');
+    $column->setOperatorsVisible(false);
+
+    // Add action column
+    $editAction = new RowAction('Edit', 'user_edit');
+    $grid->addRowAction($editAction);
+    $showAction = new RowAction('View', 'user_show');
+    $grid->addRowAction($showAction);
+    $deleteAction = new RowAction('Delete', 'user_quick_delete');
+    $deleteAction->setRole('ROLE_ADMIN');
+    $deleteAction->setConfirm(true);
+    $grid->addRowAction($deleteAction);
+
+    //manipulate the Columns
+    $column = $grid->getColumn('lastLogin');
+    $column->setTitle('Last Login');
+
+    // Set the default order of the grid
+    $grid->setDefaultOrder('created', 'DESC');
+
+
+    // Set the selector of the number of items per page
+    $grid->setLimits(array(10, 25, 50, 100));
+
+    //set no data message
+    $grid->setNoDataMessage("There are no Users to show. Please check your filter settings and try again.");
+
+    // Export of the grid
+    $grid->addExport(new CSVExport("Users as CSV", "currentUsers", array('delimiter'=>','), "UTF-8", "ROLE_BRAND"));
+
+    // Manage the grid redirection, exports and the response of the controller
+    return $grid->getGridResponse('TUIToolkitUserBundle:User:index.html.twig');
+
+  }
+
+
+  /**
+   * Lists all deleted User entities.
+   *
+   */
+  public function deletedAction(Request $request)
+  {
+    // list hidden columns
+    $hidden = array(
+
+    );
+    $em = $this->getDoctrine()->getManager();
+    $filters = $em->getFilters();
+    $filters->disable('softdeleteable');
+
+    // Creates simple grid based on your entity (ORM)
+    $source = new Entity('TUIToolkitUserBundle:User');
+
+    //add WHERE clause
+    $tableAlias=$source->getTableAlias();
+    $source->manipulateQuery(
+      function ($query) use ($tableAlias)
+      {
+        $query->andWhere($tableAlias . '.deleted IS NOT NULL');
+      }
+    );
+
+    /* @var $grid \APY\DataGridBundle\Grid\Grid */
+    $grid = $this->get('grid');
+
+    // Attach the source to the grid
+    $grid->setSource($source);
+    $grid->setId('usergrid');
+    $grid->hideColumns($hidden);
+
+    // Add action column
+    $restoreAction = new RowAction('Restore', 'user_restore');
+    $grid->addRowAction($restoreAction);
+
+
+    //manipulate the Columns
+    $column = $grid->getColumn('lastLogin');
+    $column->setTitle('Last Login');
+
+    // Set the default order of the grid
+    $grid->setDefaultOrder('created', 'DESC');
+
+
+    // Set the selector of the number of items per page
+    $grid->setLimits(array(10, 25, 50, 100));
+
+    //set no data message
+    $grid->setNoDataMessage("There are no Deleted Users to show. Please check your filter settings and try again.");
+
+    // Export of the grid
+    $grid->addExport(new CSVExport("Deleted Users as CSV", "deletedUsers", array('delimiter'=>','), "UTF-8", "ROLE_ADMIN"));
+
+    // Manage the grid redirection, exports and the response of the controller
+    return $grid->getGridResponse('TUIToolkitUserBundle:User:deleted.html.twig');
+
+  }
+
+
+
+  /**
      * Lists all User entities.
      *
      */
-    public function indexAction()
+    public function oldindexAction()
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -234,7 +363,7 @@ class UserController extends Controller
 
             $em->remove($entity);
             $em->flush();
-          $this->get('session')->getFlashBag()->add('notice', 'User Deleted: '. $entity->getUsername());
+          $this->get('session')->getFlashBag()->add('notice', 'User Deleted: '. $id);
         }
 
         return $this->redirect($this->generateUrl('user'));
@@ -257,7 +386,52 @@ class UserController extends Controller
         ;
     }
 
-    /**
+  /**
+   * Restores a Deleted Quote entity.
+   *
+   */
+  public function restoreAction(Request $request, $id)
+  {
+
+    $em = $this->getDoctrine()->getManager();
+    // dont forget to disable softdelete filter so doctrine can *find* the deleted entity
+    $filters = $em->getFilters();
+    $filters->disable('softdeleteable');
+    $entity = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
+
+    if (!$entity) {
+      throw $this->createNotFoundException('Unable to find User entity with id:.' . $id);
+    }
+    $entity->setDeleted(NULL);
+    $em->persist($entity);
+    $em->flush();
+    $this->get('session')->getFlashBag()->add('notice', 'User Restored: '. $entity->getUsername());
+
+    return $this->redirect($this->generateUrl('user'));
+  }
+
+  /**
+   * Quickly Delete a User entity.
+   *
+   */
+  public function quickdeleteAction(Request $request, $id)
+  {
+
+    $em = $this->getDoctrine()->getManager();
+    $entity = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
+
+    if (!$entity) {
+      throw $this->createNotFoundException('Unable to find User entity with id:.' . $id);
+    }
+    $em->remove($entity);
+    $em->flush();
+    $this->get('session')->getFlashBag()->add('notice', 'User Deleted: '. $entity->getUsername());
+
+    return $this->redirect($this->generateUrl('user'));
+  }
+
+
+  /**
      * Edits an existing User entity.
      *
      * @Route("/{id}/upload", name="user_upload")

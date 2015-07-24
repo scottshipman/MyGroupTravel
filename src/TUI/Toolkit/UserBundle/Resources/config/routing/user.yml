@@ -32,7 +32,21 @@ user_upload:
 user_delete:
     path:     /{id}/delete
     defaults: { _controller: "TUIToolkitUserBundle:User:delete" }
-    methods:  [POST, DELETE]
+    methods:  [POST, DELETE, GET]
+
+user_quick_delete:
+    path:     /{id}/quick_delete
+    defaults: { _controller: "TUIToolkitUserBundle:User:quickdelete" }
+    methods:  [POST, DELETE, GET]
+
+user_deleted:
+    path:     /deleted
+    defaults: { _controller: "TUIToolkitUserBundle:User:deleted" }
+
+user_restore:
+    path:     /{id}/restore
+    defaults: { _controller: "TUIToolkitUserBundle:User:restore" }
+    methods:  [POST, PUT, GET]
 
 parent_add_child:
   path: /add/child

@@ -1,0 +1,26 @@
+{% extends '::base.html.twig' %}
+{% block title %}Manage Institution{% endblock %}
+
+{% block body -%}
+    <h1>Institution Dashboard - Deleted</h1>
+
+    <ul>
+        <li>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_institution_new') }}">
+                Create a new Institution
+            </a>
+        </li>
+    </ul>
+
+    {% embed "InstitutionBundle:institution:institution_tabs.html.twig" %}
+        {# Only show this tab if is_granted ROLE_ADMIN #}
+        {% if is_granted("ROLE_ADMIN") %}
+            {% block deleted_tab %}
+                <a class="mdl-tabs__tab is-active" href="{{ path('manage_institution_deleted') }}">Deleted Institutions</a>
+            {% endblock %}
+        {% endif %}
+    {% endembed %}
+
+    {{ grid_search(grid) }}
+    {{ grid(grid, 'AppBundle:Grid:grid.html.twig') }}
+    {% endblock %}
