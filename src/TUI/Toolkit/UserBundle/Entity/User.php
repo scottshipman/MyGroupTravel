@@ -16,7 +16,7 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="fos_user")
+ * @ORM\Table(name="fos_user",uniqueConstraints={@ORM\UniqueConstraint(name="email", columns={"email"})})
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
  * @GRID\Source(columns="id, lastName, firstName, fullname, email, enabled, roles, created, lastLogin", filterable=false, sortable=true)
  * @GRID\Column(id="fullname", type="join", title="Name", columns={"firstName", "lastName"}, filterable=true, operatorsVisible=false)
