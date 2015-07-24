@@ -1,0 +1,25 @@
+.mdl-tabs-no-swap {
+  display: block;
+  width: 100%;
+
+  .mdl-tabs__tab {
+
+    &.is_active {
+      color: $text_black;
+
+      :after {
+        content: '';
+        background: rgb(255, 193, 7) none repeat scroll 0 0;
+        bottom: 0;
+        display: block;
+        height: 2px;
+        left: 0;
+        position: absolute;
+        width: 100%;
+      }
+
+    }
+
+  }
+
+}
