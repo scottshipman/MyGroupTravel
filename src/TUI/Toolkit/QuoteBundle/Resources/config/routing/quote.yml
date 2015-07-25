@@ -1,6 +1,6 @@
 manage_quote:
     path:     /
-    defaults: { _controller: "QuoteBundle:Quote:index" }
+    defaults: { _controller: "QuoteBundle:QuoteVersion:index" }
 
 manage_quote_show:
     path:     /{id}/show
@@ -40,19 +40,19 @@ manage_quote_quick_delete:
 
 manage_quote_active:
     path:     /active
-    defaults: { _controller: "QuoteBundle:Quote:index" }
+    defaults: { _controller: "QuoteBundle:QuoteVersion:index" }
 
 manage_quote_converted:
     path:     /converted
-    defaults: { _controller: "QuoteBundle:Quote:converted" }
+    defaults: { _controller: "QuoteBundle:QuoteVersion:converted" }
 
 manage_quote_templates:
     path:     /templates
-    defaults: { _controller: "QuoteBundle:Quote:templates" }
+    defaults: { _controller: "QuoteBundle:QuoteVersion:templates" }
 
 manage_quote_deleted:
     path:     /deleted
-    defaults: { _controller: "QuoteBundle:Quote:showDeleted" }
+    defaults: { _controller: "QuoteBundle:QuoteVersion:deleted" }
 
 manage_quote_restore:
     path:     /{id}/restore

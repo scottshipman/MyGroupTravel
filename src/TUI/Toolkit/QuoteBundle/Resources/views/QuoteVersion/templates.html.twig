@@ -3,8 +3,8 @@
 {% block body -%}
     <h1>Quote Dashboard - Templates</h1>
 
-    {% embed "QuoteBundle:Quote:buttons.html.twig" %}{% endembed %}
-    {% embed "QuoteBundle:Quote:quote_tabs.html.twig" %}
+    {% embed "QuoteBundle:QuoteVersion:buttons.html.twig" %}{% endembed %}
+    {% embed "QuoteBundle:QuoteVersion:quote_tabs.html.twig" %}
         {% block templates_tab %}
             <a class="mdl-tabs__tab is-active" href="{{ path('manage_quote_templates') }}">Templates</a>
         {% endblock %}

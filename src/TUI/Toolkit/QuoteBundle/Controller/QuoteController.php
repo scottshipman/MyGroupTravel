@@ -23,284 +23,6 @@ use Symfony\Component\HttpFoundation\Response;
 class QuoteController extends Controller
 {
 
-    /**
-     * Lists all unconverted Quote entities.
-     *
-     */
-    public function indexAction(Request $request)
-    {
-     // list hidden columns
-      $hidden = array(
-        'isTemplate',
-        'deleted',
-        'converted',
-        'setupComplete',
-        'locked',
-        'destination',
-        'salesAgent.firstName',
-        'salesAgent.lastName',
-        'organizer.firstName',
-        'organizer.lastName'
-      );
-
-     // Creates simple grid based on your entity (ORM)
-      $source = new Entity('QuoteBundle:Quote');
-
-      //add WHERE clause
-      $tableAlias=$source->getTableAlias();
-      $source->manipulateQuery(
-        function ($query) use ($tableAlias)
-        {
-          $query
-            ->andWhere($tableAlias . '.converted = false')
-            ->andWhere($tableAlias . '.isTemplate = false');
-        }
-      );
-
-      /* @var $grid \APY\DataGridBundle\Grid\Grid */
-      $grid = $this->get('grid');
-
-      // Attach the source to the grid
-      $grid->setSource($source);
-      $grid->setId('quotegrid');
-      $grid->hideColumns($hidden);
-
-      // Add action column
-      $editAction = new RowAction('Edit', 'manage_quote_edit');
-      $grid->addRowAction($editAction);
-      $showAction = new RowAction('View', 'manage_quote_show');
-      $grid->addRowAction($showAction);
-      $deleteAction = new RowAction('Delete', 'manage_quote_quick_delete');
-      $deleteAction->setRole('ROLE_ADMIN');
-      $deleteAction->setConfirm(true);
-      $grid->addRowAction($deleteAction);
-
-      // Set the default order of the grid
-      $grid->setDefaultOrder('created', 'DESC');
-
-
-      // Set the selector of the number of items per page
-      $grid->setLimits(array(10, 25, 50, 100));
-
-      //set no data message
-      $grid->setNoDataMessage("There are no quotes to show. Please check your filter settings and try again.");
-
-      // Export of the grid
-      $grid->addExport(new CSVExport("Active Quotes as CSV", "activeQuotes", array('delimiter'=>','), "UTF-8", "ROLE_BRAND"));
-
-      // Manage the grid redirection, exports and the response of the controller
-      return $grid->getGridResponse('QuoteBundle:Quote:index.html.twig');
-
-    }
-
-
-
-  /**
-   * Lists all CONVERTED Quote entities.
-   *
-   */
-  public function convertedAction(Request $request)
-  {
-    // list hidden columns
-    $hidden = array(
-      'isTemplate',
-      'deleted',
-      'converted',
-      'setupComplete',
-      'locked',
-      'destination',
-      'salesAgent.firstName',
-      'salesAgent.lastName',
-      'organizer.firstName',
-      'organizer.lastName'
-    );
-
-      // Creates simple grid based on your entity (ORM)
-      $source = new Entity('QuoteBundle:Quote');
-
-      //add WHERE clause
-      $tableAlias=$source->getTableAlias();
-      $source->manipulateQuery(
-        function ($query) use ($tableAlias)
-        {
-          $query->andWhere($tableAlias . '.converted = true');
-        }
-      );
-
-      /* @var $grid \APY\DataGridBundle\Grid\Grid */
-      $grid = $this->get('grid');
-
-      // Attach the source to the grid
-      $grid->setSource($source);
-      $grid->setId('quotegrid');
-      $grid->hideColumns($hidden);
-
-      // Add action column
-      $editAction = new RowAction('Edit', 'manage_quote_edit');
-      $grid->addRowAction($editAction);
-      $showAction = new RowAction('View', 'manage_quote_show');
-      $grid->addRowAction($showAction);
-      $deleteAction = new RowAction('Delete', 'manage_quote_quick_delete');
-      $deleteAction->setRole('ROLE_ADMIN');
-      $deleteAction->setConfirm(true);
-      $grid->addRowAction($deleteAction);
-
-      // Set the default order of the grid
-      $grid->setDefaultOrder('created', 'DESC');
-
-      // Set the selector of the number of items per page
-      $grid->setLimits(array(10, 25, 50, 100));
-
-      //set no data message
-      $grid->setNoDataMessage("There are no converted quotes to show. Please check your filter settings and try again.");
-
-
-    // Export of the grid
-      $grid->addExport(new CSVExport("Converted Quotes as CSV", "convertedQuotes", array('delimiter'=>','), "UTF-8", "ROLE_BRAND"));
-
-
-    // Manage the grid redirection, exports and the response of the controller
-      return $grid->getGridResponse('QuoteBundle:Quote:converted.html.twig');
-   }
-
-
-
-  /**
-   * Lists all DELETED Quote entities.
-   *
-   */
-  public function showDeletedAction(Request $request)
-  {
-    $em = $this->getDoctrine()->getManager();
-    $filters = $em->getFilters();
-    $filters->disable('softdeleteable');
-
-    // list hidden columns
-    $hidden = array(
-      'isTemplate',
-      'deleted',
-      'converted',
-      'setupComplete',
-      'locked',
-      'destination',
-      'salesAgent.firstName',
-      'salesAgent.lastName',
-      'organizer.firstName',
-      'organizer.lastName'
-    );
-
-    // Creates simple grid based on your entity (ORM)
-    $source = new Entity('QuoteBundle:Quote');
-
-    //add WHERE clause
-    $tableAlias=$source->getTableAlias();
-    $source->manipulateQuery(
-      function ($query) use ($tableAlias)
-      {
-        $query->andWhere($tableAlias . '.deleted IS NOT NULL');
-      }
-    );
-
-    /* @var $grid \APY\DataGridBundle\Grid\Grid */
-    $grid = $this->get('grid');
-
-    // Attach the source to the grid
-    $grid->setSource($source);
-    $grid->setId('quotegrid');
-    $grid->hideColumns($hidden);
-
-
-    // Set the default order of the grid
-    $grid->setDefaultOrder('created', 'DESC');
-
-    // Add action column
-    $restoreAction = new RowAction('Restore', 'manage_quote_restore');
-    $grid->addRowAction($restoreAction);
-
-    // Set the selector of the number of items per page
-    $grid->setLimits(array(10, 25, 50, 100));
-
-    //set no data message
-    $grid->setNoDataMessage("There are no deleted quotes to show. Please check your filter settings and try again.");
-
-
-    // Export of the grid
-    $grid->addExport(new CSVExport("Deleted Quotes as CSV", "deletedQuotes", array('delimiter'=>','), "UTF-8", "ROLE_ADMIN"));
-
-
-    // Manage the grid redirection, exports and the response of the controller
-    return $grid->getGridResponse('QuoteBundle:Quote:deleted.html.twig');
-  }
-
-
-
-  /**
-   * Lists all DELETED Quote entities.
-   *
-   */
-  public function templatesAction(Request $request)
-  {
-    // list hidden columns
-    $hidden = array(
-      'isTemplate',
-      'deleted',
-      'converted',
-      'setupComplete',
-      'locked',
-      'destination',
-      'salesAgent.firstName',
-      'salesAgent.lastName',
-      'organizer.firstName',
-      'organizer.lastName'
-    );
-
-   // Creates simple grid based on your entity (ORM)
-    $source = new Entity('QuoteBundle:Quote');
-
-    //add WHERE clause
-    $tableAlias=$source->getTableAlias();
-    $source->manipulateQuery(
-      function ($query) use ($tableAlias)
-      {
-        $query->andWhere($tableAlias . '.isTemplate = true');
-      }
-    );
-
-    /* @var $grid \APY\DataGridBundle\Grid\Grid */
-    $grid = $this->get('grid');
-
-    // Attach the source to the grid
-    $grid->setSource($source);
-    $grid->setId('quotegrid');
-    $grid->hideColumns($hidden);
-
-
-    // Set the default order of the grid
-    $grid->setDefaultOrder('created', 'DESC');
-
-    // Set the selector of the number of items per page
-    $grid->setLimits(array(10, 25, 50, 100));
-
-    // Add action column
-    $editAction = new RowAction('Edit', 'manage_quote_edit');
-    $grid->addRowAction($editAction);
-    $deleteAction = new RowAction('Delete', 'manage_quote_quick_delete');
-    $deleteAction->setRole('ROLE_ADMIN');
-    $deleteAction->setConfirm(true);
-    $grid->addRowAction($deleteAction);
-
-    //set no data message
-    $grid->setNoDataMessage("There are no quote templates to show. Please check your filter settings and try again.");
-
-
-    // Export of the grid
-    $grid->addExport(new CSVExport("Quote Templates as CSV", "templatesQuotes", array('delimiter'=>','), "UTF-8", "ROLE_BRAND"));
-
-
-    // Manage the grid redirection, exports and the response of the controller
-    return $grid->getGridResponse('QuoteBundle:Quote:templates.html.twig');
-  }
-
 
     /**
      * Creates a new Quote entity.
@@ -382,7 +104,9 @@ class QuoteController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('QuoteBundle:Quote')->find($id);
+        $quoteVersion = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+        $quoteReference = $quoteVersion->getQuoteReference();
+        $entity = $em->getRepository('QuoteBundle:Quote')->find($quoteReference);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Quote entity.');
@@ -525,7 +249,10 @@ class QuoteController extends Controller
       // dont forget to disable softdelete filter so doctrine can *find* the deleted entity
       $filters = $em->getFilters();
       $filters->disable('softdeleteable');
-      $entity = $em->getRepository('QuoteBundle:Quote')->find($id);
+
+      $quoteVersion = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+      $quoteReference = $quoteVersion->getQuoteReference();
+      $entity = $em->getRepository('QuoteBundle:Quote')->find($quoteReference);
 
       if (!$entity) {
         throw $this->createNotFoundException('Unable to find Quote entity.');
@@ -548,7 +275,9 @@ class QuoteController extends Controller
     $em = $this->getDoctrine()->getManager();
     // dont forget to disable softdelete filter so doctrine can *find* the deleted entity
 
-    $entity = $em->getRepository('QuoteBundle:Quote')->find($id);
+    $quoteVersion = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+    $quoteReference = $quoteVersion->getQuoteReference();
+    $entity = $em->getRepository('QuoteBundle:Quote')->find($quoteReference);
 
     if (!$entity) {
       throw $this->createNotFoundException('Unable to find Quote entity.');

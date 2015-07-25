@@ -3,13 +3,21 @@
 namespace TUI\Toolkit\QuoteBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Annotations;
+use Gedmo\Mapping\Annotation as Gedmo;
+use APY\DataGridBundle\Grid\Mapping as GRID;
 
 /**
  * QuoteVersion
  *
  * @ORM\Table()
  * @ORM\Entity
+ * @GRID\Source(columns="id, quoteReference.ts, quoteReference.id, quoteReference.institution.name, quoteReference.reference, organizer_full, quoteReference.name, salesAgent_full, quoteReference.salesAgent.firstName, quoteReference.salesAgent.lastName,  quoteReference.salesAgent.email, quoteReference.organizer.firstName, quoteReference.organizer.lastName, quoteReference.organizer.email, quoteReference.views, quoteReference.shareViews, quoteReference.converted, quoteReference.deleted, quoteReference.locked, quoteReference.setupComplete, quoteReference.destination, quoteReference.created, version, tripStatus.name, expiryDate, signupDeadline, transportType.name, boardBasis.name, freePlaces, payingPlaces, maxPax, minPax, departureDate, returnDate, quoteDays, quoteNights, welcomeMsg, totalPrice, pricePerson,  currency.name", filterable=false, sortable=true)
+ * @GRID\Column(id="organizer_full", type="join", columns = {"quoteReference.organizer.firstName", "quoteReference.organizer.lastName", "quoteReference.organizer.email"}, title="Organizer", export=true, filterable=true, operatorsVisible=false)
+ * @GRID\Column(id="salesAgent_full", type="join", columns = {"quoteReference.salesAgent.firstName", "quoteReference.salesAgent.lastName", "quoteReference.salesAgent.email"}, title="Business Admin", export=true, filterable=true, operatorsVisible=false)
  */
+
+// Quote columns = quoteReference.name, quoteReference.destination, quoteReference.reference, quoteReference.institution.name, quoteReference.created, quoteReference.views, quoteReference.shareViews, quoteReference.organizer.firstName, quoteReference.organizer.lastName, quoteReference.salesAgent.firstName, quoteReference.salesAgent.lastName, quoteReference.converted, quoteReference.deleted, quoteReference.setupComplete, quoteReference.locked, quoteReference.isTemplate
 class QuoteVersion
 {
     /**
@@ -18,6 +26,7 @@ class QuoteVersion
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @GRID\Column(title="Id", export=true)
      */
     private $id;
 
@@ -25,21 +34,31 @@ class QuoteVersion
      * @var integer
      *
      * @ORM\Column(name="version", type="integer")
-     *
+     * @GRID\Column(field="version", title="Version", export=true)
      */
     private $version = 1;
 
+
+    /**
+     * @var datetime
+     *
+     * @ORM\Column(name="ts", type="datetime", nullable=true)
+     * @GRID\Column(field="ts", title="ts", export=false)
+     */
+    private $ts = null;
+
     /**
      * @var integer
+     * @GRID\Column(field="boardBasis.name", title="Board Basis", export=true)
      *
      * @ORM\JoinColumn(name="boardBasis", referencedColumnName="id")
-     *
      * @ORM\ManyToOne(targetEntity="TUI\Toolkit\BoardBasisBundle\Entity\BoardBasis", cascade={"all"}, fetch="EAGER")
      */
     private $boardBasis;
 
     /**
      * @var array
+     * @GRID\Column(title="Content", export=true)
      *
      * @ORM\Column(name="content", type="json_array", nullable=true)
      */
@@ -49,6 +68,7 @@ class QuoteVersion
      * @var \DateTime
      *
      * @ORM\Column(name="expiryDate", type="date", nullable=true)
+     * @GRID\Column(title="Expirary Date", export=true)
      */
     private $expiryDate;
 
@@ -56,6 +76,7 @@ class QuoteVersion
      * @var integer
      *
      * @ORM\Column(name="freePlaces", type="integer", nullable=true)
+     * @GRID\Column(title="Free Places", export=true)
      */
     private $freePlaces;
 
@@ -63,6 +84,7 @@ class QuoteVersion
      * @var integer
      *
      * @ORM\Column(name="maxPax", type="integer", nullable=true)
+     * @GRID\Column(title="Max Pax", export=true)
      */
     private $maxPax;
 
@@ -70,6 +92,7 @@ class QuoteVersion
      * @var integer
      *
      * @ORM\Column(name="minPax", type="integer", nullable=true)
+     * @GRID\Column(title="Min Pax", export=true)
      */
     private $minPax;
 
@@ -77,6 +100,7 @@ class QuoteVersion
      * @var integer
      *
      * @ORM\Column(name="payingPlaces", type="integer", nullable=true)
+     * @GRID\Column(title="Paying Places", export=true)
      */
     private $payingPlaces;
 
@@ -84,14 +108,35 @@ class QuoteVersion
      * @var \DateTime
      *
      * @ORM\Column(name="departureDate", type="date", nullable=true)
+     * @GRID\Column(title="Departure Date", export=true)
      */
     private $departureDate;
 
     /**
      * @var integer
-     *
+
      * @ORM\ManyToOne(targetEntity="TUI\Toolkit\QuoteBundle\Entity\Quote", cascade={"persist"})
      * @ORM\JoinColumn(name="quoteReference", referencedColumnName="id")
+     *
+     * @GRID\Column(field = "quoteReference.name", title="Name", export=true, filterable=true, operatorsVisible=false)
+     * @GRID\Column(field = "quoteReference.id", title="ID", export=true)
+     *
+     * @GRID\Column(field = "quoteReference.salesAgent.firstName", title="BA First", export=false)
+     * @GRID\Column(field = "quoteReference.salesAgent.lastName", title="BA Last", export=false)
+     * @GRID\Column(field = "quoteReference.salesAgent.email", title="BA email", export=false)
+     * @GRID\Column(field = "quoteReference.reference", title="Reference", export=true, filterable=true, operatorsVisible=false)
+     * @GRID\Column(field = "quoteReference.converted", title="Converted", export=true)
+     * @GRID\Column(field = "quoteReference.deleted", title="Deleted", export=true)
+     * @GRID\Column(field = "quoteReference.locked", title="Locked", export=true)
+     * @GRID\Column(field = "quoteReference.setupComplete", title="Setup Complete", export=true)
+     * @GRID\Column(field = "quoteReference.views", title="Views", export=true)
+     * @GRID\Column(field = "quoteReference.shareViews", title="Shared Views", export=true)
+     * @GRID\Column(field = "quoteReference.institution.name", title="Institution", export=true, filterable=true, operatorsVisible=false)
+     * @GRID\Column(field = "quoteReference.organizer.firstName", title="O first", export=false)
+     * @GRID\Column(field = "quoteReference.organizer.lastName", title="O last", export=false)
+     * @GRID\Column(field = "quoteReference.organizer.email", title="O email", export=false)
+     * @GRID\Column(field = "quoteReference.destination", title="Destination", export=true, filterable=true, operatorsVisible=false)
+     * @GRID\Column(field = "quoteReference.created", title="Created", export=false)
      */
     private $quoteReference;
 
@@ -101,6 +146,8 @@ class QuoteVersion
      * @ORM\Column(name="signupDeadline", type="date", nullable=true)
      *
      * @ORM\ManyToOne(targetEntity="TUI\Toolkit\QuoteBundle\Entity\Quote", cascade={"all"}, fetch="EAGER", inversedBy = "id")
+     * @ORM\JoinColumn(name="tripStatus", referencedColumnName="id")
+     * @GRID\Column(title="Signup Deadline", export=true)
      */
     private $signupDeadline;
 
@@ -108,6 +155,7 @@ class QuoteVersion
      * @var integer
      *
      * @ORM\Column(name="quoteDays", type="integer", nullable=true)
+     * @GRID\Column(title="Days", export=true)
      */
     private $quoteDays;
 
@@ -115,6 +163,7 @@ class QuoteVersion
      * @var integer
      *
      * @ORM\Column(name="quoteNights", type="integer", nullable=true)
+     * @GRID\Column(title="Nights", export=true)
      */
     private $quoteNights;
 
@@ -122,6 +171,7 @@ class QuoteVersion
      * @var float
      *
      * @ORM\Column(name="totalPrice", type="float", nullable=true)
+     * @GRID\Column(title="Total Price", export=true)
      */
     private $totalPrice;
 
@@ -129,8 +179,8 @@ class QuoteVersion
      * @var integer
      *
      * @ORM\JoinColumn(name="tripStatus", referencedColumnName="id")
-     *
      * @ORM\ManyToOne(targetEntity="TUI\Toolkit\TripStatusBundle\Entity\TripStatus", cascade={"all"}, fetch="EAGER")
+     * @GRID\Column(field="tripStatus.name", title="Trip Status", export=true)
      */
     private $tripStatus;
 
@@ -138,8 +188,8 @@ class QuoteVersion
      * @var integer
      *
      * @ORM\JoinColumn(name="transportType", referencedColumnName="id")
-     *
      * @ORM\ManyToOne(targetEntity="TUI\Toolkit\TransportBundle\Entity\Transport", cascade={"all"}, fetch="EAGER")
+     * @GRID\Column(field="transportType.name", title="Transport Type", export=true)
      */
     private $transportType;
 
@@ -147,6 +197,7 @@ class QuoteVersion
      * @var string
      *
      * @ORM\Column(name="welcomeMsg", type="text", nullable=true)
+     * @GRID\Column(title="Welcome Message", export=true)
      */
     private $welcomeMsg;
 
@@ -154,6 +205,7 @@ class QuoteVersion
    * @var float
    *
    * @ORM\Column(name="pricePerson", type="float", nullable=true)
+   * @GRID\Column(title="Price / Person", export=true)
    */
   private $pricePerson;
 
@@ -161,6 +213,7 @@ class QuoteVersion
    * @var DateTime
    *
    * @ORM\Column(name="returnDate", type="date", nullable=true)
+   * @GRID\Column(title="Return Date", export=true)
    */
   private $returnDate;
 
@@ -168,8 +221,8 @@ class QuoteVersion
    * @var integer
    *
    * @ORM\JoinColumn(name="currency", referencedColumnName="id")
-   *
    * @ORM\ManyToOne(targetEntity="TUI\Toolkit\CurrencyBundle\Entity\Currency", cascade={"all"}, fetch="EAGER")
+   * @GRID\Column(field="currency.name", title="Currency", export=true)
    *
    */
   private $currency;
@@ -641,5 +694,28 @@ class QuoteVersion
   public function getVersion()
   {
     return $this->version;
+  }
+
+  /**
+   * Set ts
+   *
+   * @param datetime $ts
+   * @return QuoteVersion
+   */
+  public function setTs($ts)
+  {
+    $this->ts = $ts;
+
+    return $this;
+  }
+
+  /**
+   * Get ts
+   *
+   * @return datetime
+   */
+  public function getTs()
+  {
+    return $this->ts;
   }
 }
