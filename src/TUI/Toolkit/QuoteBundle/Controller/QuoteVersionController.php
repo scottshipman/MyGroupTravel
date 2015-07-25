@@ -7,6 +7,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use TUI\Toolkit\QuoteBundle\Entity\QuoteVersion;
 use TUI\Toolkit\QuoteBundle\Form\QuoteVersionType;
+use APY\DataGridBundle\Grid\Source\Entity;
+use APY\DataGridBundle\Grid\Export\CSVExport;
+use APY\DataGridBundle\Grid\Action\RowAction;
+use Doctrine\ORM\Query\ResultSetMapping;
 
 /**
  * QuoteVersion controller.
@@ -16,20 +20,377 @@ class QuoteVersionController extends Controller
 {
 
     /**
-     * Lists all QuoteVersion entities.
+     * Lists all QuoteVersion ( IE Quotes) entities.
      *
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
+      // hide columns from the screen display
+      $hidden = array(
+        'quoteReference.converted',
+        'quoteReference.deleted',
+        'quoteReference.locked',
+        'quoteReference.setupComplete',
+        'quoteReference.organizer.firstName',
+        'quoteReference.organizer.lastName',
+        'quoteReference.organizer.email',
+        'quoteReference.salesAgent.firstName',
+        'quoteReference.salesAgent.lastName',
+        'quoteReference.salesAgent.email',
+        'quoteReference.destination',
+        'quoteReference.created',
+        'version',
+        'id',
+        'tripStatus.name',
+        'expiryDate',
+        'signupDeadline',
+        'transportType.name',
+        'boardBasis.name',
+        'freePlaces',
+        'payingPlaces',
+        'maxPax',
+        'minPax',
+        'departureDate',
+        'returnDate',
+        'quoteDays',
+        'quoteNights',
+        'welcomeMsg',
+        'totalPrice',
+        'pricePerson',
+        'currency.name'
+      );
 
-        $entities = $em->getRepository('QuoteBundle:QuoteVersion')->findAll();
+      // Creates simple grid based on your entity (ORM)
+      $source = new Entity('QuoteBundle:QuoteVersion');
 
-        return $this->render('QuoteBundle:QuoteVersion:index.html.twig', array(
-            'entities' => $entities,
-        ));
+      //add WHERE clause
+      $tableAlias=$source->getTableAlias();
+
+      $source->manipulateQuery(
+        function ($query) use ($tableAlias)
+        {      $quoteAlias = '_quoteReference';
+          $query
+          ->where($tableAlias . '.ts IS NULL')
+          ->andWhere($quoteAlias . '.converted = false')
+          ->andWhere($quoteAlias . '.isTemplate = false');
+        }
+      );
+
+      /* @var $grid \APY\DataGridBundle\Grid\Grid */
+      $grid = $this->get('grid');
+
+      // Attach the source to the grid
+      $grid->setSource($source);
+      $grid->setId('quoteversiongrid');
+      $grid->hideColumns($hidden);
+
+      // Add action column
+      $editAction = new RowAction('Edit', 'manage_quote_edit');
+      $grid->addRowAction($editAction);
+      $showAction = new RowAction('View', 'manage_quote_show');
+      $grid->addRowAction($showAction);
+      $deleteAction = new RowAction('Delete', 'manage_quote_quick_delete');
+      $deleteAction->setRole('ROLE_ADMIN');
+      $deleteAction->setConfirm(true);
+      $grid->addRowAction($deleteAction);
+
+      // Set the default order of the grid
+      $grid->setDefaultOrder('quoteReference.created', 'DESC');
+
+      // Set the selector of the number of items per page
+      $grid->setLimits(array(10, 25, 50, 100));
+
+      //set no data message
+      $grid->setNoDataMessage("There are no quotes to show. Please check your filter settings and try again.");
+
+
+      // Export of the grid
+      $grid->addExport(new CSVExport("Quotes as CSV", "activeQuotes", array('delimiter'=>','), "UTF-8", "ROLE_BRAND"));
+
+
+      // Manage the grid redirection, exports and the response of the controller
+      return $grid->getGridResponse('QuoteBundle:QuoteVersion:index.html.twig');
     }
-    /**
+
+  /**
+   * Lists all Converted QuoteVersion ( IE Quotes) entities.
+   *
+   */
+  public function convertedAction()
+  {
+    // hide columns from the screen display
+    $hidden = array(
+      'quoteReference.converted',
+      'quoteReference.deleted',
+      'quoteReference.locked',
+      'quoteReference.setupComplete',
+      'quoteReference.organizer.firstName',
+      'quoteReference.organizer.lastName',
+      'quoteReference.organizer.email',
+      'quoteReference.salesAgent.firstName',
+      'quoteReference.salesAgent.lastName',
+      'quoteReference.salesAgent.email',
+      'quoteReference.destination',
+      'quoteReference.created',
+      'version',
+      'id',
+      'tripStatus.name',
+      'expiryDate',
+      'signupDeadline',
+      'transportType.name',
+      'boardBasis.name',
+      'freePlaces',
+      'payingPlaces',
+      'maxPax',
+      'minPax',
+      'departureDate',
+      'returnDate',
+      'quoteDays',
+      'quoteNights',
+      'welcomeMsg',
+      'totalPrice',
+      'pricePerson',
+      'currency.name'
+    );
+
+    // Creates simple grid based on your entity (ORM)
+    $source = new Entity('QuoteBundle:QuoteVersion');
+    $quotetable = new Entity('QuoteBundle:Quote');
+    //add WHERE clause
+    $tableAlias=$source->getTableAlias();
+
+    $source->manipulateQuery(
+      function ($query) use ($tableAlias)
+      {      $quoteAlias = '_quoteReference';
+        $query
+          ->where($tableAlias . '.ts IS NULL')
+          ->andWhere($quoteAlias . '.converted = true')
+          ->andWhere($quoteAlias . '.isTemplate = false');
+      }
+    );
+
+    /* @var $grid \APY\DataGridBundle\Grid\Grid */
+    $grid = $this->get('grid');
+
+    // Attach the source to the grid
+    $grid->setSource($source);
+    $grid->setId('quoteversiongrid');
+    $grid->hideColumns($hidden);
+
+    // Add action column
+    $editAction = new RowAction('Edit', 'manage_quote_edit');
+    $grid->addRowAction($editAction);
+    $showAction = new RowAction('View', 'manage_quote_show');
+    $grid->addRowAction($showAction);
+    $deleteAction = new RowAction('Delete', 'manage_quote_quick_delete');
+    $deleteAction->setRole('ROLE_ADMIN');
+    $deleteAction->setConfirm(true);
+    $grid->addRowAction($deleteAction);
+
+    // Set the default order of the grid
+    $grid->setDefaultOrder('quoteReference.created', 'DESC');
+
+    // Set the selector of the number of items per page
+    $grid->setLimits(array(10, 25, 50, 100));
+
+    //set no data message
+    $grid->setNoDataMessage("There are no converted quotes to show. Please check your filter settings and try again.");
+
+
+    // Export of the grid
+    $grid->addExport(new CSVExport("Converted Quotes as CSV", "convertedQuotes", array('delimiter'=>','), "UTF-8", "ROLE_BRAND"));
+
+
+    // Manage the grid redirection, exports and the response of the controller
+    return $grid->getGridResponse('QuoteBundle:QuoteVersion:converted.html.twig');
+  }
+  /**
+   * Lists all Deleted QuoteVersion ( IE Quotes) entities.
+   *
+   */
+  public function deletedAction()
+  {
+    $em = $this->getDoctrine()->getManager();
+    $filters = $em->getFilters();
+    $filters->disable('softdeleteable');
+
+    // hide columns from the screen display
+    $hidden = array(
+      'quoteReference.converted',
+      'quoteReference.deleted',
+      'quoteReference.locked',
+      'quoteReference.setupComplete',
+      'quoteReference.organizer.firstName',
+      'quoteReference.organizer.lastName',
+      'quoteReference.organizer.email',
+      'quoteReference.salesAgent.firstName',
+      'quoteReference.salesAgent.lastName',
+      'quoteReference.salesAgent.email',
+      'quoteReference.destination',
+      'quoteReference.created',
+      'version',
+      'id',
+      'tripStatus.name',
+      'expiryDate',
+      'signupDeadline',
+      'transportType.name',
+      'boardBasis.name',
+      'freePlaces',
+      'payingPlaces',
+      'maxPax',
+      'minPax',
+      'departureDate',
+      'returnDate',
+      'quoteDays',
+      'quoteNights',
+      'welcomeMsg',
+      'totalPrice',
+      'pricePerson',
+      'currency.name'
+    );
+
+    // Creates simple grid based on your entity (ORM)
+    $source = new Entity('QuoteBundle:QuoteVersion');
+
+    //add WHERE clause
+    $tableAlias=$source->getTableAlias();
+
+    $source->manipulateQuery(
+      function ($query) use ($tableAlias)
+      {      $quoteAlias = '_quoteReference';
+        $query
+          ->where($tableAlias . '.ts IS NULL')
+          ->andWhere("$quoteAlias.deleted IS NOT NULL")
+        ;
+        $dql = $query->getDql();
+        $foo='';
+      }
+    );
+
+    /* @var $grid \APY\DataGridBundle\Grid\Grid */
+    $grid = $this->get('grid');
+
+    // Attach the source to the grid
+    $grid->setSource($source);
+    $grid->setId('quoteversiongrid');
+    $grid->hideColumns($hidden);
+
+    // Add action column
+    $restoreAction = new RowAction('Restore', 'manage_quote_restore');
+    $grid->addRowAction($restoreAction);
+
+
+    // Set the default order of the grid
+    $grid->setDefaultOrder('quoteReference.created', 'DESC');
+
+    // Set the selector of the number of items per page
+    $grid->setLimits(array(10, 25, 50, 100));
+
+    //set no data message
+    $grid->setNoDataMessage("There are no deleted quotes to show. Please check your filter settings and try again.");
+
+
+    // Export of the grid
+    $grid->addExport(new CSVExport("Deleted Quotes as CSV", "deletedQuotes", array('delimiter'=>','), "UTF-8", "ROLE_BRAND"));
+
+
+    // Manage the grid redirection, exports and the response of the controller
+    return $grid->getGridResponse('QuoteBundle:QuoteVersion:deleted.html.twig');
+  }
+
+  /**
+   * Lists all Quote Templates( IE Quotes) entities.
+   *
+   */
+  public function templatesAction()
+  {
+    // hide columns from the screen display
+    $hidden = array(
+      'quoteReference.converted',
+      'quoteReference.deleted',
+      'quoteReference.locked',
+      'quoteReference.setupComplete',
+      'quoteReference.organizer.firstName',
+      'quoteReference.organizer.lastName',
+      'quoteReference.organizer.email',
+      'quoteReference.salesAgent.firstName',
+      'quoteReference.salesAgent.lastName',
+      'quoteReference.salesAgent.email',
+      'quoteReference.destination',
+      'quoteReference.created',
+      'version',
+      'id',
+      'tripStatus.name',
+      'expiryDate',
+      'signupDeadline',
+      'transportType.name',
+      'boardBasis.name',
+      'freePlaces',
+      'payingPlaces',
+      'maxPax',
+      'minPax',
+      'departureDate',
+      'returnDate',
+      'quoteDays',
+      'quoteNights',
+      'welcomeMsg',
+      'totalPrice',
+      'pricePerson',
+      'currency.name'
+    );
+
+    // Creates simple grid based on your entity (ORM)
+    $source = new Entity('QuoteBundle:QuoteVersion');
+
+    //add WHERE clause
+    $tableAlias=$source->getTableAlias();
+
+    $source->manipulateQuery(
+      function ($query) use ($tableAlias)
+      {      $quoteAlias = '_quoteReference';
+        $query
+          ->where($tableAlias . '.ts IS NULL')
+          ->andWhere($quoteAlias . '.isTemplate = true');
+      }
+    );
+
+    /* @var $grid \APY\DataGridBundle\Grid\Grid */
+    $grid = $this->get('grid');
+
+    // Attach the source to the grid
+    $grid->setSource($source);
+    $grid->setId('quoteversiongrid');
+    $grid->hideColumns($hidden);
+
+    // Add action column
+    $editAction = new RowAction('Edit', 'manage_quote_edit');
+    $grid->addRowAction($editAction);
+    $deleteAction = new RowAction('Delete', 'manage_quote_quick_delete');
+    $deleteAction->setRole('ROLE_ADMIN');
+    $deleteAction->setConfirm(true);
+    $grid->addRowAction($deleteAction);
+
+    // Set the default order of the grid
+    $grid->setDefaultOrder('quoteReference.created', 'DESC');
+
+    // Set the selector of the number of items per page
+    $grid->setLimits(array(10, 25, 50, 100));
+
+    //set no data message
+    $grid->setNoDataMessage("There are no templates to show. Please check your filter settings and try again.");
+
+
+    // Export of the grid
+    $grid->addExport(new CSVExport("Quote Templates as CSV", "templatesQuotes", array('delimiter'=>','), "UTF-8", "ROLE_BRAND"));
+
+
+    // Manage the grid redirection, exports and the response of the controller
+    return $grid->getGridResponse('QuoteBundle:QuoteVersion:templates.html.twig');
+  }
+
+
+
+  /**
      * Creates a new QuoteVersion entity.
      *
      */
@@ -176,26 +537,20 @@ class QuoteVersionController extends Controller
         $em = $this->getDoctrine()->getManager();
 
       // Get all Quote versions referencing Parent Quote object
-      $entity = $em->getRepository('QuoteBundle:QuoteVersion')->findByQuoteReference($id);
+      $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find QuoteVersion entity.' . $id);
         }
 
-        // order array DESC by Version # & Get the quote version with highest Version number
-        usort($entity, function ($a, $b) {
-          if ($a->getVersion() == $b->getVersion()) return 0;
-          return $a->getVersion() > $b->getVersion() ? -1 : 1;
-        });
-        $quote = $entity[0];
-         if($quote->getQuoteReference()->getIsTemplate()){
+         if($entity->getQuoteReference()->getIsTemplate()){
            $template='Template';
          } else {$template='';}
-        $editForm = $this->createEditForm($quote);
-        $deleteForm = $this->createDeleteForm($id);
+        $editForm = $this->createEditForm($entity);
+        $deleteForm = $this->createDeleteForm($entity->getQuoteReference()->getId());
 
         return $this->render('QuoteBundle:QuoteVersion:edit.html.twig', array(
-            'entity'      => $quote,
+            'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
             'template'    => $template,
