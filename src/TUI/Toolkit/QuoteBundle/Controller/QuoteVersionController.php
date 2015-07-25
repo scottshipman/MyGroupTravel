@@ -396,12 +396,33 @@ class QuoteVersionController extends Controller
      */
     public function createAction(Request $request)
     {
+        //Handling the autocomplete field for organizer.  We need to convert the string from organizer into the object.
+        $email = $_REQUEST['tui_toolkit_quotebundle_quoteversion']['quoteReference']['organizer'];
+        $email = explode('[', $email);
+        $email = rtrim($email[1], ']');
         $entity = new QuoteVersion();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
+        $em = $this->getDoctrine()->getManager();
+        $entities = $em->getRepository('TUIToolkitUserBundle:User')->findByEmail($email);
+        $organizer =  $entities[0];
+        $form->getData()->getQuoteReference()->setOrganizer($organizer);
+
+        //handling request for SalesAgent same as we did with organizer
+        $agentemail = $_REQUEST['tui_toolkit_quotebundle_quoteversion']['quoteReference']['salesAgent'];
+        $agentemail = explode('[', $agentemail);
+        $agentemail = rtrim($agentemail[1], ']');
+        $agententities = $em->getRepository('TUIToolkitUserBundle:User')->findByEmail($agentemail);
+        $salesagent =  $agententities[0];
+        $form->getData()->getQuoteReference()->setSalesAgent($salesagent);
+
+        //Handling the request for institution a little different than we did for the other 2.
+        $institutionname = $_REQUEST['tui_toolkit_quotebundle_quoteversion']['quoteReference']['institution'];
+        $institutionentities = $em->getRepository('InstitutionBundle:Institution')->findByName($institutionname);
+        $institution =  $institutionentities[0];
+        $form->getData()->getQuoteReference()->setInstitution($institution);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add('notice', 'Quote Saved: '. $entity->getQuoteReference()->getName());

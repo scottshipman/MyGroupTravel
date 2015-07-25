@@ -2,13 +2,12 @@
 {% block title %}Manage Institution{% endblock %}
 
 {% block body -%}
+
     <h1>Institution Dashboard</h1>
 
-    <ul>
+    <ul class="record_actions">
         <li>
-            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_institution_new') }}">
-                Create a new Institution
-            </a>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_institution_new') }}">Create a new Institution</a>
         </li>
     </ul>
 
@@ -21,5 +20,7 @@
     {% endembed %}
 
     {{ grid_search(grid) }}
+
     {{ grid(grid, 'AppBundle:Grid:grid.html.twig') }}
-    {% endblock %}
+
+{% endblock %}

@@ -1,10 +1,12 @@
 {% extends 'base.html.twig' %}
-{%  dump(user) %}
+{% dump(user) %}
 {% block title %}Hello {{ user.username }} {% endblock %}
-{% block body %}Hello {{ user.username }}!
+{% block page_title %}Hello {{ user.username }} {% endblock %}
+
+{% block body %}
+
+    <p>Hello {{ user.username }}!</p>
 
     <p>This is the default User Profile page, using the template src/TUI/Toolkit/UserBundle/Resources/views/Default/index.html.twig.</p>
 
-
 {% endblock %}
-

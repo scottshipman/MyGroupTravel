@@ -1,13 +1,12 @@
 .flash-messages {
 
   .flash-message {
-    padding: 1em $page_gutter;
+    padding-top: 1em;
+    padding-bottom: 1em;
     font-style: italic;
-    color: $text_white;
-    background: $bg_grey_d;
 
     &.flash-message-error {
-      background: red;
+      // background: red;
     }
 
   }

@@ -1,38 +1,36 @@
 {% extends '::base.html.twig' %}
+{% block title %}{{ entity.username }}{% endblock %}
+{% block page_title %}{{ entity.username }}{% endblock %}
 
 {% block body -%}
-    <h1>User</h1>
 
-    <table class="record_properties">
+    <table>
         <tbody>
             <tr>
-                <th>Id</th>
+                <th>ID</th>
                 <td>{{ entity.id }}</td>
             </tr>
             <tr>
                 <th>Userparent</th>
-                <td>{{ entity.userParent }}</td>
+                <td>{# entity.userParent #}</td>
             </tr>
-        <tr>
-            <th>Avatar</th>
-            {% if entity.media %}
-                <td>{% media entity.media, 'small' %}</td>
-            {% endif %}
-        </tr>
+            <tr>
+                <th>Avatar</th>
+                {% if entity.media %}
+                    <td>{% media entity.media, 'small' %}</td>
+                {% endif %}
+            </tr>
         </tbody>
     </table>
 
-        <ul class="record_actions">
-    <li>
-        <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('user') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('user_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+    <ul class="record_actions">
+        <li>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('user') }}">Back to the list</a>
+        </li>
+        <li>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('user_edit', { 'id': entity.id }) }}">Edit
+        </a></li>
+        <li>{{ form(delete_form) }}</li>
+    </ul>
+
 {% endblock %}

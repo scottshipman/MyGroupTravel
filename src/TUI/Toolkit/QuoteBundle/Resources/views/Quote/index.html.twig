@@ -1,6 +1,6 @@
 {% extends '::base.html.twig' %}
-
 {% block title %}Manage Quotes{% endblock %}
+
 {% block body %}
 
     <h1>Quote Dashboard - Active</h1>
@@ -12,6 +12,9 @@
             <a class="mdl-tabs__tab is-active" href="{{ path('manage_quote') }}">Active Quotes</a>
         {% endblock %}
     {% endembed %}
+
     {{ grid_search(grid) }}
+
     {{ grid(grid, 'AppBundle:Grid:grid.html.twig') }}
+
 {% endblock %}

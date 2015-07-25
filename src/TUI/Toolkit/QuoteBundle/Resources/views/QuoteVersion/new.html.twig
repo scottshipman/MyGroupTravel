@@ -6,12 +6,16 @@
     {{  form(form) }}
 
 
-        <ul class="record_actions">
-    <li>
-        <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quote') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
+    <ul class="record_actions">
+        <li>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+               href="{{ path('manage_quote') }}">
+                Back to the list
+            </a>
+        </li>
+    </ul>
+    {#{% javascripts %}#}
+    {{ form_javascript(form) }}
+    {#{% endjavascripts %}#}
 
 {% endblock %}

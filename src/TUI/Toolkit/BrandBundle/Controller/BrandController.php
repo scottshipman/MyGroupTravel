@@ -10,8 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use TUI\Toolkit\BrandBundle\Entity\Brand;
 use TUI\Toolkit\BrandBundle\Form\BrandType;
 use Application\Sonata\MediaBundle\Entity\Media;
-use Application\Sonata\ClassificationBundle\ApplicationSonataClassificationBundle;
-use Application\Sonata\MediaBundle\ApplicationSonataMediaBundle;
+
 
 /**
  * Brand controller.
@@ -256,13 +255,6 @@ class BrandController extends Controller
             ->getForm();
     }
 
-    /**
-     * Edits an existing Brand entity.
-     *
-     * @Route("/{id}/upload", name="_manage_brand_upload")
-     * @Method("GET")
-     * @Template("BrandBundle:Brand:dropzone.html.twig")
-     */
     public function createDropZoneFormAction(Request $request)
     {
         $form = $this->createFormBuilder()->getForm();

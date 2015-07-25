@@ -13,10 +13,11 @@
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome.css">
 
     {# Google Material Design (Lite) Stuff #}
-    <link rel="stylesheet" href="//storage.googleapis.com/code.getmdl.io/1.0.0/material.indigo-pink.min.css">
+    {{ render(controller('BrandBundle:Default:colors')) }}
     <script src="//storage.googleapis.com/code.getmdl.io/1.0.0/material.min.js"></script>
     <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+    <link rel="stylesheet"
+          href="//fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
 
     {# HEY LOOK HERE: All this crap is required for Sonata Datepicker form field types - figure out to use with assetic
         <script type="text/javascript" src="/bundles/sonatacore/public/vendor/moment/min/moment.min.js"></script>
@@ -29,21 +30,33 @@
         <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
     {% endstylesheets %}
 
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    {% stylesheets filter="cssrewrite" %}
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
 
     {% javascripts '@jquery' %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
+    <script src="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.7.0/spectrum.min.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.6.1/spectrum.min.css">
+
+    {{ render(controller('BrandBundle:Default:styles')) }}
+
 </head>
 
 <body class="user-{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}{{ app.user.id }}{% else %}0{% endif %}">
-  <div class="mdl-layout mdl-js-layout{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %} mdl-layout--fixed-drawer mdl-layout--overlay-drawer-button{% endif %}">
+<div class="mdl-layout mdl-js-layout{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %} mdl-layout--fixed-drawer mdl-layout--overlay-drawer-button{% endif %}">
 
     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
     <div class="mdl-layout__drawer">
+
         <header class="tui-drawer-header">
-            {% if app.user.firstName and app.user.lastName %}
+            {% if app.user.media %}
+                <span class="tui-image-avatar">{% media app.user.media, 'small' %}</span>
+            {% elseif app.user.firstName and app.user.lastName %}
                 <span class="tui-text-avatar mdl-typography--headline">{{ app.user.firstName[:1] }}{{ app.user.lastName[:1] }}</span>
             {% else %}
                 <span class="tui-text-avatar mdl-typography--headline">{{ app.user.username[:1] }}</span>
@@ -72,24 +85,29 @@
                 {% endblock %}
             </nav>
         {% endif %}
+
     </div><!-- mdl-layout__drawer -->
     {% endif %}
 
     <main class="mdl-layout__content">
 
-        <div class="flash-messages">
-            {% for flashMessage in app.session.flashbag.get('notice') %}
-                <div class="flash-message flash-message-notice">Notice:<br>{{ flashMessage }}</div>
-            {% endfor %}
-            {% for flashMessage in app.session.flashbag.get('error') %}
-                <div class="flash-message flash-message-error">Error:<br>{{ flashMessage }}</div>
-            {% endfor %}
-        </div>
+        <div class="header mdl-layout__header">
+            <div class="flash-messages">
+                {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="flash-message flash-message-notice">Notice:<br>{{ flashMessage }}</div>
+                {% endfor %}
+                {% for flashMessage in app.session.flashbag.get('error') %}
+                    <div class="flash-message flash-message-error">Error:<br>{{ flashMessage }}</div>
+                {% endfor %}
+            </div>
 
-        <div class="header">
             <div class="brand_logo">
                 {{ render(controller('BrandBundle:Default:index')) }}
             </div>
+
+            <h1 class="page-title">
+              {% block page_title %}{% endblock %}
+            </h1>
         </div>
 
         <div class="content">
@@ -100,11 +118,12 @@
 
     </main>
 
-  </div><!-- mdl-layout -->
+</div>
+<!-- mdl-layout -->
 
-    {% javascripts '@toolkit' %}
-        <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
+{% javascripts '@toolkit' %}
+<script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}
 
 </body>
 

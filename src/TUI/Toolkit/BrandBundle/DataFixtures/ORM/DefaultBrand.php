@@ -23,11 +23,11 @@ class DefaultBrand implements FixtureInterface
     $brand = new Brand();
     $brand->setName('ToolkitDefaultBrand');
     $brand->setDivision('ToolkitDefaultDivision');
-    $brand->setPrimaryColor('#4a494a');
-    $brand->setHoverColor('#f9f9fa');
-    $brand->setButtonColor('#4a494a');
+    $brand->setPrimaryColor('rgb(96, 125, 139)');
+    $brand->setHoverColor('rgb(33, 150, 243)');
+    $brand->setButtonColor('rgb(63, 81, 181)');
 
     $manager->persist($brand);
     $manager->flush();
   }
-} 
+}

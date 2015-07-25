@@ -1,14 +1,16 @@
-<div class="mdl-tabs__tab-bar">
+<div class="mdl-tabs-no-swap">
+  <div class="mdl-tabs__tab-bar">
+
     {% block user_tab %}
-    <a class='mdl-tabs__tab' href="{{ path('user') }}">Current Users</a>
+      <a class='mdl-tabs__tab' href="{{ path('user') }}">Current Users</a>
     {% endblock %}
 
     {# Only show this tab if is_granted ROLE_ADMIN #}
     {% if is_granted("ROLE_ADMIN") %}
-
         {% block deleted_tab %}
-        <a class='mdl-tabs__tab' href="{{ path('user_deleted') }}">Deleted Users</a>
+          <a class='mdl-tabs__tab' href="{{ path('user_deleted') }}">Deleted Users</a>
         {% endblock %}
-
     {% endif %}
+
+  </div>
 </div>

@@ -11,7 +11,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use TUI\Toolkit\QuoteBundle\Entity\Quote;
 use TUI\Toolkit\QuoteBundle\Form\QuoteType;
-
+use APY\DataGridBundle\Grid\Source\Entity;
+use APY\DataGridBundle\Grid\Export\CSVExport;
+use APY\DataGridBundle\Grid\Action\RowAction;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Quote controller.
@@ -334,4 +337,77 @@ class QuoteController extends Controller
       ->getForm()
       ;
   }
+
+
+
+
+
+
+
+  function getBrandUsers($controller)
+  {
+    $choices=array();
+    $em = $controller->getDoctrine()->getManager();
+    $qb = $em->createQueryBuilder('TUIToolkitUserBundle:User');
+    $qb->select('u.id, u.username')
+      ->from('TUIToolkitUserBundle:User', 'u')
+      ->where(
+        $qb->expr()->like('u.roles', '?1')
+      )
+      ->orderBy('u.username', 'ASC')
+      ->setParameter(1, '%ROLE_BRAND%');
+    $query = $qb->getQuery();
+    $users = $query->getArrayResult();
+    foreach($users as $user){
+      $choices[$user['id']] = $user['username'];
+    }
+    return $choices;
+  }
+
+  function getInstitutionList($controller)
+  {
+    $choices=array();
+    $em = $controller->getDoctrine()->getManager();
+    $qb = $em->createQueryBuilder('InstitutionBundle:Institution');
+    $qb->select('i.id, i.name')
+      ->from('InstitutionBundle:Institution', 'i')
+     // ->where(
+     //   $qb->expr()->like('u.roles', '?1')
+     // )
+      ->orderBy('i.name', 'ASC')
+    //  ->setParameter(1, '%ROLE_BRAND%')
+    ;
+    $query = $qb->getQuery();
+    $institutions = $query->getArrayResult();
+    foreach($institutions as $institution){
+      $choices[$institution['id']] = $institution['name'];
+    }
+    return $choices;
+  }
+
+    public function retrieve_organizers_nameAction(Request $request)
+    {
+        $value = $request->get('term');
+
+        $em = $this->getDoctrine()->getEntityManager();
+        //retriving users
+        $organizers = $em->getRepository('TUI\Toolkit\UserBundle\Entity\User')->findAll($value);
+
+        // convert the result to array
+        $search = array();
+        foreach ($organizers as $organizer) {
+            $search[] = array(
+//                'label' => $organizer -> getFirstName(),
+                'value' => $organizer -> getId(),
+        );
+        }
+
+        $response = new Response();
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setContent(json_encode($search));
+
+        return $response;
+    }
+
+}
 }
