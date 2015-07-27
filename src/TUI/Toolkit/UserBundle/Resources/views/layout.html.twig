@@ -1,6 +1,19 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}User Login{% endblock %}
+{% block title %}
+    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+        Welcome {{ app.user.username }}
+    {% else %}
+        User Login
+    {% endif %}
+{% endblock %}
+{% block page_title %}
+    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+        Welcome {{ app.user.username }}
+    {% else %}
+        User Login
+    {% endif %}
+{% endblock %}
 
 {% block body %}
 
