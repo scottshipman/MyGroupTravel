@@ -3,13 +3,12 @@
 {% block page_title %}Edit {{ entity.name }}{% endblock %}
 
 {% block body -%}
-    <h1>Edit {{ entity.name }}</h1>
 
     {{ form(edit_form) }}
 
     {{ render(controller('BrandBundle:Brand:createDropZoneForm')) }}
 
-    {#{{ oneup_uploader_endpoint('gallery') }}#}
+    {# {{ oneup_uploader_endpoint('gallery') }} #}
 
     <ul class="record_actions">
         <li>
@@ -17,5 +16,7 @@
         </li>
         <li>{{ form(delete_form) }}</li>
     </ul>
-    {#{{ form_javascript(form) }}#}
+
+    {# {{ form_javascript(form) }} #}
+
 {% endblock %}
