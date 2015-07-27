@@ -396,7 +396,7 @@ class QuoteVersionController extends Controller
      */
     public function createAction(Request $request)
     {
-        //Handling the autocomplete field for organizer.  We need to convert the string from organizer into the object.
+//        //Handling the autocomplete field for organizer.  We need to convert the string from organizer into the object.
         $entity = new QuoteVersion();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
@@ -407,15 +407,15 @@ class QuoteVersionController extends Controller
         $form->getData()->getQuoteReference()->setOrganizer($organizer);
 
         //handling ajax request for SalesAgent same as we did with organizer
-        $agentemail = $form->getData()->getQuoteReference()->getSalesAgent();
-        $agententities = $em->getRepository('TUIToolkitUserBundle:User')->findByEmail($agentemail);
-        $salesagent =  $agententities[0];
-        $form->getData()->getQuoteReference()->setSalesAgent($salesagent);
+        $agentEmail = $form->getData()->getQuoteReference()->getSalesAgent();
+        $agentEntities = $em->getRepository('TUIToolkitUserBundle:User')->findByEmail($agentEmail);
+        $salesAgent =  $agentEntities[0];
+        $form->getData()->getQuoteReference()->setSalesAgent($salesAgent);
 
         //Handling the request for institution a little different than we did for the other 2.
-        $institutionname =  $form->getData()->getQuoteReference()->getInstitution();;
-        $institutionentities = $em->getRepository('InstitutionBundle:Institution')->findByName($institutionname);
-        $institution =  $institutionentities[0];
+        $institutionName =  $form->getData()->getQuoteReference()->getInstitution();
+        $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findByName($institutionName);
+        $institution =  $institutionEntities[0];
         $form->getData()->getQuoteReference()->setInstitution($institution);
 
         if ($form->isValid()) {
