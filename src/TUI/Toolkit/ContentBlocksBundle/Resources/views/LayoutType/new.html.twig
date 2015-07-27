@@ -1,13 +1,14 @@
 {% extends '::base.html.twig' %}
+{% block title %}Create Layout Type{% endblock %}
+{% block page_title %}Create Layout Type{% endblock %}
 
 {% block body -%}
-    <h1>LayoutType creation</h1>
 
     {{ form(form) }}
 
         <ul class="record_actions">
     <li>
-        <a href="{{ path('manage_layouttype') }}">
+        <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_layouttype') }}">
             Back to the list
         </a>
     </li>
