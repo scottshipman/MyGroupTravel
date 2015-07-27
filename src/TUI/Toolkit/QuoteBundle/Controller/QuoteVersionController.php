@@ -317,7 +317,12 @@ class QuoteVersionController extends Controller
       'quoteReference.salesAgent.lastName',
       'quoteReference.salesAgent.email',
       'quoteReference.destination',
-      'quoteReference.created',
+      'quoteReference.reference',
+      'quoteReference.institution.name',
+      'quoteReference.views',
+      'quoteReference.shareViews',
+      'organizer_full',
+      //'quoteReference.created',
       'version',
       'id',
       'tripStatus.name',
@@ -369,6 +374,17 @@ class QuoteVersionController extends Controller
     $deleteAction->setRole('ROLE_ADMIN');
     $deleteAction->setConfirm(true);
     $grid->addRowAction($deleteAction);
+
+    // templates shouldnt have these fields or filters:
+    // reference
+    $reference = $grid->getColumn('quoteReference.reference');
+    $reference->setFilterable(false);
+    // institution
+    $institution = $grid->getColumn('quoteReference.institution.name');
+    $institution->setFilterable(false);
+    // organizer
+    $organizer = $grid->getColumn('organizer_full');
+    $organizer->setFilterable(false);
 
     // Set the default order of the grid
     $grid->setDefaultOrder('quoteReference.created', 'DESC');
