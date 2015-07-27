@@ -3,7 +3,6 @@
 {% block page_title %}Edit {{ entity.name }}{% endblock %}
 
 {% block body -%}
-    <h1>Edit {{ entity.name }}</h1>
 
     {{ form(edit_form) }}
 
@@ -15,5 +14,7 @@
         </li>
         <li>{{ form(delete_form) }}</li>
     </ul>
-    {#{{ form_javascript(form) }}#}
+
+    {# {{ form_javascript(form) }} #}
+
 {% endblock %}
