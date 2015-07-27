@@ -1,34 +1,34 @@
 {% extends '::base.html.twig' %}
 {% block title %}Brand {{ entity.name }}{% endblock %}
+{% block page_title %}Brand {{ entity.name }}{% endblock %}
 
 {% block body -%}
-    <h1>Brand</h1>
 
-    <table class="record_properties">
+    <table class="mdl-data-table mdl-js-data-table">
         <tbody>
             <tr>
-                <th>Name (ID)</th>
-                <td>{{ entity.name }} ({{ entity.id }})</td>
+                <td class="mdl-data-table__cell--non-numeric th-mimic">Name (ID)</td>
+                <td class="mdl-data-table__cell--non-numeric">{{ entity.name }} ({{ entity.id }})</td>
             </tr>
             <tr>
-                <th>Division</th>
-                <td>{{ entity.division }}</td>
+                <td class="mdl-data-table__cell--non-numeric th-mimic">Division</td>
+                <td class="mdl-data-table__cell--non-numeric">{{ entity.division }}</td>
             </tr>
             <tr>
-                <th>Primary color</th>
+                <td class="mdl-data-table__cell--non-numeric th-mimic">Primary color</td>
                 <td style="background-color: {{ entity.primaryColor }}"></td>
             </tr>
             <tr>
-                <th>Secondary color</th>
+                <td class="mdl-data-table__cell--non-numeric th-mimic">Secondary color</td>
                 <td style="background-color: {{ entity.buttonColor }}"></td>
             </tr>
             <tr>
-                <th>Special color</th>
+                <td class="mdl-data-table__cell--non-numeric th-mimic">Special color</td>
                 <td style="background-color: {{ entity.hoverColor }}"></td>
             </tr>
             <tr>
-                <th>Logo</th>
-                <td class="logo">
+                <td class="mdl-data-table__cell--non-numeric th-mimic">Logo</td>
+                <td class="mdl-data-table__cell--non-numeric center">
                     {% if entity.media %}
                         {% media entity.media, 'small' %}
                     {% endif %}
@@ -37,17 +37,14 @@
         </tbody>
     </table>
 
-        <ul class="record_actions">
-    <li>
-        <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('_manage_brand') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('_manage_brand_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+    <ul class="record_actions">
+        <li>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('_manage_brand') }}">Back to the list</a>
+        </li>
+        <li>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('_manage_brand_edit', { 'id': entity.id }) }}">Edit</a>
+        </li>
+        <li>{{ form(delete_form) }}</li>
+    </ul>
+
 {% endblock %}
