@@ -397,27 +397,23 @@ class QuoteVersionController extends Controller
     public function createAction(Request $request)
     {
         //Handling the autocomplete field for organizer.  We need to convert the string from organizer into the object.
-        $email = $_REQUEST['tui_toolkit_quotebundle_quoteversion']['quoteReference']['organizer'];
-        $email = explode('[', $email);
-        $email = rtrim($email[1], ']');
         $entity = new QuoteVersion();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
+        $email = $form->getData()->getQuoteReference()->getOrganizer();
         $em = $this->getDoctrine()->getManager();
         $entities = $em->getRepository('TUIToolkitUserBundle:User')->findByEmail($email);
         $organizer =  $entities[0];
         $form->getData()->getQuoteReference()->setOrganizer($organizer);
 
-        //handling request for SalesAgent same as we did with organizer
-        $agentemail = $_REQUEST['tui_toolkit_quotebundle_quoteversion']['quoteReference']['salesAgent'];
-        $agentemail = explode('[', $agentemail);
-        $agentemail = rtrim($agentemail[1], ']');
+        //handling ajax request for SalesAgent same as we did with organizer
+        $agentemail = $form->getData()->getQuoteReference()->getSalesAgent();
         $agententities = $em->getRepository('TUIToolkitUserBundle:User')->findByEmail($agentemail);
         $salesagent =  $agententities[0];
         $form->getData()->getQuoteReference()->setSalesAgent($salesagent);
 
         //Handling the request for institution a little different than we did for the other 2.
-        $institutionname = $_REQUEST['tui_toolkit_quotebundle_quoteversion']['quoteReference']['institution'];
+        $institutionname =  $form->getData()->getQuoteReference()->getInstitution();;
         $institutionentities = $em->getRepository('InstitutionBundle:Institution')->findByName($institutionname);
         $institution =  $institutionentities[0];
         $form->getData()->getQuoteReference()->setInstitution($institution);
@@ -675,4 +671,6 @@ class QuoteVersionController extends Controller
             ->getForm()
         ;
     }
+
+    
 }
