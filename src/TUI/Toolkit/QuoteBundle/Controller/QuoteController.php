@@ -391,15 +391,66 @@ class QuoteController extends Controller
 
         $em = $this->getDoctrine()->getEntityManager();
         //retriving users
-        $organizers = $em->getRepository('TUI\Toolkit\UserBundle\Entity\User')->findAll($value);
-
-        // convert the result to array
+        $organizers = $em->getRepository('TUI\Toolkit\UserBundle\Entity\User')->findByFirstName($value);
+//           ->findByFirstName($value);
+//         convert the result to array
         $search = array();
         foreach ($organizers as $organizer) {
             $search[] = array(
-//                'label' => $organizer -> getFirstName(),
-                'value' => $organizer -> getId(),
-        );
+                'label' => $organizer -> getFirstName()." ".$organizer-> getLastName(),
+                'value' => $organizer -> getEmail(),
+                $search[$organizer->getEmail()] = $organizer -> getFirstName()." ".$organizer-> getLastName()
+            );
+        }
+
+        $response = new Response();
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setContent(json_encode($search));
+
+        return $response;
+    }
+
+    public function retrieve_salesagent_nameAction(Request $request)
+    {
+        $value = $request->get('term');
+
+        $em = $this->getDoctrine()->getEntityManager();
+        //retriving users
+        $organizers = $em->getRepository('TUI\Toolkit\UserBundle\Entity\User')->findByFirstName($value);
+//           ->findByFirstName($value);
+//         convert the result to array
+        $search = array();
+        foreach ($organizers as $organizer) {
+            $search[] = array(
+                'label' => $organizer -> getFirstName()." ".$organizer-> getLastName(),
+                'value' => $organizer -> getEmail(),
+                $search[$organizer->getEmail()] = $organizer -> getFirstName()." ".$organizer-> getLastName()
+            );
+        }
+
+        $response = new Response();
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setContent(json_encode($search));
+
+        return $response;
+    }
+
+    public function retrieve_institution_nameAction(Request $request)
+    {
+        $value = $request->get('term');
+
+        $em = $this->getDoctrine()->getEntityManager();
+        //retriving users
+        $organizers = $em->getRepository('TUI\Toolkit\InstitutionBundle\Entity\Institution')->findByName($value);
+//           ->findByFirstName($value);
+//         convert the result to array
+        $search = array();
+        foreach ($organizers as $organizer) {
+            $search[] = array(
+                'label' => $organizer -> getName(),
+                'value' => $organizer -> getName(),
+                $search[$organizer->getName()] = $organizer -> getName()
+            );
         }
 
         $response = new Response();
