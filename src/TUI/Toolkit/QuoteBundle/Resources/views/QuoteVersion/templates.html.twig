@@ -1,7 +1,8 @@
 {% extends '::base.html.twig' %}
-{% block title %}Manage Quotes{% endblock %}
+{% block title %}Quote Dashboard - Templates{% endblock %}
+{% block page_title %}Quote Dashboard - Templates{% endblock %}
+
 {% block body -%}
-    <h1>Quote Dashboard - Templates</h1>
 
     {% embed "QuoteBundle:QuoteVersion:buttons.html.twig" %}{% endembed %}
     {% embed "QuoteBundle:QuoteVersion:quote_tabs.html.twig" %}
