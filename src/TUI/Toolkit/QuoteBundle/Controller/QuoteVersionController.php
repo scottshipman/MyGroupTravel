@@ -70,7 +70,7 @@ class QuoteVersionController extends Controller
         function ($query) use ($tableAlias)
         {      $quoteAlias = '_quoteReference';
           $query
-          ->where($tableAlias . '.ts IS NULL')
+          ->andWhere($tableAlias . '.ts IS NULL')
           ->andWhere($quoteAlias . '.converted = false')
           ->andWhere($quoteAlias . '.isTemplate = false');
         }
@@ -163,7 +163,7 @@ class QuoteVersionController extends Controller
       function ($query) use ($tableAlias)
       {      $quoteAlias = '_quoteReference';
         $query
-          ->where($tableAlias . '.ts IS NULL')
+          ->andWhere($tableAlias . '.ts IS NULL')
           ->andWhere($quoteAlias . '.converted = true')
           ->andWhere($quoteAlias . '.isTemplate = false');
       }
@@ -259,7 +259,7 @@ class QuoteVersionController extends Controller
       function ($query) use ($tableAlias)
       {      $quoteAlias = '_quoteReference';
         $query
-          ->where($tableAlias . '.ts IS NULL')
+          ->andWhere($tableAlias . '.ts IS NULL')
           ->andWhere("$quoteAlias.deleted IS NOT NULL")
         ;
         $dql = $query->getDql();
@@ -349,7 +349,7 @@ class QuoteVersionController extends Controller
       function ($query) use ($tableAlias)
       {      $quoteAlias = '_quoteReference';
         $query
-          ->where($tableAlias . '.ts IS NULL')
+          ->andWhere($tableAlias . '.ts IS NULL')
           ->andWhere($quoteAlias . '.isTemplate = true');
       }
     );
