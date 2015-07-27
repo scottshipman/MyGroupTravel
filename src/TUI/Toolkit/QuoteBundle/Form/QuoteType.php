@@ -78,7 +78,7 @@ class QuoteType extends AbstractType
 //
                     ->add('institution', 'genemu_jqueryautocomplete_text', array(
                         'class' => 'TUI\Toolkit\InstitutionBundle\Entity\Institution',
-                        'route_name' => 'retrieve-institution-name',
+                        'route_name' => 'retrieve_institution_name',
                         'data_class' => 'TUI\Toolkit\InstitutionBundle\Entity\Institution'
 
                     ))
@@ -95,7 +95,7 @@ class QuoteType extends AbstractType
             ->add('salesAgent', 'genemu_jqueryautocomplete_text', array(
                 'required' => false,
                 'class' => 'TUI\Toolkit\UserBundle\Entity\User',
-                'route_name' => 'retrieve-salesagent-name',
+                'route_name' => 'retrieve_salesagent_name',
                 'data_class' => 'TUI\Toolkit\UserBundle\Entity\User'
             ))
             ->add('media', 'sonata_media_type', array(
