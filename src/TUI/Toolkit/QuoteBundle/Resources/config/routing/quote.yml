@@ -12,7 +12,7 @@ manage_quote_new:
 
 manage_quote_newtemplate:
     path:     /new/template
-    defaults: { _controller: "QuoteBundle:QuoteVersion:createtemplate" }
+    defaults: { _controller: "QuoteBundle:QuoteVersion:newTemplate" }
 
 manage_quote_edit:
     path:     /{id}/edit

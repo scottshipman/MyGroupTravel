@@ -147,7 +147,8 @@ class Institution
 
     public function __toString()
     {
-        return $this->name;
+        if(null !== $this->name){return $this->name;}
+      else { return '';}
     }
 
     /**

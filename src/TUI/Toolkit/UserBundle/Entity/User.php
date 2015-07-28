@@ -78,7 +78,7 @@ class User extends BaseUser
         parent::__construct();
         // your own logic
 
-        $this->created = date();
+        $this->created = date('Y-m-d');
 
         $this->roles = array('ROLE_USER', 'ROLE_CUSTOMER');
 
