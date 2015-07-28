@@ -219,14 +219,6 @@ class UserController extends Controller
         //what does Brand add?
       }
 
-      //    if(!$this->get('security.context')->isGranted('ROLE_BRAND')){
-      //is a CUSTOMER role so they must be creating a chiuld so set parent to them
-      $curr_user = $this->get('security.context')->getToken()->getUser();
-      $form->add('userParent', 'hidden', array(
-        'data' => $curr_user->getID(),
-      ));
-      //   }
-
 
 
         $form->add('submit', 'submit', array('label' => 'Create'));
