@@ -40,6 +40,7 @@
 
   $('input.color_picker').spectrum({
     preferredFormat: "rgb",
+    color: 'rgb(121, 85, 72)',
     showPaletteOnly: true,
     showPalette: true,
     showInitial: true,

@@ -10,6 +10,22 @@ form {
   position: relative;
 }
 
-.sp-replacer {
-  
+.mdl-colorfield {
+  position: relative;
+  font-size: 16px;
+  display: inline-block;
+  width: 300px;
+  padding: 24px 0 20px; // 24px top is different that MDL
+
+  .mdl-colorfield-label {
+    position: absolute;
+    left: 0;
+    top: 4px;
+    bottom: 0;
+    right: 0;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: -1;
+  }
+
 }
