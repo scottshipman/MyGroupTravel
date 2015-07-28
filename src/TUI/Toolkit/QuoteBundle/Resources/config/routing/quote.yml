@@ -12,12 +12,7 @@ manage_quote_new:
 
 manage_quote_newtemplate:
     path:     /new/template
-    defaults: { _controller: "QuoteBundle:QuoteVersion:createtemplate" }
-
-manage_quote_create:
-    path:     /create
-    defaults: { _controller: "QuoteBundle:Quote:create" }
-    methods:  POST
+    defaults: { _controller: "QuoteBundle:QuoteVersion:newTemplate" }
 
 manage_quote_edit:
     path:     /{id}/edit

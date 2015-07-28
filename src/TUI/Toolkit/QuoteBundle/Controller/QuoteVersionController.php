@@ -412,27 +412,42 @@ class QuoteVersionController extends Controller
      */
     public function createAction(Request $request)
     {
-        //Handling the autocomplete field for organizer.  We need to convert the string from organizer into the object.
+//        //Handling the autocomplete field for organizer.  We need to convert the string from organizer into the object.
         $entity = new QuoteVersion();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-        $email = $form->getData()->getQuoteReference()->getOrganizer();
         $em = $this->getDoctrine()->getManager();
-        $entities = $em->getRepository('TUIToolkitUserBundle:User')->findByEmail($email);
-        $organizer =  $entities[0];
-        $form->getData()->getQuoteReference()->setOrganizer($organizer);
 
+        //handling ajax request for organizer
+        $o_data = $form->getData()->getQuoteReference()->getOrganizer();
+        if(preg_match('/<+(.*?)>/',$o_data, $o_matches)) {
+          $email = $o_matches[1];
+          $entities = $em->getRepository('TUIToolkitUserBundle:User')
+            ->findByEmail($email);
+          if (NULL !== $entities) {
+            $organizer = array_shift($entities);
+            $form->getData()->getQuoteReference()->setOrganizer($organizer);
+          }
+        }
         //handling ajax request for SalesAgent same as we did with organizer
-        $agentemail = $form->getData()->getQuoteReference()->getSalesAgent();
-        $agententities = $em->getRepository('TUIToolkitUserBundle:User')->findByEmail($agentemail);
-        $salesagent =  $agententities[0];
-        $form->getData()->getQuoteReference()->setSalesAgent($salesagent);
+        $a_data = $form->getData()->getQuoteReference()->getSalesAgent();
+        if(preg_match('/<+(.*?)>/',$a_data, $a_matches)) {
+          $agentEmail = $a_matches[1];
 
+          $agentEntities = $em->getRepository('TUIToolkitUserBundle:User')
+            ->findByEmail($agentEmail);
+          if (NULL !== $agentEntities) {
+            $salesAgent = array_shift($agentEntities);
+            $form->getData()->getQuoteReference()->setSalesAgent($salesAgent);
+          }
+        }
         //Handling the request for institution a little different than we did for the other 2.
-        $institutionname =  $form->getData()->getQuoteReference()->getInstitution();;
-        $institutionentities = $em->getRepository('InstitutionBundle:Institution')->findByName($institutionname);
-        $institution =  $institutionentities[0];
-        $form->getData()->getQuoteReference()->setInstitution($institution);
+        $institutionName =  $form->getData()->getQuoteReference()->getInstitution();
+        $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findByName($institutionName);
+        if(null!==$institutionEntities) {
+          $institution = array_shift($institutionEntities);
+          $form->getData()->getQuoteReference()->setInstitution($institution);
+        }
 
         if ($form->isValid()) {
             $em->persist($entity);
@@ -455,9 +470,21 @@ class QuoteVersionController extends Controller
   public function createTemplateAction(Request $request)
   {
     $entity = new QuoteVersion();
-    $form = $this->createTemplateCreateForm($entity);
+    $form = $this->createCreateForm($entity);
     $form->handleRequest($request);
+    $em = $this->getDoctrine()->getManager();
 
+    //handling ajax request for SalesAgent
+    $a_data = $form->getData()->getQuoteReference()->getSalesAgent();
+    if(preg_match('/<+(.*?)>/',$a_data, $a_matches)) {
+      $agentEmail = $a_matches[1];
+      $agentEntities = $em->getRepository('TUIToolkitUserBundle:User')
+        ->findByEmail($agentEmail);
+      if (NULL !== $agentEntities) {
+        $salesAgent = array_shift($agentEntities);
+        $form->getData()->getQuoteReference()->setSalesAgent($salesAgent);
+      }
+    }
     if ($form->isValid()) {
       $em = $this->getDoctrine()->getManager();
       $em->persist($entity);
@@ -529,6 +556,21 @@ class QuoteVersionController extends Controller
         ));
     }
 
+  /**
+   * Displays a form to create a new Quote Template entity.
+   *
+   */
+  public function newTemplateAction()
+  {
+    $entity = new QuoteVersion();
+    $form   = $this->createTemplateCreateForm($entity);
+
+    return $this->render('QuoteBundle:QuoteVersion:new.html.twig', array(
+      'entity' => $entity,
+      'form'   => $form->createView(),
+      'template' => "Template"
+    ));
+  }
 
     /**
      * Finds and displays a QuoteVersion entity.
@@ -630,7 +672,40 @@ class QuoteVersionController extends Controller
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
-        if ($editForm->isValid()) {
+        //handling ajax request for organizer
+        $o_data = $editForm->getData()->getQuoteReference()->getOrganizer();
+        if(preg_match('/<+(.*?)>/',$o_data, $o_matches)) {
+          $email = $o_matches[1];
+          $entities = $em->getRepository('TUIToolkitUserBundle:User')
+            ->findByEmail($email);
+          if (NULL !== $entities) {
+            $organizer = array_shift($entities);
+            $editForm->getData()->getQuoteReference()->setOrganizer($organizer);
+          }
+        }
+        //handling ajax request for SalesAgent same as we did with organizer
+        $a_data = $editForm->getData()->getQuoteReference()->getSalesAgent();
+        if(preg_match('/<+(.*?)>/',$a_data, $a_matches)) {
+          $agentEmail = $a_matches[1];
+          $agentEntities = $em->getRepository('TUIToolkitUserBundle:User')
+            ->findByEmail($agentEmail);
+          if (NULL !== $agentEntities) {
+            $salesAgent = array_shift($agentEntities);
+            $editForm->getData()
+              ->getQuoteReference()
+              ->setSalesAgent($salesAgent);
+          }
+        }
+        //Handling the request for institution a little different than we did for the other 2.
+        $institutionName =$editForm->getData()->getQuoteReference()->getInstitution();
+        $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findByName($institutionName);
+        if(null!==$institutionEntities) {
+          $institution = array_shift($institutionEntities);
+          $editForm->getData()->getQuoteReference()->setInstitution($institution);
+        }
+
+
+      if ($editForm->isValid()) {
             $em->flush();
           $this->get('session')->getFlashBag()->add('notice', 'Quote Saved: '. $entity->getQuoteReference()->getName());
 
