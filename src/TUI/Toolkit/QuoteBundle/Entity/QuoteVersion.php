@@ -136,7 +136,7 @@ class QuoteVersion
      * @GRID\Column(field = "quoteReference.organizer.lastName", title="O last", export=false)
      * @GRID\Column(field = "quoteReference.organizer.email", title="O email", export=false)
      * @GRID\Column(field = "quoteReference.destination", title="Destination", export=true, filterable=true, operatorsVisible=false)
-     * @GRID\Column(field = "quoteReference.created", title="Created", export=false)
+     * @GRID\Column(field = "quoteReference.created", title="Created", type="date", export=true)
      */
     private $quoteReference;
 
