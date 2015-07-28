@@ -1,0 +1,19 @@
+{% extends '::base.html.twig' %}
+{% block title %}Create Media File{% endblock %}
+
+
+
+{% block body -%}
+    <h1>Create Media File</h1>
+
+    {{ form(form) }}
+
+        <ul class="record_actions">
+    <li>
+        <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('media') }}">
+            Back to the list
+        </a>
+    </li>
+</ul>
+
+{% endblock %}

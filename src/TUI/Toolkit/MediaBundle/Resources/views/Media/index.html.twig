@@ -1,0 +1,43 @@
+{% extends '::base.html.twig' %}
+{% block title %}Manage Brand{% endblock %}
+
+{% block body -%}
+
+    <h1>Media list</h1>
+
+    <table class="mdl-data-table mdl-js-data-table">
+        <thead>
+            <tr>
+                <th class="mdl-data-table__cell--non-numeric">Name (ID)</th>
+                <th class="mdl-data-table__cell--non-numeric">Filename</th>
+                <th class="mdl-data-table__cell--non-numeric">Context</th>
+                <th class="mdl-data-table__cell--non-numeric">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td class="mdl-data-table__cell--non-numeric">
+                    <a href="{{ path('_manage_brand_show', { 'id': entity.id }) }}">{{ entity.filename }}</a> ({{ entity.id }})
+                </td>
+                <td class="mdl-data-table__cell--non-numeric">{{ entity.filename }}</td>
+                <td class="mdl-data-table__cell--non-numeric" style="background-color: {{ entity.context }}"></td>
+                <td class="mdl-data-table__cell--non-numeric">
+                    <ul class="table-actions">
+                        <li>
+                            <a href="{{ path('_manage_brand_edit', { 'id': entity.id }) }}">Edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul class="record_actions">
+        <li>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('media_new') }}">Upload a new file</a>
+        </li>
+    </ul>
+
+{% endblock %}
