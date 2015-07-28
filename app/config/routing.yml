@@ -64,18 +64,18 @@ _tui_toolkit_manage_company_currency:
   path: /
 
 
-# This is for Sonata Media Bundle
-gallery:
-    resource: '@SonataMediaBundle/Resources/config/routing/gallery.xml'
-    prefix: uploads/static/media/gallery
+## This is for Sonata Media Bundle
+#gallery:
+#    resource: '@SonataMediaBundle/Resources/config/routing/gallery.xml'
+#    prefix: uploads/static/media/gallery
+#
+#media:
+#    resource: '@SonataMediaBundle/Resources/config/routing/media.xml'
+#    prefix: uploads/static/media
 
-media:
-    resource: '@SonataMediaBundle/Resources/config/routing/media.xml'
-    prefix: uploads/static/media
-
-#oneup_uploader:
-#    resource: .
-#    type: uploader
+oneup_uploader:
+    resource: .
+    type: uploader
 
 genemu_image:
     resource: "@GenemuFormBundle/Resources/config/routing/image.xml"
