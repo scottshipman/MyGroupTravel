@@ -101,13 +101,14 @@ class User extends BaseUser
   }
 
     /**
-     * @var \Application\Sonata\MediaBundle\Entity\Media
+     * @var \TUI\Toolkit\MediaBundle\Entity\Media
      * @ORM\OneToOne(targetEntity="TUI\Toolkit\MediaBundle\Entity\Media", cascade={"persist"}, fetch="LAZY")
+     * @ORM\JoinColumn(name="media", referencedColumnName="id")
      */
     protected $media;
 
     /**
-     * @param MediaInterface $media
+     * @param  $media
      */
     public function setMedia($media)
     {
@@ -117,7 +118,7 @@ class User extends BaseUser
     }
 
     /**
-     * @return MediaInterface
+     * @return Media
      */
     public function getMedia()
     {

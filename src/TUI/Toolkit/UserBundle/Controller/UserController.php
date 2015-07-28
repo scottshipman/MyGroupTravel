@@ -280,7 +280,7 @@ class UserController extends Controller
     */
     private function createEditForm(User $entity)
     {
-        $form = $this->createForm(new UserType(), $entity, array(
+      $form = $this->createForm(new UserType(), $entity, array(
             'action' => $this->generateUrl('user_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
@@ -414,31 +414,18 @@ class UserController extends Controller
      * @Method("GET")
      * @Template("TUIToolkitUserBundle:User:dropzone.html.twig")
      */
-  /*   public function createDropZoneFormAction(Request $request)
+     public function createDropZoneFormAction(Request $request)
      {
          $form = $this->createFormBuilder()->getForm();
 
          $form->handleRequest($request);
 
-         if ($form->isValid()) {
-
-             // Getting sonata media manager service
-             $mediaManager = $this->container->get('sonata.media.manager.media');
-
-             // Getting sonata media object and saving media
-             $media = new Media;
-             $media->setBinaryContent($request->files->get('file'));
-             $media->setContext('user');
-             $media->setProviderName('sonata.media.provider.image');
-             $mediaManager->save($media);
-
-
-         }
-
          return $this->render('TUIToolkitUserBundle:User:dropzone.html.twig', array(
              'form' => $form->createView()
          ));
-     }*/
+     }
+
+
 
     public function retrieve_organizers_nameAction(Request $request)
     {

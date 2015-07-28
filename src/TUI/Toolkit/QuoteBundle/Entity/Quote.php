@@ -151,7 +151,7 @@ class Quote
     /**
      * @var \TUI\Toolkit\MediaBundle\Entity\Media
      * @ORM\ManyToOne(targetEntity="TUI\Toolkit\MediaBundle\Entity\Media", cascade={"persist"}, fetch="LAZY")
-     *
+     * @ORM\JoinColumn(name="media", referencedColumnName="id")
      */
     protected $media;
 
@@ -499,7 +499,7 @@ class Quote
     }
 
     /**
-     * @param MediaInterface $media
+     * @param $media
      */
     public function setMedia($media)
     {
@@ -509,7 +509,7 @@ class Quote
     }
 
     /**
-     * @return MediaInterface
+     * @return Media
      */
     public function getMedia()
     {

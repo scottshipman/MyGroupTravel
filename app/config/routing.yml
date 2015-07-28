@@ -74,9 +74,13 @@ _tui_toolkit_manage_company_currency:
 #    prefix: uploads/static/media
 
 oneup_uploader:
-    resource: .
+    resource: /static
     type: uploader
 
 genemu_image:
     resource: "@GenemuFormBundle/Resources/config/routing/image.xml"
 
+
+tui_toolkit_media:
+    resource: "@MediaBundle/Resources/config/routing/media.yml"
+    prefix:   /manage/media
