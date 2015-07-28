@@ -70,14 +70,14 @@ class QuoteType extends AbstractType
                 $form
 //
 //                    ->add('organizer', new OrganizerType())
-                    ->add('organizer', 'genemu_jqueryautocomplete_text', array(
+                    ->add('organizer', 'genemu_jqueryautocomplete_entity', array(
                         'route_name' => 'retrieve_organizers_name',
                         'class' => 'TUI\Toolkit\UserBundle\Entity\User',
                         'data_class' => 'TUI\Toolkit\UserBundle\Entity\User',
                         'configs' => array('minLength' => 3)
                     ))
 //
-                    ->add('institution', 'genemu_jqueryautocomplete_text', array(
+                    ->add('institution', 'genemu_jqueryautocomplete_entity', array(
                         'class' => 'TUI\Toolkit\InstitutionBundle\Entity\Institution',
                         'route_name' => 'retrieve_institution_name',
                         'data_class' => 'TUI\Toolkit\InstitutionBundle\Entity\Institution',
@@ -94,7 +94,7 @@ class QuoteType extends AbstractType
             ->add('name')
             ->add('destination')
             ->add('reference')
-            ->add('salesAgent', 'genemu_jqueryautocomplete_text', array(
+            ->add('salesAgent', 'genemu_jqueryautocomplete_entity', array(
                 'required' => false,
                 'class' => 'TUI\Toolkit\UserBundle\Entity\User',
                 'route_name' => 'retrieve_salesagent_name',
