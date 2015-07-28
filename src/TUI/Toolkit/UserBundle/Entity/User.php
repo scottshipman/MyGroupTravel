@@ -78,7 +78,7 @@ class User extends BaseUser
         parent::__construct();
         // your own logic
 
-        $this->created = date('Y-m-d');
+        $this->created = new \DateTime();
 
         $this->roles = array('ROLE_USER', 'ROLE_CUSTOMER');
 
@@ -100,22 +100,6 @@ class User extends BaseUser
   {
     return $this->firstName . ' ' . $this->lastName . ' <'. $this->email . '>';
   }
-
-    /**
-     * @param mixed $user_parent
-     */
-    public function setUserParent($userParent)
-    {
-        $this->userParent = $userParent;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUserParent()
-    {
-        return $this->userParent;
-    }
 
     /**
      * @var \Application\Sonata\MediaBundle\Entity\Media

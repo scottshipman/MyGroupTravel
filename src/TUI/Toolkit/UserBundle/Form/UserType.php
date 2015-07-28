@@ -52,7 +52,8 @@ class UserType extends AbstractType
               ))
             ->add('media', 'sonata_media_type', array(
                 'provider' => 'sonata.media.provider.image',
-                'context' => 'user'
+                'context' => 'user',
+                'required' => false,
 
             ))
         ;
