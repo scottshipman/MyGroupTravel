@@ -10,6 +10,13 @@ form {
   position: relative;
 }
 
+.mdl-form-wrap {
+  position: relative;
+  @include inline-block-vertical();
+  width: 300px;
+  padding: 20px 0;
+}
+
 .mdl-colorfield,
 .mdl-selectfield {
   position: relative;
