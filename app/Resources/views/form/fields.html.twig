@@ -15,7 +15,7 @@
 
 {% block textarea_widget %}
     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <textarea {{ block('widget_attributes') }}>{{ value }}</textarea>
+        <textarea class="mdl-textfield__input" type="text" {{ block('widget_attributes') }}>{{ value }}</textarea>
         <label class="mdl-textfield__label" for="{{ id }}">{{ form_label(form) }}</label>
     </div>
 {% endblock textarea_widget %}
@@ -29,11 +29,12 @@
 {% endblock choice_widget_expanded %}
 
 {% block choice_widget_collapsed %}
+    <div class="mdl-selectfield">
     {% if required and placeholder is none and not placeholder_in_choices and not multiple %}
         {% set required = false %}
     {% endif %}
-    <label for="{{ id }}">{{ form_label(form) }}</label>
-    <select {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %}>
+    <label class="mdl-label-mimic" for="{{ id }}">{{ form_label(form) }}</label>
+    <select class="mdl-select" {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %}>
         {% if placeholder is not none %}
             <option value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ placeholder != '' ? placeholder|trans({}, translation_domain) }}</option>
         {% endif %}
@@ -47,6 +48,7 @@
         {% set options = choices %}
         {{ block('choice_widget_options') }}
     </select>
+    </div>
 {% endblock choice_widget_collapsed %}
 
 {% block checkbox_widget %}
