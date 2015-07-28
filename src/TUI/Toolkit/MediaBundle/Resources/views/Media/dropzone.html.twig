@@ -1,0 +1,7 @@
+
+
+{% block dropzone %}
+ <form enctype="multipart/form-data" class="dropzone" action="{{oneup_uploader_endpoint(context) }}" method="post" name="dropzone_form" id="dropzone_form">
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+{% endblock %}

@@ -1,0 +1,21 @@
+media:
+    path:     /
+    defaults: { _controller: "MediaBundle:Media:index" }
+
+media_new:
+    path:     /new
+    defaults: { _controller: "MediaBundle:Media:new" }
+
+media_create:
+    path:     /create
+    defaults: { _controller: "MediaBundle:Media:create" }
+    methods:  POST
+
+media_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "MediaBundle:Media:edit" }
+
+media_update:
+    path:     /{id}/update
+    defaults: { _controller: "MediaBundle:Media:update" }
+    methods:  [POST, PUT]
