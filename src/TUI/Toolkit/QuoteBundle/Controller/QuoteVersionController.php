@@ -400,23 +400,31 @@ class QuoteVersionController extends Controller
         $entity = new QuoteVersion();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-        $email = $form->getData()->getQuoteReference()->getOrganizer();
         $em = $this->getDoctrine()->getManager();
-        $entities = $em->getRepository('TUIToolkitUserBundle:User')->findByEmail($email);
-        $organizer =  $entities[0];
-        $form->getData()->getQuoteReference()->setOrganizer($organizer);
+
+        //handling ajax request for organizer
+        $email = $form->getData()->getQuoteReference()->getOrganizer();
+          $entities = $em->getRepository('TUIToolkitUserBundle:User')->findByEmail($email);
+        if(null!==$entities) {
+          $organizer = array_shift($entities);
+          $form->getData()->getQuoteReference()->setOrganizer($organizer);
+        }
 
         //handling ajax request for SalesAgent same as we did with organizer
         $agentEmail = $form->getData()->getQuoteReference()->getSalesAgent();
         $agentEntities = $em->getRepository('TUIToolkitUserBundle:User')->findByEmail($agentEmail);
-        $salesAgent =  $agentEntities[0];
-        $form->getData()->getQuoteReference()->setSalesAgent($salesAgent);
+        if(null!==$agentEntities) {
+          $salesAgent = array_shift($agentEntities);
+          $form->getData()->getQuoteReference()->setSalesAgent($salesAgent);
+        }
 
         //Handling the request for institution a little different than we did for the other 2.
         $institutionName =  $form->getData()->getQuoteReference()->getInstitution();
         $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findByName($institutionName);
-        $institution =  $institutionEntities[0];
-        $form->getData()->getQuoteReference()->setInstitution($institution);
+        if(null!==$institutionEntities) {
+          $institution = array_shift($institutionEntities);
+          $form->getData()->getQuoteReference()->setInstitution($institution);
+        }
 
         if ($form->isValid()) {
             $em->persist($entity);
@@ -441,6 +449,15 @@ class QuoteVersionController extends Controller
     $entity = new QuoteVersion();
     $form = $this->createTemplateCreateForm($entity);
     $form->handleRequest($request);
+    $em = $this->getDoctrine()->getManager();
+
+    //handling ajax request for SalesAgent
+    $agentEmail = $form->getData()->getQuoteReference()->getSalesAgent();
+    $agentEntities = $em->getRepository('TUIToolkitUserBundle:User')->findByEmail($agentEmail);
+    if(null!==$agentEntities) {
+      $salesAgent = array_shift($agentEntities);
+      $form->getData()->getQuoteReference()->setSalesAgent($salesAgent);
+    }
 
     if ($form->isValid()) {
       $em = $this->getDoctrine()->getManager();

@@ -379,10 +379,10 @@ class QuoteController extends Controller
         return $choices;
     }
 
-    public function retrieve_organizers_nameAction(Request $request)
+  public function retrieve_organizers_nameAction(Request $request)
     {
         $term = $request->get('term', null);
-
+        $role = '%ROLE_CUSTOMER%';
 
         $choices = array();
         $em = $this->getDoctrine()->getManager();
@@ -390,16 +390,16 @@ class QuoteController extends Controller
         $qb->select('u')
             ->from('TUIToolkitUserBundle:User', 'u')
             ->where(
-                $qb->expr()->like('u.firstName', ':term')
+                $qb->expr()->like('CONCAT(u.firstName, \' \', u.lastName, u.email)', ':term')
             )
             ->andWhere('u.roles LIKE :role')
-            ->setParameters(array('role' => "%ROLE_CUSTOMER%", 'term' => '%' . $term . '%'))
+            ->setParameters(array('role' => $role, 'term' => '%' . $term . '%'))
             ->orderBy('u.firstName', 'ASC');
         $query = $qb->getQuery();
         $organizers = $query->getArrayResult();
         foreach ($organizers as $organizer) {
             $choices[] = array(
-                'label' => $organizer['firstName'] . " " . $organizer['lastName'],
+                'label' => $organizer['firstName'] . " " . $organizer['lastName'] . ' [' . $organizer['email'].']',
                 'value' => $organizer['email'],
             );
         }
@@ -411,6 +411,8 @@ class QuoteController extends Controller
         return $response;
     }
 
+
+
     /*
      * @todo error handling for non values
      *
@@ -419,7 +421,7 @@ class QuoteController extends Controller
     public function retrieve_salesagent_nameAction(Request $request)
     {
         $term = $request->get('term', null);
-
+        $role = '%ROLE_BRAND%';
 
         $choices = array();
         $em = $this->getDoctrine()->getManager();
@@ -427,16 +429,16 @@ class QuoteController extends Controller
         $qb->select('u')
             ->from('TUIToolkitUserBundle:User', 'u')
             ->where(
-                $qb->expr()->like('u.firstName', ':term')
+                $qb->expr()->like('CONCAT(u.firstName, u.lastName, u.email)', ':term')
             )
             ->andWhere('u.roles LIKE :role')
-            ->setParameters(array('role' => "%ROLE_BRAND%", 'term' => '%' . $term . '%'))
+            ->setParameters(array('role' => $role, 'term' => '%' . $term . '%'))
             ->orderBy('u.firstName', 'ASC');
         $query = $qb->getQuery();
         $agents = $query->getArrayResult();
         foreach ($agents as $agent) {
             $choices[] = array(
-                'label' => $agent['firstName'] . " " . $agent['lastName'],
+                'label' => $agent['firstName'] . " " . $agent['lastName'] . ' [' . $agent['email'].']',
                 'value' => $agent['email'],
             );
         }

@@ -73,13 +73,15 @@ class QuoteType extends AbstractType
                     ->add('organizer', 'genemu_jqueryautocomplete_text', array(
                         'route_name' => 'retrieve_organizers_name',
                         'class' => 'TUI\Toolkit\UserBundle\Entity\User',
-                        'data_class' => 'TUI\Toolkit\UserBundle\Entity\User'
+                        'data_class' => 'TUI\Toolkit\UserBundle\Entity\User',
+                        'configs' => array('minLength' => 3)
                     ))
 //
                     ->add('institution', 'genemu_jqueryautocomplete_text', array(
                         'class' => 'TUI\Toolkit\InstitutionBundle\Entity\Institution',
                         'route_name' => 'retrieve_institution_name',
-                        'data_class' => 'TUI\Toolkit\InstitutionBundle\Entity\Institution'
+                        'data_class' => 'TUI\Toolkit\InstitutionBundle\Entity\Institution',
+                        'configs' => array('minLength' => 3)
 
                     ))
                 ;
