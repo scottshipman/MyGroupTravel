@@ -33,6 +33,10 @@
     {% stylesheets filter="cssrewrite" '@jqueryuicss' %}
         <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
     {% endstylesheets %}
+    {# dropzone css #}
+    {% stylesheets '@AppBundle/Resources/assets/css/dropzone.css' filter='cssrewrite' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
 
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
 
@@ -123,7 +127,8 @@
 </div>
 <!-- mdl-layout -->
 
-{% javascripts '@toolkit' %}
+{% javascripts '@toolkit'
+'@AppBundle/Resources/assets/js/dropzone.js' %}
 <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 
