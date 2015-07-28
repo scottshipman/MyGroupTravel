@@ -11,8 +11,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use TUI\Toolkit\UserBundle\Entity\User;
 use TUI\Toolkit\UserBundle\Form\UserType;
-use Application\Sonata\MediaBundle\Entity\Media;
-use Application\Sonata\MediaBundle\ApplicationSonataMediaBundle;
 use APY\DataGridBundle\Grid\Source\Entity;
 use APY\DataGridBundle\Grid\Export\CSVExport;
 use APY\DataGridBundle\Grid\Action\RowAction;
@@ -149,22 +147,6 @@ class UserController extends Controller
 
   }
 
-
-
-  /**
-     * Lists all User entities.
-     *
-     */
-    public function oldindexAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('TUIToolkitUserBundle:User')->findAll();
-
-        return $this->render('TUIToolkitUserBundle:User:index.html.twig', array(
-            'entities' => $entities,
-        ));
-    }
     /**
      * Creates a new User entity.
      *
@@ -430,31 +412,31 @@ class UserController extends Controller
      * @Method("GET")
      * @Template("TUIToolkitUserBundle:User:dropzone.html.twig")
      */
-    public function createDropZoneFormAction(Request $request)
-    {
-        $form = $this->createFormBuilder()->getForm();
+  /*   public function createDropZoneFormAction(Request $request)
+     {
+         $form = $this->createFormBuilder()->getForm();
 
-        $form->handleRequest($request);
+         $form->handleRequest($request);
 
-        if ($form->isValid()) {
+         if ($form->isValid()) {
 
-            // Getting sonata media manager service
-            $mediaManager = $this->container->get('sonata.media.manager.media');
+             // Getting sonata media manager service
+             $mediaManager = $this->container->get('sonata.media.manager.media');
 
-            // Getting sonata media object and saving media
-            $media = new Media;
-            $media->setBinaryContent($request->files->get('file'));
-            $media->setContext('user');
-            $media->setProviderName('sonata.media.provider.image');
-            $mediaManager->save($media);
+             // Getting sonata media object and saving media
+             $media = new Media;
+             $media->setBinaryContent($request->files->get('file'));
+             $media->setContext('user');
+             $media->setProviderName('sonata.media.provider.image');
+             $mediaManager->save($media);
 
 
-        }
+         }
 
-        return $this->render('TUIToolkitUserBundle:User:dropzone.html.twig', array(
-            'form' => $form->createView()
-        ));
-    }
+         return $this->render('TUIToolkitUserBundle:User:dropzone.html.twig', array(
+             'form' => $form->createView()
+         ));
+     }*/
 
     public function retrieve_organizers_nameAction(Request $request)
     {

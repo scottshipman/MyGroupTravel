@@ -9,8 +9,6 @@ namespace TUI\Toolkit\UserBundle\Entity;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumber;
-use Sonata\MediaBundle\Model\MediaInterface;
-use Application\Sonata\MediaBundle;
 use Gedmo\Mapping\Annotation as Gedmo;
 use APY\DataGridBundle\Grid\Mapping as GRID;
 
@@ -78,6 +76,7 @@ class User extends BaseUser
         parent::__construct();
         // your own logic
 
+        $this->enabled = false;
         $this->created = new \DateTime();
 
         $this->roles = array('ROLE_USER', 'ROLE_CUSTOMER');
@@ -103,7 +102,7 @@ class User extends BaseUser
 
     /**
      * @var \Application\Sonata\MediaBundle\Entity\Media
-     * @ORM\OneToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Media", cascade={"persist"}, fetch="LAZY")
+     * @ORM\OneToOne(targetEntity="TUI\Toolkit\MediaBundle\Entity\Media", cascade={"persist"}, fetch="LAZY")
      */
     protected $media;
 
