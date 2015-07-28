@@ -40,6 +40,7 @@ class AppKernel extends Kernel
             new TUI\Toolkit\ContentBlocksBundle\ContentBlocksBundle(),
             new TUI\Toolkit\InstitutionBundle\InstitutionBundle(),
             new TUI\Toolkit\CurrencyBundle\CurrencyBundle(),
+            new TUI\Toolkit\MediaBundle\MediaBundle(),
 
             // All of this just to use Sonata Media Bundle (but some good stuff in there, like date picker)
 /*            new Sonata\ClassificationBundle\SonataClassificationBundle(),

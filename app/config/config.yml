@@ -44,8 +44,6 @@ twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
     form:
-      resources:
-        - 'SonataCoreBundle:Form:datepicker.html.twig'
     form_themes:
         - '%kernel.root_dir%/Resources/views/form/fields.html.twig'
 

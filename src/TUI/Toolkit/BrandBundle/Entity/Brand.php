@@ -7,7 +7,6 @@
 namespace TUI\Toolkit\BrandBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Sonata\MediaBundle\Model\MediaInterface;
 
 /**
  * Brand
@@ -188,8 +187,8 @@ class Brand
     }
 
     /**
-     * @var \Application\Sonata\MediaBundle\Entity\Media
-     * @ORM\ManyToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Media", cascade={"persist"}, fetch="LAZY")
+     * @var \TUI\Toolkit\MediaBundle\Entity\Media
+     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\MediaBundle\Entity\Media", cascade={"persist"}, fetch="LAZY")
      */
     protected $media;
 

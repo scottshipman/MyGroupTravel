@@ -30,11 +30,11 @@ class InstitutionType extends AbstractType
             ->add('code')
             ->add('type')
             ->add('websiteAddress')
-            ->add('media', 'sonata_media_type', array(
+/*            ->add('media', 'sonata_media_type', array(
                 'provider' => 'sonata.media.provider.image',
                 'context' => 'institution'
 
-            ));
+            ));*/
 
     }
     
