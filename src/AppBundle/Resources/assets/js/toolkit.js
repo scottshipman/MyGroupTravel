@@ -40,10 +40,10 @@
 
   $('input.color_picker').spectrum({
     preferredFormat: "rgb",
-    color: 'rgb(121, 85, 72)',
     showPaletteOnly: true,
     showPalette: true,
     showInitial: true,
+    hideAfterPaletteSelect: true,
     palette: [
         ['rgb(121, 85, 72);', 'rgb(96, 125, 139);', 'rgb(158, 158, 158);'],
         ['rgb(255, 87, 34);', 'rgb(244, 67, 54);', 'rgb(233, 30, 99);'],
