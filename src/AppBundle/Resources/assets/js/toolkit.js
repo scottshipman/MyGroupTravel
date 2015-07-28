@@ -53,5 +53,6 @@
         ['rgb(255, 152, 0);'],
     ]
   });
+  $('input.color_picker').parent().removeClass().addClass('mdl-colorfield').find('label').removeClass().addClass('mdl-colorfield-label');
 
 })(jQuery);
