@@ -20,10 +20,10 @@ class Media
     protected $id;
 
     /**
-     * @var  $string context
+     * @var  $string $context
      * @ORM\Column(type="string", nullable=true)
      */
-    private $context;
+    protected $context;
 
     /**
      * @var string $filename
@@ -37,6 +37,36 @@ class Media
      * @ORM\Column(type="string", nullable=true)
      */
     protected $hashedFilename;
+
+    /**
+     * @var string $filepath
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $filepath;
+
+
+    /**
+     * @var string $relativepath
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $relativepath;
+
+
+    /**
+     * @var string $mimetype
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $mimetype;
+
+
+    /**
+     * @var string $filesize
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $filesize;
+
+
+
 
 
   public function __toString() {
@@ -129,4 +159,88 @@ class Media
     return $this->hashedFilename;
   }
 
+
+  /**
+   * Set filepath
+   *
+   * @return media
+   */
+  public function setFilepath($filepath)
+  {
+    $this->filepath=$filepath;
+    return $this;
+  }
+
+  /**
+   * Get filepath
+   *
+   * @return string $filepath
+   */
+  public function getFilepath()
+  {
+    return $this->filepath;
+  }
+
+  /**
+   * Set relativepath
+   *
+   * @return media
+   */
+  public function setRelativepath($relativepath)
+  {
+    $this->relativepath=$relativepath;
+    return $this;
+  }
+
+  /**
+   * Get relativepath
+   *
+   * @return string $relativepath
+   */
+  public function getRelativepath()
+  {
+    return $this->relativepath;
+  }
+
+  /**
+   * Set mimetype
+   *
+   * @return media
+   */
+  public function setMimetype($mimetype)
+  {
+    $this->mimetype=$mimetype;
+    return $this;
+  }
+
+  /**
+   * Get mimetype
+   *
+   * @return string $mimetype
+   */
+  public function getMimetype()
+  {
+    return $this->mimetype;
+  }
+
+  /**
+   * Set filesize
+   *
+   * @return media
+   */
+  public function setFilesize($filesize)
+  {
+    $this->filesize=$filesize;
+    return $this;
+  }
+
+  /**
+   * Get filesize
+   *
+   * @return string $filesize
+   */
+  public function getFilesize()
+  {
+    return $this->filesize;
+  }
 }
