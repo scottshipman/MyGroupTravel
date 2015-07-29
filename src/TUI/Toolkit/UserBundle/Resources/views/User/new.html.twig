@@ -3,7 +3,9 @@
 {% block body -%}
     <h1>User creation</h1>
 
-    {{ form(form) }}
+  {{ form(form) }}
+    {{ render(controller('MediaBundle:Media:createDropzoneForm', {'context':'user'}))  }}
+
 
         <ul class="record_actions">
     <li>

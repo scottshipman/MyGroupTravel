@@ -100,12 +100,12 @@ class QuoteType extends AbstractType
                 'route_name' => 'retrieve_salesagent_name',
                 'data_class' => 'TUI\Toolkit\UserBundle\Entity\User'
             ))
-            ->add('media', 'sonata_media_type', array(
+/*            ->add('media', 'sonata_media_type', array(
                 'required' => false,
                 'provider' => 'sonata.media.provider.image',
                 'context' => 'quote'
 
-            ));
+            ));*/
     }
 
     /**

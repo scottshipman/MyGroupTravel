@@ -55,12 +55,16 @@
                 <td class="mdl-data-table__cell--non-numeric">{{ entity.websiteAddress }}</td>
             </tr>
             <tr>
-                <td class="mdl-data-table__cell--non-numeric th-mimic">Logo</td>
-                <td class="mdl-data-table__cell--non-numeric center">
-                    {% if entity.media %}
-                        {% media entity.media, 'small' %}
-                    {% endif %}
-                </td>
+                <th>Websiteaddress</th>
+                <td>{{ entity.websiteAddress }}</td>
+            </tr>
+            <tr>
+                <th>Logo</th>
+                {% if entity.media %}
+                    <td class="logo">
+                        {#{% media entity.media, 'small' %}#}
+                    </td>
+                {% endif %}
             </tr>
         </tbody>
     </table>

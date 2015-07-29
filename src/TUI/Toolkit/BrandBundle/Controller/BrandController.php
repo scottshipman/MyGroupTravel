@@ -255,7 +255,7 @@ class BrandController extends Controller
             ->getForm();
     }
 
-    public function createDropZoneFormAction(Request $request)
+/*    public function createDropZoneFormAction(Request $request)
     {
         $form = $this->createFormBuilder()->getForm();
 
@@ -279,5 +279,5 @@ class BrandController extends Controller
         return $this->render('BrandBundle:Brand:dropzone.html.twig', array(
             'form' => $form->createView()
         ));
-    }
+    }*/
 }

@@ -33,6 +33,10 @@
     {% stylesheets filter="cssrewrite" '@jqueryuicss' %}
         <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
     {% endstylesheets %}
+    {# dropzone css #}
+    {% stylesheets '@AppBundle/Resources/assets/css/dropzone.css' filter='cssrewrite' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
 
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
 
@@ -57,7 +61,7 @@
 
         <header class="tui-drawer-header">
             {% if app.user.media %}
-                <span class="tui-image-avatar">{% media app.user.media, 'small' %}</span>
+              {#  <span class="tui-image-avatar">{% media app.user.media, 'small' %}</span> #}
             {% elseif app.user.firstName and app.user.lastName %}
                 <span class="tui-text-avatar mdl-typography--headline">{{ app.user.firstName[:1] }}{{ app.user.lastName[:1] }}</span>
             {% else %}
@@ -123,7 +127,8 @@
 </div>
 <!-- mdl-layout -->
 
-{% javascripts '@toolkit' %}
+{% javascripts '@toolkit'
+'@AppBundle/Resources/assets/js/dropzone.js' %}
 <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 

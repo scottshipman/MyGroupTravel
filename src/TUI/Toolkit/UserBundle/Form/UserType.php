@@ -8,7 +8,6 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use libphonenumber\PhoneNumberUtils;
 use libphonenumber\PhoneNumberFormat;
 
-
 class UserType extends AbstractType
 {
     /**
@@ -50,11 +49,8 @@ class UserType extends AbstractType
                 'invalid_message' => 'fos_user.password.mismatch',
                 'required' => false,
               ))
-            ->add('media', 'sonata_media_type', array(
-                'provider' => 'sonata.media.provider.image',
-                'context' => 'user',
+            ->add('media', 'hidden', array(
                 'required' => false,
-
             ))
         ;
     }
