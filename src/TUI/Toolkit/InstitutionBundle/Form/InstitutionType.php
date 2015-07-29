@@ -19,17 +19,39 @@ class InstitutionType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('address1')
-            ->add('address2')
-            ->add('city')
-            ->add('county')
-            ->add('state')
-            ->add('postCode')
-            ->add('localAuthority')
-            ->add('country')
-            ->add('code')
-            ->add('type')
-            ->add('websiteAddress')
+            ->add('address1','text', array(
+              'required' => false,
+            ))
+            ->add('address2', 'text', array(
+              'required' => false,
+            ))
+            ->add('city', 'text', array(
+              'required' => false,
+            ))
+            ->add('county', 'text', array(
+              'required' => false,
+            ))
+            ->add('state', 'text', array(
+              'required' => false,
+            ))
+            ->add('postCode', 'text', array(
+              'required' => false,
+            ))
+            ->add('localAuthority', 'text', array(
+              'required' => false,
+            ))
+            ->add('country', 'text', array(
+              'required' => false,
+            ))
+            ->add('code', 'text', array(
+              'required' => false,
+            ))
+            ->add('type', 'text', array(
+              'required' => false,
+            ))
+            ->add('websiteAddress', 'text', array(
+              'required' => false,
+            ))
 /*            ->add('media', 'sonata_media_type', array(
                 'provider' => 'sonata.media.provider.image',
                 'context' => 'institution'

@@ -20,3 +20,4 @@ parameters:
 
     # brand_id is added after crated in db so it can be mapped
     brand_id:   1
+    locale: en_GB.utf8
