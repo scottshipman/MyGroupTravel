@@ -37,6 +37,7 @@ class UserType extends AbstractType
           ->add('email')
           ->add('phoneNumber', 'tel', array(
             'label' => 'Phone Number',
+            'required' => false,
             'default_region' => 'US',
             'format' => PhoneNumberFormat::NATIONAL
               ))

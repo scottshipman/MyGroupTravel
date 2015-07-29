@@ -11,8 +11,20 @@
                 <td class="mdl-data-table__cell--non-numeric">{{ entity.id }}</td>
             </tr>
             <tr>
-                <td class="mdl-data-table__cell--non-numeric th-mimic">User Parent</td>
-                <td class="mdl-data-table__cell--non-numeric">{# {{ entity.userParent }} #}</td>
+                <td class="mdl-data-table__cell--non-numeric th-mimic">UserName</td>
+                <td class="mdl-data-table__cell--non-numeric"> {{ entity.username }} </td>
+            </tr>
+            <tr>
+                <td class="mdl-data-table__cell--non-numeric th-mimic">First Name</td>
+                <td class="mdl-data-table__cell--non-numeric">{{ entity.firstName }}</td>
+            </tr>
+            <tr>
+                <td class="mdl-data-table__cell--non-numeric th-mimic">Last Name</td>
+                <td class="mdl-data-table__cell--non-numeric"> {{ entity.lastName }}</td>
+            </tr>
+            <tr>
+                <td class="mdl-data-table__cell--non-numeric th-mimic">Roles</td>
+                <td class="mdl-data-table__cell--non-numeric"> {% for role in entity.roles %} {{ role }} {% endfor %}</td>
             </tr>
             <tr>
                 <td class="mdl-data-table__cell--non-numeric th-mimic">Avatar</td>
