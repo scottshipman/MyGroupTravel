@@ -161,12 +161,20 @@ oneup_uploader:
             frontend: dropzone # or any uploader you use in the frontend
             namer: oneup_uploader.namer.uniqid
             error_handler: oneup_uploader.error_handler.noop
+            enable_progress:      true
+            enable_cancelation:   true
+            allowed_mimetypes:     []
+            storage:
+              directory: "%kernel.root_dir%/../web/static/uploads/media/gallery"
         brand:
             frontend: dropzone
             namer: oneup_uploader.namer.uniqid
             error_handler: oneup_uploader.error_handler.noop
             enable_progress:      true
             enable_cancelation:   true
+            allowed_mimetypes:     []
+            storage:
+              directory: "%kernel.root_dir%/../web/static/uploads/media/brand"
         user:
             frontend: dropzone
             namer: oneup_uploader.namer.uniqid
@@ -174,7 +182,8 @@ oneup_uploader:
             enable_progress:      true
             enable_cancelation:   true
             storage:
-              directory: "%kernel.root_dir%/../web/static/uploads/media"
+              directory: "%kernel.root_dir%/../web/static/uploads/media/user"
+            allowed_mimetypes:     []
 
 stof_doctrine_extensions:
     default_locale: "%locale%"

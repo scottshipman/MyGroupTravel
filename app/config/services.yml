@@ -26,3 +26,10 @@ services:
          class: Twig_Extensions_Extension_Intl
          tags:
              - { name: twig.extension }
+
+     tui_toolkit_mediabundle.onupload_listener:
+         class: TUI\Toolkit\MediaBundle\EventListener\UploadListener
+         tags:
+             - { name: kernel.event_listener, event: oneup_uploader.post_persist, method: onUpload }
+             - { name: kernel.event_listener, event: oneup_uploader.pre_upload, method: preUpload }
+         arguments: ['@doctrine']

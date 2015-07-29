@@ -5,8 +5,7 @@
 {% block body -%}
 
     {{ form(edit_form) }}
-
-    {#{{ render(controller('TUIToolkitUserBundle:User:createDropZoneForm')) }}#}
+    {{ render(controller('MediaBundle:Media:createDropzoneForm', {'context':'user'}))  }}
 
     <ul class="record_actions">
         <li>
