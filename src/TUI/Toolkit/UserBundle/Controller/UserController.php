@@ -287,20 +287,27 @@ class UserController extends Controller
 
       // get current user's roles and add form elements
 
-      if($this->get('security.context')->isGranted('ROLE_ADMIN')){
+      if($this->get('security.context')->isGranted('ROLE_ADMIN')) {
         $form->add('enabled', 'checkbox', array(
-          'required' => false,
+          'required' => FALSE,
         ))
           ->add('roles', 'choice', array(
-            'choices'  => array('ROLE_USER' => 'User', 'ROLE_CUSTOMER' => 'CUSTOMER', 'ROLE_BRAND'=> 'BRAND', 'ROLE_ADMIN'=>'ADMIN',),
-            'multiple' => true,
+            'choices' => array(
+              'ROLE_USER' => 'User',
+              'ROLE_CUSTOMER' => 'CUSTOMER',
+              'ROLE_BRAND' => 'BRAND',
+              'ROLE_ADMIN' => 'ADMIN',
+            ),
+            'multiple' => TRUE,
             'expanded' => TRUE,
           ));
+      }
 
         $form->add('submit', 'submit', array('label' => 'Update'));
 
         return $form;
     }
+
     /**
      * Edits an existing User entity.
      *
