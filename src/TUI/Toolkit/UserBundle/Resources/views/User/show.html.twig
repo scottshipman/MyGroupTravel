@@ -1,26 +1,26 @@
 {% extends '::base.html.twig' %}
-{% block title %}{{ entity.username }}{% endblock %}
-{% block page_title %}{{ entity.username }}{% endblock %}
+{% block title %}User '{{ entity.username }}'{% endblock %}
+{% block page_title %}User '{{ entity.username }}'{% endblock %}
 
 {% block body -%}
 
-    <table>
+    <table class="mdl-data-table mdl-js-data-table">
         <tbody>
             <tr>
-                <th>ID</th>
-                <td>{{ entity.id }}</td>
+                <td class="mdl-data-table__cell--non-numeric th-mimic">ID</td>
+                <td class="mdl-data-table__cell--non-numeric">{{ entity.id }}</td>
             </tr>
             <tr>
-                <th>Userparent</th>
-                <td>{# entity.userParent #}</td>
+                <td class="mdl-data-table__cell--non-numeric th-mimic">User Parent</td>
+                <td class="mdl-data-table__cell--non-numeric">{# {{ entity.userParent }} #}</td>
             </tr>
             <tr>
-                <th>Avatar</th>
+                <td class="mdl-data-table__cell--non-numeric th-mimic">Avatar</td>
+                <td class="mdl-data-table__cell--non-numeric center">
                 {% if entity.media %}
-                    <td>
-                        {#{% media entity.media, 'small' %}#}
-                    </td>
+                    {# {% media entity.media, 'small' %} #}
                 {% endif %}
+                </td>
             </tr>
         </tbody>
     </table>
