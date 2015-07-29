@@ -12,7 +12,7 @@
         </li>
     </ul>
 
-    {% embed "InstitutionBundle:institution:institution_tabs.html.twig" %}
+    {% embed "InstitutionBundle:Institution:institution_tabs.html.twig" %}
         {# Only show this tab if is_granted ROLE_ADMIN #}
         {% if is_granted("ROLE_ADMIN") %}
             {% block deleted_tab %}

@@ -10,7 +10,7 @@
         </li>
     </ul>
 
-    {% embed "InstitutionBundle:institution:institution_tabs.html.twig" %}
+    {% embed "InstitutionBundle:Institution:institution_tabs.html.twig" %}
         {% if is_granted("ROLE_ADMIN") %}
             {% block institution_tab %}
                 <a class="mdl-tabs__tab is-active" href="{{ path('manage_institution') }}">Current Institutions</a>
