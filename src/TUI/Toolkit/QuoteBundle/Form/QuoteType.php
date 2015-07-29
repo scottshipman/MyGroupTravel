@@ -105,7 +105,8 @@ class QuoteType extends AbstractType
                 'provider' => 'sonata.media.provider.image',
                 'context' => 'quote'
 
-            ));*/
+            ))*/
+        ;
     }
 
     /**
