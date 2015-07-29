@@ -34,7 +34,8 @@ class InstitutionType extends AbstractType
                 'provider' => 'sonata.media.provider.image',
                 'context' => 'institution'
 
-            ));*/
+            ))*/
+        ;
 
     }
     
