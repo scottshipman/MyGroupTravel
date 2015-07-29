@@ -43,6 +43,7 @@
     showPaletteOnly: true,
     showPalette: true,
     showInitial: true,
+    hideAfterPaletteSelect: true,
     palette: [
         ['rgb(121, 85, 72);', 'rgb(96, 125, 139);', 'rgb(158, 158, 158);'],
         ['rgb(255, 87, 34);', 'rgb(244, 67, 54);', 'rgb(233, 30, 99);'],
@@ -52,6 +53,12 @@
         ['rgb(205, 220, 57);', 'rgb(255, 235, 59);', 'rgb(255, 193, 7);'],
         ['rgb(255, 152, 0);'],
     ]
+  });
+  $('input.color_picker').parent().removeClass().addClass('mdl-colorfield').find('label').removeClass().addClass('mdl-label-mimic');
+
+  $('input[type="date"]').addClass('mdl-date');
+  $('.mdl-date').change( function() {
+    $(this).parent().addClass('is-dirty');
   });
 
 })(jQuery);

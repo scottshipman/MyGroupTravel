@@ -10,14 +10,15 @@ legend {
   display: block;
   width: 100%;
 }
-
+/*
 label {
-  // @include inline-block-vertical();
-  // @include font-sizer(16);
-  // padding-bottom: 0.25em;
-  // cursor: pointer;
+  @include inline-block-vertical();
+  @include font-sizer(16);
+  padding-bottom: 0.25em;
+  cursor: pointer;
 }
-
+*/
+/*
 .textinput {
   border: 1px solid $text_black;
   margin: 0;
@@ -32,7 +33,7 @@ label {
   @include font-sizer(14);
 }
 
-/* textarea,
+textarea,
 input[type="text"],
 input[type="password"],
 input[type="email"],
@@ -52,18 +53,17 @@ input[type="number"],
 input[type="tel"] {
   height: 32px;
   padding: 0 5px;
-} */
-
+}
+*/
 select {
   border: 1px solid $text_black;
   background: $bg_white;
   @include inline-block-vertical(top);
   max-width: 100%;
   height: 32px;
-  @include font-sizer(14);
   color: $text_black;
 }
-
+/*
 .select-wrap {
   margin: 0;
   border: 1px solid $text_black;
@@ -100,3 +100,4 @@ select {
   }
 
 }
+*/

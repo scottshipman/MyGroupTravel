@@ -2,21 +2,39 @@ table {
   width: 100%;
   margin: 0 0 1em;
 
+  td, th {
+
+    ul, ol {
+      font-size: 1em;
+      margin-bottom: 0;
+    }
+
+  }
+
+  th {
+    text-transform: uppercase;
+  }
+
   &.mdl-data-table {
     white-space: normal;
-  }
 
-}
+    .th-mimic {
+      position: relative;
+      vertical-align: top;
+      text-overflow: ellipsis;
+      font-weight: 700;
+      line-height: 24px;
+      letter-spacing: 0;
+      height: 48px;
+      font-size: 12px;
+      color: rgba(0,0,0,.54);
+      padding-bottom: 8px;
+    }
 
-td, th {
+    .center {
+      text-align: center;
+    }
 
-  &.mdl-data-table__cell--non-numeric.center {
-    text-align: center;
-  }
-
-  ul, ol {
-    font-size: 1em;
-    margin-bottom: 0;
   }
 
 }
@@ -35,22 +53,15 @@ td, th {
 .grid-search {
   padding: 1em;
   border: 1px solid $border_grey_l;
-  .odd {
-    padding:1em;
-    float:left;
-  }
+
+  .odd,
   .even {
-    padding:1em;
-    float:left;
+    padding: 1em;
+    float: left;
   }
-  .grid-search-action{
-    clear:both;
 
+  .grid-search-action {
+    clear: both;
   }
-}
 
-.mdl-data-table {
-  th{
-    text-transform: uppercase;
-  }
 }

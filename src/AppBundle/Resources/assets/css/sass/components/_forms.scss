@@ -5,3 +5,39 @@ form {
   }
 
 }
+
+.form-row {
+  position: relative;
+}
+
+.mdl-form-wrap {
+  position: relative;
+  @include inline-block-vertical();
+  width: 300px;
+  padding: 20px 0;
+}
+
+.mdl-colorfield,
+.mdl-selectfield {
+  position: relative;
+  font-size: 16px;
+  @include inline-block-vertical();
+  width: 300px;
+  padding: 24px 0 20px; // 24px top is different that MDL
+
+  .mdl-label-mimic {
+    position: absolute;
+    left: 0;
+    top: 4px;
+    bottom: 0;
+    right: 0;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: -1;
+  }
+
+}
+
+.mdl-select {
+  width: 100%;
+}
