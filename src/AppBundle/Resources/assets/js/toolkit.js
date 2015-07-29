@@ -56,7 +56,8 @@
   });
   $('input.color_picker').parent().removeClass().addClass('mdl-colorfield').find('label').removeClass().addClass('mdl-label-mimic');
 
-  $('input[type="date"]').addClass('mdl-date');
+  // Work on date fields
+  $('input[type="date"]').addClass('mdl-date').attr('type','text');
   $('.mdl-date').change( function() {
     $(this).parent().addClass('is-dirty');
   });
