@@ -32,3 +32,11 @@
 {% endfor %}
 
 <link rel="stylesheet" href="//storage.googleapis.com/code.getmdl.io/1.0.0/material.{{ TUIColorPrimary }}-{{ TUIColorSecondary }}.min.css">
+
+{% stylesheets filter="compass" "@AppBundle/Resources/assets/css/sass/main.scss" %}
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
+{% endstylesheets %}
+
+</head>
+
+<body class="color_primary_{{ TUIColorPrimary }} color_secondary_{{ TUIColorSecondary }} user_{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}{{ app.user.id }}{% else %}0{% endif %}">
