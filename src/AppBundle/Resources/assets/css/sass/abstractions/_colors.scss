@@ -1,79 +1,159 @@
-@mixin mdl-primary-color() {
+@mixin mdl-primary-color( $prop, $type ) {
 
   .color_primary_brown & {
-
+    #{$prop}: unquote("rgb(#{nth($palette-brown, $type)})");
   }
 
   .color_primary_blue_grey & {
-
+    #{$prop}: unquote("rgb(#{nth($palette-blue-grey, $type)})");
   }
 
   .color_primary_grey & {
-
+    #{$prop}: unquote("rgb(#{nth($palette-grey, $type)})");
   }
 
   .color_primary_deep_orange & {
-
+    #{$prop}: unquote("rgb(#{nth($palette-deep-orange, $type)})");
   }
 
   .color_primary_red & {
-
+    #{$prop}: unquote("rgb(#{nth($palette-red, $type)})");
   }
 
   .color_primary_pink & {
-
+    #{$prop}: unquote("rgb(#{nth($palette-pink, $type)})");
   }
 
   .color_primary_purple & {
-
+    #{$prop}: unquote("rgb(#{nth($palette-purple, $type)})");
   }
 
   .color_primary_deep_purple & {
-    
+    #{$prop}: unquote("rgb(#{nth($palette-deep-purple, $type)})");
   }
 
   .color_primary_indigo & {
-
+    #{$prop}: unquote("rgb(#{nth($palette-indigo, $type)})");
   }
 
   .color_primary_blue & {
-
+    #{$prop}: unquote("rgb(#{nth($palette-blue, $type)})");
   }
 
   .color_primary_light_blue & {
-
+    #{$prop}: unquote("rgb(#{nth($palette-light-blue, $type)})");
   }
 
   .color_primary_cyan & {
-
+    #{$prop}: unquote("rgb(#{nth($palette-cyan, $type)})");
   }
 
   .color_primary_teal & {
-
+    #{$prop}: unquote("rgb(#{nth($palette-teal, $type)})");
   }
 
   .color_primary_green & {
-
+    #{$prop}: unquote("rgb(#{nth($palette-green, $type)})");
   }
 
   .color_primary_light_green & {
-
+    #{$prop}: unquote("rgb(#{nth($palette-light-green, $type)})");
   }
 
   .color_primary_lime & {
-
+    #{$prop}: unquote("rgb(#{nth($palette-lime, $type)})");
   }
 
   .color_primary_yellow & {
-
+    #{$prop}: unquote("rgb(#{nth($palette-yellow, $type)})");
   }
 
   .color_primary_amber & {
-
+    #{$prop}: unquote("rgb(#{nth($palette-amber, $type)})");
   }
 
   .color_primary_orange & {
+    #{$prop}: unquote("rgb(#{nth($palette-orange, $type)})");
+  }
 
+}
+
+@mixin mdl-secondary-color( $prop, $type ) {
+
+  .color_secondary_brown & {
+    #{$prop}: unquote("rgb(#{nth($palette-brown, $type)})");
+  }
+
+  .color_secondary_blue_grey & {
+    #{$prop}: unquote("rgb(#{nth($palette-blue-grey, $type)})");
+  }
+
+  .color_secondary_grey & {
+    #{$prop}: unquote("rgb(#{nth($palette-grey, $type)})");
+  }
+
+  .color_secondary_deep_orange & {
+    #{$prop}: unquote("rgb(#{nth($palette-deep-orange, $type)})");
+  }
+
+  .color_secondary_red & {
+    #{$prop}: unquote("rgb(#{nth($palette-red, $type)})");
+  }
+
+  .color_secondary_pink & {
+    #{$prop}: unquote("rgb(#{nth($palette-pink, $type)})");
+  }
+
+  .color_secondary_purple & {
+    #{$prop}: unquote("rgb(#{nth($palette-purple, $type)})");
+  }
+
+  .color_secondary_deep_purple & {
+    #{$prop}: unquote("rgb(#{nth($palette-deep-purple, $type)})");
+  }
+
+  .color_secondary_indigo & {
+    #{$prop}: unquote("rgb(#{nth($palette-indigo, $type)})");
+  }
+
+  .color_secondary_blue & {
+    #{$prop}: unquote("rgb(#{nth($palette-blue, $type)})");
+  }
+
+  .color_secondary_light_blue & {
+    #{$prop}: unquote("rgb(#{nth($palette-light-blue, $type)})");
+  }
+
+  .color_secondary_cyan & {
+    #{$prop}: unquote("rgb(#{nth($palette-cyan, $type)})");
+  }
+
+  .color_secondary_teal & {
+    #{$prop}: unquote("rgb(#{nth($palette-teal, $type)})");
+  }
+
+  .color_secondary_green & {
+    #{$prop}: unquote("rgb(#{nth($palette-green, $type)})");
+  }
+
+  .color_secondary_light_green & {
+    #{$prop}: unquote("rgb(#{nth($palette-light-green, $type)})");
+  }
+
+  .color_secondary_lime & {
+    #{$prop}: unquote("rgb(#{nth($palette-lime, $type)})");
+  }
+
+  .color_secondary_yellow & {
+    #{$prop}: unquote("rgb(#{nth($palette-yellow, $type)})");
+  }
+
+  .color_secondary_amber & {
+    #{$prop}: unquote("rgb(#{nth($palette-amber, $type)})");
+  }
+
+  .color_secondary_orange & {
+    #{$prop}: unquote("rgb(#{nth($palette-orange, $type)})");
   }
 
 }

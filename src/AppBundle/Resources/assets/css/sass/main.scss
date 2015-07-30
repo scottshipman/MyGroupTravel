@@ -1,13 +1,14 @@
 @import "compass";
 
-@import "abstractions/_browser";
-@import "abstractions/_layout";
-@import "abstractions/_typography";
-
 @import "variables/_mdl";
 @import "variables/_colors";
 @import "variables/_layout";
 @import "variables/_typography";
+
+@import "abstractions/_browser";
+@import "abstractions/_colors";
+@import "abstractions/_layout";
+@import "abstractions/_typography";
 
 @import "base/_forms";
 @import "base/_layout";
