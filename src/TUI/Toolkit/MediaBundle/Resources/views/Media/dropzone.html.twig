@@ -17,8 +17,15 @@
                         console.log('completed dropzone');
                         console.log(file);
 //                        file.serverId = response;
-                        $("#tui_toolkit_userbundle_user_media").val(file.name);
-
+                        if ("#tui_toolkit_userbundle_user_media".length > 0) {
+                            $("#tui_toolkit_userbundle_user_media").val(file.name);
+                        }
+                        if ("#tui_toolkit_brandbundle_brand_media".length > 0) {
+                            $("#tui_toolkit_brandbundle_brand_media").val(file.name);
+                        }
+                        if ("#tui_toolkit_institutionbundle_institution_media".length > 0) {
+                            $("#tui_toolkit_institutionbundle_institution_media").val(file.name);
+                        }
                     });
 
                     this.on("error", function (file, response) {
@@ -29,23 +36,23 @@
                             this.removeFile(this.files[0]);
                         }
                     });
-                    this.on("removedfile", function (file) {
-                        console.log(file.serverId);
-                        var name = {file: file.name}
-                        $.ajax({
-                            type: 'DELETE',
-                            url: '{{ oneup_uploader_cancel(context) }}',
-                            contentType: 'application/json',
-                            data: JSON.stringify(name),
-                            dataType: 'json',
-                            success: function (e) {
-                                console.log(e);
-                            }
-                        });
-                        var _ref;
-                        return (_ref = file) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+                    {#this.on("removedfile", function (file) {#}
+                        {#console.log(file.serverId);#}
+                        {#var name = {file: file.name}#}
+                        {#$.ajax({#}
+                            {#type: 'DELETE',#}
+                            {#url: '{{ oneup_uploader_cancel(context) }}',#}
+                            {#contentType: 'application/json',#}
+                            {#data: JSON.stringify(name),#}
+                            {#dataType: 'json',#}
+                            {#success: function (e) {#}
+                                {#console.log(e);#}
+                            {#}#}
+                        {#});#}
+                        {#var _ref;#}
+                        {#return (_ref = file) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;#}
 
-                    });
+                    {#});#}
                 }
             }
         });
