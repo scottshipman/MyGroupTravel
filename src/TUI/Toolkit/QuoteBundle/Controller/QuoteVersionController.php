@@ -441,6 +441,21 @@ class QuoteVersionController extends Controller
             $form->getData()->getQuoteReference()->setSalesAgent($salesAgent);
           }
         }
+
+        //handling ajax request for SecondaryContact same as we did with organizer
+        $s_data = $form->getData()->getQuoteReference()->getSecondaryContact();
+        if(preg_match('/<+(.*?)>/',$s_data, $s_matches)) {
+          $secondEmail = $s_matches[1];
+          $secondEntities = $em->getRepository('TUIToolkitUserBundle:User')
+            ->findByEmail($secondEmail);
+          if (NULL !== $secondEntities) {
+            $secondAgent = array_shift($secondEntities);
+            $form->getData()
+              ->getQuoteReference()
+              ->setSecondaryContact($secondAgent);
+          }
+        }
+
         //Handling the request for institution a little different than we did for the other 2.
         $institutionName =  $form->getData()->getQuoteReference()->getInstitution();
         $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findByName($institutionName);
@@ -696,6 +711,21 @@ class QuoteVersionController extends Controller
               ->setSalesAgent($salesAgent);
           }
         }
+
+        //handling ajax request for SecondaryContact same as we did with organizer
+        $s_data = $editForm->getData()->getQuoteReference()->getSecondaryContact();
+        if(preg_match('/<+(.*?)>/',$s_data, $s_matches)) {
+          $secondEmail = $s_matches[1];
+          $secondEntities = $em->getRepository('TUIToolkitUserBundle:User')
+            ->findByEmail($secondEmail);
+          if (NULL !== $secondEntities) {
+            $secondAgent = array_shift($secondEntities);
+            $editForm->getData()
+              ->getQuoteReference()
+              ->setSecondaryContact($secondAgent);
+          }
+        }
+
         //Handling the request for institution a little different than we did for the other 2.
         $institutionName =$editForm->getData()->getQuoteReference()->getInstitution();
         $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findByName($institutionName);
