@@ -22,6 +22,9 @@ class Version20150730105713 extends AbstractMigration
         $this->addSql('ALTER TABLE quote ADD CONSTRAINT FK_6B71CBF4DE21469F FOREIGN KEY (secondaryContact) REFERENCES fos_user (id)');
         $this->addSql('CREATE INDEX IDX_6B71CBF4DE21469F ON quote (secondaryContact)');
         $this->addSql('ALTER TABLE institution CHANGE address2 address2 VARCHAR(255) DEFAULT NULL');
+        $this->addSql('ALTER TABLE institution CHANGE address1 address1 VARCHAR(255) DEFAULT NULL');
+        $this->addSql('ALTER TABLE institution CHANGE address1 address1 VARCHAR(255) DEFAULT NULL, CHANGE localAuthority localAuthority VARCHAR(255) DEFAULT NULL, CHANGE country country VARCHAR(255) DEFAULT NULL, CHANGE code code INT DEFAULT NULL, CHANGE type type VARCHAR(255) DEFAULT NULL, CHANGE websiteAddress websiteAddress VARCHAR(255) DEFAULT NULL');
+
     }
 
     /**
@@ -36,5 +39,8 @@ class Version20150730105713 extends AbstractMigration
         $this->addSql('DROP INDEX IDX_6B71CBF4DE21469F ON quote');
         $this->addSql('ALTER TABLE quote DROP secondaryContact');
         $this->addSql('ALTER TABLE institution CHANGE address2 address2 VARCHAR(255) NOT NULL');
+        $this->addSql('ALTER TABLE institution CHANGE address1 address1 VARCHAR(255) NOT NULL');
+        $this->addSql('ALTER TABLE institution CHANGE address1 address1 VARCHAR(255) DEFAULT \'\' NOT NULL, CHANGE localAuthority localAuthority VARCHAR(255) DEFAULT \'\' NOT NULL, CHANGE country country VARCHAR(255) DEFAULT \'\' NOT NULL, CHANGE code code INT NOT NULL, CHANGE type type VARCHAR(255) DEFAULT \'\' NOT NULL, CHANGE websiteAddress websiteAddress VARCHAR(255) DEFAULT \'\' NOT NULL');
+
     }
 }
