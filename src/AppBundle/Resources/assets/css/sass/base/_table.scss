@@ -51,12 +51,10 @@ table {
 
 /* APY data Grids Display */
 .grid-search {
-  padding: 1em;
-  border: 1px solid $border_grey_l;
+  margin-bottom: $element-bottom;
 
   .odd,
   .even {
-    padding: 1em;
     float: left;
   }
 
