@@ -62,7 +62,7 @@
                 <th>Logo</th>
                 {% if entity.media %}
                     <td class="logo">
-                        {#{% media entity.media, 'small' %}#}
+                        {{ asset(entity.media.getHashedFilename) }}
                     </td>
                 {% endif %}
             </tr>

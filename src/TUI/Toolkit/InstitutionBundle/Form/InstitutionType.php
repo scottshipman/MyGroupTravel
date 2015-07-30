@@ -52,11 +52,10 @@ class InstitutionType extends AbstractType
             ->add('websiteAddress', 'text', array(
               'required' => false,
             ))
-/*            ->add('media', 'sonata_media_type', array(
-                'provider' => 'sonata.media.provider.image',
-                'context' => 'institution'
-
-            ))*/
+            ->add('media', 'hidden', array(
+                'required' => false,
+                'data_class' => 'TUI\Toolkit\MediaBundle\Entity\Media',
+            ))
         ;
 
     }
