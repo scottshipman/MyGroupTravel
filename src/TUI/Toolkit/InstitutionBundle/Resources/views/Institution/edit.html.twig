@@ -5,8 +5,9 @@
 {% block body -%}
 
     {{ form(edit_form) }}
+    {{ render(controller('MediaBundle:Media:createDropzoneForm', {'context':'user'}))  }}
 
-        <ul class="record_actions">
+    <ul class="record_actions">
     <li>
         <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_institution') }}">
             Back to the list
