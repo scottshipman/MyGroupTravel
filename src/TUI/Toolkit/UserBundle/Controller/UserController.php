@@ -314,6 +314,7 @@ class UserController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
@@ -325,6 +326,16 @@ class UserController extends Controller
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
+
+        //handling ajax request for media
+        $media_data = $editForm->getData()->getMedia();
+        $filename = $media_data;
+        $entities = $em->getRepository('MediaBundle:Media')
+            ->findByFilename($filename);
+        if (NULL !== $entities) {
+            $media = array_shift($entities);
+            $editForm->getData()->setMedia($media);
+        }
 
         if ($editForm->isValid()) {
             $em->flush();
@@ -444,30 +455,4 @@ class UserController extends Controller
          ));
      }
 
-
-
-    public function retrieve_organizers_nameAction(Request $request)
-    {
-        $value = $request->get('term');
-
-        $em = $this->getDoctrine()->getEntityManager();
-        //retriving users
-        $organizers = $em->getRepository('TUI\Toolkit\UserBundle\Entity\User')->findByFirstName($value);
-//           ->findByFirstName($value);
-        // convert the result to array
-//        $search = array();
-//        foreach ($organizers as $organizer) {
-//            $search[] = array(
-//                'label' => $organizer -> getFirstName(),
-//                'value' => $organizer -> getId(),
-////            $search[$organizer->getId()] = $organizer->getFirstName();
-//            );
-//        }
-//
-//        $response = new Response();
-//        $response->headers->set('Content-Type', 'application/json');
-//        $response->setContent(json_encode($search));
-
-        return $organizers;
-    }
 }
