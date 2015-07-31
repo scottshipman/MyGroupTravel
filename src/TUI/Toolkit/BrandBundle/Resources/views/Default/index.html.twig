@@ -1,6 +1,6 @@
 {% if brand.media %}
     <div class="logo">
-        {#{% media brand.media, 'reference' with {'title': (brand.name), 'alt': (brand.name)} %}#}
+        <img src="{{ asset(".." ~ brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) }}" alt="{{ brand.name }}">
     </div>
 {% else %}
     {{ brand.name }}
