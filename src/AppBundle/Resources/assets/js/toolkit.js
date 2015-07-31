@@ -62,4 +62,43 @@
     $(this).parent().addClass('is-dirty');
   });
 
+  // Add New Link for Quote form - Add form element ID's to the array
+    var elements = {'#tui_toolkit_quotebundle_quoteversion_quoteReference_organizer':'organizer',
+                    '#tui_toolkit_quotebundle_quoteversion_quoteReference_institution': 'institution'};
+    $.each(elements, function(element, type){
+            if ( element.length ) {
+                //  source a button or glyph here
+                $(element).parent('div').parent('div').append('<div id= "' + type + 'add-new-link" class="add-new modal" style="display:inline;">Add New</div>');
+                // add and hide a modal dialog
+                //$(element).parent('div').parent('div').append('<div id="' + type + 'add-new-modal" class="add-new-modal" style="display:none;"><a href="http://www.google.com">Close</a>INSERT FORM HERE</div>');
+
+            }
+        });
+
+    $("#dialog").dialog({
+        autoOpen: false,
+        modal: true,
+        width: 600,
+        height: 400,
+        buttons: {
+            "Close": function() {
+                $(this).dialog("close");
+            }
+        }
+    });
+
+    $(".modal").on("click", function(e) {
+        console.log('clicked');
+        //e.preventDefault();
+        $("#dialog").html("");
+        console.log('html');
+        $("#dialog").dialog("option", "title", "Loading...").dialog("open");
+        console.log('dialog');
+        $("#dialog").load('toolkit.dev', function() {
+            console.log('load');
+        //    //$(this).dialog("option", "title", $(this).find("h2").text());
+        //    //$(this).find("h1").remove();
+        });
+    });
+
 })(jQuery);
