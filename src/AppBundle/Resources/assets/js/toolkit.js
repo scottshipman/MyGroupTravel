@@ -62,4 +62,8 @@
     $(this).parent().addClass('is-dirty');
   });
 
+  //Add Placeholder Fields to Login Form
+    $("#username").attr("placeholder", "Username");
+    $("#password").attr("placeholder", "Password");
+
 })(jQuery);
