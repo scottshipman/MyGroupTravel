@@ -13,47 +13,32 @@
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome.css">
 
     {# Google Material Design (Lite) Stuff #}
-    {{ render(controller('BrandBundle:Default:colors')) }}
     <script src="//storage.googleapis.com/code.getmdl.io/1.0.0/material.min.js"></script>
     <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet"
           href="//fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
 
-    {# HEY LOOK HERE: All this crap is required for Sonata Datepicker form field types - figure out to use with assetic
-        <script type="text/javascript" src="/bundles/sonatacore/public/vendor/moment/min/moment.min.js"></script>
-        <script type="text/javascript" src="path_to_bootstrap.min.js"></script>
-        <script type="text/javascript"  src="/bundles/sonatacore/public/vendor/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
-        <link rel="stylesheet" href="/bundles/sonatacore/public/vendor/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
-    #}
-
-    {% stylesheets filter="compass" "@AppBundle/Resources/assets/css/sass/main.scss" %}
-        <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
-    {% endstylesheets %}
-
+    {# jQuery UI CSS #}
     {% stylesheets filter="cssrewrite" '@jqueryuicss' %}
         <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
     {% endstylesheets %}
-    {# dropzone css #}
-    {% stylesheets '@AppBundle/Resources/assets/css/dropzone.css' filter='cssrewrite' %}
-    <link rel="stylesheet" href="{{ asset_url }}" />
+
+    {# Dropzone CSS #}
+    {% stylesheets filter='cssrewrite' '@AppBundle/Resources/assets/css/dropzone.css' %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
 
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
 
-    {% javascripts '@jquery'
-    '@jqueryui'
-    %}
+    {% javascripts '@jquery' '@jqueryui' %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.7.0/spectrum.min.js"></script>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.6.1/spectrum.min.css">
 
-    {{ render(controller('BrandBundle:Default:styles')) }}
+    {{ render(controller('BrandBundle:Default:colors')) }}
 
-</head>
-
-<body class="user-{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}{{ app.user.id }}{% else %}0{% endif %}">
 <div class="mdl-layout mdl-js-layout{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %} mdl-layout--fixed-drawer mdl-layout--overlay-drawer-button{% endif %}">
 
     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
@@ -112,7 +97,7 @@
             </div>
 
             <h1 class="page-title">
-              {% block page_title %}{% endblock %}
+                {% block page_title %}{% endblock %}
             </h1>
         </div>
 
@@ -124,12 +109,10 @@
 
     </main>
 
-</div>
-<!-- mdl-layout -->
+</div><!-- mdl-layout -->
 
-{% javascripts '@toolkit'
-'@AppBundle/Resources/assets/js/dropzone.js' %}
-<script type="text/javascript" src="{{ asset_url }}"></script>
+{% javascripts '@toolkit' '@AppBundle/Resources/assets/js/dropzone.js' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 
 </body>

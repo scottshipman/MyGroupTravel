@@ -12,3 +12,6 @@ $admin_page_width : 90%;
 $admin_page_width_reset : (100% / $admin_page_width) * 100%; // 111.1111%
 $admin_page_gutter: (100% - $admin_page_width) / 2; // 5%
 $admin_page_gutter_reset: ($admin_page_width_reset - 100%) / 2; // 5.5556%
+
+// Element widths and heights
+$element-bottom: 32px;
