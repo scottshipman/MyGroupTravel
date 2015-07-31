@@ -6,80 +6,82 @@
 
     <table class="mdl-data-table mdl-js-data-table">
         <tbody>
-            <tr>
-                <td class="mdl-data-table__cell--non-numeric th-mimic">Name (ID)</td>
-                <td class="mdl-data-table__cell--non-numeric">{{ entity.name }} ({{ entity.id }})</td>
-            </tr>
-            <tr>
-                <td class="mdl-data-table__cell--non-numeric th-mimic">Address 1</td>
-                <td class="mdl-data-table__cell--non-numeric">{{ entity.address1 }}</td>
-            </tr>
-            <tr>
-                <td class="mdl-data-table__cell--non-numeric th-mimic">Address 2</td>
-                <td class="mdl-data-table__cell--non-numeric">{{ entity.address2 }}</td>
-            </tr>
-            <tr>
-                <td class="mdl-data-table__cell--non-numeric th-mimic">City</td>
-                <td class="mdl-data-table__cell--non-numeric">{{ entity.city }}</td>
-            </tr>
-            <tr>
-                <td class="mdl-data-table__cell--non-numeric th-mimic">County</td>
-                <td class="mdl-data-table__cell--non-numeric">{{ entity.county }}</td>
-            </tr>
-            <tr>
-                <td class="mdl-data-table__cell--non-numeric th-mimic">State</td>
-                <td class="mdl-data-table__cell--non-numeric">{{ entity.state }}</td>
-            </tr>
-            <tr>
-                <td class="mdl-data-table__cell--non-numeric th-mimic">Postcode</td>
-                <td class="mdl-data-table__cell--non-numeric">{{ entity.postCode }}</td>
-            </tr>
-            <tr>
-                <td class="mdl-data-table__cell--non-numeric th-mimic">Local Authority</td>
-                <td class="mdl-data-table__cell--non-numeric">{{ entity.localAuthority }}</td>
-            </tr>
-            <tr>
-                <td class="mdl-data-table__cell--non-numeric th-mimic">Country</td>
-                <td class="mdl-data-table__cell--non-numeric">{{ entity.country }}</td>
-            </tr>
-            <tr>
-                <td class="mdl-data-table__cell--non-numeric th-mimic">Code</td>
-                <td class="mdl-data-table__cell--non-numeric">{{ entity.code }}</td>
-            </tr>
-            <tr>
-                <td class="mdl-data-table__cell--non-numeric th-mimic">Type</td>
-                <td class="mdl-data-table__cell--non-numeric">{{ entity.type }}</td>
-            </tr>
-            <tr>
-                <td class="mdl-data-table__cell--non-numeric th-mimic">Website</td>
-                <td class="mdl-data-table__cell--non-numeric">{{ entity.websiteAddress }}</td>
-            </tr>
-            <tr>
-                <th>Websiteaddress</th>
-                <td>{{ entity.websiteAddress }}</td>
-            </tr>
-            <tr>
-                <th>Logo</th>
-                {% if entity.media %}
-                    <td class="logo">
-                        {#{% media entity.media, 'small' %}#}
-                    </td>
-                {% endif %}
-            </tr>
+        <tr>
+            <td class="mdl-data-table__cell--non-numeric th-mimic">Name (ID)</td>
+            <td class="mdl-data-table__cell--non-numeric">{{ entity.name }} ({{ entity.id }})</td>
+        </tr>
+        <tr>
+            <td class="mdl-data-table__cell--non-numeric th-mimic">Address 1</td>
+            <td class="mdl-data-table__cell--non-numeric">{{ entity.address1 }}</td>
+        </tr>
+        <tr>
+            <td class="mdl-data-table__cell--non-numeric th-mimic">Address 2</td>
+            <td class="mdl-data-table__cell--non-numeric">{{ entity.address2 }}</td>
+        </tr>
+        <tr>
+            <td class="mdl-data-table__cell--non-numeric th-mimic">City</td>
+            <td class="mdl-data-table__cell--non-numeric">{{ entity.city }}</td>
+        </tr>
+        <tr>
+            <td class="mdl-data-table__cell--non-numeric th-mimic">County</td>
+            <td class="mdl-data-table__cell--non-numeric">{{ entity.county }}</td>
+        </tr>
+        <tr>
+            <td class="mdl-data-table__cell--non-numeric th-mimic">State</td>
+            <td class="mdl-data-table__cell--non-numeric">{{ entity.state }}</td>
+        </tr>
+        <tr>
+            <td class="mdl-data-table__cell--non-numeric th-mimic">Postcode</td>
+            <td class="mdl-data-table__cell--non-numeric">{{ entity.postCode }}</td>
+        </tr>
+        <tr>
+            <td class="mdl-data-table__cell--non-numeric th-mimic">Local Authority</td>
+            <td class="mdl-data-table__cell--non-numeric">{{ entity.localAuthority }}</td>
+        </tr>
+        <tr>
+            <td class="mdl-data-table__cell--non-numeric th-mimic">Country</td>
+            <td class="mdl-data-table__cell--non-numeric">{{ entity.country }}</td>
+        </tr>
+        <tr>
+            <td class="mdl-data-table__cell--non-numeric th-mimic">Code</td>
+            <td class="mdl-data-table__cell--non-numeric">{{ entity.code }}</td>
+        </tr>
+        <tr>
+            <td class="mdl-data-table__cell--non-numeric th-mimic">Type</td>
+            <td class="mdl-data-table__cell--non-numeric">{{ entity.type }}</td>
+        </tr>
+        <tr>
+            <td class="mdl-data-table__cell--non-numeric th-mimic">Website</td>
+            <td class="mdl-data-table__cell--non-numeric">{{ entity.websiteAddress }}</td>
+        </tr>
+        <tr>
+            <th>Websiteaddress</th>
+            <td>{{ entity.websiteAddress }}</td>
+        </tr>
+        <tr>
+            <th>Logo</th>
+            {% if entity.media %}
+                <td class="logo">
+                    <img src="{{ asset(".." ~ entity.media.getRelativePath ~ "/" ~ entity.media.getHashedFilename ) }}">
+                </td>
+            {% endif %}
+        </tr>
         </tbody>
     </table>
 
-        <ul class="record_actions">
-    <li>
-        <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_institution') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_institution_edit', { 'id': entity.id }) }}">
+    <ul class="record_actions">
+        <li>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+               href="{{ path('manage_institution') }}">
+                Back to the list
+            </a>
+        </li>
+        <li>
+            <\a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+            href="{{ path('manage_institution_edit', { 'id': entity.id }) }}">
             Edit
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+            </a>
+        </li>
+        <li>{{ form(delete_form) }}</li>
+    </ul>
 {% endblock %}

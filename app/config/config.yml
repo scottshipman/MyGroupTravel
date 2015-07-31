@@ -156,12 +156,15 @@ knp_menu:
 oneup_uploader:
     mappings:
         gallery:
-            frontend: dropzone # or any uploader you use in the frontend
+            frontend: dropzone
             namer: oneup_uploader.namer.uniqid
             error_handler: oneup_uploader.error_handler.noop
             enable_progress:      true
             enable_cancelation:   true
-            allowed_mimetypes:     []
+            allowed_mimetypes:
+             - image/jpeg
+             - image/png
+             - image/jpg
             storage:
               directory: "%kernel.root_dir%/../web/static/uploads/media/gallery"
         brand:
@@ -170,9 +173,24 @@ oneup_uploader:
             error_handler: oneup_uploader.error_handler.noop
             enable_progress:      true
             enable_cancelation:   true
-            allowed_mimetypes:     []
+            allowed_mimetypes:
+              - image/jpeg
+              - image/png
+              - image/jpg
             storage:
               directory: "%kernel.root_dir%/../web/static/uploads/media/brand"
+        institution:
+            frontend: dropzone
+            namer: oneup_uploader.namer.uniqid
+            error_handler: oneup_uploader.error_handler.noop
+            enable_progress:      true
+            enable_cancelation:   true
+            allowed_mimetypes:
+               - image/jpeg
+               - image/png
+               - image/jpg
+            storage:
+              directory: "%kernel.root_dir%/../web/static/uploads/media/institution"
         user:
             frontend: dropzone
             namer: oneup_uploader.namer.uniqid
@@ -181,7 +199,10 @@ oneup_uploader:
             enable_cancelation:   true
             storage:
               directory: "%kernel.root_dir%/../web/static/uploads/media/user"
-            allowed_mimetypes:     []
+            allowed_mimetypes:
+              - image/jpeg
+              - image/png
+              - image/jpg
 
 stof_doctrine_extensions:
     default_locale: "%locale%"

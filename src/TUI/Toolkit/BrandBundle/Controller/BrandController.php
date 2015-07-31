@@ -197,6 +197,16 @@ class BrandController extends Controller
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
+        //handling ajax request for media
+        $media_data = $editForm->getData()->getMedia();
+        $filename = $media_data;
+        $entities = $em->getRepository('MediaBundle:Media')
+            ->findByFilename($filename);
+        if (NULL !== $entities) {
+            $media = array_shift($entities);
+            $editForm->getData()->setMedia($media);
+        }
+
 
         if ($editForm->isValid()) {
             $em->flush();
@@ -255,29 +265,4 @@ class BrandController extends Controller
             ->getForm();
     }
 
-/*    public function createDropZoneFormAction(Request $request)
-    {
-        $form = $this->createFormBuilder()->getForm();
-
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-
-            // Getting sonata media manager service
-            $mediaManager = $this->container->get('sonata.media.manager.media');
-
-            // Getting sonata media object and saving media
-            $media = new Media;
-            $media->setBinaryContent($request->files->get('file'));
-            $media->setContext('brand');
-            $media->setProviderName('sonata.media.provider.image');
-            $mediaManager->save($media);
-
-
-        }
-
-        return $this->render('BrandBundle:Brand:dropzone.html.twig', array(
-            'form' => $form->createView()
-        ));
-    }*/
 }
