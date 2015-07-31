@@ -27,12 +27,11 @@
                 <td class="mdl-data-table__cell--non-numeric"> {% for role in entity.roles %} {{ role }} {% endfor %}</td>
             </tr>
             <tr>
-                <td class="mdl-data-table__cell--non-numeric th-mimic">Avatar</td>
-                <td class="mdl-data-table__cell--non-numeric center">
-                {% if entity.media %}
-                    {# {% media entity.media, 'small' %} #}
-                {% endif %}
-                </td>
+            <td class="mdl-data-table__cell--non-numeric th-mimic">Avatar</td>
+            <td class="mdl-data-table__cell--non-numeric center">
+                {#{% image '@' %}#}
+                <img src ="{{ asset("../static/uploads/media/user/" ~ entity.media.getHashedFilename ) }}" >
+            </td>
             </tr>
         </tbody>
     </table>
