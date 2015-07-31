@@ -29,7 +29,7 @@ class UploadListener extends Controller {
     $file = $event->getFile();
     $response['filename'] = $file->getFileName();
     $response['filepath'] = $file->getPath();
-    $response['relativepath'] = '/' . strstr($response['filepath'], 'web');
+    $response['relativepath'] = '/' . strstr($response['filepath'], 'static');
 
     // persist object to database
     $em = $this->doctrine->getManager();
