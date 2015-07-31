@@ -114,7 +114,7 @@
 
         <div class="content">
             <div class="inner">
-                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}{{ app.user.id }}{% else %}<h2 class="signin-form">
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}{% else %}<h2 class="signin-form">
                     Sign In</h2>{% endif %}
                 {% block body %}{% endblock %}
             </div>
