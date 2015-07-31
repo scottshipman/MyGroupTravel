@@ -36,23 +36,7 @@
                             this.removeFile(this.files[0]);
                         }
                     });
-                    {#this.on("removedfile", function (file) {#}
-                        {#console.log(file.serverId);#}
-                        {#var name = {file: file.name}#}
-                        {#$.ajax({#}
-                            {#type: 'DELETE',#}
-                            {#url: '{{ oneup_uploader_cancel(context) }}',#}
-                            {#contentType: 'application/json',#}
-                            {#data: JSON.stringify(name),#}
-                            {#dataType: 'json',#}
-                            {#success: function (e) {#}
-                                {#console.log(e);#}
-                            {#}#}
-                        {#});#}
-                        {#var _ref;#}
-                        {#return (_ref = file) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;#}
-
-                    {#});#}
+                    
                 }
             }
         });
