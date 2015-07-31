@@ -27,3 +27,21 @@
   -webkit-touch-callout: none;
   @include vendor-prefix(user-select, none);
 }
+
+@mixin move-dropzone-up() {
+  position: relative;
+  padding-bottom: 160px + 36px + 20px;
+
+  .button-row {
+    margin: 0;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+  }
+
+  ~ .dropzone {
+    margin-top: -(160px + 36px + 20px);
+    margin-bottom: 36px + 20px + 20px;
+  }
+  
+}
