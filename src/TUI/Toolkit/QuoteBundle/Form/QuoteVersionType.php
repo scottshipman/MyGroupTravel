@@ -22,6 +22,9 @@ class QuoteVersionType extends AbstractType
               'label' => 'Quote details'
           ))
             // now the versionable fields
+            ->add('welcomeMsg', 'textarea', array(
+              'label' => 'Welcome Message',
+            ))
             ->add('tripStatus','entity', array(
             'label' => 'Trip Status',
             'required' => false,
@@ -33,9 +36,6 @@ class QuoteVersionType extends AbstractType
                   ->where('ts.visible = 1')
                   ->orderBy('ts.name', 'ASC');
                 },
-              ))
-            ->add('welcomeMsg', 'textarea', array(
-                'label' => 'Welcome Message',
               ))
             ->add('boardBasis','entity', array(
             'label' => 'Board Basis',

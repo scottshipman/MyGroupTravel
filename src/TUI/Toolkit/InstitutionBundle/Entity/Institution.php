@@ -49,7 +49,7 @@ class Institution
     /**
      * @var string
      *
-     * @ORM\Column(name="address1", type="string", length=255)
+     * @ORM\Column(name="address1", type="string", length=255, nullable=true)
      * @GRID\Column(visible=false, filterable=false, export=true)
      */
     private $address1;
@@ -58,14 +58,14 @@ class Institution
      * @var string
      *
      * @ORM\Column(name="address2", type="string", length=255)
-     * @GRID\Column(visible=false, filterable=false, export=true)
+     * @GRID\Column(visible=false, filterable=false, export=true, nullable=true)
      */
     private $address2;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="city", type="string", length=255)
+     * @ORM\Column(name="city", type="string", length=255, nullable=true)
      * @GRID\Column(visible=false, filterable=false, export=true)
      */
     private $city;
@@ -73,7 +73,7 @@ class Institution
     /**
      * @var string
      *
-     * @ORM\Column(name="county", type="string", length=255)
+     * @ORM\Column(name="county", type="string", length=255, nullable=true)
      * @GRID\Column(visible=false, filterable=false, export=true)
      */
     private $county;
@@ -81,7 +81,7 @@ class Institution
     /**
      * @var string
      *
-     * @ORM\Column(name="state", type="string", length=255)
+     * @ORM\Column(name="state", type="string", length=255, nullable=true)
      * @GRID\Column(visible=false, filterable=false, export=true)
      */
     private $state;
@@ -89,7 +89,7 @@ class Institution
     /**
      * @var string
      *
-     * @ORM\Column(name="post_code", type="string", length=255)
+     * @ORM\Column(name="post_code", type="string", length=255, nullable=true)
      * @GRID\Column(visible=false, filterable=false, export=true)
      */
     private $postCode;
@@ -97,7 +97,7 @@ class Institution
     /**
      * @var string
      *
-     * @ORM\Column(name="localAuthority", type="string", length=255)
+     * @ORM\Column(name="localAuthority", type="string", length=255, nullable=true)
      * @GRID\Column(title="Local Authority", visible=true, filterable=true, operatorsVisible=false, export=true)
      */
     private $localAuthority;
@@ -105,7 +105,7 @@ class Institution
     /**
      * @var string
      *
-     * @ORM\Column(name="country", type="string", length=255)
+     * @ORM\Column(name="country", type="string", length=255, nullable=true)
      * @GRID\Column(visible=false, filterable=false, export=true)
      */
     private $country;
@@ -113,7 +113,7 @@ class Institution
     /**
      * @var integer
      *
-     * @ORM\Column(name="code", type="integer")
+     * @ORM\Column(name="code", type="integer", nullable=true)
      * @GRID\Column(title="Code", visible=true, filterable=true, operatorsVisible=false, export=true)
      */
     private $code;
@@ -121,7 +121,7 @@ class Institution
     /**
      * @var string
      *
-     * @ORM\Column(name="type", type="string", length=255)
+     * @ORM\Column(name="type", type="string", length=255, nullable=true)
      * @GRID\Column(title="Type", visible=true, filterable=true, operatorsVisible=false, export=true)
      */
     private $type;
@@ -129,7 +129,7 @@ class Institution
     /**
      * @var string
      *
-     * @ORM\Column(name="websiteAddress", type="string", length=255)
+     * @ORM\Column(name="websiteAddress", type="string", length=255, nullable=true)
      * @GRID\Column(visible=false, filterable=false, export=true)
      */
     private $websiteAddress;

@@ -99,6 +99,14 @@ class Quote
     private $salesAgent;
 
     /**
+     * @var integer
+     *
+     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\UserBundle\Entity\User", cascade={"persist"})
+     * @ORM\JoinColumn(name="secondaryContact", referencedColumnName="id")
+     */
+    private $secondaryContact;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="isTemplate", type="boolean")
@@ -356,6 +364,29 @@ class Quote
         return $this->salesAgent;
     }
 
+
+  /**
+   * Set secondaryContact
+   *
+   * @param integer $secondaryContact
+   * @return Quote
+   */
+  public function setSecondaryContact($secondaryContact)
+  {
+    $this->secondaryContact = $secondaryContact;
+
+    return $this;
+  }
+
+  /**
+   * Get secondaryContact
+   *
+   * @return integer
+   */
+  public function getSecondaryContact()
+  {
+    return $this->secondaryContact;
+  }
     /**
      * Set isTemplate
      *
