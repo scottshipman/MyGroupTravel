@@ -65,32 +65,32 @@ class Institution
     /**
      * @var string
      *
-     * @ORM\Column(name="city", type="string", length=255)
-     * @GRID\Column(visible=false, filterable=false, export=true, nullable=true)
+     * @ORM\Column(name="city", type="string", length=255, nullable=true)
+     * @GRID\Column(visible=false, filterable=false, export=true)
      */
     private $city;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="county", type="string", length=255)
-     * @GRID\Column(visible=false, filterable=false, export=true, nullable=true)
+     * @ORM\Column(name="county", type="string", length=255, nullable=true)
+     * @GRID\Column(visible=false, filterable=false, export=true)
      */
     private $county;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="state", type="string", length=255)
-     * @GRID\Column(visible=false, filterable=false, export=true, nullable=true)
+     * @ORM\Column(name="state", type="string", length=255, nullable=true)
+     * @GRID\Column(visible=false, filterable=false, export=true)
      */
     private $state;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="post_code", type="string", length=255)
-     * @GRID\Column(visible=false, filterable=false, export=true, nullable=true)
+     * @ORM\Column(name="post_code", type="string", length=255, nullable=true)
+     * @GRID\Column(visible=false, filterable=false, export=true)
      */
     private $postCode;
 
