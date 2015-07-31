@@ -2,7 +2,7 @@
 
 {% block body %}
 
-    <div class="main_login"></div>
+    <div class="main_login">
     {{ render(controller('FOSUserBundle:Security:login')) }}
         <div class="login_reset">
             <a href="{{ path('fos_user_resetting_request') }}">Forgot password ?</a>
