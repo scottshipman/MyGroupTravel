@@ -4,6 +4,20 @@ html {
 
 .main_login {
 
+  .login_reset {
+    position: absolute;
+    color: $bg_grey_d;
+    width: 100%;
+    text-align: center;
+    top: 520px;
+    z-index: 5;
+
+    a {
+      color: #A9A9AB;
+      text-decoration: none;
+    }
+  }
+
   .mdl-layout__container {
 
     .logo-sample {
@@ -28,7 +42,7 @@ html {
 
   .content {
     max-width: 436px;
-    height: 300px;
+    height: 360px;
     position: relative;
     background-color: white;
     margin: 0 auto;
