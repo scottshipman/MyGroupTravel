@@ -4,6 +4,10 @@ html {
   background: $bg_white;
 }
 
+.logo-sample {
+  display: none;
+}
+
 .content .inner,
 .header {
   padding-left: $page_gutter;
