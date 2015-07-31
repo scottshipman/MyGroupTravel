@@ -17,8 +17,9 @@
         <tr>
             <td class="mdl-data-table__cell--non-numeric th-mimic">Avatar</td>
             <td class="mdl-data-table__cell--non-numeric center">
-               {#{% image '@' %}#}
-                <img src ="{{ asset("../static/uploads/media/user/" ~ entity.media.getHashedFilename ) }}" >
+                {% if entity.media %}
+                    <img src="{{ asset(".." ~ entity.media.getRelativePath ~ "/" ~ entity.media.getHashedFilename ) }}">
+                {% endif %}
             </td>
         </tr>
         </tbody>
