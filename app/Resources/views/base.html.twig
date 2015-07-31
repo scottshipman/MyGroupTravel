@@ -27,6 +27,10 @@
     {% stylesheets filter='cssrewrite' '@AppBundle/Resources/assets/css/dropzone.css' %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
+    {# dropzone css #}
+    {% stylesheets '@AppBundle/Resources/assets/css/dropzone.css' filter='cssrewrite' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
 
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
 
@@ -99,10 +103,19 @@
             <h1 class="page-title">
                 {% block page_title %}{% endblock %}
             </h1>
+
+            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+            {% else %}
+                <div class="logo-sample">
+                    <img src="../static/samples/travelbound-logo.png"/>
+                </div>
+            {% endif %}
         </div>
 
         <div class="content">
             <div class="inner">
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}{{ app.user.id }}{% else %}<h2 class="signin-form">
+                    Sign In</h2>{% endif %}
                 {% block body %}{% endblock %}
             </div>
         </div>
