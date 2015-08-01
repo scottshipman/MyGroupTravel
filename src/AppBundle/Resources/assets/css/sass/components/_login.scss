@@ -4,6 +4,10 @@ html {
 
 .main_login {
 
+  .signin-form{
+    display: block;
+  }
+
   .login_reset {
     position: absolute;
     color: $bg_grey_d;
