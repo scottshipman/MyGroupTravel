@@ -79,7 +79,7 @@
         autoOpen: false,
         modal: true,
         width: 600,
-        height: 400,
+        height: 400
 /*        buttons: {
             "Close": function() {
                 $(this).dialog("close");
@@ -88,7 +88,6 @@
     });
 
     $(".modal").on("click", function(e) {
-        console.log(e.currentTarget.id);
         var modal_form = e.currentTarget.id;
         var parts = modal_form.split("-add");
         var form_type = parts[0].toLowerCase();
@@ -97,7 +96,6 @@
         $("#dialog").dialog("option", "title", "Loading...").dialog("open");
         $("#dialog").load('/ajax/' + form_type + '/new', function() {
         $(this).dialog("option", "title", 'Create New ' + parts[0]);
-        //    //$(this).find("h1").remove();
         });
     });
 

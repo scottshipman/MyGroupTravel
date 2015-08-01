@@ -13,6 +13,10 @@
         $('#ajax_institution_form').ajaxForm({
             success : function (response) {
                 $('#dialog').dialog( "close" );
+                // make the floating label leave the field and change to valid color
+                $('#tui_toolkit_quotebundle_quoteversion_quoteReference_institution').parent().addClass('is-dirty');
+                $('#tui_toolkit_quotebundle_quoteversion_quoteReference_institution').parent().removeClass('is-invalid');
+                // add the value to the field
                 $('#tui_toolkit_quotebundle_quoteversion_quoteReference_institution').val(response);
             }
         })
