@@ -6,6 +6,10 @@ quote_manage_quoteversion:
     resource: "@QuoteBundle/Resources/config/routing/quoteversion.yml"
     prefix:   /manage/quoteversion
 
-quote_homepage:
-    path:     /hello/{name}
-    defaults: { _controller: QuoteBundle:Default:index }
+ajax_organizer_new:
+    path:   /ajax/organizer/new
+    defaults: { _controller: "TUIToolkitUserBundle:User:ajax_organizer_create" }
+
+ajax_institution_new:
+    path:   /ajax/institution/new
+    defaults: { _controller: "InstitutionBundle:Institution:new_ajax" }

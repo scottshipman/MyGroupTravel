@@ -19,9 +19,10 @@
           href="//fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
 
     {# jQuery UI CSS #}
-    {% stylesheets filter="cssrewrite" '@jqueryuicss' %}
-        <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
+    {% stylesheets filter="cssrewrite" 'bundles/app/css/jquery-ui/jquery-ui.css' %}
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/
     {% endstylesheets %}
+    {% image '@AppBundle/Resources/public/css/jquery-ui/images/*' %}{% endimage %}
 
     {# Dropzone CSS #}
     {% stylesheets filter='cssrewrite' '@AppBundle/Resources/assets/css/dropzone.css' %}
