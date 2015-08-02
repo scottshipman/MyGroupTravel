@@ -73,5 +73,9 @@
 
     }
 
+    if ($("div").hasClass("login-message-block")){
+        $("body").addClass("main_login");
+    }
+
 
 })(jQuery);

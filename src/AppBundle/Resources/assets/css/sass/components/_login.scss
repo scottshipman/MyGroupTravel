@@ -112,5 +112,17 @@ html {
         border-radius: 3px;
       }
     }
+
+    //Invalid credentials isn't assigned a class or id
+    div:nth-child(3) > div {
+      color:red;
+      text-align: center;
+      padding-bottom: 5px;
+    }
   }
 }
+//body > div.mdl-layout__container > div > main > div.content > div > div:nth-child(3) > div {
+//  color:red;
+//  text-align: center;
+//  padding-bottom: 5px;
+//}
