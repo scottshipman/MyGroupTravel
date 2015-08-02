@@ -13,7 +13,7 @@ html {
     color: $bg_grey_d;
     width: 100%;
     text-align: center;
-    top: 520px;
+    top: 510px;
     z-index: 5;
 
     a {
@@ -46,7 +46,7 @@ html {
 
   .content {
     max-width: 436px;
-    height: 360px;
+    height: auto;
     position: relative;
     background-color: white;
     margin: 0 auto;
