@@ -98,6 +98,19 @@ html {
         margin-top: 20px;
         border-radius: 3px;
       }
+
+      input[type="submit"] {
+        width: 85%;
+        margin: 0 auto;
+        position: relative;
+        padding: 15px;
+        color: $white;
+        background-color: $lime_green;
+        border: none;
+        box-shadow: none;
+        margin-top: 20px;
+        border-radius: 3px;
+      }
     }
   }
 }
