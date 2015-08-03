@@ -1,7 +1,14 @@
 // Page layout styling
 
 html {
-  background: $bg_white;
+  background: $bg_grey_l1;
+}
+.signin-form{
+  display: none;
+}
+
+.logo-sample {
+  display: none;
 }
 
 .content .inner,
