@@ -75,14 +75,20 @@ class QuoteType extends AbstractType
                         'route_name' => 'retrieve_organizers_name',
                         'class' => 'TUI\Toolkit\UserBundle\Entity\User',
                         'data_class' => 'TUI\Toolkit\UserBundle\Entity\User',
-                        'configs' => array('minLength' => 3)
+                        'configs' => array('minLength' => 3),
+                        'attr' => array(
+                          'class' => 'suggest',
+                          ),
                     ))
 //
                     ->add('institution', 'genemu_jqueryautocomplete_entity', array(
                         'class' => 'TUI\Toolkit\InstitutionBundle\Entity\Institution',
                         'route_name' => 'retrieve_institution_name',
                         'data_class' => 'TUI\Toolkit\InstitutionBundle\Entity\Institution',
-                        'configs' => array('minLength' => 3)
+                        'configs' => array('minLength' => 3),
+                        'attr' => array(
+                          'class' => 'suggest',
+                        ),
 
                     ))
                 ;
@@ -93,7 +99,10 @@ class QuoteType extends AbstractType
 
         $builder
             ->add('name')
-            ->add('destination')
+            ->add('destination', 'genemu_jqueryautocomplete_entity', array(
+                'class' => 'TUI\Toolkit\QuoteBundle\Entity\Quote',
+                'property' => 'destination',
+            ))
             ->add('reference')
             ->add('salesAgent', 'genemu_jqueryautocomplete_entity', array(
                 'required' => true,
@@ -101,6 +110,9 @@ class QuoteType extends AbstractType
                 'route_name' => 'retrieve_salesagent_name',
                 'data_class' => 'TUI\Toolkit\UserBundle\Entity\User',
                 'label' => 'Primary Sales Agent',
+                'attr' => array(
+                  'class' => 'suggest',
+                ),
             ))
             ->add('secondaryContact', 'genemu_jqueryautocomplete_entity', array(
               'class' => 'TUI\Toolkit\UserBundle\Entity\User',
@@ -108,6 +120,9 @@ class QuoteType extends AbstractType
               'route_name' => 'retrieve_salesagent_name',
               'data_class' => 'TUI\Toolkit\UserBundle\Entity\User',
               'label' => 'Secondary Sales Agent',
+              'attr' => array(
+                'class' => 'suggest',
+              ),
               //'multiple' => true,
             ))
 /*            ->add('media', 'sonata_media_type', array(

@@ -116,4 +116,28 @@
         });
     });
 
+   /*
+    * Autocomplete Handle empty responses
+    */
+
+    var suggest = ['tui_toolkit_quotebundle_quoteversion_quoteReference_organizer',
+                   'tui_toolkit_quotebundle_quoteversion_quoteReference_institution',
+                   'tui_toolkit_quotebundle_quoteversion_quoteReference_salesAgent',
+                   'tui_toolkit_quotebundle_quoteversion_quoteReference_secondaryContact'];
+
+    $.each(suggest, function(index, formfield){
+        $('#' + formfield).autocomplete({
+            response: function( event, ui ) {
+                var label = $("label[for='"+event.target.id+"']");
+                var text = label.text().trim();
+                if (ui.content.length == 0) {
+                    alert('No suggested results  found for ' + text);
+                    $(this).val('');
+                }
+
+            }
+        });
+    })
+
+
 })(jQuery);
