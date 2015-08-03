@@ -108,6 +108,7 @@
         var parts = modal_form.split("-add");
         var form_type = parts[0].toLowerCase();
         //e.preventDefault();
+        console.log(form_type);
         $("#dialog").html("");
         $("#dialog").dialog("option", "title", "Loading...").dialog("open");
         $("#dialog").load('/ajax/' + form_type + '/new', function() {

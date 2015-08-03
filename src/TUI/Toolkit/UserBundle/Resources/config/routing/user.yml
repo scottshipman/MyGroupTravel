@@ -15,6 +15,11 @@ user_create:
     defaults: { _controller: "TUIToolkitUserBundle:User:create" }
     methods:  POST
 
+user_ajax_create:
+    path:     /ajax/create
+    defaults: { _controller: "InstitutionBundle:Institution:ajax_organizer_create" }
+    methods:  POST
+
 user_edit:
     path:     /{id}/edit
     defaults: { _controller: "TUIToolkitUserBundle:User:edit" }

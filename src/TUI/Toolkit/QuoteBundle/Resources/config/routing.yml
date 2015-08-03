@@ -8,7 +8,7 @@ quote_manage_quoteversion:
 
 ajax_organizer_new:
     path:   /ajax/organizer/new
-    defaults: { _controller: "TUIToolkitUserBundle:User:ajax_organizer_create" }
+    defaults: { _controller: "TUIToolkitUserBundle:User:new_ajax" }
 
 ajax_institution_new:
     path:   /ajax/institution/new
