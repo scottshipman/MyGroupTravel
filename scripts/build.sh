@@ -87,10 +87,13 @@ then
   cd ../../live
 fi
 
-php app/console assetic:dump --env=$application_env
-echo ""
 php app/console cache:clear --env=$application_env
 echo ""
+php app/console assets:install --env=$application_env
+echo ""
+php app/console assetic:dump --env=$application_env
+echo ""
+
 
 # @TODO: Asset Refresh from Prod (once we have prod)
 # if [ "$1" = "dev" -o "$1" = "uat" ]
