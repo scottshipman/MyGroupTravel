@@ -23,17 +23,17 @@
     {% stylesheets filter="compass" "@AppBundle/Resources/assets/css/sass/main.scss" %}
     <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
     {% endstylesheets %}
-    
-    {# jQuery UI CSS #}
-    {% stylesheets filter="cssrewrite" 'bundles/app/css/jquery-ui/jquery-ui.css' %}
-        <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/
-    {% endstylesheets %}
-    {% image '@AppBundle/Resources/public/css/jquery-ui/images/*' %}{% endimage %}
 
     {# Dropzone CSS #}
     {% stylesheets filter='cssrewrite' '@AppBundle/Resources/assets/css/dropzone.css' %}
-        <link rel="stylesheet" href="{{ asset_url }}" />
+    <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
+
+    {# jQuery UI CSS #}
+    {% stylesheets filter="cssrewrite" '../bundles/app/css/jquery-ui/jquery-ui.css' %}
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"
+    {% endstylesheets %}
+    {% image '@AppBundle/Resources/public/css/jquery-ui/images/*' %}{% endimage %}
 
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
 
