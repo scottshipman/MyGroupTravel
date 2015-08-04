@@ -108,7 +108,7 @@
 
             <div class="brand_logo">
                 {#{{ render(controller('BrandBundle:Default:index')) }}#}
-                {#<img src="../static/samples/travelbound-logo.png"/>#}
+
             </div>
 
             <h1 class="page-title">
@@ -118,7 +118,7 @@
             {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
             {% else %}
                 <div class="logo-sample">
-                    <img src="../static/samples/travelbound-logo.png"/>
+                    {{ render(controller('BrandBundle:Default:index')) }}
                 </div>
             {% endif %}
         </div>
