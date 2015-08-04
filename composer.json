@@ -41,6 +41,7 @@
         "apy/datagrid-bundle": "^2.2",
         "genemu/form-bundle": "2.2.*",
         "oneup/uploader-bundle": "^1.3"
+        "myclabs/deep-copy": "^1.3"
 
     },
     "require-dev": {
