@@ -1,0 +1,20 @@
+{% block body -%}
+{{ form(form) }}
+    {{ render(controller('MediaBundle:Media:createDropzoneForm', {'context':'user'}))  }}
+{% endblock %}
+<script>
+    // wait for the DOM to be loaded
+    $(document).ready(function() {
+        // bind form and provide a simple callback function
+        $('#ajax_organizer_form').ajaxForm({
+            success : function (response) {
+                $('#dialog').dialog( "close" );
+                // make the floating label leave the field and change to valid color
+                $('#tui_toolkit_quotebundle_quoteversion_quoteReference_organizer').parent().addClass('is-dirty');
+                $('#tui_toolkit_quotebundle_quoteversion_quoteReference_organizer').parent().removeClass('is-invalid');
+                // add the value to the field
+                $('#tui_toolkit_quotebundle_quoteversion_quoteReference_organizer').val(response);
+            }
+        })
+    });
+</script>
