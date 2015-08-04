@@ -226,3 +226,22 @@ genemu_form:
     date: ~
     autocomplete: ~
     image: ~
+
+trsteel_ckeditor:
+    class: Trsteel\CkeditorBundle\Form\Type\CkeditorType
+    transformers: ['html_purifier']
+    toolbar: ['document', 'clipboard', 'editing', '/', 'basicstyles', 'paragraph', 'links', '/', 'insert', 'styles', 'tools']
+    toolbar_groups:
+        document: ['Source','-','Save','-','Templates']
+        clipboard: ['Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo']
+        editing: ['Find','Replace','-','SelectAll']
+        basicstyles: ['Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat']
+        paragraph: ['NumberedList','BulletedList','-','Outdent','Indent','-','JustifyLeft', 'JustifyCenter','JustifyRight','JustifyBlock']
+        links: ['Link','Unlink','Anchor']
+        insert: ['Image','Flash','Table','HorizontalRule']
+        styles: ['Styles','Format']
+        tools: ['Maximize', 'ShowBlocks']
+    ui_color: '#000000'
+    startup_outline_blocks: true
+    width: 800 #Integer or %
+    height: 300 #Integer or %
