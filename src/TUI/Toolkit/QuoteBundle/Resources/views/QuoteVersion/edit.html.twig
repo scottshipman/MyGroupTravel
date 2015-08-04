@@ -1,7 +1,8 @@
 {% extends '::base.html.twig' %}
-{% block title %}Edit Quote {% if template is defined %}{{ template }} {% endif %} {{ entity.quoteReference.name }}{% endblock %}
+{% if clone is defined %}{% set title_label = 'Clone' %}{% else %} {% set title_label = 'Edit' %}{% endif %}
+{% block title %}{{ title_label }} Quote {% if template is defined %}{{ template }} {% endif %} {{ entity.quoteReference.name }}{% endblock %}
 {% block body -%}
-    <h1>Edit Quote {% if template is defined %}{{ template }} {% endif %}</h1>
+    <h1>{{ title_label }} Quote {% if template is defined %}{{ template }} {% endif %}</h1>
 
     {{ form(edit_form) }}
 
