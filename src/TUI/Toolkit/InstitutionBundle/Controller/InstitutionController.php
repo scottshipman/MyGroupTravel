@@ -3,6 +3,7 @@
 namespace TUI\Toolkit\InstitutionBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use TUI\Toolkit\InstitutionBundle\Entity\Institution;
@@ -152,6 +153,35 @@ class InstitutionController extends Controller
         ));
     }
 
+
+  /**
+   * Creates a new Institution entity.
+   *
+   */
+  public function ajax_institution_createAction(Request $request)
+  {
+    $entity = new Institution();
+    $form = $this->create_ajaxCreateForm($entity);
+    $form->handleRequest($request);
+
+    if ($form->isValid()) {
+      $em = $this->getDoctrine()->getManager();
+      $em->persist($entity);
+      $em->flush();
+
+      return new Response($entity);
+
+     // need to return an http response
+
+//      return $this->redirect($this->generateUrl('manage_institution_show', array('id' => $entity->getId())));
+    }
+
+    return $this->render('InstitutionBundle:Institution:ajax_new.html.twig', array(
+      'entity' => $entity,
+      'form' => $form->createView(),
+    ));
+  }
+
     /**
      * Creates a form to create a Institution entity.
      *
@@ -171,6 +201,29 @@ class InstitutionController extends Controller
         return $form;
     }
 
+
+  /**
+   * Creates a form to create a Institution entity.
+   *
+   * @param Institution $entity The entity
+   *
+   * @return \Symfony\Component\Form\Form The form
+   */
+  private function create_ajaxCreateForm(Institution $entity)
+  {
+    $form = $this->createForm(new InstitutionType(), $entity, array(
+      'action' => $this->generateUrl('manage_institution_ajax_create'),
+      'method' => 'POST',
+      'attr'  => array (
+          'id' => 'ajax_institution_form'
+          ),
+    ));
+
+    $form->add('submit', 'submit', array('label' => 'Create'));
+
+    return $form;
+  }
+
     /**
      * Displays a form to create a new Institution entity.
      *
@@ -185,6 +238,22 @@ class InstitutionController extends Controller
             'form' => $form->createView(),
         ));
     }
+
+
+  /**
+   * Displays a form to create a new Institution entity.
+   *
+   */
+  public function new_ajaxAction()
+  {
+    $entity = new Institution();
+    $form = $this->create_ajaxCreateForm($entity);
+
+    return $this->render('InstitutionBundle:Institution:ajax_new.html.twig', array(
+      'entity' => $entity,
+      'form' => $form->createView(),
+    ));
+  }
 
     /**
      * Finds and displays a Institution entity.

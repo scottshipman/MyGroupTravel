@@ -78,29 +78,29 @@
     //}
 
 
-    // *
-    // "Add New" Link and Dialog modal for New Quote form
-    // *
+  // *
+  // "Add New" Link and Dialog modal for New Quote form
+  // *
     $('body').append('<div id="dialog"></div>');
     var elements = {'#tui_toolkit_quotebundle_quoteversion_quoteReference_organizer':'Organizer',
-        '#tui_toolkit_quotebundle_quoteversion_quoteReference_institution': 'Institution'};
+                    '#tui_toolkit_quotebundle_quoteversion_quoteReference_institution': 'Institution'};
     $.each(elements, function(element, type){
-        if ( element.length ) {
-            //  source a button or glyph here
-            $(element).parent('div').parent('div').append('<div id= "' + type + '-add-new-link" class="add-new modal" style="display:inline;cursor:Pointer"><i class="material-icons">&#xE147;</i></div>');
-        }
-    });
+            if ( element.length ) {
+                //  source a button or glyph here
+                $(element).parent('div').parent('div').append('<div id= "' + type + '-add-new-link" class="add-new modal" style="display:inline;cursor:Pointer"><i class="material-icons">&#xE147;</i></div>');
+            }
+        });
 
     $("#dialog").dialog({
         autoOpen: false,
         modal: true,
         width: 600,
         height: 400
-        /*        buttons: {
-         "Close": function() {
-         $(this).dialog("close");
-         }
-         }*/
+/*        buttons: {
+            "Close": function() {
+                $(this).dialog("close");
+            }
+        }*/
     });
 
     $(".modal").on("click", function(e) {
@@ -112,18 +112,18 @@
         $("#dialog").html("");
         $("#dialog").dialog("option", "title", "Loading...").dialog("open");
         $("#dialog").load('/ajax/' + form_type + '/new', function() {
-            $(this).dialog("option", "title", 'Create New ' + parts[0]);
+        $(this).dialog("option", "title", 'Create New ' + parts[0]);
         });
     });
 
-    /*
-     * Autocomplete Handle empty responses
-     */
+   /*
+    * Autocomplete Handle empty responses
+    */
 
     var suggest = ['tui_toolkit_quotebundle_quoteversion_quoteReference_organizer',
-        'tui_toolkit_quotebundle_quoteversion_quoteReference_institution',
-        'tui_toolkit_quotebundle_quoteversion_quoteReference_salesAgent',
-        'tui_toolkit_quotebundle_quoteversion_quoteReference_secondaryContact'];
+                   'tui_toolkit_quotebundle_quoteversion_quoteReference_institution',
+                   'tui_toolkit_quotebundle_quoteversion_quoteReference_salesAgent',
+                   'tui_toolkit_quotebundle_quoteversion_quoteReference_secondaryContact'];
 
     $.each(suggest, function(index, formfield){
         $('#' + formfield).autocomplete({
@@ -138,7 +138,6 @@
             }
         });
     })
-
 
     $('#user_media').find('img').each(function () {
         var imgWidth = $(this).width();
