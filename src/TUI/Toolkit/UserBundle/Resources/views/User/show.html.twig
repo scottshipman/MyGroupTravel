@@ -41,8 +41,8 @@
                href="{{ path('user_edit', { 'id': entity.id }) }}">Edit
             </a></li>
         <li>{{ form(delete_form) }}</li>
-        {#<li>{{ form_row(edit_form.media) }}#}
-            {#{{ form_row(edit_form.submit) }}</li>#}
+        <li>{{ form(media_form) }}
+        </li>
     </ul>
 
 {% endblock %}
