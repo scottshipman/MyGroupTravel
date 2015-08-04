@@ -4,7 +4,7 @@
 
 {% block body -%}
 
-    <ul>
+    <ul class="record_actions">
         <li>
             <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_institution_new') }}">
                 Create a new Institution
@@ -21,6 +21,6 @@
         {% endif %}
     {% endembed %}
 
-    {{ grid_search(grid) }}
+    {{ grid_search(grid, 'AppBundle:Grid:grid.html.twig') }}
     {{ grid(grid, 'AppBundle:Grid:grid.html.twig') }}
     {% endblock %}

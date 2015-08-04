@@ -36,6 +36,10 @@ form {
     z-index: -1;
   }
 
+  label {
+    @include mdl-primary-color(color, 6);
+  }
+
 }
 
 .mdl-select {

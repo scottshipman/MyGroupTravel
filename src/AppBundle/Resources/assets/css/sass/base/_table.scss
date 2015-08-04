@@ -51,15 +51,34 @@ table {
 
 /* APY Data Grids Display */
 .grid-search {
-  margin-bottom: $element-bottom;
 
   .odd,
   .even {
     float: left;
+    margin-right: 2em;
+    margin-bottom: $element-bottom / 2;
+  }
+
+  .grid-search-fields,
+  .grid-search-action {
+    @include clear-fix();
   }
 
   .grid-search-action {
-    clear: both;
+    margin-bottom: $element-bottom;
+  }
+
+  input[type="text"],
+  input[type="password"],
+  input[type="email"],
+  input[type="number"],
+  input[type="tel"] {
+    @extend .textinput;
+  }
+
+  label {
+    @include inline-block-vertical();
+    line-height: 28px;
   }
 
 }

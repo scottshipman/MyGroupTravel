@@ -5,3 +5,7 @@
   }
 
 }
+
+form[name="tui_toolkit_brandbundle_brand"] {
+  @include move-dropzone-up();
+}
