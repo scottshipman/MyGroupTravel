@@ -29,7 +29,7 @@
     line-height: 48px;
     width: 48px;
     color: $text_white;
-    background: $bg_black;
+    @include mdl-primary-color(background-color, 6);
     text-align: center;
   }
 
@@ -57,7 +57,7 @@
     }
 
     .active a {
-      color: $color-primary;
+      @include mdl-secondary-color(color, 12);
     }
 
     span.mdl-navigation__link {

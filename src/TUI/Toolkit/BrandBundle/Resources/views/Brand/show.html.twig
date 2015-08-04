@@ -30,7 +30,7 @@
                 <td class="mdl-data-table__cell--non-numeric th-mimic">Logo</td>
                 <td class="mdl-data-table__cell--non-numeric center">
                     {% if entity.media %}
-                        {#{% media entity.media, 'small' %}#}
+                        <img src="{{ asset(".." ~ entity.media.getRelativePath ~ "/" ~ entity.media.getHashedFilename ) }}">
                     {% endif %}
                 </td>
             </tr>

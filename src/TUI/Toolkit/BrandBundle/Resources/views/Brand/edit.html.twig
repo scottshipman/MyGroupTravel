@@ -6,7 +6,7 @@
 
     {{ form(edit_form) }}
 
-    {#{{ render(controller('BrandBundle:Brand:createDropZoneForm')) }}#}
+    {{ render(controller('MediaBundle:Media:createDropzoneForm', {'context':'brand'}))  }}
 
     <ul class="record_actions">
         <li>

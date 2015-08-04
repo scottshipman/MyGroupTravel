@@ -34,6 +34,8 @@ class SuperAdmin implements FixtureInterface, ContainerAwareInterface
     $user->setPlainPassword('Zend1234!');
     $user->setEnabled(true);
     $user->setRoles(array('ROLE_SUPER_ADMIN'));
+    $user->setFirstName('SUPER');
+    $user->setLastName('ADMIN');
 
     $userManager->persist($user);
     $userManager->flush();

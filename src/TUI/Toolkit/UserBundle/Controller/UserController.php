@@ -11,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use TUI\Toolkit\UserBundle\Entity\User;
 use TUI\Toolkit\UserBundle\Form\UserType;
+use TUI\Toolkit\UserBundle\Form\AjaxuserType;
 use APY\DataGridBundle\Grid\Source\Entity;
 use APY\DataGridBundle\Grid\Export\CSVExport;
 use APY\DataGridBundle\Grid\Action\RowAction;
@@ -172,7 +173,34 @@ class UserController extends Controller
         ));
     }
 
-    /**
+  /**
+   * Creates a new User entity.
+   *
+   */
+  public function ajax_organizer_create(Request $request)
+  {
+    $entity = new User();
+    $form = $this->create_ajaxCreateForm($entity);
+    $form->handleRequest($request);
+
+    if ($form->isValid()) {
+      $em = $this->getDoctrine()->getManager();
+      $em->persist($entity);
+      $em->flush();
+
+      return new Response($entity);
+    }
+
+    return $this->render('TUIToolkitUserBundle:User:ajax_new.html.twig', array(
+      'entity' => $entity,
+      'form'   => $form->createView(),
+    ));
+  }
+
+
+
+
+  /**
      * Creates a form to create a User entity.
      *
      * @param User $entity The entity
@@ -210,7 +238,30 @@ class UserController extends Controller
         return $form;
     }
 
-    /**
+
+  /**
+   * Creates a form to create a User entity.
+   *
+   * @param User $entity The entity
+   *
+   * @return \Symfony\Component\Form\Form The form
+   */
+  private function create_ajaxCreateForm(User $entity)
+  {
+    $form = $this->createForm(new AjaxuserType(), $entity, array(
+      'action' => $this->generateUrl('user_ajax_create'),
+      'method' => 'POST',
+    ));
+
+
+    $form->add('submit', 'submit', array('label' => 'Create'));
+
+    return $form;
+  }
+
+
+
+  /**
      * Displays a form to create a new User entity.
      *
      */
@@ -225,7 +276,23 @@ class UserController extends Controller
         ));
     }
 
-    /**
+  /**
+   * Displays a form to create a new User entity.
+   *
+   */
+  public function new_ajaxAction()
+  {
+    $entity = new User();
+    $form   = $this->create_ajaxCreateForm($entity);
+
+    return $this->render('TUIToolkitUserBundle:User:ajax_new.html.twig', array(
+      'entity' => $entity,
+      'form'   => $form->createView(),
+    ));
+  }
+
+
+  /**
      * Finds and displays a User entity.
      *
      */
@@ -314,6 +381,7 @@ class UserController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
@@ -325,6 +393,16 @@ class UserController extends Controller
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
+
+        //handling ajax request for media
+        $media_data = $editForm->getData()->getMedia();
+        $filename = $media_data;
+        $entities = $em->getRepository('MediaBundle:Media')
+            ->findByFilename($filename);
+        if (NULL !== $entities) {
+            $media = array_shift($entities);
+            $editForm->getData()->setMedia($media);
+        }
 
         if ($editForm->isValid()) {
             $em->flush();
@@ -444,30 +522,4 @@ class UserController extends Controller
          ));
      }
 
-
-
-    public function retrieve_organizers_nameAction(Request $request)
-    {
-        $value = $request->get('term');
-
-        $em = $this->getDoctrine()->getEntityManager();
-        //retriving users
-        $organizers = $em->getRepository('TUI\Toolkit\UserBundle\Entity\User')->findByFirstName($value);
-//           ->findByFirstName($value);
-        // convert the result to array
-//        $search = array();
-//        foreach ($organizers as $organizer) {
-//            $search[] = array(
-//                'label' => $organizer -> getFirstName(),
-//                'value' => $organizer -> getId(),
-////            $search[$organizer->getId()] = $organizer->getFirstName();
-//            );
-//        }
-//
-//        $response = new Response();
-//        $response->headers->set('Content-Type', 'application/json');
-//        $response->setContent(json_encode($search));
-
-        return $organizers;
-    }
 }

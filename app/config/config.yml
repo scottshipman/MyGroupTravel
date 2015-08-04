@@ -48,9 +48,9 @@ twig:
 # Assetic Configuration
 assetic:
     debug:          "%kernel.debug%"
-    read_from:            '%kernel.root_dir%/../web/static'
+    read_from:            '%kernel.root_dir%/../web/static/'
     use_controller: false
-    bundles:        [BrandBundle, TUIToolkitUserBundle, QuoteBundle, InstitutionBundle, MediaBundle]
+    bundles:        [BrandBundle, TUIToolkitUserBundle, QuoteBundle, InstitutionBundle, MediaBundle, AppBundle]
     #java: /usr/bin/java
     filters:
         cssrewrite: ~
@@ -66,16 +66,17 @@ assetic:
             jquery:
                 inputs:
                     - "%kernel.root_dir%/../vendor/components/jquery/jquery.min.js"
+                    - "%kernel.root_dir%/../components/jquery/jquery.form.js"
                     # - /srv/www/Toolkit/vendor/components/jquery/jquery.min.js
             toolkit:
                 inputs:
                     - @AppBundle/Resources/assets/js/toolkit.js
             jqueryui:
                 inputs:
-                    - "%kernel.root_dir%/../components/jquery-ui/jquery-ui.js"
-            jqueryuicss:
-                inputs:
-                    - "%kernel.root_dir%/../components/jquery-ui/jquery-ui.css"
+                    - "%kernel.root_dir%/../src/AppBundle/Resources/public/js/jquery-ui/jquery-ui.js"
+#            jqueryuicss:
+#                inputs:
+#                    - "%kernel.root_dir%/../src/AppBundle/Resources/assets/jquery-ui/jquery-ui.css"
 
 
 
@@ -156,12 +157,15 @@ knp_menu:
 oneup_uploader:
     mappings:
         gallery:
-            frontend: dropzone # or any uploader you use in the frontend
+            frontend: dropzone
             namer: oneup_uploader.namer.uniqid
             error_handler: oneup_uploader.error_handler.noop
             enable_progress:      true
             enable_cancelation:   true
-            allowed_mimetypes:     []
+            allowed_mimetypes:
+             - image/jpeg
+             - image/png
+             - image/jpg
             storage:
               directory: "%kernel.root_dir%/../web/static/uploads/media/gallery"
         brand:
@@ -170,9 +174,24 @@ oneup_uploader:
             error_handler: oneup_uploader.error_handler.noop
             enable_progress:      true
             enable_cancelation:   true
-            allowed_mimetypes:     []
+            allowed_mimetypes:
+              - image/jpeg
+              - image/png
+              - image/jpg
             storage:
               directory: "%kernel.root_dir%/../web/static/uploads/media/brand"
+        institution:
+            frontend: dropzone
+            namer: oneup_uploader.namer.uniqid
+            error_handler: oneup_uploader.error_handler.noop
+            enable_progress:      true
+            enable_cancelation:   true
+            allowed_mimetypes:
+               - image/jpeg
+               - image/png
+               - image/jpg
+            storage:
+              directory: "%kernel.root_dir%/../web/static/uploads/media/institution"
         user:
             frontend: dropzone
             namer: oneup_uploader.namer.uniqid
@@ -181,7 +200,10 @@ oneup_uploader:
             enable_cancelation:   true
             storage:
               directory: "%kernel.root_dir%/../web/static/uploads/media/user"
-            allowed_mimetypes:     []
+            allowed_mimetypes:
+              - image/jpeg
+              - image/png
+              - image/jpg
 
 stof_doctrine_extensions:
     default_locale: "%locale%"

@@ -6,32 +6,34 @@
 
     <table class="mdl-data-table mdl-js-data-table">
         <tbody>
-            <tr>
-                <td class="mdl-data-table__cell--non-numeric th-mimic">ID</td>
-                <td class="mdl-data-table__cell--non-numeric">{{ entity.id }}</td>
-            </tr>
-            <tr>
-                <td class="mdl-data-table__cell--non-numeric th-mimic">User Parent</td>
-                <td class="mdl-data-table__cell--non-numeric">{# {{ entity.userParent }} #}</td>
-            </tr>
-            <tr>
-                <td class="mdl-data-table__cell--non-numeric th-mimic">Avatar</td>
-                <td class="mdl-data-table__cell--non-numeric center">
+        <tr>
+            <td class="mdl-data-table__cell--non-numeric th-mimic">ID</td>
+            <td class="mdl-data-table__cell--non-numeric">{{ entity.id }}</td>
+        </tr>
+        <tr>
+            <td class="mdl-data-table__cell--non-numeric th-mimic">User Parent</td>
+            <td class="mdl-data-table__cell--non-numeric">{# {{ entity.userParent }} #}</td>
+        </tr>
+        <tr>
+            <td class="mdl-data-table__cell--non-numeric th-mimic">Avatar</td>
+            <td class="mdl-data-table__cell--non-numeric center">
                 {% if entity.media %}
-                    {# {% media entity.media, 'small' %} #}
+                    <img src="{{ asset(".." ~ entity.media.getRelativePath ~ "/" ~ entity.media.getHashedFilename ) }}">
                 {% endif %}
-                </td>
-            </tr>
+            </td>
+        </tr>
         </tbody>
     </table>
 
     <ul class="record_actions">
         <li>
-            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('user') }}">Back to the list</a>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('user') }}">Back to
+                the list</a>
         </li>
         <li>
-            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('user_edit', { 'id': entity.id }) }}">Edit
-        </a></li>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+               href="{{ path('user_edit', { 'id': entity.id }) }}">Edit
+            </a></li>
         <li>{{ form(delete_form) }}</li>
     </ul>
 
