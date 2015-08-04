@@ -87,11 +87,11 @@ then
   cd ../../live
 fi
 
-php app/console cache:clear --env=$application_env
+sudo php app/console cache:clear --env=$application_env
 echo ""
-php app/console assets:install --env=$application_env
+sudo php app/console assets:install --env=$application_env
 echo ""
-php app/console assetic:dump --env=$application_env
+sudo php app/console assetic:dump --env=$application_env
 echo ""
 
 
