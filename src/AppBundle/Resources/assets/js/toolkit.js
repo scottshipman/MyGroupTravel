@@ -82,13 +82,10 @@
     // "Add New" Link and Dialog modal for New Quote form
     // *
     $('body').append('<div id="dialog"></div>');
-    var elements = {
-        '#tui_toolkit_quotebundle_quoteversion_quoteReference_organizer': 'Organizer',
-        '#tui_toolkit_quotebundle_quoteversion_quoteReference_institution': 'Institution',
-        '#user_media': 'User'
-    };
-    $.each(elements, function (element, type) {
-        if (element.length) {
+    var elements = {'#tui_toolkit_quotebundle_quoteversion_quoteReference_organizer':'Organizer',
+        '#tui_toolkit_quotebundle_quoteversion_quoteReference_institution': 'Institution'};
+    $.each(elements, function(element, type){
+        if ( element.length ) {
             //  source a button or glyph here
             $(element).parent('div').parent('div').append('<div id= "' + type + '-add-new-link" class="add-new modal" style="display:inline;cursor:Pointer"><i class="material-icons">&#xE147;</i></div>');
         }
@@ -106,7 +103,7 @@
          }*/
     });
 
-    $(".modal").on("click", function (e) {
+    $(".modal").on("click", function(e) {
         var modal_form = e.currentTarget.id;
         var parts = modal_form.split("-add");
         var form_type = parts[0].toLowerCase();
@@ -114,10 +111,33 @@
         console.log(form_type);
         $("#dialog").html("");
         $("#dialog").dialog("option", "title", "Loading...").dialog("open");
-        $("#dialog").load('/ajax/' + form_type + '/new', function () {
+        $("#dialog").load('/ajax/' + form_type + '/new', function() {
             $(this).dialog("option", "title", 'Create New ' + parts[0]);
         });
     });
+
+    /*
+     * Autocomplete Handle empty responses
+     */
+
+    var suggest = ['tui_toolkit_quotebundle_quoteversion_quoteReference_organizer',
+        'tui_toolkit_quotebundle_quoteversion_quoteReference_institution',
+        'tui_toolkit_quotebundle_quoteversion_quoteReference_salesAgent',
+        'tui_toolkit_quotebundle_quoteversion_quoteReference_secondaryContact'];
+
+    $.each(suggest, function(index, formfield){
+        $('#' + formfield).autocomplete({
+            response: function( event, ui ) {
+                var label = $("label[for='"+event.target.id+"']");
+                var text = label.text().trim();
+                if (ui.content.length == 0) {
+                    alert('No suggested results  found for ' + text);
+                    $(this).val('');
+                }
+
+            }
+        });
+    })
 
 
     $('#user_media').find('img').each(function () {
