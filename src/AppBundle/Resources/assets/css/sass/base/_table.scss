@@ -56,15 +56,12 @@ table {
   .even {
     float: left;
     margin-right: 2em;
+    margin-bottom: $element-bottom / 2;
   }
 
   .grid-search-fields,
   .grid-search-action {
     @include clear-fix();
-  }
-
-  .grid-search-fields {
-    margin-bottom: $element-bottom / 2;
   }
 
   .grid-search-action {
