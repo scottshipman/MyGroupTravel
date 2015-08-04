@@ -3,15 +3,27 @@
 {% block page_title %}Edit '{{ entity.username }}'{% endblock %}
 
 {% block body -%}
+    <div id="theform">
+        {{ form(edit_form) }}
+        {#{{ render(controller('MediaBundle:Media:createDropzoneForm', {'context':'user'}))  }}#}
+    </div>
+    <div id="user_dropzone">
+        {{ render(controller('MediaBundle:Media:createDropzoneForm', {'context':'user'})) }}
 
-    {{ form(edit_form) }}
-    {{ render(controller('MediaBundle:Media:createDropzoneForm', {'context':'user'}))  }}
+        <div id="user_media">
+            {% if entity.media %}
+                <img src="{{ asset(".." ~ entity.media.getRelativePath ~ "/" ~ entity.media.getHashedFilename ) }}">
+            {% endif %}
+        </div>
+    </div>
 
     <ul class="record_actions">
         <li>
-            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('user') }}">Back to the list</a>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('user') }}">Back to
+                the list</a>
         </li>
         <li>{{ form(delete_form) }}</li>
+        <li>{{ form(media_form) }}</li>
     </ul>
 
 {% endblock %}
