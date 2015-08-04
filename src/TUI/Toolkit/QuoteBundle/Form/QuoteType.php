@@ -35,7 +35,7 @@ class QuoteType extends AbstractType
             } elseif ($entity->getIsTemplate() == true) {
                 $hasTemplate = true;
             }
-            if (isset($request[3]) && $request[3] == "new" && isset($request[4]) && $request[4] == "template") {
+            if (isset($request[3]) && ($request[3] == "new" || $request[3] =='create') && isset($request[4]) && $request[4] == "template") {
                 $newTemplate = true;
             }
 
@@ -70,7 +70,14 @@ class QuoteType extends AbstractType
             if ($showAll) {
                 $form
 //
-//                    ->add('organizer', new OrganizerType())
+                    ->add('secondaryContact', 'genemu_jqueryautocomplete_entity', array(
+                        'class' => 'TUI\Toolkit\UserBundle\Entity\User',
+                        'required' => false,
+                        'route_name' => 'retrieve_salesagent_name',
+                        'data_class' => 'TUI\Toolkit\UserBundle\Entity\User',
+                        'label' => 'Secondary Sales Agent',
+                        //'multiple' => true,
+                      ))
                     ->add('organizer', 'genemu_jqueryautocomplete_entity', array(
                         'route_name' => 'retrieve_organizers_name',
                         'class' => 'TUI\Toolkit\UserBundle\Entity\User',
@@ -110,20 +117,6 @@ class QuoteType extends AbstractType
                 'route_name' => 'retrieve_salesagent_name',
                 'data_class' => 'TUI\Toolkit\UserBundle\Entity\User',
                 'label' => 'Primary Sales Agent',
-                'attr' => array(
-                  'class' => 'suggest',
-                ),
-            ))
-            ->add('secondaryContact', 'genemu_jqueryautocomplete_entity', array(
-              'class' => 'TUI\Toolkit\UserBundle\Entity\User',
-              'required' => false,
-              'route_name' => 'retrieve_salesagent_name',
-              'data_class' => 'TUI\Toolkit\UserBundle\Entity\User',
-              'label' => 'Secondary Sales Agent',
-              'attr' => array(
-                'class' => 'suggest',
-              ),
-              //'multiple' => true,
             ))
 /*            ->add('media', 'sonata_media_type', array(
                 'required' => false,
