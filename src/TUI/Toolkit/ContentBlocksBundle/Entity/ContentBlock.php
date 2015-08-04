@@ -54,7 +54,7 @@ class ContentBlock
     /**
      * @var blob
      *
-     * @ORM\Column(name="body", type="text")
+     * @ORM\Column(name="body", type="blob")
      */
     private $body;
 
