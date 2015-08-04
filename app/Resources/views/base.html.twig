@@ -86,6 +86,7 @@
 
     <main class="mdl-layout__content">
 
+        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
         <div class="header mdl-layout__header">
             <div class="flash-messages">
                 {% for flashMessage in app.session.flashbag.get('notice') %}
@@ -97,26 +98,26 @@
             </div>
 
             <div class="brand_logo">
-                {#{{ render(controller('BrandBundle:Default:index')) }}#}
-                {#<img src="../static/samples/travelbound-logo.png"/>#}
+                {{ render(controller('BrandBundle:Default:index')) }}
             </div>
 
             <h1 class="page-title">
                 {% block page_title %}{% endblock %}
             </h1>
+        </div><!-- header -->
+        {% endif %}
 
-            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-            {% else %}
-                <div class="logo-sample">
-                    <img src="../static/samples/travelbound-logo.png"/>
-                </div>
-            {% endif %}
-        </div>
+        {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+            <div class="brand_logo_login">
+                {{ render(controller('BrandBundle:Default:index')) }}
+            </div>
+        {% endif %}
 
         <div class="content">
             <div class="inner">
-                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}{% else %}<h2 class="signin-form">
-                    Sign In</h2>{% endif %}
+                {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                    <h2 class="signin-form">Sign In</h2>
+                {% endif %}
                 {% block body %}{% endblock %}
             </div>
         </div>
@@ -126,9 +127,8 @@
 </div>
 <!-- mdl-layout -->
 
-{% javascripts '@toolkit'
-'@AppBundle/Resources/assets/js/dropzone.js' %}
-<script type="text/javascript" src="{{ asset_url }}"></script>
+{% javascripts '@toolkit' '@AppBundle/Resources/assets/js/dropzone.js' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 
 </body>
