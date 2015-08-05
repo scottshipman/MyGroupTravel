@@ -112,9 +112,6 @@
 
         <div class="content">
             <div class="inner">
-                {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                    <h2 class="signin-form">Sign In</h2>
-                {% endif %}
                 {% block body %}{% endblock %}
             </div>
         </div>
