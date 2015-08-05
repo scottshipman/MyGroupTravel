@@ -36,6 +36,9 @@ class QuoteVersionController extends Controller
     {
       // hide columns from the screen display
       $hidden = array(
+        'quoteReference.id',
+        'quoteReference.institution.name',
+        'quoteReference.institution.city',
         'quoteReference.converted',
         'quoteReference.deleted',
         'quoteReference.locked',
@@ -50,21 +53,15 @@ class QuoteVersionController extends Controller
         'quoteReference.created',
         'version',
         'id',
+        'duration',
         'tripStatus.name',
         'expiryDate',
-        'signupDeadline',
         'transportType.name',
         'boardBasis.name',
         'freePlaces',
         'payingPlaces',
-        'maxPax',
-        'minPax',
         'departureDate',
         'returnDate',
-        'quoteDays',
-        'quoteNights',
-        'welcomeMsg',
-        'totalPrice',
         'pricePerson',
         'currency.name'
       );
@@ -142,6 +139,9 @@ class QuoteVersionController extends Controller
   {
     // hide columns from the screen display
     $hidden = array(
+      'quoteReference.id',
+      'quoteReference.institution.name',
+      'quoteReference.institution.city',
       'quoteReference.converted',
       'quoteReference.deleted',
       'quoteReference.locked',
@@ -156,21 +156,15 @@ class QuoteVersionController extends Controller
       'quoteReference.created',
       'version',
       'id',
+      'duration',
       'tripStatus.name',
       'expiryDate',
-      'signupDeadline',
       'transportType.name',
       'boardBasis.name',
       'freePlaces',
       'payingPlaces',
-      'maxPax',
-      'minPax',
       'departureDate',
       'returnDate',
-      'quoteDays',
-      'quoteNights',
-      'welcomeMsg',
-      'totalPrice',
       'pricePerson',
       'currency.name'
     );
@@ -238,6 +232,9 @@ class QuoteVersionController extends Controller
 
     // hide columns from the screen display
     $hidden = array(
+      'quoteReference.id',
+      'quoteReference.institution.name',
+      'quoteReference.institution.city',
       'quoteReference.converted',
       'quoteReference.deleted',
       'quoteReference.locked',
@@ -252,21 +249,15 @@ class QuoteVersionController extends Controller
       'quoteReference.created',
       'version',
       'id',
+      'duration',
       'tripStatus.name',
       'expiryDate',
-      'signupDeadline',
       'transportType.name',
       'boardBasis.name',
       'freePlaces',
       'payingPlaces',
-      'maxPax',
-      'minPax',
       'departureDate',
       'returnDate',
-      'quoteDays',
-      'quoteNights',
-      'welcomeMsg',
-      'totalPrice',
       'pricePerson',
       'currency.name'
     );
@@ -328,6 +319,9 @@ class QuoteVersionController extends Controller
   {
     // hide columns from the screen display
     $hidden = array(
+      'quoteReference.id',
+      'quoteReference.institution.name',
+      'quoteReference.institution.city',
       'quoteReference.converted',
       'quoteReference.deleted',
       'quoteReference.locked',
@@ -347,21 +341,15 @@ class QuoteVersionController extends Controller
       //'quoteReference.created',
       'version',
       'id',
+      'duration',
       'tripStatus.name',
       'expiryDate',
-      'signupDeadline',
       'transportType.name',
       'boardBasis.name',
       'freePlaces',
       'payingPlaces',
-      'maxPax',
-      'minPax',
       'departureDate',
       'returnDate',
-      'quoteDays',
-      'quoteNights',
-      'welcomeMsg',
-      'totalPrice',
       'pricePerson',
       'currency.name'
     );
@@ -492,8 +480,8 @@ class QuoteVersionController extends Controller
         }
 
         //Handling the request for institution a little different than we did for the other 2.
-        $institutionName =  $form->getData()->getQuoteReference()->getInstitution();
-        $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findByName($institutionName);
+        $institutionName =  explode(' - ', $form->getData()->getQuoteReference()->getInstitution());
+        $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findByName($institutionName[0]);
         if(null!==$institutionEntities) {
           $institution = array_shift($institutionEntities);
           $form->getData()->getQuoteReference()->setInstitution($institution);
@@ -506,10 +494,11 @@ class QuoteVersionController extends Controller
 
             return $this->redirect($this->generateUrl('manage_quote'));
         }
-
+        $date_format = $this->container->getParameter('date_format');
         return $this->render('QuoteBundle:QuoteVersion:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
+            'date_format' => $date_format,
         ));
     }
 
@@ -544,10 +533,12 @@ class QuoteVersionController extends Controller
       return $this->redirect($this->generateUrl('manage_quote_templates'));
     }
 
+    $date_format = $this->container->getParameter('date_format');
     return $this->render('QuoteBundle:QuoteVersion:new.html.twig', array(
       'entity' => $entity,
       'form'   => $form->createView(),
-      'template' => 'Template'
+      'template' => 'Template',
+      'date_format' => $date_format,
     ));
   }
 
@@ -562,11 +553,18 @@ class QuoteVersionController extends Controller
      */
     private function createCreateForm(QuoteVersion $entity)
     {
-        $form = $this->createForm(new QuoteVersionType(), $entity, array(
+        $locale = $this->container->getParameter('locale');
+        $currency_code = $this->container->getParameter('currency');
+        $em = $this->getDoctrine()->getManager();
+        $currency = $em->getRepository('CurrencyBundle:Currency')->findByCode($currency_code);
+        $currency = array_shift($currency);
+        $form = $this->createForm(new QuoteVersionType($locale), $entity, array(
             'action' => $this->generateUrl('manage_quoteversion_create'),
             'method' => 'POST',
         ));
-
+        $form->get('quoteReference')->get('salesAgent')->setData($this->get('security.token_storage')->getToken()->getUser());
+        $form->get('currency')->setdata($currency);
+        $form->get('expiryDate')->setdata(new \DateTime('now + 30 days'));
         $form->add('submit', 'submit', array('label' => 'Create'));
 
         return $form;
@@ -581,11 +579,14 @@ class QuoteVersionController extends Controller
    */
   private function createTemplateCreateForm(QuoteVersion $entity)
   {
-    $form = $this->createForm(new QuoteVersionType(), $entity, array(
+    $locale = $this->container->getParameter('locale');
+    $form = $this->createForm(new QuoteVersionType($locale), $entity, array(
       'action' => $this->generateUrl('manage_quoteversion_createtemplate'),
       'method' => 'POST',
     ));
 
+    $form->get('quoteReference')->get('salesAgent')->setData($this->get('security.token_storage')->getToken()->getUser());
+    $form->get('currency')->setdata($currency);
     $form->add('submit', 'submit', array('label' => 'Create Template'));
 
     return $form;
@@ -597,12 +598,14 @@ class QuoteVersionController extends Controller
      */
     public function newAction()
     {
+        $date_format = $this->container->getParameter('date_format');
         $entity = new QuoteVersion();
         $form   = $this->createCreateForm($entity);
 
         return $this->render('QuoteBundle:QuoteVersion:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
+            'date_format' => $date_format,
         ));
     }
 
@@ -612,13 +615,15 @@ class QuoteVersionController extends Controller
    */
   public function newTemplateAction()
   {
+    $date_format = $this->container->getParameter('date_format');
     $entity = new QuoteVersion();
     $form   = $this->createTemplateCreateForm($entity);
 
     return $this->render('QuoteBundle:QuoteVersion:new.html.twig', array(
       'entity' => $entity,
       'form'   => $form->createView(),
-      'template' => "Template"
+      'template' => "Template",
+      'date_format' => $date_format,
     ));
   }
 
@@ -673,12 +678,14 @@ class QuoteVersionController extends Controller
          } else {$template='';}
         $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($entity->getQuoteReference()->getId());
+        $date_format = $this->container->getParameter('date_format');
 
         return $this->render('QuoteBundle:QuoteVersion:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
             'template'    => $template,
+            'date_format' => $date_format,
         ));
     }
 
@@ -714,12 +721,14 @@ class QuoteVersionController extends Controller
       $template = 'Template';
     }
     $cloneForm = $this->createCloneForm($new_entity);
+    $date_format = $this->container->getParameter('date_format');
 
     return $this->render('QuoteBundle:QuoteVersion:edit.html.twig', array(
       'entity'      => $new_entity,
       'edit_form'   => $cloneForm->createView(),
       'clone'       => 'Clone',
       'template'    =>  $template,
+      'date_format' => $date_format,
     ));
   }
 
@@ -732,7 +741,8 @@ class QuoteVersionController extends Controller
     */
     private function createEditForm(QuoteVersion $entity)
     {
-        $form = $this->createForm(new QuoteVersionType(), $entity, array(
+        $locale = $this->container->getParameter('locale');
+        $form = $this->createForm(new QuoteVersionType($locale), $entity, array(
             'action' => $this->generateUrl('manage_quoteversion_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
@@ -751,7 +761,8 @@ class QuoteVersionController extends Controller
    */
   private function createCloneForm(QuoteVersion $entity)
   {
-    $form = $this->createForm(new QuoteVersionType(), $entity, array(
+    $locale = $this->container->getParameter('locale');
+    $form = $this->createForm(new QuoteVersionType($locale), $entity, array(
       'action' => $this->generateUrl('manage_quoteversion_clone'),
       'method' => 'PUT',
     ));
@@ -825,7 +836,8 @@ class QuoteVersionController extends Controller
         }
 
         //Handling the request for institution a little different than we did for the other 2.
-        $institutionName =$editForm->getData()->getQuoteReference()->getInstitution();
+      $institutionName =  explode(' - ', $editForm->getData()->getQuoteReference()->getInstitution());
+      $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findByName($institutionName[0]);
         $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findByName($institutionName);
         if(null!==$institutionEntities) {
           $institution = array_shift($institutionEntities);
@@ -855,11 +867,14 @@ class QuoteVersionController extends Controller
           return $this->redirect($this->generateUrl('manage_quote' . $route));
         }
 
+      $date_format = $this->container->getParameter('date_format');
+
         return $this->render('QuoteBundle:QuoteVersion:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
             'template'    => $template,
+            'date_format' => $date_format,
         ));
     }
 
@@ -921,7 +936,8 @@ class QuoteVersionController extends Controller
     }
 
     //Handling the request for institution a little different than we did for the other 2.
-    $institutionName =$cloneform->getData()->getQuoteReference()->getInstitution();
+    $institutionName =  explode(' - ', $cloneform->getData()->getQuoteReference()->getInstitution());
+    $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findByName($institutionName[0]);
     $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findByName($institutionName);
     if(null!==$institutionEntities) {
       $institution = array_shift($institutionEntities);
@@ -938,10 +954,12 @@ class QuoteVersionController extends Controller
       return $this->redirect($this->generateUrl('manage_quote_show', array('id' => $entity->getId())));
     }
 
+    $date_format = $this->container->getParameter('date_format');
     return $this->render('QuoteBundle:QuoteVersion:edit.html.twig', array(
       'entity'      => $entity,
       'edit_form'   => $cloneform->createView(),
       'template'    => $template,
+      'date_format' => $date_format,
     ));
   }
     /**
