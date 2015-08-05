@@ -17,7 +17,7 @@ user_create:
 
 user_ajax_create:
     path:     /ajax/create
-    defaults: { _controller: "InstitutionBundle:Institution:ajax_organizer_create" }
+    defaults: { _controller: "TUIToolkitUserBundle:User:ajax_organizer_create" }
     methods:  POST
 
 user_edit:
@@ -55,4 +55,4 @@ user_restore:
 
 parent_add_child:
   path: /add/child
-  defaults: { _controller: TUIToolkitUserBundle:User:create }
+  defaults: { _controller: "TUIToolkitUserBundle:User:create" }
