@@ -241,7 +241,7 @@ trsteel_ckeditor:
         insert: ['Image','Flash','Table','HorizontalRule']
         styles: ['Styles','Format']
         tools: ['Maximize', 'ShowBlocks']
-    ui_color: '#000000'
+    ui_color: '#ffffff'
     startup_outline_blocks: true
     width: 800 #Integer or %
     height: 300 #Integer or %
