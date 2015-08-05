@@ -52,9 +52,9 @@ class ContentBlock
     private $title;
 
     /**
-     * @var blob
+     * @var longtext
      *
-     * @ORM\Column(name="body", type="blob")
+     * @ORM\Column(name="body", type="text", length=4294967295)
      */
     private $body;
 
@@ -178,7 +178,7 @@ class ContentBlock
     /**
      * Set body
      *
-     * @param blob $body
+     * @param text $body
      * @return ContentBlock
      */
     public function setBody($body)
@@ -191,7 +191,7 @@ class ContentBlock
     /**
      * Get body
      *
-     * @return blob
+     * @return text
      */
     public function getBody()
     {
