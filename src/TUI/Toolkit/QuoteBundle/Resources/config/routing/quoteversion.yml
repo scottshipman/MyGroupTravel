@@ -29,6 +29,11 @@ manage_quoteversion_update:
     defaults: { _controller: "QuoteBundle:QuoteVersion:update" }
     methods:  [POST, PUT]
 
+manage_quoteversion_clone:
+    path:     /clone
+    defaults: { _controller: "QuoteBundle:QuoteVersion:cloneUpdate" }
+    methods:  [POST, PUT]
+
 manage_quoteversion_delete:
     path:     /{id}/delete
     defaults: { _controller: "QuoteBundle:QuoteVersion:delete" }

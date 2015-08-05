@@ -10,13 +10,15 @@ $bg_black : #000;
 $bg_white : #fff;
 
 // Border colors
-$border_grey_l : #e3e3e3;
-$border_grey_d : #3a3a3a;
+$border_grey_l : rgba(0, 0, 0, 0.12);
+$border_grey_d : rgba(0, 0, 0, 0.87);
 
 // Text colors
 $text_white : #fff;
 $text_black : #000;
 $text_grey : #c0c0c0;
+$text_grey_t1 : rgba(0, 0, 0, 0.26);
+$text_grey_t2 : rgba(0, 0, 0, 0.87);
 // $text_link_light : #8bc34a; // on light background
 // $text_link_dark : #bdff70; // on dark background
 

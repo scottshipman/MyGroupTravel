@@ -139,5 +139,31 @@
         });
     })
 
+    $('#user_media').find('img').each(function () {
+        var imgWidth = $(this).width();
+        var imgHeight = $(this).height();
+        var positionTop = $(this).position().top;
+        var positionLeft = $(this).position().left;
+        var dropzone_form = $("#dropzone_form");
+        var mediaclick = $('span#dropzone_form div.dz-default.dz-message');
+
+        dropzone_form.css({
+            width: imgWidth,
+            height: imgHeight,
+            background: "transparent",
+            //top : positionTop,
+            left: positionLeft,
+            border: "none",
+            position: "absolute"
+        });
+
+        if ($("dropzone_form").hasClass("dz-max-files-reached")) {
+            $(this).css({
+                display: "none"
+            });
+        }
+
+
+    });
 
 })(jQuery);
