@@ -19,7 +19,7 @@ class AjaxuserType extends AbstractType
 
       // todo: Add logic so you cant add any role greater than your own
         $builder
-          ->add('honorific', 'choice', array(
+/*          ->add('honorific', 'choice', array(
               'choices' => array(
                 'Mr.' => 'Mr.',
                 'Mrs.' => 'Mrs.',
@@ -27,7 +27,7 @@ class AjaxuserType extends AbstractType
                 'Miss' => 'Miss',
                 'Dr.' => 'Dr.',
                 )
-              ))
+              ))*/
           ->add('firstName', 'text', array(
             'label' => 'First Name',
               ))
@@ -41,16 +41,17 @@ class AjaxuserType extends AbstractType
             'default_region' => 'US',
             'format' => PhoneNumberFormat::NATIONAL
               ))
-            ->add('username')
-/*            ->add('plainPassword', 'repeated', array(
-                'type' => 'password',
-                'options' => array('translation_domain' => 'FOSUserBundle'),
-                'first_options' => array('label' => 'form.new_password'),
-                'second_options' => array('label' => 'form.new_password_confirmation'),
-                'invalid_message' => 'fos_user.password.mismatch',
-                'required' => false,
-              ))
-            ->add('media', 'hidden', array(
+            ->add('username', 'hidden')
+            ->add('password', 'hidden')
+              //, array(
+              //  'type' => 'password',
+              //  'options' => array('translation_domain' => 'FOSUserBundle'),
+              //  'first_options' => array('label' => 'form.new_password'),
+              //  'second_options' => array('label' => 'form.new_password_confirmation'),
+              //  'invalid_message' => 'fos_user.password.mismatch',
+              //  'required' => false,
+              //))
+            /*->add('media', 'hidden', array(
                 'required' => false,
                 'data_class' => 'TUI\Toolkit\MediaBundle\Entity\Media',
             ))*/
