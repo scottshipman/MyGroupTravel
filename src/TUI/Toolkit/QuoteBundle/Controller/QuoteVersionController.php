@@ -18,6 +18,8 @@ use DeepCopy\Matcher\PropertyTypeMatcher;
 use DeepCopy\Filter\SetNullFilter;
 use DeepCopy\Matcher\PropertyNameMatcher;
 use DeepCopy\Filter\ReplaceFilter;
+use DeepCopy\Filter\KeepFilter;
+use DeepCopy\Matcher\PropertyMatcher;
 
 /**
  * QuoteVersion controller.
@@ -93,6 +95,17 @@ class QuoteVersionController extends Controller
 
       // Add action column
       $editAction = new RowAction('Edit', 'manage_quote_edit');
+      $editAction->manipulateRender(
+        function ($action, $row)
+        { // business rule is only admins can edit locked quotes
+          if ($row->getField('quoteReference.locked') == true) {
+            if (false === $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
+              return null;
+            }
+          }
+          return $action;
+        }
+      );
       $grid->addRowAction($editAction);
       $showAction = new RowAction('View', 'manage_quote_show');
       $grid->addRowAction($showAction);
@@ -187,8 +200,6 @@ class QuoteVersionController extends Controller
     $grid->hideColumns($hidden);
 
     // Add action column
-    $editAction = new RowAction('Edit', 'manage_quote_edit');
-    $grid->addRowAction($editAction);
     $showAction = new RowAction('View', 'manage_quote_show');
     $grid->addRowAction($showAction);
     $cloneAction = new RowAction('Clone', 'manage_quote_clone');
@@ -380,6 +391,17 @@ class QuoteVersionController extends Controller
 
     // Add action column
     $editAction = new RowAction('Edit', 'manage_quote_edit');
+    $editAction->manipulateRender(
+      function ($action, $row)
+      { // business rule is only admins can edit locked quotes
+        if ($row->getField('quoteReference.locked') == true) {
+          if (false === $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
+            return null;
+          }
+        }
+        return $action;
+      }
+    );
     $grid->addRowAction($editAction);
     $cloneAction = new RowAction('Clone', 'manage_quote_clone');
     $grid->addRowAction($cloneAction);
@@ -747,12 +769,14 @@ class QuoteVersionController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
+
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find QuoteVersion entity.');
+          throw $this->createNotFoundException('Unable to find QuoteVersion entity.');
         }
 
         if($entity->getQuoteReference()->getIsTemplate()){
@@ -762,7 +786,6 @@ class QuoteVersionController extends Controller
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
-
         //handling ajax request for organizer
         $o_data = $editForm->getData()->getQuoteReference()->getOrganizer();
         if(preg_match('/<+(.*?)>/',$o_data, $o_matches)) {
@@ -810,6 +833,20 @@ class QuoteVersionController extends Controller
           $editForm->getData()->getQuoteReference()->setInstitution($institution);
         }
 
+      if($_POST['tui_toolkit_quotebundle_quoteversion']['revision']=='revision'){
+        // this is a save as new revision call so duplicate the quoteversion
+        // and then set a ts on the original, persist both
+        $new_entity = clone($entity);
+        $new_entity->setVersion($entity->getVersion() + 1);
+        $new_entity->setId(null);
+        $entity->setTs(new \DateTime());
+         $em->persist($new_entity);
+         $em->flush();
+        $this->get('session')->getFlashBag()->add('notice', 'Quote Saved: '. $new_entity->getQuoteReference()->getName());
+
+
+        return $this->redirect($this->generateUrl('manage_quote' . $route));
+      }
 
       if ($editForm->isValid()) {
             $em->flush();

@@ -236,6 +236,20 @@ class QuoteVersion
         return $this->id;
     }
 
+
+  /**
+   * Set ID
+   *
+   * @param integer $id
+   * @return QuoteVersion
+   */
+  public function setId($id)
+  {
+    $this->id = $id;
+
+    return $this;
+  }
+
     /**
      * Set boardBasis
      *

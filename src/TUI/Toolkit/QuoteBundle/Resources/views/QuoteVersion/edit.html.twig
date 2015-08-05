@@ -6,13 +6,26 @@
 
     {{ form(edit_form) }}
 
-        <ul class="record_actions">
+<ul class="record_actions">
+    <li>
+        <a id="save-revision" onclick="submitQuoteForm();" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+            Save as New Revision
+        </a>
+    </li>
     <li>
         <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quote') }}">
             Back to the list
         </a>
     </li>
     <li>{{ form(delete_form) }}</li>
+
 </ul>
     {{ form_javascript(edit_form) }}
+<script language="javascript" type="text/javascript">
+    function submitQuoteForm() {
+        var revision = document.getElementById('tui_toolkit_quotebundle_quoteversion_revision');
+        revision.value = 'revision';
+        document.tui_toolkit_quotebundle_quoteversion.submit();
+    }
+</script>
 {% endblock %}
