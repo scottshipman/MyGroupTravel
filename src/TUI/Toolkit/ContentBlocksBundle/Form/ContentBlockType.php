@@ -25,6 +25,8 @@ class ContentBlockType extends AbstractType
                 'toolbar_groups' => array(
                     'document' => array('Source')
                 ),
+                'ui_color' => '#fff',
+                'startup_outline_blocks' => false,
                 'width' => '100%',
                 'height' => '320',
             ))
