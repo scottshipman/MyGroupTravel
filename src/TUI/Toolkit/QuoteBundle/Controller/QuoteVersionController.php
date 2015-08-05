@@ -701,24 +701,23 @@ class QuoteVersionController extends Controller
 
     $deepCopy = new DeepCopy();
     $deepCopy->addFilter(new SetNullFilter(), new PropertyNameMatcher('id'));
+    $deepCopy->addFilter(new KeepFilter(), new PropertyMatcher('QuoteVersion', 'currency'));
+    $deepCopy->addFilter(new KeepFilter(), new PropertyMatcher('QuoteVersion', 'tripStatus'));
+    $deepCopy->addFilter(new KeepFilter(), new PropertyMatcher('QuoteVersion', 'transportType'));
+    $deepCopy->addFilter(new KeepFilter(), new PropertyMatcher('QuoteVersion', 'boardBasis'));
     $deepCopy->addFilter(new DoctrineCollectionFilter(), new PropertyTypeMatcher('Doctrine\Common\Collections\Collection'));
     $new_entity = $deepCopy->copy($original_entity);
+    $em->persist($new_entity);
 
     if($original_entity->getQuoteReference()->getIsTemplate()){
       $new_entity->getQuoteReference()->setIsTemplate(false);
       $template = 'Template';
     }
-/*    $em->persist($new_entity);
-    $em->flush();*/
-
-
-    $editForm = $this->createCloneForm($new_entity);
-    $deleteForm = $this->createDeleteForm($new_entity->getQuoteReference()->getId());
+    $cloneForm = $this->createCloneForm($new_entity);
 
     return $this->render('QuoteBundle:QuoteVersion:edit.html.twig', array(
       'entity'      => $new_entity,
-      'edit_form'   => $editForm->createView(),
-      'delete_form' => $deleteForm->createView(),
+      'edit_form'   => $cloneForm->createView(),
       'clone'       => 'Clone',
       'template'    =>  $template,
     ));

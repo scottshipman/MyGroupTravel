@@ -52,7 +52,7 @@ class QuoteVersion
      * @GRID\Column(field="boardBasis.name", title="Board Basis", export=true)
      *
      * @ORM\JoinColumn(name="boardBasis", referencedColumnName="id")
-     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\BoardBasisBundle\Entity\BoardBasis", cascade={"all"}, fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\BoardBasisBundle\Entity\BoardBasis", cascade="persist")
      */
     private $boardBasis;
 
@@ -179,7 +179,7 @@ class QuoteVersion
      * @var integer
      *
      * @ORM\JoinColumn(name="tripStatus", referencedColumnName="id")
-     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\TripStatusBundle\Entity\TripStatus", cascade={"all"}, fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\TripStatusBundle\Entity\TripStatus", cascade="persist")
      * @GRID\Column(field="tripStatus.name", title="Trip Status", export=true)
      */
     private $tripStatus;
@@ -188,7 +188,7 @@ class QuoteVersion
      * @var integer
      *
      * @ORM\JoinColumn(name="transportType", referencedColumnName="id")
-     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\TransportBundle\Entity\Transport", cascade={"all"}, fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\TransportBundle\Entity\Transport", cascade="persist")
      * @GRID\Column(field="transportType.name", title="Transport Type", export=true)
      */
     private $transportType;
@@ -221,7 +221,7 @@ class QuoteVersion
    * @var integer
    *
    * @ORM\JoinColumn(name="currency", referencedColumnName="id")
-   * @ORM\ManyToOne(targetEntity="TUI\Toolkit\CurrencyBundle\Entity\Currency", cascade={"all"}, fetch="EAGER")
+   * @ORM\ManyToOne(targetEntity="TUI\Toolkit\CurrencyBundle\Entity\Currency", cascade="persist")
    * @GRID\Column(field="currency.name", title="Currency", export=true)
    *
    */

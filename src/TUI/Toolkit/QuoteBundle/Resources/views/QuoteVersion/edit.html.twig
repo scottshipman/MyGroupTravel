@@ -7,17 +7,23 @@
     {{ form(edit_form) }}
 
 <ul class="record_actions">
+    {% if clone is defined %}
+        {# do nothing#}
+    {% else %}
     <li>
         <a id="save-revision" onclick="submitQuoteForm();" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
             Save as New Revision
         </a>
     </li>
+    {% endif %}
     <li>
         <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quote') }}">
             Back to the list
         </a>
     </li>
-    <li>{{ form(delete_form) }}</li>
+    {% if delete_form is defined %}
+        <li>{{ form(delete_form) }}</li>
+    {% endif %}
 
 </ul>
     {{ form_javascript(edit_form) }}
