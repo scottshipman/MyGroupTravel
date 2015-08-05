@@ -1,0 +1,17 @@
+.dropzone {
+    background: $bg_white;
+    border: 1px solid $border_grey_l;
+    min-height: 160px;
+    padding: 20px;
+    position: relative;
+
+    .dz-message {
+      margin: -10px 0 0;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 80px;
+      text-align: center;
+    }
+
+}

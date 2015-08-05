@@ -64,3 +64,8 @@ retrieve_salesagent_name:
 retrieve_institution_name:
     path:   /retrieve-institution-name
     defaults: { _controller: "QuoteBundle:Quote:retrieve_institution_name" }
+
+manage_quote_clone:
+    path:     /{id}/clone
+    defaults: { _controller: "QuoteBundle:QuoteVersion:clone" }
+    methods:  [POST, GET]

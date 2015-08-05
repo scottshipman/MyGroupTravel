@@ -30,6 +30,7 @@
 /web/fonts/
 /web/js/
 /web/static/
+/web/images/
 
 # PHPUnit
 /app/phpunit.xml

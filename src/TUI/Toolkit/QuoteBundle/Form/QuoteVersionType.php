@@ -16,15 +16,18 @@ class QuoteVersionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('revision', 'hidden', array(
+              'mapped' => false,
+            ))
             ->add('version', 'integer', array('read_only' => true, 'label' => 'Version Number'))
             // add the QuoteType form first
             ->add('quoteReference', new QuoteType(), array(
               'label' => 'Quote details'
-          ))
+              ))
             // now the versionable fields
             ->add('welcomeMsg', 'textarea', array(
               'label' => 'Welcome Message',
-            ))
+              ))
             ->add('tripStatus','entity', array(
             'label' => 'Trip Status',
             'required' => false,

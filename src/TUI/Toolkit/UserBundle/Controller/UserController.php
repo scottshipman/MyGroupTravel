@@ -4,6 +4,7 @@ namespace TUI\Toolkit\UserBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -177,11 +178,13 @@ class UserController extends Controller
    * Creates a new User entity.
    *
    */
-  public function ajax_organizer_create(Request $request)
+  public function ajax_organizer_createAction(Request $request)
   {
     $entity = new User();
     $form = $this->create_ajaxCreateForm($entity);
     $form->handleRequest($request);
+    $form->getData()->setPassword('');
+    $form->getData()->setUsername('');
 
     if ($form->isValid()) {
       $em = $this->getDoctrine()->getManager();
@@ -251,6 +254,9 @@ class UserController extends Controller
     $form = $this->createForm(new AjaxuserType(), $entity, array(
       'action' => $this->generateUrl('user_ajax_create'),
       'method' => 'POST',
+      'attr'  => array (
+        'id' => 'ajax_organizer_form'
+      ),
     ));
 
 
@@ -306,10 +312,12 @@ class UserController extends Controller
             throw $this->createNotFoundException('Unable to find User entity.');
         }
 
+        $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('TUIToolkitUserBundle:User:show.html.twig', array(
             'entity'      => $entity,
+            'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
     }
