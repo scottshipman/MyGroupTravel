@@ -21,11 +21,11 @@ class ContentBlockType extends AbstractType
             ->add('title')
             ->add('body', 'ckeditor', array(
                 'transformers' => array('html_purifier'),
-                'toolbar' => array('document','basicstyles'),
+                'toolbar' => array('document', 'editing', 'tools', 'basicstyles'),
                 'toolbar_groups' => array(
                     'document' => array('Source')
                 ),
-                'ui_color' => '#fff',
+                'ui_color' => '#ffffff',
                 'startup_outline_blocks' => false,
                 'width' => '100%',
                 'height' => '320',
