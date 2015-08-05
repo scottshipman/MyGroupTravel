@@ -10,13 +10,19 @@
     <title>{% block title %}Welcome{% endblock %} | eToolkit</title>
 
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome.css">
 
     {# Google Material Design (Lite) Stuff #}
+    {{ render(controller('BrandBundle:Default:colors')) }}
     <script src="//storage.googleapis.com/code.getmdl.io/1.0.0/material.min.js"></script>
     <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet"
           href="//fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+
+    {# Main css#}
+    {% stylesheets filter="compass" "@AppBundle/Resources/assets/css/sass/main.scss" %}
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
+    {% endstylesheets %}
 
     {# Dropzone CSS #}
     {% stylesheets filter='cssrewrite' '@AppBundle/Resources/assets/css/dropzone.css' %}
@@ -25,21 +31,25 @@
 
     {# jQuery UI CSS #}
     {% stylesheets filter="cssrewrite" 'bundles/app/css/jquery-ui/jquery-ui.css' %}
-        <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}">
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"
     {% endstylesheets %}
     {% image '@AppBundle/Resources/public/css/jquery-ui/images/*' %}{% endimage %}
 
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
 
-    {% javascripts '@jquery' '@jqueryui' %}
-        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% javascripts '@jquery'
+    '@jqueryui' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.7.0/spectrum.min.js"></script>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.6.1/spectrum.min.css">
 
-    {{ render(controller('BrandBundle:Default:colors')) }}
+    {{ render(controller('BrandBundle:Default:styles')) }}
 
+</head>
+
+<body class="user-{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}{{ app.user.id }}{% else %}0{% endif %}">
 <div class="mdl-layout mdl-js-layout{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %} mdl-layout--fixed-drawer mdl-layout--overlay-drawer-button{% endif %}">
 
     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
@@ -47,7 +57,7 @@
 
             <header class="tui-drawer-header">
                 {% if app.user.media %}
-                    <span class="tui-image-avatar"><img src="{{ asset(".." ~ app.user.media.getRelativePath ~ "/" ~ app.user.media.getHashedFilename ) }}" alt="{{ app.user.username }}"></span>
+                    {#  <span class="tui-image-avatar">{% media app.user.media, 'small' %}</span> #}
                 {% elseif app.user.firstName and app.user.lastName %}
                     <span class="tui-text-avatar mdl-typography--headline">{{ app.user.firstName[:1] }}{{ app.user.lastName[:1] }}</span>
                 {% else %}
@@ -55,6 +65,7 @@
                 {% endif %}
                 <div class="tui-avatar-dropdown">
                     <span>{{ app.user.username }}</span>
+
                     <div class="mdl-layout-spacer"></div>
                     <button id="accbtn" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
                         <i class="material-icons">arrow_drop_down</i>
@@ -64,7 +75,9 @@
                         </li>
                         <li><a class="mdl-menu__item" href="{{ path('user_edit', { 'id': app.user.id }) }}">Edit</a>
                         </li>
-                        <li><a class="mdl-menu__item" href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a></li>
+                        <li><a class="mdl-menu__item" href="{{ path('fos_user_security_logout') }}">
+                                {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+                            </a></li>
                     </ul>
                 </div>
             </header>
@@ -83,7 +96,6 @@
 
     <main class="mdl-layout__content">
 
-        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
         <div class="header mdl-layout__header">
             <div class="flash-messages">
                 {% for flashMessage in app.session.flashbag.get('notice') %}
@@ -95,26 +107,27 @@
             </div>
 
             <div class="brand_logo">
-                {{ render(controller('BrandBundle:Default:index')) }}
+                {#{{ render(controller('BrandBundle:Default:index')) }}#}
+                {#<img src="../static/samples/travelbound-logo.png"/>#}
             </div>
 
             <h1 class="page-title">
                 {% block page_title %}{% endblock %}
             </h1>
-        </div><!-- header -->
-        {% endif %}
 
-        {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-            <div class="brand_logo_login">
-                {{ render(controller('BrandBundle:Default:index')) }}
-            </div>
-        {% endif %}
+            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+            {% else %}
+                <div class="logo-sample">
+                    {{ render(controller('BrandBundle:Default:index')) }}
+                    {#<img src="{{ asset(".." ~ brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) }}" >#}
+                </div>
+            {% endif %}
+        </div>
 
         <div class="content">
             <div class="inner">
-                {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                    <h2 class="signin-form">Sign In</h2>
-                {% endif %}
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}{% else %}<h2 class="signin-form">
+                    Sign In</h2>{% endif %}
                 {% block body %}{% endblock %}
             </div>
         </div>
@@ -124,8 +137,9 @@
 </div>
 <!-- mdl-layout -->
 
-{% javascripts '@toolkit' '@AppBundle/Resources/assets/js/dropzone.js' %}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
+{% javascripts '@toolkit'
+'@AppBundle/Resources/assets/js/dropzone.js' %}
+<script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 
 </body>

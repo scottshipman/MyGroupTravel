@@ -19,9 +19,18 @@ class ContentBlockType extends AbstractType
             ->add('hidden')
             ->add('layoutType')
             ->add('title')
-            ->add('body')
+            ->add('body', 'ckeditor', array(
+                'transformers' => array('html_purifier'),
+                'toolbar' => array('document','basicstyles'),
+                'toolbar_groups' => array(
+                    'document' => array('Source')
+                ),
+                'width' => '100%',
+                'height' => '320',
+            ))
             ->add('sortOrder')
             ->add('doubleWidth')
+            ->getForm()
         ;
     }
     
