@@ -1,12 +1,7 @@
-{# do not need to extend 'base.html.twig'  because its handled via FOSUSerBundle already #}
+{# Do not need to extend 'base.html.twig' because its handled via FOSUSerBundle already #}
 
 {% block body %}
 
-    <div class="main_login">
     {{ render(controller('FOSUserBundle:Security:login')) }}
-        <div class="login_reset">
-            <a href="{{ path('fos_user_resetting_request') }}">Forgot password ?</a>
-        </div>
-    </div>
 
 {% endblock %}
