@@ -183,6 +183,8 @@ class UserController extends Controller
     $form->handleRequest($request);
 
     if ($form->isValid()) {
+      $entity->setPassword('');
+      $entity->setUsername($entity->getEmail());
       $em = $this->getDoctrine()->getManager();
       $em->persist($entity);
       $em->flush();
@@ -249,6 +251,9 @@ class UserController extends Controller
     $form = $this->createForm(new AjaxuserType(), $entity, array(
       'action' => $this->generateUrl('user_ajax_create'),
       'method' => 'POST',
+      'attr'  => array (
+        'id' => 'ajax_organizer_form'
+      ),
     ));
 
 
