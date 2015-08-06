@@ -15,6 +15,7 @@ use TUI\Toolkit\UserBundle\Entity\User;
 use TUI\Toolkit\UserBundle\Form\UserType;
 use TUI\Toolkit\UserBundle\Form\AjaxuserType;
 use TUI\Toolkit\UserBundle\Form\UserMediaType;
+use TUI\Toolkit\MediaBundle\Form\MediaType;
 use APY\DataGridBundle\Grid\Source\Entity;
 use APY\DataGridBundle\Grid\Export\CSVExport;
 use APY\DataGridBundle\Grid\Action\RowAction;
@@ -309,9 +310,6 @@ class UserController extends Controller
             throw $this->createNotFoundException('Unable to find User entity.');
         }
 
-
-
-        $mediaForm = $this->createUpdateMediaForm($entity);
         $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
 
@@ -319,7 +317,6 @@ class UserController extends Controller
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-            'media_form' => $mediaForm->createView(),
         ));
     }
 
@@ -336,7 +333,6 @@ class UserController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find User entity.');
         }
-        $mediaForm = $this->createUpdateMediaForm($entity);
         $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
 
@@ -344,7 +340,6 @@ class UserController extends Controller
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-            'media_form' => $mediaForm->createView(),
         ));
     }
 
@@ -391,7 +386,7 @@ class UserController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
-
+        $media_data = null;
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
@@ -402,20 +397,12 @@ class UserController extends Controller
 
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
-//        $editForm->handleRequest($request);
-        $mediaForm = $this->createUpdateMediaForm($entity);
         $editForm->handleRequest($request);
-        $mediaForm->handleRequest($request);
-
-        if ($mediaForm != Null) {
-            $media_data = $mediaForm->getData()->getMedia();
-        }        else {
-            //handling ajax request for media
-            $media_data = $editForm->getData()->getMedia();
+        if (Null != $editForm->getData()->getMedia()){
+          $fileId = $editForm->getData()->getMedia();
         }
-        $filename = $media_data;
         $entities = $em->getRepository('MediaBundle:Media')
-            ->findByFilename($filename);
+            ->findById($fileId);
         if (NULL !== $entities) {
             $media = array_shift($entities);
             $editForm->getData()->setMedia($media);
@@ -537,24 +524,6 @@ class UserController extends Controller
         return $this->render('TUIToolkitUserBundle:User:dropzone.html.twig', array(
             'form' => $form->createView()
         ));
-    }
-
-    /*
-     * Updates the User's media
-     *
-     */
-
-    public function createUpdateMediaForm(User $entity)
-    {
-        $form = $this->createForm(new UserMediaType(), $entity, array(
-            'action' => $this->generateUrl('user_update', array('id' => $entity->getId())),
-            'method' => 'POST',
-        ));
-
-        $form->add('submit', 'submit', array('label' => 'Update'));
-
-        return $form;
-
     }
 
 }

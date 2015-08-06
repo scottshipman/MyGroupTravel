@@ -139,7 +139,14 @@
         });
     })
 
-    $('#user_media').find('img').each(function () {
+    /**
+     * Dropzone manipulation
+     */
+    $("#dropzone_form").css({"display":"none"});
+
+    $('.media-placeholder-image').each(function () {
+        $(this).height('120px');
+        $(this).width('120px');
         var imgWidth = $(this).width();
         var imgHeight = $(this).height();
         var positionTop = $(this).position().top;
@@ -148,22 +155,39 @@
         var mediaclick = $('span#dropzone_form div.dz-default.dz-message');
 
         dropzone_form.css({
-            width: imgWidth,
-            height: imgHeight,
-            background: "transparent",
-            //top : positionTop,
-            left: positionLeft,
-            border: "none",
-            position: "absolute"
+            width: imgWidth+40,
+            height: imgHeight+40,
+            "background": "transparent",
+            border: "1 px dashed green",
+            position: "relative",
+            "border-radius": "20px"
         });
+    });
 
-        if ($("dropzone_form").hasClass("dz-max-files-reached")) {
-            $(this).css({
-                display: "none"
-            });
-        }
+    $('.media-placeholder-image').on("click", function(){
+        $('.media-placeholder-image').css({"display":"none"});
+        $("#dropzone_form").css({"display":"block"});
+    });
 
+    $('.media-placeholder-image').on("click", function(){
+        $('.media-placeholder-image').css({"display":"none"});
+        $("#dropzone_form").css({"display":"block"});
+        $("#dropzone-form-close").css({"display":"inline-block"});
+        console.log('whaaaa');
+    });
 
+    $('#avatar-label').on("click", function(){
+        $('.media-placeholder-image').css({"display":"block"});
+        $("#dropzone_form").css({"display":"none"});
+        $("#dropzone-form-close").css({"display":"none"});
+    });
+
+    //if ($("#dropzone_form").hasClass("dz-max-files-reached")) {
+    $("#dropzone_form").submit(function(){
+        console.log('dropzone submitted remove image');
+        $("img#user_media").css({
+            display: "none"
+        });
     });
 
 })(jQuery);
