@@ -30,6 +30,10 @@ class ContentBlockType extends AbstractType
                 'width' => '100%',
                 'height' => '320',
             ))
+            ->add('media', 'hidden', array(
+                'required' => false,
+//                'data_class' => 'TUI\Toolkit\MediaBundle\Entity\Media',
+            ))
             ->add('sortOrder')
             ->add('doubleWidth')
             ->getForm()
