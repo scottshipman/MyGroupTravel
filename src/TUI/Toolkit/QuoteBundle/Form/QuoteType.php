@@ -75,7 +75,7 @@ class QuoteType extends AbstractType
                         'required' => false,
                         'route_name' => 'retrieve_salesagent_name',
                         'data_class' => 'TUI\Toolkit\UserBundle\Entity\User',
-                        'label' => 'Secondary Sales Agent',
+                        'label' => 'Other Business Admin',
                         //'multiple' => true,
                       ))
                     ->add('organizer', 'genemu_jqueryautocomplete_entity', array(
@@ -105,18 +105,23 @@ class QuoteType extends AbstractType
         });
 
         $builder
-            ->add('name')
+            ->add('name', 'text', array(
+              'label' => 'Tour Name',
+            ))
             ->add('destination', 'genemu_jqueryautocomplete_entity', array(
                 'class' => 'TUI\Toolkit\QuoteBundle\Entity\Quote',
                 'property' => 'destination',
+                'label'   => 'Destination',
             ))
-            ->add('reference')
+            ->add('reference', 'text', array(
+              'label' => 'Quote Number',
+            ))
             ->add('salesAgent', 'genemu_jqueryautocomplete_entity', array(
                 'required' => true,
                 'class' => 'TUI\Toolkit\UserBundle\Entity\User',
                 'route_name' => 'retrieve_salesagent_name',
                 'data_class' => 'TUI\Toolkit\UserBundle\Entity\User',
-                'label' => 'Primary Sales Agent',
+                'label' => 'Primary Business Admin',
             ))
 /*            ->add('media', 'sonata_media_type', array(
                 'required' => false,

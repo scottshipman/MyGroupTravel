@@ -9,12 +9,30 @@ use Doctrine\ORM\EntityRepository;
 
 class QuoteVersionType extends AbstractType
 {
+
+  private $locale;
+
+  public function __construct($locale)
+  {
+    $this->locale = $locale;
+  }
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+
+        switch ($this->locale){
+          case 'en_GB.utf8':
+            $date_label = '(DD-MM-YYYY)';
+            $date_format = 'dd-MM-yyyy';
+            break;
+          default:
+            $date_label = '(MM-DD-YYYY)';
+            $date_format = 'MM-dd-yyyy';
+            break;
+        }
         $builder
             ->add('revision', 'hidden', array(
               'mapped' => false,
@@ -25,21 +43,27 @@ class QuoteVersionType extends AbstractType
               'label' => 'Quote details'
               ))
             // now the versionable fields
-            ->add('welcomeMsg', 'textarea', array(
-              'label' => 'Welcome Message',
-              ))
-            ->add('tripStatus','entity', array(
-            'label' => 'Trip Status',
-            'required' => false,
-            'placeholder' => 'Select',
-            'class' => 'TripStatusBundle:TripStatus',
-            'property' => 'name',
-            'query_builder' => function (EntityRepository $er) {
-                return $er->createQueryBuilder('ts')
-                  ->where('ts.visible = 1')
-                  ->orderBy('ts.name', 'ASC');
-                },
-              ))
+              // Expire default should be now + 30 days
+            ->add('expiryDate', 'genemu_jquerydate', array(
+              'widget' => 'single_text',
+              'required' => false,
+              'label' => 'Quote Expiration? ' .$date_label,
+              'format' => $date_format,
+            ))
+            ->add('departureDate', 'genemu_jquerydate', array(
+              'widget' => 'single_text',
+              'required' => false,
+              'label' => 'Departure Date ' .$date_label,
+            ))
+            ->add('returnDate', 'genemu_jquerydate', array(
+              'widget' => 'single_text',
+              'required' => false,
+              'label' => 'Return Date ' .$date_label,
+            ))
+            ->add('duration', 'text', array(
+              'required'  => false,
+              'label' => 'Duration',
+            ))
             ->add('boardBasis','entity', array(
             'label' => 'Board Basis',
             'required' => false,
@@ -61,33 +85,18 @@ class QuoteVersionType extends AbstractType
                     ->orderBy('t.name', 'ASC');
                     },
                 ))
-            ->add('expiryDate', 'genemu_jquerydate', array(
-                  'widget' => 'single_text',
-                  'required' => false,
-                  'label' => 'When does this quote expire?'
-                    ))
-            ->add('signupDeadline', 'genemu_jquerydate', array(
-                   'widget' => 'single_text',
-                   'required' => false,
-                   'label' => 'When is the Signup Deadline?'
-                    ))
-            ->add('freePlaces')
-            ->add('payingPlaces')
-            ->add('maxPax')
-            ->add('minPax')
-            ->add('departureDate', 'genemu_jquerydate', array(
-                  'widget' => 'single_text',
-                  'required' => false
-                  ))
-            ->add('returnDate', 'genemu_jquerydate', array(
-                  'widget' => 'single_text',
-                  'required' => false
-                  ))
-
-            ->add('quoteDays')
-            ->add('quoteNights')
-            ->add('totalPrice')
-            ->add('pricePerson')
+            ->add('freePlaces', 'integer', array(
+              'label' => 'Free Places',
+              'required'  => false,
+            ))
+            ->add('payingPlaces', 'integer', array(
+              'label' => 'Paying Places',
+              'required'  => false,
+            ))
+            ->add('pricePerson', 'integer', array(
+              'label' => 'Price per Person',
+              'required'  => false,
+            ))
             ->add('currency', 'entity', array(
                 'required' => false,
                 'placeholder' => 'Select',

@@ -11,12 +11,34 @@ use Application\Sonata\MediaBundle;
 
 class InstitutionType extends AbstractType
 {
+
+  private $locale;
+
+  public function __construct($locale)
+  {
+    $this->locale = $locale;
+  }
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+      switch ($this->locale){
+        case 'en_GB.utf8':
+          $city_label = 'Town';
+          $regional_field = 'county';
+          $zip_label = "Post code";
+          break;
+        default:
+          $city_label = 'City';
+          $regional_field = 'state';
+          $zip_label = "Zipcode";
+          break;
+      }
+
+
         $builder
             ->add('name')
             ->add('address1','text', array(
@@ -26,30 +48,17 @@ class InstitutionType extends AbstractType
               'required' => false,
             ))
             ->add('city', 'text', array(
-              'required' => false,
+              'required' => true,
+              'label' => $city_label
             ))
-            ->add('county', 'text', array(
-              'required' => false,
-            ))
-            ->add('state', 'text', array(
+            ->add($regional_field, 'text', array(
               'required' => false,
             ))
             ->add('postCode', 'text', array(
-              'required' => false,
-            ))
-            ->add('localAuthority', 'text', array(
-              'required' => false,
+              'required' => true,
+              'label' => $zip_label
             ))
             ->add('country', 'text', array(
-              'required' => false,
-            ))
-            ->add('code', 'text', array(
-              'required' => false,
-            ))
-            ->add('type', 'text', array(
-              'required' => false,
-            ))
-            ->add('websiteAddress', 'text', array(
               'required' => false,
             ))
             ->add('media', 'hidden', array(
