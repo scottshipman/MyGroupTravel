@@ -50,7 +50,7 @@ assetic:
     debug:          "%kernel.debug%"
     read_from:            '%kernel.root_dir%/../web'
     use_controller: false
-    bundles:        [BrandBundle, TUIToolkitUserBundle, QuoteBundle, InstitutionBundle, MediaBundle, AppBundle]
+    bundles:        [BrandBundle, TUIToolkitUserBundle, QuoteBundle, InstitutionBundle, MediaBundle, AppBundle, ContentBlocksBundle]
     #java: /usr/bin/java
     filters:
         cssrewrite: ~
@@ -204,6 +204,18 @@ oneup_uploader:
               - image/jpeg
               - image/png
               - image/jpg
+        contentblock:
+            frontend: dropzone
+            namer: oneup_uploader.namer.uniqid
+            error_handler: oneup_uploader.error_handler.noop
+            enable_progress:      true
+            enable_cancelation:   true
+            storage:
+              directory: "%kernel.root_dir%/../web/static/uploads/media/contentblock"
+            allowed_mimetypes:
+              - image/jpeg
+              - image/png
+              - image/jpg
 
 stof_doctrine_extensions:
     default_locale: "%locale%"
@@ -226,3 +238,22 @@ genemu_form:
     date: ~
     autocomplete: ~
     image: ~
+
+trsteel_ckeditor:
+    class: Trsteel\CkeditorBundle\Form\Type\CkeditorType
+    transformers: ['html_purifier']
+    toolbar: ['document', 'clipboard', 'editing', '/', 'basicstyles', 'paragraph', 'links', '/', 'insert', 'styles', 'tools']
+    toolbar_groups:
+        document: ['Source','-','Save','-','Templates']
+        clipboard: ['Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo']
+        editing: ['Find','Replace','-','SelectAll']
+        basicstyles: ['Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat']
+        paragraph: ['NumberedList','BulletedList','-','Outdent','Indent','-','JustifyLeft', 'JustifyCenter','JustifyRight','JustifyBlock']
+        links: ['Link','Unlink','Anchor']
+        insert: ['Image','Flash','Table','HorizontalRule']
+        styles: ['Styles','Format']
+        tools: ['Maximize', 'ShowBlocks']
+    ui_color: '#ffffff'
+    startup_outline_blocks: true
+    width: 800 #Integer or %
+    height: 300 #Integer or %

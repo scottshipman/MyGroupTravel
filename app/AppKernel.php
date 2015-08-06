@@ -26,6 +26,7 @@ class AppKernel extends Kernel
             new Webfactory\Bundle\ExceptionsBundle\WebfactoryExceptionsBundle(),
             new Genemu\Bundle\FormBundle\GenemuFormBundle(),
             new Oneup\UploaderBundle\OneupUploaderBundle(),
+            new Trsteel\CkeditorBundle\TrsteelCkeditorBundle(),
 
 
             // In Toolkit Project ( in /src directory) bundles...
