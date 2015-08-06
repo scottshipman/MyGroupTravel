@@ -29,7 +29,7 @@ class PublicSchool implements FixtureInterface, ContainerAwareInterface
     $institution = new Institution();
     $institution->setName('Public School Test School');
     $institution->setAddress1('22546 Educational Bliss Way');
-    $institution->setAdddress2('Suite 100');
+    $institution->setAddress2('Suite 100');
     $institution->setCity('Springfield');
     $institution->setCounty('Smart Township');
     $institution->setState('FL');

@@ -28,7 +28,7 @@ class CatholicSchool implements FixtureInterface, ContainerAwareInterface
     $institution = new Institution();
     $institution->setName('Sister Mary Elizabeth of the Broken Souls');
     $institution->setAddress1('21666 Christ Saves Drive');
-    $institution->setAdddress2('Floor 6');
+    $institution->setAddress2('Floor 6');
     $institution->setCity('Branson');
     $institution->setCounty('Branson');
     $institution->setState('MO');

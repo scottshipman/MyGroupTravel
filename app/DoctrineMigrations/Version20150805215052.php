@@ -20,7 +20,6 @@ class Version20150805215052 extends AbstractMigration
 
         $this->addSql('CREATE TABLE permission (id INT AUTO_INCREMENT NOT NULL, user INT DEFAULT NULL, class VARCHAR(255) NOT NULL, object INT NOT NULL, grants VARCHAR(255) NOT NULL, INDEX IDX_E04992AA8D93D649 (user), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('ALTER TABLE permission ADD CONSTRAINT FK_E04992AA8D93D649 FOREIGN KEY (user) REFERENCES fos_user (id)');
-        $this->addSql('CREATE INDEX IDX_E04992AA8D93D649 ON permission (user)');
     }
 
     /**
