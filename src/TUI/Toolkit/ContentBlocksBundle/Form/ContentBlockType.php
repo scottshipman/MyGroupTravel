@@ -19,9 +19,24 @@ class ContentBlockType extends AbstractType
             ->add('hidden')
             ->add('layoutType')
             ->add('title')
-            ->add('body')
+            ->add('body', 'ckeditor', array(
+                'transformers' => array('html_purifier'),
+                'toolbar' => array('document', 'editing', 'tools', 'basicstyles'),
+                'toolbar_groups' => array(
+                    'document' => array('Source')
+                ),
+                'ui_color' => '#ffffff',
+                'startup_outline_blocks' => false,
+                'width' => '100%',
+                'height' => '320',
+            ))
+            ->add('media', 'hidden', array(
+                'required' => false,
+//                'data_class' => 'TUI\Toolkit\MediaBundle\Entity\Media',
+            ))
             ->add('sortOrder')
             ->add('doubleWidth')
+            ->getForm()
         ;
     }
     

@@ -26,6 +26,9 @@
                         if ("#tui_toolkit_institutionbundle_institution_media".length > 0) {
                             $("#tui_toolkit_institutionbundle_institution_media").val(file.name);
                         }
+                        if ("#tui_toolkit_contentblocksbundle_contentblock_media".length > 0) {
+                            $("#tui_toolkit_contentblocksbundle_contentblock_media").val(file.name);
+                        }
                     });
 
                     this.on("error", function (file, response) {
@@ -37,20 +40,20 @@
                         }
                     });
                     {#this.on("removedfile", function (file) {#}
-                        {#console.log(file.serverId);#}
-                        {#var name = {file: file.name}#}
-                        {#$.ajax({#}
-                            {#type: 'DELETE',#}
-                            {#url: '{{ oneup_uploader_cancel(context) }}',#}
-                            {#contentType: 'application/json',#}
-                            {#data: JSON.stringify(name),#}
-                            {#dataType: 'json',#}
-                            {#success: function (e) {#}
-                                {#console.log(e);#}
-                            {#}#}
-                        {#});#}
-                        {#var _ref;#}
-                        {#return (_ref = file) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;#}
+                    {#console.log(file.serverId);#}
+                    {#var name = {file: file.name}#}
+                    {#$.ajax({#}
+                    {#type: 'DELETE',#}
+                    {#url: '{{ oneup_uploader_cancel(context) }}',#}
+                    {#contentType: 'application/json',#}
+                    {#data: JSON.stringify(name),#}
+                    {#dataType: 'json',#}
+                    {#success: function (e) {#}
+                    {#console.log(e);#}
+                    {#}#}
+                    {#});#}
+                    {#var _ref;#}
+                    {#return (_ref = file) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;#}
 
                     {#});#}
                 }
