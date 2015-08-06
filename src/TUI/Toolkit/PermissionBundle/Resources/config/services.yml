@@ -1,0 +1,8 @@
+services:
+#    permission.example:
+#        class: TUI\Toolkit\PermissionBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
+
+  permission.set_permission:
+    class: TUI\Toolkit\PermissionBundle\Controller\PermissionService
+    arguments: [ @doctrine.orm.entity_manager ]

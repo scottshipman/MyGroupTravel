@@ -3,6 +3,9 @@
 parameters:
 #    parameter_name: value
 
+imports:
+    - { resource: "@PermissionBundle/Resources/config/services.yml" }
+
 services:
 #    service_name:
 #        class: AppBundle\Directory\ClassName
