@@ -7,6 +7,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use TUI\Toolkit\QuoteBundle\Entity\QuoteVersion;
 use TUI\Toolkit\QuoteBundle\Form\QuoteVersionType;
+use TUI\Toolkit\PermissionBundle\Entity\Permission;
+use TUI\Toolkit\PermissionBundle\Controller\PermissionService;
 use APY\DataGridBundle\Grid\Source\Entity;
 use APY\DataGridBundle\Grid\Export\CSVExport;
 use APY\DataGridBundle\Grid\Action\RowAction;
@@ -490,6 +492,8 @@ class QuoteVersionController extends Controller
         if ($form->isValid()) {
             $em->persist($entity);
             $em->flush();
+          // Create organizer permission
+          $permission = $this->get("permission.set_permission")->setPermission($entity->getQuoteReference()->getId(), 'quote', $entity->getQuoteReference()->getOrganizer(), 'organizer');
             $this->get('session')->getFlashBag()->add('notice', 'Quote Saved: '. $entity->getQuoteReference()->getName());
 
             return $this->redirect($this->generateUrl('manage_quote'));
@@ -714,12 +718,15 @@ class QuoteVersionController extends Controller
     $deepCopy->addFilter(new KeepFilter(), new PropertyMatcher('QuoteVersion', 'boardBasis'));
     $deepCopy->addFilter(new DoctrineCollectionFilter(), new PropertyTypeMatcher('Doctrine\Common\Collections\Collection'));
     $new_entity = $deepCopy->copy($original_entity);
-    $em->persist($new_entity);
+
 
     if($original_entity->getQuoteReference()->getIsTemplate()){
       $new_entity->getQuoteReference()->setIsTemplate(false);
       $template = 'Template';
     }
+
+    $em->persist($new_entity);
+
     $cloneForm = $this->createCloneForm($new_entity);
     $date_format = $this->container->getParameter('date_format');
 
@@ -853,6 +860,7 @@ class QuoteVersionController extends Controller
         $entity->setTs(new \DateTime());
          $em->persist($new_entity);
          $em->flush();
+        $permission = $this->get("permission.set_permission")->setPermission($new_entity->getQuoteReference()->getId(), 'quote', $new_entity->getQuoteReference()->getOrganizer(), 'organizer');
         $this->get('session')->getFlashBag()->add('notice', 'Quote Saved: '. $new_entity->getQuoteReference()->getName());
 
 
@@ -861,6 +869,7 @@ class QuoteVersionController extends Controller
 
       if ($editForm->isValid()) {
             $em->flush();
+        $permission = $this->get("permission.set_permission")->setPermission($entity->getQuoteReference()->getId(), 'quote', $entity->getQuoteReference()->getOrganizer(), 'organizer');
           $this->get('session')->getFlashBag()->add('notice', 'Quote Saved: '. $entity->getQuoteReference()->getName());
 
 
@@ -948,6 +957,7 @@ class QuoteVersionController extends Controller
     if ($cloneform->isValid()) {
       $em->persist($entity);
       $em->flush();
+      $permission = $this->get("permission.set_permission")->setPermission($entity->getQuoteReference()->getId(), 'quote', $entity->getQuoteReference()->getOrganizer(), 'organizer');
       $this->get('session')->getFlashBag()->add('notice', 'Quote Saved: '. $entity->getQuoteReference()->getName());
 
 
@@ -1004,6 +1014,4 @@ class QuoteVersionController extends Controller
             ->getForm()
         ;
     }
-
-    
 }

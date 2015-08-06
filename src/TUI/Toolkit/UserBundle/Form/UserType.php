@@ -20,6 +20,9 @@ class UserType extends AbstractType
       // todo: Add logic so you cant add any role greater than your own
         $builder
           ->add('honorific', 'choice', array(
+            'required' => false,
+            'placeholder' => 'Select',
+            'label' => 'Title',
               'choices' => array(
                 'Mr.' => 'Mr.',
                 'Mrs.' => 'Mrs.',
@@ -30,25 +33,32 @@ class UserType extends AbstractType
               ))
           ->add('firstName', 'text', array(
             'label' => 'First Name',
+            'required' => true,
+
               ))
           ->add('lastName', 'text', array(
             'label' => 'Last Name',
+            'required' => true,
               ))
-          ->add('email')
+          ->add('email', 'email', array(
+            'label' => 'Email Address',
+            'required'  => true,
+
+          ))
           ->add('phoneNumber', 'tel', array(
             'label' => 'Phone Number',
             'required' => false,
             'default_region' => 'US',
             'format' => PhoneNumberFormat::NATIONAL
               ))
-            ->add('username')
+           // ->add('username')
             ->add('plainPassword', 'repeated', array(
                 'type' => 'password',
                 'options' => array('translation_domain' => 'FOSUserBundle'),
                 'first_options' => array('label' => 'form.new_password'),
                 'second_options' => array('label' => 'form.new_password_confirmation'),
                 'invalid_message' => 'fos_user.password.mismatch',
-                'required' => false,
+                'required' => true,
               ))
             ->add('media', 'hidden', array(
                 'required' => false,
