@@ -191,7 +191,8 @@ class InstitutionController extends Controller
      */
     private function createCreateForm(Institution $entity)
     {
-        $form = $this->createForm(new InstitutionType(), $entity, array(
+        $locale = $this->container->getParameter('locale');
+        $form = $this->createForm(new InstitutionType($locale), $entity, array(
             'action' => $this->generateUrl('manage_institution_create'),
             'method' => 'POST',
         ));
@@ -211,7 +212,8 @@ class InstitutionController extends Controller
    */
   private function create_ajaxCreateForm(Institution $entity)
   {
-    $form = $this->createForm(new InstitutionType(), $entity, array(
+    $locale = $this->container->getParameter('locale');
+    $form = $this->createForm(new InstitutionType($locale), $entity, array(
       'action' => $this->generateUrl('manage_institution_ajax_create'),
       'method' => 'POST',
       'attr'  => array (
@@ -310,7 +312,8 @@ class InstitutionController extends Controller
      */
     private function createEditForm(Institution $entity)
     {
-        $form = $this->createForm(new InstitutionType(), $entity, array(
+        $locale = $this->container->getParameter('locale');
+        $form = $this->createForm(new InstitutionType($locale), $entity, array(
             'action' => $this->generateUrl('manage_institution_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
