@@ -4,6 +4,12 @@
 
 {% block body -%}
 
+    <ul class="record_actions">
+        <li>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('_manage_brand_new') }}">Create a new Brand</a>
+        </li>
+    </ul>
+
     <table class="mdl-data-table mdl-js-data-table">
         <thead>
             <tr>
@@ -45,11 +51,5 @@
         {% endfor %}
         </tbody>
     </table>
-
-    <ul class="record_actions">
-        <li>
-            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('_manage_brand_new') }}">Create a new entry</a>
-        </li>
-    </ul>
 
 {% endblock %}
