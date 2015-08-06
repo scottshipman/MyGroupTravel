@@ -16,18 +16,32 @@
 {% endblock %}
 
 {% block body %}
+    <div class="login-block">
 
-    <div class="login-message-block">
-    {% for type, messages in app.session.flashBag.all %}
-        {% for message in messages %}
-            <div class="{{ type }}">
-                {{ message|trans({}, 'FOSUserBundle') }}
+        {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+            <h2>Sign In</h2>
+        {% endif %}
+
+        <div class="login-message-block">
+            {% for type, messages in app.session.flashBag.all %}
+                {% for message in messages %}
+                    <div class="{{ type }}">
+                        {{ message|trans({}, 'FOSUserBundle') }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+
+        <div class="login-form">
+            {% block fos_user_content %}
+            {% endblock fos_user_content %}
+        </div>
+
+        {% if not is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+            <div class="login-reset">
+                <a href="{{ path('fos_user_resetting_request') }}">Forgot password?</a>
             </div>
-        {% endfor %}
-    {% endfor %}
-    </div>
-    <div>
-        {% block fos_user_content %}
-        {% endblock fos_user_content %}
+        {% endif %}
+
     </div>
 {% endblock %}

@@ -1,50 +1,6 @@
-html {
-  background-color: $bg_grey_l1;
-}
+.user_0 {
 
-.main_login {
-
-  .signin-form {
-    display: block;
-  }
-
-  .login_reset {
-    position: absolute;
-    color: $bg_grey_d;
-    width: 100%;
-    text-align: center;
-    top: 390px;
-    z-index: 5;
-
-    a {
-      color: #A9A9AB;
-      text-decoration: none;
-    }
-  }
-
-  .mdl-layout__container {
-
-    .logo-sample {
-      width: auto;
-      position: relative;
-      display: block;
-      margin: 0 auto;
-      text-align: center;
-      padding-bottom: 10px;
-    }
-
-    .header.mdl-layout__header {
-      background-color: $bg_grey_l1;
-      border: none;
-      box-shadow: none;
-
-      h1 {
-        visibility: hidden;
-      }
-    }
-  }
-
-  .content {
+  .login-block {
     max-width: 436px;
     height: auto;
     position: relative;
@@ -53,76 +9,64 @@ html {
     border: 1px solid rgba(0, 0, 0, 0.3);
     -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
     -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
-    box-shadow: 0 2px 7px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
 
-    .inner {
-      .signin-form {
-        font-weight: 100;
-        text-align: center;
-      }
-
-      form {
-        text-align: center;
-      }
-
-      #username {
-        width: 85%;
-        margin: 0 auto;
-        position: relative;
-        padding: 15px;
-      }
-
-      #password {
-        width: 85%;
-        margin: 0 auto;
-        position: relative;
-        padding: 15px;
-      }
-      #remember_me {
-        display: none;
-      }
-
-      label {
-        display: none;
-      }
-
-      #_submit {
-        width: 85%;
-        margin: 0 auto;
-        position: relative;
-        padding: 15px;
-        color: $white;
-        background-color: $lime_green;
-        border: none;
-        box-shadow: none;
-        margin-top: 20px;
-        border-radius: 3px;
-      }
-
-      input[type="submit"] {
-        width: 85%;
-        margin: 0 auto;
-        position: relative;
-        padding: 15px;
-        color: $white;
-        background-color: $lime_green;
-        border: none;
-        box-shadow: none;
-        margin-top: 20px;
-        border-radius: 3px;
-      }
+    h2 {
+      font-weight: 100;
+      text-align: center;
     }
 
-    //Invalid credentials isn't assigned a class or id
-    div:nth-child(3) > div {
-      color:red;
+    .login-reset {
+      color: $bg_grey_d;
+      text-align: center;
+      padding: 24px 0;
+
+      a {
+        color: #A9A9AB;
+        text-decoration: none;
+      }
+
+    }
+
+    form {
+      text-align: center;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 85%;
+      margin: 0 auto;
+      position: relative;
+      padding: 15px;
+    }
+
+    #remember_me {
+      display: none;
+    }
+
+    label {
+      display: none;
+    }
+
+    input[type="submit"] {
+      width: 85%;
+      margin: 0 auto;
+      position: relative;
+      padding: 15px;
+      color: $white;
+      background-color: $lime_green;
+      border: none;
+      box-shadow: none;
+      margin-top: 20px;
+      border-radius: 3px;
+    }
+    
+    .login-form > div {
+      color: red;
       text-align: center;
       padding-bottom: 5px;
     }
+
   }
+
 }
-//body > div.mdl-layout__container > div > main > div.content > div > div:nth-child(3) > div {
-//  color:red;
-//  text-align: center;
-//  padding-bottom: 5px;
-//}
