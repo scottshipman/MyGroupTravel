@@ -40,7 +40,6 @@
         "genemu/form-bundle": "2.2.*",
         "oneup/uploader-bundle": "^1.3",
         "myclabs/deep-copy": "^1.3",
-        "Trsteel/ckeditor-bundle": "^1.8",
         "trsteel/ckeditor-bundle": "~1.8"
 
     },
