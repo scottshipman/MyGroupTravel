@@ -204,6 +204,18 @@ oneup_uploader:
               - image/jpeg
               - image/png
               - image/jpg
+        contentblock:
+            frontend: dropzone
+            namer: oneup_uploader.namer.uniqid
+            error_handler: oneup_uploader.error_handler.noop
+            enable_progress:      true
+            enable_cancelation:   true
+            storage:
+              directory: "%kernel.root_dir%/../web/static/uploads/media/contentblock"
+            allowed_mimetypes:
+              - image/jpeg
+              - image/png
+              - image/jpg
 
 stof_doctrine_extensions:
     default_locale: "%locale%"
