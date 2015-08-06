@@ -1,0 +1,30 @@
+permission:
+    path:     /
+    defaults: { _controller: "PermissionBundle:Permission:index" }
+
+permission_show:
+    path:     /{id}/show
+    defaults: { _controller: "PermissionBundle:Permission:show" }
+
+permission_new:
+    path:     /new
+    defaults: { _controller: "PermissionBundle:Permission:new" }
+
+permission_create:
+    path:     /create
+    defaults: { _controller: "PermissionBundle:Permission:create" }
+    methods:  POST
+
+permission_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "PermissionBundle:Permission:edit" }
+
+permission_update:
+    path:     /{id}/update
+    defaults: { _controller: "PermissionBundle:Permission:update" }
+    methods:  [POST, PUT]
+
+permission_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "PermissionBundle:Permission:delete" }
+    methods:  [POST, DELETE]

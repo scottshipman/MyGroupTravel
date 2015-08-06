@@ -14,7 +14,7 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
  * @ORM\Table()
  * @ORM\Entity
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
- * @GRID\Source(columns="id, location, name, type, localAuthority, code, city, state, country", filterable=false, sortable=true)
+ * @GRID\Source(columns="id, location, name, city, state, country", filterable=false, sortable=true)
  * @GRID\Column(id="location", type="join", title="Location", columns={"city", "state", "country"}, filterable=true, operatorsVisible=false)
  */
 class Institution
@@ -97,42 +97,10 @@ class Institution
     /**
      * @var string
      *
-     * @ORM\Column(name="localAuthority", type="string", length=255, nullable=true)
-     * @GRID\Column(title="Local Authority", visible=true, filterable=true, operatorsVisible=false, export=true)
-     */
-    private $localAuthority;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="country", type="string", length=255, nullable=true)
      * @GRID\Column(visible=false, filterable=false, export=true)
      */
     private $country;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="code", type="integer", nullable=true)
-     * @GRID\Column(title="Code", visible=true, filterable=true, operatorsVisible=false, export=true)
-     */
-    private $code;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="type", type="string", length=255, nullable=true)
-     * @GRID\Column(title="Type", visible=true, filterable=true, operatorsVisible=false, export=true)
-     */
-    private $type;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="websiteAddress", type="string", length=255, nullable=true)
-     * @GRID\Column(visible=false, filterable=false, export=true)
-     */
-    private $websiteAddress;
 
 
     /**
@@ -147,7 +115,9 @@ class Institution
 
     public function __toString()
     {
-        if(null !== $this->name){return $this->name;}
+        if(null !== $this->name && null!== $this->city){
+          return $this->name . ' - ' . $this->city;
+        }
       else { return '';}
     }
 
@@ -313,29 +283,6 @@ class Institution
     }
 
     /**
-     * Set localAuthority
-     *
-     * @param string $localAuthority
-     * @return Institution
-     */
-    public function setLocalAuthority($localAuthority)
-    {
-        $this->localAuthority = $localAuthority;
-
-        return $this;
-    }
-
-    /**
-     * Get localAuthority
-     *
-     * @return string 
-     */
-    public function getLocalAuthority()
-    {
-        return $this->localAuthority;
-    }
-
-    /**
      * Set country
      *
      * @param string $country
@@ -356,75 +303,6 @@ class Institution
     public function getCountry()
     {
         return $this->country;
-    }
-
-    /**
-     * Set code
-     *
-     * @param integer $code
-     * @return Institution
-     */
-    public function setCode($code)
-    {
-        $this->code = $code;
-
-        return $this;
-    }
-
-    /**
-     * Get code
-     *
-     * @return integer 
-     */
-    public function getCode()
-    {
-        return $this->code;
-    }
-
-    /**
-     * Set type
-     *
-     * @param string $type
-     * @return Institution
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    /**
-     * Get type
-     *
-     * @return string 
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * Set websiteAddress
-     *
-     * @param string $websiteAddress
-     * @return Institution
-     */
-    public function setWebsiteAddress($websiteAddress)
-    {
-        $this->websiteAddress = $websiteAddress;
-
-        return $this;
-    }
-
-    /**
-     * Get websiteAddress
-     *
-     * @return string 
-     */
-    public function getWebsiteAddress()
-    {
-        return $this->websiteAddress;
     }
 
     /**
