@@ -19,7 +19,10 @@ class AjaxuserType extends AbstractType
 
       // todo: Add logic so you cant add any role greater than your own
         $builder
-/*          ->add('honorific', 'choice', array(
+          ->add('honorific', 'choice', array(
+            'required' => false,
+            'placeholder' => 'Select',
+            'label' => 'Title',
               'choices' => array(
                 'Mr.' => 'Mr.',
                 'Mrs.' => 'Mrs.',
@@ -27,34 +30,27 @@ class AjaxuserType extends AbstractType
                 'Miss' => 'Miss',
                 'Dr.' => 'Dr.',
                 )
-              ))*/
+              ))
           ->add('firstName', 'text', array(
             'label' => 'First Name',
-              ))
+            'required' => true,
+
+          ))
           ->add('lastName', 'text', array(
             'label' => 'Last Name',
-              ))
-          ->add('email')
+            'required' => true,
+          ))
+          ->add('email', 'email', array(
+            'label' => 'Email Address',
+            'required'  => true,
+
+          ))
           ->add('phoneNumber', 'tel', array(
             'label' => 'Phone Number',
             'required' => false,
             'default_region' => 'US',
             'format' => PhoneNumberFormat::NATIONAL
-              ))
-            ->add('username', 'hidden')
-            ->add('password', 'hidden')
-              //, array(
-              //  'type' => 'password',
-              //  'options' => array('translation_domain' => 'FOSUserBundle'),
-              //  'first_options' => array('label' => 'form.new_password'),
-              //  'second_options' => array('label' => 'form.new_password_confirmation'),
-              //  'invalid_message' => 'fos_user.password.mismatch',
-              //  'required' => false,
-              //))
-            /*->add('media', 'hidden', array(
-                'required' => false,
-                'data_class' => 'TUI\Toolkit\MediaBundle\Entity\Media',
-            ))*/
+          ))
         ;
     }
 
