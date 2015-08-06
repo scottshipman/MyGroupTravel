@@ -160,6 +160,7 @@ class UserController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
+          $entity->setUsername($entity->getEmail());
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
@@ -183,10 +184,12 @@ class UserController extends Controller
     $entity = new User();
     $form = $this->create_ajaxCreateForm($entity);
     $form->handleRequest($request);
-    $form->getData()->setPassword('');
-    $form->getData()->setUsername('');
+//    $form->getData()->setPassword('');
+//    $form->getData()->setUsername('');
 
     if ($form->isValid()) {
+      $entity->setPassword('');
+      $entity->setUsername($entity->getEmail());
       $em = $this->getDoctrine()->getManager();
       $em->persist($entity);
       $em->flush();
