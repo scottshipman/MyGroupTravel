@@ -14,6 +14,7 @@ use Symfony\Component\Validator\Constraints\Null;
 use TUI\Toolkit\UserBundle\Entity\User;
 use TUI\Toolkit\UserBundle\Form\UserType;
 use TUI\Toolkit\UserBundle\Form\UserMediaType;
+use TUI\Toolkit\UserBundle\Form\AjaxFormType;
 use APY\DataGridBundle\Grid\Source\Entity;
 use APY\DataGridBundle\Grid\Export\CSVExport;
 use APY\DataGridBundle\Grid\Action\RowAction;
