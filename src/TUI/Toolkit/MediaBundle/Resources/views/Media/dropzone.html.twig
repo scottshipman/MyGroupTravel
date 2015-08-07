@@ -25,12 +25,16 @@
                         alert(response);
                     });
                     this.on("addedfile", function () {
+                        $("#dropzone-form-close").css({"display":"none"});
                         if (this.files[1] != null) {
                             this.removeFile(this.files[0]);
+
                         }
                     });
-/*                    this.on("removedfile", function (file) {
+                    this.on("removedfile", function (file) {
+                        $("#dropzone-form-close").css({"display":"inline-block"});
                         console.log(file.serverId);
+/*
                         var name = {file: file.name}
                         $.ajax({
                             type: 'DELETE',
@@ -44,8 +48,9 @@
                         });
                         var _ref;
                         return (_ref = file) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+*/
 
-                    });*/
+                    });
                 }
             }
         });
