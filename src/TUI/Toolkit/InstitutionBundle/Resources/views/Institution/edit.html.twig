@@ -3,7 +3,7 @@
 {% block page_title %}Edit {{ entity.name }}{% endblock %}
 
 {% block body -%}
-    <div id="avatar-label" class="mdl-label-mimic">Brand Image
+    <div id="avatar-label" class="mdl-label-mimic">Company Logo
         <div style="display:none;" id="dropzone-form-close"><i class="fa fa-times-circle"></i></div>
     </div>
     {{ render(controller('MediaBundle:Media:createDropzoneForm', {'context':'institution'})) }}
@@ -17,8 +17,26 @@
                     <i class="fa fa-pencil-square-o fa-2x"></i>
                 </div>
             </div>
+            <script>
+                $(document).ready(function () {
+                    var bUrl = '{{ asset(".." ~ entity.media.getRelativePath ~ "/" ~ entity.media.getHashedFilename ) }}';
+                    $(".media-placeholder-image").css({
+                        "background-image": "url(" + bUrl + ")",
+                        "background-position": "left",
+                        "background-repeat": "no-repeat",
+                        "background-size":"contain",
+                        "width": "auto",
+                        "max-width": "500px",
+                        "height": "auto"
+                    });
+                });
+            </script>
         {% else %}
-            <i class="media-placeholder-image fa fa-picture-o fa-5x"></i>
+            <span class="fa-stack fa-3x">
+                <i class="media-placeholder-image fa fa-picture-o fa-stack-5x">
+                    <span style="display:block; font-size: .25em;">click to edit</span>
+                </i>
+            </span>
         {% endif %}
     </div>
     {{ form_widget(edit_form) }}
@@ -33,20 +51,6 @@
         </li>
         <li>{{ form(delete_form) }}</li>
     </ul>
-    <script>
-        {% if entity.media %}
-        $(document).ready(function () {
-            var bUrl = '{{ asset(".." ~ entity.media.getRelativePath ~ "/" ~ entity.media.getHashedFilename ) }}';
-            $(".media-placeholder-image").css({
-                "background-image": "url(" + bUrl + ")",
-                "background-position": "center",
-                "background-repeat": "no-repeat",
-                "background-size":"cover",
-                "width": "auto",
-                "max-width": "500px",
-                "height": "auto"
-            });
-        });
-        {% endif %}
-    </script>
+
+
 {% endblock %}
