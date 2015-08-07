@@ -1,3 +1,7 @@
 form[name="tui_toolkit_userbundle_user"] {
   @include move-dropzone-up();
 }
+
+.media-placeholder-image {
+  border-radius: 20px;
+}
