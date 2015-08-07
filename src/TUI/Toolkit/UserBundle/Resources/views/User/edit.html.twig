@@ -23,9 +23,9 @@
                     var bUrl = '{{ asset(".." ~ entity.media.getRelativePath ~ "/" ~ entity.media.getHashedFilename ) }}';
                     $(".media-placeholder-image").css({
                         "background-image": "url(" + bUrl + ")",
-                        "background-position": "center",
+                        "background-position": "left",
                         "background-repeat": "no-repeat",
-                        "background-size": "cover"
+                        "background-size": "contain"
 
                     });
                 });
@@ -34,10 +34,10 @@
             </script>
         {% else %}
             <span class="fa-stack fa-3x">
-                        <i class="media-placeholder-image fa fa-picture-o fa-stack-5x">
-                            <span style="display:block; font-size: .25em" ;>click to edit</span>
-                        </i>
-                    </span>
+                <i class="media-placeholder-image fa fa-picture-o fa-stack-5x">
+                    <span style="display:block; font-size: .25em" ;>click to edit</span>
+                </i>
+            </span>
 
 
         {% endif %}

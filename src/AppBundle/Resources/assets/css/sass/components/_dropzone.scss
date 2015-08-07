@@ -52,8 +52,13 @@
 }
 #dropzone-form-close {
   display: inline-block;
-  left: 50px;
+  right: 10px;
   top: 25px;
   position: relative;
   z-index: 11;
+  float:right;
+}
+
+#avatar-label {
+  max-width:160px;
 }
