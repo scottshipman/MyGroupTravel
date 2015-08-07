@@ -1,5 +1,23 @@
 .user_0 {
 
+  .exceptions-block {
+    max-width: 436px;
+    height: auto;
+    position: relative;
+    background-color: white;
+    margin: 0 auto;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    padding: 2em;
+
+    h2 {
+      font-weight: 100;
+      text-align: center;
+    }
+  }
+
   .login-block {
     max-width: 436px;
     height: auto;

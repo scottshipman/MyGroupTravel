@@ -58,11 +58,14 @@ class UserType extends AbstractType
                 'first_options' => array('label' => 'form.new_password'),
                 'second_options' => array('label' => 'form.new_password_confirmation'),
                 'invalid_message' => 'fos_user.password.mismatch',
-                'required' => true,
+                'required' => false,
               ))
             ->add('media', 'hidden', array(
                 'required' => false,
                 'data_class' => 'TUI\Toolkit\MediaBundle\Entity\Media',
+                'attr' => array(
+                  'class' => 'media-placeholder',
+                )
             ))
         ;
     }

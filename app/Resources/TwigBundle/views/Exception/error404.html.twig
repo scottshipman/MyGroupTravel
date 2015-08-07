@@ -1,17 +1,98 @@
 {# error.html.twig #}
 
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css">
-<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome.css">
-<link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title> User Login
+        | eToolkit</title>
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+    <script src="//storage.googleapis.com/code.getmdl.io/1.0.0/material.min.js"></script>
+    <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet"
+          href="//fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
 
 
-{% use "WebfactoryExceptionsBundle:Exception:blocks.html.twig" %}
+    {# jQuery UI CSS #}
+    {% stylesheets filter="cssrewrite" 'bundles/app/css/jquery-ui/jquery-ui.css' %}
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}">
+    {% endstylesheets %}
+    {% image '@AppBundle/Resources/public/css/jquery-ui/images/*' %}{% endimage %}
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    {% javascripts '@jquery' '@jqueryui' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 
-{# example security usage, see below #}
-    {% if app.user and is_granted('IS_AUTHENTICATED_FULLY') %}
-        {# ... #}
-    {% endif %}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.7.0/spectrum.min.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.6.1/spectrum.min.css">
 
-{% block myMainContentContainer %}
-    {{ block('webfactory_exceptions_standardExceptionPage') }}
-{% endblock %}
+
+    <script type="text/javascript" src=https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.7.0/spectrum.min.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.6.1/spectrum.min.css">
+
+    {{ render(controller('BrandBundle:Default:colorsError')) }}
+
+    <div class="mdl-layout mdl-js-layout">
+
+        <main class="mdl-layout__content">
+
+
+            <div class="brand_logo_login">
+
+                {{ render(controller('BrandBundle:Default:index')) }}
+
+
+            </div>
+
+            <div class="content">
+                <div class="inner">
+
+                    <div class="exceptions-block">
+                    {% use "WebfactoryExceptionsBundle:Exception:blocks.html.twig" %}
+
+                    {% block myMainContentContainer %}
+                      {# {{ block('webfactory_exceptions_standardExceptionPage') }} #}
+
+                        {% block webfactory_exceptions_standardExceptionPage %}
+                            <h2><i class="fa fa-exclamation-triangle"></i> {{ block('webfactory_exceptions_error_headline') }}</h2>
+                            <p>
+                                    {{ ("error." ~ exception.getStatusCode ~ ".description")|trans({}, 'exceptions-bundle')|nl2br }}
+                               </p>
+
+
+                                <h3 class="h3">{{ "alternatives.title"|trans({},'webfactory-exceptions-bundle') }}</h3>
+                                <p>{{ "alternatives.description"|trans({},'webfactory-exceptions-bundle') }}</p>
+                                <ul class="bulleted">
+                                    <li>{{ block('webfactory_exceptions_actionBack') }}</li>
+                                    <li>{{ block('webfactory_exceptions_actionGetToHomepage') }}</li>
+                                    {% if contactUrl is defined %}
+                                        <li>{{ block('webfactory_exceptions_actionGetInContact') }}</li>
+                                    {% endif %}
+                                </ul>
+
+
+                            <strong>{{ block('webfactory_exceptions_sorry_footer') }}</strong>
+                        {% endblock %}
+
+                    {% endblock %}
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+</body>
+
+</html>
