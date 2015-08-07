@@ -173,7 +173,6 @@
         $('.media-placeholder-image').css({"display":"none"});
         $("#dropzone_form").css({"display":"block"});
         $("#dropzone-form-close").css({"display":"inline-block"});
-        console.log('whaaaa');
     });
 
     $('#avatar-label').on("click", function(){

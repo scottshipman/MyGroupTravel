@@ -10,7 +10,11 @@
 
             <div id="user_media" class="is-dirty mdl-textfield--floating-label">
                 {% if entity.media %}
-                    <img class="media-placeholder-image" src="{{ asset(".." ~ entity.media.getRelativePath ~ "/" ~ entity.media.getHashedFilename ) }}">
+                    <div class="media-placeholder-image">
+                        <div id="overlay">
+                            <i class="fa fa-pencil-square-o fa-2x"></i>
+                        </div>
+                    </div>
                 {%  else %}
                     <i class="media-placeholder-image fa fa-picture-o fa-5x"></i>
                 {% endif %}
@@ -25,5 +29,12 @@
         </li>
         <li>{{ form(delete_form) }}</li>
     </ul>
+<script>
+    $( document ).ready(function() {
+        var bUrl = '{{ asset(".." ~ entity.media.getRelativePath ~ "/" ~ entity.media.getHashedFilename ) }}';
+       $(".media-placeholder-image").css({"background-image":"url(" + bUrl + ")"});
+//'{{ asset(".." ~ entity.media.getRelativePath ~ "/" ~ entity.media.getHashedFilename ) }}'
 
+    });
+</script>
 {% endblock %}
