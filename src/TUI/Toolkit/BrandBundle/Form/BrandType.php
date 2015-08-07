@@ -25,6 +25,9 @@ class BrandType extends AbstractType
             ->add('media', 'hidden', array(
                 'required' => false,
                 'data_class' => 'TUI\Toolkit\MediaBundle\Entity\Media',
+                'attr' => array(
+                    'class' => 'media-placeholder',
+                )
             ))
         ;
     }
