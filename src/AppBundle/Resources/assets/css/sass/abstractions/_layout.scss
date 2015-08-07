@@ -30,7 +30,8 @@
 
 @mixin move-dropzone-up() {
   position: relative;
-  padding-bottom: 160px + 36px + 20px;
+  //padding-bottom: 160px + 36px + 20px;
+  padding-bottom: 40px;
 
   .button-row {
     margin: 0;

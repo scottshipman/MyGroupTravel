@@ -135,8 +135,19 @@ class InstitutionController extends Controller
     public function createAction(Request $request)
     {
         $entity = new Institution();
+        $em = $this->getDoctrine()->getManager();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
+
+        if (Null != $form->getData()->getMedia()){
+            $fileId = $form->getData()->getMedia();
+        }
+        $entities = $em->getRepository('MediaBundle:Media')
+            ->findById($fileId);
+        if (NULL !== $entities) {
+            $media = array_shift($entities);
+            $form->getData()->setMedia($media);
+        }
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -342,10 +353,11 @@ class InstitutionController extends Controller
         $editForm->handleRequest($request);
 
         //handling ajax request for media
-        $media_data = $editForm->getData()->getMedia();
-        $filename = $media_data;
+        if (NULL != $editForm->getData()->getMedia()){
+            $fileId = $editForm->getData()->getMedia();
+        }
         $entities = $em->getRepository('MediaBundle:Media')
-            ->findByFilename($filename);
+            ->findById($fileId);
         if (NULL !== $entities) {
             $media = array_shift($entities);
             $editForm->getData()->setMedia($media);
