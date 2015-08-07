@@ -1,0 +1,42 @@
+.sp-replacer {
+  background: $bg_white;
+  border-color: $border_grey_l;
+  padding: 6px;
+
+  &.sp-active,
+  &:hover {
+    @include mdl-primary-color( border-color, 6 );
+  }
+
+  .sp-preview {
+    border-color: $text_grey;
+  }
+
+  .sp-dd {
+    display: block;
+    text-indent: 12px;
+    padding: 0 12px 0 0;
+    width: 0;
+    position: relative;
+    overflow: hidden;
+    font-size: 16px;
+    line-height: 20px;
+    height: 20px;
+
+    &:after {
+      content: '\f0d7';
+      position: absolute;
+      top: 0;
+      right: 0;
+      @include fa-standard();
+    }
+
+  }
+
+}
+
+.sp-container {
+  margin-top: -1px;
+  background: $bg_white;
+  @include mdl-primary-color( border-color, 6 );
+}
