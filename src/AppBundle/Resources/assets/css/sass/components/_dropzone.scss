@@ -41,7 +41,15 @@
 .media-placeholder-image:hover #overlay {
   opacity:1;
 }
-
+#dropzone_form {
+  width: auto;
+  height: auto;
+  background: transparent;
+  border: 1px dashed green;
+  position: relative;
+  border-radius: 20px;
+  display:none;
+}
 #dropzone-form-close {
   display: inline-block;
   left: 50px;

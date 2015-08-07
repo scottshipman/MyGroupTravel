@@ -142,25 +142,17 @@
     /**
      * Dropzone manipulation
      */
-    $("#dropzone_form").css({"display":"none"});
 
     $('.media-placeholder-image').each(function () {
         $(this).height('120px');
         $(this).width('120px');
         var imgWidth = $(this).width();
         var imgHeight = $(this).height();
-        var positionTop = $(this).position().top;
-        var positionLeft = $(this).position().left;
         var dropzone_form = $("#dropzone_form");
-        var mediaclick = $('span#dropzone_form div.dz-default.dz-message');
 
         dropzone_form.css({
             width: imgWidth+40,
-            height: imgHeight+40,
-            "background": "transparent",
-            border: "1 px dashed green",
-            position: "relative",
-            "border-radius": "20px"
+            height: imgHeight+40
         });
     });
 
