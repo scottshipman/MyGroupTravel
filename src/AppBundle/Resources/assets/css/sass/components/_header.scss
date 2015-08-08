@@ -1,9 +1,17 @@
 .header {
   margin: 0 0 2em;
+  @include clear-fix();
+
+  &.mdl-layout__header {
+    display: block;
+    min-height: auto;
+    max-height: none;
+  }
 
   h1 {
     margin: 0;
     padding: 0.25em 0;
+    clear: both;
 
     .user_0 & {
       text-align: center;
@@ -14,12 +22,23 @@
 }
 
 .brand_logo {
-  padding: 1em 0;
-  text-align: right;
+  padding: 8px 0;
+  float: right;
   color: $text_white;
 
   img {
     max-width: 120px;
+  }
+
+  .tui-drawer-header ~ & {
+    line-height: 48px;
+
+    img {
+      width: auto;
+      height: auto;
+      max-height: 48px;
+    }
+
   }
 
 }
@@ -37,10 +56,4 @@
     max-height: 100px;
   }
 
-}
-
-.mdl-layout__header {
-  display: block;
-  min-height: auto;
-  max-height: none;
 }

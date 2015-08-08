@@ -1,85 +1,98 @@
+{% extends '::base.html.twig' %}
+{% block title %}Quote: {{ entity.quoteReference.name }} {% endblock %}
+{% block page_title %}Quote: {{ entity.quoteReference.name  }} {% endblock %}
 
+{% block body -%}
+    <ul class="record_actions">
+        <li>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quote') }}">
+                Back to the list
+            </a>
+        </li>
+        {% if (entity.quoteReference.locked is sameas(false)) and (is_granted("ROLE_ADMIN")) %}
+        <li>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quoteversion_edit', { 'id': entity.id }) }}">
+                Edit
+            </a>
+        </li>
+        {% endif %}
+        {% if is_granted("ROLE_ADMIN") %}
+            <li>{{ form(delete_form) }}</li>
+        {% endif %}
+    </ul>
+    <h3>Summary</h3>
 
     <table class="record_properties">
         <tbody>
             <tr>
-                <th>Version</th>
-                <td>{{ entity.version }}</td>
+                <th>Institution</th><td>{% if entity.quoteReference.institution %}{{ entity.quoteReference.institution.name }}{% endif %}</td>
+                <th>Tour Name</th><td>{% if entity.quoteReference.name %}{{ entity.quoteReference.name }}{% endif %}</td>
             </tr>
             <tr>
-                <th>Board basis</th>
-                <td>{% if entity.boardBasis %}{{ entity.boardBasis.name }}{% endif %}</td>
+                <th>Destination</th><td>{% if entity.quoteReference.destination %}{{ entity.quoteReference.destination }}{% endif %}</td>
+                <th>Quote Number</th><td>{% if entity.quoteReference.reference %}{{ entity.quoteReference.reference }}{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+    <hr>
+
+    <h3>Details</h3>
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Departure</th>
+                <td>{% if entity.departureDate %}{{ entity.departureDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <th>Priced per person</th>
+                <td>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %} {% if entity.pricePerson %}{{ entity.pricePerson }}{% endif %}</td>
             </tr>
             <tr>
-                <th>Content</th>
-                <td>{{ entity.content }}</td>
+                <th>Return</th>
+                <td>{% if entity.returnDate %}{{ entity.returnDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <th>Board Basis</th>
+                <td>{% if entity.boardBasis %}{{ entity.boardBasis }}{% endif %}</td>
             </tr>
             <tr>
-                <th>Expiry date</th>
-                <td>{{ entity.expiryDate|date('Y-m-d H:i:s') }}</td>
-            </tr>
-            <tr>
-                <th>Free places</th>
-                <td>{{ entity.freePlaces }}</td>
-            </tr>
-            <tr>
-                <th>Max passengers</th>
-                <td>{{ entity.maxPax }}</td>
-            </tr>
-            <tr>
-                <th>Min passengers</th>
-                <td>{{ entity.minPax }}</td>
-            </tr>
-            <tr>
-                <th>Paying places</th>
-                <td>{{ entity.payingPlaces }}</td>
-            </tr>
-            <tr>
-                <th>Departure date</th>
-                <td>{{ entity.departureDate|date('Y-m-d H:i:s') }}</td>
-            </tr>
-            <tr>
-                <th>Signupdeadline</th>
-                <td>{{ entity.signupDeadline|date('Y-m-d H:i:s') }}</td>
-            </tr>
-            <tr>
-                <th>Quotedays</th>
-                <td>{{ entity.quoteDays }}</td>
-            </tr>
-            <tr>
-                <th>Quotenights</th>
-                <td>{{ entity.quoteNights }}</td>
-            </tr>
-            <tr>
-                <th>Totalprice</th>
-                <td>{{ entity.totalPrice }}</td>
-            </tr>
-            <tr>
-                <th>Tripstatus</th>
-                <td>{% if entity.tripStatus %}{{ entity.tripStatus.name }}{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Transporttype</th>
+                <th>Duration</th>
+                <td>{% if entity.duration %}{{ entity.duration }}{% endif %}</td>
+                <th>Transport</th>
                 <td>{% if entity.transportType %}{{ entity.transportType.name }}{% endif %}</td>
             </tr>
             <tr>
-                <th>Welcomemsg</th>
-                <td>{{ entity.welcomeMsg }}</td>
+                <th>Paying places</th>
+                <td>{% if entity.payingPlaces  %}{{ entity.payingPlaces  }}{% endif %}</td>
+                <th>Free places</th>
+                <td>{% if entity.payingPlaces  %}{{ entity.payingPlaces  }}{% endif %}</td>
             </tr>
         </tbody>
     </table>
 
-        <ul class="record_actions">
-    <li>
-        <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quote') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quoteversion_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+    <hr>
 
+    <table>
+        <tbody>
+        <tr>
+            <th>Organizer</th><td>{% if entity.quoteReference.organizer %}{{ entity.quoteReference.organizer.firstName }} {{ entity.quoteReference.organizer.lastName }} {{ entity.quoteReference.organizer.email }}{% endif %}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <hr>
+
+    <table>
+        <tbody>
+        <tr>
+            <th>Primary Business Administrator</th><td>{% if entity.quoteReference.salesAgent %}{{ entity.quoteReference.salesAgent.firstName }} {{ entity.quoteReference.salesAgent.lastName }} {{ entity.quoteReference.salesAgent.email }}{% endif %}</td>
+        </tr>
+        <tr>
+            <th>Other Business Administrator</th><td>{% if entity.quoteReference.secondaryContact %}{{ entity.quoteReference.secondaryContact.firstName }} {{ entity.quoteReference.secondaryContact.lastName }} {{ entity.quoteReference.secondaryContact.email }}{% endif %}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <hr>
+
+    {# RENDER THE CONTENT BLOCKS HERE #}
+
+    {{ render(controller('ContentBlocksBundle:ContentBlock:index')) }}
+
+{% endblock %}

@@ -1,15 +1,31 @@
 .tui-drawer-header {
-  display: flex;
-  flex-direction: column;
-  height: 151px;
-  justify-content: flex-end;
-  padding: 16px;
+
+  .mdl-layout__drawer & {
+    display: flex;
+    flex-direction: column;
+    height: 150px;
+    justify-content: flex-end;
+    padding: 16px;
+  }
+
+  .header & {
+    float: right;
+    padding: 0 0 0 16px;
+    border-left: 1px solid $border_white_l;
+    margin: 8px 0 8px 16px;
+    position: relative;
+  }
 
   .tui-image-avatar {
     border-radius: 24px;
     height: 48px;
     width: 48px;
     overflow: hidden;
+
+    .header & {
+      display: block;
+      cursor: pointer;
+    }
 
     div {
       width: 100%;
@@ -31,13 +47,29 @@
     color: $text_white;
     @include mdl-primary-color(background-color, 6);
     text-align: center;
+
+    .header & {
+      display: block;
+      color: $text_grey_t2;
+      background: $bg_white;
+      cursor: pointer;
+    }
+
   }
 
-  .tui-avatar-dropdown {
+}
+
+.tui-avatar-dropdown {
+
+  .mdl-layout__drawer & {
     align-items: center;
     display: flex;
     flex-direction: row;
     position: relative;
+    width: 100%;
+  }
+
+  .header & {
     width: 100%;
   }
 
