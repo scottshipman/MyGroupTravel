@@ -141,13 +141,15 @@ class InstitutionController extends Controller
 
         if (Null != $form->getData()->getMedia()){
             $fileId = $form->getData()->getMedia();
-        }
-        $entities = $em->getRepository('MediaBundle:Media')
+          $entities = $em->getRepository('MediaBundle:Media')
             ->findById($fileId);
-        if (NULL !== $entities) {
+
+          if (NULL !== $entities) {
             $media = array_shift($entities);
             $form->getData()->setMedia($media);
+          }
         }
+
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -355,13 +357,15 @@ class InstitutionController extends Controller
         //handling ajax request for media
         if (NULL != $editForm->getData()->getMedia()){
             $fileId = $editForm->getData()->getMedia();
-        }
-        $entities = $em->getRepository('MediaBundle:Media')
+          $entities = $em->getRepository('MediaBundle:Media')
             ->findById($fileId);
-        if (NULL !== $entities) {
+
+          if (NULL !== $entities) {
             $media = array_shift($entities);
             $editForm->getData()->setMedia($media);
+          }
         }
+
 
         if ($editForm->isValid()) {
             $em->flush();
