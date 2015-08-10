@@ -15,6 +15,7 @@ use TUI\Toolkit\UserBundle\Entity\User;
 use TUI\Toolkit\UserBundle\Form\UserType;
 use TUI\Toolkit\UserBundle\Form\AjaxuserType;
 use TUI\Toolkit\UserBundle\Form\UserMediaType;
+use TUI\Toolkit\UserBundle\Form\PasswordSetType;
 use TUI\Toolkit\MediaBundle\Form\MediaType;
 use APY\DataGridBundle\Grid\Source\Entity;
 use APY\DataGridBundle\Grid\Export\CSVExport;
@@ -322,7 +323,7 @@ class UserController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing User entity.
+     * Displays a form to set an newly created User password.
      *
      */
     public function editAction($id)
@@ -343,6 +344,28 @@ class UserController extends Controller
             'delete_form' => $deleteForm->createView(),
         ));
     }
+
+
+  /**
+   * Displays a form to edit an existing User entity.
+   *
+   */
+  public function passwordSetAction($id)
+  {
+    $em = $this->getDoctrine()->getManager();
+
+    $entity = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
+
+    if (!$entity) {
+      throw $this->createNotFoundException('Unable to find User entity.');
+    }
+    $setForm = $this->createPasswordSetForm($entity);
+
+    return $this->render('TUIToolkitUserBundle:User:password-set.html.twig', array(
+      'set_form' => $setForm->createView(),
+    ));
+  }
+
 
     /**
      * Creates a form to edit a User entity.
@@ -381,7 +404,31 @@ class UserController extends Controller
         return $form;
     }
 
-    /**
+  /**
+   * Creates a form to set a User password.
+   *
+   * @param User $entity The entity
+   *
+   * @return \Symfony\Component\Form\Form The form
+   */
+  private function createPasswordSetForm(User $entity)
+  {
+    $form = $this->createForm(new PasswordSetType(), $entity, array(
+      'action' => $this->generateUrl('user_password_set', array('id' => $entity->getId())),
+      'method' => 'PUT',
+    ));
+
+    // get current user's roles and add form elements
+
+
+    $form->add('submit', 'submit', array('label' => 'Set Password'));
+
+    return $form;
+  }
+
+
+
+  /**
      * Edits an existing User entity.
      *
      */
@@ -425,7 +472,39 @@ class UserController extends Controller
         ));
     }
 
-    /**
+  /**
+   * Edits an existing User entity.
+   *
+   */
+  public function setPasswordAction(Request $request, $id)
+  {
+    $em = $this->getDoctrine()->getManager();
+
+    $entity = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
+
+    if (!$entity) {
+      throw $this->createNotFoundException('Unable to find User entity.');
+    }
+
+    $setForm = $this->createPasswordSetForm($entity);
+    $setForm->handleRequest($request);
+
+    if ($setForm->isValid()) {
+      $em->flush();
+      $this->get('session')->getFlashBag()->add('notice', 'Password Updated for: ' . $entity->getUsername());
+
+      return $this->redirect($this->generateUrl('fos_user_profile_show'));
+    }
+
+    return $this->render('TUIToolkitUserBundle:Registration:confirmed.html.twig', array(
+      'user' => $entity,
+      'set_form' => $setForm->createView(),
+    ));
+  }
+
+
+
+  /**
      * Deletes a User entity.
      *
      */

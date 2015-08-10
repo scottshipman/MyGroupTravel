@@ -60,3 +60,7 @@ parent_add_child:
 user_registration_confirmation:
   path: /{id}/register-confirm-notification
   defaults: {_controller: "TUIToolkitUserBundle:User:registerConfirmationTrigger" }
+
+user_password_set:
+  path: /{id}/password-set
+  defaults: {_controller: "TUIToolkitUserBundle:User:setPassword" }
