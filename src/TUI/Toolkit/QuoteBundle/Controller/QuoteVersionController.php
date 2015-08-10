@@ -642,22 +642,22 @@ class QuoteVersionController extends Controller
         $em = $this->getDoctrine()->getManager();
 
       // Get all Quote versions referencing Parent Quote object
-      $entity = $em->getRepository('QuoteBundle:QuoteVersion')->findByQuoteReference($id);
-
+      $entity = $em->getRepository('QuoteBundle:QuoteVersion')->findById($id);
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find QuoteVersion entity.');
         }
 
-      // Get the quote with highest Version number and order array DESC
-      usort($entity, function ($a, $b) {
+/*      // Get the quote with highest Version number and order array DESC
+        usort($entity, function ($a, $b) {
         if ($a->getVersion() == $b->getVersion()) return 0;
         return $a->getVersion() > $b->getVersion() ? -1 : 1;
       });
-      $quote = $entity[0];
+      $quote = $entity[0];*/
+
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('QuoteBundle:QuoteVersion:show.html.twig', array(
-            'entity'      => $quote,
+            'entity'      => $entity[0],
             'delete_form' => $deleteForm->createView(),
         ));
     }
