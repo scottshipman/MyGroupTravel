@@ -538,6 +538,8 @@ class UserController extends Controller
     // Create token
     $tokenGenerator = $this->container->get('fos_user.util.token_generator');
     $user->setConfirmationToken($tokenGenerator->generateToken());
+    $em->persist($user);
+    $em->flush();
     $mailer->sendConfirmationEmailMessage($user);
 
     $this->get('session')->getFlashBag()->add('notice', 'A Notification was sent to ' . $user->getEmail());
