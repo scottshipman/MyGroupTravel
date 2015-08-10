@@ -39,7 +39,6 @@
                href="{{ path('user_edit', { 'id': entity.id }) }}">Edit
             </a></li>
         <li>{{ form(delete_form) }}</li>
-    {{ dump(entity) }}
         {% if entity.enabled==false %}
         <li>
             <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
