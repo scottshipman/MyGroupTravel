@@ -26,12 +26,19 @@
   float: right;
   color: $text_white;
 
-  .tui-drawer-header ~ & {
-    line-height: 48px;
-  }
-
   img {
     max-width: 120px;
+  }
+
+  .tui-drawer-header ~ & {
+    line-height: 48px;
+
+    img {
+      width: auto;
+      height: auto;
+      max-height: 48px;
+    }
+
   }
 
 }

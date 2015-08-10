@@ -39,6 +39,13 @@
                href="{{ path('user_edit', { 'id': entity.id }) }}"><i class="fa fa-pencil-square-o"></i> Edit
             </a></li>
         <li>{{ form(delete_form) }}</li>
+        {% if entity.enabled==false %}
+        <li>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+               href="{{ path('user_registration_confirmation', { 'id': entity.id }) }}"><i class="fa fa-paper-plane"></i> Send New User Notification
+            </a>
+        </li>
+        {% endif %}
         {#   <li>{{ form(media_form) }}
         </li> #}
     </ul>
