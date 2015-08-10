@@ -4,7 +4,7 @@ manage_quote:
 
 manage_quote_show:
     path:     /{id}/show
-    defaults: { _controller: "QuoteBundle:Quote:show" }
+    defaults: { _controller: "QuoteBundle:QuoteVersion:show" }
 
 manage_quote_new:
     path:     /new
