@@ -159,6 +159,7 @@ class UserController extends Controller
 
         if ($form->isValid()) {
           $entity->setUsername($entity->getEmail());
+          $entity->setPassword('');
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
@@ -400,13 +401,15 @@ class UserController extends Controller
         $editForm->handleRequest($request);
         if (Null != $editForm->getData()->getMedia()){
           $fileId = $editForm->getData()->getMedia();
-        }
-        $entities = $em->getRepository('MediaBundle:Media')
+          $entities = $em->getRepository('MediaBundle:Media')
             ->findById($fileId);
-        if (NULL !== $entities) {
+
+          if (NULL !== $entities) {
             $media = array_shift($entities);
             $editForm->getData()->setMedia($media);
+          }
         }
+
 
         if ($editForm->isValid()) {
             $em->flush();
@@ -525,5 +528,21 @@ class UserController extends Controller
             'form' => $form->createView()
         ));
     }
+
+  public function registerConfirmationTriggerAction($id) {
+
+    $mailer = $this->container->get('fos_user.mailer');
+
+    $em = $this->getDoctrine()->getManager();
+    $user = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
+    // Create token
+    $token = sha1(uniqid(mt_rand(), TRUE)); // Or whatever you prefer to generate a token
+    $user->setConfirmationToken($token);
+    $mailer->sendConfirmationEmailMessage($user);
+
+    $this->get('session')->getFlashBag()->add('notice', 'A Notification was sent to ' . $user->getEmail());
+
+    return $this->redirect($this->generateUrl('user_show', array('id' => $user->getId())));
+  }
 
 }

@@ -14,8 +14,8 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
  * @ORM\Table()
  * @ORM\Entity
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
- * @GRID\Source(columns="id, location, name, city, state, country", filterable=false, sortable=true)
- * @GRID\Column(id="location", type="join", title="Location", columns={"city", "state", "country"}, filterable=true, operatorsVisible=false)
+ * @GRID\Source(columns="id, location, name, city, county, state, country", filterable=false, sortable=true)
+ * @GRID\Column(id="location", type="join", title="Location", columns={"city", "county", "state", "country"}, filterable=true, operatorsVisible=false)
  */
 class Institution
 {
