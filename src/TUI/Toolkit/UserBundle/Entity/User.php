@@ -25,7 +25,7 @@ class User extends BaseUser
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @GRID\Column(title="ID", filterable=true, operatorsVisible=false, export=true)
+     * @GRID\Column(title="ID", filterable=false, operatorsVisible=false, export=true)
      */
     protected $id;
 

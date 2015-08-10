@@ -57,8 +57,8 @@ class Institution
     /**
      * @var string
      *
-     * @ORM\Column(name="address2", type="string", length=255)
-     * @GRID\Column(visible=false, filterable=false, export=true, nullable=true)
+     * @ORM\Column(name="address2", type="string", length=255, nullable=true)
+     * @GRID\Column(visible=false, filterable=false, export=true)
      */
     private $address2;
 
