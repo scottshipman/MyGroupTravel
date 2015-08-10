@@ -36,6 +36,7 @@ security:
     access_control:
             - { path: ^/admin/, role: ROLE_ADMIN }
             - { path: ^/manage/, role: ROLE_BRAND }
+            - { path: ^/user/password-set/, role: ROLE_CUSTOMER }
             - { path: ^/user/add/, role: ROLE_CUSTOMER }
             - { path: ^/user/new, role: ROLE_BRAND }
             - { path: ^/user/, role: ROLE_BRAND }
@@ -43,3 +44,4 @@ security:
             - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
             - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
             - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+

@@ -1,0 +1,24 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block fos_user_content %}
+   {# <p>{{ 'registration.confirmed'|trans({'%username%': user.username}) }}</p> #}
+
+   <h3>  Please set your new password using the form below.</h3>
+    <div class="login_form">
+        {% if set_form is defined %}
+            {{ form(set_form) }}
+        {%  else %}
+            {{ render(controller('TUIToolkitUserBundle:User:passwordSet', {'id':user.id})) }}
+        {% endif %}
+    </div>
+
+
+
+
+    {% if app.session is not empty %}
+        {% set targetUrl = app.session.get('_security.' ~ app.security.token.providerKey ~ '.target_path') %}
+        {% if targetUrl is not empty %}<p><a href="{{ targetUrl }}">{{ 'registration.back'|trans }}</a></p>{% endif %}
+    {% endif %}
+{% endblock fos_user_content %}
