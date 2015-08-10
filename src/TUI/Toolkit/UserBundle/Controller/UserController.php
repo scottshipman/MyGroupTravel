@@ -536,8 +536,8 @@ class UserController extends Controller
     $em = $this->getDoctrine()->getManager();
     $user = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
     // Create token
-    $token = sha1(uniqid(mt_rand(), TRUE)); // Or whatever you prefer to generate a token
-    $user->setConfirmationToken($token);
+    $tokenGenerator = $this->container->get('fos_user.util.token_generator');
+    $user->setConfirmationToken($tokenGenerator->generateToken());
     $mailer->sendConfirmationEmailMessage($user);
 
     $this->get('session')->getFlashBag()->add('notice', 'A Notification was sent to ' . $user->getEmail());
