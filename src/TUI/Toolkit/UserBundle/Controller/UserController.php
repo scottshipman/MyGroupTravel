@@ -415,7 +415,7 @@ class UserController extends Controller
   {
     $form = $this->createForm(new PasswordSetType(), $entity, array(
       'action' => $this->generateUrl('user_password_set', array('id' => $entity->getId())),
-      'method' => 'PUT',
+      'method' => 'POST',
     ));
 
     // get current user's roles and add form elements
@@ -490,6 +490,8 @@ class UserController extends Controller
     $setForm->handleRequest($request);
 
     if ($setForm->isValid()) {
+      $entity->setPassword($setForm->getData()->getPlainPassword());
+      $em->persist($entity);
       $em->flush();
       $this->get('session')->getFlashBag()->add('notice', 'Password Updated for: ' . $entity->getUsername());
 
