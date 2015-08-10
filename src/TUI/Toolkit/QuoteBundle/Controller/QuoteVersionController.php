@@ -1010,7 +1010,12 @@ class QuoteVersionController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('manage_quote_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->add('submit', 'button', array(
+              'label' => 'Delete',
+              'attr' => array(
+                'class' => 'delete-btn'
+              )
+            ))
             ->getForm()
         ;
     }
