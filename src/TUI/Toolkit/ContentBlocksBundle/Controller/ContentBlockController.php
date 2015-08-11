@@ -44,7 +44,8 @@ class ContentBlockController extends Controller
 
 
         if (NULL != $form->getData()->getMedia()) {
-            $fileIds[] = $form->getData()->getMedia();
+            $fileIdString = $form->getData()->getMedia();
+            $fileIds = explode(',', $fileIdString);
 
             foreach ($fileIds as $fileId) {
                 $image = $em->getRepository('MediaBundle:Media')

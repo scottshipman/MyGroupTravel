@@ -19,6 +19,7 @@ class ContentBlockType extends AbstractType
             ->add('hidden')
             ->add('layoutType', 'entity', array(
                 'class' => 'ContentBlocksBundle:LayoutType',
+                'data_class' => 'TUI\Toolkit\ContentBlocksBundle\Entity\LayoutType',
                 'choice_label' => 'name',
                 'expanded' => true,
                 'multiple' => false
@@ -43,7 +44,6 @@ class ContentBlockType extends AbstractType
 //                    'multiple' => true
                 )
             ))
-            ->add('sortOrder')
             ->add('doubleWidth')
             ->getForm()
         ;
