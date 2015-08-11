@@ -17,7 +17,12 @@ class ContentBlockType extends AbstractType
         $builder
             ->add('locked')
             ->add('hidden')
-            ->add('layoutType')
+            ->add('layoutType', 'entity', array(
+                'class' => 'ContentBlocksBundle:LayoutType',
+                'choice_label' => 'name',
+                'expanded' => true,
+                'multiple' => false
+            ))
             ->add('title')
             ->add('body', 'ckeditor', array(
                 'transformers' => array('html_purifier'),
