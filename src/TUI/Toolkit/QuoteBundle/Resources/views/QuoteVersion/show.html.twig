@@ -2,6 +2,8 @@
 {% block title %}Quote: {{ entity.quoteReference.name }} {% endblock %}
 {% block page_title %}Quote: {{ entity.quoteReference.name  }} {% endblock %}
 
+{%  if 'en_GB' in locale %} {% set format = 'd-m-Y' %} {% else %} {% set format = 'm-d-Y' %} {% endif %}
+
 {% block body -%}
     <ul class="record_actions">
         <li>
@@ -41,13 +43,13 @@
         <tbody>
             <tr>
                 <th>Departure</th>
-                <td>{% if entity.departureDate %}{{ entity.departureDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if entity.departureDate %}{{ entity.departureDate|date(format) }}{% endif %}</td>
                 <th>Priced per person</th>
-                <td>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %} {% if entity.pricePerson %}{{ entity.pricePerson }}{% endif %}</td>
+                <td>{% if entity.pricePerson %}{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %} {{ entity.pricePerson }}{% endif %}</td>
             </tr>
             <tr>
                 <th>Return</th>
-                <td>{% if entity.returnDate %}{{ entity.returnDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if entity.returnDate %}{{ entity.returnDate|date(format) }}{% endif %}</td>
                 <th>Board Basis</th>
                 <td>{% if entity.boardBasis %}{{ entity.boardBasis }}{% endif %}</td>
             </tr>
@@ -63,6 +65,12 @@
                 <th>Free places</th>
                 <td>{% if entity.payingPlaces  %}{{ entity.payingPlaces  }}{% endif %}</td>
             </tr>
+            <tr>
+                <th>Version</th>
+                <td>{% if entity.version  %}{{ entity.version  }}{% endif %}</td>
+                <th>Expiry Date</th>
+                <td>{% if entity.expiryDate  %}{{ entity.expiryDate|date(format) }}{% endif %}</td>
+            </tr>
         </tbody>
     </table>
 
@@ -72,7 +80,7 @@
         <tbody>
         <tr>
             <th>Organizer</th><td>{% if entity.quoteReference.organizer %}{{ entity.quoteReference.organizer.firstName }} {{ entity.quoteReference.organizer.lastName }} {{ entity.quoteReference.organizer.email }}{% endif %}
-            <a href="{{ path('user_edit', { 'id': entity.quoteReference.organizer.id }) }}" alt = "Edit"><i class="fa fa-pencil-square-o"></i></a>
+                {% if entity.quoteReference.organizer %}<a href="{{ path('user_edit', { 'id': entity.quoteReference.organizer.id }) }}" alt = "Edit"><i class="fa fa-pencil-square-o"></i></a>{% endif %}
             </td>
         </tr>
         </tbody>

@@ -204,7 +204,7 @@ class UserController extends Controller
    * Creates a new User entity.
    *
    */
-  public function ajax_organizer_create(Request $request)
+  public function ajax_organizer_createAction(Request $request)
   {
     $entity = new User();
     $form = $this->create_ajaxCreateForm($entity);
