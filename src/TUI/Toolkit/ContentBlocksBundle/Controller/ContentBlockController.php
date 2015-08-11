@@ -29,6 +29,7 @@ class ContentBlockController extends Controller
             'entities' => $entities,
         ));
     }
+
     /**
      * Creates a new ContentBlock entity.
      *
@@ -41,6 +42,12 @@ class ContentBlockController extends Controller
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
+        if (NULL != $form->getData()->getLayoutType()) {
+            $layout = $form->getData()->getLayoutType();
+            $layoutId = $layout->getId();
+            $form->getData()->setLayoutType($layoutId);
+        }
+
         if (NULL != $form->getData()->getMedia()) {
             $fileIds[] = $form->getData()->getMedia();
 
@@ -51,7 +58,7 @@ class ContentBlockController extends Controller
             }
         }
         if (!empty($medias)) {
-                $form->getData()->setMedia($medias);
+            $form->getData()->setMedia($medias);
         }
 
         if ($form->isValid()) {
@@ -64,7 +71,7 @@ class ContentBlockController extends Controller
 
         return $this->render('ContentBlocksBundle:ContentBlock:new.html.twig', array(
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'form' => $form->createView(),
         ));
     }
 
@@ -94,11 +101,11 @@ class ContentBlockController extends Controller
     public function newAction()
     {
         $entity = new ContentBlock();
-        $form   = $this->createCreateForm($entity);
+        $form = $this->createCreateForm($entity);
 
         return $this->render('ContentBlocksBundle:ContentBlock:new.html.twig', array(
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'form' => $form->createView(),
         ));
     }
 
@@ -119,7 +126,7 @@ class ContentBlockController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('ContentBlocksBundle:ContentBlock:show.html.twig', array(
-            'entity'      => $entity,
+            'entity' => $entity,
             'delete_form' => $deleteForm->createView(),
         ));
     }
@@ -142,19 +149,19 @@ class ContentBlockController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('ContentBlocksBundle:ContentBlock:edit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-    * Creates a form to edit a ContentBlock entity.
-    *
-    * @param ContentBlock $entity The entity
-    *
-    * @return \Symfony\Component\Form\Form The form
-    */
+     * Creates a form to edit a ContentBlock entity.
+     *
+     * @param ContentBlock $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
     private function createEditForm(ContentBlock $entity)
     {
         $form = $this->createForm(new ContentBlockType(), $entity, array(
@@ -166,6 +173,7 @@ class ContentBlockController extends Controller
 
         return $form;
     }
+
     /**
      * Edits an existing ContentBlock entity.
      *
@@ -184,6 +192,26 @@ class ContentBlockController extends Controller
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
+        if (NULL != $editForm->getData()->getLayoutType()) {
+            $layout = $editForm->getData()->getLayoutType();
+            $layoutId = $layout->getId();
+            $editForm->getData()->setLayoutType($layoutId);
+        }
+        $medias = array();
+
+        if (NULL != $editForm->getData()->getMedia()) {
+            $fileIds[] = $editForm->getData()->getMedia();
+
+            foreach ($fileIds as $fileId) {
+                $image = $em->getRepository('MediaBundle:Media')
+                    ->findById($fileId);
+                $medias[] = array_shift($image);
+            }
+        }
+        if (!empty($medias)) {
+            $editForm->getData()->setMedia($medias);
+        }
+
         if ($editForm->isValid()) {
             $em->flush();
 
@@ -191,11 +219,12 @@ class ContentBlockController extends Controller
         }
 
         return $this->render('ContentBlocksBundle:ContentBlock:edit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
     }
+
     /**
      * Deletes a ContentBlock entity.
      *
@@ -233,7 +262,6 @@ class ContentBlockController extends Controller
             ->setAction($this->generateUrl('manage_contentblocks_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-        ;
+            ->getForm();
     }
 }
