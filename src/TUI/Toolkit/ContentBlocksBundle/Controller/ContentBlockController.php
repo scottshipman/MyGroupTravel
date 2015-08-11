@@ -36,8 +36,23 @@ class ContentBlockController extends Controller
     public function createAction(Request $request)
     {
         $entity = new ContentBlock();
+        $medias = array();
+        $em = $this->getDoctrine()->getManager();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
+
+        if (NULL != $form->getData()->getMedia()) {
+            $fileIds[] = $form->getData()->getMedia();
+
+            foreach ($fileIds as $fileId) {
+                $image = $em->getRepository('MediaBundle:Media')
+                    ->findById($fileId);
+                $medias[] = array_shift($image);
+            }
+        }
+        if (!empty($medias)) {
+                $form->getData()->setMedia($medias);
+        }
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();

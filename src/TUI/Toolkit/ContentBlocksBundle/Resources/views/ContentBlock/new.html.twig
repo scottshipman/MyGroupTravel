@@ -3,7 +3,44 @@
 {% block body -%}
     <h1>ContentBlock creation</h1>
 
-    {{ form(form) }}
+    <div id="avatar-label" class="mdl-label-mimic">Some Media
+        <div style="display:none;" id="dropzone-form-close"><i class="fa fa-times-circle"></i></div>
+    </div>
+    {{ render(controller('MediaBundle:Media:createDropzoneForm', {'context':'contentblock'})) }}
+    {{ form_start(form) }}
+
+
+    <div id="user_media" class="is-dirty mdl-textfield--floating-label">
+        {% if entity.media %}
+            <div class="media-placeholder-image">
+                <div id="overlay">
+                    <i class="fa fa-pencil-square-o fa-2x"></i>
+                </div>
+            </div>
+            <script>
+                {#$(document).ready(function () {#}
+                {#var bUrl = '{{ asset(".." ~ entity.media.getRelativePath ~ "/" ~ entity.media.getHashedFilename ) }}';#}
+                {#$(".media-placeholder-image").css({#}
+                {#"background-image": "url(" + bUrl + ")",#}
+                {#"background-position": "left",#}
+                {#"background-repeat": "no-repeat",#}
+                {#"background-size":"contain",#}
+                {#"width": "auto",#}
+                {#"max-width": "500px",#}
+                {#"height": "auto"#}
+                {#});#}
+                {#});#}
+            </script>
+        {% else %}
+            <span class="fa-stack fa-3x">
+                <i class="media-placeholder-image fa fa-picture-o fa-stack-5x">
+                    <span style="display:block; font-size: .25em;">click to edit</span>
+                </i>
+            </span>
+        {% endif %}
+    </div>
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
 
         <ul class="record_actions">
     <li>
