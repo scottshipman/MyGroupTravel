@@ -646,6 +646,8 @@ class QuoteVersionController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
+      $locale = $this->container->getParameter('locale');
+
       // Get all Quote versions referencing Parent Quote object
       $entity = $em->getRepository('QuoteBundle:QuoteVersion')->findById($id);
         if (!$entity) {
@@ -664,6 +666,7 @@ class QuoteVersionController extends Controller
         return $this->render('QuoteBundle:QuoteVersion:show.html.twig', array(
             'entity'      => $entity[0],
             'delete_form' => $deleteForm->createView(),
+            'locale'      => $locale,
         ));
     }
 

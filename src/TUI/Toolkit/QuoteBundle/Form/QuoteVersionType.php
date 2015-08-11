@@ -54,11 +54,13 @@ class QuoteVersionType extends AbstractType
               'widget' => 'single_text',
               'required' => false,
               'label' => 'Departure Date ' .$date_label,
+              'format' => $date_format,
             ))
             ->add('returnDate', 'genemu_jquerydate', array(
               'widget' => 'single_text',
               'required' => false,
               'label' => 'Return Date ' .$date_label,
+              'format' => $date_format,
             ))
             ->add('duration', 'text', array(
               'required'  => false,
