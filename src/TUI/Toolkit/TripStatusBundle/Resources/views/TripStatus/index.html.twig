@@ -14,7 +14,7 @@
         <thead>
             <tr>
                 <th class="mdl-data-table__cell--non-numeric">Name (ID)</th>
-                <th>Visible</th>
+                <th class="mdl-data-table__cell--non-numeric">Visible</th>
                 <th class="mdl-data-table__cell--non-numeric">Actions</th>
             </tr>
         </thead>
@@ -24,14 +24,20 @@
                 <td class="mdl-data-table__cell--non-numeric">
                     <a href="{{ path('manage_tripstatus_show', { 'id': entity.id }) }}">{{ entity.name }}</a> ({{ entity.id }})
                 </td>
-                <td>{{ entity.visible }}</td>
+                <td class="mdl-data-table__cell--non-numeric">
+                    {% if entity.visible == 1 %}
+                        <i class="fa fa-check"></i>
+                    {% else %}
+                        <i class="fa fa-times"></i>
+                    {% endif %}
+                </td>
                 <td class="mdl-data-table__cell--non-numeric">
                     <ul class="table-actions">
                         <li>
-                            <a href="{{ path('manage_tripstatus_show', { 'id': entity.id }) }}">show</a>
+                            <a href="{{ path('manage_tripstatus_show', { 'id': entity.id }) }}"><i class="fa fam-view"></i></a>
                         </li>
                         <li>
-                            <a href="{{ path('manage_tripstatus_edit', { 'id': entity.id }) }}">edit</a>
+                            <a href="{{ path('manage_tripstatus_edit', { 'id': entity.id }) }}"><i class="fa fam-edit"></i></a>
                         </li>
                     </ul>
                 </td>

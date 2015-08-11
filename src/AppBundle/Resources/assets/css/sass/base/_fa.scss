@@ -1,0 +1,31 @@
+.fam-edit {
+
+  &:before {
+    content: '\f040';
+  }
+
+}
+
+.fam-view {
+
+  &:before {
+    content: '\f06e';
+  }
+
+}
+
+.fam-delete {
+
+  &:before {
+    content: '\f00d';
+  }
+
+}
+
+.fam-clone {
+
+  &:before {
+    content: '\f24d';
+  }
+
+}
