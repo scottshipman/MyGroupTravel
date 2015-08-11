@@ -37,8 +37,16 @@
                 <th>Doublewidth</th>
                 <td>{{ entity.doubleWidth }}</td>
             </tr>
+            <tr>
+                <th>Media</th>
+                {#{% for media in entity.getMedia() %}#}
+                {#<td>{{ entity.media.getId() }}</td>#}
+                {#{% endfor %}#}
+            </tr>
         </tbody>
     </table>
+
+    {{ dump(entity.media) }}
 
         <ul class="record_actions">
     <li>

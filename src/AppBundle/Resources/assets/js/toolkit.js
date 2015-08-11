@@ -78,18 +78,20 @@
     //}
 
 
-  // *
-  // "Add New" Link and Dialog modal for New Quote form
-  // *
+    // *
+    // "Add New" Link and Dialog modal for New Quote form
+    // *
     $('body').append('<div id="dialog"></div>');
-    var elements = {'#tui_toolkit_quotebundle_quoteversion_quoteReference_organizer':'Organizer',
-                    '#tui_toolkit_quotebundle_quoteversion_quoteReference_institution': 'Institution'};
-    $.each(elements, function(element, type){
-            if ( element.length ) {
-                //  source a button or glyph here
-                $(element).parent('div').parent('div').append('<div id= "' + type + '-add-new-link" class="add-new modal" style="display:inline;cursor:Pointer"><i class="material-icons">&#xE147;</i></div>');
-            }
-        });
+    var elements = {
+        '#tui_toolkit_quotebundle_quoteversion_quoteReference_organizer': 'Organizer',
+        '#tui_toolkit_quotebundle_quoteversion_quoteReference_institution': 'Institution'
+    };
+    $.each(elements, function (element, type) {
+        if (element.length) {
+            //  source a button or glyph here
+            $(element).parent('div').parent('div').append('<div id= "' + type + '-add-new-link" class="add-new modal" style="display:inline;cursor:Pointer"><i class="material-icons">&#xE147;</i></div>');
+        }
+    });
 
     $("#dialog").dialog({
         autoOpen: false,
@@ -247,5 +249,9 @@
         }
     })
 
+
+    ////Content Blocks Fontawesome Radio Button
+    //$('#tui_toolkit_contentblocksbundle_contentblock_layoutType > label:nth-child(1) > span').css({"display": "none"});
+    //$('#tui_toolkit_contentblocksbundle_contentblock_layoutType_8').wrap('<i class="fa fa-picture-o fa-bars"></i>');
 
 })(jQuery);
