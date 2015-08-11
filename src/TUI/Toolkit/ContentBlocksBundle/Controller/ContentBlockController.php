@@ -42,11 +42,6 @@ class ContentBlockController extends Controller
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
-        if (NULL != $form->getData()->getLayoutType()) {
-            $layout = $form->getData()->getLayoutType();
-            $layoutId = $layout->getId();
-            $form->getData()->setLayoutType($layoutId);
-        }
 
         if (NULL != $form->getData()->getMedia()) {
             $fileIds[] = $form->getData()->getMedia();
@@ -192,11 +187,6 @@ class ContentBlockController extends Controller
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
-        if (NULL != $editForm->getData()->getLayoutType()) {
-            $layout = $editForm->getData()->getLayoutType();
-            $layoutId = $layout->getId();
-            $editForm->getData()->setLayoutType($layoutId);
-        }
         $medias = array();
 
         if (NULL != $editForm->getData()->getMedia()) {
