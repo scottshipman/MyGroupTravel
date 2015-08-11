@@ -584,6 +584,10 @@ class QuoteVersionController extends Controller
   private function createTemplateCreateForm(QuoteVersion $entity)
   {
     $locale = $this->container->getParameter('locale');
+    $currency_code = $this->container->getParameter('currency');
+    $em = $this->getDoctrine()->getManager();
+    $currency = $em->getRepository('CurrencyBundle:Currency')->findByCode($currency_code);
+    $currency = array_shift($currency);
     $form = $this->createForm(new QuoteVersionType($locale), $entity, array(
       'action' => $this->generateUrl('manage_quoteversion_createtemplate'),
       'method' => 'POST',
