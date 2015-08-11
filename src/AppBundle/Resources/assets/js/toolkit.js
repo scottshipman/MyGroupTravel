@@ -63,7 +63,7 @@
     });
 
     //Add Placeholder Fields to Login Form
-    $("#username").attr("placeholder", "Username");
+    $("#username").attr("placeholder", "Email");
     $("#password").attr("placeholder", "Password");
 
     if ($("form").hasClass("fos_user_resetting_request")) {
@@ -180,5 +180,72 @@
             display: "none"
         });
     });
+
+    /**
+     * Drag and Drop Sorting
+     */
+
+    $( ".sortable-tabs" ).sortable({
+        containment: "parent",
+        items: "> div",
+        // handle: ".move",
+        tolerance: "pointer",
+        cursor: "move",
+        opacity: 0.7,
+        revert: 300,
+        delay: 150,
+        dropOnEmpty: true,
+        placeholder: "tabs-placeholder",
+        start: function(e, ui) {
+            ui.placeholder.height(ui.helper.outerHeight());
+        },
+        axis: 'y'
+        //  update: function (event, ui) {
+        //      var data = $(this).sortable('serialize');
+        //// POST to server using $.post or $.ajax
+        //           $.ajax({
+        //                data: data,
+        //                type: 'POST',
+        //                url: '/your/url/here'
+        //            });
+        //// }
+    });
+    //$( ".sortable-tabs" ).disableSelection();
+    $( ".sortable-items" ).sortable({
+        containment: "document",
+        items: "> div",
+        tolerance: "pointer",
+        connectWith: '.sortable-items',
+        placeholder: "items-placeholder",
+        start: function(e, ui) {
+            ui.placeholder.height(ui.helper.outerHeight());
+        },
+        axis: 'y'
+        //  update: function (event, ui) {
+        //      var data = $(this).sortable('serialize');
+        //// POST to server using $.post or $.ajax
+        //            $.ajax({
+        //                data: data,
+        //                type: 'POST',
+        //                url: '/your/url/here'
+        //            });
+        ////  }
+    });
+//     $( ".sortable-items" ).disableSelection();
+
+
+    /**
+     * Add font-awesome to Delete buttons
+     */
+
+    $('.button-row').children(':button').each(function(){
+        if ($.trim($(this).html()) == 'Delete'){
+            $(this).html('<i class="fa fa-trash-o"></i> Delete');
+        }
+        if ($.trim($(this).html()) == 'Update'){
+            $(this).html('<i class="fa fa-check-circle"></i> Update');
+        }
+    })
+
 
 })(jQuery);

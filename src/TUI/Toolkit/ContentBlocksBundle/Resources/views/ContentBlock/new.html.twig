@@ -9,6 +9,13 @@
     {{ render(controller('MediaBundle:Media:createDropzoneForm', {'context':'contentblock'})) }}
     {{ form_start(form) }}
 
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('manage_contentblocks') }}">
+            <i class="fa fa-arrow-circle-left"></i> Back to the list
+        </a>
+    </li>
+</ul>
 
     <div id="user_media" class="is-dirty mdl-textfield--floating-label">
         {% if entity.media %}
