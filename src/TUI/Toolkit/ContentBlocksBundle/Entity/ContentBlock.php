@@ -261,10 +261,10 @@ class ContentBlock
     {
         $this->media[] = $medias;
     }
-//
-//    /**
-//     * @param  $media
-//     */
+
+    /**
+     * @param  $media
+     */
 
     public function setMedia($media)
     {
