@@ -3,6 +3,7 @@
 namespace TUI\Toolkit\QuoteBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use TUI\Toolkit\QuoteBundle\Entity\QuoteVersion;
@@ -645,6 +646,8 @@ class QuoteVersionController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
+      $locale = $this->container->getParameter('locale');
+
       // Get all Quote versions referencing Parent Quote object
       $entity = $em->getRepository('QuoteBundle:QuoteVersion')->findById($id);
         if (!$entity) {
@@ -663,6 +666,7 @@ class QuoteVersionController extends Controller
         return $this->render('QuoteBundle:QuoteVersion:show.html.twig', array(
             'entity'      => $entity[0],
             'delete_form' => $deleteForm->createView(),
+            'locale'      => $locale,
         ));
     }
 
@@ -1014,8 +1018,33 @@ class QuoteVersionController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('manage_quote_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->add('submit', 'button', array(
+              'label' => 'Delete',
+              'attr' => array(
+                'class' => 'delete-btn'
+              )
+            ))
             ->getForm()
         ;
     }
+
+  /**
+   * Adds a new tab into the content blocks array field
+   *
+   * @param mixed $id The entity id
+   *
+   * @return Symfony\Component\HttpFoundation\Response
+   */
+  public function newTabAction(Request $request, $id)
+  {
+    $em = $this->getDoctrine()->getManager();
+    $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+    $content = $entity->getContent();
+    $newContent = $request;
+
+
+
+
+    return new Response();
+  }
 }

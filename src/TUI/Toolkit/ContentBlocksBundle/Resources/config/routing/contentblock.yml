@@ -28,3 +28,8 @@ manage_contentblocks_delete:
     path:     /{id}/delete
     defaults: { _controller: "ContentBlocksBundle:ContentBlock:delete" }
     methods:  [POST, DELETE]
+
+contentblocks_new_tab:
+    path:   /new-tab/{id}
+    defaults: { _controller: "QuoteBundle:QuoteVersion:newTab" }
+    methods:  [POST]

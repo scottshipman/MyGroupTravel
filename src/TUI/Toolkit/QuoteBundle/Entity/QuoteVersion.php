@@ -61,9 +61,9 @@ class QuoteVersion
      * @var array
      * @GRID\Column(title="Content", export=true)
      *
-     * @ORM\Column(name="content", type="json_array", nullable=true)
+     * @ORM\Column(name="content", type="array", nullable=true)
      */
-    private $content;
+    private $content=array();
 
     /**
      * @var \DateTime

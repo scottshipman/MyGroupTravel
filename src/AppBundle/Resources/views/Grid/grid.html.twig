@@ -121,8 +121,8 @@
                 {% endfor %}
                 </div>
                 <div class="grid-search-action">
-                    <input type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored grid-search-submit" value="{{ 'Search'|trans }}"/>
-                    <input type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored grid-search-reset" value="{{ 'Reset'|trans }}" onclick="return {{ grid.hash }}_reset();"/>
+                    <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored grid-search-submit"><i class="fa fa-filter"></i>{{ ' Filter'|trans }}</button>
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored grid-search-reset" onclick="return {{ grid.hash }}_reset();"><i class="fa fa-undo"></i>{{ ' Reset'|trans }}</button>
                 </div>
             </form>
         </div>
@@ -220,7 +220,7 @@
                     <option selected="selected" value="{{key}}">{{ export.title|trans }}</option>
                 {% endfor %}
             </select>
-            <input type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" value="{{ 'Export to CSV'|trans }}"/>
+            <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"><i class="fa fa-download"></i>{{  ' Export to CSV'|trans }}</button>
         {% endspaceless %}
     </div>
 {% endblock grid_exports %}

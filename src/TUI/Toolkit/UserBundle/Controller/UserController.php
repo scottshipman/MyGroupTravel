@@ -57,9 +57,34 @@ class UserController extends Controller
         $column->setFilterType('select');
         $column->setOperatorsVisible(false);
 
+        // add email filter
+        $column = $grid->getColumn('email');
+        $column->setFilterable(true);
+        $column->setTitle('Email');
+        //$column->setFilterType('select');
+        $column->setOperatorsVisible(false);
+
+        // add enabled filter
+        $column = $grid->getColumn('enabled');
+        $column->setFilterable(true);
+        $column->setTitle('Enabled');
+        //$column->setFilterType('select');
+        $column->setOperatorsVisible(false);
+
         // Add action column
         $editAction = new RowAction('Edit', 'user_edit');
         $grid->addRowAction($editAction);
+        $notifyAction = new RowAction('Notify', 'user_registration_confirmation');
+          $notifyAction->manipulateRender(
+            function ($action, $row)
+            { // only show if enabled is false
+              if ($row->getField('enabled') == true) {
+                  return null;
+              }
+              return $action;
+            }
+          );
+        $grid->addRowAction($notifyAction);
         $showAction = new RowAction('View', 'user_show');
         $grid->addRowAction($showAction);
         $deleteAction = new RowAction('Delete', 'user_quick_delete');
@@ -179,7 +204,7 @@ class UserController extends Controller
    * Creates a new User entity.
    *
    */
-  public function ajax_organizer_create(Request $request)
+  public function ajax_organizer_createAction(Request $request)
   {
     $entity = new User();
     $form = $this->create_ajaxCreateForm($entity);

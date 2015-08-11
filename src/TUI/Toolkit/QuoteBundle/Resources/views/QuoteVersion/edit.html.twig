@@ -12,13 +12,13 @@
     {% else %}
     <li>
         <a id="save-revision" onclick="submitQuoteForm();" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-            Save as New Revision
+            <i class="fa fa-files-o"></i> Save as New Revision
         </a>
     </li>
     {% endif %}
     <li>
         <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quote') }}">
-            Back to the list
+            <i class="fa fa-arrow-circle-left"></i> Back to the list
         </a>
     </li>
     {% if delete_form is defined %}
