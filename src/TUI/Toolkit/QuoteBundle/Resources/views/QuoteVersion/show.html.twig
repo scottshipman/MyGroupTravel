@@ -71,7 +71,9 @@
     <table>
         <tbody>
         <tr>
-            <th>Organizer</th><td>{% if entity.quoteReference.organizer %}{{ entity.quoteReference.organizer.firstName }} {{ entity.quoteReference.organizer.lastName }} {{ entity.quoteReference.organizer.email }}{% endif %}</td>
+            <th>Organizer</th><td>{% if entity.quoteReference.organizer %}{{ entity.quoteReference.organizer.firstName }} {{ entity.quoteReference.organizer.lastName }} {{ entity.quoteReference.organizer.email }}{% endif %}
+            <a href="{{ path('user_edit', { 'id': entity.quoteReference.organizer.id }) }}" alt = "Edit"><i class="fa fa-pencil-square-o"></i></a>
+            </td>
         </tr>
         </tbody>
     </table>
@@ -93,15 +95,12 @@
 
     {# RENDER THE CONTENT BLOCKS HERE #}
 
-    {{ dump(entity) }}
+   {# {{ dump(entity) }} #}
 
-    <h3>Site Content Blocks</h3>
+    <h3>Tour Information</h3>
 
-    <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quote') }}">
+    <a id="add-new-tab" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
         <i class="fa fa-plus-circle"></i>  Add New Tab
-    </a>
-    <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quote') }}">
-        <i class="fa fa-plus-circle"></i>  Add New Content Block
     </a>
 
     <div id="content-blocks-wrapper" class="sortable-tabs">
@@ -113,6 +112,7 @@
                 <i class="content-block-tab-actions fa fa-lock"></i>
                 <i class="content-block-tab-actions fa fa-trash-o"></i>
                 <i class="content-block-tab-actions fa fa-pencil-square-o"></i>
+                <a href="{{ path('manage_quote') }}" alt = "Add New Content Block"><i class="content-block-tab-actions fa fa-plus-circle"></i></a>
 
 
 
@@ -136,7 +136,52 @@
     </div>
 
     <style>
-         .content-block-actions, .content-block-tab-actions {display:inline; float:right; padding-right:.2em;}
+        .content-blocks-drawer {min-height: 1em;}
     </style>
+
+    <script>
+        (function ($) {
+            $("#add-new-tab").on('click', function(){
+                var newId = $("#content-blocks-wrapper").children().length;
+                $("#content-blocks-wrapper").prepend(
+                        '<div id="tab-tab'  + (newId + 1)+ '" class="content-blocks-tab">' +
+                        ' <h4 id="tab-label-' +(newId +1)+'" class="content-blocks tab-label">'+
+                        '<i class="fa fa-arrows"></i> New Tab' + (newId + 1) +
+                        '<i class="content-block-tab-actions fa fa-ban"></i>' +
+                        '<i class="content-block-tab-actions fa fa-lock"></i>' +
+                        '<i class="content-block-tab-actions fa fa-trash-o"></i>' +
+                        '<i class="content-block-tab-actions fa fa-pencil-square-o"></i>' +
+                        '<a href="{{ path('manage_quote') }}" alt = "Add New Content Block"><i class="content-block-tab-actions fa fa-plus-circle"></i></a>' +
+                        '</h4>' +
+                        '<div id="tabs-drawer-tab' + (newId +1) + '" class="sortable-items content-blocks-drawer">' +
+                        '</div></div>'
+                );
+
+                $(".sortable-tabs").sortable('refresh');
+                $(".sortable-items").sortable();
+
+                // update server with new data
+                var data
+                     // var data = $('.sortable-tabs').sortable('serialize');
+                $('.sortable-tabs').each(function(i, obj) {
+                    $(this > '.sortable-items').map(function(){
+                        data
+                    })
+                });
+
+
+
+                var data = $('#content-blocks-wrapper').serialize();
+                console.log(data);
+                        //POST to server using $.post or $.ajax
+                            $.ajax({
+                                data: data,
+                                type: 'POST',
+                                url: '/manage/contentblocks/new-tab/{{ entity.id }}'
+                            });
+
+            });
+        })(jQuery);
+    </script>
 
 {% endblock %}

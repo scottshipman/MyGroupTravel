@@ -3,6 +3,7 @@
 namespace TUI\Toolkit\QuoteBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use TUI\Toolkit\QuoteBundle\Entity\QuoteVersion;
@@ -584,6 +585,10 @@ class QuoteVersionController extends Controller
   private function createTemplateCreateForm(QuoteVersion $entity)
   {
     $locale = $this->container->getParameter('locale');
+    $currency_code = $this->container->getParameter('currency');
+    $em = $this->getDoctrine()->getManager();
+    $currency = $em->getRepository('CurrencyBundle:Currency')->findByCode($currency_code);
+    $currency = array_shift($currency);
     $form = $this->createForm(new QuoteVersionType($locale), $entity, array(
       'action' => $this->generateUrl('manage_quoteversion_createtemplate'),
       'method' => 'POST',
@@ -1019,4 +1024,24 @@ class QuoteVersionController extends Controller
             ->getForm()
         ;
     }
+
+  /**
+   * Adds a new tab into the content blocks array field
+   *
+   * @param mixed $id The entity id
+   *
+   * @return Symfony\Component\HttpFoundation\Response
+   */
+  public function newTabAction(Request $request, $id)
+  {
+    $em = $this->getDoctrine()->getManager();
+    $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+    $content = $entity->getContent();
+    $newContent = $request;
+
+
+
+
+    return new Response();
+  }
 }

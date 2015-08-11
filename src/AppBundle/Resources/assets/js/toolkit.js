@@ -195,20 +195,20 @@
         revert: 300,
         delay: 150,
         dropOnEmpty: true,
-        placeholder: "movable-placeholder",
+        placeholder: "tabs-placeholder",
         start: function(e, ui) {
             ui.placeholder.height(ui.helper.outerHeight());
         },
         axis: 'y'
         //  update: function (event, ui) {
         //      var data = $(this).sortable('serialize');
-        // POST to server using $.post or $.ajax
-//                    $.ajax({
-//                        data: data,
-//                        type: 'POST',
-//                        url: '/your/url/here'
-//                    });
-        // }
+        //// POST to server using $.post or $.ajax
+        //           $.ajax({
+        //                data: data,
+        //                type: 'POST',
+        //                url: '/your/url/here'
+        //            });
+        //// }
     });
     //$( ".sortable-tabs" ).disableSelection();
     $( ".sortable-items" ).sortable({
@@ -216,18 +216,22 @@
         items: "> div",
         tolerance: "pointer",
         connectWith: '.sortable-items',
+        placeholder: "items-placeholder",
+        start: function(e, ui) {
+            ui.placeholder.height(ui.helper.outerHeight());
+        },
         axis: 'y'
         //  update: function (event, ui) {
         //      var data = $(this).sortable('serialize');
-        // POST to server using $.post or $.ajax
-//                    $.ajax({
-//                        data: data,
-//                        type: 'POST',
-//                        url: '/your/url/here'
-//                    });
-        //  }
+        //// POST to server using $.post or $.ajax
+        //            $.ajax({
+        //                data: data,
+        //                type: 'POST',
+        //                url: '/your/url/here'
+        //            });
+        ////  }
     });
-    // $( ".sortable-items" ).disableSelection();
+//     $( ".sortable-items" ).disableSelection();
 
 
     /**
