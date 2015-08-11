@@ -107,9 +107,9 @@ class QuoteVersionType extends AbstractType
                     ->orderBy('c.name', 'ASC');
                     },
               ))
-            ->add('content', 'hidden', array(
-                'empty_data' => 0, //'set this to whatever is the parent'
-              ))
+//            ->add('content', 'collection', array(
+//                'type' => 'hidden',
+//              ))
         ;
     }
     
