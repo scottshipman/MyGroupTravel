@@ -37,11 +37,11 @@ class ContentBlock
     private $hidden;
 
     /**
-     * @var integer
      *
-     * @ORM\Column(name="layoutType", type="integer")
+     * @var \TUI\Toolkit\ContentBlocksBundle\Entity\LayoutType
+     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\ContentBlocksBundle\Entity\LayoutType", cascade={"persist"}, fetch="LAZY")
+     * @ORM\JoinColumn(name="layouttype", referencedColumnName="id")
      *
-     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\ContentBlocksBundle\Entity\LayoutType", cascade={"all"}, fetch="EAGER", inversedBy = "id")
      */
     private $layoutType;
 
