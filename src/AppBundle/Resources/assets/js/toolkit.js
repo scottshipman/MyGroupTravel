@@ -63,7 +63,7 @@
     });
 
     //Add Placeholder Fields to Login Form
-    $("#username").attr("placeholder", "Username");
+    $("#username").attr("placeholder", "Email");
     $("#password").attr("placeholder", "Password");
 
     if ($("form").hasClass("fos_user_resetting_request")) {
