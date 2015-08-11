@@ -1,18 +1,15 @@
 .dropzone {
-    background: $bg_white;
-    border: 1px solid $border_grey_l;
-    min-height: 160px;
-    padding: 20px;
-    position: relative;
+  padding: 20px;
+  position: relative;
 
-    .dz-message {
-      margin: -20px 0 0;
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 80px;
-      text-align: center;
-    }
+  .dz-message {
+    margin: -20px 0 0;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    text-align: center;
+  }
 
 }
 
@@ -28,37 +25,77 @@
   min-height: 100px;
 }
 
-#overlay    {
-  background:rgba(0,0,0,.15);
+#overlay {
+  background: rgba(0,0,0,0.15);
   border-radius: 20px;
-  text-align:center;
-  padding:45px 0 45px 0;
-  opacity:0;
-  -webkit-transition: opacity .25s ease;
-  -moz-transition: opacity .25s ease;
+  text-align: center;
+  height: 100%;
+  padding: 0;
+  opacity: 0;
+  @include vendor-prefix(transition, opacity 0.25s ease);
 }
 
-.media-placeholder-image:hover #overlay {
-  opacity:1;
-}
+.media-placeholder-image,
 #dropzone_form {
   width: auto;
   height: auto;
   background: transparent;
-  border: 1px dashed green;
+  border: 1px dashed #000;
+  @include mdl-primary-color(border-color, 6);
   position: relative;
   border-radius: 20px;
-  display:none;
+  margin-bottom: 20px;
 }
-#dropzone-form-close {
-  display: inline-block;
-  right: 10px;
-  top: 25px;
-  position: relative;
-  z-index: 11;
-  float:right;
+
+.media-placeholder-image {
+  text-align: center;
+  display: block;
+  cursor: pointer;
+
+  .fa {
+    display: block;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 50%;
+  }
+
+  &.edit .fa {
+    top: 50%;
+    bottom: auto;
+    margin-top: -0.5em;
+  }
+
+  span {
+    display: block;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+  }
+
+  &:hover #overlay {
+    opacity: 1;
+  }
+
+}
+
+#dropzone_form {
+  display: none;
+  padding: 20px;
 }
 
 #avatar-label {
-  max-width:160px;
+  width: 300px;
+  position: relative;
+  @include mdl-primary-color(color, 6);
+}
+
+#dropzone-form-close {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  z-index: 11;
+  cursor: pointer;
+  padding: 10px;
 }
