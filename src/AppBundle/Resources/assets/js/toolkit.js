@@ -111,7 +111,6 @@
         var parts = modal_form.split("-add");
         var form_type = parts[0].toLowerCase();
         //e.preventDefault();
-        console.log(form_type);
         $("#dialog").html("");
         $("#dialog").dialog("option", "title", "Loading...").dialog("open");
         $("#dialog").load('/ajax/' + form_type + '/new', function() {
@@ -257,12 +256,10 @@
 
 var contentBlocksUpdate = function (id) {
     // update server with new data
-    console.log('Updating Quote ' + id);
     var result = {};
     var data = $(".content-blocks-tab");
     data.each(function (i, obj) {
         tabText = $(this).find('.editable-tab').text();
-        console.log(tabText);
         if ($(this).find('.content-blocks-item').size() == 0) {
             result[tabText] = '';
         } else {
@@ -281,6 +278,8 @@ var contentBlocksUpdate = function (id) {
         type: 'POST',
         url: '/manage/contentblocks/update/'+ id
     });
+    //reload the window so changes are redrawn - its lazy non-ajaxy, but...
+    contentBlocksRefresh(id);
 };
 
 /**
@@ -291,11 +290,9 @@ var contentBlocksUpdate = function (id) {
 
 var contentBlocksAddTab= function (elem, id){
     var newId = $(elem).children().length;
-    console.log(newId);
     $("#content-blocks-wrapper").prepend(
         '<div id="tab-tab'  + (newId + 1)+ '" class="content-blocks-tab">' +
         '<span class="content-blocks tab-label"><i class="content-block-tab-handle fa fa-arrows"></i>  <h4 id="tab-label-{{ tab }}" class="editable-tab"> New Tab '  + (newId + 1)+ '</h4>' +
-        '<i class="tab-edit fa fa-pencil-square-o"></i>' +
         '<i class="tab-delete content-block-tab-actions fa fa-trash-o"> Delete Tab</i>' +
         '<i class="tab-new content-block-tab-actions fa fa-plus-circle"> Add Content</i>' +
         '</span>' +
@@ -306,5 +303,23 @@ var contentBlocksAddTab= function (elem, id){
     $(".sortable-tabs").sortable('refresh');
     $(".sortable-items").sortable();
     contentBlocksUpdate(id);
+}
+
+var contentBlocksRefresh = function(id){
+    $.ajax({
+        beforeSend: function() {
+            $('#loader').show();
+        },
+
+        url: window.location.href,
+        headers: {
+            "Pragma": "no-cache",
+            "Expires": -1,
+            "Cache-Control": "no-cache"
+        }
+    }).done(function () {
+        window.location.hash = 'site-content';
+        window.location.reload(true);
+    });
 }
 

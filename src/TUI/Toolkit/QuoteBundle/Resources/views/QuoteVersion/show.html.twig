@@ -111,11 +111,11 @@
         <i class="fa fa-plus-circle"></i>  Add New Tab
     </a>
 
+    <a id="site-content"></a>
     <div id="content-blocks-wrapper" class="sortable-tabs">
         {%  for tab, blocks in entity.content %}
         <div id="tab-{{ tab|replace({' ': '_'}) }}" class="content-blocks-tab">
             <span class="content-blocks tab-label"><i class="content-block-tab-handle fa fa-arrows"></i>  <h4 id="tab-label-{{ tab }}" class="editable-tab">{{ tab }}</h4>
-                <i class="tab-edit fa fa-pencil-square-o"></i>
                     {% if blocks | length < 1 %}
                     <i class="tab-delete content-block-tab-actions fa fa-trash-o"> Delete Tab</i>
                     {% endif %}
@@ -143,7 +143,7 @@
     </div>
 
     <style>
-        .content-blocks-drawer {min-height: 1em;}
+
     </style>
 
     <script>
@@ -152,17 +152,30 @@
                 contentBlocksAddTab('#content-blocks-wrapper', {{ entity.id }});
             });
 
+            $(".tab-delete").on('click', function(){
+                var ancestorTabElement = $(this).closest('.content-blocks-tab');
+                alert('Are you sure you want to remove this tab? Warning: this can not be undone.');
+                $(ancestorTabElement).remove();
+                contentBlocksUpdate({{ entity.id }});
+            });
+
+            $(".tab-new").on('click', function(){
+                //e.preventDefault();
+                $("#dialog").html("");
+                $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
+                $("#dialog").load('/manage/contentblocks/new', function() {
+                    $(this).dialog("option", "title", 'Create New Content Block');
+                });
+                //contentBlocksUpdate({{ entity.id }});
+            });
+
             $('.editable-tab').editable(function(value, settings) {
-//                console.log(this);
-                console.log('return');
-//                console.log(settings);
                 return(value);
             }, {
                 width: '20em',
                 onblur: "cancel",
                 tooltip: 'Click to edit',
                 callback : function(value, settings) {
-                    console.log('callback');
                     contentBlocksUpdate({{ entity.id }}); //value
                 }
             });
