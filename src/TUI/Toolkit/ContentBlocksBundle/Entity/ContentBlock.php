@@ -62,7 +62,7 @@ class ContentBlock
     /**
      * @var integer
      *
-     * @ORM\Column(name="sortOrder", type="integer")
+     * @ORM\Column(name="sortOrder", type="integer", nullable=true)
      */
     private $sortOrder;
 
@@ -257,9 +257,15 @@ class ContentBlock
         $this->media = new ArrayCollection();
     }
 
-    public function addMedia($medias)
+    /**
+     * @param $media
+     */
+
+    public function addMedia($media)
     {
-        $this->media[] = $medias;
+
+        $this->media[] = $media;
+        return $this;
     }
 
     /**

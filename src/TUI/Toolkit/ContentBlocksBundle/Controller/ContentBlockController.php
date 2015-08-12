@@ -42,7 +42,6 @@ class ContentBlockController extends Controller
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
-
         if (NULL != $form->getData()->getMedia()) {
             $fileIdString = $form->getData()->getMedia();
             $fileIds = explode(',', $fileIdString);
@@ -55,6 +54,7 @@ class ContentBlockController extends Controller
         }
         if (!empty($medias)) {
             $form->getData()->setMedia($medias);
+
         }
 
         if ($form->isValid()) {
@@ -115,6 +115,8 @@ class ContentBlockController extends Controller
 
         $entity = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($id);
 
+        $collection = $entity->getMedia()->toArray();
+
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ContentBlock entity.');
         }
@@ -124,6 +126,7 @@ class ContentBlockController extends Controller
         return $this->render('ContentBlocksBundle:ContentBlock:show.html.twig', array(
             'entity' => $entity,
             'delete_form' => $deleteForm->createView(),
+            'collection' => $collection,
         ));
     }
 
@@ -137,15 +140,26 @@ class ContentBlockController extends Controller
 
         $entity = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($id);
 
+        $collection = $entity->getMedia()->toArray();
+        foreach ($collection as $image) {
+            $imageIds[] = $image->getId();
+
+        }
+        $collectionIds = implode(',', $imageIds);
+
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ContentBlock entity.');
         }
 
+        $entity->setMedia($collectionIds);
         $editForm = $this->createEditForm($entity);
+//        $editForm->getData()->setMedia($collectionIds);
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('ContentBlocksBundle:ContentBlock:edit.html.twig', array(
             'entity' => $entity,
+            'collection' => $collection,
+            'collection_ids' => $collectionIds,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
@@ -180,6 +194,9 @@ class ContentBlockController extends Controller
 
         $entity = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($id);
 
+        $collection = $entity->getMedia()->toArray();
+
+
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ContentBlock entity.');
         }
@@ -213,6 +230,7 @@ class ContentBlockController extends Controller
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+            'collection' => $collection,
         ));
     }
 
