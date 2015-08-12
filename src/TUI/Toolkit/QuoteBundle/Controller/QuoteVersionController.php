@@ -1040,11 +1040,31 @@ class QuoteVersionController extends Controller
     $em = $this->getDoctrine()->getManager();
     $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
     $content = $entity->getContent();
-    $newContent = $request;
+    $content=array();
 
+    if ($request->getMethod() == 'POST') {
+      $newContent = $request->request->all();
+    }
 
+    foreach($newContent as $tab => $blocks){
+      $tab = str_replace('_', ' ', $tab);
+      if($blocks !='') {
+        foreach ($blocks as $block) {
+          $content[$tab][] = substr($block, 15);
+        }
+      } else {
+        $content[$tab]=array();
+      }
+  }
+    $entity->setContent($content);
+    $em->persist($entity);
+    $em->flush();
 
+    $responseContent = json_encode($entity->getContent());
 
-    return new Response();
+    return new Response($responseContent,
+      Response::HTTP_OK,
+      array('content-type' => 'application/json')
+    );
   }
 }

@@ -37,8 +37,13 @@
 
 .content-blocks.tab-label {
   background-color: #dcdcdc;
+  display: inline-block;
+  width: 100%;
 }
 
+.content-blocks.tab-label h4 {
+  display:inline-block;
+}
 .content-blocks-item {
   border: 1px solid #808080;
   display: block;
@@ -48,9 +53,18 @@
 .content-block-actions, .content-block-tab-actions {
   display:inline;
   float:right;
+  padding-right:1em;
+}
+
+.content-block-tab-handle {
+  display:inline;
   padding-right:.2em;
 }
 
 .sortable-items, .content-blocks-drawer  {
   min-height: 1em;
+}
+
+.editable-tab {
+  margin-left:2em;
 }

@@ -113,18 +113,17 @@
 
     <div id="content-blocks-wrapper" class="sortable-tabs">
         {%  for tab, blocks in entity.content %}
-        <div id="tab-{{ tab }}" class="content-blocks-tab">
-            <h4 id="tab-label-{{ tab }}" class="content-blocks tab-label">
-                <i class="fa fa-arrows"></i> {{ tab }}
-                <i class="content-block-tab-actions fa fa-ban"></i>
-                <i class="content-block-tab-actions fa fa-lock"></i>
-                <i class="content-block-tab-actions fa fa-trash-o"></i>
-                <i class="content-block-tab-actions fa fa-pencil-square-o"></i>
-                <a href="{{ path('manage_quote') }}" alt = "Add New Content Block"><i class="content-block-tab-actions fa fa-plus-circle"></i></a>
+        <div id="tab-{{ tab|replace({' ': '_'}) }}" class="content-blocks-tab">
+            <span class="content-blocks tab-label"><i class="content-block-tab-handle fa fa-arrows"></i>  <h4 id="tab-label-{{ tab }}" class="editable-tab">{{ tab }}</h4>
+                <i class="tab-edit fa fa-pencil-square-o"></i>
+                    {% if blocks | length < 1 %}
+                    <i class="tab-delete content-block-tab-actions fa fa-trash-o"> Delete Tab</i>
+                    {% endif %}
+                 <i class="tab-new content-block-tab-actions fa fa-plus-circle"> Add Content</i>
+            </span>
 
 
 
-            </h4>
             <div id="tabs-drawer-{{ tab }}" class="sortable-items content-blocks-drawer">
                     {%  for item in blocks %}
                         <div id="content-blocks-{{ item }}" class="content-blocks content-blocks-item">
@@ -148,48 +147,26 @@
     </style>
 
     <script>
-        (function ($) {
+        $(document).ready(function() {
             $("#add-new-tab").on('click', function(){
-                var newId = $("#content-blocks-wrapper").children().length;
-                $("#content-blocks-wrapper").prepend(
-                        '<div id="tab-tab'  + (newId + 1)+ '" class="content-blocks-tab">' +
-                        ' <h4 id="tab-label-' +(newId +1)+'" class="content-blocks tab-label">'+
-                        '<i class="fa fa-arrows"></i> New Tab' + (newId + 1) +
-                        '<i class="content-block-tab-actions fa fa-ban"></i>' +
-                        '<i class="content-block-tab-actions fa fa-lock"></i>' +
-                        '<i class="content-block-tab-actions fa fa-trash-o"></i>' +
-                        '<i class="content-block-tab-actions fa fa-pencil-square-o"></i>' +
-                        '<a href="{{ path('manage_quote') }}" alt = "Add New Content Block"><i class="content-block-tab-actions fa fa-plus-circle"></i></a>' +
-                        '</h4>' +
-                        '<div id="tabs-drawer-tab' + (newId +1) + '" class="sortable-items content-blocks-drawer">' +
-                        '</div></div>'
-                );
-
-                $(".sortable-tabs").sortable('refresh');
-                $(".sortable-items").sortable();
-
-                // update server with new data
-                var data
-                     // var data = $('.sortable-tabs').sortable('serialize');
-                $('.sortable-tabs').each(function(i, obj) {
-                    $(this > '.sortable-items').map(function(){
-                        data
-                    })
-                });
-
-
-
-                var data = $('#content-blocks-wrapper').serialize();
-                console.log(data);
-                        //POST to server using $.post or $.ajax
-                            $.ajax({
-                                data: data,
-                                type: 'POST',
-                                url: '/manage/contentblocks/new-tab/{{ entity.id }}'
-                            });
-
+                contentBlocksAddTab('#content-blocks-wrapper', {{ entity.id }});
             });
-        })(jQuery);
+
+            $('.editable-tab').editable(function(value, settings) {
+//                console.log(this);
+                console.log('return');
+//                console.log(settings);
+                return(value);
+            }, {
+                width: '20em',
+                onblur: "cancel",
+                tooltip: 'Click to edit',
+                callback : function(value, settings) {
+                    console.log('callback');
+                    contentBlocksUpdate({{ entity.id }}); //value
+                }
+            });
+        });
     </script>
 
 {% endblock %}
