@@ -1,10 +1,26 @@
-.record_actions,
-.grid-row-actions {
+table .fa {
+  @include inline-block-vertical();
+  font-size: 18px;
+}
+
+.grid-row-actions,
+.table-actions {
   padding: 0;
   list-style: none;
 
   li {
-    @include inline-block-vertical(top);
+    float: left;
+    margin-right: 0.5em;
+  }
+
+}
+
+.record_actions {
+  padding: 0;
+  list-style: none;
+
+  li {
+    @include inline-block-vertical();
   }
 
 }

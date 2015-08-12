@@ -4,38 +4,36 @@
     <h3>Site Content</h3>
 
 
-    <table class="records_list">
+    <table class="mdl-data-table mdl-js-data-table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Locked</th>
-                <th>Hidden</th>
-                <th>Layouttype</th>
-                <th>Title</th>
-                <th>Body</th>
-                <th>Sortorder</th>
-                <th>Doublewidth</th>
-                <th>Actions</th>
+                <th class="mdl-data-table__cell--non-numeric">Title (ID)</th>
+                <th class="mdl-data-table__cell--non-numeric">Locked</th>
+                <th class="mdl-data-table__cell--non-numeric">Hidden</th>
+                <th class="mdl-data-table__cell--non-numeric">Layout Type</th>
+                <th class="mdl-data-table__cell--non-numeric">Body</th>
+                <th class="mdl-data-table__cell--non-numeric">Sort Order</th>
+                <th class="mdl-data-table__cell--non-numeric">Double Width</th>
+                <th class="mdl-data-table__cell--non-numeric">Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for entity in entities %}
             <tr>
-                <td><a href="{{ path('manage_contentblocks_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.locked }}</td>
-                <td>{{ entity.hidden }}</td>
-                <td>{{ entity.layoutType }}</td>
-                <td>{{ entity.title }}</td>
-                <td>{{ entity.body }}</td>
-                <td>{{ entity.sortOrder }}</td>
-                <td>{{ entity.doubleWidth }}</td>
-                <td>
+                <td class="mdl-data-table__cell--non-numeric"><a href="{{ path('manage_contentblocks_show', { 'id': entity.id }) }}">{{ entity.title }}</a> ({{ entity.id }})</td>
+                <td class="mdl-data-table__cell--non-numeric">{{ entity.locked }}</td>
+                <td class="mdl-data-table__cell--non-numeric">{{ entity.hidden }}</td>
+                <td class="mdl-data-table__cell--non-numeric">{{ entity.layoutType }}</td>
+                <td class="mdl-data-table__cell--non-numeric">{{ entity.body }}</td>
+                <td class="mdl-data-table__cell--non-numeric">{{ entity.sortOrder }}</td>
+                <td class="mdl-data-table__cell--non-numeric">{{ entity.doubleWidth }}</td>
+                <td class="mdl-data-table__cell--non-numeric">
                 <ul>
                     <li>
-                        <a href="{{ path('manage_contentblocks_show', { 'id': entity.id }) }}">show</a>
+                        <a href="{{ path('manage_contentblocks_show', { 'id': entity.id }) }}"><i class="fa fam-view"></i></a>
                     </li>
                     <li>
-                        <a href="{{ path('manage_contentblocks_edit', { 'id': entity.id }) }}">edit</a>
+                        <a href="{{ path('manage_contentblocks_edit', { 'id': entity.id }) }}"><i class="fa fam-edit"></i></a>
                     </li>
                 </ul>
                 </td>
@@ -44,7 +42,7 @@
         </tbody>
     </table>
 
-        <ul>
+        <ul class="record_actions">
         <li>
             <a href="{{ path('manage_contentblocks_new') }}">
                 <i class="fa fa-plus-circle"></i> Create a new Block

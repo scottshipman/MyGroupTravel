@@ -146,15 +146,17 @@
      */
 
     $('.media-placeholder-image').each(function () {
-        $(this).height('120px');
-        $(this).width('120px');
+        var mWidth = 300
+        var mHeight = 160;
+        $(this).css('width', mWidth + 'px');
+        $(this).css('height', mHeight + 'px');
         var imgWidth = $(this).width();
         var imgHeight = $(this).height();
         var dropzone_form = $("#dropzone_form");
 
         dropzone_form.css({
-            width: imgWidth+40,
-            height: imgHeight+40
+            width: mWidth,
+            height: mHeight
         });
     });
 
