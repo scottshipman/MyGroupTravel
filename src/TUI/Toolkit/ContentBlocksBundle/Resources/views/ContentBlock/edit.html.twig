@@ -1,16 +1,4 @@
-{% extends '::base.html.twig' %}
-
-{% block body -%}
+{# Edit Content Block #}
     <h1>ContentBlock edit</h1>
 
     {{ form(edit_form) }}
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('manage_contentblocks') }}">
-            <i class="fa fa-arrow-circle-left"></i> Back to the list
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
-{% endblock %}

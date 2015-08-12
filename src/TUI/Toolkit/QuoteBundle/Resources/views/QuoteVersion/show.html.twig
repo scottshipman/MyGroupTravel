@@ -130,10 +130,10 @@
                             <i class="fa fa-arrows"></i>  {{ item }} name
                             {# probably render a controller here by passing in item as id and have block entity returned #}
                             <div id="content-block-actions-{{ item }}" class="content-block-actions">
-                                <i class="fa fa-pencil-square-o"></i>
-                                <i class="fa fa-trash-o"></i>
-                                <i class="fa fa-lock"></i>  {# <i class="fa fa-unlock-alt"></i> #}
-                                <i class="fa fa-ban"></i> {# <i class="fa fa-unlock-alt"></i> #}
+                                <i class="item-edit fa fa-pencil-square-o"></i>
+                                <i class="item-delete fa fa-trash-o"></i>
+                                <i class="item-lock fa fa-lock"></i>  {# <i class="fa fa-unlock-alt"></i> #}
+                                <i class="item-hide fa fa-ban"></i> {# <i class="fa fa-unlock-alt"></i> #}
                             </div>
                         </div>
                     {% endfor %}
@@ -154,17 +154,31 @@
 
             $(".tab-delete").on('click', function(){
                 var ancestorTabElement = $(this).closest('.content-blocks-tab');
-                alert('Are you sure you want to remove this tab? Warning: this can not be undone.');
-                $(ancestorTabElement).remove();
-                contentBlocksUpdate({{ entity.id }});
+                if (confirm('Are you sure you want to remove this tab? Warning: this can not be undone.')) {
+                    $(ancestorTabElement).remove();
+                    contentBlocksUpdate({{ entity.id }});
+                }
             });
 
             $(".tab-new").on('click', function(){
                 //e.preventDefault();
                 $("#dialog").html("");
                 $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
-                $("#dialog").load('/manage/contentblocks/new', function() {
+                $("#dialog").load('{{ path('manage_contentblocks_new', {'quoteVersion' : entity.id, 'class' : 'QuoteVersion' }) }}', function() {
                     $(this).dialog("option", "title", 'Create New Content Block');
+                });
+                //contentBlocksUpdate({{ entity.id }});
+            });
+
+            $(".item-edit").on('click', function(e){
+                console.log(e);
+                // todo Get item.id and item.name
+                var block = 1;
+                //e.preventDefault();
+                $("#dialog").html("");
+                $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
+                $("#dialog").load('/manage/contentblocks/' + block + '/' + {{ entity.id}} +'/QuoteVersion', function() {
+                    $(this).dialog("option", "title", 'Edit Content Block');
                 });
                 //contentBlocksUpdate({{ entity.id }});
             });
