@@ -39,14 +39,13 @@
             </tr>
             <tr>
                 <th>Media</th>
-                {#{% for media in entity.getMedia() %}#}
-                {#<td>{{ entity.media.getId() }}</td>#}
-                {#{% endfor %}#}
             </tr>
         </tbody>
     </table>
 
-    {{ dump(entity.media) }}
+    {% for media in entity.media %}
+        <img src ={{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }} />
+    {% endfor %}
 
         <ul class="record_actions">
     <li>

@@ -6,69 +6,73 @@
     <div id="avatar-label" class="mdl-label-mimic">Some Media
         <div style="display:none;" id="dropzone-form-close"><i class="fa fa-times-circle"></i></div>
     </div>
+    {{ dump(collection) }}
+    {% for media in collection %}
+        <img src={{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}/>
+    {% endfor %}
     {{ render(controller('MediaBundle:Media:createDropzoneForm', {'context':'contentblock'})) }}
     {{ form_start(edit_form) }}
 
 
-    <div id="user_media" class="is-dirty mdl-textfield--floating-label">
-        {% if entity.media %}
-            <div class="media-placeholder-image">
-                <div id="overlay">
-                    <i class="fa fa-pencil-square-o fa-2x"></i>
-                </div>
-            </div>
-            <script>
-                $(function () {
-                    Dropzone.options.dropzoneForm = {
-                        maxFiles: 3,
-                        acceptedMimeTypes: 'image/jpeg,image/png,image/jpg',
-                        addRemoveLinks: true,
-                        dictDefaultMessage: "Drop files here,<br /> or click to upload",
-                        init: function () {
-                            this.hiddenFileInput.removeAttribute('multiple');
-                            this.on("success", function (file, response) {
-                                if (".media-placeholder".length > 0) {
-                                    $(".media-placeholder").val(response.id);
-                                }
-                            });
+    {#<div id="user_media" class="is-dirty mdl-textfield--floating-label">#}
+    {#{% if entity.media %}#}
+    {#<div class="media-placeholder-image">#}
+    {#<div id="overlay">#}
+    {#<i class="fa fa-pencil-square-o fa-2x"></i>#}
+    {#</div>#}
+    {#</div>#}
+    {#<script>#}
+    {#$(function () {#}
+    {#Dropzone.options.dropzoneForm = {#}
+    {#maxFiles: 3,#}
+    {#acceptedMimeTypes: 'image/jpeg,image/png,image/jpg',#}
+    {#addRemoveLinks: true,#}
+    {#dictDefaultMessage: "Drop files here,<br /> or click to upload",#}
+    {#init: function () {#}
+    {#this.hiddenFileInput.removeAttribute('multiple');#}
+    {#this.on("success", function (file, response) {#}
+    {#if (".media-placeholder".length > 0) {#}
+    {#$(".media-placeholder").val(response.id);#}
+    {#}#}
+    {#});#}
 
-                            this.on("error", function (file, response) {
-                                alert(response);
-                            });
-                            this.on("addedfile", function () {
-                                $("#dropzone-form-close").css({"display": "none"});
-                                if (this.files[1] != null) {
-                                    this.removeFile(this.files[0]);
+    {#this.on("error", function (file, response) {#}
+    {#alert(response);#}
+    {#});#}
+    {#this.on("addedfile", function () {#}
+    {#$("#dropzone-form-close").css({"display": "none"});#}
+    {#if (this.files[1] != null) {#}
+    {#this.removeFile(this.files[0]);#}
 
-                                }
-                            });
-                            this.on("removedfile", function (file) {
-                                $("#dropzone-form-close").css({"display": "inline-block"});
-                                console.log(file.serverId);
-                            });
-                        }
-                    }
-                });
-                {#$(document).ready(function () &#123;&#35;}
-                {#var bUrl = '{{ asset(".." ~ entity.media.getRelativePath ~ "/" ~ entity.media.getHashedFilename ) }}';#}
-                {#$(".media-placeholder-image").css(&#123;&#35;}
-                {#"background-image": "url(" + bUrl + ")",#}
-                {#"background-position": "left",#}
-                {#"background-repeat": "no-repeat",#}
-                {#"background-size":"contain",#}
-                {#"width": "auto",#}
-                {#"max-width": "500px",#}
-                {#"height": "auto"#}
-                {#});#}
-            </script>
-        {% else %}
-            <span class="fa-stack fa-3x">
-                <i class="media-placeholder-image fa fa-picture-o fa-stack-5x">
-                    <span style="display:block; font-size: .25em;">click to edit</span>
-                </i>
-            </span>
-        {% endif %}
-    </div>
+    {#}#}
+    {#});#}
+    {#this.on("removedfile", function (file) {#}
+    {#$("#dropzone-form-close").css({"display": "inline-block"});#}
+    {#console.log(file.serverId);#}
+    {#});#}
+    {#}#}
+    {#}#}
+    {#});#}
+    {#&#123;&#35;$(document).ready(function () &#123;&#35;}#}
+    {#&#123;&#35;var bUrl = '{{ asset(".." ~ entity.media.getRelativePath ~ "/" ~ entity.media.getHashedFilename ) }}';&#35;&#125;#}
+    {#&#123;&#35;$(".media-placeholder-image").css(&#123;&#35;}#}
+    {#&#123;&#35;"background-image": "url(" + bUrl + ")",&#35;&#125;#}
+    {#&#123;&#35;"background-position": "left",&#35;&#125;#}
+    {#&#123;&#35;"background-repeat": "no-repeat",&#35;&#125;#}
+    {#&#123;&#35;"background-size":"contain",&#35;&#125;#}
+    {#&#123;&#35;"width": "auto",&#35;&#125;#}
+    {#&#123;&#35;"max-width": "500px",&#35;&#125;#}
+    {#&#123;&#35;"height": "auto"&#35;&#125;#}
+    {#&#123;&#35;});&#35;&#125;#}
+    {#</script>#}
+    {#{% else %}#}
+    {#<span class="fa-stack fa-3x">#}
+    {#<i class="media-placeholder-image fa fa-picture-o fa-stack-5x">#}
+    {#<span style="display:block; font-size: .25em;">click to edit</span>#}
+    {#</i>#}
+    {#</span>#}
+    {#{% endif %}#}
+    {#</div>#}
     {{ form_widget(edit_form) }}
     {{ form_end(edit_form) }}
 
