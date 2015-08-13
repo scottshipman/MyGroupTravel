@@ -2,77 +2,102 @@
 
 {% block body -%}
     <h1>ContentBlock edit</h1>
+    {% for media in collection %}
+
+        <img src ={{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }} style="max-width:200px" />
+    {% endfor %}
 
     <div id="avatar-label" class="mdl-label-mimic">Some Media
         <div style="display:none;" id="dropzone-form-close"><i class="fa fa-times-circle"></i></div>
     </div>
     {{ dump(collection) }}
-    {% for media in collection %}
-        <img src={{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}/>
-    {% endfor %}
     {{ render(controller('MediaBundle:Media:createDropzoneForm', {'context':'contentblock'})) }}
     {{ form_start(edit_form) }}
 
 
-    {#<div id="user_media" class="is-dirty mdl-textfield--floating-label">#}
-    {#{% if entity.media %}#}
-    {#<div class="media-placeholder-image">#}
-    {#<div id="overlay">#}
-    {#<i class="fa fa-pencil-square-o fa-2x"></i>#}
-    {#</div>#}
-    {#</div>#}
-    {#<script>#}
-    {#$(function () {#}
-    {#Dropzone.options.dropzoneForm = {#}
-    {#maxFiles: 3,#}
-    {#acceptedMimeTypes: 'image/jpeg,image/png,image/jpg',#}
-    {#addRemoveLinks: true,#}
-    {#dictDefaultMessage: "Drop files here,<br /> or click to upload",#}
-    {#init: function () {#}
-    {#this.hiddenFileInput.removeAttribute('multiple');#}
-    {#this.on("success", function (file, response) {#}
-    {#if (".media-placeholder".length > 0) {#}
-    {#$(".media-placeholder").val(response.id);#}
-    {#}#}
-    {#});#}
+    <div id="user_media" class="is-dirty mdl-textfield--floating-label">
+        {% if entity.media %}
+            <div class="media-placeholder-image">
+                <div id="overlay">
+                    <i class="fa fa-pencil-square-o fa-2x"></i>
+                </div>
+            </div>
+            {#<div class="media-placeholder-image-2">#}
+                {#<div id="overlay">#}
+                    {#<i class="fa fa-pencil-square-o fa-2x"></i>#}
+                {#</div>#}
+            {#</div>#}
+            <script>
+                $(function () {
+                    Dropzone.options.dropzoneForm = {
+                        maxFiles: 6,
+                        acceptedMimeTypes: 'image/jpeg,image/png,image/jpg',
+                        addRemoveLinks: true,
+                        dictDefaultMessage: "Drop files here,<br /> or click to upload",
+                        init: function () {
+                            var value = $(".media-placeholder").val();
+//                            console.log(value);
+                            var values = [];
+                            values = value.split(',').map(Number);
+                            console.log(values);
+                            this.on("success", function (file, response) {
+                                console.log(response.id);
+                                if (".media-placeholder".length > 0) {
+                                    values.push(response.id);
+                                    console.log(values);
+                                    $(".media-placeholder").val(values);
+                                }
+                            });
+                            this.on("error", function (file, response) {
+                                alert(response);
+                            });
+                            this.on("removedfile", function (file, response) {
+                                $("#dropzone-form-close").css({"display": "inline-block"});
+                                $("#dropzone_form").submit(function(){
+                                    console.log(response);
+                                });
+//                                console.log(file);
+//                                if (".media-placeholder".length > 0) {
+//                                    values.splice(response.id);
+//                                    $(".media-placeholder").val(values);
+//                                    console.log(values);
+//                                }
+                            });
+                        }
+                    }
+                });
 
-    {#this.on("error", function (file, response) {#}
-    {#alert(response);#}
-    {#});#}
-    {#this.on("addedfile", function () {#}
-    {#$("#dropzone-form-close").css({"display": "none"});#}
-    {#if (this.files[1] != null) {#}
-    {#this.removeFile(this.files[0]);#}
-
-    {#}#}
-    {#});#}
-    {#this.on("removedfile", function (file) {#}
-    {#$("#dropzone-form-close").css({"display": "inline-block"});#}
-    {#console.log(file.serverId);#}
-    {#});#}
-    {#}#}
-    {#}#}
-    {#});#}
-    {#&#123;&#35;$(document).ready(function () &#123;&#35;}#}
-    {#&#123;&#35;var bUrl = '{{ asset(".." ~ entity.media.getRelativePath ~ "/" ~ entity.media.getHashedFilename ) }}';&#35;&#125;#}
-    {#&#123;&#35;$(".media-placeholder-image").css(&#123;&#35;}#}
-    {#&#123;&#35;"background-image": "url(" + bUrl + ")",&#35;&#125;#}
-    {#&#123;&#35;"background-position": "left",&#35;&#125;#}
-    {#&#123;&#35;"background-repeat": "no-repeat",&#35;&#125;#}
-    {#&#123;&#35;"background-size":"contain",&#35;&#125;#}
-    {#&#123;&#35;"width": "auto",&#35;&#125;#}
-    {#&#123;&#35;"max-width": "500px",&#35;&#125;#}
-    {#&#123;&#35;"height": "auto"&#35;&#125;#}
-    {#&#123;&#35;});&#35;&#125;#}
-    {#</script>#}
-    {#{% else %}#}
-    {#<span class="fa-stack fa-3x">#}
-    {#<i class="media-placeholder-image fa fa-picture-o fa-stack-5x">#}
-    {#<span style="display:block; font-size: .25em;">click to edit</span>#}
-    {#</i>#}
-    {#</span>#}
-    {#{% endif %}#}
-    {#</div>#}
+                {% for media in collection %}
+                $(document).ready(function () {
+                    var bUrl = '{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}';
+                    $(".media-placeholder-image").css({
+                        "background-image": "url(" + bUrl + ")",
+                        "background-position": "50%",
+                        "background-repeat": "no-repeat",
+                        "background-size": "contain",
+                        "width": "300px",
+                        "height": "160px"
+                    });
+                    {#var bUrl2 = '{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}';#}
+                    {#$(".media-placeholder-image-2").css({#}
+                        {#"background-image": "url(" + bUrl2 + ")",#}
+                        {#"background-position": "50%",#}
+                        {#"background-repeat": "no-repeat",#}
+                        {#"background-size": "contain",#}
+                        {#"width": "300px",#}
+                        {#"height": "160px"#}
+                    {#});#}
+                });
+                {% endfor %}
+            </script>
+        {% else %}
+            <span class="fa-stack fa-3x">
+    <i class="media-placeholder-image fa fa-picture-o fa-stack-5x">
+        <span style="display:block; font-size: .25em;">click to edit</span>
+    </i>
+    </span>
+        {% endif %}
+    </div>
     {{ form_widget(edit_form) }}
     {{ form_end(edit_form) }}
 
