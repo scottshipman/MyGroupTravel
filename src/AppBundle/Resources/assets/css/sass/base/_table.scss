@@ -84,3 +84,7 @@ table {
   }
 
 }
+
+.grid_footer {
+  @include clear-fix();
+}
