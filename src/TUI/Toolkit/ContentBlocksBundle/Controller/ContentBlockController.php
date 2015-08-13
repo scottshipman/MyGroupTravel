@@ -208,7 +208,8 @@ class ContentBlockController extends Controller
         $medias = array();
 
         if (NULL != $editForm->getData()->getMedia()) {
-            $fileIds[] = $editForm->getData()->getMedia();
+            $fileIdString = $editForm->getData()->getMedia();
+            $fileIds = explode(',', $fileIdString);
 
             foreach ($fileIds as $fileId) {
                 $image = $em->getRepository('MediaBundle:Media')
@@ -218,6 +219,7 @@ class ContentBlockController extends Controller
         }
         if (!empty($medias)) {
             $editForm->getData()->setMedia($medias);
+
         }
 
         if ($editForm->isValid()) {
