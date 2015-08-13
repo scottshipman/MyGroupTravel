@@ -29,12 +29,12 @@
                     <a href="{{ path('_manage_brand_show', { 'id': entity.id }) }}">{{ entity.name }}</a> ({{ entity.id }})
                 </td>
                 <td class="mdl-data-table__cell--non-numeric">{{ entity.division }}</td>
-                <td class="mdl-data-table__cell--non-numeric" style="background-color: {{ entity.primaryColor }}"></td>
-                <td class="mdl-data-table__cell--non-numeric" style="background-color: {{ entity.buttonColor }}"></td>
-                <td class="mdl-data-table__cell--non-numeric" style="background-color: {{ entity.hoverColor }}"></td>
+                <td class="mdl-data-table__cell--non-numeric center" style="background-color: {{ entity.primaryColor }}"></td>
+                <td class="mdl-data-table__cell--non-numeric center" style="background-color: {{ entity.buttonColor }}"></td>
+                <td class="mdl-data-table__cell--non-numeric center" style="background-color: {{ entity.hoverColor }}"></td>
                 <td class="mdl-data-table__cell--non-numeric center logo">
                     {% if entity.media %}
-                        {#{% media entity.media, 'small' %}#}
+                        <img src="{{ asset(".." ~ entity.media.getRelativePath ~ "/" ~ entity.media.getHashedFilename ) }}" alt="{{ entity.name }}">
                     {% endif %}
                 </td>
                 <td class="mdl-data-table__cell--non-numeric">
