@@ -84,13 +84,3 @@ table {
   }
 
 }
-
-.sort_up::after {
-  @include fa-standard();
-  content: "\f160";
-}
-
-.sort_down::after {
-  @include fa-standard();
-  content: "\f161";
-}

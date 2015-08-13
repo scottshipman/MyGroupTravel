@@ -74,12 +74,13 @@
                     {% set columnTitle = column.title %}
                 {% endif %}
                 {% if (column.sortable) %}
-                    <a class="order" href="{{ grid_url('order', grid, column) }}" title="{{ 'Order by'|trans }} {{ columnTitle|trans }}">{{ columnTitle|trans }}</a>
-                    {% if column.order == 'asc' %}
-                        <div class="sort_up"></div>
-                    {% elseif column.order == 'desc' %}
-                        <div class="sort_down"></div>
-                    {% endif %}
+                    <a class="order" href="{{ grid_url('order', grid, column) }}" title="{{ 'Order by'|trans }} {{ columnTitle|trans }}">{{ columnTitle|trans }}
+                        {% if column.order == 'asc' %}
+                            <i class="fa fa-sort-amount-asc"></i>
+                        {% elseif column.order == 'desc' %}
+                            <i class="fa fa-sort-amount-desc"></i>
+                        {% endif %}
+                    </a>
                 {% else %}
                     {{ columnTitle|trans }}
                 {% endif %}

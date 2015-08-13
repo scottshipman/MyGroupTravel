@@ -1,6 +1,6 @@
 table {
 
-  .fa {
+  td .fa {
     @include inline-block-vertical();
     font-size: 18px;
   }
