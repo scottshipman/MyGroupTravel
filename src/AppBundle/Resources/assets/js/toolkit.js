@@ -54,7 +54,9 @@
             ['rgb(255, 152, 0);'],
         ]
     });
-    $('input.color_picker').parent().removeClass().addClass('mdl-colorfield').find('label').removeClass().addClass('mdl-label-mimic');
+    $('input.color_picker')
+        .parent().removeClass().addClass('mdl-colorfield')
+        .find('label').removeClass().addClass('mdl-label-mimic');
 
     // Work on date fields
     $('input[type="date"]').addClass('mdl-date').attr('type', 'text');
@@ -62,15 +64,14 @@
         $(this).parent().addClass('is-dirty');
     });
 
-    //Add Placeholder Fields to Login Form
+    // Add Placeholder Fields to Login Form
     $("#username").attr("placeholder", "Username");
     $("#password").attr("placeholder", "Password");
 
-    if ($("form").hasClass("fos_user_resetting_request")) {
+    if ( $("form").hasClass("fos_user_resetting_request") ) {
         $("body").addClass("main_login");
         $('h2.signin-form').text('Reset Password').show();
         $("#username").attr("placeholder", "Username Or Email Address");
-
     }
 
     //if ($("div").hasClass("login-message-block")){
