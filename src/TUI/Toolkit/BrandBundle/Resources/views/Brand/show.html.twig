@@ -28,7 +28,7 @@
             </tr>
             <tr>
                 <td class="mdl-data-table__cell--non-numeric th-mimic">Logo</td>
-                <td class="mdl-data-table__cell--non-numeric center">
+                <td class="mdl-data-table__cell--non-numeric center logo">
                     {% if entity.media %}
                         <img src="{{ asset(".." ~ entity.media.getRelativePath ~ "/" ~ entity.media.getHashedFilename ) }}">
                     {% endif %}
