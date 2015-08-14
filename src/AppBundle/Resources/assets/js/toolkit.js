@@ -273,7 +273,7 @@ var contentBlocksUpdate = function (id) {
             result[tabText] = children;
         }
     });
-    //console.log(result);
+    console.log(result);
     //POST to server using $.post or $.ajax
     $.ajax({
         data: result,
@@ -307,12 +307,12 @@ var contentBlocksAddTab= function (elem, id){
     contentBlocksUpdate(id);
 }
 
+/**
+ * Reload the page that shows the content blocks and tabs
+ * @param id
+ */
 var contentBlocksRefresh = function(id){
     $.ajax({
-        beforeSend: function() {
-            $('#loader').show();
-        },
-
         url: window.location.href,
         headers: {
             "Pragma": "no-cache",

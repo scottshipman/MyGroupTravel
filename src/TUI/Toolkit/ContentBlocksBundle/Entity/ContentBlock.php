@@ -38,7 +38,7 @@ class ContentBlock
     /**
      * @var integer
      *
-     * @ORM\Column(name="layoutType", type="integer")
+     * @ORM\Column(name="layoutType", type="integer", nullable=true)
      *
      * @ORM\ManyToOne(targetEntity="TUI\Toolkit\ContentBlocksBundle\Entity\LayoutType", cascade={"all"}, fetch="EAGER", inversedBy = "id")
      */
@@ -54,7 +54,7 @@ class ContentBlock
     /**
      * @var longtext
      *
-     * @ORM\Column(name="body", type="text", length=4294967295)
+     * @ORM\Column(name="body", type="text", length=4294967295, nullable=true)
      */
     private $body;
 
@@ -72,6 +72,13 @@ class ContentBlock
      */
     private $doubleWidth;
 
+    public function __construct(){
+      $this->hidden = false;
+      $this->locked = false;
+      $this->doubleWidth = false;
+      $this->sortOrder = 1;
+      $this->body = "";
+    }
 
     /**
      * Get id

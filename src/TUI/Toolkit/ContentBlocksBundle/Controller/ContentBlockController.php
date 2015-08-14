@@ -3,6 +3,7 @@
 namespace TUI\Toolkit\ContentBlocksBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use TUI\Toolkit\ContentBlocksBundle\Entity\ContentBlock;
@@ -264,14 +265,14 @@ class ContentBlockController extends Controller
     } else {
       $value = $entity->getLocked()==true ? false :true;
       $entity->setLocked($value);
-      $em->remove($entity);
+      $em->persist($entity);
       $em->flush();
     }
 
 
     //return $this->redirect($this->generateUrl('manage_contentblocks'));
 
-    $responseContent = $error ? $error : json_encode($entity->getContent());
+    $responseContent = $error ? $error : json_encode($entity);
 
     return new Response($responseContent,
       Response::HTTP_OK,
@@ -295,14 +296,37 @@ class ContentBlockController extends Controller
     } else {
       $value = $entity->getHidden()==true ? false :true;
       $entity->setHidden($value);
-      $em->remove($entity);
+      $em->persist($entity);
       $em->flush();
     }
 
 
     //return $this->redirect($this->generateUrl('manage_contentblocks'));
 
-    $responseContent = $error ? $error : json_encode($entity->getContent());
+    $responseContent = $error ? $error : json_encode($entity);
+
+    return new Response($responseContent,
+      Response::HTTP_OK,
+      array('content-type' => 'application/json')
+    );
+  }
+
+  /**
+   * Generate a New Contentblock via ajax call.
+   *
+   */
+  public function ajaxNewAction(Request $request)
+  {
+    $error = false;
+
+    $em = $this->getDoctrine()->getManager();
+    $entity = new ContentBlock();
+    $entity->setTitle('New Content Block');
+
+      $em->persist($entity);
+      $em->flush();
+
+    $responseContent = json_encode(array($entity->getId() => $entity->getTitle()));
 
     return new Response($responseContent,
       Response::HTTP_OK,

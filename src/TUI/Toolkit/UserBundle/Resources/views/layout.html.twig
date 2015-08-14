@@ -19,7 +19,10 @@
     <div class="login-block">
 
         {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-            <h2>Sign In</h2>
+            {%  if 'resetting/request' in app.request.pathinfo  %} <h2>Forgot Password?</h2>
+                {% else %}
+                <h2>Sign In</h2>
+            {% endif %}
         {% endif %}
 
         <div class="login-message-block">
@@ -37,11 +40,11 @@
             {% endblock fos_user_content %}
         </div>
 
-        {% if not is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+       {% if not is_granted("IS_AUTHENTICATED_REMEMBERED") %}
             <div class="login-reset">
-                <a href="{{ path('fos_user_resetting_request') }}">Forgot password?</a>
+             {%  if not 'resetting/request' in app.request.pathinfo  %}   <a href="{{ path('fos_user_resetting_request') }}">Forgot password?</a>{% endif %}
             </div>
-        {% endif %}
+          {% endif %}
 
     </div>
 {% endblock %}

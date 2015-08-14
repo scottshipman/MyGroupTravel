@@ -44,3 +44,8 @@ manage_contentblocks_hide:
     path:     /{id}/hide
     defaults: { _controller: "ContentBlocksBundle:ContentBlock:hide" }
     methods:  [POST]
+
+manage_contentblocks_ajax_new:
+    path:     /ajax/new
+    defaults: { _controller: "ContentBlocksBundle:ContentBlock:ajaxNew" }
+    methods:  [GET]
