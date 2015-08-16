@@ -1,8 +1,16 @@
-
+{% extends '::base.html.twig' %}
+{% block title %}Manage Content Blocks{% endblock %}
+{% block page_title %}Manage Content Blocks{% endblock %}
 
 {% block body -%}
-    <h3>Site Content</h3>
 
+    <ul class="record_actions">
+        <li>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_contentblocks_new') }}">
+                <i class="fa fa-plus-circle"></i> Create a new Block
+            </a>
+        </li>
+    </ul>
 
     <table class="mdl-data-table mdl-js-data-table">
         <thead>
@@ -28,25 +36,19 @@
                 <td class="mdl-data-table__cell--non-numeric">{{ entity.sortOrder }}</td>
                 <td class="mdl-data-table__cell--non-numeric">{{ entity.doubleWidth }}</td>
                 <td class="mdl-data-table__cell--non-numeric">
-                <ul>
-                    <li>
-                        <a href="{{ path('manage_contentblocks_show', { 'id': entity.id }) }}"><i class="fa fam-view"></i></a>
-                    </li>
-                    <li>
-                        <a href="{{ path('manage_contentblocks_edit', { 'id': entity.id }) }}"><i class="fa fam-edit"></i></a>
-                    </li>
-                </ul>
+                    <ul class="grid-row-actions">
+                        <li>
+                            <a href="{{ path('manage_contentblocks_show', { 'id': entity.id }) }}"><i class="fa fam-view"></i></a>
+                        </li>
+                        <li>
+                            <a href="{{ path('manage_contentblocks_edit', { 'id': entity.id }) }}"><i class="fa fam-edit"></i></a>
+                        </li>
+                    </ul>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-        <ul class="record_actions">
-        <li>
-            <a href="{{ path('manage_contentblocks_new') }}">
-                <i class="fa fa-plus-circle"></i> Create a new Block
-            </a>
-        </li>
-    </ul>
+
     {% endblock %}
