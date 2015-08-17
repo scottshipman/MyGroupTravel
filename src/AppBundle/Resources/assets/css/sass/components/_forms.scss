@@ -6,32 +6,6 @@ form {
 
 }
 
-#tui_toolkit_contentblocksbundle_contentblock_layoutType{
-  width: auto;
-}
-
-#tui_toolkit_contentblocksbundle_contentblock_layoutType > label:nth-child(2) > span.mdl-radio__outer-circle:after{
-  content: "\f03e\f0c9"; /* 3 Stars */
-  font-family: FontAwesome;
-  padding-left: 20px;
-  display: inline;
-}
-
-#tui_toolkit_contentblocksbundle_contentblock_layoutType > label:nth-child(2) > span.mdl-radio__label{
-  display: none;
-}
-
-#tui_toolkit_contentblocksbundle_contentblock_layoutType > label:nth-child(3) > span.mdl-radio__outer-circle:after {
-  content: "\f0c9\f03e"; /* 3 Stars */
-  font-family: FontAwesome;
-  padding-left: 20px;
-  display: inline;
-}
-
-#tui_toolkit_contentblocksbundle_contentblock_layoutType > label:nth-child(3) > span.mdl-radio__label{
-  display: none;
-}
-
 .form-row {
   position: relative;
 }
@@ -73,4 +47,12 @@ form {
 
 .mdl-select {
   width: 100%;
+}
+
+.mdl-radio__outer-circle {
+  top: 4px;
+}
+
+.mdl-radio__inner-circle {
+  top: 8px;
 }
