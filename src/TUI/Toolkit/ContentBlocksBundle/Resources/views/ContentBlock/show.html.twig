@@ -2,7 +2,10 @@
 {% block title %}Content Block {{ entity.title }}{% endblock %}
 {% block page_title %}Content Block {{ entity.title }}{% endblock %}
 
-{% set class = 'content-block-layout-' ~ entity.layoutType.name %}
+{% set class = '' %}
+{% if entity.layoutType.name %}
+    {% set class = 'content-block-layout-' ~ entity.layoutType.name %}
+{% endif %}
 {% if entity.doubleWidth == 1 %}
     {% set class = class ~ ' content-block-size-full' %}
 {% else %}
