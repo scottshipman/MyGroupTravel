@@ -19,9 +19,7 @@
                 <th class="mdl-data-table__cell--non-numeric">Locked</th>
                 <th class="mdl-data-table__cell--non-numeric">Hidden</th>
                 <th class="mdl-data-table__cell--non-numeric">Layout Type</th>
-                <th class="mdl-data-table__cell--non-numeric">Body</th>
                 <th class="mdl-data-table__cell--non-numeric">Sort Order</th>
-                <th class="mdl-data-table__cell--non-numeric">Double Width</th>
                 <th class="mdl-data-table__cell--non-numeric">Actions</th>
             </tr>
         </thead>
@@ -29,12 +27,22 @@
         {% for entity in entities %}
             <tr>
                 <td class="mdl-data-table__cell--non-numeric"><a href="{{ path('manage_contentblocks_show', { 'id': entity.id }) }}">{{ entity.title }}</a> ({{ entity.id }})</td>
-                <td class="mdl-data-table__cell--non-numeric">{{ entity.locked }}</td>
-                <td class="mdl-data-table__cell--non-numeric">{{ entity.hidden }}</td>
+                <td class="mdl-data-table__cell--non-numeric">
+                    {% if entity.locked == 1 %}
+                        <i class="fa fa-check"></i>
+                    {% else %}
+                        <i class="fa fa-times"></i>
+                    {% endif %}
+                </td>
+                <td class="mdl-data-table__cell--non-numeric">
+                    {% if entity.hidden == 1 %}
+                        <i class="fa fa-check"></i>
+                    {% else %}
+                        <i class="fa fa-times"></i>
+                    {% endif %}
+                </td>
                 <td class="mdl-data-table__cell--non-numeric">{{ entity.layoutType }}</td>
-                <td class="mdl-data-table__cell--non-numeric">{{ entity.body }}</td>
                 <td class="mdl-data-table__cell--non-numeric">{{ entity.sortOrder }}</td>
-                <td class="mdl-data-table__cell--non-numeric">{{ entity.doubleWidth }}</td>
                 <td class="mdl-data-table__cell--non-numeric">
                     <ul class="grid-row-actions">
                         <li>
