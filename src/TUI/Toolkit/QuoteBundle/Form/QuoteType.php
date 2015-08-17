@@ -19,92 +19,44 @@ class QuoteType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        // Complex event listener for dealing with Templates
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
-            // is this an existing Quote and is a template
-            $entity = $event->getData();
-            $form = $event->getForm();
-            $request = explode('/', $_SERVER['REQUEST_URI']);
-            $newTemplate = false;
-            $isNew = false;
-            $hasTemplate = false;
-            $showAll = false;
+      // CASE Editing a quote or creating a new quote - show non-Template fields
+      $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+        if ($_SESSION['showAll']) {
+          $form = $event->getForm();
+          $form
+            ->add('secondaryContact', 'genemu_jqueryautocomplete_entity', array(
+              'class' => 'TUI\Toolkit\UserBundle\Entity\User',
+              'required' => FALSE,
+              'route_name' => 'retrieve_salesagent_name',
+              'data_class' => 'TUI\Toolkit\UserBundle\Entity\User',
+              'label' => 'Other Business Admin',
+              //'multiple' => true,
+            ))
+            ->add('organizer', 'genemu_jqueryautocomplete_entity', array(
+              'route_name' => 'retrieve_organizers_name',
+              'class' => 'TUI\Toolkit\UserBundle\Entity\User',
+              'data_class' => 'TUI\Toolkit\UserBundle\Entity\User',
+              'configs' => array('minLength' => 3),
+              'attr' => array(
+                'class' => 'suggest',
+              ),
+            ))
+            ->add('institution', 'genemu_jqueryautocomplete_entity', array(
+              'class' => 'TUI\Toolkit\InstitutionBundle\Entity\Institution',
+              'route_name' => 'retrieve_institution_name',
+              'data_class' => 'TUI\Toolkit\InstitutionBundle\Entity\Institution',
+              'configs' => array('minLength' => 3),
+              'attr' => array(
+                'class' => 'suggest',
+              ),
 
-            if (!$entity || null === $entity->getId()) {
-                $isNew = true;
-            } elseif ($entity->getIsTemplate() == true) {
-                $hasTemplate = true;
-            }
-            if (isset($request[3]) && ($request[3] == "new" || $request[3] =='create') && isset($request[4]) && $request[4] == "template") {
-                $newTemplate = true;
-            }
+            ));
 
-            // CASE: New Object - hidden isTemplate w value of newTemplate
-            if ($isNew && $newTemplate) {
-                $form->add('isTemplate', 'hidden', array(
-                    'data' => true,
-                ));
 
-            }
-            if ($isNew && !$newTemplate) {
-                $showAll = true;
-            }
+        };
+      });
 
-            // CASE: Editing an existing Template - hidden isTemplate w/ true value
-            if ((!$isNew && $hasTemplate)) {
-                $form->add('isTemplate', 'hidden', array(
-                    'data' => $hasTemplate,
-                ));
-            }
-
-            // CASE Editing an existing quote - hide isTemplate - show other fields
-            if (!$isNew && !$hasTemplate) {
-                $form->add('isTemplate', 'checkbox', array(
-                    'required' => FALSE,
-                    'label' => "Convert to Template?",
-                ));
-                $showAll = true;
-            }
-
-            // CASE Editing a quote or creating a new quote - show non-Template fields
-            if ($showAll) {
-                $form
-//
-                    ->add('secondaryContact', 'genemu_jqueryautocomplete_entity', array(
-                        'class' => 'TUI\Toolkit\UserBundle\Entity\User',
-                        'required' => false,
-                        'route_name' => 'retrieve_salesagent_name',
-                        'data_class' => 'TUI\Toolkit\UserBundle\Entity\User',
-                        'label' => 'Other Business Admin',
-                        //'multiple' => true,
-                      ))
-                    ->add('organizer', 'genemu_jqueryautocomplete_entity', array(
-                        'route_name' => 'retrieve_organizers_name',
-                        'class' => 'TUI\Toolkit\UserBundle\Entity\User',
-                        'data_class' => 'TUI\Toolkit\UserBundle\Entity\User',
-                        'configs' => array('minLength' => 3),
-                        'attr' => array(
-                          'class' => 'suggest',
-                          ),
-                    ))
-//
-                    ->add('institution', 'genemu_jqueryautocomplete_entity', array(
-                        'class' => 'TUI\Toolkit\InstitutionBundle\Entity\Institution',
-                        'route_name' => 'retrieve_institution_name',
-                        'data_class' => 'TUI\Toolkit\InstitutionBundle\Entity\Institution',
-                        'configs' => array('minLength' => 3),
-                        'attr' => array(
-                          'class' => 'suggest',
-                        ),
-
-                    ))
-                ;
-
-            }
-
-        });
-
-        $builder
+      $builder
             ->add('name', 'text', array(
               'label' => 'Tour Name',
             ))
@@ -113,9 +65,7 @@ class QuoteType extends AbstractType
                 'property' => 'destination',
                 'label'   => 'Destination',
             ))
-            ->add('reference', 'text', array(
-              'label' => 'Quote Number',
-            ))
+
             ->add('salesAgent', 'genemu_jqueryautocomplete_entity', array(
                 'required' => true,
                 'class' => 'TUI\Toolkit\UserBundle\Entity\User',
@@ -130,6 +80,8 @@ class QuoteType extends AbstractType
 
             ))*/
         ;
+
+
     }
 
     /**
@@ -138,7 +90,7 @@ class QuoteType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'TUI\Toolkit\QuoteBundle\Entity\Quote'
+            'data_class' => 'TUI\Toolkit\QuoteBundle\Entity\Quote',
         ));
     }
 

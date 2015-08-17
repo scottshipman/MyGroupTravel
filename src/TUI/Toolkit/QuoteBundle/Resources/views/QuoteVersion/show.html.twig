@@ -11,7 +11,7 @@
                  <i class="fa fa-arrow-circle-left"></i> Back to the list
             </a>
         </li>
-        {% if (entity.quoteReference.locked is sameas(false)) and (is_granted("ROLE_ADMIN")) %}
+        {% if (entity.locked is sameas(false)) and (is_granted("ROLE_ADMIN")) %}
         <li>
             <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quoteversion_edit', { 'id': entity.id }) }}">
                 <i class="fa fa-pencil-square-o"> </i> Edit
@@ -32,7 +32,7 @@
             </tr>
             <tr>
                 <th>Destination</th><td>{% if entity.quoteReference.destination %}{{ entity.quoteReference.destination }}{% endif %}</td>
-                <th>Quote Number</th><td>{% if entity.quoteReference.reference %}{{ entity.quoteReference.reference }}{% endif %}</td>
+                <th>Quote Number</th><td>{% if entity.quoteNumber %}{{ entity.quoteNumber }}{% endif %}</td>
             </tr>
         </tbody>
     </table>
@@ -66,8 +66,8 @@
                 <td>{% if entity.payingPlaces  %}{{ entity.payingPlaces  }}{% endif %}</td>
             </tr>
             <tr>
-                <th>Version</th>
-                <td>{% if entity.version  %}{{ entity.version  }}{% endif %}</td>
+                <th>Quote Name</th>
+                <td>{% if entity.name  %}{{ entity.name  }}{% endif %}</td>
                 <th>Expiry Date</th>
                 <td>{% if entity.expiryDate  %}{{ entity.expiryDate|date(format) }}{% endif %}</td>
             </tr>

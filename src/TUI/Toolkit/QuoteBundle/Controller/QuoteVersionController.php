@@ -42,9 +42,10 @@ class QuoteVersionController extends Controller
         'quoteReference.id',
         'quoteReference.institution.name',
         'quoteReference.institution.city',
+        'converted',
+        'deleted',
+        'locked',
         'quoteReference.converted',
-        'quoteReference.deleted',
-        'quoteReference.locked',
         'quoteReference.setupComplete',
         'quoteReference.organizer.firstName',
         'quoteReference.organizer.lastName',
@@ -53,7 +54,7 @@ class QuoteVersionController extends Controller
         'quoteReference.salesAgent.lastName',
         'quoteReference.salesAgent.email',
         'quoteReference.destination',
-        'quoteReference.created',
+        'created',
         'version',
         'id',
         'duration',
@@ -79,9 +80,9 @@ class QuoteVersionController extends Controller
         function ($query) use ($tableAlias)
         {      $quoteAlias = '_quoteReference';
           $query
-          ->andWhere($tableAlias . '.ts IS NULL')
-          ->andWhere($quoteAlias . '.converted = false')
-          ->andWhere($quoteAlias . '.isTemplate = false');
+         // ->andWhere($tableAlias . '.ts IS NULL')
+          ->andWhere($tableAlias . '.converted = false')
+          ->andWhere($tableAlias . '.isTemplate = false');
         }
       );
 
@@ -98,7 +99,7 @@ class QuoteVersionController extends Controller
       $editAction->manipulateRender(
         function ($action, $row)
         { // business rule is only admins can edit locked quotes
-          if ($row->getField('quoteReference.locked') == true) {
+          if ($row->getField('locked') == true) {
             if (false === $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
               return null;
             }
@@ -117,7 +118,7 @@ class QuoteVersionController extends Controller
       $grid->addRowAction($deleteAction);
 
       // Set the default order of the grid
-      $grid->setDefaultOrder('quoteReference.created', 'DESC');
+      $grid->setDefaultOrder('created', 'DESC');
 
       // Set the selector of the number of items per page
       $grid->setLimits(array(10, 25, 50, 100));
@@ -145,9 +146,10 @@ class QuoteVersionController extends Controller
       'quoteReference.id',
       'quoteReference.institution.name',
       'quoteReference.institution.city',
+      'converted',
+      'deleted',
+      'locked',
       'quoteReference.converted',
-      'quoteReference.deleted',
-      'quoteReference.locked',
       'quoteReference.setupComplete',
       'quoteReference.organizer.firstName',
       'quoteReference.organizer.lastName',
@@ -156,7 +158,7 @@ class QuoteVersionController extends Controller
       'quoteReference.salesAgent.lastName',
       'quoteReference.salesAgent.email',
       'quoteReference.destination',
-      'quoteReference.created',
+      'created',
       'version',
       'id',
       'duration',
@@ -180,11 +182,11 @@ class QuoteVersionController extends Controller
 
     $source->manipulateQuery(
       function ($query) use ($tableAlias)
-      {      $quoteAlias = '_quoteReference';
+      {
         $query
-          ->andWhere($tableAlias . '.ts IS NULL')
-          ->andWhere($quoteAlias . '.converted = true')
-          ->andWhere($quoteAlias . '.isTemplate = false');
+         // ->andWhere($tableAlias . '.ts IS NULL')
+          ->andWhere($tableAlias . '.converted = true')
+          ->andWhere($tableAlias . '.isTemplate = false');
       }
     );
 
@@ -207,7 +209,7 @@ class QuoteVersionController extends Controller
     $grid->addRowAction($deleteAction);
 
     // Set the default order of the grid
-    $grid->setDefaultOrder('quoteReference.created', 'DESC');
+    $grid->setDefaultOrder('created', 'DESC');
 
     // Set the selector of the number of items per page
     $grid->setLimits(array(10, 25, 50, 100));
@@ -238,9 +240,10 @@ class QuoteVersionController extends Controller
       'quoteReference.id',
       'quoteReference.institution.name',
       'quoteReference.institution.city',
+      'converted',
+      'deleted',
+      'locked',
       'quoteReference.converted',
-      'quoteReference.deleted',
-      'quoteReference.locked',
       'quoteReference.setupComplete',
       'quoteReference.organizer.firstName',
       'quoteReference.organizer.lastName',
@@ -249,7 +252,7 @@ class QuoteVersionController extends Controller
       'quoteReference.salesAgent.lastName',
       'quoteReference.salesAgent.email',
       'quoteReference.destination',
-      'quoteReference.created',
+      'created',
       'version',
       'id',
       'duration',
@@ -273,10 +276,10 @@ class QuoteVersionController extends Controller
 
     $source->manipulateQuery(
       function ($query) use ($tableAlias)
-      {      $quoteAlias = '_quoteReference';
+      {
         $query
-          ->andWhere($tableAlias . '.ts IS NULL')
-          ->andWhere("$quoteAlias.deleted IS NOT NULL")
+          //->andWhere($tableAlias . '.ts IS NULL')
+          ->andWhere($tableAlias . ".deleted IS NOT NULL")
         ;
         $dql = $query->getDql();
         $foo='';
@@ -297,7 +300,7 @@ class QuoteVersionController extends Controller
 
 
     // Set the default order of the grid
-    $grid->setDefaultOrder('quoteReference.created', 'DESC');
+    $grid->setDefaultOrder('created', 'DESC');
 
     // Set the selector of the number of items per page
     $grid->setLimits(array(10, 25, 50, 100));
@@ -325,9 +328,10 @@ class QuoteVersionController extends Controller
       'quoteReference.id',
       'quoteReference.institution.name',
       'quoteReference.institution.city',
+      'converted',
+      'deleted',
+      'locked',
       'quoteReference.converted',
-      'quoteReference.deleted',
-      'quoteReference.locked',
       'quoteReference.setupComplete',
       'quoteReference.organizer.firstName',
       'quoteReference.organizer.lastName',
@@ -336,12 +340,7 @@ class QuoteVersionController extends Controller
       'quoteReference.salesAgent.lastName',
       'quoteReference.salesAgent.email',
       'quoteReference.destination',
-      'quoteReference.reference',
-      'quoteReference.institution.name',
-      'quoteReference.views',
-      'quoteReference.shareViews',
-      'organizer_full',
-      //'quoteReference.created',
+      'created',
       'version',
       'id',
       'duration',
@@ -365,10 +364,10 @@ class QuoteVersionController extends Controller
 
     $source->manipulateQuery(
       function ($query) use ($tableAlias)
-      {      $quoteAlias = '_quoteReference';
+      {
         $query
-          ->andWhere($tableAlias . '.ts IS NULL')
-          ->andWhere($quoteAlias . '.isTemplate = true');
+          //->andWhere($tableAlias . '.ts IS NULL')
+          ->andWhere($tableAlias . '.isTemplate = true');
       }
     );
 
@@ -385,7 +384,7 @@ class QuoteVersionController extends Controller
     $editAction->manipulateRender(
       function ($action, $row)
       { // business rule is only admins can edit locked quotes
-        if ($row->getField('quoteReference.locked') == true) {
+        if ($row->getField('locked') == true) {
           if (false === $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
             return null;
           }
@@ -403,7 +402,7 @@ class QuoteVersionController extends Controller
 
     // templates shouldnt have these fields or filters:
     // reference
-    $reference = $grid->getColumn('quoteReference.reference');
+    $reference = $grid->getColumn('quoteNumber');
     $reference->setFilterable(false);
     // institution
     $institution = $grid->getColumn('quoteReference.institution.name');
@@ -413,7 +412,7 @@ class QuoteVersionController extends Controller
     $organizer->setFilterable(false);
 
     // Set the default order of the grid
-    $grid->setDefaultOrder('quoteReference.created', 'DESC');
+    $grid->setDefaultOrder('created', 'DESC');
 
     // Set the selector of the number of items per page
     $grid->setLimits(array(10, 25, 50, 100));
@@ -495,7 +494,7 @@ class QuoteVersionController extends Controller
             $em->flush();
           // Create organizer permission
           $permission = $this->get("permission.set_permission")->setPermission($entity->getQuoteReference()->getId(), 'quote', $entity->getQuoteReference()->getOrganizer(), 'organizer');
-            $this->get('session')->getFlashBag()->add('notice', 'Quote Saved: '. $entity->getQuoteReference()->getName());
+            $this->get('session')->getFlashBag()->add('notice', 'Quote Saved: '. $entity->getName());
 
             return $this->redirect($this->generateUrl('manage_quote'));
         }
@@ -533,7 +532,7 @@ class QuoteVersionController extends Controller
       $em = $this->getDoctrine()->getManager();
       $em->persist($entity);
       $em->flush();
-      $this->get('session')->getFlashBag()->add('notice', 'Quote Template Saved: '. $entity->getQuoteReference()->getName());
+      $this->get('session')->getFlashBag()->add('notice', 'Quote Template Saved: '. $entity->getName());
 
       return $this->redirect($this->generateUrl('manage_quote_templates'));
     }
@@ -685,11 +684,11 @@ class QuoteVersionController extends Controller
             throw $this->createNotFoundException('Unable to find QuoteVersion entity.' . $id);
         }
 
-         if($entity->getQuoteReference()->getIsTemplate()){
+         if($entity->getIsTemplate()){
            $template='Template';
          } else {$template='';}
         $editForm = $this->createEditForm($entity);
-        $deleteForm = $this->createDeleteForm($entity->getQuoteReference()->getId());
+        $deleteForm = $this->createDeleteForm($entity->getId());
         $date_format = $this->container->getParameter('date_format');
 
         return $this->render('QuoteBundle:QuoteVersion:edit.html.twig', array(
@@ -728,8 +727,8 @@ class QuoteVersionController extends Controller
     $new_entity = $deepCopy->copy($original_entity);
 
 
-    if($original_entity->getQuoteReference()->getIsTemplate()){
-      $new_entity->getQuoteReference()->setIsTemplate(false);
+    if($original_entity->getIsTemplate()){
+      $new_entity->setIsTemplate(false);
       $template = 'Template';
     }
 
@@ -795,7 +794,6 @@ class QuoteVersionController extends Controller
     public function updateAction(Request $request, $id)
     {
 
-
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
@@ -803,8 +801,7 @@ class QuoteVersionController extends Controller
         if (!$entity) {
           throw $this->createNotFoundException('Unable to find QuoteVersion entity.');
         }
-
-        if($entity->getQuoteReference()->getIsTemplate()){
+        if($entity->getIsTemplate()){
           $template='Template'; $route = '_templates';
         } else {$template=''; $route = '';}
 
@@ -865,11 +862,11 @@ class QuoteVersionController extends Controller
         $new_entity = clone($entity);
         $new_entity->setVersion($entity->getVersion() + 1);
         $new_entity->setId(null);
-        $entity->setTs(new \DateTime());
+        $em->detach($entity);
          $em->persist($new_entity);
-         $em->flush();
+         $em->flush($new_entity);
         $permission = $this->get("permission.set_permission")->setPermission($new_entity->getQuoteReference()->getId(), 'quote', $new_entity->getQuoteReference()->getOrganizer(), 'organizer');
-        $this->get('session')->getFlashBag()->add('notice', 'Quote Saved: '. $new_entity->getQuoteReference()->getName());
+        $this->get('session')->getFlashBag()->add('notice', 'Quote Saved: '. $new_entity->getName());
 
 
         return $this->redirect($this->generateUrl('manage_quote' . $route));
@@ -878,7 +875,7 @@ class QuoteVersionController extends Controller
       if ($editForm->isValid()) {
             $em->flush();
         $permission = $this->get("permission.set_permission")->setPermission($entity->getQuoteReference()->getId(), 'quote', $entity->getQuoteReference()->getOrganizer(), 'organizer');
-          $this->get('session')->getFlashBag()->add('notice', 'Quote Saved: '. $entity->getQuoteReference()->getName());
+          $this->get('session')->getFlashBag()->add('notice', 'Quote Saved: '. $entity->getName());
 
 
           return $this->redirect($this->generateUrl('manage_quote' . $route));
@@ -908,7 +905,7 @@ class QuoteVersionController extends Controller
     $cloneform = $this->createCloneForm($entity);
     $cloneform->handleRequest($request);
 
-    if($entity->getQuoteReference()->getIsTemplate()){
+    if($entity->getIsTemplate()){
       $template='Template'; $route = '_templates';
     } else {$template=''; $route = '';}
 
@@ -966,7 +963,7 @@ class QuoteVersionController extends Controller
       $em->persist($entity);
       $em->flush();
       $permission = $this->get("permission.set_permission")->setPermission($entity->getQuoteReference()->getId(), 'quote', $entity->getQuoteReference()->getOrganizer(), 'organizer');
-      $this->get('session')->getFlashBag()->add('notice', 'Quote Saved: '. $entity->getQuoteReference()->getName());
+      $this->get('session')->getFlashBag()->add('notice', 'Quote Saved: '. $entity->getName());
 
 
       return $this->redirect($this->generateUrl('manage_quote_show', array('id' => $entity->getId())));
@@ -1046,5 +1043,71 @@ class QuoteVersionController extends Controller
 
 
     return new Response();
+  }
+
+
+  /**
+   * quickly Deletes QuoteVersion entity.
+   *
+   */
+  public function quickdeleteAction(Request $request, $id)
+  {
+
+    $em = $this->getDoctrine()->getManager();
+    // dont forget to disable softdelete filter so doctrine can *find* the deleted entity
+
+    $quoteVersion = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+    if (!$quoteVersion) {
+      throw $this->createNotFoundException('Unable to find Quote Version entity.');
+    }
+    $em->remove($quoteVersion);
+    $em->flush();
+    $this->get('session')->getFlashBag()->add('notice', 'Quote Deleted: ' . $quoteVersion->getName());
+
+    return $this->redirect($this->generateUrl('manage_quote'));
+  }
+
+
+  /**
+   * Creates a form to Restore a deleted QuoteVersion entity by id.
+   *
+   * @param mixed $id The entity id
+   *
+   * @return \Symfony\Component\Form\Form The form
+   */
+  private function createRestoreForm($id)
+  {
+    return $this->createFormBuilder()
+      ->setAction($this->generateUrl('manage_quote_restore', array('id' => $id)))
+      ->setMethod('POST')
+      ->add('submit', 'submit', array('label' => 'RESTORE'))
+      ->getForm();
+  }
+
+
+
+  /**
+   * Restores a Deleted Quote entity.
+   *
+   */
+  public function restoreAction(Request $request, $id)
+  {
+
+    $em = $this->getDoctrine()->getManager();
+    // dont forget to disable softdelete filter so doctrine can *find* the deleted entity
+    $filters = $em->getFilters();
+    $filters->disable('softdeleteable');
+
+    $quoteVersion = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+
+    if (!$quoteVersion) {
+      throw $this->createNotFoundException('Unable to find Quote entity.');
+    }
+    $quoteVersion->setDeleted(NULL);
+    $em->persist($quoteVersion);
+    $em->flush();
+    $this->get('session')->getFlashBag()->add('notice', 'Quote Restored: ' . $quoteVersion->getName());
+
+    return $this->redirect($this->generateUrl('manage_quote'));
   }
 }
