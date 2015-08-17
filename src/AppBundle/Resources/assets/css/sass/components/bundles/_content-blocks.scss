@@ -59,42 +59,55 @@
 
 
 
-#tui_toolkit_contentblocksbundle_contentblock_layoutType {
+#tui_toolkit_contentblocksbundle_contentblock_layoutType .mdl-radio__label,
+td .layout-icons {
+  position: relative;
+  @include inline-block-vertical();
+  text-indent: 3em;
+  width: 3em;
+  overflow: hidden;
 
-  .mdl-radio__label {
-    position: relative;
-    @include inline-block-vertical();
-    text-indent: 3em;
-    width: 3em;
-    overflow: hidden;
+  &:before {
+    @include fa-standard();
+    position: absolute;
+    top: 0;
+    left: -3em;
+  }
 
-    &:before {
-      @include fa-standard();
-      position: absolute;
-      top: 0;
-      left: -3em;
-    }
-
-    &:after {
-      @include fa-standard();
-      position: absolute;
-      bottom: 0;
-      left: -3em;
-    }
-
+  &:after {
+    @include fa-standard();
+    position: absolute;
+    bottom: 0;
+    left: -3em;
   }
 
 }
 
-#tui_toolkit_contentblocksbundle_contentblock_layoutType_1 ~ .mdl-radio__label:before {
-  content: "\f03e\00a0\f036";
+td .layout-icons {
+  margin-bottom: 1em;
 }
 
-#tui_toolkit_contentblocksbundle_contentblock_layoutType_2 ~ .mdl-radio__label:before {
-  content: "\f036\00a0\f03e";
+#tui_toolkit_contentblocksbundle_contentblock_layoutType_1 ~ .mdl-radio__label,
+td .layout-icons.image_left {
+
+  &:before {
+    content: "\f03e\00a0\f036";
+  }
+
 }
 
-#tui_toolkit_contentblocksbundle_contentblock_layoutType_3 ~ .mdl-radio__label {
+#tui_toolkit_contentblocksbundle_contentblock_layoutType_2 ~ .mdl-radio__label,
+td .layout-icons.image_right {
+
+  &:before {
+    content: "\f036\00a0\f03e";
+  }
+
+}
+
+#tui_toolkit_contentblocksbundle_contentblock_layoutType_3 ~ .mdl-radio__label,
+td .layout-icons.image_top {
+  height: 48px;
 
   &:before {
     content: "\f03e";
@@ -106,7 +119,9 @@
 
 }
 
-#tui_toolkit_contentblocksbundle_contentblock_layoutType_4 ~ .mdl-radio__label {
+#tui_toolkit_contentblocksbundle_contentblock_layoutType_4 ~ .mdl-radio__label,
+td .layout-icons.image_bottom {
+  height: 48px;
 
   &:before {
     content: "\f036";
