@@ -153,7 +153,6 @@ class ContentBlockController extends Controller
 
         $entity->setMedia($collectionIds);
         $editForm = $this->createEditForm($entity);
-//        $editForm->getData()->setMedia($collectionIds);
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('ContentBlocksBundle:ContentBlock:edit.html.twig', array(
