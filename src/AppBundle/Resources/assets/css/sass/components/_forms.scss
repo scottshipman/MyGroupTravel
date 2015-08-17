@@ -56,3 +56,15 @@ form {
 .mdl-radio__inner-circle {
   top: 8px;
 }
+
+.mdl-checkbox {
+
+  &:first-child {
+    margin-top: 20px;
+  }
+
+  &:last-child {
+    margin-bottom: 20px;
+  }
+
+}
