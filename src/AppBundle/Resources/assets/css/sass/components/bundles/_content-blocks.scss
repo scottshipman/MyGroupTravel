@@ -63,6 +63,20 @@
 .content-block {
   @include clear-fix();
   margin-bottom: $element-bottom;
+
+  &.content-block-size-full {
+    clear: both;
+  }
+
+  &.content-block-size-half {
+    float: left;
+    width: 50%;
+  }
+
+  & ~ .record_actions {
+    clear: both;
+  }
+
 }
 
 .content-block-media {
@@ -134,6 +148,19 @@
 
     img {
       width: 25%;
+    }
+
+  }
+
+}
+
+.content-block-size-half {
+
+  &.content-block-layout-image_top,
+  &.content-block-layout-image_bottom {
+
+    img {
+      width: 50%;
     }
 
   }
