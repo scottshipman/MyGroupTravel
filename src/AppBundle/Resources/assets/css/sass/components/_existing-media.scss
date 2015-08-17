@@ -1,15 +1,15 @@
 .media-wrapper {
   @include clear-fix();
-  margin-bottom: $element-bottom;
 }
 
 .existing-media-wrapper {
-  float: left;
+  @include clear-fix();
+  margin-bottom: 10px;
 
   .existing-media-item {
     float: left;
     position: relative;
-    margin-right: 10px;
+    margin: 0 10px 10px 0;
     border-radius: 20px;
     overflow: hidden;
 
@@ -31,15 +31,5 @@
 }
 
 .new-media-wrapper {
-
-  .existing-media-wrapper ~ & {
-    float: left;
-
-    .media-placeholder-image,
-    #dropzone_form {
-      margin-bottom: 0;
-    }
-
-  }
-
+  margin-bottom: 20px;
 }
