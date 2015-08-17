@@ -1,0 +1,45 @@
+.media-wrapper {
+  @include clear-fix();
+  margin-bottom: $element-bottom;
+}
+
+.existing-media-wrapper {
+  float: left;
+
+  .existing-media-item {
+    float: left;
+    position: relative;
+    margin-right: 10px;
+    border-radius: 20px;
+    overflow: hidden;
+
+    img {
+      height: 160px;
+      width: auto;
+    }
+
+    .existing-delete {
+      @include mdl-primary-color(color, 6);
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 10px;
+    }
+
+  }
+
+}
+
+.new-media-wrapper {
+
+  .existing-media-wrapper ~ & {
+    float: left;
+
+    .media-placeholder-image,
+    #dropzone_form {
+      margin-bottom: 0;
+    }
+
+  }
+
+}

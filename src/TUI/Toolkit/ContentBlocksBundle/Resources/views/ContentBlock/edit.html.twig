@@ -1,112 +1,87 @@
 {% extends '::base.html.twig' %}
+{% block title %}Edit {{ entity.title }}{% endblock %}
+{% block page_title %}Edit {{ entity.title }}{% endblock %}
 
 {% block body -%}
-    <h1>ContentBlock edit</h1>
-    {% for media in collection %}
 
-        <img src ={{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }} style="max-width:200px" />
-    {% endfor %}
+    <div class="media-wrapper">
 
-    <div id="avatar-label" class="mdl-label-mimic">Some Media
-        <div style="display:none;" id="dropzone-form-close"><i class="fa fa-times-circle"></i></div>
-    </div>
-    {{ dump(collection) }}
-    {{ render(controller('MediaBundle:Media:createDropzoneForm', {'context':'contentblock'})) }}
-    {{ form_start(edit_form) }}
-
-
-    <div id="user_media" class="is-dirty mdl-textfield--floating-label">
-        {% if entity.media %}
-            <div class="media-placeholder-image">
-                <div id="overlay">
-                    <i class="fa fa-pencil-square-o fa-2x"></i>
-                </div>
-            </div>
-            {#<div class="media-placeholder-image-2">#}
-                {#<div id="overlay">#}
-                    {#<i class="fa fa-pencil-square-o fa-2x"></i>#}
-                {#</div>#}
-            {#</div>#}
-            <script>
-                $(function () {
-                    Dropzone.options.dropzoneForm = {
-                        maxFiles: 6,
-                        acceptedMimeTypes: 'image/jpeg,image/png,image/jpg',
-                        addRemoveLinks: true,
-                        dictDefaultMessage: "Drop files here,<br /> or click to upload",
-                        init: function () {
-                            var value = $(".media-placeholder").val();
-//                            console.log(value);
-                            var values = [];
-                            values = value.split(',').map(Number);
-                            console.log(values);
-                            this.on("success", function (file, response) {
-                                console.log(response.id);
-                                if (".media-placeholder".length > 0) {
-                                    values.push(response.id);
-                                    console.log(values);
-                                    $(".media-placeholder").val(values);
-                                }
-                            });
-                            this.on("error", function (file, response) {
-                                alert(response);
-                            });
-                            this.on("removedfile", function (file, response) {
-                                $("#dropzone-form-close").css({"display": "inline-block"});
-                                $("#dropzone_form").submit(function(){
-                                    console.log(response);
-                                });
-//                                console.log(file);
-//                                if (".media-placeholder".length > 0) {
-//                                    values.splice(response.id);
-//                                    $(".media-placeholder").val(values);
-//                                    console.log(values);
-//                                }
-                            });
-                        }
-                    }
-                });
-
+        <div class="existing-media-wrapper">
+            {% if entity.media %}
                 {% for media in collection %}
-                $(document).ready(function () {
-                    var bUrl = '{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}';
-                    $(".media-placeholder-image").css({
-                        "background-image": "url(" + bUrl + ")",
-                        "background-position": "50%",
-                        "background-repeat": "no-repeat",
-                        "background-size": "contain",
-                        "width": "300px",
-                        "height": "160px"
-                    });
-                    {#var bUrl2 = '{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}';#}
-                    {#$(".media-placeholder-image-2").css({#}
-                        {#"background-image": "url(" + bUrl2 + ")",#}
-                        {#"background-position": "50%",#}
-                        {#"background-repeat": "no-repeat",#}
-                        {#"background-size": "contain",#}
-                        {#"width": "300px",#}
-                        {#"height": "160px"#}
-                    {#});#}
-                });
+                    <div class="existing-media-item">
+                        <img id="{{ media.id }}" src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">
+                        <a class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a>
+                    </div>
                 {% endfor %}
-            </script>
-        {% else %}
-            <span class="fa-stack fa-3x">
-    <i class="media-placeholder-image fa fa-picture-o fa-stack-5x">
-        <span style="display:block; font-size: .25em;">click to edit</span>
-    </i>
-    </span>
-        {% endif %}
+            {% endif %}
+        </div>
+
+        <div class="new-media-wrapper">
+
+            <div id="avatar-label">
+                <div style="display: none;" id="dropzone-form-close"><i class="fa fa-times-circle"></i></div>
+            </div>
+
+            {{ render(controller('MediaBundle:Media:createDropzoneForm', {'context':'contentblock'})) }}
+
+            <div id="user_media">
+                <span class="media-placeholder-image new">
+                    <i class="fa fa-picture-o fa-3x"></i>
+                    <span>Click to upload</span>
+                </span>
+            </div>
+
+        </div>
+
     </div>
+
+    {{ form_start(edit_form) }}
     {{ form_widget(edit_form) }}
     {{ form_end(edit_form) }}
 
     <ul class="record_actions">
         <li>
-            <a href="{{ path('manage_contentblocks') }}">
-                Back to the list
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_contentblocks') }}">
+                <i class="fa fa-arrow-circle-left"></i> Back to the list
             </a>
         </li>
         <li>{{ form(delete_form) }}</li>
     </ul>
+
+    <script>
+        $( function() {
+            $(document).on( 'click', '.existing-delete', function(e) {
+                e.preventDefault();
+                var remove = $(this).parent().find('img').attr('id');
+                var value = $(".media-placeholder").val();
+                var values = [];
+                values = value.split(',').map(Number);
+                values = jQuery.grep(values, function(v) {
+                    return v != remove;
+                });
+                $(".media-placeholder").val(values);
+                $(this).parent().remove();
+            });
+            Dropzone.options.dropzoneForm = {
+                maxFiles: 1,
+                acceptedMimeTypes: 'image/jpeg,image/png,image/jpg',
+                init: function () {
+                    var value = $(".media-placeholder").val();
+                    var values = [];
+                    values = value.split(',').map(Number);
+                    this.on("success", function (file, response) {
+                        if ( $(".media-placeholder").val().length > 0 ) {
+                            values.push(response.id);
+                            $(".media-placeholder").val(values);
+                        } else {
+                            $(".media-placeholder").val(response.id);
+                        };
+                        $('.existing-media-wrapper').append('<div class="existing-media-item"><img id="' + response.id + '" src="' + response.relativepath + '/' + response.filename + '"><a class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a></div>');
+                    });
+                }
+            }
+        });
+    </script>
+
 {% endblock %}
