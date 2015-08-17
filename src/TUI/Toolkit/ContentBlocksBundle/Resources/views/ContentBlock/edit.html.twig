@@ -10,7 +10,8 @@
             {% if entity.media %}
                 {% for media in collection %}
                     <div class="existing-media-item">
-                        <img id="{{ media.id }}" src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">
+                        <img id="{{ media.id }}"
+                             src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">
                         <a class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a>
                     </div>
                 {% endfor %}
@@ -42,7 +43,8 @@
 
     <ul class="record_actions">
         <li>
-            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_contentblocks') }}">
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+               href="{{ path('manage_contentblocks') }}">
                 <i class="fa fa-arrow-circle-left"></i> Back to the list
             </a>
         </li>
@@ -55,14 +57,14 @@
     </ul>
 
     <script>
-        $( function() {
-            $(document).on( 'click', '.existing-delete', function(e) {
+        $(function () {
+            $(document).on('click', '.existing-delete', function (e) {
                 e.preventDefault();
                 var remove = $(this).parent().find('img').attr('id');
                 var value = $(".media-placeholder").val();
                 var values = [];
                 values = value.split(',').map(Number);
-                values = jQuery.grep(values, function(v) {
+                values = jQuery.grep(values, function (v) {
                     return v != remove;
                 });
                 $(".media-placeholder").val(values);
@@ -76,23 +78,20 @@
                     var values = [];
                     values = value.split(',').map(Number);
                     this.on("success", function (file, response) {
-                        if ( $(".media-placeholder").val().length > 0 ) {
+                        if ($(".media-placeholder").val().length > 0) {
                             values.push(response.id);
                             $(".media-placeholder").val(values);
                         } else {
                             $(".media-placeholder").val(response.id);
-                        };
+                        }
                         $('.existing-media-wrapper').append('<div class="existing-media-item"><img id="' + response.id + '" src="' + response.relativepath + '/' + response.filename + '"><a class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a></div>');
+                    });
+                    this.on("complete", function (file) {
+                        this.removeFile(file);
+
                     });
                     this.on("error", function (file, response) {
                         alert(response);
-                    });
-                    this.on("addedfile", function () {
-                        $("#dropzone-form-close").css({"display":"none"});
-                        if (this.files[1] != null) {
-                            this.removeFile(this.files[0]);
-
-                        }
                     });
                 }
             }
