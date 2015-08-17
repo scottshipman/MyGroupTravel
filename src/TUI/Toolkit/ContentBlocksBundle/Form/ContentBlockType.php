@@ -15,8 +15,12 @@ class ContentBlockType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('locked')
-            ->add('hidden')
+            ->add('locked', 'checkbox', array(
+                'required' => false
+            ))
+            ->add('hidden', 'checkbox', array(
+                'required' => false
+            ))
             ->add('layoutType', 'entity', array(
                 'class' => 'ContentBlocksBundle:LayoutType',
                 'data_class' => 'TUI\Toolkit\ContentBlocksBundle\Entity\LayoutType',
@@ -44,11 +48,13 @@ class ContentBlockType extends AbstractType
 //                    'multiple' => true
                 )
             ))
-            ->add('doubleWidth')
+            ->add('doubleWidth', 'checkbox', array(
+                'required' => false
+            ))
             ->getForm()
         ;
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */
