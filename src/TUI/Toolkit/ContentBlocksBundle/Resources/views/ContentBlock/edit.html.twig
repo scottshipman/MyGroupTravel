@@ -84,6 +84,16 @@
                         };
                         $('.existing-media-wrapper').append('<div class="existing-media-item"><img id="' + response.id + '" src="' + response.relativepath + '/' + response.filename + '"><a class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a></div>');
                     });
+                    this.on("error", function (file, response) {
+                        alert(response);
+                    });
+                    this.on("addedfile", function () {
+                        $("#dropzone-form-close").css({"display":"none"});
+                        if (this.files[1] != null) {
+                            this.removeFile(this.files[0]);
+
+                        }
+                    });
                 }
             }
         });
