@@ -70,8 +70,9 @@
 
     if ( $("form").hasClass("fos_user_resetting_request") ) {
         $("body").addClass("main_login");
-        $('h2.signin-form').text('Reset Password').show();
-        $("#username").attr("placeholder", "Username Or Email Address");
+        $('h2').text('Reset Password').show();
+        $("#username").attr("placeholder", "Email Address");
+        $('.login-reset a').attr("href", "/").text("Sign In").css({"color":"#8DC74B"});
 
     }
 
