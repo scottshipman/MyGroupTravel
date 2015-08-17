@@ -20,7 +20,6 @@ class QuoteType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
       // CASE Editing a quote or creating a new quote - show non-Template fields
-      // TODO figure out to toggle display of fields based on QuoteVersion values
       $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
         if ($_SESSION['showAll']) {
           $form = $event->getForm();
