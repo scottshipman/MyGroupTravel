@@ -7,18 +7,13 @@
     <div class="media-wrapper">
 
         <div class="existing-media-wrapper">
-            {% if entity.media %}
-                {% for media in entity.media %}
-                    <div class="existing-media-item">
-                        <img id="{{ media.id }}"
-                             src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">
-                        <a class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a>
-                    </div>
-                {% endfor %}
-            {% endif %}
+            <div class="mdl-label-mimic"><label>Uploaded Images</label></div>
+            <p class="none">No images uploaded.</p>
         </div>
 
         <div class="new-media-wrapper">
+
+            <div class="mdl-label-mimic"><label>New Images</label></div>
 
             <div id="avatar-label">
                 <div style="display: none;" id="dropzone-form-close"><i class="fa fa-times-circle"></i></div>
@@ -48,6 +43,7 @@
             </a>
         </li>
     </ul>
+
     <script>
         $(function () {
             $(document).on('click', '.existing-delete', function (e) {
@@ -57,14 +53,12 @@
                 var values = [];
                 values = value.split(',').map(Number);
                 values = jQuery.grep(values, function (v) {
-                    if (values.length < 7){
-                        console.log(values.length);
+                    if (values.length <= 6) {
                         $(".new-media-wrapper").css({"display": "block"});
                     }
                     return v != remove;
                 });
                 $(".media-placeholder").val(values);
-
                 $(this).parent().remove();
             });
             Dropzone.options.dropzoneForm = {
@@ -74,29 +68,32 @@
                 init: function () {
                     var value = $(".media-placeholder").val();
                     var values = [];
-                    values = value.split(',').map(Number);
-                    console.log(values.length);
-                    if (values.length >= 6) {
-                        $(".new-media-wrapper").css({"display": "none"});
+                    if ( value != 0 ) {
+                        values = value.split(',').map(Number);
+                        if (values.length >= 6) {
+                            $(".new-media-wrapper").css({"display": "none"});
+                        }
                     }
                     this.on("success", function (file, response) {
                         if ($(".media-placeholder").val().length > 0) {
                             var value = $(".media-placeholder").val();
                             var values = [];
-                            values = value.split(',').map(Number);
-                            values.push(response.id);
+                            if ( value != 0 ) {
+                                values = value.split(',').map(Number);
+                                values.push(response.id);
+                                if (values.length >= 6) {
+                                    $(".new-media-wrapper").css({"display": "none"});
+                                }
+                            }
                             $(".media-placeholder").val(values);
                         } else {
                             $(".media-placeholder").val(response.id);
                         }
+                        $('.existing-media-wrapper').find('.none').hide();
                         $('.existing-media-wrapper').append('<div class="existing-media-item"><img id="' + response.id + '" src="' + response.relativepath + '/' + response.filename + '"><a class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a></div>');
-                        if (values.length >= 6) {
-                            $(".new-media-wrapper").css({"display": "none"});
-                        }
                     });
-                    this.on("complete", function (file) {
+                    this.on("complete", function (file, response) {
                         this.removeFile(file);
-
                     });
                     this.on("error", function (file, response) {
                         alert(response);

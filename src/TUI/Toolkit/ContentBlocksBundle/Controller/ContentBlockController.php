@@ -143,9 +143,13 @@ class ContentBlockController extends Controller
         $collection = $entity->getMedia()->toArray();
         foreach ($collection as $image) {
             $imageIds[] = $image->getId();
-
         }
-        $collectionIds = implode(',', $imageIds);
+
+        if ( isset($imageIds) ) {
+            $collectionIds = implode(',', $imageIds);
+        } else {
+            $collectionIds = '';
+        }
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ContentBlock entity.');
