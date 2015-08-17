@@ -15,9 +15,6 @@ class ContentBlockType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('locked')
-            ->add('hidden')
-            ->add('layoutType')
             ->add('title')
             ->add('body', 'ckeditor', array(
                 'transformers' => array('html_purifier'),
@@ -30,16 +27,34 @@ class ContentBlockType extends AbstractType
                 'width' => '100%',
                 'height' => '320',
             ))
+            ->add('locked', 'checkbox', array(
+                'required' => false
+            ))
+            ->add('hidden', 'checkbox', array(
+                'required' => false
+            ))
+            ->add('layoutType', 'entity', array(
+                'class' => 'ContentBlocksBundle:LayoutType',
+                'data_class' => 'TUI\Toolkit\ContentBlocksBundle\Entity\LayoutType',
+                'choice_label' => 'name',
+                'expanded' => true,
+                'multiple' => false
+            ))
             ->add('media', 'hidden', array(
                 'required' => false,
 //                'data_class' => 'TUI\Toolkit\MediaBundle\Entity\Media',
+                'attr' => array(
+                    'class' => 'media-placeholder',
+//                    'multiple' => true
+                )
             ))
-            ->add('sortOrder')
-            ->add('doubleWidth')
+            ->add('doubleWidth', 'checkbox', array(
+                'required' => false
+            ))
             ->getForm()
         ;
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */

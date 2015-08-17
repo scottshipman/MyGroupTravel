@@ -68,43 +68,50 @@
     $("#username").attr("placeholder", "Email");
     $("#password").attr("placeholder", "Password");
 
-    if ( $("form").hasClass("fos_user_resetting_request") ) {
+    if ($("form").hasClass("fos_user_resetting_request")) {
         $("body").addClass("main_login");
-        $('h2.signin-form').text('Reset Password').show();
-        $("#username").attr("placeholder", "Username Or Email Address");
+        $('h2').text('Reset Password').show();
+        $("#username").attr("placeholder", "Email Address");
+        $('.login-reset a').attr("href", "/").text("Sign In").css({"color": "#8DC74B"});
+
     }
 
-    //if ($("div").hasClass("login-message-block")){
-    //    $("body").addClass("main_login");
-    //}
+    if ($('#fos_user_resetting_form').length) {
+        $("#fos_user_resetting_form_plainPassword_first").attr("placeholder", "New Password");
+        $("#fos_user_resetting_form_plainPassword_second").attr("placeholder", "Confirm New Password");
+        $('h2').text("Reset Password").show();
+        $('.login-reset a').attr("href", "/").text("Sign In").css({"color": "#8DC74B"});
+    }
 
 
-  // *
-  // "Add New" Link and Dialog modal for New Quote form
-  // *
+    // *
+    // "Add New" Link and Dialog modal for New Quote form
+    // *
     $('body').append('<div id="dialog"></div>');
-    var elements = {'#tui_toolkit_quotebundle_quoteversion_quoteReference_organizer':'Organizer',
-                    '#tui_toolkit_quotebundle_quoteversion_quoteReference_institution': 'Institution'};
-    $.each(elements, function(element, type){
-            if ( element.length ) {
-                //  source a button or glyph here
-                $(element).parent('div').parent('div').append('<div id= "' + type.toLowerCase() + '-add-new-link" class="add-new modal"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-plus fa-stack-1x fa-inverse"></i></span></div>');
-            }
-        });
+    var elements = {
+        '#tui_toolkit_quotebundle_quoteversion_quoteReference_organizer': 'Organizer',
+        '#tui_toolkit_quotebundle_quoteversion_quoteReference_institution': 'Institution'
+    };
+    $.each(elements, function (element, type) {
+        if (element.length) {
+            //  source a button or glyph here
+            $(element).parent('div').parent('div').append('<div id= "' + type.toLowerCase() + '-add-new-link" class="add-new modal"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-plus fa-stack-1x fa-inverse"></i></span></div>');
+        }
+    });
 
     $("#dialog").dialog({
         autoOpen: false,
         modal: true,
         width: 600,
         height: 400
-/*        buttons: {
-            "Close": function() {
-                $(this).dialog("close");
-            }
-        }*/
+        /*        buttons: {
+         "Close": function() {
+         $(this).dialog("close");
+         }
+         }*/
     });
 
-    $(".modal").on("click", function(e) {
+    $(".modal").on("click", function (e) {
         var modal_form = e.currentTarget.id;
         var parts = modal_form.split("-add");
         var form_type = parts[0].toLowerCase();
@@ -112,44 +119,46 @@
         console.log(form_type);
         $("#dialog").html("");
         $("#dialog").dialog("option", "title", "Loading...").dialog("open");
-        $("#dialog").load('/ajax/' + form_type + '/new', function() {
+        $("#dialog").load('/ajax/' + form_type + '/new', function () {
             $(this).dialog("option", "title", 'Create New ' + parts[0]);
-            $(this).find('.mdl-textfield__input').each( function() {
-                if ( $(this).attr('required') ) {
+            $(this).find('.mdl-textfield__input').each(function () {
+                if ($(this).attr('required')) {
                     $(this).parent().addClass('is-invalid');
-                };
+                }
+                ;
             });
         });
     });
 
-    $(document).on( 'focus', '.ui-dialog .mdl-textfield__input', function() {
+    $(document).on('focus', '.ui-dialog .mdl-textfield__input', function () {
         $(this).parent().addClass('is-focused');
-    }).on( 'blur', '.ui-dialog .mdl-textfield__input', function() {
+    }).on('blur', '.ui-dialog .mdl-textfield__input', function () {
         $(this).parent().removeClass('is-focused');
-    }).on( 'change paste keyup', '.ui-dialog .mdl-textfield__input', function() {
-        if ( $(this).val() ) {
+    }).on('change paste keyup', '.ui-dialog .mdl-textfield__input', function () {
+        if ($(this).val()) {
             $(this).parent().addClass('is-dirty').addClass('is-upgraded').removeClass('is-invalid');
         } else {
             $(this).parent().removeClass('is-dirty').removeClass('is-upgraded');
-            if ( $(this).attr('required') ) {
+            if ($(this).attr('required')) {
                 $(this).parent().addClass('is-invalid');
-            };
+            }
+            ;
         }
     });
 
-   /*
-    * Autocomplete Handle empty responses
-    */
+    /*
+     * Autocomplete Handle empty responses
+     */
 
     var suggest = ['tui_toolkit_quotebundle_quoteversion_quoteReference_organizer',
-                   'tui_toolkit_quotebundle_quoteversion_quoteReference_institution',
-                   'tui_toolkit_quotebundle_quoteversion_quoteReference_salesAgent',
-                   'tui_toolkit_quotebundle_quoteversion_quoteReference_secondaryContact'];
+        'tui_toolkit_quotebundle_quoteversion_quoteReference_institution',
+        'tui_toolkit_quotebundle_quoteversion_quoteReference_salesAgent',
+        'tui_toolkit_quotebundle_quoteversion_quoteReference_secondaryContact'];
 
-    $.each(suggest, function(index, formfield){
+    $.each(suggest, function (index, formfield) {
         $('#' + formfield).autocomplete({
-            response: function( event, ui ) {
-                var label = $("label[for='"+event.target.id+"']");
+            response: function (event, ui) {
+                var label = $("label[for='" + event.target.id + "']");
                 var text = label.text().trim();
                 if (ui.content.length == 0) {
                     alert('No suggested results  found for ' + text);
@@ -179,25 +188,25 @@
         });
     });
 
-    $('.media-placeholder-image').on("click", function(){
-        $('.media-placeholder-image').css({"display":"none"});
-        $("#dropzone_form").css({"display":"block"});
+    $('.media-placeholder-image').on("click", function () {
+        $('.media-placeholder-image').css({"display": "none"});
+        $("#dropzone_form").css({"display": "block"});
     });
 
-    $('.media-placeholder-image').on("click", function(){
-        $('.media-placeholder-image').css({"display":"none"});
-        $("#dropzone_form").css({"display":"block"});
-        $("#dropzone-form-close").css({"display":"inline-block"});
+    $('.media-placeholder-image').on("click", function () {
+        $('.media-placeholder-image').css({"display": "none"});
+        $("#dropzone_form").css({"display": "block"});
+        $("#dropzone-form-close").css({"display": "inline-block"});
     });
 
-    $('#avatar-label').on("click", function(){
-        $('.media-placeholder-image').css({"display":"block"});
-        $("#dropzone_form").css({"display":"none"});
-        $("#dropzone-form-close").css({"display":"none"});
+    $('#avatar-label').on("click", function () {
+        $('.media-placeholder-image').css({"display": "block"});
+        $("#dropzone_form").css({"display": "none"});
+        $("#dropzone-form-close").css({"display": "none"});
     });
 
     //if ($("#dropzone_form").hasClass("dz-max-files-reached")) {
-    $("#dropzone_form").submit(function(){
+    $("#dropzone_form").submit(function () {
         console.log('dropzone submitted remove image');
         $("img#user_media").css({
             display: "none"
@@ -208,7 +217,7 @@
      * Drag and Drop Sorting
      */
 
-    $( ".sortable-tabs" ).sortable({
+    $(".sortable-tabs").sortable({
         containment: "parent",
         items: "> div",
         // handle: ".move",
@@ -219,7 +228,7 @@
         delay: 150,
         dropOnEmpty: true,
         placeholder: "tabs-placeholder",
-        start: function(e, ui) {
+        start: function (e, ui) {
             ui.placeholder.height(ui.helper.outerHeight());
         },
         axis: 'y'
@@ -234,13 +243,13 @@
         //// }
     });
     //$( ".sortable-tabs" ).disableSelection();
-    $( ".sortable-items" ).sortable({
+    $(".sortable-items").sortable({
         containment: "document",
         items: "> div",
         tolerance: "pointer",
         connectWith: '.sortable-items',
         placeholder: "items-placeholder",
-        start: function(e, ui) {
+        start: function (e, ui) {
             ui.placeholder.height(ui.helper.outerHeight());
         },
         axis: 'y'
@@ -261,11 +270,11 @@
      * Add font-awesome to Delete buttons
      */
 
-    $('.button-row').children(':button').each(function(){
-        if ($.trim($(this).html()) == 'Delete'){
+    $('.button-row').children(':button').each(function () {
+        if ($.trim($(this).html()) == 'Delete') {
             $(this).html('<i class="fa fa-trash-o"></i> Delete');
         }
-        if ($.trim($(this).html()) == 'Update'){
+        if ($.trim($(this).html()) == 'Update') {
             $(this).html('<i class="fa fa-check-circle"></i> Update');
         }
     })

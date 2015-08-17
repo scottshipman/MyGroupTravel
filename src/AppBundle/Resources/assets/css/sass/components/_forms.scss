@@ -13,6 +13,11 @@ form {
 .mdl-label-mimic {
   font-size: 12px;
   white-space: nowrap;
+
+  label {
+    @include mdl-primary-color(color, 6);
+  }
+  
 }
 
 .mdl-form-wrap {
@@ -37,10 +42,6 @@ form {
     bottom: 0;
     right: 0;
     z-index: -1;
-  }
-
-  label {
-    @include mdl-primary-color(color, 6);
   }
 
 }

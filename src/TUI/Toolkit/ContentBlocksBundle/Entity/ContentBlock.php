@@ -2,6 +2,7 @@
 
 namespace TUI\Toolkit\ContentBlocksBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -36,11 +37,11 @@ class ContentBlock
     private $hidden;
 
     /**
-     * @var integer
      *
-     * @ORM\Column(name="layoutType", type="integer")
+     * @var \TUI\Toolkit\ContentBlocksBundle\Entity\LayoutType
+     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\ContentBlocksBundle\Entity\LayoutType", cascade={"persist"}, fetch="LAZY")
+     * @ORM\JoinColumn(name="layouttype", referencedColumnName="id")
      *
-     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\ContentBlocksBundle\Entity\LayoutType", cascade={"all"}, fetch="EAGER", inversedBy = "id")
      */
     private $layoutType;
 
@@ -61,7 +62,7 @@ class ContentBlock
     /**
      * @var integer
      *
-     * @ORM\Column(name="sortOrder", type="integer")
+     * @ORM\Column(name="sortOrder", type="integer", nullable=true)
      */
     private $sortOrder;
 
@@ -76,7 +77,7 @@ class ContentBlock
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -99,7 +100,7 @@ class ContentBlock
     /**
      * Get locked
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getLocked()
     {
@@ -122,7 +123,7 @@ class ContentBlock
     /**
      * Get hidden
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getHidden()
     {
@@ -145,7 +146,7 @@ class ContentBlock
     /**
      * Get layoutType
      *
-     * @return integer 
+     * @return integer
      */
     public function getLayoutType()
     {
@@ -168,7 +169,7 @@ class ContentBlock
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -214,7 +215,7 @@ class ContentBlock
     /**
      * Get sortOrder
      *
-     * @return integer 
+     * @return integer
      */
     public function getSortOrder()
     {
@@ -237,7 +238,7 @@ class ContentBlock
     /**
      * Get doubleWidth
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getDoubleWidth()
     {
@@ -246,14 +247,31 @@ class ContentBlock
 
     /**
      * @var \TUI\Toolkit\MediaBundle\Entity\Media
-     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\MediaBundle\Entity\Media", cascade={"persist"}, fetch="LAZY")
+     * @ORM\ManyToMany(targetEntity="TUI\Toolkit\MediaBundle\Entity\Media", cascade={"persist"}, fetch="LAZY")
      * @ORM\JoinColumn(name="media", referencedColumnName="id")
      */
     protected $media;
 
+    public function __construct()
+    {
+        $this->media = new ArrayCollection();
+    }
+
+    /**
+     * @param $media
+     */
+
+    public function addMedia($media)
+    {
+
+        $this->media[] = $media;
+        return $this;
+    }
+
     /**
      * @param  $media
      */
+
     public function setMedia($media)
     {
         $this->media = $media;

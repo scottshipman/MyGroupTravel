@@ -10,10 +10,11 @@ parameters:
     # You should uncomment this if you want use pdo_sqlite
     # database_path: "%kernel.root_dir%/data.db3"
 
-    mailer_transport:  mail
-    mailer_host:       ~
-    mailer_user:       ~
-    mailer_password:   ~
+    mailer_transport: smtp
+    mailer_host: smtp.mandrillapp.com
+    mailer_user: expedu
+    mailer_password: s_V-Hi_b9PgIkiU6wBmb5w
+    mailer_port: 587
 
     # A secret key that's used to generate certain security-related tokens
     secret:            Zend1234!

@@ -46,8 +46,9 @@ class MenuBuilder
 
 
     $menu->addChild('Tools');
-    $menu['Tools']->addChild('Trip Status', array('route' => 'manage_tripstatus'));
+    $menu['Tools']->addChild('Content Blocks', array('route' => 'manage_contentblocks'));
     $menu['Tools']->addChild('Layout Types', array('route' => 'manage_layouttype'));
+    $menu['Tools']->addChild('Trip Status', array('route' => 'manage_tripstatus'));
 
     // ... add more children
 
