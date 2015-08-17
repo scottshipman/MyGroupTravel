@@ -4,7 +4,7 @@
  * Date: 8/11/15
  */
 
-namespace TUI\Toolkit\BrandBundle\DataFixtures\ORM;
+namespace TUI\Toolkit\ContentBlocksBundle\Bundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
