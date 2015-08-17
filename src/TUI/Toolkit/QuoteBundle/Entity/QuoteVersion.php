@@ -10,15 +10,15 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
 /**
  * QuoteVersion
  *
- * @ORM\Table()
+ * @ORM\Table(name="quote_version",uniqueConstraints={@ORM\UniqueConstraint(name="quoteNumber", columns={"quoteNumber"})})
  * @ORM\Entity
- * @GRID\Source(columns="id, quoteReference.ts, quoteReference.id, institution_full, quoteReference.institution.name, quoteReference.institution.city, quoteReference.reference, organizer_full, quoteReference.name, salesAgent_full, quoteReference.salesAgent.firstName, quoteReference.salesAgent.lastName,  quoteReference.salesAgent.email, quoteReference.organizer.firstName, quoteReference.organizer.lastName, quoteReference.organizer.email, quoteReference.views, quoteReference.shareViews, quoteReference.converted, quoteReference.deleted, quoteReference.locked, quoteReference.setupComplete, quoteReference.destination, quoteReference.created, version, duration, tripStatus.name, expiryDate, transportType.name, boardBasis.name, freePlaces, payingPlaces, departureDate, returnDate, pricePerson,  currency.name", filterable=false, sortable=true)
+ * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
+ * @GRID\Source(columns="id, name, isTemplate, quoteReference.ts, quoteReference.id, institution_full, quoteReference.institution.name, quoteReference.institution.city, quoteNumber, organizer_full, quoteReference.name, salesAgent_full, quoteReference.salesAgent.firstName, quoteReference.salesAgent.lastName,  quoteReference.salesAgent.email, quoteReference.organizer.firstName, quoteReference.organizer.lastName, quoteReference.organizer.email, quoteReference.views, quoteReference.shareViews, quoteReference.converted, deleted, locked, quoteReference.setupComplete, quoteReference.destination, created, version, duration, tripStatus.name, expiryDate, transportType.name, boardBasis.name, freePlaces, payingPlaces, departureDate, returnDate, pricePerson,  currency.name, converted, views, shareViews", filterable=false, sortable=true)
  * @GRID\Column(id="organizer_full", type="join", columns = {"quoteReference.organizer.firstName", "quoteReference.organizer.lastName", "quoteReference.organizer.email"}, title="Organizer", export=true, filterable=true, operatorsVisible=false)
  * @GRID\Column(id="salesAgent_full", type="join", columns = {"quoteReference.salesAgent.firstName", "quoteReference.salesAgent.lastName", "quoteReference.salesAgent.email"}, title="Primary Business Admin", export=true, filterable=true, operatorsVisible=false)
  * @GRID\Column(id="institution_full", type="join", columns = {"quoteReference.institution.name", "quoteReference.institution.city"}, title="Institution", export=true, filterable=true, operatorsVisible=false)
  */
 
-// Quote columns = quoteReference.name, quoteReference.destination, quoteReference.reference, quoteReference.institution.name, quoteReference.created, quoteReference.views, quoteReference.shareViews, quoteReference.organizer.firstName, quoteReference.organizer.lastName, quoteReference.salesAgent.firstName, quoteReference.salesAgent.lastName, quoteReference.converted, quoteReference.deleted, quoteReference.setupComplete, quoteReference.locked, quoteReference.isTemplate
 class QuoteVersion
 {
     /**
@@ -32,6 +32,15 @@ class QuoteVersion
     private $id;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255)
+     * @GRID\Column(title="Quote Name", filterable=true, operatorsVisible=false, export=true)
+     *
+     */
+    private $name;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="version", type="integer")
@@ -39,6 +48,53 @@ class QuoteVersion
      */
     private $version = 1;
 
+  /**
+   * @var string
+   *
+   * @ORM\Column(name="quoteNumber", type="string", length=255, nullable=true)
+   * @GRID\Column(title="Quote Number", filterable=true, operatorsVisible=false, export=true)
+   */
+  private $quoteNumber;
+
+  /**
+   * @var boolean
+   *
+   * @ORM\Column(name="converted", type="boolean")
+   * @GRID\Column(visible=false, filterable=false, export=true)
+   */
+  private $converted = false;
+
+  /**
+   * @var date
+   *
+   * @ORM\Column(name="deleted", type="date", nullable=true)
+   * @GRID\Column(visible=false, filterable=false, export=true)
+   */
+  private $deleted;
+
+  /**
+   * @var boolean
+   *
+   * @ORM\Column(name="locked", type="boolean")
+   * @GRID\Column(visible=false, filterable=false, export=true)
+   */
+  private $locked = false;
+
+  /**
+   * @var boolean
+   *
+   * @ORM\Column(name="isTemplate", type="boolean")
+   * @GRID\Column(visible=false, filterable=false, export=true)
+   */
+  private $isTemplate = false;
+
+  /**
+   * @var DateTime
+   *
+   * @ORM\Column(name="created", type="date")
+   * @GRID\Column(title="Created On", filterable=false, export=true)
+   */
+  private $created;
 
     /**
      * @var datetime
@@ -109,20 +165,14 @@ class QuoteVersion
      * @GRID\Column(field = "quoteReference.salesAgent.firstName", title="BA First", export=false)
      * @GRID\Column(field = "quoteReference.salesAgent.lastName", title="BA Last", export=false)
      * @GRID\Column(field = "quoteReference.salesAgent.email", title="BA email", export=false)
-     * @GRID\Column(field = "quoteReference.reference", title="Quote Number", export=true, filterable=true, operatorsVisible=false)
      * @GRID\Column(field = "quoteReference.converted", title="Converted", export=true)
-     * @GRID\Column(field = "quoteReference.deleted", title="Deleted", export=true)
-     * @GRID\Column(field = "quoteReference.locked", title="Locked", export=true)
      * @GRID\Column(field = "quoteReference.setupComplete", title="Setup Complete", export=true)
-     * @GRID\Column(field = "quoteReference.views", title="Views", export=true)
-     * @GRID\Column(field = "quoteReference.shareViews", title="Shared Views", export=true)
      * @GRID\Column(field = "quoteReference.institution.name", title="Institution Name", export=true, filterable=false, operatorsVisible=false)
      * @GRID\Column(field = "quoteReference.institution.city", title="Institution City", export=true, filterable=false, operatorsVisible=false)
      * @GRID\Column(field = "quoteReference.organizer.firstName", title="O first", export=false)
      * @GRID\Column(field = "quoteReference.organizer.lastName", title="O last", export=false)
      * @GRID\Column(field = "quoteReference.organizer.email", title="O email", export=false)
      * @GRID\Column(field = "quoteReference.destination", title="Destination", export=true, filterable=true, operatorsVisible=false)
-     * @GRID\Column(field = "quoteReference.created", title="Created", type="date", export=true)
      */
     private $quoteReference;
 
@@ -214,6 +264,33 @@ class QuoteVersion
      *
      * @return integer 
      */
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="views", type="integer")
+     * @GRID\Column(title="Views", filterable=false, export=true)
+     */
+    private $views;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="shareViews", type="integer")
+     * @GRID\Column(title="Shared Views", filterable=false, export=true)
+     */
+    private $shareViews;
+
+
+
+  public function __construct()
+  {
+    $this->created = new \DateTime();
+    $this->views = 0;
+    $this->shareViews = 0;
+  }
+
+
     public function getId()
     {
         return $this->id;
@@ -231,6 +308,29 @@ class QuoteVersion
     $this->id = $id;
 
     return $this;
+  }
+
+  /**
+   * Set name
+   *
+   * @param string $name
+   * @return Quote
+   */
+  public function setName($name)
+  {
+    $this->name = $name;
+
+    return $this;
+  }
+
+  /**
+   * Get name
+   *
+   * @return string
+   */
+  public function getName()
+  {
+    return $this->name;
   }
 
     /**
@@ -671,5 +771,193 @@ class QuoteVersion
   public function getTs()
   {
     return $this->ts;
+  }
+
+
+  /**
+   * Set reference
+   *
+   * @param string $reference
+   * @return Quote
+   */
+  public function setQuoteNumber($quoteNumber)
+  {
+    $this->quoteNumber = $quoteNumber;
+
+    return $this;
+  }
+
+  /**
+   * Get reference
+   *
+   * @return string
+   */
+  public function getQuoteNumber()
+  {
+    return $this->quoteNumber;
+  }
+
+  /**
+   * Set converted
+   *
+   * @param boolean $converted
+   * @return Quote
+   */
+  public function setConverted($converted)
+  {
+    $this->converted = $converted;
+
+    return $this;
+  }
+
+  /**
+   * Get converted
+   *
+   * @return boolean
+   */
+  public function getConverted()
+  {
+    return $this->converted;
+  }
+
+  /**
+   * Set deleted
+   *
+   * @param boolean $deleted
+   * @return Quote
+   */
+  public function setDeleted($deleted)
+  {
+    $this->deleted = $deleted;
+
+    return $this;
+  }
+
+  /**
+   * Get deleted
+   *
+   * @return boolean
+   */
+  public function getDeleted()
+  {
+    return $this->deleted;
+  }
+
+  /**
+   * Set locked
+   *
+   * @param boolean $locked
+   * @return Quote
+   */
+  public function setLocked($locked)
+  {
+    $this->locked = $locked;
+
+    return $this;
+  }
+
+  /**
+   * Get locked
+   *
+   * @return boolean
+   */
+  public function getLocked()
+  {
+    return $this->locked;
+  }
+
+  /**
+   * Set isTemplate
+   *
+   * @param boolean $isTemplate
+   * @return Quote
+   */
+  public function setIsTemplate($isTemplate)
+  {
+    $this->isTemplate = $isTemplate;
+
+    return $this;
+  }
+
+  /**
+   * Get isTemplate
+   *
+   * @return boolean
+   */
+  public function getIsTemplate()
+  {
+    return $this->isTemplate;
+  }
+
+  /**
+   * Set views
+   *
+   * @param integer $views
+   * @return Quote
+   */
+  public function setViews($views)
+  {
+    $this->views = $views;
+
+    return $this;
+  }
+
+  /**
+   * Get views
+   *
+   * @return integer
+   */
+  public function getViews()
+  {
+    return $this->views;
+  }
+
+  /**
+   * Set shareViews
+   *
+   * @param integer $shareViews
+   * @return Quote
+   */
+  public function setShareViewsiews($shareViews)
+  {
+    $this->shareViews = $shareViews;
+
+    return $this;
+  }
+
+  /**
+   * Get shareViews
+   *
+   * @return integer
+   */
+  public function getShareViews()
+  {
+    return $this->shareViews;
+  }
+
+  /**
+   * Set created
+   *
+   * @param date $created
+   * @return Quote
+   */
+  public function setCreated($created)
+  {
+    if (!$created) {
+      $created = new \DateTime();
+    }
+    $this->created = $created;
+
+    return $this;
+  }
+
+  /**
+   * Get created
+   *
+   * @return date
+   */
+  public function getCreated()
+  {
+    return $this->created;
   }
 }
