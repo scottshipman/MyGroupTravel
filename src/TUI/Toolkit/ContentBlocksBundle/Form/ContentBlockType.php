@@ -15,6 +15,18 @@ class ContentBlockType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('title')
+            ->add('body', 'ckeditor', array(
+                'transformers' => array('html_purifier'),
+                'toolbar' => array('document', 'editing', 'tools', 'basicstyles'),
+                'toolbar_groups' => array(
+                    'document' => array('Source')
+                ),
+                'ui_color' => '#ffffff',
+                'startup_outline_blocks' => false,
+                'width' => '100%',
+                'height' => '320',
+            ))
             ->add('locked', 'checkbox', array(
                 'required' => false
             ))
@@ -27,18 +39,6 @@ class ContentBlockType extends AbstractType
                 'choice_label' => 'name',
                 'expanded' => true,
                 'multiple' => false
-            ))
-            ->add('title')
-            ->add('body', 'ckeditor', array(
-                'transformers' => array('html_purifier'),
-                'toolbar' => array('document', 'editing', 'tools', 'basicstyles'),
-                'toolbar_groups' => array(
-                    'document' => array('Source')
-                ),
-                'ui_color' => '#ffffff',
-                'startup_outline_blocks' => false,
-                'width' => '100%',
-                'height' => '320',
             ))
             ->add('media', 'hidden', array(
                 'required' => false,
