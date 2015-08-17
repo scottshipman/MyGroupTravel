@@ -65,26 +65,41 @@
                 var values = [];
                 values = value.split(',').map(Number);
                 values = jQuery.grep(values, function (v) {
+                    if (values.length < 7){
+                        console.log(values.length);
+                        $("#dropzone_form").css({"display": "block"});
+                        $("#avatar-label").css({"display": "block"});
+                    }
                     return v != remove;
                 });
                 $(".media-placeholder").val(values);
+
                 $(this).parent().remove();
             });
             Dropzone.options.dropzoneForm = {
                 maxFiles: 1,
                 acceptedMimeTypes: 'image/jpeg,image/png,image/jpg',
+                uploadMultiple: false,
                 init: function () {
                     var value = $(".media-placeholder").val();
                     var values = [];
                     values = value.split(',').map(Number);
                     this.on("success", function (file, response) {
                         if ($(".media-placeholder").val().length > 0) {
+                            var value = $(".media-placeholder").val();
+                            var values = [];
+                            values = value.split(',').map(Number);
                             values.push(response.id);
                             $(".media-placeholder").val(values);
                         } else {
                             $(".media-placeholder").val(response.id);
                         }
                         $('.existing-media-wrapper').append('<div class="existing-media-item"><img id="' + response.id + '" src="' + response.relativepath + '/' + response.filename + '"><a class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a></div>');
+                        if (values.length >= 6) {
+                            $("#dropzone_form").css({"display": "none"});
+                            $("#avatar-label").css({"display": "none"});
+                        }
+                        return values;
                     });
                     this.on("complete", function (file) {
                         this.removeFile(file);
