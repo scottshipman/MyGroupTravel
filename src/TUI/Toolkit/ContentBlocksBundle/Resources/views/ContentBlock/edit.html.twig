@@ -47,7 +47,10 @@
     $(document).ready(function() {
         // Bind form and provide a simple callback function
         $('#ajax_contentblocks_form').ajaxForm({
-            success : function (response) {
+            beforeSubmit: function() {
+                CKEDITOR.instances.tui_toolkit_contentblocksbundle_contentblock_body.updateElement();
+            },
+            success: function(response) {
                 $('#dialog').dialog( "close" );
                 window.location.hash = 'site-content';
                 window.location.reload(true);
@@ -73,7 +76,7 @@
         $(this).parent().remove();
     });
 
-    Dropzone.autoDiscover = false;
+    // Dropzone.autoDiscover = false;
 
     $('#dropzone_form').dropzone({
         maxFiles: 1,
