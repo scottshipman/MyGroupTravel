@@ -130,10 +130,10 @@
                             <i class="fa fa-arrows"></i>  {{ items[item].title }}
                             {# probably render a controller here by passing in item as id and have block entity returned #}
                             <div id="content-block-actions-{{ items[item].id }}" class="content-block-actions">
-                                <i class="item-edit fa fa-pencil-square-o"></i>
-                                <i class="item-delete fa fa-trash-o"></i>
-                                <i class="item-lock fa fa-lock"></i>  {# <i class="fa fa-unlock-alt"></i> #}
-                                <i class="item-hide fa fa-ban"></i> {# <i class="fa fa-unlock-alt"></i> #}
+                                <i class="item-edit content-block-item-action fa fa-pencil-square-o"></i>
+                                <i class="item-delete content-block-item-action fa fa-trash-o"></i>
+                                {% if items[item].locked %}<i class="item-lock content-block-item-action fa fa-unlock-alt"></i> {% else %}  <i class="item-lock content-block-item-action fa fa-lock"></i> {% endif %}
+                                {% if items[item].hidden %}<i class="item-hide content-block-item-action fa fa-ban"></i> {% else %} <i class="item-hide content-block-item-action fa fa-eye"></i> {% endif %}
                             </div>
                         </div>
                     {% endfor %}
@@ -182,10 +182,10 @@
                         '<i class="fa fa-arrows"></i>  ' + title +
                         {# probably render a controller here by passing in item as id and have block entity returned #}
                         '<div id="content-block-actions-' + id + '" class="content-block-actions">' +
-                        '<i class="item-edit fa fa-pencil-square-o"></i>' +
-                        '<i class="item-delete fa fa-trash-o"></i>' +
-                        '<i class="item-lock fa fa-lock"></i>' +
-                        '<i class="item-hide fa fa-ban"></i>' +
+                        '<i class="item-edit content-block-item-action fa fa-pencil-square-o"></i>' +
+                        '<i class="item-delete content-block-item-action fa fa-trash-o"></i>' +
+                        '<i class="item-lock content-block-item-action fa fa-lock"></i>' +
+                        '<i class="item-hide content-block-item-action fa fa-ban"></i>' +
                         '</div></div>'
                     );
                     contentBlocksUpdate({{ entity.id }});
@@ -201,10 +201,9 @@
                 //e.preventDefault();
                 $("#dialog").html("");
                 $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
-                $("#dialog").load('/ajax/contentblocks/edit/' + block + '/' + {{ entity.id}} +'/QuoteVersion', function() {
+                $("#dialog").load('/ajax/contentblocks/' + block + '/edit/' + {{ entity.id}} +'/QuoteVersion', function() {
                     $(this).dialog("option", "title", 'Edit Content Block');
                 });
-                //contentBlocksUpdate({{ entity.id }});
             });
 
 
@@ -214,17 +213,17 @@
                 var actionParent = $(this).parent().attr('id');
                 var block = actionParent.substring(22);
                 $.ajax({
-                    url: window.location.protocol + window.location.hostname + '/manage/contentblocks/'+ block + '/hide',
+                    url: '/manage/contentblocks/'+ block + '/hide/' + {{ entity.id }} + '/QuoteVersion',
                     headers: {
                         "Pragma": "no-cache",
                         "Expires": -1,
                         "Cache-Control": "no-cache"
                     }
                 }).done(function () {
+                    alert("The item's visibility has successfully been toggled");
                     window.location.hash = 'site-content';
                     window.location.reload(true);
                 });
-                //contentBlocksUpdate({{ entity.id }});
             });
 
 
@@ -234,20 +233,39 @@
                 var actionParent = $(this).parent().attr('id');
                 var block = actionParent.substring(22);
                 $.ajax({
-                    beforeSend: function() {
-                        $('#loader').show();
-                    },
-                    url: window.location.protocol + window.location.hostname + '/manage/contentblocks/'+ block + '/lock',
+                    url: '/manage/contentblocks/'+ block + '/lock/' + {{ entity.id }} + '/QuoteVersion',
                     headers: {
                         "Pragma": "no-cache",
                         "Expires": -1,
                         "Cache-Control": "no-cache"
                     }
                 }).done(function () {
+                    alert("The item's lock has successfully been toggled");
                     window.location.hash = 'site-content';
                     window.location.reload(true);
                 });
-                //contentBlocksUpdate({{ entity.id }});
+            });
+
+            // toggle the locked boolean on a content block
+            $(".item-delete").on('click', function(e){
+                // todo Get item.id and item.name
+                if (confirm('Are you sure you want to remove this item? Warning: this can not be undone.')) {
+                    var actionParent = $(this).parent().attr('id');
+                    var block = actionParent.substring(22);
+                    $.ajax({
+                        method:'DELETE',
+                        url: '/manage/contentblocks/' + block + '/delete/' + {{ entity.id }} + '/QuoteVersion',
+                        headers: {
+                            "Pragma": "no-cache",
+                            "Expires": -1,
+                            "Cache-Control": "no-cache"
+                        }
+                    }).done(function () {
+                        $('#content-blocks-' + block).remove();
+                        alert("The item has successfully been deleted");
+                        contentBlocksUpdate({{ entity.id }});
+                    });
+                }
             });
 
             // change a tab's name

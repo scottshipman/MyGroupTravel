@@ -131,7 +131,7 @@ class ContentBlockController extends Controller
             throw $this->createNotFoundException('Unable to find ContentBlock entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
+        $deleteForm = $this->createDeleteForm($id, $quoteVersion, $class);
 
         return $this->render('ContentBlocksBundle:ContentBlock:show.html.twig', array(
             'entity' => $entity,
@@ -167,7 +167,7 @@ class ContentBlockController extends Controller
       
         $entity->setMedia($collectionIds);
         $editForm = $this->createEditForm($entity, $quoteVersion, $class);
-        $deleteForm = $this->createDeleteForm($id);
+        $deleteForm = $this->createDeleteForm($id, $quoteVersion, $class);
 
         return $this->render('ContentBlocksBundle:ContentBlock:edit.html.twig', array(
             'entity' => $entity,
@@ -219,7 +219,7 @@ class ContentBlockController extends Controller
             throw  $this->createNotFoundException('Unable to find ContentBlock entity.');
         }
 
-          $deleteForm = $this->createDeleteForm($id);
+          $deleteForm = $this->createDeleteForm($id, $quoteVersion, $class);
           $editForm = $this->createEditForm($entity, $quoteVersion, $class);
           $editForm->handleRequest($request);
 
@@ -244,11 +244,12 @@ class ContentBlockController extends Controller
             $em->flush();
 
             //return $this->redirect($this->generateUrl('manage_contentblocks_edit', array('id' => $id)));
-          // todo get repository for class that is passed in
-          $qv = $em->getRepository('QuoteBundle:QuoteVersion')->find($quoteVersion);
-          $responseContent =  json_encode($qv->getContent());
-
-
+          if ($class=='QuoteVersion'){
+            $parent = $em->getRepository('QuoteBundle:QuoteVersion')->find($quoteVersion);
+          } elseif( $class =='TourVersion'){
+            //$parent = $em->getRepository('TourBundle:TourVersion')->find($quoteVersion);
+          }
+          $responseContent =  json_encode($parent->getContent());
           return new Response($responseContent,
             Response::HTTP_OK,
             array('content-type' => 'application/json')
@@ -270,7 +271,7 @@ class ContentBlockController extends Controller
      * Deletes a ContentBlock entity.
      *
      */
-    public function deleteAction(Request $request, $id, $quoteVersion=null, $class = null)
+    public function deleteAction(Request $request, $id, $quoteVersion, $class)
     {
         $error = false;
 
@@ -285,11 +286,12 @@ class ContentBlockController extends Controller
               $em->flush();
             }
 
-
-        //return $this->redirect($this->generateUrl('manage_contentblocks'));
-
-      $responseContent = $error ? $error : json_encode($entity->getContent());
-
+      if ($class=='QuoteVersion'){
+        $parent = $em->getRepository('QuoteBundle:QuoteVersion')->find($quoteVersion);
+      } elseif( $class =='TourVersion'){
+        //$parent = $em->getRepository('TourBundle:TourVersion')->find($quoteVersion);
+      }
+      $responseContent =  json_encode($parent->getContent());
       return new Response($responseContent,
         Response::HTTP_OK,
         array('content-type' => 'application/json')
@@ -303,10 +305,10 @@ class ContentBlockController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm($id)
+    private function createDeleteForm($id, $quoteVersion=null, $class=null)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('manage_contentblocks_delete', array('id' => $id)))
+            ->setAction($this->generateUrl('manage_contentblocks_delete', array('id' => $id, 'quoteVersion' => $quoteVersion, 'class' => $class)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm();
@@ -316,7 +318,7 @@ class ContentBlockController extends Controller
    * Locks a ContentBlock entity.
    *
    */
-  public function lockAction(Request $request, $id)
+  public function lockAction(Request $request, $id, $quoteVersion=null, $class=null)
   {
     $error = false;
 
@@ -332,11 +334,12 @@ class ContentBlockController extends Controller
       $em->flush();
     }
 
-
-    //return $this->redirect($this->generateUrl('manage_contentblocks'));
-
-    $responseContent = $error ? $error : json_encode($entity);
-
+    if ($class=='QuoteVersion'){
+      $parent = $em->getRepository('QuoteBundle:QuoteVersion')->find($quoteVersion);
+    } elseif( $class =='TourVersion'){
+      //$parent = $em->getRepository('TourBundle:TourVersion')->find($quoteVersion);
+    }
+    $responseContent =  json_encode($parent->getContent());
     return new Response($responseContent,
       Response::HTTP_OK,
       array('content-type' => 'application/json')
@@ -347,7 +350,7 @@ class ContentBlockController extends Controller
    * Locks a ContentBlock entity.
    *
    */
-  public function hideAction(Request $request, $id)
+  public function hideAction(Request $request, $id, $quoteVersion=null, $class=null)
   {
     $error = false;
 
@@ -362,12 +365,12 @@ class ContentBlockController extends Controller
       $em->persist($entity);
       $em->flush();
     }
-
-
-    //return $this->redirect($this->generateUrl('manage_contentblocks'));
-
-    $responseContent = $error ? $error : json_encode($entity);
-
+    if ($class=='QuoteVersion'){
+      $parent = $em->getRepository('QuoteBundle:QuoteVersion')->find($quoteVersion);
+    } elseif( $class =='TourVersion'){
+      //$parent = $em->getRepository('TourBundle:TourVersion')->find($quoteVersion);
+    }
+    $responseContent =  json_encode($parent->getContent());
     return new Response($responseContent,
       Response::HTTP_OK,
       array('content-type' => 'application/json')
