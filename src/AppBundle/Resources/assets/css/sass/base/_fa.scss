@@ -29,3 +29,19 @@
   }
 
 }
+
+.fam-notify {
+
+  &:before {
+    content: '\f0a2';
+  }
+
+}
+
+.fam-restore {
+
+  &:before {
+    content: '\f0e2';
+  }
+
+}

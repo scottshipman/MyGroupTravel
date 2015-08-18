@@ -1,56 +1,55 @@
 {% extends '::base.html.twig' %}
+{% block title %}Content Block {{ entity.title }}{% endblock %}
+{% block page_title %}Content Block {{ entity.title }}{% endblock %}
+
+{% set class = '' %}
+{% if entity.layoutType.name %}
+    {% set class = 'content-block-layout-' ~ entity.layoutType.name %}
+{% endif %}
+{% if entity.doubleWidth == 1 %}
+    {% set class = class ~ ' content-block-size-full' %}
+{% else %}
+    {% set class = class ~ ' content-block-size-half' %}
+{% endif %}
 
 {% block body -%}
-    <h1>ContentBlock</h1>
 
-    <table class="record_properties">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
-            </tr>
-            <tr>
-                <th>Locked</th>
-                <td>{{ entity.locked }}</td>
-            </tr>
-            <tr>
-                <th>Hidden</th>
-                <td>{{ entity.hidden }}</td>
-            </tr>
-            <tr>
-                <th>Layouttype</th>
-                <td>{{ entity.layoutType }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td>{{ entity.title }}</td>
-            </tr>
-            <tr>
-                <th>Body</th>
-                <td>{{ entity.body|raw }}</td>
-            </tr>
-            <tr>
-                <th>Sortorder</th>
-                <td>{{ entity.sortOrder }}</td>
-            </tr>
-            <tr>
-                <th>Doublewidth</th>
-                <td>{{ entity.doubleWidth }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="content-block content-block-id-{{ entity.id }} {{ class }}">
+        <h2>{{ entity.title }}</h2>
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('manage_contentblocks') }}">
-            <i class="fa fa-arrow-circle-left"></i> Back to the list
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('manage_contentblocks_edit', { 'id': entity.id }) }}">
-            <i class="fa fa-pencil-square-o"></i> Edit
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+        {% if entity.layoutType.name != 'image_bottom' %}
+            <div class="content-block-media">
+                {% for media in entity.media %}
+                    <img src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="content-block-body">
+            {{ entity.body|raw }}
+        </div>
+
+        {% if entity.layoutType.name == 'image_bottom' %}
+            <div class="content-block-media">
+                {% for media in entity.media %}
+                    <img src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <ul class="record_actions">
+        <li>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_contentblocks') }}">
+                <i class="fa fa-arrow-circle-left"></i> Back to the list
+            </a>
+        </li>
+        <li>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_contentblocks_edit', { 'id': entity.id }) }}">
+                <i class="fa fa-pencil-square-o"></i> Edit
+            </a>
+        </li>
+        <li>{{ form(delete_form) }}</li>
+    </ul>
+
 {% endblock %}

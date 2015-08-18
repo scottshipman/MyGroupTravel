@@ -4,8 +4,10 @@ table {
 
   td, th {
     text-align: left;
+
     ul, ol {
       font-size: 1em;
+      line-height: inherit;
       margin-bottom: 0;
     }
 
@@ -83,12 +85,6 @@ table {
 
 }
 
-.sort_up::after {
-  @include fa-standard();
-  content: "\f160";
-}
-
-.sort_down::after {
-  @include fa-standard();
-  content: "\f161";
+.grid_footer {
+  @include clear-fix();
 }

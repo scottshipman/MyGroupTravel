@@ -61,9 +61,9 @@
                         <i class="material-icons">arrow_drop_down</i>
                     </button>
                     <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="accbtn">
-                        <li><a class="mdl-menu__item" href="{{ path('fos_user_profile_show') }}">View</a>
+                        <li><a class="mdl-menu__item" href="/user/{{ app.user.id }}/show">View</a>
                         </li>
-                        <li><a class="mdl-menu__item" href="{{ path('fos_user_profile_edit') }}">Edit</a>
+                        <li><a class="mdl-menu__item" href="/user/{{ app.user.id }}/edit">Edit</a>
                         </li>
                         <li><a class="mdl-menu__item" href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a></li>
                     </ul>
@@ -103,9 +103,9 @@
                 {% endif %}
                 <div class="tui-avatar-dropdown">
                     <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="accbtn">
-                        <li><a class="mdl-menu__item" href="{{ path('fos_user_profile_show') }}">View</a>
+                        <li><a class="mdl-menu__item" href="/user/{{ app.user.id }}/show">View</a>
                         </li>
-                        <li><a class="mdl-menu__item" href="{{ path('fos_user_profile_edit') }}">Edit</a>
+                        <li><a class="mdl-menu__item" href="/user/{{ app.user.id }}/edit">Edit</a>
                         </li>
                         <li><a class="mdl-menu__item" href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a></li>
                     </ul>

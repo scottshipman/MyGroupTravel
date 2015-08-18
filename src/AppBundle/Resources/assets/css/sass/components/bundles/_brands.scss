@@ -1,7 +1,10 @@
-.brands_table.records_list {
+td.logo {
+    background: #eee;
+    padding-bottom: 12px;
 
-  td.logo {
-    text-align: center;
-  }
+    img {
+      width: 120px;
+      height: auto;
+    }
 
 }

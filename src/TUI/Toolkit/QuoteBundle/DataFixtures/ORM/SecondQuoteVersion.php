@@ -30,8 +30,7 @@ class FirstQuoteVersion implements FixtureInterface, ContainerAwareInterface
 
     // Create our quote and set details
     $quote = new Quote();
-    $quote->setName('Second Quote For This Location');
-    $quote->setReference('secondquote');
+    $quote->setName('Second Tour For This Location');
     $quote->setDestination('The Love Boat');
 
     $quoteversionManager->persist($quote);
@@ -39,6 +38,8 @@ class FirstQuoteVersion implements FixtureInterface, ContainerAwareInterface
 
     // Create our quoteversion and set details
     $quoteversion = new QuoteVersion();
+    $quoteversion->setName('Option 2 - Mints on Pillows');
+    $quoteversion->setQuoteNumber('secondquote');
     $quoteversion->setVersion(1);
     $quoteversion->setExpiryDate(new \DateTime('now + 30 days'));
     $quoteversion->setFreePlaces(5);

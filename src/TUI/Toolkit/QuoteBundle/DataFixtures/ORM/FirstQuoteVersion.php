@@ -30,8 +30,7 @@ class FirstQuoteVersion implements FixtureInterface, ContainerAwareInterface
 
     // Create our quote and set details
     $quote = new Quote();
-    $quote->setName('First Quote For That Place');
-    $quote->setReference('firstquote');
+    $quote->setName('First Tour For That Place');
     $quote->setDestination('Fantasy Island');
 
     $quoteversionManager->persist($quote);
@@ -39,6 +38,8 @@ class FirstQuoteVersion implements FixtureInterface, ContainerAwareInterface
 
     // Create our quoteversion and set details
     $quoteversion = new QuoteVersion();
+    $quoteversion->setName('Option 1 - BYOB');
+    $quoteversion->setQuoteNumber('firstquote');
     $quoteversion->setVersion(1);
     $quoteversion->setExpiryDate(new \DateTime('now + 30 days'));
     $quoteversion->setFreePlaces(5);

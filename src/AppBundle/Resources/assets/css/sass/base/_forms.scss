@@ -1,4 +1,3 @@
-// Form elements styles from Style Guide
 fieldset {
   display: block;
   margin: 0;
@@ -10,15 +9,6 @@ legend {
   display: block;
   width: 100%;
 }
-
-/*
-label {
-  @include inline-block-vertical();
-  @include font-sizer(16);
-  padding-bottom: 0.25em;
-  cursor: pointer;
-}
-*/
 
 .textinput {
   font-size: 14px;
@@ -43,41 +33,31 @@ select {
   color: $text_grey_t2;
 }
 
-/*
-.select-wrap {
-  margin: 0;
-  border: 1px solid $text_black;
-  background: $bg_white;
-  @include inline-block-vertical(top);
-  position: relative;
-  overflow: hidden;
+/* MDL Additions */
 
-  &:after {
-    content: "\f107";
-    @include fa-standard();
-    display: block;
-    line-height: inherit;
-    height: 30px;
-    width: 20px;
-    text-align: center;
-    background: $bg_white;
-    color: $text_black;
-    @include font-sizer(20);
-    line-height: 30px;
-    position: absolute;
-    top: 0;
-    right: 0;
+.mdl-radio {
+  z-index: 1;
+  vertical-align: middle;
+  width: 100%;
+}
+
+.mdl-radio__outer-circle {
+  top: 4px;
+}
+
+.mdl-radio__inner-circle {
+  top: 8px;
+}
+
+.mdl-checkbox {
+  width: 300px;
+
+  &:first-child {
+    margin-top: 20px;
   }
 
-  select {
-    box-sizing: content-box;
-    border: 0;
-    height: 30px;
-    max-width: none;
-    background: transparent;
-    position: relative;
-    z-index: 1;
+  &:last-child {
+    margin-bottom: 20px;
   }
 
 }
-*/

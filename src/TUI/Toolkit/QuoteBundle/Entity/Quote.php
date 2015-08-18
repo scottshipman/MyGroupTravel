@@ -12,8 +12,7 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
  *
  * @ORM\Table(name="quote")
  * @ORM\Entity
- * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
- * @GRID\Source(columns="id, name, destination, reference, institution.name, created, views, shareViews, orgfullname, organizer.firstName, organizer.lastName, bizfullname, salesAgent.firstName, salesAgent.lastName, converted, deleted, setupComplete, locked, isTemplate", filterable=false, sortable=true)
+ * @GRID\Source(columns="id, name, destination, institution.name, orgfullname, organizer.firstName, organizer.lastName, bizfullname, salesAgent.firstName, salesAgent.lastName, converted, setupComplete", filterable=false, sortable=true)
  * @GRID\Column(id="bizfullname", type="join", title="Business Admin", columns={"salesAgent.firstName", "salesAgent.lastName"}, filterable=true, operatorsVisible=false)
  * @GRID\Column(id="orgfullname", type="join", title="Organizer", columns={"organizer.firstName", "organizer.lastName"}, filterable=true, operatorsVisible=false)
  */
@@ -33,18 +32,11 @@ class Quote
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
-     * @GRID\Column(title="Name", filterable=true, operatorsVisible=false, export=true)
+     * @GRID\Column(title="Tour Name", filterable=true, operatorsVisible=false, export=true)
      *
      */
     private $name;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="reference", type="string", length=255)
-     * @GRID\Column(title="Quote Reference", filterable=true, operatorsVisible=false, export=true)
-     */
-    private $reference;
 
     /**
      * @var integer
@@ -58,18 +50,10 @@ class Quote
     /**
      * @var boolean
      *
-     * @ORM\Column(name="converted", type="boolean")
+     * @ORM\Column(name="status", type="boolean")
      * @GRID\Column(visible=false, filterable=false, export=true)
      */
     private $converted = false;
-
-    /**
-     * @var date
-     *
-     * @ORM\Column(name="deleted", type="date", nullable=true)
-     * @GRID\Column(visible=false, filterable=false, export=true)
-     */
-    private $deleted;
 
     /**
      * @var boolean
@@ -79,13 +63,6 @@ class Quote
      */
     private $setupComplete = false;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="locked", type="boolean")
-     * @GRID\Column(visible=false, filterable=false, export=true)
-     */
-    private $locked = false;
 
     /**
      * @var integer
@@ -105,39 +82,6 @@ class Quote
      * @ORM\JoinColumn(name="secondaryContact", referencedColumnName="id")
      */
     private $secondaryContact;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="isTemplate", type="boolean")
-     * @GRID\Column(visible=false, filterable=false, export=true)
-     */
-    private $isTemplate = false;
-
-
-    /**
-     * @var DateTime
-     *
-     * @ORM\Column(name="created", type="date")
-     * @GRID\Column(title="Created On", filterable=false, export=true)
-     */
-    private $created;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="views", type="integer")
-     * @GRID\Column(title="Views", filterable=false, export=true)
-     */
-    private $views;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="shareViews", type="integer")
-     * @GRID\Column(title="Shared Views", filterable=false, export=true)
-     */
-    private $shareViews;
 
     /**
      * @var integer
@@ -162,13 +106,6 @@ class Quote
      * @ORM\JoinColumn(name="media", referencedColumnName="id")
      */
     protected $media;
-
-    public function __construct()
-    {
-        $this->created = new \DateTime();
-        $this->views = 0;
-        $this->shareViews = 0;
-    }
 
     /**
      * Get id
@@ -201,29 +138,6 @@ class Quote
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * Set reference
-     *
-     * @param string $reference
-     * @return Quote
-     */
-    public function setReference($reference)
-    {
-        $this->reference = $reference;
-
-        return $this;
-    }
-
-    /**
-     * Get reference
-     *
-     * @return string
-     */
-    public function getReference()
-    {
-        return $this->reference;
     }
 
     /**
@@ -273,29 +187,6 @@ class Quote
     }
 
     /**
-     * Set deleted
-     *
-     * @param boolean $deleted
-     * @return Quote
-     */
-    public function setDeleted($deleted)
-    {
-        $this->deleted = $deleted;
-
-        return $this;
-    }
-
-    /**
-     * Get deleted
-     *
-     * @return boolean
-     */
-    public function getDeleted()
-    {
-        return $this->deleted;
-    }
-
-    /**
      * Set setupComplete
      *
      * @param boolean $setupComplete
@@ -316,29 +207,6 @@ class Quote
     public function getSetupComplete()
     {
         return $this->setupComplete;
-    }
-
-    /**
-     * Set locked
-     *
-     * @param boolean $locked
-     * @return Quote
-     */
-    public function setLocked($locked)
-    {
-        $this->locked = $locked;
-
-        return $this;
-    }
-
-    /**
-     * Get locked
-     *
-     * @return boolean
-     */
-    public function getLocked()
-    {
-        return $this->locked;
     }
 
     /**
@@ -387,74 +255,6 @@ class Quote
   {
     return $this->secondaryContact;
   }
-    /**
-     * Set isTemplate
-     *
-     * @param boolean $isTemplate
-     * @return Quote
-     */
-    public function setIsTemplate($isTemplate)
-    {
-        $this->isTemplate = $isTemplate;
-
-        return $this;
-    }
-
-    /**
-     * Get isTemplate
-     *
-     * @return boolean
-     */
-    public function getIsTemplate()
-    {
-        return $this->isTemplate;
-    }
-
-    /**
-     * Set views
-     *
-     * @param integer $views
-     * @return Quote
-     */
-    public function setViews($views)
-    {
-        $this->views = $views;
-
-        return $this;
-    }
-
-    /**
-     * Get views
-     *
-     * @return integer
-     */
-    public function getViews()
-    {
-        return $this->views;
-    }
-
-    /**
-     * Set shareViews
-     *
-     * @param integer $shareViews
-     * @return Quote
-     */
-    public function setShareViewsiews($shareViews)
-    {
-        $this->shareViews = $shareViews;
-
-        return $this;
-    }
-
-    /**
-     * Get shareViews
-     *
-     * @return integer
-     */
-    public function getShareViews()
-    {
-        return $this->shareViews;
-    }
 
     /**
      * Set institution
@@ -502,32 +302,6 @@ class Quote
     return $this->destination;
   }
 
-
-  /**
-     * Set created
-     *
-     * @param date $created
-     * @return Quote
-     */
-    public function setCreated($created)
-    {
-        if (!$created) {
-            $created = new \DateTime();
-        }
-        $this->created = $created;
-
-        return $this;
-    }
-
-    /**
-     * Get created
-     *
-     * @return date
-     */
-    public function getCreated()
-    {
-        return $this->created;
-    }
 
     /**
      * @param $media
