@@ -42,21 +42,6 @@
     {{ form_widget(edit_form) }}
     {{ form_end(edit_form) }}
 
-    <ul class="record_actions">
-        <li>
-            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
-               href="{{ path('manage_contentblocks') }}">
-                <i class="fa fa-arrow-circle-left"></i> Back to the list
-            </a>
-        </li>
-        <li>
-            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="show">
-                <i class="fa fa-eye"></i> Show
-            </a>
-        </li>
-        <li>{{ form(delete_form) }}</li>
-    </ul>
-
     <script>
         $(function () {
             $(document).on('click', '.existing-delete', function (e) {

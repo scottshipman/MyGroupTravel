@@ -57,8 +57,8 @@
 
 .media-placeholder-image,
 #dropzone_form {
-  width: auto;
-  height: auto;
+  width: 300px;
+  height: 160px;
   background: transparent;
   border: 1px dashed #000;
   @include mdl-primary-color(border-color, 6);

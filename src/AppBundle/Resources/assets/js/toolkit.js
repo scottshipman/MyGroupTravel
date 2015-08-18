@@ -143,8 +143,7 @@
             $(this).parent().removeClass('is-dirty').removeClass('is-upgraded');
             if ($(this).attr('required')) {
                 $(this).parent().addClass('is-invalid');
-            }
-            ;
+            };
         }
     });
 
@@ -175,41 +174,19 @@
      * Dropzone manipulation
      */
 
-    $('.media-placeholder-image').each(function () {
-        var mWidth = 300
-        var mHeight = 160;
-        $(this).css('width', mWidth + 'px');
-        $(this).css('height', mHeight + 'px');
-        var imgWidth = $(this).width();
-        var imgHeight = $(this).height();
-        var dropzone_form = $("#dropzone_form");
-
-        dropzone_form.css({
-            width: mWidth,
-            height: mHeight
-        });
-    });
-
-    $('.media-placeholder-image').on("click", function () {
-        $('.media-placeholder-image').css({"display": "none"});
-        $("#dropzone_form").css({"display": "block"});
-    });
-
-    $('.media-placeholder-image').on("click", function () {
+    $(document).on('click', '.media-placeholder-image', function () {
         $('.media-placeholder-image').css({"display": "none"});
         $("#dropzone_form").css({"display": "block"});
         $("#dropzone-form-close").css({"display": "inline-block"});
     });
 
-    $('#avatar-label').on("click", function () {
+    $(document).on('click', '#avatar-label', function () {
         $('.media-placeholder-image').css({"display": "block"});
         $("#dropzone_form").css({"display": "none"});
         $("#dropzone-form-close").css({"display": "none"});
     });
 
-    //if ($("#dropzone_form").hasClass("dz-max-files-reached")) {
-    $("#dropzone_form").submit(function () {
-        console.log('dropzone submitted remove image');
+    $(document).on('submit', '#dropzone_form', function () {
         $("img#user_media").css({
             display: "none"
         });
