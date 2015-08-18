@@ -303,7 +303,6 @@ var contentBlocksUpdate = function (id) {
             result[tabText] = children;
         }
     });
-    console.log(result);
     //POST to server using $.post or $.ajax
     $.ajax({
         data: result,

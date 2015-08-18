@@ -201,7 +201,7 @@
                 //e.preventDefault();
                 $("#dialog").html("");
                 $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
-                $("#dialog").load('/manage/contentblocks/' + block + '/' + {{ entity.id}} +'/QuoteVersion', function() {
+                $("#dialog").load('/ajax/contentblocks/edit/' + block + '/' + {{ entity.id}} +'/QuoteVersion', function() {
                     $(this).dialog("option", "title", 'Edit Content Block');
                 });
                 //contentBlocksUpdate({{ entity.id }});

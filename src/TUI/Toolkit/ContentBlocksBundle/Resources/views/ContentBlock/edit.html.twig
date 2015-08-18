@@ -1,8 +1,3 @@
-{% extends '::base.html.twig' %}
-{% block title %}Edit {{ entity.title }}{% endblock %}
-{% block page_title %}Edit {{ entity.title }}{% endblock %}
-
-{% block body -%}
 
     <div class="media-wrapper">
 
@@ -119,5 +114,17 @@
             }
         });
     </script>
+    <script>
+        // wait for the DOM to be loaded
+        $(document).ready(function() {
+            // bind form and provide a simple callback function
+            $('#ajax_contentblocks_form').ajaxForm({
+                success : function (response) {
+                    $('#dialog').dialog( "close" );
+                    window.location.hash = 'site-content';
+                    window.location.reload(true);
+                }
+            })
+        });
+    </script>
 
-{% endblock %}

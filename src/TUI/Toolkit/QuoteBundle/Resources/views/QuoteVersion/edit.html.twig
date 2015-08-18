@@ -41,7 +41,6 @@
         $( document ).ready(function() {
             $( ".hasDatepicker" ).datepicker( "option", "dateFormat", "dd-mm-yy" );
             $( ".hasDatepicker" ).change(function(){
-                console.log('new method');
                 $(this).parent().addClass('is-dirty');
             });
         });

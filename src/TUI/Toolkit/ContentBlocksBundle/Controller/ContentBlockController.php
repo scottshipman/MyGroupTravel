@@ -191,7 +191,10 @@ class ContentBlockController extends Controller
     {
         $form = $this->createForm(new ContentBlockType(), $entity, array(
             'action' => $this->generateUrl('manage_contentblocks_update', array('id' => $entity->getId(), 'quoteVersion' => $quoteVersion, 'class' => $class)),
-            'method' => 'PUT',
+            'method' => 'POST',
+            'attr'  => array (
+              'id' => 'ajax_contentblocks_form'
+            ),
         ));
 
         $form->add('submit', 'submit', array('label' => 'Update'));
@@ -217,7 +220,7 @@ class ContentBlockController extends Controller
         }
 
           $deleteForm = $this->createDeleteForm($id);
-          $editForm = $this->createEditForm($entity);
+          $editForm = $this->createEditForm($entity, $quoteVersion, $class);
           $editForm->handleRequest($request);
 
         $medias = array();
@@ -241,7 +244,10 @@ class ContentBlockController extends Controller
             $em->flush();
 
             //return $this->redirect($this->generateUrl('manage_contentblocks_edit', array('id' => $id)));
-          $responseContent =  json_encode($entity->getContent());
+          // todo get repository for class that is passed in
+          $qv = $em->getRepository('QuoteBundle:QuoteVersion')->find($quoteVersion);
+          $responseContent =  json_encode($qv->getContent());
+
 
           return new Response($responseContent,
             Response::HTTP_OK,

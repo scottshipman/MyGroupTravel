@@ -79,6 +79,7 @@ class ContentBlock
       $this->doubleWidth = false;
       $this->sortOrder = 1;
       $this->body = "";
+      $this->media = new ArrayCollection();
     }
 
     /**
@@ -258,11 +259,6 @@ class ContentBlock
      * @ORM\JoinColumn(name="media", referencedColumnName="id")
      */
     protected $media;
-
-    public function __construct()
-    {
-        $this->media = new ArrayCollection();
-    }
 
     /**
      * @param $media
