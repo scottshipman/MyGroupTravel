@@ -3,6 +3,8 @@
 namespace TUI\Toolkit\QuoteBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Annotations;
 use Gedmo\Mapping\Annotation as Gedmo;
 use APY\DataGridBundle\Grid\Mapping as GRID;
@@ -10,8 +12,10 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
 /**
  * QuoteVersion
  *
- * @ORM\Table(name="quote_version",uniqueConstraints={@ORM\UniqueConstraint(name="quoteNumber", columns={"quoteNumber"})})
+ * @ORM\Table(name="quote_version", uniqueConstraints={@ORM\UniqueConstraint(name="unique_quoteNumber", columns={"quoteNumber"})})
  * @ORM\Entity
+ * @UniqueEntity(fields={"quoteNumber"}, message="This Quote Number already exists on another Quote.", ignoreNull=true)
+ *
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
  * @GRID\Source(columns="id, name, isTemplate, quoteReference.ts, quoteReference.id, institution_full, quoteReference.institution.name, quoteReference.institution.city, quoteNumber, organizer_full, quoteReference.name, salesAgent_full, quoteReference.salesAgent.firstName, quoteReference.salesAgent.lastName,  quoteReference.salesAgent.email, quoteReference.organizer.firstName, quoteReference.organizer.lastName, quoteReference.organizer.email, quoteReference.views, quoteReference.shareViews, quoteReference.converted, deleted, locked, quoteReference.setupComplete, quoteReference.destination, created, version, duration, tripStatus.name, expiryDate, transportType.name, boardBasis.name, freePlaces, payingPlaces, departureDate, returnDate, pricePerson,  currency.name, converted, views, shareViews", filterable=false, sortable=true)
  * @GRID\Column(id="organizer_full", type="join", columns = {"quoteReference.organizer.firstName", "quoteReference.organizer.lastName", "quoteReference.organizer.email"}, title="Organizer", export=true, filterable=true, operatorsVisible=false)
@@ -19,6 +23,7 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
  * @GRID\Column(id="institution_full", type="join", columns = {"quoteReference.institution.name", "quoteReference.institution.city"}, title="Institution", export=true, filterable=true, operatorsVisible=false)
  */
 
+// ,uniqueConstraints={@ORM\UniqueConstraint(name="quoteNumber", columns={"quoteNumber"})}
 class QuoteVersion
 {
     /**
@@ -53,6 +58,7 @@ class QuoteVersion
    *
    * @ORM\Column(name="quoteNumber", type="string", length=255, nullable=true)
    * @GRID\Column(title="Quote Number", filterable=true, operatorsVisible=false, export=true)
+   * @Assert\Length(min=2)
    */
   private $quoteNumber;
 

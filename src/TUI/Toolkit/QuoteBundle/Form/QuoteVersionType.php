@@ -183,6 +183,7 @@ class QuoteVersionType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'TUI\Toolkit\QuoteBundle\Entity\QuoteVersion',
+            'cascade_validation' => true
         ));
     }
 

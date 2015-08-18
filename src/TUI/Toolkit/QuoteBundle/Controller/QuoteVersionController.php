@@ -23,6 +23,7 @@ use DeepCopy\Matcher\PropertyNameMatcher;
 use DeepCopy\Filter\ReplaceFilter;
 use DeepCopy\Filter\KeepFilter;
 use DeepCopy\Matcher\PropertyMatcher;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * QuoteVersion controller.
@@ -793,11 +794,9 @@ class QuoteVersionController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
-
+        $date_format = $this->container->getParameter('date_format');
         $em = $this->getDoctrine()->getManager();
-
         $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
-
         if (!$entity) {
           throw $this->createNotFoundException('Unable to find QuoteVersion entity.');
         }
@@ -848,48 +847,62 @@ class QuoteVersionController extends Controller
         }
 
         //Handling the request for institution a little different than we did for the other 2.
-      $institutionName =  explode(' - ', $editForm->getData()->getQuoteReference()->getInstitution());
-      $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findByName($institutionName[0]);
+        $institutionName =  explode(' - ', $editForm->getData()->getQuoteReference()->getInstitution());
+        $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findByName($institutionName[0]);
         $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findByName($institutionName);
         if(null!==$institutionEntities) {
           $institution = array_shift($institutionEntities);
           $editForm->getData()->getQuoteReference()->setInstitution($institution);
         }
 
-      if($_POST['tui_toolkit_quotebundle_quoteversion']['revision']=='revision'){
-        // this is a save as new revision call so duplicate the quoteversion
-        // and then set a ts on the original, persist both
-        $new_entity = clone($entity);
-        $new_entity->setVersion($entity->getVersion() + 1);
-        $new_entity->setId(null);
-        $em->detach($entity);
-         $em->persist($new_entity);
-         $em->flush($new_entity);
-        $permission = $this->get("permission.set_permission")->setPermission($new_entity->getQuoteReference()->getId(), 'quote', $new_entity->getQuoteReference()->getOrganizer(), 'organizer');
-        $this->get('session')->getFlashBag()->add('notice', 'Quote Saved: '. $new_entity->getName());
+        // Handling if the Save as New Revision button was clicked
+        if($_POST['tui_toolkit_quotebundle_quoteversion']['revision']=='revision'){
+          // this is a save as new revision call so duplicate the quoteversion
+          $new_entity = clone($entity);
+          $new_entity->setVersion($entity->getVersion() + 1);
 
-
-        return $this->redirect($this->generateUrl('manage_quote' . $route));
-      }
-
-      if ($editForm->isValid()) {
-            $em->flush();
-        $permission = $this->get("permission.set_permission")->setPermission($entity->getQuoteReference()->getId(), 'quote', $entity->getQuoteReference()->getOrganizer(), 'organizer');
-          $this->get('session')->getFlashBag()->add('notice', 'Quote Saved: '. $entity->getName());
-
-
-          return $this->redirect($this->generateUrl('manage_quote' . $route));
-        }
-
-      $date_format = $this->container->getParameter('date_format');
-
-        return $this->render('QuoteBundle:QuoteVersion:edit.html.twig', array(
+          // Validate the quoteNumber field is unique
+          $uniqueEntity = new UniqueEntity('quoteNumber');
+          $message= 'This Quote Number is already used on another Quote.';
+          $uniqueEntity->message = $message;
+          $errors = $this->get('validator')->validate(
+            $new_entity,
+            $uniqueEntity
+          );
+          if (!$errors) {
+            $new_entity->setId(null);
+            $em->detach($entity);
+            $em->persist($new_entity);
+            $em->flush($new_entity);
+            $permission = $this->get("permission.set_permission")->setPermission($new_entity->getQuoteReference()->getId(), 'quote', $new_entity->getQuoteReference()->getOrganizer(), 'organizer');
+            $this->get('session')->getFlashBag()->add('notice', 'Quote Saved: '. $new_entity->getName());
+            return $this->redirect($this->generateUrl('manage_quote' . $route));
+          }
+          $this->get('session')->getFlashBag()->add('error', $message);
+          return $this->render('QuoteBundle:QuoteVersion:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
             'template'    => $template,
             'date_format' => $date_format,
-        ));
+          ));
+        }
+
+      // handling a standard edit (not a save as new version)
+      if ($editForm->isValid()) {
+        $em->flush();
+        $permission = $this->get("permission.set_permission")->setPermission($entity->getQuoteReference()->getId(), 'quote', $entity->getQuoteReference()->getOrganizer(), 'organizer');
+        $this->get('session')->getFlashBag()->add('notice', 'Quote Saved: '. $entity->getName());
+        return $this->redirect($this->generateUrl('manage_quote' . $route));
+      }
+
+      return $this->render('QuoteBundle:QuoteVersion:edit.html.twig', array(
+          'entity'      => $entity,
+          'edit_form'   => $editForm->createView(),
+          'delete_form' => $deleteForm->createView(),
+          'template'    => $template,
+          'date_format' => $date_format,
+      ));
     }
 
 
