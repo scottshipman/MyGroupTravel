@@ -8,7 +8,7 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-class Version20150818111731 extends AbstractMigration
+class Version20150818120225 extends AbstractMigration
 {
     /**
      * @param Schema $schema
@@ -25,7 +25,7 @@ class Version20150818111731 extends AbstractMigration
         $this->addSql('CREATE TABLE board_basis (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE transport (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE trip_status (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, visible TINYINT(1) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE content_block (id INT AUTO_INCREMENT NOT NULL, layouttype INT DEFAULT NULL, locked TINYINT(1) NOT NULL, hidden TINYINT(1) NOT NULL, title VARCHAR(255) NOT NULL, body LONGTEXT NOT NULL, sortOrder INT DEFAULT NULL, doubleWidth TINYINT(1) NOT NULL, INDEX IDX_68D8C3F0578FFD90 (layouttype), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE content_block (id INT AUTO_INCREMENT NOT NULL, layouttype INT DEFAULT NULL, locked TINYINT(1) NOT NULL, hidden TINYINT(1) NOT NULL, title VARCHAR(255) NOT NULL, body LONGTEXT DEFAULT NULL, sortOrder INT DEFAULT NULL, doubleWidth TINYINT(1) NOT NULL, INDEX IDX_68D8C3F0578FFD90 (layouttype), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE content_block_media (content_block_id INT NOT NULL, media_id INT NOT NULL, INDEX IDX_FE17CD6CBB5A68E3 (content_block_id), INDEX IDX_FE17CD6CEA9FDD75 (media_id), PRIMARY KEY(content_block_id, media_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE layout_type (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, icon VARCHAR(255) NOT NULL, className VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE institution (id INT AUTO_INCREMENT NOT NULL, media INT DEFAULT NULL, deleted DATE DEFAULT NULL, name VARCHAR(255) NOT NULL, address1 VARCHAR(255) DEFAULT NULL, address2 VARCHAR(255) DEFAULT NULL, city VARCHAR(255) DEFAULT NULL, county VARCHAR(255) DEFAULT NULL, state VARCHAR(255) DEFAULT NULL, post_code VARCHAR(255) DEFAULT NULL, country VARCHAR(255) DEFAULT NULL, INDEX IDX_3A9F98E56A2CA10C (media), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');

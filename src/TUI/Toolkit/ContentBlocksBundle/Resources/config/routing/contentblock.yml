@@ -7,29 +7,45 @@ manage_contentblocks_show:
     defaults: { _controller: "ContentBlocksBundle:ContentBlock:show" }
 
 manage_contentblocks_new:
-    path:     /new
+    path:     /new/{quoteVersion}/{class}
     defaults: { _controller: "ContentBlocksBundle:ContentBlock:new" }
 
 manage_contentblocks_create:
-    path:     /create
+    path:     /create/{quoteVersion}/{class}
     defaults: { _controller: "ContentBlocksBundle:ContentBlock:create" }
     methods:  POST
 
 manage_contentblocks_edit:
-    path:     /{id}/edit
+    path:     /{id}/edit/{quoteVersion}/{class}
     defaults: { _controller: "ContentBlocksBundle:ContentBlock:edit" }
 
 manage_contentblocks_update:
-    path:     /{id}/update
+    path:     /{id}/update/{quoteVersion}/{class}
     defaults: { _controller: "ContentBlocksBundle:ContentBlock:update" }
-    methods:  [POST, PUT]
+    methods:  [POST]
 
 manage_contentblocks_delete:
     path:     /{id}/delete
     defaults: { _controller: "ContentBlocksBundle:ContentBlock:delete" }
     methods:  [POST, DELETE]
 
-contentblocks_new_tab:
-    path:   /new-tab/{id}
+contentblocks_update:
+    path:   /update/{id}
     defaults: { _controller: "QuoteBundle:QuoteVersion:newTab" }
     methods:  [POST]
+
+
+manage_contentblocks_lock:
+    path:     /{id}/lock
+    defaults: { _controller: "ContentBlocksBundle:ContentBlock:lock" }
+    methods:  [POST]
+
+manage_contentblocks_hide:
+    path:     /{id}/hide
+    defaults: { _controller: "ContentBlocksBundle:ContentBlock:hide" }
+    methods:  [POST]
+
+manage_contentblocks_ajax_new:
+    path:     /ajax/new
+    defaults: { _controller: "ContentBlocksBundle:ContentBlock:ajaxNew" }
+    methods:  [GET]

@@ -55,7 +55,7 @@ class ContentBlock
     /**
      * @var longtext
      *
-     * @ORM\Column(name="body", type="text", length=4294967295)
+     * @ORM\Column(name="body", type="text", length=4294967295, nullable=true)
      */
     private $body;
 
@@ -73,6 +73,14 @@ class ContentBlock
      */
     private $doubleWidth;
 
+    public function __construct(){
+      $this->hidden = false;
+      $this->locked = false;
+      $this->doubleWidth = false;
+      $this->sortOrder = 1;
+      $this->body = "";
+      $this->media = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -251,11 +259,6 @@ class ContentBlock
      * @ORM\JoinColumn(name="media", referencedColumnName="id")
      */
     protected $media;
-
-    public function __construct()
-    {
-        $this->media = new ArrayCollection();
-    }
 
     /**
      * @param $media

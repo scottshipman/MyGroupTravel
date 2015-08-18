@@ -1,4 +1,7 @@
 (function ($) {
+    /**
+     * Material Design Stuff
+     */
 
     $('.mdl-layout__drawer .menu_level_1').each(function () {
         var t = $(this);
@@ -115,8 +118,7 @@
         var modal_form = e.currentTarget.id;
         var parts = modal_form.split("-add");
         var form_type = parts[0].toLowerCase();
-        // e.preventDefault();
-        console.log(form_type);
+        //e.preventDefault();
         $("#dialog").html("");
         $("#dialog").dialog("option", "title", "Loading...").dialog("open");
         $("#dialog").load('/ajax/' + form_type + '/new', function () {
@@ -231,19 +233,15 @@
         start: function (e, ui) {
             ui.placeholder.height(ui.helper.outerHeight());
         },
-        axis: 'y'
-        //  update: function (event, ui) {
-        //      var data = $(this).sortable('serialize');
-        //// POST to server using $.post or $.ajax
-        //           $.ajax({
-        //                data: data,
-        //                type: 'POST',
-        //                url: '/your/url/here'
-        //            });
-        //// }
+        axis: 'y',
+        update: function(e, ui) {
+            var pathArray = window.location.pathname.split( '/' );
+            contentBlocksUpdate(pathArray[3]); // fourth [3] part in the path should be quote ID to pass in
+        }
     });
-    //$( ".sortable-tabs" ).disableSelection();
-    $(".sortable-items").sortable({
+
+
+    $( ".sortable-items" ).sortable({
         containment: "document",
         items: "> div",
         tolerance: "pointer",
@@ -252,19 +250,12 @@
         start: function (e, ui) {
             ui.placeholder.height(ui.helper.outerHeight());
         },
-        axis: 'y'
-        //  update: function (event, ui) {
-        //      var data = $(this).sortable('serialize');
-        //// POST to server using $.post or $.ajax
-        //            $.ajax({
-        //                data: data,
-        //                type: 'POST',
-        //                url: '/your/url/here'
-        //            });
-        ////  }
+        axis: 'y',
+        update: function(e, ui) {
+            var pathArray = window.location.pathname.split( '/' );
+            contentBlocksUpdate(pathArray[3]); // fourth [3] part in the path should be quote ID to pass in
+        }
     });
-//     $( ".sortable-items" ).disableSelection();
-
 
     /**
      * Add font-awesome to Delete buttons
@@ -279,5 +270,87 @@
         }
     })
 
+    /**
+     * Add, Edit and Delete Content Block Tabs
+     *
+     */
+
+
 
 })(jQuery);
+
+/********* Global Methods Go below here ******************************/
+
+/**
+ * Persist Content block data to the database/entity
+ * @param id - Quote Version # passed from window.path
+ */
+
+var contentBlocksUpdate = function (id) {
+    // update server with new data
+    var result = {};
+    var data = $(".content-blocks-tab");
+    data.each(function (i, obj) {
+        tabText = $(this).find('.editable-tab').text();
+        if ($(this).find('.content-blocks-item').size() == 0) {
+            result[tabText] = '';
+        } else {
+            result[tabText] = [];
+            var children = []
+            $(this).find('.content-blocks-item').each(function (k, v) {
+                children.push(this.id);
+            });
+            result[tabText] = children;
+        }
+    });
+    //POST to server using $.post or $.ajax
+    $.ajax({
+        data: result,
+        type: 'POST',
+        url: '/manage/contentblocks/update/'+ id
+    });
+    //reload the window so changes are redrawn - its lazy non-ajaxy, but...
+    contentBlocksRefresh(id);
+};
+
+/**
+ * Add a New Tab for Content Blocks
+ * @param elem The parent container of the content blocks
+ * @param id The id of the QuoteVersion Object that owns the content blocks
+ */
+
+var contentBlocksAddTab= function (elem, id){
+    var newId = $(elem).children().length;
+    $("#content-blocks-wrapper").prepend(
+        '<div id="tab-tab'  + (newId + 1)+ '" class="content-blocks-tab">' +
+        '<span class="content-blocks tab-label"><i class="content-block-tab-handle fa fa-arrows"></i>  <h4 id="tab-label-{{ tab }}" class="editable-tab"> New Tab '  + (newId + 1)+ '</h4>' +
+        '<i class="tab-delete content-block-tab-actions fa fa-trash-o"> Delete Tab</i>' +
+        '<i class="tab-new content-block-tab-actions fa fa-plus-circle"> Add Content</i>' +
+        '</span>' +
+        '<div id="tabs-drawer-tab' + (newId +1) + '" class="sortable-items content-blocks-drawer">' +
+        '</div></div>'
+    );
+
+    $(".sortable-tabs").sortable('refresh');
+    $(".sortable-items").sortable();
+    contentBlocksUpdate(id);
+}
+
+/**
+ * Reload the page that shows the content blocks and tabs
+ * @param id
+ */
+var contentBlocksRefresh = function(id){
+    $.ajax({
+        url: window.location.href,
+        headers: {
+            "Pragma": "no-cache",
+            "Expires": -1,
+            "Cache-Control": "no-cache"
+        }
+    }).done(function () {
+        window.location.hash = 'site-content';
+        window.location.reload(true);
+    });
+}
+

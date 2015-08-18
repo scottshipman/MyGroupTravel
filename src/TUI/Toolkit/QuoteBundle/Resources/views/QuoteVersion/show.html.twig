@@ -111,30 +111,29 @@
         <i class="fa fa-plus-circle"></i>  Add New Tab
     </a>
 
+    <a id="site-content"></a>
     <div id="content-blocks-wrapper" class="sortable-tabs">
         {%  for tab, blocks in entity.content %}
-        <div id="tab-{{ tab }}" class="content-blocks-tab">
-            <h4 id="tab-label-{{ tab }}" class="content-blocks tab-label">
-                <i class="fa fa-arrows"></i> {{ tab }}
-                <i class="content-block-tab-actions fa fa-ban"></i>
-                <i class="content-block-tab-actions fa fa-lock"></i>
-                <i class="content-block-tab-actions fa fa-trash-o"></i>
-                <i class="content-block-tab-actions fa fa-pencil-square-o"></i>
-                <a href="{{ path('manage_quote') }}" alt = "Add New Content Block"><i class="content-block-tab-actions fa fa-plus-circle"></i></a>
+        <div id="tab-{{ tab|replace({' ': '_'}) }}" class="content-blocks-tab">
+            <span class="content-blocks tab-label"><i class="content-block-tab-handle fa fa-arrows"></i>  <h4 id="tab-label-{{ tab }}" class="editable-tab">{{ tab }}</h4>
+                    {% if blocks | length < 1 %}
+                    <i class="tab-delete content-block-tab-actions fa fa-trash-o"> Delete Tab</i>
+                    {% endif %}
+                 <i class="tab-new content-block-tab-actions fa fa-plus-circle"> Add Content</i>
+            </span>
 
 
 
-            </h4>
             <div id="tabs-drawer-{{ tab }}" class="sortable-items content-blocks-drawer">
                     {%  for item in blocks %}
-                        <div id="content-blocks-{{ item }}" class="content-blocks content-blocks-item">
-                            <i class="fa fa-arrows"></i>  {{ item }} name
+                        <div id="content-blocks-{{ items[item].id }}" class="content-blocks content-blocks-item">
+                            <i class="fa fa-arrows"></i>  {{ items[item].title }}
                             {# probably render a controller here by passing in item as id and have block entity returned #}
-                            <div id="content-block-actions-{{ item }}" class="content-block-actions">
-                                <i class="fa fa-pencil-square-o"></i>
-                                <i class="fa fa-trash-o"></i>
-                                <i class="fa fa-lock"></i>  {# <i class="fa fa-unlock-alt"></i> #}
-                                <i class="fa fa-ban"></i> {# <i class="fa fa-unlock-alt"></i> #}
+                            <div id="content-block-actions-{{ items[item].id }}" class="content-block-actions">
+                                <i class="item-edit fa fa-pencil-square-o"></i>
+                                <i class="item-delete fa fa-trash-o"></i>
+                                <i class="item-lock fa fa-lock"></i>  {# <i class="fa fa-unlock-alt"></i> #}
+                                <i class="item-hide fa fa-ban"></i> {# <i class="fa fa-unlock-alt"></i> #}
                             </div>
                         </div>
                     {% endfor %}
@@ -144,52 +143,125 @@
     </div>
 
     <style>
-        .content-blocks-drawer {min-height: 1em;}
+
     </style>
 
     <script>
-        (function ($) {
+        $(document).ready(function() {
+
+            // Add a new tab to a site
             $("#add-new-tab").on('click', function(){
-                var newId = $("#content-blocks-wrapper").children().length;
-                $("#content-blocks-wrapper").prepend(
-                        '<div id="tab-tab'  + (newId + 1)+ '" class="content-blocks-tab">' +
-                        ' <h4 id="tab-label-' +(newId +1)+'" class="content-blocks tab-label">'+
-                        '<i class="fa fa-arrows"></i> New Tab' + (newId + 1) +
-                        '<i class="content-block-tab-actions fa fa-ban"></i>' +
-                        '<i class="content-block-tab-actions fa fa-lock"></i>' +
-                        '<i class="content-block-tab-actions fa fa-trash-o"></i>' +
-                        '<i class="content-block-tab-actions fa fa-pencil-square-o"></i>' +
-                        '<a href="{{ path('manage_quote') }}" alt = "Add New Content Block"><i class="content-block-tab-actions fa fa-plus-circle"></i></a>' +
-                        '</h4>' +
-                        '<div id="tabs-drawer-tab' + (newId +1) + '" class="sortable-items content-blocks-drawer">' +
+                contentBlocksAddTab('#content-blocks-wrapper', {{ entity.id }});
+            });
+
+            // remove an empty tab from a site (hard delete)
+            $(".tab-delete").on('click', function(){
+                var ancestorTabElement = $(this).closest('.content-blocks-tab');
+                if (confirm('Are you sure you want to remove this tab? Warning: this can not be undone.')) {
+                    $(ancestorTabElement).remove();
+                    contentBlocksUpdate({{ entity.id }});
+                }
+            });
+
+            // Add a content block into a tab
+            $(".tab-new").on('click', function(){
+                var ancestorTabElement=$(this).closest('.content-blocks-tab').children('.sortable-items');
+                $.ajax({
+                    url: window.location.protocol + '//' + window.location.hostname + '/manage/contentblocks/ajax/new',
+                    headers: {
+                        "Pragma": "no-cache",
+                        "Expires": -1,
+                        "Cache-Control": "no-cache"
+                    }
+                }).done(function (data) {
+                    var id=(Object.keys(data).toString());
+                    var title = data[id];
+                    //add element into DOM
+                    $(ancestorTabElement).append(
+                        '<div id="content-blocks-' + id + '" class="content-blocks content-blocks-item">' +
+                        '<i class="fa fa-arrows"></i>  ' + title +
+                        {# probably render a controller here by passing in item as id and have block entity returned #}
+                        '<div id="content-block-actions-' + id + '" class="content-block-actions">' +
+                        '<i class="item-edit fa fa-pencil-square-o"></i>' +
+                        '<i class="item-delete fa fa-trash-o"></i>' +
+                        '<i class="item-lock fa fa-lock"></i>' +
+                        '<i class="item-hide fa fa-ban"></i>' +
                         '</div></div>'
-                );
-
-                $(".sortable-tabs").sortable('refresh');
-                $(".sortable-items").sortable();
-
-                // update server with new data
-                var data
-                     // var data = $('.sortable-tabs').sortable('serialize');
-                $('.sortable-tabs').each(function(i, obj) {
-                    $(this > '.sortable-items').map(function(){
-                        data
-                    })
+                    );
+                    contentBlocksUpdate({{ entity.id }});
                 });
 
-
-
-                var data = $('#content-blocks-wrapper').serialize();
-                console.log(data);
-                        //POST to server using $.post or $.ajax
-                            $.ajax({
-                                data: data,
-                                type: 'POST',
-                                url: '/manage/contentblocks/new-tab/{{ entity.id }}'
-                            });
-
             });
-        })(jQuery);
+
+            // edit a content block
+            $(".item-edit").on('click', function(e){
+                // todo Get item.id and item.name
+                var actionParent = $(this).parent().attr('id');
+                var block = actionParent.substring(22);
+                //e.preventDefault();
+                $("#dialog").html("");
+                $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
+                $("#dialog").load('/ajax/contentblocks/edit/' + block + '/' + {{ entity.id}} +'/QuoteVersion', function() {
+                    $(this).dialog("option", "title", 'Edit Content Block');
+                });
+                //contentBlocksUpdate({{ entity.id }});
+            });
+
+
+            // toggle the hide boolean on a content block
+            $(".item-hide").on('click', function(e){
+                // todo Get item.id and item.name
+                var actionParent = $(this).parent().attr('id');
+                var block = actionParent.substring(22);
+                $.ajax({
+                    url: window.location.protocol + window.location.hostname + '/manage/contentblocks/'+ block + '/hide',
+                    headers: {
+                        "Pragma": "no-cache",
+                        "Expires": -1,
+                        "Cache-Control": "no-cache"
+                    }
+                }).done(function () {
+                    window.location.hash = 'site-content';
+                    window.location.reload(true);
+                });
+                //contentBlocksUpdate({{ entity.id }});
+            });
+
+
+            // toggle the locked boolean on a content block
+            $(".item-lock").on('click', function(e){
+                // todo Get item.id and item.name
+                var actionParent = $(this).parent().attr('id');
+                var block = actionParent.substring(22);
+                $.ajax({
+                    beforeSend: function() {
+                        $('#loader').show();
+                    },
+                    url: window.location.protocol + window.location.hostname + '/manage/contentblocks/'+ block + '/lock',
+                    headers: {
+                        "Pragma": "no-cache",
+                        "Expires": -1,
+                        "Cache-Control": "no-cache"
+                    }
+                }).done(function () {
+                    window.location.hash = 'site-content';
+                    window.location.reload(true);
+                });
+                //contentBlocksUpdate({{ entity.id }});
+            });
+
+            // change a tab's name
+            $('.editable-tab').editable(function(value, settings) {
+                return(value);
+            }, {
+                width: '20em',
+                onblur: "cancel",
+                tooltip: 'Click to edit',
+                callback : function(value, settings) {
+                    contentBlocksUpdate({{ entity.id }}); //value
+                }
+            });
+        });
     </script>
 
 {% endblock %}

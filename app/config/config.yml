@@ -70,7 +70,9 @@ assetic:
                     # - /srv/www/Toolkit/vendor/components/jquery/jquery.min.js
             toolkit:
                 inputs:
+                    - @AppBundle/Resources/assets/js/jeditable.js
                     - @AppBundle/Resources/assets/js/toolkit.js
+
             jqueryui:
                 inputs:
                     - "%kernel.root_dir%/../src/AppBundle/Resources/public/js/jquery-ui/jquery-ui.js"
@@ -137,7 +139,7 @@ fos_user:
                       sender_name: Toolkit Registration
 
                 enabled:    true
-                template:   FOSUserBundle:Registration:email.txt.twig
+                template:   TUIToolkitUserBundle:Registration:email.txt.twig
     from_email:
         address:        noreply@toolkit.com
         sender_name:    TUI Toolkit System

@@ -654,12 +654,19 @@ class QuoteVersionController extends Controller
             throw $this->createNotFoundException('Unable to find QuoteVersion entity.');
         }
 
-/*      // Get the quote with highest Version number and order array DESC
-        usort($entity, function ($a, $b) {
-        if ($a->getVersion() == $b->getVersion()) return 0;
-        return $a->getVersion() > $b->getVersion() ? -1 : 1;
-      });
-      $quote = $entity[0];*/
+
+      // get the content blocks to send to twig
+      $items=array();
+      $content = $entity[0]->getContent();
+      foreach($content as $tab){
+        foreach($tab as $key=>$block){
+          $object=$em->getRepository('ContentBlocksBundle:ContentBlock')->find($block);
+          if($object != null){
+            $items[$block] = $object;
+          }
+        }
+      }
+
 
         $deleteForm = $this->createDeleteForm($id);
 
@@ -667,6 +674,7 @@ class QuoteVersionController extends Controller
             'entity'      => $entity[0],
             'delete_form' => $deleteForm->createView(),
             'locale'      => $locale,
+            'items'       => $items,
         ));
     }
 
@@ -1050,12 +1058,32 @@ class QuoteVersionController extends Controller
     $em = $this->getDoctrine()->getManager();
     $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
     $content = $entity->getContent();
-    $newContent = $request;
+    $content=array();
 
+    if ($request->getMethod() == 'POST') {
+      $newContent = $request->request->all();
+    }
 
+    foreach($newContent as $tab => $blocks){
+      $tab = str_replace('_', ' ', $tab);
+      if($blocks !='') {
+        foreach ($blocks as $block) {
+          $content[$tab][] = substr($block, 15);
+        }
+      } else {
+        $content[$tab]=array();
+      }
+  }
+    $entity->setContent($content);
+    $em->persist($entity);
+    $em->flush();
 
+    $responseContent = json_encode($entity->getContent());
 
-    return new Response();
+    return new Response($responseContent,
+      Response::HTTP_OK,
+      array('content-type' => 'application/json')
+    );
   }
 
 
