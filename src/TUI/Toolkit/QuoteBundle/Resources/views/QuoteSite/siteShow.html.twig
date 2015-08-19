@@ -1,116 +1,67 @@
-{% extends '::base.html.twig' %}
-{% block title %}Quote: {{ entity.quoteReference.name }} {% endblock %}
-{% block page_title %}Quote: {{ entity.quoteReference.name  }} {% endblock %}
+{% extends '::site-base.html.twig' %}
+
+{% block title %}{{ entity.name }} {% endblock %}
+{% block page_subtitle %}<div id="site-quote-name">{{ entity.quoteReference.name  }} </div>{% endblock %}
+{% block page_title %}{{ entity.name  }} {% endblock %}
+
 
 {%  if 'en_GB' in locale %} {% set format = 'd-m-Y' %} {% else %} {% set format = 'm-d-Y' %} {% endif %}
 
 {% block body -%}
-    <ul class="record_actions">
-        <li>
-            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quote') }}">
-                 <i class="fa fa-arrow-circle-left"></i> Back to the list
-            </a>
-        </li>
-        {% if (entity.locked is sameas(false)) and (is_granted("ROLE_ADMIN")) %}
-        <li>
-            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quoteversion_edit', { 'id': entity.id }) }}">
-                <i class="fa fa-pencil-square-o"> </i> Edit
-            </a>
-        </li>
-        {% endif %}
-        {% if is_granted("ROLE_ADMIN") %}
-            <li>{{ form(delete_form) }}</li>
-        {% endif %}
-        <li>
-            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('quote_site_show', { 'id': entity.id, 'quoteNumber': entity.quoteNumber }) }}">
-                <i class="fa fa-desktop"> </i> Preview
-            </a>
-        </li>
-    </ul>
-    <h3>Summary</h3>
 
-    <table class="record_properties">
-        <tbody>
-            <tr>
-                <th>Institution</th><td>{% if entity.quoteReference.institution %}{{ entity.quoteReference.institution.name }}{% endif %}</td>
-                <th>Tour Name</th><td>{% if entity.quoteReference.name %}{{ entity.quoteReference.name }}{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Destination</th><td>{% if entity.quoteReference.destination %}{{ entity.quoteReference.destination }}{% endif %}</td>
-                <th>Quote Number</th><td>{% if entity.quoteNumber %}{{ entity.quoteNumber }}{% endif %}</td>
-            </tr>
-        </tbody>
-    </table>
-    <hr>
+    <div id="site-quote-number">Quote Number: {{ entity.quoteNumber  }} </div>
+    <div id="print_pdf"><i class="fa fa-print">print/pdf</i></div>
 
-    <h3>Details</h3>
-    <table class="record_properties">
-        <tbody>
-            <tr>
-                <th>Departure</th>
-                <td>{% if entity.departureDate %}{{ entity.departureDate|date(format) }}{% endif %}</td>
-                <th>Priced per person</th>
-                <td>{% if entity.pricePerson %}{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %} {{ entity.pricePerson }}{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Return</th>
-                <td>{% if entity.returnDate %}{{ entity.returnDate|date(format) }}{% endif %}</td>
-                <th>Board Basis</th>
-                <td>{% if entity.boardBasis %}{{ entity.boardBasis }}{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Duration</th>
-                <td>{% if entity.duration %}{{ entity.duration }}{% endif %}</td>
-                <th>Transport</th>
-                <td>{% if entity.transportType %}{{ entity.transportType.name }}{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Paying places</th>
-                <td>{% if entity.payingPlaces  %}{{ entity.payingPlaces  }}{% endif %}</td>
-                <th>Free places</th>
-                <td>{% if entity.payingPlaces  %}{{ entity.payingPlaces  }}{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Quote Name</th>
-                <td>{% if entity.name  %}{{ entity.name  }}{% endif %}</td>
-                <th>Expiry Date</th>
-                <td>{% if entity.expiryDate  %}{{ entity.expiryDate|date(format) }}{% endif %}</td>
-            </tr>
-        </tbody>
-    </table>
+    {% if warning | length >0 %}
+        <div id="site-warning">
+            {% for message in warning %}
+            <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
 
-    <hr>
+    <div id="site-header">
+        <div id="site-header-slideshow">
 
-    <table>
-        <tbody>
-        <tr>
-            <th>Organizer</th><td>{% if entity.quoteReference.organizer %}{{ entity.quoteReference.organizer.firstName }} {{ entity.quoteReference.organizer.lastName }} {{ entity.quoteReference.organizer.email }}{% endif %}
-                {% if entity.quoteReference.organizer %}<a href="{{ path('user_edit', { 'id': entity.quoteReference.organizer.id }) }}" alt = "Edit"><i class="fa fa-pencil-square-o"></i></a>{% endif %}
-            </td>
-        </tr>
-        </tbody>
-    </table>
+        </div>
+        <div id="site-header-summary">
+            <ul id="site-summary-details">
+                <li>Departing: {% if entity.departureDate %}{{ entity.departureDate|date(format) }}{% endif %}</li>
+                <li>{% if entity.duration %}{{ entity.duration }}{% endif %}</li>
+                <li>Returning: {% if entity.returnDate %}{{ entity.returnDate|date(format) }}{% endif %}</li>
+                <li>Board Basis: {% if entity.boardBasis %}{{ entity.boardBasis }}{% endif %}</li>
+                <li>Transport: {% if entity.transportType %}{{ entity.transportType.name }}{% endif %}</li>
+                <li>Price per person: <span>{% if entity.pricePerson %}{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %} {{ entity.pricePerson }}{% endif %}</span></li>
+                <li>Based on {% if entity.payingPlaces  %}{{ entity.payingPlaces  }}{% endif %} paying places and {% if entity.payingPlaces  %}{{ entity.payingPlaces  }}{% endif %} free places</li>
+                <li>Quote valid until {% if entity.expiryDate  %}{{ entity.expiryDate|date(format) }}{% endif %}</li>
+                <ul class="quote_site_actions">
+                    <li>
+                        <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quote') }}">
+                            <i class="fa fa-bullhorn"></i> Request Changes
+                        </a>
+                    </li>
 
-    <hr>
+                    <li>
+                        {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
+                            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quoteversion_edit', { 'id': entity.id }) }}">
+                                <i class="fa fa-thumbs-o-up"> </i> Accept Quote
+                            </a>
+                        {% else %}
+                            <i class="fa fa-thumbs-up"> </i> Accepted
+                        {% endif %}
+                    </li>
+                </ul>
+                <li>Welcome Msg: {% if entity.welcomeMsg  %}{{ entity.welcomeMsg }}{% endif %}</li>
+            </ul>
+        </div>
 
-    <table>
-        <tbody>
-        <tr>
-            <th>Primary Business Administrator</th><td>{% if entity.quoteReference.salesAgent %}{{ entity.quoteReference.salesAgent.firstName }} {{ entity.quoteReference.salesAgent.lastName }} {{ entity.quoteReference.salesAgent.email }}{% endif %}</td>
-        </tr>
-        <tr>
-            <th>Other Business Administrator</th><td>{% if entity.quoteReference.secondaryContact %}{{ entity.quoteReference.secondaryContact.firstName }} {{ entity.quoteReference.secondaryContact.lastName }} {{ entity.quoteReference.secondaryContact.email }}{% endif %}</td>
-        </tr>
-        </tbody>
-    </table>
+    </div>
 
-    <hr>
 
     {# RENDER THE CONTENT BLOCKS HERE #}
 
    {# {{ dump(entity) }} #}
 
-    <h3>Tour Information</h3>
 
     <a id="add-new-tab" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
         <i class="fa fa-plus-circle"></i>  Add New Tab
@@ -145,6 +96,13 @@
             </div>
         </div>
         {% endfor %}
+    </div>
+
+    <div id="site-footer">
+        Your Contact is {% if entity.quoteReference.salesAgent %}{{ entity.quoteReference.salesAgent.firstName }} {{ entity.quoteReference.salesAgent.lastName }}
+            <br />
+            <i class="fa fa-envelope-o"></i> {{ entity.quoteReference.salesAgent.email }}
+        {% endif %}
     </div>
 
     <div id="loader"><img src="{{ asset('bundles/quote/images/loader.gif') }}"></div>
