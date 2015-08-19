@@ -149,7 +149,7 @@ fos_user:
                       address: reset@toolkit.com
                       sender_name: Toolkit Reset
 
-                template:   TUIToolkitUserBundle:Resetting:email.txt.twig
+                template:   TUIToolkitUserBundle:Resetting:reset.html.twig
 
 
 knp_menu:
