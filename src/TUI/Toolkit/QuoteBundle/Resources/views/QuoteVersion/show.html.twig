@@ -142,9 +142,7 @@
         {% endfor %}
     </div>
 
-    <style>
-
-    </style>
+    <div id="loader"><img src="{{ asset('bundles/quote/images/loader.gif') }}"></div>
 
     <script>
         $(document).ready(function() {
@@ -220,7 +218,7 @@
                         "Cache-Control": "no-cache"
                     }
                 }).done(function () {
-                    alert("The item's visibility has successfully been toggled");
+                    $("#loader").css("display", "inline-block");
                     window.location.hash = 'site-content';
                     window.location.reload(true);
                 });
@@ -240,7 +238,7 @@
                         "Cache-Control": "no-cache"
                     }
                 }).done(function () {
-                    alert("The item's lock has successfully been toggled");
+                    $("#loader").css("display", "inline-block");
                     window.location.hash = 'site-content';
                     window.location.reload(true);
                 });
@@ -262,7 +260,6 @@
                         }
                     }).done(function () {
                         $('#content-blocks-' + block).remove();
-                        alert("The item has successfully been deleted");
                         contentBlocksUpdate({{ entity.id }});
                     });
                 }

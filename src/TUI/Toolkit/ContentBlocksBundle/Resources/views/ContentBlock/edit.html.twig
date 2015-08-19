@@ -47,8 +47,9 @@
     $(document).ready(function() {
         // Bind form and provide a simple callback function
         $('#ajax_contentblocks_form').ajaxForm({
-            beforeSubmit: function() {
+            beforeSerialize: function() {
                 CKEDITOR.instances.tui_toolkit_contentblocksbundle_contentblock_body.updateElement();
+                $("#loader").css("display", "inline-block");
             },
             success: function(response) {
                 $('#dialog').dialog( "close" );

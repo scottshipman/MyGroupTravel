@@ -265,6 +265,7 @@
 
 var contentBlocksUpdate = function (id) {
     // update server with new data
+    $("#loader").css("display", "inline-block");
     var result = {};
     var data = $(".content-blocks-tab");
     data.each(function (i, obj) {
