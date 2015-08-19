@@ -3,7 +3,7 @@ manage_contentblocks:
     defaults: { _controller: "ContentBlocksBundle:ContentBlock:index" }
 
 manage_contentblocks_show:
-    path:     /{id}/show
+    path:     /{id}/show/{quoteVersion}/{class}
     defaults: { _controller: "ContentBlocksBundle:ContentBlock:show" }
 
 manage_contentblocks_new:
@@ -25,9 +25,9 @@ manage_contentblocks_update:
     methods:  [POST]
 
 manage_contentblocks_delete:
-    path:     /{id}/delete
+    path:     /{id}/delete/{quoteVersion}/{class}
     defaults: { _controller: "ContentBlocksBundle:ContentBlock:delete" }
-    methods:  [POST, DELETE]
+    methods:  [POST, DELETE, GET]
 
 contentblocks_update:
     path:   /update/{id}
@@ -36,14 +36,14 @@ contentblocks_update:
 
 
 manage_contentblocks_lock:
-    path:     /{id}/lock
+    path:     /{id}/lock/{quoteVersion}/{class}
     defaults: { _controller: "ContentBlocksBundle:ContentBlock:lock" }
-    methods:  [POST]
+    methods:  [POST, PUT, GET]
 
 manage_contentblocks_hide:
-    path:     /{id}/hide
+    path:     /{id}/hide/{quoteVersion}/{class}
     defaults: { _controller: "ContentBlocksBundle:ContentBlock:hide" }
-    methods:  [POST]
+    methods:  [POST, PUT, GET]
 
 manage_contentblocks_ajax_new:
     path:     /ajax/new

@@ -15,5 +15,5 @@ ajax_institution_new:
     defaults: { _controller: "InstitutionBundle:Institution:new_ajax" }
 
 ajax_contentblocks_edit:
-    path:   /ajax/contentblocks/edit/{id}/{quoteVersion}/{class}
+    path:   /ajax/contentblocks/{id}/edit/{quoteVersion}/{class}
     defaults: { _controller: "ContentBlocksBundle:ContentBlock:edit" }

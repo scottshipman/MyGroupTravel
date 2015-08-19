@@ -5,15 +5,24 @@ namespace TUI\Toolkit\ContentBlocksBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Security\Core\SecurityContext;
 
 class ContentBlockType extends AbstractType
 {
+  private $securityContext;
+
+  public function __construct(SecurityContext $securityContext)
+  {
+    $this->securityContext = $securityContext;
+  }
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+      $securityContext = $this->securityContext;
         $builder
             ->add('title')
             ->add('body', 'ckeditor', array(
@@ -26,14 +35,19 @@ class ContentBlockType extends AbstractType
                 'startup_outline_blocks' => false,
                 'width' => '100%',
                 'height' => '320',
-            ))
-            ->add('locked', 'checkbox', array(
-                'required' => false
-            ))
-            ->add('hidden', 'checkbox', array(
-                'required' => false
-            ))
-            ->add('layoutType', 'entity', array(
+            ));
+
+            // Dont show locked or hidden fields unless Brand role or higher
+            if($securityContext->isGranted('ROLE_BRAND')) {
+             $builder ->add('locked', 'checkbox', array(
+                'required' => FALSE
+              ))
+                ->add('hidden', 'checkbox', array(
+                  'required' => FALSE
+                ));
+                }
+            $builder
+              ->add('layoutType', 'entity', array(
                 'class' => 'ContentBlocksBundle:LayoutType',
                 'data_class' => 'TUI\Toolkit\ContentBlocksBundle\Entity\LayoutType',
                 'choice_label' => 'name',
