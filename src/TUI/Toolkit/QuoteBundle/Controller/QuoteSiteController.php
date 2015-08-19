@@ -64,6 +64,10 @@ class QuoteSiteController extends Controller
       }
     }
 
+    // get the content block that is the header block
+    $header = $entity[0]->getHeaderBlock();
+    $headerBlock=$em->getRepository('ContentBlocksBundle:ContentBlock')->find($header);
+
     // send warning messages
     $warningMsg = array();
     if($entity[0]->getExpiryDate() < date($date_format)){
@@ -76,7 +80,8 @@ class QuoteSiteController extends Controller
       'entity'      => $entity[0],
       'locale'      => $locale,
       'items'       => $items,
-      'warning'     => $warningMsg
+      'warning'     => $warningMsg,
+      'header'      => $headerBlock,
     ));
   }
 
