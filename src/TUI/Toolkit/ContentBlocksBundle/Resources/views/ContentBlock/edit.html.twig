@@ -50,9 +50,9 @@
             beforeSerialize: function() {
                 CKEDITOR.instances.tui_toolkit_contentblocksbundle_contentblock_body.updateElement();
                 $("#loader").css("display", "inline-block");
+                $('#dialog').dialog("close");
             },
             success: function(response) {
-                $('#dialog').dialog( "close" );
                 window.location.hash = 'site-content';
                 window.location.reload(true);
             }
