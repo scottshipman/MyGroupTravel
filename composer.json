@@ -40,8 +40,8 @@
         "genemu/form-bundle": "2.2.*",
         "oneup/uploader-bundle": "^1.3",
         "myclabs/deep-copy": "^1.3",
-        "trsteel/ckeditor-bundle": "~1.8"
-
+        "trsteel/ckeditor-bundle": "~1.8",
+        "jms/serializer-bundle": "^1.0"
     },
     "require-dev": {
         "liip/functional-test-bundle": "~1.0",
