@@ -1,13 +1,15 @@
 {% extends '::site-base.html.twig' %}
 
 {% block title %}{{ entity.name }} {% endblock %}
-{% block page_subtitle %}<div id="site-quote-name">{{ entity.quoteReference.name  }} </div>{% endblock %}
-{% block page_title %}{{ entity.name  }} {% endblock %}
+{% block page_institution %}<div id="site-quote-name">{{ entity.quoteReference.institution.name  }} </div>{% endblock %}
+{% block page_title %}{{ entity.quoteReference.name  }}, {{ entity.name  }} {% endblock %}
 
 
 {%  if 'en_GB' in locale %} {% set format = 'd-m-Y' %} {% else %} {% set format = 'm-d-Y' %} {% endif %}
 
 {% block body -%}
+
+   {#  {{ dump(entity) }} #}
 
     <div id="site-quote-number">Quote Number: {{ entity.quoteNumber  }} </div>
     <div id="print_pdf"><i class="fa fa-print">print/pdf</i></div>
