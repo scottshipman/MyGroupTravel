@@ -143,6 +143,14 @@ fos_user:
     from_email:
         address:        noreply@toolkit.com
         sender_name:    TUI Toolkit System
+    resetting:
+            email:
+                from_email:
+                      address: reset@toolkit.com
+                      sender_name: Toolkit Reset
+
+                template:   TUIToolkitUserBundle:Resetting:email.txt.twig
+
 
 knp_menu:
     # use "twig: false" to disable the Twig extension and the TwigRenderer
