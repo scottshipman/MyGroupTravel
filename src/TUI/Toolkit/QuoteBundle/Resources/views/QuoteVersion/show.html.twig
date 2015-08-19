@@ -201,8 +201,9 @@
                 //e.preventDefault();
                 $("#dialog").html("");
                 $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
-                $("#dialog").load('/ajax/contentblocks/' + block + '/edit/' + {{ entity.id}} +'/QuoteVersion', function() {
+                $("#dialog").load( '/ajax/contentblocks/' + block + '/edit/' + {{ entity.id}} + '/QuoteVersion', function() {
                     $(this).dialog("option", "title", 'Edit Content Block');
+                    doMDLpopup( $(this) );
                 });
             });
 
