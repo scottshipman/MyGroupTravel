@@ -86,14 +86,14 @@ class UserController extends Controller
         $grid->addRowAction($notifyAction);
         $showAction = new RowAction('View', 'user_show');
         $grid->addRowAction($showAction);
-        $deleteAction = new RowAction('Delete', 'user_quick_delete');
-        $deleteAction->setRole('ROLE_ADMIN');
-        $deleteAction->setConfirm(true);
-        $grid->addRowAction($deleteAction);
         $resetAction = new RowAction('Reset', 'user_password_reset');
         $resetAction->setRole('ROLE_ADMIN');
         $resetAction->setConfirm(true);
         $grid->addRowAction($resetAction);
+        $deleteAction = new RowAction('Delete', 'user_quick_delete');
+        $deleteAction->setRole('ROLE_ADMIN');
+        $deleteAction->setConfirm(true);
+        $grid->addRowAction($deleteAction);
 
         //manipulate the Columns
         $column = $grid->getColumn('lastLogin');
