@@ -4,14 +4,6 @@
 
 {% block body -%}
 
-    <ul class="record_actions">
-        <li>
-            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_contentblocks_new') }}">
-                <i class="fa fa-plus-circle"></i> Create a new Block
-            </a>
-        </li>
-    </ul>
-
     <table class="mdl-data-table mdl-js-data-table">
         <thead>
             <tr>
@@ -19,13 +11,13 @@
                 <th class="mdl-data-table__cell--non-numeric">Locked</th>
                 <th class="mdl-data-table__cell--non-numeric">Hidden</th>
                 <th class="mdl-data-table__cell--non-numeric">Layout Type</th>
-                <th class="mdl-data-table__cell--non-numeric">Sort Order</th>
+                <th>Sort Order</th>
                 <th class="mdl-data-table__cell--non-numeric">Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for entity in entities %}
-            <tr>
+            <tr id="{{ entity.id }}">
                 <td class="mdl-data-table__cell--non-numeric"><a href="{{ path('manage_contentblocks_show', { 'id': entity.id }) }}">{{ entity.title }}</a> ({{ entity.id }})</td>
                 <td class="mdl-data-table__cell--non-numeric">
                     {% if entity.locked == 1 %}
@@ -42,14 +34,11 @@
                     {% endif %}
                 </td>
                 <td class="mdl-data-table__cell--non-numeric"><span class="layout-icons {{ entity.layoutType }}">{{ entity.layoutType }}</span></td>
-                <td class="mdl-data-table__cell--non-numeric">{{ entity.sortOrder }}</td>
+                <td>{{ entity.sortOrder }}</td>
                 <td class="mdl-data-table__cell--non-numeric">
                     <ul class="grid-row-actions">
                         <li>
                             <a href="{{ path('manage_contentblocks_show', { 'id': entity.id }) }}"><i class="fa fam-view"></i></a>
-                        </li>
-                        <li>
-                            <a href="{{ path('manage_contentblocks_edit', { 'id': entity.id }) }}"><i class="fa fam-edit"></i></a>
                         </li>
                     </ul>
                 </td>
@@ -58,5 +47,4 @@
         </tbody>
     </table>
 
-
-    {% endblock %}
+{% endblock %}
