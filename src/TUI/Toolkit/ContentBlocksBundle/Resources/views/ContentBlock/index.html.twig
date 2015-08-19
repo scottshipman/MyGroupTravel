@@ -1,54 +1,50 @@
-
+{% extends '::base.html.twig' %}
+{% block title %}Manage Content Blocks{% endblock %}
+{% block page_title %}Manage Content Blocks{% endblock %}
 
 {% block body -%}
-    <h3>Site Content</h3>
 
-
-    <table class="records_list">
+    <table class="mdl-data-table mdl-js-data-table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Locked</th>
-                <th>Hidden</th>
-                <th>Layouttype</th>
-                <th>Title</th>
-                <th>Body</th>
-                <th>Sortorder</th>
-                <th>Doublewidth</th>
-                <th>Actions</th>
+                <th class="mdl-data-table__cell--non-numeric">Title (ID)</th>
+                <th class="mdl-data-table__cell--non-numeric">Locked</th>
+                <th class="mdl-data-table__cell--non-numeric">Hidden</th>
+                <th class="mdl-data-table__cell--non-numeric">Layout Type</th>
+                <th>Sort Order</th>
+                <th class="mdl-data-table__cell--non-numeric">Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for entity in entities %}
-            <tr>
-                <td><a href="{{ path('manage_contentblocks_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.locked }}</td>
-                <td>{{ entity.hidden }}</td>
-                <td>{{ entity.layoutType }}</td>
-                <td>{{ entity.title }}</td>
-                <td>{{ entity.body }}</td>
+            <tr id="{{ entity.id }}">
+                <td class="mdl-data-table__cell--non-numeric"><a href="{{ path('manage_contentblocks_show', { 'id': entity.id }) }}">{{ entity.title }}</a> ({{ entity.id }})</td>
+                <td class="mdl-data-table__cell--non-numeric">
+                    {% if entity.locked == 1 %}
+                        <i class="fa fa-check"></i>
+                    {% else %}
+                        <i class="fa fa-times"></i>
+                    {% endif %}
+                </td>
+                <td class="mdl-data-table__cell--non-numeric">
+                    {% if entity.hidden == 1 %}
+                        <i class="fa fa-check"></i>
+                    {% else %}
+                        <i class="fa fa-times"></i>
+                    {% endif %}
+                </td>
+                <td class="mdl-data-table__cell--non-numeric"><span class="layout-icons {{ entity.layoutType }}">{{ entity.layoutType }}</span></td>
                 <td>{{ entity.sortOrder }}</td>
-                <td>{{ entity.doubleWidth }}</td>
-                <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('manage_contentblocks_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('manage_contentblocks_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
+                <td class="mdl-data-table__cell--non-numeric">
+                    <ul class="grid-row-actions">
+                        <li>
+                            <a href="{{ path('manage_contentblocks_show', { 'id': entity.id }) }}"><i class="fa fam-view"></i></a>
+                        </li>
+                    </ul>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-        <ul>
-        <li>
-            <a href="{{ path('manage_contentblocks_new') }}">
-                <i class="fa fa-plus-circle"></i> Create a new Block
-            </a>
-        </li>
-    </ul>
-    {% endblock %}
+{% endblock %}

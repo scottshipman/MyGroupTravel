@@ -12,7 +12,7 @@
 
     <div id="user_media" class="is-dirty mdl-textfield--floating-label">
         {% if entity.media %}
-            <div class="media-placeholder-image">
+            <div class="media-placeholder-image edit">
                 <div id="overlay">
                     <i class="fa fa-pencil-square-o fa-2x"></i>
                 </div>
@@ -22,20 +22,19 @@
                     var bUrl = '{{ asset(".." ~ entity.media.getRelativePath ~ "/" ~ entity.media.getHashedFilename ) }}';
                     $(".media-placeholder-image").css({
                         "background-image": "url(" + bUrl + ")",
-                        "background-position": "left",
+                        "background-position": "50%",
                         "background-repeat": "no-repeat",
-                        "background-size":"contain",
-                        "max-width": "500px",
-                        "width": "auto",
-                        "height": "auto"
+                        "background-size": "contain",
+                        "width": "300px",
+                        "height": "160px"
                     });
+                    $("#tui_toolkit_brandbundle_brand_media").val('{{ entity.media.id }}');
                 });
             </script>
         {% else %}
-            <span class="fa-stack fa-3x">
-                <i class="media-placeholder-image fa fa-picture-o fa-stack-5x">
-                    <span style="display:block; font-size: .25em;">click to edit</span>
-                </i>
+            <span class="media-placeholder-image new">
+                <i class="fa fa-picture-o fa-3x"></i>
+                <span>Click to upload</span>
             </span>
         {% endif %}
     </div>

@@ -13,3 +13,7 @@ ajax_organizer_new:
 ajax_institution_new:
     path:   /ajax/institution/new
     defaults: { _controller: "InstitutionBundle:Institution:new_ajax" }
+
+ajax_contentblocks_edit:
+    path:   /ajax/contentblocks/{id}/edit/{quoteVersion}/{class}
+    defaults: { _controller: "ContentBlocksBundle:ContentBlock:edit" }

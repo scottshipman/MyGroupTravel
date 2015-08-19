@@ -10,6 +10,16 @@ form {
   position: relative;
 }
 
+.mdl-label-mimic {
+  font-size: 12px;
+  white-space: nowrap;
+
+  label {
+    @include mdl-primary-color(color, 6);
+  }
+  
+}
+
 .mdl-form-wrap {
   position: relative;
   @include inline-block-vertical();
@@ -31,13 +41,7 @@ form {
     top: 4px;
     bottom: 0;
     right: 0;
-    font-size: 12px;
-    white-space: nowrap;
     z-index: -1;
-  }
-
-  label {
-    @include mdl-primary-color(color, 6);
   }
 
 }

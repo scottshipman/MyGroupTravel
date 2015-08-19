@@ -1,10 +1,67 @@
-.record_actions,
-.grid-row-actions {
+table {
+
+  td .fa {
+    @include inline-block-vertical();
+    font-size: 18px;
+  }
+
+  .grid_boolean_true,
+  .grid_boolean_false {
+    @include inline-block-vertical();
+    font-size: 18px;
+    line-height: 1;
+    height: 18px;
+    width: 20px;
+    text-indent: 20px;
+    overflow: hidden;
+    position: relative;
+
+    &:before {
+      position: absolute;
+      top: 0;
+      left: -20px;
+      @include fa-standard();
+      content: '\f00d';
+    }
+
+  }
+
+  .grid_boolean_true {
+
+    &:before {
+      content: '\f00c';
+    }
+
+  }
+
+  .grid_boolean_false {
+
+    &:before {
+      content: '\f00d';
+    }
+
+  }
+
+}
+
+.grid-row-actions,
+.table-actions {
   padding: 0;
   list-style: none;
 
   li {
-    @include inline-block-vertical(top);
+    float: left;
+    margin-right: 0.5em;
+  }
+
+}
+
+.record_actions {
+  padding: 0;
+  list-style: none;
+
+  li {
+    @include inline-block-vertical();
   }
 
 }

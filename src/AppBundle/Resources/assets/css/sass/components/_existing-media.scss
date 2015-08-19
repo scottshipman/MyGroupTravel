@@ -1,0 +1,35 @@
+.media-wrapper {
+  @include clear-fix();
+}
+
+.existing-media-wrapper {
+  @include clear-fix();
+  margin-bottom: 10px;
+
+  .existing-media-item {
+    float: left;
+    position: relative;
+    margin: 0 10px 10px 0;
+    border-radius: 20px;
+    overflow: hidden;
+
+    img {
+      height: 160px;
+      width: auto;
+    }
+
+    .existing-delete {
+      @include mdl-primary-color(color, 6);
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 10px;
+    }
+
+  }
+
+}
+
+.new-media-wrapper {
+  margin-bottom: 20px;
+}

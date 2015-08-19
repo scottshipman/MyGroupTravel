@@ -2,3 +2,9 @@ services:
 #    content_blocks.example:
 #        class: TUI\Toolkit\ContentBlocksBundle\Example
 #        arguments: [@service_id, "plain_value", %parameter%]
+
+  form.type.contentblock:
+          class: TUI\Toolkit\ContentBlocksBundle\Form\ContentBlockType
+          arguments: ["@security.context"]
+          tags:
+              - { name: form.type, alias: tui_toolkit_contentblocksbundle_contentblock }

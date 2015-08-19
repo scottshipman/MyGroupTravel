@@ -1,16 +1,121 @@
-{% extends '::base.html.twig' %}
+{# Only visible in Quote #}
 
-{% block body -%}
-    <h1>ContentBlock edit</h1>
+    <div class="media-wrapper">
 
-    {{ form(edit_form) }}
+        <div class="existing-media-wrapper">
+            <div class="mdl-label-mimic"><label>Uploaded Images</label></div>
+            {% if entity.media %}
+                {% for media in collection %}
+                    <div class="existing-media-item">
+                        <img id="{{ media.id }}"
+                             src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">
+                        <a class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="none">No images uploaded.</p>
+            {% endif %}
+        </div>
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('manage_contentblocks') }}">
-            <i class="fa fa-arrow-circle-left"></i> Back to the list
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
-{% endblock %}
+        <div class="new-media-wrapper">
+
+            <div class="mdl-label-mimic"><label>New Images</label></div>
+
+            <div id="avatar-label">
+                <div style="display: none;" id="dropzone-form-close"><i class="fa fa-times-circle"></i></div>
+            </div>
+
+            {{ render(controller('MediaBundle:Media:createDropzoneLightForm', {'context':'contentblock'})) }}
+
+            <div id="user_media">
+                <span class="media-placeholder-image new">
+                    <i class="fa fa-picture-o fa-3x"></i>
+                    <span>Click to upload</span>
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+    {{ form_start(edit_form) }}
+    {{ form_widget(edit_form) }}
+    {{ form_end(edit_form) }}
+
+<script>
+    // Wait for the DOM to be loaded
+    $(document).ready(function() {
+        // Bind form and provide a simple callback function
+        $('#ajax_contentblocks_form').ajaxForm({
+            beforeSerialize: function() {
+                CKEDITOR.instances.tui_toolkit_contentblocksbundle_contentblock_body.updateElement();
+                $("#loader").css("display", "inline-block");
+            },
+            success: function(response) {
+                $('#dialog').dialog( "close" );
+                window.location.hash = 'site-content';
+                window.location.reload(true);
+            }
+        })
+    });
+</script>
+
+<script>
+    $(document).on('click', '.existing-delete', function (e) {
+        e.preventDefault();
+        var remove = $(this).parent().find('img').attr('id');
+        var value = $(".media-placeholder").val();
+        var values = [];
+        values = value.split(',').map(Number);
+        values = jQuery.grep(values, function (v) {
+            if (values.length <= 6) {
+                $(".new-media-wrapper").css({"display": "block"});
+            }
+            return v != remove;
+        });
+        $(".media-placeholder").val(values);
+        $(this).parent().remove();
+    });
+
+    // Dropzone.autoDiscover = false;
+
+    $('#dropzone_form').dropzone({
+        maxFiles: 1,
+        acceptedMimeTypes: 'image/jpeg,image/png,image/jpg',
+        uploadMultiple: false,
+        init: function () {
+            var value = $(".media-placeholder").val();
+            var values = [];
+            if ( value != 0 ) {
+                values = value.split(',').map(Number);
+                if (values.length >= 6) {
+                    $(".new-media-wrapper").css({"display": "none"});
+                }
+            }
+            this.on("success", function (file, response) {
+                if ($(".media-placeholder").val().length > 0) {
+                    var value = $(".media-placeholder").val();
+                    var values = [];
+                    if ( value != 0 ) {
+                        values = value.split(',').map(Number);
+                        values.push(response.id);
+                        if (values.length >= 6) {
+                            $(".new-media-wrapper").css({"display": "none"});
+                        }
+                    }
+                    $(".media-placeholder").val(values);
+                } else {
+                    $(".media-placeholder").val(response.id);
+                }
+                $('.existing-media-wrapper').find('.none').hide();
+                $('.existing-media-wrapper').append('<div class="existing-media-item"><img id="' + response.id + '" src="' + response.relativepath + '/' + response.filename + '"><a class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a></div>');
+            });
+            this.on("complete", function (file, response) {
+                this.removeFile(file);
+            });
+            this.on("error", function (file, response) {
+                alert(response);
+            });
+        }
+    });
+</script>

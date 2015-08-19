@@ -66,14 +66,17 @@ resetting:
     flash:
         success: The password has been reset successfully
     email:
-        subject: Reset Password
+        subject: Toolkit Reset Password
         message: |
-            Hello %username%!
+            %username%
 
-            To reset your password - please visit %confirmationUrl%
+            We've received a request to change your password. Click on the link below and follow the instructions to change your password.
 
-            Regards,
-            the Team.
+             %confirmationUrl%
+
+            If you didn't make this request, or didn't mean to, please ignore this email.
+            Regards
+            Toolkit Team
 
 # Global strings
 layout:

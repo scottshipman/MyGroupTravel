@@ -15,6 +15,7 @@
 @import "base/_media";
 @import "base/_table";
 @import "base/_typography";
+@import "base/_fa";
 
 @import "components/_page";
 @import "components/_login";
@@ -26,7 +27,9 @@
 @import "components/_messages";
 @import "components/_tabs";
 @import "components/_dropzone";
+@import "components/_existing-media";
 @import "components/_colorbox";
+@import "components/_modal";
 
 @import "components/bundles/_brands";
 @import "components/bundles/_content-blocks";

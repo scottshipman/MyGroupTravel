@@ -43,6 +43,11 @@ class LayoutType
     private $className;
 
 
+    public function __toString()
+    {
+        return $this->name;
+    }
+
     /**
      * Get id
      *

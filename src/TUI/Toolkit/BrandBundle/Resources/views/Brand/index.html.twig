@@ -6,7 +6,7 @@
 
     <ul class="record_actions">
         <li>
-            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('_manage_brand_new') }}">Create a new Brand</a>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('_manage_brand_new') }}"><i class="fa fa-plus-circle"></i> Create a new Brand</a>
         </li>
     </ul>
 
@@ -29,21 +29,21 @@
                     <a href="{{ path('_manage_brand_show', { 'id': entity.id }) }}">{{ entity.name }}</a> ({{ entity.id }})
                 </td>
                 <td class="mdl-data-table__cell--non-numeric">{{ entity.division }}</td>
-                <td class="mdl-data-table__cell--non-numeric" style="background-color: {{ entity.primaryColor }}"></td>
-                <td class="mdl-data-table__cell--non-numeric" style="background-color: {{ entity.buttonColor }}"></td>
-                <td class="mdl-data-table__cell--non-numeric" style="background-color: {{ entity.hoverColor }}"></td>
-                <td class="mdl-data-table__cell--non-numeric center">
+                <td class="mdl-data-table__cell--non-numeric center" style="background-color: {{ entity.primaryColor }}"></td>
+                <td class="mdl-data-table__cell--non-numeric center" style="background-color: {{ entity.buttonColor }}"></td>
+                <td class="mdl-data-table__cell--non-numeric center" style="background-color: {{ entity.hoverColor }}"></td>
+                <td class="mdl-data-table__cell--non-numeric center logo">
                     {% if entity.media %}
-                        {#{% media entity.media, 'small' %}#}
+                        <img src="{{ asset(".." ~ entity.media.getRelativePath ~ "/" ~ entity.media.getHashedFilename ) }}" alt="{{ entity.name }}">
                     {% endif %}
                 </td>
                 <td class="mdl-data-table__cell--non-numeric">
                     <ul class="table-actions">
                         <li>
-                            <a href="{{ path('_manage_brand_show', { 'id': entity.id }) }}">Show</a>
+                            <a href="{{ path('_manage_brand_show', { 'id': entity.id }) }}"><i class="fa fam-view"></i></a>
                         </li>
                         <li>
-                            <a href="{{ path('_manage_brand_edit', { 'id': entity.id }) }}">Edit</a>
+                            <a href="{{ path('_manage_brand_edit', { 'id': entity.id }) }}"><i class="fa fam-edit"></i></a>
                         </li>
                     </ul>
                 </td>
