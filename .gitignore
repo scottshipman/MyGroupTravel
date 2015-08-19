@@ -32,6 +32,9 @@
 /web/static/
 /web/images/
 
+# Core .htaccess
+/web/.htaccess
+
 # PHPUnit
 /app/phpunit.xml
 /phpunit.xml

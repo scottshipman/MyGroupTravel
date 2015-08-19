@@ -56,7 +56,7 @@ echo "Setting proper .htaccess"
 echo $'=============================================\n'
 
 [ -f web/.htaccess-$application_env ] && cp web/.htaccess-$application_env web/.htaccess
-echo $'\n  - Done!'
+echo $'  - Done!'
 
 if [ "$1" = "prod" ]
 then
