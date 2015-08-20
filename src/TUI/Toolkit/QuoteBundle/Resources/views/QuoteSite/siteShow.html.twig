@@ -12,7 +12,7 @@
    {#  {{ dump(entity) }} #}
 
     <div id="site-quote-number">Quote Number: {{ entity.quoteNumber  }} </div>
-    <div id="print_pdf"><i class="fa fa-print">print/pdf</i></div>
+    <div id="print_pdf"><i class="fa fa-print"> print/pdf</i></div>
 
     {% if warning | length >0 %}
         <div id="site-warning">
@@ -36,29 +36,39 @@
         </div>
         <div id="site-header-summary">
             <ul id="site-summary-details">
-                <li>Departing: {% if entity.departureDate %}{{ entity.departureDate|date(format) }}{% endif %}</li>
-                <li>{% if entity.duration %}{{ entity.duration }}{% endif %}</li>
-                <li>Returning: {% if entity.returnDate %}{{ entity.returnDate|date(format) }}{% endif %}</li>
-                <li>Board Basis: {% if entity.boardBasis %}{{ entity.boardBasis }}{% endif %}</li>
-                <li>Transport: {% if entity.transportType %}{{ entity.transportType.name }}{% endif %}</li>
-                <li>Price per person: <span>{% if entity.pricePerson %}{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %} {{ entity.pricePerson }}{% endif %}</span></li>
-                <li>Based on {% if entity.payingPlaces  %}{{ entity.payingPlaces  }}{% endif %} paying places and {% if entity.payingPlaces  %}{{ entity.payingPlaces  }}{% endif %} free places</li>
-                <li>Quote valid until {% if entity.expiryDate  %}{{ entity.expiryDate|date(format) }}{% endif %}</li>
-                <ul class="quote_site_actions">
+                <li>Departing: {% if entity.departureDate %}<strong>{{ entity.departureDate|date(format) }}</strong>{% endif %}</li>
+                <li>{% if entity.duration %}<strong>{{ entity.duration }}</strong>{% endif %}</li>
+                <li>Returning: {% if entity.returnDate %}<strong>{{ entity.returnDate|date(format) }}</strong>{% endif %}</li>
+                <li>Board Basis: {% if entity.boardBasis %}<strong>{{ entity.boardBasis }}</strong>{% endif %}</li>
+                <li>Transport: {% if entity.transportType %}<strong>{{ entity.transportType.name }}</strong>{% endif %}</li>
+                <li>Price per person: <span>{% if entity.pricePerson %}<strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %} {{ entity.pricePerson }}</strong>{% endif %}</span></li>
+                <li>Based on {% if entity.payingPlaces  %}<strong>{{ entity.payingPlaces  }}</strong>{% endif %} paying and {% if entity.freePlaces  %}<strong>{{ entity.freePlaces  }}</strong>{% endif %} free places</li>
+                <li>Quote valid until {% if entity.expiryDate  %}<strong>{{ entity.expiryDate|date(format) }}</strong>{% endif %}</li>
+                <ul class="quote-site-actions">
+                    <li>
+                        {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
+                            {% if date(entity.expiryDate) < date('now') %}
+                                <a class="expired-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+                                    <i class="fa fa-calendar-times-o"></i> Expired
+                                </a>
+                            {% else %}
+                                <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quoteversion_edit', { 'id': entity.id }) }}">
+                                    <i class="fa fa-thumbs-o-up"> </i> Accept Quote
+                                </a>
+                            {% endif %}
+                        {% elseif (entity.converted is sameas(true)) and (entity.quoteReference.converted is sameas(true))%}
+                            <i class="fa fa-thumbs-up"> </i> Accepted
+                        {% endif %}
+                    </li>
                     <li>
                         <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quote') }}">
                             <i class="fa fa-bullhorn"></i> Request Changes
                         </a>
                     </li>
-
                     <li>
-                        {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
-                            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quoteversion_edit', { 'id': entity.id }) }}">
-                                <i class="fa fa-thumbs-o-up"> </i> Accept Quote
-                            </a>
-                        {% else %}
-                            <i class="fa fa-thumbs-up"> </i> Accepted
-                        {% endif %}
+                        <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+                            <i class="fa fa-share"></i> Share this Quote
+                        </a>
                     </li>
                 </ul>
                 <li>{% if entity.headerBlock  %}{{ entity.headerBlock.body|raw }}{% endif %}</li>
