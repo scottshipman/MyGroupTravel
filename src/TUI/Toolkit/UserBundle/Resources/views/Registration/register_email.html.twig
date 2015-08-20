@@ -1,0 +1,30 @@
+{% trans_default_domain 'FOSUserBundle' %}
+{% block subject %}
+    {% autoescape false %}
+    {{ 'registration.email.subject'|trans({'%username%': user.username, '%confirmationUrl%': confirmationUrl}) }}
+    {% endautoescape %}
+{% endblock %}
+<header style="height: 250px; background-color:#80BB41; width: 100%;">
+    <p style="text-align: center; color: #fff;">For [tour name] departing on [departure date]</p>
+    <p style="text-align: center; text-transform: uppercase; color: #fff;">there is supposed to be a logo here logo</p>
+</header>
+{% block body_html %}
+    <div class="outer" style="background:#E5E8EA; margin-top: -20px; ">
+        {% block body_text %}
+            {% autoescape false %}
+            <div class="inner" style="width:80%; margin: 0 auto; background-color: #fff; margin-top: -140px;">
+                <div class="content" style="position: relative; width: 80%; margin: 0 auto;">
+                    <h2 style="text-align: center; font-weight: 100; color: #283F5F;">Activate your account</h2>
+                    <p style="text-align: center; color: #717D82;">{{ 'registration.email.message'|trans({'%username%': user.username, '%confirmationUrl%': confirmationUrl}) }}</p>
+                </div>
+            </div>
+            {% endautoescape %}
+        {% endblock %}
+        <footer style="background-color:#E5E8EA;">
+            <div class="footer-middle" style="width: 60%; margin: 0 auto; position: relative;">
+                <p style="text-align: center; color:#9DA6AA;">Copyright © 2015 [Company], All rights reserved</p>
+                <p style="text-align: center; color:#9DA6AA;">[Company Address]</p>
+            </div>
+        </footer>
+    </div>
+{% endblock %}
