@@ -38,3 +38,13 @@ manage_quoteversion_delete:
     path:     /{id}/delete
     defaults: { _controller: "QuoteBundle:QuoteVersion:delete" }
     methods:  [POST, DELETE]
+
+manage_quoteversion_lock:
+    path:     /{id}/lock
+    defaults: { _controller: "QuoteBundle:QuoteVersion:lock" }
+    methods:  [POST, GET]
+
+manage_quoteversion_lock_nonajax:
+    path:     /{id}/lockAction
+    defaults: { _controller: "QuoteBundle:QuoteVersion:lockNonajax" }
+    methods:  [POST, GET]
