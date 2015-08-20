@@ -115,11 +115,11 @@
         {%  for tab, blocks in entity.content %}
             <div id="tabs-drawer-{{ tab | replace({' ': '_'}) }}" class="mdl-tabs__panel sortable-items content-blocks-drawer {{ activeTab }} ">
                     {%  for item in blocks %}
-                        <div id="content-blocks-{{ items[item].id }}" class="content-blocks content-blocks-item">
+                        <div id="content-blocks-{{ items[item].id }}" class="site-content-blocks site-content-blocks-item">
                             {% if editable %}
                                 <i class="fa fa-arrows"></i>  {{ items[item].title }}
                                 {# probably render a controller here by passing in item as id and have block entity returned #}
-                                <div id="content-block-actions-{{ items[item].id }}" class="content-block-actions">
+                                <div id="content-block-actions-{{ items[item].id }}" class="site-content-block-actions">
                                     <i class="item-edit content-block-item-action fa fa-pencil-square-o"></i>
                                     <i class="item-delete content-block-item-action fa fa-trash-o"></i>
                                     {% if items[item].locked %}<i class="item-lock content-block-item-action fa fa-unlock-alt"></i> {% else %}  <i class="item-lock content-block-item-action fa fa-lock"></i> {% endif %}
