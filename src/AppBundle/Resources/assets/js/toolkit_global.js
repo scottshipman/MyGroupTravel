@@ -43,12 +43,14 @@ var contentBlocksAddTab= function (elem, id){
     var newId = $(elem).children().length;
     $("#content-blocks-wrapper").prepend(
         '<div id="tab-tab'  + (newId + 1)+ '" class="content-blocks-tab">' +
-        '<span class="content-blocks tab-label"><i class="content-block-tab-handle fa fa-arrows"></i>  <h4 id="tab-label-{{ tab }}" class="editable-tab"> New Tab '  + (newId + 1)+ '</h4>' +
-        '<i class="tab-delete content-block-tab-actions fa fa-trash-o"> Delete Tab</i>' +
-        '<i class="tab-new content-block-tab-actions fa fa-plus-circle"> Add Content</i>' +
-        '</span>' +
-        '<div id="tabs-drawer-tab' + (newId +1) + '" class="sortable-items content-blocks-drawer">' +
-        '</div></div>'
+            '<span class="content-blocks tab-label">' +
+                '<i class="content-block-tab-handle fa fa-arrows"></i> ' +
+                '<h4 id="tab-label-{{ tab }}" class="editable-tab"> New Tab '  + (newId + 1)+ '</h4>' +
+                '<span class="tab-delete icon-label"><i class="content-block-tab-actions fa fa-trash-o"></i> Delete Tab</span>' +
+                '<span class="tab-new icon-label"><i class="content-block-tab-actions fa fa-plus-circle"></i> Add Content</span>' +
+            '</span>' +
+            '<div id="tabs-drawer-tab' + (newId +1) + '" class="sortable-items content-blocks-drawer"></div>' +
+        '</div>'
     );
 
     $(".sortable-tabs").sortable('refresh');

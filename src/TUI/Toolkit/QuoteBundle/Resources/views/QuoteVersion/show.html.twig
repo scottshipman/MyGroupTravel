@@ -136,9 +136,9 @@
                 <i class="content-block-tab-handle fa fa-arrows"></i>
                 <h4 id="tab-label-{{ tab }}" class="editable-tab">{{ tab }}</h4>
                 {% if blocks | length < 1 %}
-                    <span class="icon-label"><i class="tab-delete content-block-tab-actions fa fa-trash-o"></i> Delete Tab</span>
+                    <span class="tab-delete icon-label"><i class="content-block-tab-actions fa fa-trash-o"></i> Delete Tab</span>
                 {% endif %}
-                <span class="icon-label"><i class="tab-new content-block-tab-actions fa fa-plus-circle"></i> Add Content</span>
+                <span class="tab-new icon-label"><i class="content-block-tab-actions fa fa-plus-circle"></i> Add Content</span>
             </span>
 
 
@@ -216,12 +216,12 @@
                     //add element into DOM
                     $(ancestorTabElement).append(
                         '<div id="content-blocks-' + id + '" class="content-blocks content-blocks-item">' +
-                        '<i class="fa fa-arrows"></i>  ' + title +
+                        '<i class="fa fa-arrows"></i> ' + title +
                         {# probably render a controller here by passing in item as id and have block entity returned #}
                         '<div id="content-block-actions-' + id + '" class="content-block-actions">' +
-                        '<i class="item-edit content-block-item-action fa fa-pencil-square-o"></i>' +
-                        '<i class="item-delete content-block-item-action fa fa-trash-o"></i>' +
-                        '<i class="item-lock content-block-item-action fa fa-lock"></i>' +
+                        '<i class="item-edit content-block-item-action fa fa-pencil-square-o"></i> ' +
+                        '<i class="item-delete content-block-item-action fa fa-trash-o"></i> ' +
+                        '<i class="item-lock content-block-item-action fa fa-lock"></i> ' +
                         '<i class="item-hide content-block-item-action fa fa-ban"></i>' +
                         '</div></div>'
                     );
