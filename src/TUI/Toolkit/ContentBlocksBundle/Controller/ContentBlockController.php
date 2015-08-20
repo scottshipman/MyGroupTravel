@@ -89,7 +89,7 @@ class ContentBlockController extends Controller
      */
     private function createCreateForm(ContentBlock $entity, $quoteVersion=null, $class=null)
     {
-        $form = $this->createForm(new ContentBlockType(), $entity, array(
+        $form = $this->createForm($this->get('form.type.contentblock'), $entity, array(
             'action' => $this->generateUrl('manage_contentblocks_create', array('quoteVersion' => $quoteVersion, 'class' => $class)),
             'method' => 'POST',
         ));

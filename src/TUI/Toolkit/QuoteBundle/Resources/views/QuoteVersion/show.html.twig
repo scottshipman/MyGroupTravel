@@ -105,6 +105,18 @@
     </table>
 
     <hr>
+    <h3>Header Content</h3>
+
+    {% if entity.headerBlock %}
+        <a id="edit-headerBlock" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+            <i class="fa fa-pencil-square-o"></i> Edit Header Content
+        </a>
+    {% else %}
+        <a id="add-headerBlock" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+            <i class="fa fa-plus-circle"></i> Add Header Content
+        </a>
+    {% endif %}
+    <hr>
 
     {# RENDER THE CONTENT BLOCKS HERE #}
 
@@ -151,6 +163,26 @@
 
     <script>
         $(document).ready(function() {
+
+            // Add a headerBlock to a site
+            $("#add-headerBlock").on('click', function(){
+                $("#dialog").html("");
+                $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
+                $("#dialog").load('/manage/contentblocks/new/header/' + {{ entity.id}} +'/QuoteVersion', function() {
+                    $(this).dialog("option", "title", 'Add Header Content');
+                });
+            });
+
+            {% if entity.headerBlock %}
+            // Edit the headerBlock for a site
+            $("#edit-headerBlock").on('click', function(){
+                $("#dialog").html("");
+                $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
+                $("#dialog").load('/manage/contentblocks/'+ {{ entity.headerBlock.id }} + '/edit/header/' + {{ entity.id}} +'/QuoteVersion', function() {
+                    $(this).dialog("option", "title", 'Edit Header Content');
+                });
+            });
+            {% endif %}
 
             // Add a new tab to a site
             $("#add-new-tab").on('click', function(){

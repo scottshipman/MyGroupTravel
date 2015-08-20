@@ -73,10 +73,18 @@ class ContentBlock
      */
     private $doubleWidth;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isSlideshow", type="boolean")
+     */
+    private $isSlideshow;
+
     public function __construct(){
       $this->hidden = false;
       $this->locked = false;
       $this->doubleWidth = false;
+      $this->isSlideshow = false;
       $this->sortOrder = 1;
       $this->body = "";
       $this->media = new ArrayCollection();
@@ -253,7 +261,31 @@ class ContentBlock
         return $this->doubleWidth;
     }
 
-    /**
+  /**
+   * Set isSlideshow
+   *
+   * @param boolean $doubleWidth
+   * @return ContentBlock
+   */
+  public function setIsSlideshow($isSlideshow)
+  {
+    $this->isSlideshow = $isSlideshow;
+
+    return $this;
+  }
+
+  /**
+   * Get isSlideshow
+   *
+   * @return boolean
+   */
+  public function getIsSlideshow()
+  {
+    return $this->isSlideshow;
+  }
+
+
+  /**
      * @var \TUI\Toolkit\MediaBundle\Entity\Media
      * @ORM\ManyToMany(targetEntity="TUI\Toolkit\MediaBundle\Entity\Media", cascade={"persist"}, fetch="LAZY")
      * @ORM\JoinColumn(name="media", referencedColumnName="id")

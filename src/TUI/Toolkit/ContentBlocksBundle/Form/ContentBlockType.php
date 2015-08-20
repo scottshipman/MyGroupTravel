@@ -46,15 +46,20 @@ class ContentBlockType extends AbstractType
                   'required' => FALSE
                 ));
                 }
+
+            // only show Layout Type for Content Blocks, not Header Blocks
+            if(strpos($options['action'], '/header/')===false) {
+              $builder
+                ->add('layoutType', 'entity', array(
+                  'class' => 'ContentBlocksBundle:LayoutType',
+                  'data_class' => 'TUI\Toolkit\ContentBlocksBundle\Entity\LayoutType',
+                  'choice_label' => 'name',
+                  'expanded' => TRUE,
+                  'multiple' => FALSE
+                ));
+              }
             $builder
-              ->add('layoutType', 'entity', array(
-                'class' => 'ContentBlocksBundle:LayoutType',
-                'data_class' => 'TUI\Toolkit\ContentBlocksBundle\Entity\LayoutType',
-                'choice_label' => 'name',
-                'expanded' => true,
-                'multiple' => false
-            ))
-            ->add('media', 'hidden', array(
+              ->add('media', 'hidden', array(
                 'required' => false,
 //                'data_class' => 'TUI\Toolkit\MediaBundle\Entity\Media',
                 'attr' => array(
@@ -64,6 +69,11 @@ class ContentBlockType extends AbstractType
             ))
             ->add('doubleWidth', 'checkbox', array(
                 'required' => false
+            ))
+
+            ->add('isSlideshow', 'checkbox', array(
+              'required' => false,
+              'label' => 'This is a Slideshow',
             ))
             ->getForm()
         ;

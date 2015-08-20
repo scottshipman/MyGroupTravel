@@ -71,6 +71,7 @@ assetic:
                 inputs:
                     - @AppBundle/Resources/assets/js/jeditable.js
                     - @AppBundle/Resources/assets/js/toolkit.js
+                    - @AppBundle/Resources/assets/js/jquery.flexslider.js
 
             jqueryui:
                 inputs:

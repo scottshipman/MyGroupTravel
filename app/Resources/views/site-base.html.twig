@@ -18,9 +18,12 @@
     <link rel="stylesheet"
           href="//fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
 
-    {# Dropzone CSS #}
-    {% stylesheets filter='cssrewrite' '@AppBundle/Resources/assets/css/dropzone.css' %}
-        <link rel="stylesheet" href="{{ asset_url }}" />
+    {# Dropzone & Flexslider CSS #}
+    {% stylesheets filter='cssrewrite'
+    '@AppBundle/Resources/assets/css/flexslider.css'
+    '@AppBundle/Resources/assets/css/dropzone.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
 
     {# jQuery UI CSS #}

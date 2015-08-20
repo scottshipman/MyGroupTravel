@@ -1,0 +1,21 @@
+.slides img {
+  max-height: 350px;
+  min-width: 100%;
+  height: auto;
+}
+
+#site-header {
+  padding-top: 3em;
+  width: 100%
+}
+
+#site-header-slideshow {
+  width: 75%;
+  float: left;
+  padding-right: 3em;
+}
+
+#site-header-summary {
+  width: 25%;
+  float:left;
+}

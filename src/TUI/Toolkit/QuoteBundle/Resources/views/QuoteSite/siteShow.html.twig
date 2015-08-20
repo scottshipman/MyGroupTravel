@@ -24,7 +24,15 @@
 
     <div id="site-header">
         <div id="site-header-slideshow">
-
+            <div class="flexslider">
+                <ul class="slides">
+                    {% for media in entity.headerBlock.media %}
+                    <li>
+                        <img src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}" />
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
         <div id="site-header-summary">
             <ul id="site-summary-details">
@@ -53,7 +61,7 @@
                         {% endif %}
                     </li>
                 </ul>
-                <li>Welcome Msg: {% if entity.welcomeMsg  %}{{ entity.welcomeMsg }}{% endif %}</li>
+                <li>{% if entity.headerBlock  %}{{ entity.headerBlock.body|raw }}{% endif %}</li>
             </ul>
         </div>
 
@@ -108,7 +116,11 @@
     </div>
 
     <div id="loader"><img src="{{ asset('bundles/quote/images/loader.gif') }}"></div>
-
+    <script type="text/javascript" charset="utf-8">
+        $(window).load(function() {
+            $('.flexslider').flexslider();
+        });
+    </script>
     <script>
         $(document).ready(function() {
 
