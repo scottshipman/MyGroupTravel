@@ -49,3 +49,23 @@ manage_contentblocks_ajax_new:
     path:     /ajax/new
     defaults: { _controller: "ContentBlocksBundle:ContentBlock:ajaxNew" }
     methods:  [GET]
+
+manage_headerblock_new:
+    path:   /new/header/{quoteVersion}/{class}
+    defaults: { _controller: "ContentBlocksBundle:HeaderBlock:new" }
+    methods:  [GET]
+
+manage_headerblock_edit:
+    path:   /{id}/edit/header/{quoteVersion}/{class}
+    defaults: { _controller: "ContentBlocksBundle:HeaderBlock:edit" }
+    methods:  [GET]
+
+manage_headerblock_create:
+    path:     /create/header/{quoteVersion}/{class}
+    defaults: { _controller: "ContentBlocksBundle:HeaderBlock:create" }
+    methods:  POST
+
+manage_headerblock_update:
+    path:     /{id}/update/header/{quoteVersion}/{class}
+    defaults: { _controller: "ContentBlocksBundle:HeaderBlock:update" }
+    methods:  [POST]

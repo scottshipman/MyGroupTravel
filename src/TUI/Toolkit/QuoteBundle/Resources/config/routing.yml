@@ -17,3 +17,7 @@ ajax_institution_new:
 ajax_contentblocks_edit:
     path:   /ajax/contentblocks/{id}/edit/{quoteVersion}/{class}
     defaults: { _controller: "ContentBlocksBundle:ContentBlock:edit" }
+
+quote_site:
+    resource: "@QuoteBundle/Resources/config/routing/quote-site.yml"
+    prefix:   /quote/view
