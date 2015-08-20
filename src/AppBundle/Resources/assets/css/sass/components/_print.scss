@@ -1,0 +1,37 @@
+@media print {
+
+  body {
+    font-size: 75%;
+  }
+
+  .mdl-layout__container {
+    height: auto;
+    position: static;
+  }
+
+  .mdl-layout {
+    display: block;
+    height: auto;
+    overflow-x: auto;
+  }
+
+  .mdl-layout__drawer,
+  .mdl-layout__drawer-button {
+    display: none;
+  }
+
+  .mdl-layout--fixed-drawer > .mdl-layout__content {
+    margin-left: 0;
+    display: block;
+    overflow-x: auto;
+  }
+
+  // Non-MDL
+
+  .record_actions,
+  .flash-messages,
+  .brand_logo {
+    display: none;
+  }
+
+}
