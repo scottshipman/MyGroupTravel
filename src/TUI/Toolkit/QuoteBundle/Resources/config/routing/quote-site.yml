@@ -4,3 +4,7 @@ quote_site_show:
     path:     /{id}/{quoteNumber}
     defaults: { _controller: "QuoteBundle:QuoteSite:siteShow" }
 
+quote_site_action_show:
+    path:     /{id}
+    defaults: { _controller: "QuoteBundle:QuoteSite:siteShow" }
+

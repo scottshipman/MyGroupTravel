@@ -43,7 +43,12 @@
   &:before {
     content: '\f0e2';
   }
+}
 
+.fam-preview {
+  &:before {
+    content: '\f108';
+  }
 }
 
 .fam-reset {
@@ -53,3 +58,17 @@
   }
 
 }
+
+.fam-lock {
+  &:before {
+    content: '\f023';
+  }
+}
+
+.fam-unlock {
+  &:before {
+    content: '\f09c';
+  }
+}
+
+
