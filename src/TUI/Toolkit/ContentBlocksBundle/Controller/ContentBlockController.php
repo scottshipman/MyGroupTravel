@@ -125,17 +125,16 @@ class ContentBlockController extends Controller
 
         $entity = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($id);
 
-        $collection = $entity->getMedia()->toArray();
+
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ContentBlock entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id, $quoteVersion, $class);
+        $collection = $entity->getMedia()->toArray() ? $entity->getMedia()->toArray() : NULL;
 
         return $this->render('ContentBlocksBundle:ContentBlock:show.html.twig', array(
             'entity' => $entity,
-            'delete_form' => $deleteForm->createView(),
             'collection' => $collection,
         ));
     }

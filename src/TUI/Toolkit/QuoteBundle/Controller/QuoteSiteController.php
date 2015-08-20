@@ -40,6 +40,10 @@ class QuoteSiteController extends Controller
    */
   public function siteShowAction($id, $quoteNumber = null)
   {
+    $editable = false;
+    // TODO if user is allowed to edit then set $editable to true
+    // if organizer or if brand or higher (check permission table for organizer)
+
     $em = $this->getDoctrine()->getManager();
 
     $locale = $this->container->getParameter('locale');
@@ -66,7 +70,11 @@ class QuoteSiteController extends Controller
 
     // get the content block that is the header block
     $header = $entity[0]->getHeaderBlock();
-    $headerBlock=$em->getRepository('ContentBlocksBundle:ContentBlock')->find($header);
+    if($header !=NULL){
+      $headerBlock=$em->getRepository('ContentBlocksBundle:ContentBlock')->find($header);
+    } else {
+      $headerBlock = NULL;
+    }
 
     // send warning messages
     $warningMsg = array();
@@ -82,6 +90,7 @@ class QuoteSiteController extends Controller
       'items'       => $items,
       'warning'     => $warningMsg,
       'header'      => $headerBlock,
+      'editable'  =>  $editable,
     ));
   }
 
