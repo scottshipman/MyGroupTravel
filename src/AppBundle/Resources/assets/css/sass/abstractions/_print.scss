@@ -1,0 +1,15 @@
+@mixin no-print() {
+
+  @media print {
+    display: none;
+  }
+
+}
+
+@mixin print-font-size( $size: 75% ) {
+
+  @media print {
+    font-size: $size;
+  }
+
+}
