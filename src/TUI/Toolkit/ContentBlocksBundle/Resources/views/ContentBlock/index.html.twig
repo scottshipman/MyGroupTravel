@@ -12,13 +12,12 @@
                 <th class="mdl-data-table__cell--non-numeric">Hidden</th>
                 <th class="mdl-data-table__cell--non-numeric">Layout Type</th>
                 <th>Sort Order</th>
-                <th class="mdl-data-table__cell--non-numeric">Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for entity in entities %}
             <tr id="{{ entity.id }}">
-                <td class="mdl-data-table__cell--non-numeric"><a href="{{ path('manage_contentblocks_show', { 'id': entity.id }) }}">{{ entity.title }}</a> ({{ entity.id }})</td>
+                <td class="mdl-data-table__cell--non-numeric">{{ entity.title }} ({{ entity.id }})</td>
                 <td class="mdl-data-table__cell--non-numeric">
                     {% if entity.locked == 1 %}
                         <i class="fa fa-check"></i>
@@ -35,13 +34,6 @@
                 </td>
                 <td class="mdl-data-table__cell--non-numeric"><span class="layout-icons {{ entity.layoutType }}">{{ entity.layoutType }}</span></td>
                 <td>{{ entity.sortOrder }}</td>
-                <td class="mdl-data-table__cell--non-numeric">
-                    <ul class="grid-row-actions">
-                        <li>
-                            <a href="{{ path('manage_contentblocks_show', { 'id': entity.id }) }}"><i class="fa fam-view"></i></a>
-                        </li>
-                    </ul>
-                </td>
             </tr>
         {% endfor %}
         </tbody>

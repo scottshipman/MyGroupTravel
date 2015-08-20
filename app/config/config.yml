@@ -66,12 +66,16 @@ assetic:
                 inputs:
                     - "%kernel.root_dir%/../vendor/components/jquery/jquery.min.js"
                     - "%kernel.root_dir%/../components/jquery/jquery.form.js"
+                    - @AppBundle/Resources/assets/js/jeditable.js
                     # - /srv/www/Toolkit/vendor/components/jquery/jquery.min.js
             toolkit:
                 inputs:
-                    - @AppBundle/Resources/assets/js/jeditable.js
                     - @AppBundle/Resources/assets/js/toolkit.js
                     - @AppBundle/Resources/assets/js/jquery.flexslider.js
+                    - @AppBundle/Resources/assets/js/toolkit_mdl.js
+                    - @AppBundle/Resources/assets/js/toolkit_dropzone.js
+                    - @AppBundle/Resources/assets/js/toolkit_colorpicker.js
+                    - @AppBundle/Resources/assets/js/toolkit_global.js
 
             jqueryui:
                 inputs:

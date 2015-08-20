@@ -1,46 +1,46 @@
 {# Only visible in Quote #}
 
-    <div class="media-wrapper">
+<div class="media-wrapper">
 
-        <div class="existing-media-wrapper">
-            <div class="mdl-label-mimic"><label>Uploaded Images</label></div>
-            {% if entity.media %}
-                {% for media in collection %}
-                    <div class="existing-media-item">
-                        <img id="{{ media.id }}"
-                             src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">
-                        <a class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a>
-                    </div>
-                {% endfor %}
-            {% else %}
-                <p class="none">No images uploaded.</p>
-            {% endif %}
+    <div class="existing-media-wrapper">
+        <div class="mdl-label-mimic"><label>Uploaded Images</label></div>
+        {% if entity.media %}
+            {% for media in collection %}
+                <div class="existing-media-item">
+                    <img id="{{ media.id }}"
+                         src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">
+                    <a class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="none">No images uploaded.</p>
+        {% endif %}
+    </div>
+
+    <div class="new-media-wrapper">
+
+        <div class="mdl-label-mimic"><label>New Images</label></div>
+
+        <div id="avatar-label">
+            <div style="display: none;" id="dropzone-form-close"><i class="fa fa-times-circle"></i></div>
         </div>
 
-        <div class="new-media-wrapper">
+        {{ render(controller('MediaBundle:Media:createDropzoneLightForm', {'context':'contentblock'})) }}
 
-            <div class="mdl-label-mimic"><label>New Images</label></div>
-
-            <div id="avatar-label">
-                <div style="display: none;" id="dropzone-form-close"><i class="fa fa-times-circle"></i></div>
-            </div>
-
-            {{ render(controller('MediaBundle:Media:createDropzoneLightForm', {'context':'contentblock'})) }}
-
-            <div id="user_media">
-                <span class="media-placeholder-image new">
-                    <i class="fa fa-picture-o fa-3x"></i>
-                    <span>Click to upload</span>
-                </span>
-            </div>
-
+        <div id="user_media">
+            <span class="media-placeholder-image new">
+                <i class="fa fa-picture-o fa-3x"></i>
+                <span>Click to upload</span>
+            </span>
         </div>
 
     </div>
 
-    {{ form_start(edit_form) }}
-    {{ form_widget(edit_form) }}
-    {{ form_end(edit_form) }}
+</div>
+
+{{ form_start(edit_form) }}
+{{ form_widget(edit_form) }}
+{{ form_end(edit_form) }}
 
 <script>
     // Wait for the DOM to be loaded
@@ -50,9 +50,9 @@
             beforeSerialize: function() {
                 CKEDITOR.instances.tui_toolkit_contentblocksbundle_contentblock_body.updateElement();
                 $("#loader").css("display", "inline-block");
+                $('#dialog').dialog("close");
             },
             success: function(response) {
-                $('#dialog').dialog( "close" );
                 window.location.hash = 'site-content';
                 window.location.reload(true);
             }
