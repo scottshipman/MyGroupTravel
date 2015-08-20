@@ -1,6 +1,4 @@
-{% extends '::base.html.twig' %}
-{% block title %}Content Block {{ entity.title }}{% endblock %}
-{% block page_title %}Content Block {{ entity.title }}{% endblock %}
+{# Only visible in Quote #}
 
 {% set class = '' %}
 {% if entity.layoutType.name %}
@@ -12,38 +10,26 @@
     {% set class = class ~ ' content-block-size-half' %}
 {% endif %}
 
-{% block body -%}
+<div class="content-block content-block-id-{{ entity.id }} {{ class }}">
+    <h2>{{ entity.title }}</h2>
 
-    <div class="content-block content-block-id-{{ entity.id }} {{ class }}">
-        <h2>{{ entity.title }}</h2>
-
-        {% if entity.layoutType.name != 'image_bottom' %}
-            <div class="content-block-media">
-                {% for media in entity.media %}
-                    <img src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">
-                {% endfor %}
-            </div>
-        {% endif %}
-
-        <div class="content-block-body">
-            {{ entity.body|raw }}
+    {% if entity.layoutType.name != 'image_bottom' %}
+        <div class="content-block-media">
+            {% for media in entity.media %}
+                <img src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">
+            {% endfor %}
         </div>
+    {% endif %}
 
-        {% if entity.layoutType.name == 'image_bottom' %}
-            <div class="content-block-media">
-                {% for media in entity.media %}
-                    <img src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">
-                {% endfor %}
-            </div>
-        {% endif %}
+    <div class="content-block-body">
+        {{ entity.body|raw }}
     </div>
 
-    <ul class="record_actions">
-        <li>
-            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_contentblocks') }}">
-                <i class="fa fa-arrow-circle-left"></i> Back to the list
-            </a>
-        </li>
-    </ul>
-
-{% endblock %}
+    {% if entity.layoutType.name == 'image_bottom' %}
+        <div class="content-block-media">
+            {% for media in entity.media %}
+                <img src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>

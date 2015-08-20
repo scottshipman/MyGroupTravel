@@ -112,14 +112,16 @@
     </a>
 
     <a id="site-content"></a>
-    <div id="content-blocks-wrapper" class="sortable-tabs">
+    <div id="content-blocks-wrapper" class="content-blocks-wrapper sortable-tabs">
         {%  for tab, blocks in entity.content %}
         <div id="tab-{{ tab|replace({' ': '_'}) }}" class="content-blocks-tab">
-            <span class="content-blocks tab-label"><i class="content-block-tab-handle fa fa-arrows"></i>  <h4 id="tab-label-{{ tab }}" class="editable-tab">{{ tab }}</h4>
-                    {% if blocks | length < 1 %}
-                    <i class="tab-delete content-block-tab-actions fa fa-trash-o"> Delete Tab</i>
-                    {% endif %}
-                 <i class="tab-new content-block-tab-actions fa fa-plus-circle"> Add Content</i>
+            <span class="content-blocks tab-label">
+                <i class="content-block-tab-handle fa fa-arrows"></i>
+                <h4 id="tab-label-{{ tab }}" class="editable-tab">{{ tab }}</h4>
+                {% if blocks | length < 1 %}
+                    <span class="icon-label"><i class="tab-delete content-block-tab-actions fa fa-trash-o"></i> Delete Tab</span>
+                {% endif %}
+                <span class="icon-label"><i class="tab-new content-block-tab-actions fa fa-plus-circle"></i> Add Content</span>
             </span>
 
 
@@ -127,7 +129,7 @@
             <div id="tabs-drawer-{{ tab }}" class="sortable-items content-blocks-drawer">
                     {%  for item in blocks %}
                         <div id="content-blocks-{{ items[item].id }}" class="content-blocks content-blocks-item">
-                            <i class="fa fa-arrows"></i>  {{ items[item].title }}
+                            <i class="fa fa-arrows"></i> {{ items[item].title }}
                             {# probably render a controller here by passing in item as id and have block entity returned #}
                             <div id="content-block-actions-{{ items[item].id }}" class="content-block-actions">
                                 <i class="item-edit content-block-item-action fa fa-pencil-square-o"></i>
@@ -199,8 +201,9 @@
                 //e.preventDefault();
                 $("#dialog").html("");
                 $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
-                $("#dialog").load('/ajax/contentblocks/' + block + '/edit/' + {{ entity.id}} +'/QuoteVersion', function() {
+                $("#dialog").load( '/ajax/contentblocks/' + block + '/edit/' + {{ entity.id}} + '/QuoteVersion', function() {
                     $(this).dialog("option", "title", 'Edit Content Block');
+                    doMDLpopup( $(this) );
                 });
             });
 
