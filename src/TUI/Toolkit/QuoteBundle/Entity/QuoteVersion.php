@@ -119,6 +119,15 @@ class QuoteVersion
      */
     private $boardBasis;
 
+
+    /**
+     * @var integer
+     *
+     * @ORM\JoinColumn(name="headerBlock", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\ContentBlocksBundle\Entity\ContentBlock", cascade="persist")
+     */
+    private $headerBlock;
+
     /**
      * @var array
      * @GRID\Column(title="Content", export=true)
@@ -362,7 +371,31 @@ class QuoteVersion
         return $this->boardBasis;
     }
 
-    /**
+  /**
+   * Set headerBlock
+   *
+   * @param integer $boardBasis
+   * @return QuoteVersion
+   */
+  public function setHeaderBlock($headerBlock)
+  {
+    $this->headerBlock = $headerBlock;
+
+    return $this;
+  }
+
+  /**
+   * Get headerBlock
+   *
+   * @return integer
+   */
+  public function getHeaderBlock()
+  {
+    return $this->headerBlock;
+  }
+
+
+  /**
      * Set content
      *
      * @param array $content

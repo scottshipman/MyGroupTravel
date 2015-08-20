@@ -1,9 +1,80 @@
 #loader {
-  display:none;
-  position:absolute;
-  top: 50%;
-  left: 50%;
-  margin-top: -50px;
-  margin-left: -50px;
-  z-index:99999;
+  display: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: $border_grey_l;
+  z-index: 9999;
+
+  img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -39px 0 0 -40px;
+  }
+
+}
+
+/**
+ * Quote Site page styles
+ */
+#site-quote-name {
+  font-size: 1.2em;
+  padding-top: 2em;
+}
+
+#site-quote-number {
+  font-size: 1.2em;
+}
+
+#print_pdf {
+  font-size: 1.5em;
+  color: green;
+  line-height: 2.5;
+}
+
+#site-summary-details {
+  list-style: none;
+  line-height: 2em;
+  padding: 0;
+  span {
+    font-size: 1.3em;
+    font-weight: bold;
+    display: block;
+  }
+}
+
+.quote-site-actions {
+  list-style: none;
+  line-height: 3.5em;
+  margin-bottom: 1em;
+  padding: 0;
+  width: 100%;
+
+  a {
+    min-width: 100%;
+  }
+}
+
+.expired-quote {
+  -khtml-opacity:.70;
+  -moz-opacity:.70;
+  -ms-filter:”alpha(opacity=70)”;
+  filter:alpha(opacity=70);
+  filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0.7);
+  opacity:.70;
+  cursor: default;
+}
+
+#site-header {
+  background-color: lightgrey;
+  padding: 2em;
+  display: inline-block;
+  margin: 1em 0 1em 0;
+}
+
+#site-footer {
+  clear: both;
 }

@@ -18,9 +18,12 @@
     <link rel="stylesheet"
           href="//fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
 
-    {# Dropzone CSS #}
-    {% stylesheets filter='cssrewrite' '@AppBundle/Resources/assets/css/dropzone.css' %}
-        <link rel="stylesheet" href="{{ asset_url }}" />
+    {# Dropzone & Flexslider CSS #}
+    {% stylesheets filter='cssrewrite'
+    '@AppBundle/Resources/assets/css/flexslider.css'
+    '@AppBundle/Resources/assets/css/dropzone.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
 
     {# jQuery UI CSS #}
@@ -116,7 +119,7 @@
             <div class="brand_logo">
                 {{ render(controller('BrandBundle:Default:index')) }}
             </div>
-
+            {% block page_institution %}{% endblock %}
             <h1 class="page-title">
                 {% block page_title %}{% endblock %}
             </h1>
@@ -140,7 +143,7 @@
 </div>
 <!-- mdl-layout -->
 
-{% javascripts '@AppBundle/Resources/assets/js/dropzone.js' '@toolkit' %}
+{% javascripts '@toolkit' '@AppBundle/Resources/assets/js/dropzone.js' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 

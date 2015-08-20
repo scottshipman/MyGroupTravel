@@ -51,6 +51,13 @@ echo $'=============================================\n'
 
 /usr/local/bin/composer install --no-progress --no-plugins --prefer-dist -v $composer_params
 
+echo $'\n============================================='
+echo "Setting proper .htaccess"
+echo $'=============================================\n'
+
+[ -f web/.htaccess-$application_env ] && cp web/.htaccess-$application_env web/.htaccess
+echo $'  - Done!'
+
 if [ "$1" = "prod" ]
 then
   echo $'\n============================================='
@@ -93,7 +100,6 @@ php app/console assets:install --env=$application_env
 echo ""
 php app/console assetic:dump --env=$application_env
 echo ""
-
 
 # @TODO: Asset Refresh from Prod (once we have prod)
 # if [ "$1" = "dev" -o "$1" = "uat" ]

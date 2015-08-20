@@ -1,0 +1,292 @@
+{% extends '::site-base.html.twig' %}
+
+{% block title %}{{ entity.name }} {% endblock %}
+{% block page_institution %}<div id="site-quote-name">{% if entity.quoteReference.institution %}{{ entity.quoteReference.institution.name  }}{% endif %} </div>{% endblock %}
+{% block page_title %}{{ entity.quoteReference.name  }}, {{ entity.name  }} {% endblock %}
+
+
+{%  if 'en_GB' in locale %} {% set format = 'd-m-Y' %} {% else %} {% set format = 'm-d-Y' %} {% endif %}
+
+{% block body -%}
+
+   {#  {{ dump(entity) }} #}
+
+    <div id="site-quote-number">Quote Number: {% if entity.quoteNumber %}{{ entity.quoteNumber  }} {% endif %}</div>
+    <div id="print_pdf"><i class="fa fa-print"> print/pdf</i></div>
+
+    {% if warning | length >0 %}
+        <div id="site-warning">
+            {% for message in warning %}
+            <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div id="site-header">
+        <div id="site-header-slideshow">
+            <div class="flexslider">
+                <ul class="slides">
+                    {%  if entity.headerBlock %}
+                        {% for media in entity.headerBlock.media %}
+                        <li>
+                            <img src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}" />
+                        </li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        <div id="site-header-summary">
+            <ul id="site-summary-details">
+                <li>Departing: {% if entity.departureDate %}<strong>{{ entity.departureDate|date(format) }}</strong>{% endif %}</li>
+                <li>{% if entity.duration %}<strong>{{ entity.duration }}</strong>{% endif %}</li>
+                <li>Returning: {% if entity.returnDate %}<strong>{{ entity.returnDate|date(format) }}</strong>{% endif %}</li>
+                <li>Board Basis: {% if entity.boardBasis %}<strong>{{ entity.boardBasis }}</strong>{% endif %}</li>
+                <li>Transport: {% if entity.transportType %}<strong>{{ entity.transportType.name }}</strong>{% endif %}</li>
+                <li>Price per person: <span>{% if entity.pricePerson %}<strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %} {{ entity.pricePerson }}</strong>{% endif %}</span></li>
+                <li>Based on {% if entity.payingPlaces  %}<strong>{{ entity.payingPlaces  }}</strong>{% endif %} paying and {% if entity.freePlaces  %}<strong>{{ entity.freePlaces  }}</strong>{% endif %} free places</li>
+                <li>Quote valid until {% if entity.expiryDate  %}<strong>{{ entity.expiryDate|date(format) }}</strong>{% endif %}</li>
+                <ul class="quote-site-actions">
+                    <li>
+                        {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
+                            {% if date(entity.expiryDate) < date('now') %}
+                                <a class="expired-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+                                    <i class="fa fa-calendar-times-o"></i> Expired
+                                </a>
+                            {% else %}
+                                <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quoteversion_edit', { 'id': entity.id }) }}">
+                                    <i class="fa fa-thumbs-o-up"> </i> Accept Quote
+                                </a>
+                            {% endif %}
+                        {% elseif (entity.converted is sameas(true)) and (entity.quoteReference.converted is sameas(true))%}
+                            <i class="fa fa-thumbs-up"> </i> Accepted
+                        {% endif %}
+                    </li>
+                    <li>
+                        <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quote') }}">
+                            <i class="fa fa-bullhorn"></i> Request Changes
+                        </a>
+                    </li>
+                    <li>
+                        <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+                            <i class="fa fa-share"></i> Share this Quote
+                        </a>
+                    </li>
+                </ul>
+                <li>{% if entity.headerBlock  %}{{ entity.headerBlock.body|raw }}{% endif %}</li>
+            </ul>
+        </div>
+
+    </div>
+
+
+    {# RENDER THE CONTENT BLOCKS HERE #}
+
+   {# {{ dump(entity) }} #}
+
+
+    {% if editable %}
+        <a id="add-new-tab" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+            <i class="fa fa-plus-circle"></i>  Add New Tab
+        </a>
+    {% endif %}
+
+    <a id="site-content"></a>
+    <div id="content-wrapper" class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+        <div id="content-blocks-wrapper" class="sortable-tabs mdl-tabs__tab-bar">
+            {# render the tabs#}
+            {% set activeTab = 'is-active' %}
+            {%  for tab, blocks in entity.content %}
+                    <a id="tab-{{ tab|replace({' ': '_'}) }}" href="#tabs-drawer-{{ tab | replace({' ': '_'}) }}" class="site-content-blocks-tab mdl-tabs__tab {{ activeTab }}">{{ tab }}</a>
+                    {% if editable %}
+                        <span class="content-blocks tab-label"><i class="content-block-tab-handle fa fa-arrows"></i>
+                                {% if blocks | length < 1 %}
+                                <i class="tab-delete content-block-tab-actions fa fa-trash-o"> Delete Tab</i>
+                                {% endif %}
+                             <i class="tab-new content-block-tab-actions fa fa-plus-circle"> Add Content</i>
+                        </span>
+                    {% endif %}
+                {% set activeTab = '' %}
+            {% endfor %}
+        </div>
+
+        {# render the tabs'  content#}
+        {% set activeTab = 'is-active' %}
+        {%  for tab, blocks in entity.content %}
+            <div id="tabs-drawer-{{ tab | replace({' ': '_'}) }}" class="mdl-tabs__panel sortable-items content-blocks-drawer {{ activeTab }} ">
+                    {%  for item in blocks %}
+                        <div id="content-blocks-{{ items[item].id }}" class="site-content-blocks site-content-blocks-item">
+                            {% if editable %}
+                                <i class="fa fa-arrows"></i>  {{ items[item].title }}
+                                {# probably render a controller here by passing in item as id and have block entity returned #}
+                                <div id="content-block-actions-{{ items[item].id }}" class="site-content-block-actions">
+                                    <i class="item-edit content-block-item-action fa fa-pencil-square-o"></i>
+                                    <i class="item-delete content-block-item-action fa fa-trash-o"></i>
+                                    {% if items[item].locked %}<i class="item-lock content-block-item-action fa fa-unlock-alt"></i> {% else %}  <i class="item-lock content-block-item-action fa fa-lock"></i> {% endif %}
+                                    {% if items[item].hidden %}<i class="item-hide content-block-item-action fa fa-ban"></i> {% else %} <i class="item-hide content-block-item-action fa fa-eye"></i> {% endif %}
+                                </div>
+                            {% endif %}
+                            {# render the actual content block#}
+                            <div id="site-block-content-{{ items[item].id }}" class="site-block-content">
+                                {{ render(controller('ContentBlocksBundle:ContentBlock:show', {'id':  items[item].id  })) }}
+                            </div>
+                        </div>
+                    {% endfor %}
+            </div>
+            {% set activeTab = '' %}
+        {% endfor %}
+
+    </div>
+
+    <div id="site-footer">
+        Your Contact is {% if entity.quoteReference.salesAgent %}{{ entity.quoteReference.salesAgent.firstName }} {{ entity.quoteReference.salesAgent.lastName }}
+            <br />
+            <i class="fa fa-envelope-o"></i> {{ entity.quoteReference.salesAgent.email }}
+        {% endif %}
+    </div>
+
+    <div id="loader"><img src="{{ asset('bundles/quote/images/loader.gif') }}"></div>
+    <script type="text/javascript" charset="utf-8">
+        $(window).load(function() {
+            $('.flexslider').flexslider({
+                directionNav: false,
+                controlNav: false
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+
+            // Add a new tab to a site
+            $("#add-new-tab").on('click', function(){
+                contentBlocksAddTab('#content-blocks-wrapper', {{ entity.id }});
+            });
+
+            // remove an empty tab from a site (hard delete)
+            $(".tab-delete").on('click', function(){
+                var ancestorTabElement = $(this).closest('.content-blocks-tab');
+                if (confirm('Are you sure you want to remove this tab? Warning: this can not be undone.')) {
+                    $(ancestorTabElement).remove();
+                    contentBlocksUpdate({{ entity.id }});
+                }
+            });
+
+            // Add a content block into a tab
+            $(".tab-new").on('click', function(){
+                var ancestorTabElement=$(this).closest('.content-blocks-tab').children('.sortable-items');
+                $.ajax({
+                    url: window.location.protocol + '//' + window.location.hostname + '/manage/contentblocks/ajax/new',
+                    headers: {
+                        "Pragma": "no-cache",
+                        "Expires": -1,
+                        "Cache-Control": "no-cache"
+                    }
+                }).done(function (data) {
+                    var id=(Object.keys(data).toString());
+                    var title = data[id];
+                    //add element into DOM
+                    $(ancestorTabElement).append(
+                        '<div id="content-blocks-' + id + '" class="content-blocks content-blocks-item">' +
+                        '<i class="fa fa-arrows"></i>  ' + title +
+                        {# probably render a controller here by passing in item as id and have block entity returned #}
+                        '<div id="content-block-actions-' + id + '" class="content-block-actions">' +
+                        '<i class="item-edit content-block-item-action fa fa-pencil-square-o"></i>' +
+                        '<i class="item-delete content-block-item-action fa fa-trash-o"></i>' +
+                        '<i class="item-lock content-block-item-action fa fa-lock"></i>' +
+                        '<i class="item-hide content-block-item-action fa fa-ban"></i>' +
+                        '</div></div>'
+                    );
+                    contentBlocksUpdate({{ entity.id }});
+                });
+
+            });
+
+            // edit a content block
+            $(".item-edit").on('click', function(e){
+                // todo Get item.id and item.name
+                var actionParent = $(this).parent().attr('id');
+                var block = actionParent.substring(22);
+                //e.preventDefault();
+                $("#dialog").html("");
+                $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
+                $("#dialog").load('/ajax/contentblocks/' + block + '/edit/' + {{ entity.id}} +'/QuoteVersion', function() {
+                    $(this).dialog("option", "title", 'Edit Content Block');
+                });
+            });
+
+
+            // toggle the hide boolean on a content block
+            $(".item-hide").on('click', function(e){
+                // todo Get item.id and item.name
+                var actionParent = $(this).parent().attr('id');
+                var block = actionParent.substring(22);
+                $.ajax({
+                    url: '/manage/contentblocks/'+ block + '/hide/' + {{ entity.id }} + '/QuoteVersion',
+                    headers: {
+                        "Pragma": "no-cache",
+                        "Expires": -1,
+                        "Cache-Control": "no-cache"
+                    }
+                }).done(function () {
+                    $("#loader").css("display", "inline-block");
+                    window.location.hash = 'site-content';
+                    window.location.reload(true);
+                });
+            });
+
+
+            // toggle the locked boolean on a content block
+            $(".item-lock").on('click', function(e){
+                // todo Get item.id and item.name
+                var actionParent = $(this).parent().attr('id');
+                var block = actionParent.substring(22);
+                $.ajax({
+                    url: '/manage/contentblocks/'+ block + '/lock/' + {{ entity.id }} + '/QuoteVersion',
+                    headers: {
+                        "Pragma": "no-cache",
+                        "Expires": -1,
+                        "Cache-Control": "no-cache"
+                    }
+                }).done(function () {
+                    $("#loader").css("display", "inline-block");
+                    window.location.hash = 'site-content';
+                    window.location.reload(true);
+                });
+            });
+
+            // toggle the locked boolean on a content block
+            $(".item-delete").on('click', function(e){
+                // todo Get item.id and item.name
+                if (confirm('Are you sure you want to remove this item? Warning: this can not be undone.')) {
+                    var actionParent = $(this).parent().attr('id');
+                    var block = actionParent.substring(22);
+                    $.ajax({
+                        method:'DELETE',
+                        url: '/manage/contentblocks/' + block + '/delete/' + {{ entity.id }} + '/QuoteVersion',
+                        headers: {
+                            "Pragma": "no-cache",
+                            "Expires": -1,
+                            "Cache-Control": "no-cache"
+                        }
+                    }).done(function () {
+                        $('#content-blocks-' + block).remove();
+                        contentBlocksUpdate({{ entity.id }});
+                    });
+                }
+            });
+
+            // change a tab's name
+            $('.editable-tab').editable(function(value, settings) {
+                return(value);
+            }, {
+                width: '20em',
+                onblur: "cancel",
+                tooltip: 'Click to edit',
+                callback : function(value, settings) {
+                    contentBlocksUpdate({{ entity.id }}); //value
+                }
+            });
+        });
+    </script>
+
+{% endblock %}

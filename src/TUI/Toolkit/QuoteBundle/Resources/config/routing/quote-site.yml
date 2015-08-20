@@ -1,0 +1,6 @@
+
+# path for a Quotes Site View, not admin view
+quote_site_show:
+    path:     /{id}/{quoteNumber}
+    defaults: { _controller: "QuoteBundle:QuoteSite:siteShow" }
+
