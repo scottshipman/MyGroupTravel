@@ -111,12 +111,25 @@ class QuoteVersionController extends Controller
       $grid->addRowAction($editAction);
       $showAction = new RowAction('View', 'manage_quote_show');
       $grid->addRowAction($showAction);
+      $previewAction = new RowAction('Preview', 'quote_site_action_show');
+      $grid->addRowAction($previewAction);
       $cloneAction = new RowAction('Clone', 'manage_quote_clone');
       $grid->addRowAction($cloneAction);
       $deleteAction = new RowAction('Delete', 'manage_quote_quick_delete');
       $deleteAction->setRole('ROLE_ADMIN');
       $deleteAction->setConfirm(true);
       $grid->addRowAction($deleteAction);
+      $lockAction = new RowAction('Lock', 'manage_quoteversion_lock_nonajax');
+      $lockAction->manipulateRender(
+        function ($action, $row)
+        {
+          if ($row->getField('locked') == true) {
+            $action->setTitle('Unlock');
+          }
+          return $action;
+        }
+      );
+      $grid->addRowAction($lockAction);
 
       // Set the default order of the grid
       $grid->setDefaultOrder('created', 'DESC');
@@ -1150,5 +1163,64 @@ class QuoteVersionController extends Controller
     $this->get('session')->getFlashBag()->add('notice', 'Quote Restored: ' . $quoteVersion->getName());
 
     return $this->redirect($this->generateUrl('manage_quote'));
+  }
+
+
+  /**
+   * Toggles lock status on Quote entity.
+   *
+   */
+  public function lockAction(Request $request, $id)
+  {
+
+    $em = $this->getDoctrine()->getManager();
+
+    $quoteVersion = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+
+    if (!$quoteVersion) {
+      throw $this->createNotFoundException('Unable to find Quote entity.');
+    }
+
+    if($quoteVersion->getLocked()==false){
+      $status = true;
+    } else {
+      $status = false;
+    }
+    $quoteVersion->setLocked($status);
+    $em->persist($quoteVersion);
+    $em->flush();
+    $this->get('session')->getFlashBag()->add('notice', 'Quote Lock has been toggled ');
+
+    return new Response(json_encode( (array) $quoteVersion));
+
+  }
+
+  /**
+   * Toggles lock status Quote entity without ajax.
+   *
+   */
+  public function lockNonajaxAction(Request $request, $id)
+  {
+
+    $em = $this->getDoctrine()->getManager();
+
+    $quoteVersion = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+
+    if (!$quoteVersion) {
+      throw $this->createNotFoundException('Unable to find Quote entity.');
+    }
+
+    if($quoteVersion->getLocked()==false){
+      $status = true;
+    } else {
+      $status = false;
+    }
+    $quoteVersion->setLocked($status);
+    $em->persist($quoteVersion);
+    $em->flush();
+    $this->get('session')->getFlashBag()->add('notice', 'Quote Lock has been toggled ');
+
+    return $this->redirect($this->generateUrl('manage_quote'));
+
   }
 }

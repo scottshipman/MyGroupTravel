@@ -14,4 +14,13 @@
     {% endembed %}
     {{ grid_search(grid, 'AppBundle:Grid:grid.html.twig') }}
     {{ grid(grid, 'AppBundle:Grid:grid.html.twig') }}
+    <div id="loader"><img src="{{ asset('bundles/quote/images/loader.gif') }}"></div>
+    <script>
+        $(document).ready(function() {
+            $(".fam-lock, .fam-unlock").parent().on('click', function() {
+                $("#loader").css("display", "inline-block");
+            });
+        });
+    </script>
+
 {% endblock %}
