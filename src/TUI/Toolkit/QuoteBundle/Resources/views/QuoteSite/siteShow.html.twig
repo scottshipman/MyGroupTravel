@@ -1,7 +1,7 @@
 {% extends '::site-base.html.twig' %}
 
 {% block title %}{{ entity.name }} {% endblock %}
-{% block page_institution %}<div id="site-quote-name">{{ entity.quoteReference.institution.name  }} </div>{% endblock %}
+{% block page_institution %}<div id="site-quote-name">{% if entity.quoteReference.institution %}{{ entity.quoteReference.institution.name  }}{% endif %} </div>{% endblock %}
 {% block page_title %}{{ entity.quoteReference.name  }}, {{ entity.name  }} {% endblock %}
 
 
@@ -11,7 +11,7 @@
 
    {#  {{ dump(entity) }} #}
 
-    <div id="site-quote-number">Quote Number: {{ entity.quoteNumber  }} </div>
+    <div id="site-quote-number">Quote Number: {% if entity.quoteNumber %}{{ entity.quoteNumber  }} {% endif %}</div>
     <div id="print_pdf"><i class="fa fa-print"> print/pdf</i></div>
 
     {% if warning | length >0 %}
@@ -26,11 +26,13 @@
         <div id="site-header-slideshow">
             <div class="flexslider">
                 <ul class="slides">
-                    {% for media in entity.headerBlock.media %}
-                    <li>
-                        <img src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}" />
-                    </li>
-                    {% endfor %}
+                    {%  if entity.headerBlock %}
+                        {% for media in entity.headerBlock.media %}
+                        <li>
+                            <img src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}" />
+                        </li>
+                        {% endfor %}
+                    {% endif %}
                 </ul>
             </div>
         </div>
@@ -83,39 +85,57 @@
    {# {{ dump(entity) }} #}
 
 
-    <a id="add-new-tab" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-        <i class="fa fa-plus-circle"></i>  Add New Tab
-    </a>
+    {% if editable %}
+        <a id="add-new-tab" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+            <i class="fa fa-plus-circle"></i>  Add New Tab
+        </a>
+    {% endif %}
 
     <a id="site-content"></a>
-    <div id="content-blocks-wrapper" class="sortable-tabs">
-        {%  for tab, blocks in entity.content %}
-        <div id="tab-{{ tab|replace({' ': '_'}) }}" class="content-blocks-tab">
-            <span class="content-blocks tab-label"><i class="content-block-tab-handle fa fa-arrows"></i>  <h4 id="tab-label-{{ tab }}" class="editable-tab">{{ tab }}</h4>
-                    {% if blocks | length < 1 %}
-                    <i class="tab-delete content-block-tab-actions fa fa-trash-o"> Delete Tab</i>
+    <div id="content-wrapper" class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+        <div id="content-blocks-wrapper" class="sortable-tabs mdl-tabs__tab-bar">
+            {# render the tabs#}
+            {% set activeTab = 'is-active' %}
+            {%  for tab, blocks in entity.content %}
+                    <a id="tab-{{ tab|replace({' ': '_'}) }}" href="#tabs-drawer-{{ tab | replace({' ': '_'}) }}" class="site-content-blocks-tab mdl-tabs__tab {{ activeTab }}">{{ tab }}</a>
+                    {% if editable %}
+                        <span class="content-blocks tab-label"><i class="content-block-tab-handle fa fa-arrows"></i>
+                                {% if blocks | length < 1 %}
+                                <i class="tab-delete content-block-tab-actions fa fa-trash-o"> Delete Tab</i>
+                                {% endif %}
+                             <i class="tab-new content-block-tab-actions fa fa-plus-circle"> Add Content</i>
+                        </span>
                     {% endif %}
-                 <i class="tab-new content-block-tab-actions fa fa-plus-circle"> Add Content</i>
-            </span>
+                {% set activeTab = '' %}
+            {% endfor %}
+        </div>
 
-
-
-            <div id="tabs-drawer-{{ tab }}" class="sortable-items content-blocks-drawer">
+        {# render the tabs'  content#}
+        {% set activeTab = 'is-active' %}
+        {%  for tab, blocks in entity.content %}
+            <div id="tabs-drawer-{{ tab | replace({' ': '_'}) }}" class="mdl-tabs__panel sortable-items content-blocks-drawer {{ activeTab }} ">
                     {%  for item in blocks %}
                         <div id="content-blocks-{{ items[item].id }}" class="content-blocks content-blocks-item">
-                            <i class="fa fa-arrows"></i>  {{ items[item].title }}
-                            {# probably render a controller here by passing in item as id and have block entity returned #}
-                            <div id="content-block-actions-{{ items[item].id }}" class="content-block-actions">
-                                <i class="item-edit content-block-item-action fa fa-pencil-square-o"></i>
-                                <i class="item-delete content-block-item-action fa fa-trash-o"></i>
-                                {% if items[item].locked %}<i class="item-lock content-block-item-action fa fa-unlock-alt"></i> {% else %}  <i class="item-lock content-block-item-action fa fa-lock"></i> {% endif %}
-                                {% if items[item].hidden %}<i class="item-hide content-block-item-action fa fa-ban"></i> {% else %} <i class="item-hide content-block-item-action fa fa-eye"></i> {% endif %}
+                            {% if editable %}
+                                <i class="fa fa-arrows"></i>  {{ items[item].title }}
+                                {# probably render a controller here by passing in item as id and have block entity returned #}
+                                <div id="content-block-actions-{{ items[item].id }}" class="content-block-actions">
+                                    <i class="item-edit content-block-item-action fa fa-pencil-square-o"></i>
+                                    <i class="item-delete content-block-item-action fa fa-trash-o"></i>
+                                    {% if items[item].locked %}<i class="item-lock content-block-item-action fa fa-unlock-alt"></i> {% else %}  <i class="item-lock content-block-item-action fa fa-lock"></i> {% endif %}
+                                    {% if items[item].hidden %}<i class="item-hide content-block-item-action fa fa-ban"></i> {% else %} <i class="item-hide content-block-item-action fa fa-eye"></i> {% endif %}
+                                </div>
+                            {% endif %}
+                            {# render the actual content block#}
+                            <div id="site-block-content-{{ items[item].id }}" class="site-block-content">
+                                {{ render(controller('ContentBlocksBundle:ContentBlock:show', {'id':  items[item].id  })) }}
                             </div>
                         </div>
                     {% endfor %}
             </div>
-        </div>
+            {% set activeTab = '' %}
         {% endfor %}
+
     </div>
 
     <div id="site-footer">
@@ -128,7 +148,10 @@
     <div id="loader"><img src="{{ asset('bundles/quote/images/loader.gif') }}"></div>
     <script type="text/javascript" charset="utf-8">
         $(window).load(function() {
-            $('.flexslider').flexslider();
+            $('.flexslider').flexslider({
+                directionNav: false,
+                controlNav: false
+            });
         });
     </script>
     <script>
