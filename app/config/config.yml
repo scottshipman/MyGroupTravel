@@ -142,7 +142,7 @@ fos_user:
                       sender_name: Toolkit Registration
 
                 enabled:    true
-                template:   TUIToolkitUserBundle:Registration:email.txt.twig
+                template:   TUIToolkitUserBundle:Registration:register_email.html.twig
     from_email:
         address:        noreply@toolkit.com
         sender_name:    TUI Toolkit System
