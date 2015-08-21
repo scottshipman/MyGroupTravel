@@ -22,10 +22,22 @@
     overflow-x: auto;
   }
 
+  .mdl-tabs.is-upgraded .mdl-tabs__panel {
+    display: block;
+    margin-bottom: 2em;
+    clear: both;
+  }
+
   // Non-MDL
 
   h1 {
     font-size: 2.5em;
+    line-height: 1.125;
+  }
+
+  h2 {
+    font-size: 2em;
+    line-height: 1.125;
   }
 
   a {
@@ -45,7 +57,10 @@
   .table-actions,
   .cell-actions,
   .grid-column-__actions,
-  th.id___actions {
+  th.id___actions,
+  #content-blocks-wrapper,
+  .mdl-tabs-no-swap,
+  #print_pdf {
     display: none;
   }
 
