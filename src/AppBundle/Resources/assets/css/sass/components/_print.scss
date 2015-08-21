@@ -1,9 +1,5 @@
 @media print {
 
-  body {
-    font-size: 75%;
-  }
-
   .mdl-layout__container {
     height: auto;
     position: static;
@@ -28,9 +24,28 @@
 
   // Non-MDL
 
+  h1 {
+    font-size: 2.5em;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  a[href]:after {
+    content: none !important;
+  }
+
   .record_actions,
   .flash-messages,
-  .brand_logo {
+  .brand_logo,
+  .grid-search,
+  .grid_footer,
+  .grid-row-actions,
+  .table-actions,
+  .cell-actions,
+  .grid-column-__actions,
+  th.id___actions {
     display: none;
   }
 
