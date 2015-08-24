@@ -82,7 +82,8 @@ class QuoteSiteController extends Controller
       $warningMsg[] = "This quote has expired. Please contact $entity>getQuoteReference()->getSalesAgent()->getFirstName()   $entity>getQuoteReference()->getSalesAgent()->getLasttName()  at $entity>getQuoteReference()->getSalesAgent()->getEmail()";
     }
 
-
+    // Record Views
+    $this->setQuoteViews($entity[0]->getId());
 
     return $this->render('QuoteBundle:QuoteSite:siteShow.html.twig', array(
       'entity'      => $entity[0],
@@ -94,5 +95,38 @@ class QuoteSiteController extends Controller
     ));
   }
 
+  /**
+   * Record Uhnique Views for a Quote View
+   * @param $entity
+   *
+   * RULES:
+   *  1) dont log Brand or Admins
+   *  2) ???
+   */
+  public function setQuoteViews($id) {
+    $cookie = '';
+    $securityContext = $this->get('security.context');
 
+    if (FALSE === $securityContext->isGranted('ROLE_BRAND')) {
+
+      if (isset($_COOKIE['toolkit'])) {
+        if (strpos($_COOKIE['toolkit'], 'quote-' . $id . '~') !== FALSE) {
+          return;
+        }
+        $cookie = $_COOKIE['toolkit_quotes'] . '\n';
+      }
+      $cookie .= 'quote-' . $id . '~';
+      setcookie('toolkit', $cookie, time() + (365 * 24 * 60 * 60), "/"); // 1 year expiration
+
+      // increment the view on the record
+      $em = $this->getDoctrine()->getManager();
+      $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+      if ($entity) {
+        $entity->setViews($entity->getViews() + 1);
+        $em->persist($entity);
+        $em->flush();
+        return;
+      }
+    }
+  }
 }
