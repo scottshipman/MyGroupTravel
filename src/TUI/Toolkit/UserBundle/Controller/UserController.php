@@ -238,7 +238,8 @@ class UserController extends Controller
      */
     private function createCreateForm(User $entity)
     {
-        $form = $this->createForm(new UserType(), $entity, array(
+        $locale = $this->container->getParameter('locale');
+        $form = $this->createForm(new UserType($locale), $entity, array(
             'action' => $this->generateUrl('user_create'),
             'method' => 'POST',
         ));
@@ -276,7 +277,8 @@ class UserController extends Controller
    */
   private function create_ajaxCreateForm(User $entity)
   {
-    $form = $this->createForm(new AjaxuserType(), $entity, array(
+    $locale = $this->container->getParameter('locale');
+    $form = $this->createForm(new AjaxuserType($locale), $entity, array(
       'action' => $this->generateUrl('user_ajax_create'),
       'method' => 'POST',
       'attr'  => array (
@@ -401,7 +403,8 @@ class UserController extends Controller
      */
     private function createEditForm(User $entity)
     {
-        $form = $this->createForm(new UserType(), $entity, array(
+        $locale = $this->container->getParameter('locale');
+        $form = $this->createForm(new UserType($locale), $entity, array(
             'action' => $this->generateUrl('user_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));

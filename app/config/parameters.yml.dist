@@ -24,3 +24,7 @@ parameters:
     locale: en_GB.utf8
     currency: GBP
     date_format:    dd-mm-yy
+        # set as INTERNATIONAL or NATIONAL
+    phone_format: INTERNATIONAL
+        # set as GB or US
+    user_region: GB
