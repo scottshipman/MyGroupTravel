@@ -1,7 +1,7 @@
 {# Only visible in Quote #}
 
 {% set class = '' %}
-{% if entity.layoutType.name %}
+{% if entity.layoutType %}
     {% set class = 'content-block-layout-' ~ entity.layoutType.name %}
 {% endif %}
 {% if entity.doubleWidth == 1 %}
@@ -13,23 +13,27 @@
 <div class="content-block content-block-id-{{ entity.id }} {{ class }}">
     <h2>{{ entity.title }}</h2>
 
-    {% if entity.layoutType.name != 'image_bottom' %}
-        <div class="content-block-media">
-            {% for media in entity.media %}
-                <img src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">
-            {% endfor %}
-        </div>
+    {% if entity.layoutType %}
+        {% if entity.layoutType.name != 'image_bottom' %}
+            <div class="content-block-media">
+                {% for media in entity.media %}
+                    <img src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">
+                {% endfor %}
+            </div>
+        {% endif %}
     {% endif %}
 
     <div class="content-block-body">
         {{ entity.body|raw }}
     </div>
 
-    {% if entity.layoutType.name == 'image_bottom' %}
-        <div class="content-block-media">
-            {% for media in entity.media %}
-                <img src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">
-            {% endfor %}
-        </div>
+    {% if entity.layoutType %}
+        {% if entity.layoutType.name == 'image_bottom' %}
+            <div class="content-block-media">
+                {% for media in entity.media %}
+                    <img src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">
+                {% endfor %}
+            </div>
+        {% endif %}
     {% endif %}
 </div>

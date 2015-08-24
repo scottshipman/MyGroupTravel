@@ -18,10 +18,8 @@
     <link rel="stylesheet"
           href="//fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
 
-    {# Dropzone & Flexslider CSS #}
-    {% stylesheets filter='cssrewrite'
-    '@AppBundle/Resources/assets/css/flexslider.css'
-    '@AppBundle/Resources/assets/css/dropzone.css'
+    {# Dropzone and Flexslider CSS #}
+    {% stylesheets filter='cssrewrite' '@AppBundle/Resources/assets/css/flexslider.css' '@AppBundle/Resources/assets/css/dropzone.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -43,7 +41,7 @@
 
     {{ render(controller('BrandBundle:Default:colors')) }}
 
-<div class="mdl-layout mdl-js-layout{% if is_granted("ROLE_BRAND") %} mdl-layout--fixed-drawer mdl-layout--overlay-drawer-button{% endif %}">
+<div class="marketing-site mdl-layout mdl-js-layout{% if is_granted("ROLE_BRAND") %} mdl-layout--fixed-drawer mdl-layout--overlay-drawer-button{% endif %}">
 
     {# Display admin menu only if the user is BRAND or higher ROLE #}
     {% if is_granted("ROLE_BRAND") %}
@@ -84,7 +82,6 @@
 
     <main class="mdl-layout__content">
 
-        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
         <div class="header mdl-layout__header">
             <div class="flash-messages">
                 {% for flashMessage in app.session.flashbag.get('notice') %}
@@ -95,7 +92,7 @@
                 {% endfor %}
             </div>
 
-            {% if not is_granted("ROLE_BRAND") %}
+            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and not is_granted("ROLE_BRAND") %}
             <div class="tui-drawer-header">
                 {% if app.user.media %}
                     <span id="accbtn" class="tui-image-avatar"><img src="{{ asset(".." ~ app.user.media.getRelativePath ~ "/" ~ app.user.media.getHashedFilename ) }}" alt="{{ app.user.username }}"></span>
@@ -119,18 +116,13 @@
             <div class="brand_logo">
                 {{ render(controller('BrandBundle:Default:index')) }}
             </div>
+
             {% block page_institution %}{% endblock %}
+
             <h1 class="page-title">
                 {% block page_title %}{% endblock %}
             </h1>
         </div><!-- header -->
-        {% endif %}
-
-        {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-        <div class="brand_logo_login">
-            {{ render(controller('BrandBundle:Default:index')) }}
-        </div>
-        {% endif %}
 
         <div class="content">
             <div class="inner">

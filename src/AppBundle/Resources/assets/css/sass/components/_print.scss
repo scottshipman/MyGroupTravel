@@ -1,0 +1,68 @@
+@media print {
+
+  .mdl-layout__container {
+    height: auto;
+    position: static;
+  }
+
+  .mdl-layout {
+    display: block;
+    height: auto;
+    overflow-x: auto;
+  }
+
+  .mdl-layout__drawer,
+  .mdl-layout__drawer-button {
+    display: none;
+  }
+
+  .mdl-layout--fixed-drawer > .mdl-layout__content {
+    margin-left: 0;
+    display: block;
+    overflow-x: auto;
+  }
+
+  .mdl-tabs.is-upgraded .mdl-tabs__panel {
+    display: block;
+    margin-bottom: 2em;
+    clear: both;
+  }
+
+  // Non-MDL
+
+  h1 {
+    font-size: 2.5em;
+    line-height: 1.125;
+  }
+
+  h2 {
+    font-size: 2em;
+    line-height: 1.125;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  a[href]:after {
+    content: none !important;
+  }
+
+  .record_actions,
+  .flash-messages,
+  .brand_logo,
+  .grid-search,
+  .grid_footer,
+  .grid-row-actions,
+  .table-actions,
+  .cell-actions,
+  .grid-column-__actions,
+  th.id___actions,
+  #content-blocks-wrapper,
+  .mdl-tabs-no-swap,
+  #print_pdf,
+  .quote-site-actions {
+    display: none;
+  }
+
+}

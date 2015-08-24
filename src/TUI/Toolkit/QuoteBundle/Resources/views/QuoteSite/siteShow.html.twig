@@ -12,7 +12,10 @@
    {#  {{ dump(entity) }} #}
 
     <div id="site-quote-number">Quote Number: {% if entity.quoteNumber %}{{ entity.quoteNumber  }} {% endif %}</div>
-    <div id="print_pdf"><i class="fa fa-print"> print/pdf</i></div>
+
+    <a href="javascript:window.print()" id="print_pdf" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+        <i class="fa fa-print"></i> Print/PDF
+    </a>
 
     {% if warning | length >0 %}
         <div id="site-warning">
