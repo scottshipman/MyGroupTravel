@@ -1,4 +1,17 @@
 {% block body -%}
-    <h1>Quote Change Request</h1>
+    <h1>I'd like to make some changes</h1>
+    <h4>{{ entity.name }}</h4>
+    <ul>
+        <li>Quote Number: {{ entity.quoteNumber }}</li>
+        <li>Departing: {{ entity.departureDate.date }}</li>
+        <li>For {{ entity.duration }}</li>
+        <li>Returning {{ entity.returnDate.date }}</li>
+        <li>Price per person: {{ entity.pricePerson }}</li>
+        <li>Based on {{ entity.payingPlaces }} paying plus {{ entity.freePlaces }} free places</li>
+        <li><strong>Quote valid until {{ entity.expiryDate.date }}</strong></li>
+    </ul>
+    {% if entity.headerBlock.media %}
+            <img src="{{ asset(".." ~ entity.headerBlock.media[0].getRelativePath ~ "/" ~ entity.headerBlock.media[0].getHashedFilename ) }}" />
+    {% endif %}
     {{ form(change_request_form) }}
 {% endblock %}
