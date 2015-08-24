@@ -77,7 +77,7 @@ var contentBlocksRefresh = function(id){
 }
 
 // Do lots of MDL stuff when a jQuery modal is opened
-function doMDLpopup(t) {
+var doMDLpopup = function(t) {
     t.find('.mdl-textfield__input').each(function () {
         if ( $(this).val() ) {
             $(this).parent()

@@ -183,6 +183,7 @@
                 $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
                 $("#dialog").load('/manage/contentblocks/new/header/' + {{ entity.id}} +'/QuoteVersion', function() {
                     $(this).dialog("option", "title", 'Add Header Content');
+                    doMDLpopup( $(this) );
                 });
             });
 
@@ -193,6 +194,7 @@
                 $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
                 $("#dialog").load('/manage/contentblocks/'+ {{ entity.headerBlock.id }} + '/edit/header/' + {{ entity.id}} +'/QuoteVersion', function() {
                     $(this).dialog("option", "title", 'Edit Header Content');
+                    doMDLpopup( $(this) );
                 });
             });
             {% endif %}
