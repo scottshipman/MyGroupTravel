@@ -67,11 +67,23 @@
   cursor: default;
 }
 
-#site-header {
+.quote-view-site-header {
   background-color: lightgrey;
-  padding: 2em;
-  display: inline-block;
-  margin: 1em 0 1em 0;
+  padding: 2em 0;
+  margin: $element-bottom 0;
+  @include clear-fix();
+}
+
+#site-header-slideshow {
+  width: 75%;
+  float: left;
+  padding: 0 1em 0 2em;
+}
+
+#site-header-summary {
+  width: 25%;
+  float: right;
+  padding: 0 2em 0 1em;
 }
 
 #site-footer {

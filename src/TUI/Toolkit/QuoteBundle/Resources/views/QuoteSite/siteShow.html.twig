@@ -25,14 +25,14 @@
         </div>
     {% endif %}
 
-    <div id="site-header">
+    <div id="site-header" class="quote-view-site-header">
         <div id="site-header-slideshow">
             <div class="flexslider">
                 <ul class="slides">
                     {%  if entity.headerBlock %}
                         {% for media in entity.headerBlock.media %}
                         <li>
-                            <img src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}" />
+                            <img src="{{ asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}" />
                         </li>
                         {% endfor %}
                     {% endif %}
@@ -90,7 +90,7 @@
 
     {% if editable %}
         <a id="add-new-tab" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-            <i class="fa fa-plus-circle"></i>  Add New Tab
+            <i class="fa fa-plus-circle"></i> Add New Tab
         </a>
     {% endif %}
 
@@ -149,14 +149,17 @@
     </div>
 
     <div id="loader"><img src="{{ asset('bundles/quote/images/loader.gif') }}"></div>
+
     <script type="text/javascript" charset="utf-8">
         $(window).load(function() {
             $('.flexslider').flexslider({
                 directionNav: false,
-                controlNav: false
+                controlNav: false,
+                smoothHeight: true
             });
         });
     </script>
+
     <script>
         $(document).ready(function() {
 
