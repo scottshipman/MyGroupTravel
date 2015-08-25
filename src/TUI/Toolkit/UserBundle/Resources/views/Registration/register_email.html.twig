@@ -6,9 +6,7 @@
             <div class="inner" style="width:80%; margin: 0 auto; background-color: #fff; padding-bottom: 25px; margin-top: -90px;">
                 <div class="content" style="position: relative; width: 80%; margin: 0 auto; padding-top: 30px; ">
                     {% if brand.media %}
-                        <div class="logo" style="width: 100%">
-                            <img style="margin: 0 auto; position: relative; display: block; max-width: 300px;" src="{{ absolute_url(asset(".." ~ brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename )) }}" alt="{{ brand.name }}">
-                        </div>
+                            <img style="margin: 0 auto; position: relative; display: block; max-width: 250px;" src="{{ absolute_url(asset(".." ~ brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename )) }}" alt="{{ brand.name }}">
                     {% else %}
                         <p style="text-align: center; text-transform: uppercase; color: #283F5F;">{{ brand.name }}</p>
                     {% endif %}
@@ -19,14 +17,14 @@
                     <p style="text-align: center; color: #C7C3C5;">
                         You can also paste the link below straight into your browser window:
                     </p></br>
-                    <span style="text-align: center; color:{{ brand.primaryColor }}; display: block; overflow: hidden;"> <a style="text-decoration: none; color:{{ brand.primaryColor }};" href="{{ absolute_url("/resetting/reset/" ~ user.confirmationToken) }}">{{ absolute_url("/resetting/reset/" ~ user.confirmationToken) }}</a> </span></br>
+                    <span style="text-align: center; color:{{ brand.primaryColor }}; display: block;"> <a style="text-decoration: none; color:{{ brand.primaryColor }};" href="{{ absolute_url("/resetting/reset/" ~ user.confirmationToken) }}">{{ absolute_url("/resetting/reset/" ~ user.confirmationToken) }}</a> </span></br>
                 </div>
             </div>
             {% endautoescape %}
         {% endblock %}
         <footer style="background-color:#E5E8EA; padding-bottom: 25px; padding-top: 25px">
             <div class="footer-middle" style="width: 60%; margin: 0 auto; position: relative;">
-                <p style="text-align: center; color:#9DA6AA;">Copyright © 2015 {{ brand.name }}, All rights reserved</p>
+                <p style="text-align: center; color:#9DA6AA;">Copyright © {{ "now"|date("Y") }} {{ brand.name }}, All rights reserved</p>
             </div>
         </footer>
     </div>
