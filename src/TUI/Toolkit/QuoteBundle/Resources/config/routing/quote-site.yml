@@ -5,6 +5,10 @@ quote_site_change_request:
     defaults: { _controller: "QuoteBundle:QuoteSite:requestChange"}
     methods: [POST, GET]
 
+quote_site_quote_accepted:
+    path:   /accepted/{id}
+    defaults: { _controller: "QuoteBundle:QuoteSite:quoteAccepted" }
+
 quote_site_action_show:
     path:     /{id}
     defaults: { _controller: "QuoteBundle:QuoteSite:siteShow" }
