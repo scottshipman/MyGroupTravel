@@ -636,38 +636,83 @@ class UserController extends Controller
     public function registerConfirmationTriggerAction($id)
     {
 
-        $mailer = $this->container->get('fos_user.mailer');
+        $mailer = $this->container->get('mailer');
 
         $em = $this->getDoctrine()->getManager();
         $user = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
         // Create token
         $tokenGenerator = $this->container->get('fos_user.util.token_generator');
+
+        //Get some user info
         $user->setConfirmationToken($tokenGenerator->generateToken());
+        $userEmail = $user->getEmail();
+
+        //Get Brand Stuff
+        $brand = $em->getRepository('BrandBundle:Brand')->findAll();
+        $brand = $brand[0];
+
+        $message = \Swift_Message::newInstance()
+            ->setSubject('Toolkit Registration Confirmation')
+            ->setFrom('registration@Toolkit.com')
+            ->setTo($userEmail)
+            ->setBody(
+                $this->renderView(
+                    'TUIToolkitUserBundle:Registration:register_email.html.twig',
+                    array(
+                        'brand' => $brand,
+                        'user' => $user,
+                    )
+                ), 'text/html');
+
         $em->persist($user);
         $em->flush();
-        $mailer->sendConfirmationEmailMessage($user);
+
+        $mailer->send($message);;
 
         $this->get('session')->getFlashBag()->add('notice', 'A Notification was sent to ' . $user->getEmail());
 
-        return $this->redirect($this->generateUrl('user_show', array('id' => $user->getId())));
+        return $this->redirect($this->generateUrl('user'));
+
     }
 
     public function resetUserPasswordAction($id)
     {
-        $mailer = $this->container->get('fos_user.mailer');
+        $mailer = $this->container->get('mailer');
 
         $em = $this->getDoctrine()->getManager();
         $user = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
         // Create token
         $tokenGenerator = $this->container->get('fos_user.util.token_generator');
+
+        //Get some user info
         $user->setConfirmationToken($tokenGenerator->generateToken());
+        $userEmail = $user->getEmail();
+
+        //Get Brand Stuff
+        $brand = $em->getRepository('BrandBundle:Brand')->findAll();
+        $brand = $brand[0];
+
+        $message = \Swift_Message::newInstance()
+            ->setSubject('Toolkit Password Reset')
+            ->setFrom('reset@Toolkit.com')
+            ->setTo($userEmail)
+            ->setBody(
+                $this->renderView(
+                    'TUIToolkitUserBundle:Resetting:reset.html.twig',
+                    array(
+                        'brand' => $brand,
+                        'user' => $user,
+                    )
+                ), 'text/html');
+
         $em->persist($user);
         $em->flush();
-        $mailer->sendResettingEmailMessage($user);
+
+        $mailer->send($message);
 
         $this->get('session')->getFlashBag()->add('notice', 'A Notification was sent to ' . $user->getEmail());
 
-        return $this->redirect($this->generateUrl('user_show', array('id' => $user->getId())));
+        return $this->redirect($this->generateUrl('user'));
 
     }
 
