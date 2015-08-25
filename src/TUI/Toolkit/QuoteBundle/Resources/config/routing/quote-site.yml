@@ -4,6 +4,10 @@ quote_site_show:
     path:     /{id}/{quoteNumber}
     defaults: { _controller: "QuoteBundle:QuoteSite:siteShow" }
 
+quote_site_share:
+    path:     /share/{id}/{quoteNumber}
+    defaults: { _controller: "QuoteBundle:QuoteSite:siteShow" }
+
 quote_site_validate:
     path:     /validate/{id}/
     defaults: { _controller: "QuoteBundle:QuoteSite:siteValidate" }

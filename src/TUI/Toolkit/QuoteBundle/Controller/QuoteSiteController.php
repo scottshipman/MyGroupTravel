@@ -166,11 +166,15 @@ class QuoteSiteController extends Controller
       $cookie .= 'quote-' . $id . '~';
       setcookie('toolkit', $cookie, time() + (365 * 24 * 60 * 60), "/"); // 1 year expiration
 
-      // increment the view on the record
+      // increment the view OR shareView on the record
       $em = $this->getDoctrine()->getManager();
       $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
       if ($entity) {
-        $entity->setViews($entity->getViews() + 1);
+        if(strpos($_SERVER['REQUEST_URI'], 'share')===false) {
+          $entity->setViews($entity->getViews() + 1);
+        } else {
+          $entity->setShareViews($entity->getShareViews() + 1);
+        }
         $em->persist($entity);
         $em->flush();
         return;
