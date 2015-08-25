@@ -106,7 +106,7 @@ class QuoteSiteController extends Controller
       'method' => 'POST',
     ));
 
-    $form->add('submit', 'submit', array('label' => 'Validate'));
+    $form->add('submit', 'submit', array('label' => 'Go'));
 
     return $form;
   }
