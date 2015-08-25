@@ -1,0 +1,42 @@
+<div class="top" style="height: 250px; background-color:{{ brand.primaryColor }}; width: 100%;">
+    <p style="text-align: center; color: #fff;">For {{ tour_name }} departing on {{ departure.date }}</p>
+    {% if brand.media %}
+        <div class="logo" style="width: 100%">
+            <img style="margin: 0 auto; position: relative; display: block" src="{{ absolute_url(asset(".." ~ brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename )) }}" alt="{{ brand.name }}">
+        </div>
+    {% else %}
+        <p style="text-align: center; text-transform: uppercase; color: #fff;">{{ brand.name }}</p>
+    {% endif %}
+</div>
+<div class="outer" style="background:#E5E8EA; margin-top: -20px; ">
+    {% block body_text %}
+        {% autoescape false %}
+        <div class="inner" style="width:80%; margin: 0 auto; background-color: #fff; margin-top: -140px;">
+            <div class="content" style="position: relative; width: 80%; margin: 0 auto;">
+                <h2 style="text-align: center; font-weight: 100; color: #283F5F;">Your quote has been accepted!</h2>
+                <h4>{{ entity.name }}</h4>
+                <ul>
+                    <li>Quote Number: {{ entity.quoteNumber }}</li>
+                    <li>Departing: {{ entity.departureDate.date }}</li>
+                    <li>For {{ entity.duration }}</li>
+                    <li>Returning {{ entity.returnDate.date }}</li>
+                    <li>Price per person: {{ entity.pricePerson }}</li>
+                    <li>Based on {{ entity.payingPlaces }} paying plus {{ entity.freePlaces }} free places</li>
+                    <li><strong>Quote valid until {{ entity.expiryDate.date }}</strong></li>
+                </ul>
+                <span style="display: block; text-align: center; overflow: hidden; margin: 0 auto; width: 200px; padding: 20px; color:#fff; background-color:{{ brand.primaryColor }};"><a style="text-decoration: none; color:#fff;" href="{{ absolute_url("/quote/view/" ~ entity.id) }}">View Your Quote</a></span>
+                <hr>
+                <p style="text-align: center; color: #C7C3C5;">
+                    You can also paste the link below straight into your browser window:
+                </p></br>
+                <span style="text-align: center; color:{{ brand.primaryColor }}; display: block; overflow: hidden;"><a href="{{ absolute_url("/quote/view/" ~ entity.id) }}">{{ absolute_url("/quote/view/" ~ entity.id) }}</a></span></br>
+            </div>
+        </div>
+        {% endautoescape %}
+    {% endblock %}
+    <footer style="background-color:#E5E8EA;">
+        <div class="footer-middle" style="width: 60%; margin: 0 auto; position: relative;">
+            <p style="text-align: center; color:#9DA6AA;">Copyright © 2015 {{ brand.name }}, All rights reserved</p>
+        </div>
+    </footer>
+</div>
