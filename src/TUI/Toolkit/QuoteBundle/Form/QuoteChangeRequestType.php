@@ -22,20 +22,20 @@ class QuoteChangeRequestType extends AbstractType
         $builder
             ->add('changes', 'choice', array(
                 'choices' => array(
-                    'numbers' => 'Our numbers have changed',
-                    'price' => 'Need advice on how to reduce price',
-                    'dates' => 'Can we look at different dates?',
-                    'recommendation' => 'Where else do you recommend?'
+                    'Our numbers have changed' => 'Our numbers have changed',
+                    'Need advice on how to reduce price' => 'Need advice on how to reduce price',
+                    'Can we look at different dates?' => 'Can we look at different dates?',
+                    'Where else do you recommend?' => 'Where else do you recommend?'
                 ),
                 'multiple' => true,
                 'expanded' => true,
                 'required' => false,
-//                'mapped' => false,
+                'mapped' => false,
 
             ))
             ->add('additional', 'textarea', array(
                 'label' => 'Anything else?',
-//                'mapped' => false,
+                'mapped' => false,
                 'required' => false,
                 'attr' => array(
                     'maxlength' => 500,

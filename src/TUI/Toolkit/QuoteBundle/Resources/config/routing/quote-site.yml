@@ -1,5 +1,10 @@
 
 # path for a Quotes Site View, not admin view
+quote_site_change_request_form:
+    path:   /change-request/form/{id}
+    defaults:  { _controller: "QuoteBundle:QuoteSite:newRequest"}
+    methods: [GET]
+
 quote_site_change_request:
     path:     /change-request/{id}
     defaults: { _controller: "QuoteBundle:QuoteSite:requestChange"}

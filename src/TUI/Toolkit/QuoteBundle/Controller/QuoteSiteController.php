@@ -92,9 +92,9 @@ class QuoteSiteController extends Controller
      * @return \Symfony\Component\Form\Form The form
      */
 
-    public function createChangeRequestForm($id)
+    public function createChangeRequestFormAction($id)
     {
-        $changeForm = $this->createForm(new QuoteChangeRequestType(), array(
+        $changeForm = $this->createForm(new QuoteChangeRequestType(), array(), array(
             'action' => $this->generateUrl('quote_site_change_request', array('id' => $id)),
             'method' => 'POST',
         ));
@@ -105,10 +105,22 @@ class QuoteSiteController extends Controller
 
     }
 
+    public function newRequestAction($id)
+    {
+        $changeForm = $this->createChangeRequestFormAction($id);
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+
+        return $this->render('QuoteBundle:QuoteSite:changeRequest.html.twig', array(
+            'change_request_form' => $changeForm->createView(),
+            'entity' => $entity,
+        ));
+    }
+
     public function requestChangeAction(Request $request, $id)
     {
 
-        $changeForm = $this->createChangeRequestForm($id);
+        $changeForm = $this->createChangeRequestFormAction($id);
         $changeForm->handleRequest($request);
         $changes = $changeForm->get('changes')->getData();
         $additional = $changeForm->get('additional')->getData();
@@ -124,7 +136,7 @@ class QuoteSiteController extends Controller
         $brand = $brand[0];
 
         $message = \Swift_Message::newInstance()
-            ->setSubject('Quote Change Request')
+            ->setSubject('Quote Change Request For ' . $tourName)
             ->setFrom('ChangeRequest@toolkit.com')
             ->setTo($agentEmail)
             ->setBody(
@@ -146,6 +158,7 @@ class QuoteSiteController extends Controller
 
         return $this->redirect($this->generateUrl('quote_site_action_show', array('id' => $id)));
 
+
     }
 
     /**
@@ -158,27 +171,37 @@ class QuoteSiteController extends Controller
 
     public function quoteAcceptedAction(Request $request, $id)
     {
+        $secondaryAgent = "";
+        $toArray = array();
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('QuoteBundle:QuoteVersion')->findById($id);
         $entity = $entity[0];
-        if ($entity->getConverted()==false){
+        if ($entity->getConverted() == false) {
             $entity->setConverted(true);
         }
         $quoteConverted = $entity->getQuoteReference()->getConverted();
-        if ($quoteConverted == false){
+        if ($quoteConverted == false) {
             $entity->getQuoteReference()->setConverted(true);
         }
         $departure = $entity->getDepartureDate();
         $tourName = $entity->getName();
         $salesAgent = $entity->getQuoteReference()->getSalesAgent();
         $agentEmail = $salesAgent->getEmail();
+        $toArray[] = $agentEmail;
+        if ($entity->getQuoteReference()->getSecondaryContact()) {
+            $secondaryAgent = $entity->getQuoteReference()->getSecondaryContact()->getEmail();
+            $toArray[] = $secondaryAgent;
+        }
+
         $brand = $em->getRepository('BrandBundle:Brand')->findAll();
         $brand = $brand[0];
+        $brandName = $brand->getName();
+
 
         $message = \Swift_Message::newInstance()
             ->setSubject('Quote' . $tourName . 'has been accepted!')
-            ->setFrom('QuoteAccepted@toolkit.com')
-            ->setTo($agentEmail)
+            ->setFrom($brandName . '@Toolkit.com')
+            ->setTo($toArray)
             ->setBody(
                 $this->renderView(
                     'QuoteBundle:Emails:acceptQuote.html.twig',
