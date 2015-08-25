@@ -10,7 +10,7 @@
         <li>Based on {{ entity.payingPlaces }} paying plus {{ entity.freePlaces }} free places</li>
         <li><strong>Quote valid until {{ entity.expiryDate.date }}</strong></li>
     </ul>
-    {% if entity.headerBlock.media %}
+    {% if entity.headerBlock %}
             <img src="{{ asset(".." ~ entity.headerBlock.media[0].getRelativePath ~ "/" ~ entity.headerBlock.media[0].getHashedFilename ) }}" />
     {% endif %}
     {{ form(change_request_form) }}

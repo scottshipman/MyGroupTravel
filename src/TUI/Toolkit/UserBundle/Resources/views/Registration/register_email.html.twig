@@ -1,29 +1,32 @@
-{% trans_default_domain 'FOSUserBundle' %}
-{% block subject %}
-    {% autoescape false %}
-    {{ 'registration.email.subject'|trans({'%username%': user.username, '%confirmationUrl%': confirmationUrl}) }}
-    {% endautoescape %}
-{% endblock %}
-<header style="height: 250px; background-color:#80BB41; width: 100%;">
-    <p style="text-align: center; color: #fff;">For [tour name] departing on [departure date]</p>
-    <p style="text-align: center; text-transform: uppercase; color: #fff;">there is supposed to be a logo here logo</p>
-</header>
+<header style="height: 150px; background-color:{{ brand.primaryColor }}; width: 100%;"></header>
 {% block body_html %}
-    <div class="outer" style="background:#E5E8EA; margin-top: -20px; ">
+    <div class="outer" style="background:#E5E8EA; margin-top: -20px; "></br>
         {% block body_text %}
             {% autoescape false %}
-            <div class="inner" style="width:80%; margin: 0 auto; background-color: #fff; margin-top: -140px;">
-                <div class="content" style="position: relative; width: 80%; margin: 0 auto;">
+            <div class="inner" style="width:80%; margin: 0 auto; background-color: #fff; padding-bottom: 25px; margin-top: -90px;">
+                <div class="content" style="position: relative; width: 80%; margin: 0 auto; padding-top: 30px; ">
+                    {% if brand.media %}
+                        <div class="logo" style="width: 100%">
+                            <img style="margin: 0 auto; position: relative; display: block; max-width: 300px;" src="{{ absolute_url(asset(".." ~ brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename )) }}" alt="{{ brand.name }}">
+                        </div>
+                    {% else %}
+                        <p style="text-align: center; text-transform: uppercase; color: #283F5F;">{{ brand.name }}</p>
+                    {% endif %}
                     <h2 style="text-align: center; font-weight: 100; color: #283F5F;">Activate your account</h2>
-                    <p style="text-align: center; color: #717D82; overflow: hidden;">{{ 'registration.email.message'|trans({'%username%': user.username, '%confirmationUrl%': confirmationUrl}) }}</p>
+                    <p style="text-align: center; color: #717D82;">Hi {{ user.firstName|capitalize }} {{ user.lastName|capitalize }}</br> To finish activating your account please click the button</p>
+                    <span style="display: block; text-align: center; overflow: hidden; margin: 20px auto; width: 200px; padding: 20px; color:#fff; background-color:{{ brand.primaryColor }};"><a style="text-decoration: none; color:#fff;"href="{{ absolute_url("/resetting/reset/" ~ user.confirmationToken) }}">Activate</a></span>
+                    <hr>
+                    <p style="text-align: center; color: #C7C3C5;">
+                        You can also paste the link below straight into your browser window:
+                    </p></br>
+                    <span style="text-align: center; color:{{ brand.primaryColor }}; display: block; overflow: hidden;"> <a style="text-decoration: none; color:{{ brand.primaryColor }};" href="{{ absolute_url("/resetting/reset/" ~ user.confirmationToken) }}">{{ absolute_url("/resetting/reset/" ~ user.confirmationToken) }}</a> </span></br>
                 </div>
             </div>
             {% endautoescape %}
         {% endblock %}
-        <footer style="background-color:#E5E8EA;">
+        <footer style="background-color:#E5E8EA; padding-bottom: 25px; padding-top: 25px">
             <div class="footer-middle" style="width: 60%; margin: 0 auto; position: relative;">
-                <p style="text-align: center; color:#9DA6AA;">Copyright © 2015 [Company], All rights reserved</p>
-                <p style="text-align: center; color:#9DA6AA;">[Company Address]</p>
+                <p style="text-align: center; color:#9DA6AA;">Copyright © 2015 {{ brand.name }}, All rights reserved</p>
             </div>
         </footer>
     </div>
