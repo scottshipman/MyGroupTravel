@@ -38,7 +38,7 @@
   list-style: none;
   line-height: 2em;
   padding: 0;
-  span {
+  .quote-price {
     font-size: 1.3em;
     font-weight: bold;
     display: block;
@@ -54,10 +54,30 @@
 
   a {
     min-width: 100%;
+    .not-full {
+      min-width: auto;
+    }
+  }
+
+  .not-full {
+    min-width: auto;
+  }
+
+  input {
+    line-height: 2.2em;
+    -moz-box-shadow: 3px 3px 5px 6px #ccc;
+    -webkit-box-shadow: 3px 3px 5px 6px #ccc;
+    box-shadow: 3px 3px 5px 6px #ccc
   }
 }
+.share-text {
+  font-size: 1em;
+  font-weight: bold;
+  top: 1.5em;
+  position: relative;
+}
 
-.expired-quote {
+.expired-quote, .accepted-quote {
   -khtml-opacity:.70;
   -moz-opacity:.70;
   -ms-filter:”alpha(opacity=70)”;
