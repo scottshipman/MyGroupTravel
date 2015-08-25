@@ -185,9 +185,10 @@ class QuoteSiteController extends Controller
         }
         $departure = $entity->getDepartureDate();
         $tourName = $entity->getName();
-        $salesAgent = $entity->getQuoteReference()->getSalesAgent();
-        $agentEmail = $salesAgent->getEmail();
-        $toArray[] = $agentEmail;
+        if ($entity->getQuoteReference()->getSalesAgent()) {
+            $agentEmail = $entity->getQuoteReference()->getSalesAgent()->getEmail();
+            $toArray[] = $agentEmail;
+        }
         if ($entity->getQuoteReference()->getSecondaryContact()) {
             $secondaryAgent = $entity->getQuoteReference()->getSecondaryContact()->getEmail();
             $toArray[] = $secondaryAgent;
