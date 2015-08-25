@@ -117,7 +117,7 @@ class QuoteSiteController extends Controller
         $entity = $em->getRepository('QuoteBundle:QuoteVersion')->findById($id);
         $entity = $entity[0];
         $departure = $entity->getDepartureDate();
-        $tourName =  $entity->getName();
+        $tourName = $entity->getName();
         $salesAgent = $entity->getQuoteReference()->getSalesAgent();
         $agentEmail = $salesAgent->getEmail();
         $brand = $em->getRepository('BrandBundle:Brand')->findAll();
@@ -142,13 +142,62 @@ class QuoteSiteController extends Controller
 
         $this->get('mailer')->send($message);
 
-        return $this->render('QuoteBundle:QuoteSite:changeRequest.html.twig', array(
-            'change_request_form' => $changeForm->createView(),
-            'entity' => $entity,
-            'brand' => $brand,
-            'agent' => $salesAgent,
-        ));
+        $this->get('session')->getFlashBag()->add('notice', 'You have requested a change to' . $tourName);
+
+        return $this->redirect($this->generateUrl('quote_site_action_show', array('id' => $id)));
+
     }
 
+    /**
+     * Creates the action for when a user accepts a quote
+     *
+     * @param Request $request object and the quote $id
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+
+    public function quoteAcceptedAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('QuoteBundle:QuoteVersion')->findById($id);
+        $entity = $entity[0];
+        if ($entity->getConverted()==false){
+            $entity->setConverted(true);
+        }
+        $quoteConverted = $entity->getQuoteReference()->getConverted();
+        if ($quoteConverted == false){
+            $entity->getQuoteReference()->setConverted(true);
+        }
+        $departure = $entity->getDepartureDate();
+        $tourName = $entity->getName();
+        $salesAgent = $entity->getQuoteReference()->getSalesAgent();
+        $agentEmail = $salesAgent->getEmail();
+        $brand = $em->getRepository('BrandBundle:Brand')->findAll();
+        $brand = $brand[0];
+
+        $message = \Swift_Message::newInstance()
+            ->setSubject('Quote' . $tourName . 'has been accepted!')
+            ->setFrom('QuoteAccepted@toolkit.com')
+            ->setTo($agentEmail)
+            ->setBody(
+                $this->renderView(
+                    'QuoteBundle:Emails:acceptQuote.html.twig',
+                    array(
+                        'brand' => $brand,
+                        'entity' => $entity,
+                        'departure' => $departure,
+                        'tour_name' => $tourName,
+                    )
+                ), 'text/html');
+
+        $em->persist($entity);
+        $em->flush();
+        $this->get('mailer')->send($message);
+
+        $this->get('session')->getFlashBag()->add('notice', 'Quote ' . $tourName . 'has been accepted.');
+
+        return $this->redirect($this->generateUrl('quote_site_action_show', array('id' => $id)));
+
+    }
 
 }
