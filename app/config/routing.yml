@@ -88,3 +88,6 @@ genemu_image:
 tui_toolkit_media:
     resource: "@MediaBundle/Resources/config/routing/media.yml"
     prefix:   /manage/media
+
+_liip_imagine:
+    resource: "@LiipImagineBundle/Resources/config/routing.xml"

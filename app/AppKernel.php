@@ -27,6 +27,7 @@ class AppKernel extends Kernel
             new Genemu\Bundle\FormBundle\GenemuFormBundle(),
             new Oneup\UploaderBundle\OneupUploaderBundle(),
             new Trsteel\CkeditorBundle\TrsteelCkeditorBundle(),
+            new Liip\ImagineBundle\LiipImagineBundle(),
 
 
             // In Toolkit Project ( in /src directory) bundles...
