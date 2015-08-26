@@ -15,7 +15,7 @@
                     <p style="text-align: center; color: #717D82;">Hi {{ user.firstName|capitalize }} {{ user.lastName|capitalize }}, we've received a request to
                         change your
                         password. Click on the button below and follow the instructions to change your password</p>
-                    <span style="display: block; text-align: center; overflow: hidden; margin: 20px auto; width: 200px; padding: 20px; color:#fff; background-color:{{ brand.primaryColor }};"><a style="text-decoration: none; color:#fff;"href="{{ absolute_url("/resetting/reset/" ~ user.confirmationToken) }}">Choose a password</a></span>
+                    <a style="text-decoration: none; color:#fff; display: block; width: 200px; padding: 20px; margin: 20px auto; background-color:{{ brand.primaryColor }}; text-align: center;"href="{{ absolute_url("/resetting/reset/" ~ user.confirmationToken) }}">Choose a password</a>
                     <hr>
                     <p style="text-align: center; color: #C7C3C5;">
                         You can also paste the link below straight into your browser window:
