@@ -28,3 +28,50 @@
 .ui-dialog-title {
   text-transform: capitalize;
 }
+
+.request-changes {
+
+  h4 {
+    width: 51%;
+    float: left;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  ul {
+    width: 50%;
+    float: left;
+    margin-bottom: 5px;
+  }
+
+  img {
+    float: right;
+  }
+
+  #tui_toolkit_quotebundle_quotechangerequest {
+
+    div:nth-child(1) {
+      width: 51%;
+      float: left;
+
+      .mdl-form-wrap {
+        padding: 0;
+      }
+    }
+
+      div:nth-child(2) {
+        float: right;
+
+        .mdl-textfield {
+          width: 250px;
+        }
+
+      }
+
+      div.button-row {
+        float: right;
+      }
+
+    }
+
+  }

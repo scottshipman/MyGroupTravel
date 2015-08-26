@@ -51,6 +51,14 @@
   }
 }
 
+.fam-reset {
+
+  &:before {
+    content: '\f084';
+  }
+
+}
+
 .fam-lock {
   &:before {
     content: '\f023';

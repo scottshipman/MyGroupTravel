@@ -1,8 +1,18 @@
 
 # path for a Quotes Site View, not admin view
-quote_site_show:
-    path:     /{id}/{quoteNumber}
-    defaults: { _controller: "QuoteBundle:QuoteSite:siteShow" }
+quote_site_change_request_form:
+    path:   /change-request/form/{id}
+    defaults:  { _controller: "QuoteBundle:QuoteSite:newRequest"}
+    methods: [GET]
+
+quote_site_change_request:
+    path:     /change-request/{id}
+    defaults: { _controller: "QuoteBundle:QuoteSite:requestChange"}
+    methods: [POST, GET]
+
+quote_site_quote_accepted:
+    path:   /accepted/{id}
+    defaults: { _controller: "QuoteBundle:QuoteSite:quoteAccepted" }
 
 quote_site_share:
     path:     /share/{id}/{quoteNumber}
@@ -16,5 +26,9 @@ quote_site_validate:
 
 quote_site_action_show:
     path:     /{id}
+    defaults: { _controller: "QuoteBundle:QuoteSite:siteShow" }
+
+quote_site_show:
+    path:     /{id}/{quoteNumber}
     defaults: { _controller: "QuoteBundle:QuoteSite:siteShow" }
 
