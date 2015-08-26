@@ -270,3 +270,17 @@ trsteel_ckeditor:
     startup_outline_blocks: true
     width: 800 #Integer or %
     height: 300 #Integer or %
+
+liip_imagine:
+    resolvers:
+       default:
+          web_path: ~
+
+    filter_sets:
+        cache: ~
+        thumbnail:
+            quality: 100
+            filters:
+                thumbnail: { size: [120, 120], mode: inset }
+            post_processors:
+                jpegoptim: {}
