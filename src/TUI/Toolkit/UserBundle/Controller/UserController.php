@@ -75,18 +75,21 @@ class UserController extends Controller
         $editAction = new RowAction('Edit', 'user_edit');
         $grid->addRowAction($editAction);
         $notifyAction = new RowAction('Notify', 'user_registration_confirmation');
-          $notifyAction->manipulateRender(
-            function ($action, $row)
-            { // only show if enabled is false
-              if ($row->getField('enabled') == true) {
-                  return null;
-              }
-              return $action;
+        $notifyAction->manipulateRender(
+            function ($action, $row) { // only show if enabled is false
+                if ($row->getField('enabled') == true) {
+                    return null;
+                }
+                return $action;
             }
-          );
+        );
         $grid->addRowAction($notifyAction);
         $showAction = new RowAction('View', 'user_show');
         $grid->addRowAction($showAction);
+        $resetAction = new RowAction('Reset', 'user_password_reset');
+        $resetAction->setRole('ROLE_ADMIN');
+        $resetAction->setConfirm(true);
+        $grid->addRowAction($resetAction);
         $deleteAction = new RowAction('Delete', 'user_quick_delete');
         $deleteAction->setRole('ROLE_ADMIN');
         $deleteAction->setConfirm(true);
@@ -184,8 +187,8 @@ class UserController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-          $entity->setUsername($entity->getEmail());
-          $entity->setPassword('');
+            $entity->setUsername($entity->getEmail());
+            $entity->setPassword('');
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
@@ -200,36 +203,34 @@ class UserController extends Controller
         ));
     }
 
-  /**
-   * Creates a new User entity.
-   *
-   */
-  public function ajax_organizer_createAction(Request $request)
-  {
-    $entity = new User();
-    $form = $this->create_ajaxCreateForm($entity);
-    $form->handleRequest($request);
+    /**
+     * Creates a new User entity.
+     *
+     */
+    public function ajax_organizer_createAction(Request $request)
+    {
+        $entity = new User();
+        $form = $this->create_ajaxCreateForm($entity);
+        $form->handleRequest($request);
 
-    if ($form->isValid()) {
-      $entity->setPassword('');
-      $entity->setUsername($entity->getEmail());
-      $em = $this->getDoctrine()->getManager();
-      $em->persist($entity);
-      $em->flush();
+        if ($form->isValid()) {
+            $entity->setPassword('');
+            $entity->setUsername($entity->getEmail());
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($entity);
+            $em->flush();
 
-      return new Response($entity);
+            return new Response($entity);
+        }
+
+        return $this->render('TUIToolkitUserBundle:User:ajax_new.html.twig', array(
+            'entity' => $entity,
+            'form' => $form->createView(),
+        ));
     }
 
-    return $this->render('TUIToolkitUserBundle:User:ajax_new.html.twig', array(
-      'entity' => $entity,
-      'form'   => $form->createView(),
-    ));
-  }
 
-
-
-
-  /**
+    /**
      * Creates a form to create a User entity.
      *
      * @param User $entity The entity
@@ -238,7 +239,8 @@ class UserController extends Controller
      */
     private function createCreateForm(User $entity)
     {
-        $form = $this->createForm(new UserType(), $entity, array(
+        $locale = $this->container->getParameter('locale');
+        $form = $this->createForm(new UserType($locale), $entity, array(
             'action' => $this->generateUrl('user_create'),
             'method' => 'POST',
         ));
@@ -276,23 +278,22 @@ class UserController extends Controller
    */
   private function create_ajaxCreateForm(User $entity)
   {
-    $form = $this->createForm(new AjaxuserType(), $entity, array(
+    $locale = $this->container->getParameter('locale');
+    $form = $this->createForm(new AjaxuserType($locale), $entity, array(
       'action' => $this->generateUrl('user_ajax_create'),
       'method' => 'POST',
       'attr'  => array (
         'id' => 'ajax_organizer_form'
       ),
     ));
+      
+        $form->add('submit', 'submit', array('label' => 'Create'));
+
+        return $form;
+    }
 
 
-    $form->add('submit', 'submit', array('label' => 'Create'));
-
-    return $form;
-  }
-
-
-
-  /**
+    /**
      * Displays a form to create a new User entity.
      *
      */
@@ -307,23 +308,23 @@ class UserController extends Controller
         ));
     }
 
-  /**
-   * Displays a form to create a new User entity.
-   *
-   */
-  public function new_ajaxAction()
-  {
-    $entity = new User();
-    $form   = $this->create_ajaxCreateForm($entity);
+    /**
+     * Displays a form to create a new User entity.
+     *
+     */
+    public function new_ajaxAction()
+    {
+        $entity = new User();
+        $form = $this->create_ajaxCreateForm($entity);
 
-    return $this->render('TUIToolkitUserBundle:User:ajax_new.html.twig', array(
-      'entity' => $entity,
-      'form'   => $form->createView(),
-    ));
-  }
+        return $this->render('TUIToolkitUserBundle:User:ajax_new.html.twig', array(
+            'entity' => $entity,
+            'form' => $form->createView(),
+        ));
+    }
 
 
-  /**
+    /**
      * Finds and displays a User entity.
      *
      */
@@ -371,25 +372,25 @@ class UserController extends Controller
     }
 
 
-  /**
-   * Displays a form to edit an existing User entity.
-   *
-   */
-  public function passwordSetAction($id)
-  {
-    $em = $this->getDoctrine()->getManager();
+    /**
+     * Displays a form to edit an existing User entity.
+     *
+     */
+    public function passwordSetAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
 
-    $entity = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
+        $entity = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
 
-    if (!$entity) {
-      throw $this->createNotFoundException('Unable to find User entity.');
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find User entity.');
+        }
+        $setForm = $this->createPasswordSetForm($entity);
+
+        return $this->render('TUIToolkitUserBundle:User:password-set.html.twig', array(
+            'set_form' => $setForm->createView(),
+        ));
     }
-    $setForm = $this->createPasswordSetForm($entity);
-
-    return $this->render('TUIToolkitUserBundle:User:password-set.html.twig', array(
-      'set_form' => $setForm->createView(),
-    ));
-  }
 
 
     /**
@@ -401,7 +402,8 @@ class UserController extends Controller
      */
     private function createEditForm(User $entity)
     {
-        $form = $this->createForm(new UserType(), $entity, array(
+        $locale = $this->container->getParameter('locale');
+        $form = $this->createForm(new UserType($locale), $entity, array(
             'action' => $this->generateUrl('user_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
@@ -429,31 +431,30 @@ class UserController extends Controller
         return $form;
     }
 
-  /**
-   * Creates a form to set a User password.
-   *
-   * @param User $entity The entity
-   *
-   * @return \Symfony\Component\Form\Form The form
-   */
-  private function createPasswordSetForm(User $entity)
-  {
-    $form = $this->createForm(new PasswordSetType(), $entity, array(
-      'action' => $this->generateUrl('user_password_set', array('id' => $entity->getId())),
-      'method' => 'POST',
-    ));
+    /**
+     * Creates a form to set a User password.
+     *
+     * @param User $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createPasswordSetForm(User $entity)
+    {
+        $form = $this->createForm(new PasswordSetType(), $entity, array(
+            'action' => $this->generateUrl('user_password_set', array('id' => $entity->getId())),
+            'method' => 'POST',
+        ));
 
-    // get current user's roles and add form elements
-
-
-    $form->add('submit', 'submit', array('label' => 'Set Password'));
-
-    return $form;
-  }
+        // get current user's roles and add form elements
 
 
+        $form->add('submit', 'submit', array('label' => 'Set Password'));
 
-  /**
+        return $form;
+    }
+
+
+    /**
      * Edits an existing User entity.
      *
      */
@@ -471,15 +472,15 @@ class UserController extends Controller
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
-        if (Null != $editForm->getData()->getMedia()){
-          $fileId = $editForm->getData()->getMedia();
-          $entities = $em->getRepository('MediaBundle:Media')
-            ->findById($fileId);
+        if (Null != $editForm->getData()->getMedia()) {
+            $fileId = $editForm->getData()->getMedia();
+            $entities = $em->getRepository('MediaBundle:Media')
+                ->findById($fileId);
 
-          if (NULL !== $entities) {
-            $media = array_shift($entities);
-            $editForm->getData()->setMedia($media);
-          }
+            if (NULL !== $entities) {
+                $media = array_shift($entities);
+                $editForm->getData()->setMedia($media);
+            }
         }
 
 
@@ -497,41 +498,40 @@ class UserController extends Controller
         ));
     }
 
-  /**
-   * Edits an existing User entity.
-   *
-   */
-  public function setPasswordAction(Request $request, $id)
-  {
-    $em = $this->getDoctrine()->getManager();
+    /**
+     * Edits an existing User entity.
+     *
+     */
+    public function setPasswordAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
 
-    $entity = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
+        $entity = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
 
-    if (!$entity) {
-      throw $this->createNotFoundException('Unable to find User entity.');
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find User entity.');
+        }
+
+        $setForm = $this->createPasswordSetForm($entity);
+        $setForm->handleRequest($request);
+
+        if ($setForm->isValid()) {
+            $entity->setPassword($setForm->getData()->getPlainPassword());
+            $em->persist($entity);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add('notice', 'Password Updated for: ' . $entity->getUsername());
+
+            return $this->redirect($this->generateUrl('fos_user_profile_show'));
+        }
+
+        return $this->render('TUIToolkitUserBundle:Registration:confirmed.html.twig', array(
+            'user' => $entity,
+            'set_form' => $setForm->createView(),
+        ));
     }
 
-    $setForm = $this->createPasswordSetForm($entity);
-    $setForm->handleRequest($request);
 
-    if ($setForm->isValid()) {
-      $entity->setPassword($setForm->getData()->getPlainPassword());
-      $em->persist($entity);
-      $em->flush();
-      $this->get('session')->getFlashBag()->add('notice', 'Password Updated for: ' . $entity->getUsername());
-
-      return $this->redirect($this->generateUrl('fos_user_profile_show'));
-    }
-
-    return $this->render('TUIToolkitUserBundle:Registration:confirmed.html.twig', array(
-      'user' => $entity,
-      'set_form' => $setForm->createView(),
-    ));
-  }
-
-
-
-  /**
+    /**
      * Deletes a User entity.
      *
      */
@@ -635,22 +635,88 @@ class UserController extends Controller
         ));
     }
 
-  public function registerConfirmationTriggerAction($id) {
+    public function registerConfirmationTriggerAction($id)
+    {
 
-    $mailer = $this->container->get('fos_user.mailer');
+        $mailer = $this->container->get('mailer');
 
-    $em = $this->getDoctrine()->getManager();
-    $user = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
-    // Create token
-    $tokenGenerator = $this->container->get('fos_user.util.token_generator');
-    $user->setConfirmationToken($tokenGenerator->generateToken());
-    $em->persist($user);
-    $em->flush();
-    $mailer->sendConfirmationEmailMessage($user);
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
+        // Create token
+        $tokenGenerator = $this->container->get('fos_user.util.token_generator');
 
-    $this->get('session')->getFlashBag()->add('notice', 'A Notification was sent to ' . $user->getEmail());
+        //Get some user info
+        $user->setConfirmationToken($tokenGenerator->generateToken());
+        $userEmail = $user->getEmail();
 
-    return $this->redirect($this->generateUrl('user_show', array('id' => $user->getId())));
-  }
+        //Get Brand Stuff
+        $brand = $em->getRepository('BrandBundle:Brand')->findAll();
+        $brand = $brand[0];
+
+        $message = \Swift_Message::newInstance()
+            ->setSubject('Toolkit Registration Confirmation')
+            ->setFrom('registration@Toolkit.com')
+            ->setTo($userEmail)
+            ->setBody(
+                $this->renderView(
+                    'TUIToolkitUserBundle:Registration:register_email.html.twig',
+                    array(
+                        'brand' => $brand,
+                        'user' => $user,
+                    )
+                ), 'text/html');
+
+        $em->persist($user);
+        $em->flush();
+
+        $mailer->send($message);;
+
+        $this->get('session')->getFlashBag()->add('notice', 'A Notification was sent to ' . $user->getEmail());
+
+        return $this->redirect($this->generateUrl('user'));
+
+    }
+
+    public function resetUserPasswordAction($id)
+    {
+        $mailer = $this->container->get('mailer');
+
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
+        // Create token
+        $tokenGenerator = $this->container->get('fos_user.util.token_generator');
+
+        //Get some user info
+        $user->setConfirmationToken($tokenGenerator->generateToken());
+        $userEmail = $user->getEmail();
+
+        //Get Brand Stuff
+        $brand = $em->getRepository('BrandBundle:Brand')->findAll();
+        $brand = $brand[0];
+
+        $message = \Swift_Message::newInstance()
+            ->setSubject('Toolkit Password Reset')
+            ->setFrom('reset@Toolkit.com')
+            ->setTo($userEmail)
+            ->setBody(
+                $this->renderView(
+                    'TUIToolkitUserBundle:Resetting:reset.html.twig',
+                    array(
+                        'brand' => $brand,
+                        'user' => $user,
+                    )
+                ), 'text/html');
+
+        $em->persist($user);
+        $em->flush();
+
+        $mailer->send($message);
+
+        $this->get('session')->getFlashBag()->add('notice', 'A Notification was sent to ' . $user->getEmail());
+
+        return $this->redirect($this->generateUrl('user'));
+
+    }
+
 
 }

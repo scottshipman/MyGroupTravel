@@ -992,6 +992,18 @@ class QuoteVersionController extends Controller
       $cloneform->getData()->getQuoteReference()->setInstitution($institution);
     }
 
+    // clone the content blocks, but first load the original entity since we never did that - only used form values
+    $pathArr = explode('/', $_SERVER['HTTP_REFERER']);
+    if(is_numeric($pathArr[5])){
+      $originalEntity = $em->getRepository('QuoteBundle:QuoteVersion')->find($pathArr[5]);
+      $entity->setContent($this->cloneContentBlocks($originalEntity->getContent()));
+
+      // And clone the Header block if it has one
+      $headerBlock = $originalEntity->getHeaderBlock()->getId();
+      $entity->setHeaderBlock($this->cloneHeaderBlock($headerBlock));
+    }
+
+
 
     if ($cloneform->isValid()) {
       $em->persist($entity);
@@ -1222,5 +1234,64 @@ class QuoteVersionController extends Controller
 
     return $this->redirect($this->generateUrl('manage_quote'));
 
+  }
+
+  /**
+   * Clone Content Blocks for a QuoteVersion
+   *
+   */
+
+  public function cloneContentBlocks($content = array())
+  {
+    $newContentArray = array();
+    if(!empty($content) && $content!= NULL){
+      foreach($content as $tab => $blocks){
+        foreach($blocks as $block){ // block should be an ID number
+          $em = $this->getDoctrine()->getManager();
+
+          $originalBlock = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($block);
+
+          if(!$originalBlock){
+            throw $this->createNotFoundException('Unable to find Content entity.');
+          }
+
+          $newBlock = clone $originalBlock;
+          $newBlock->setId(null);
+          $em->persist($newBlock);
+          $em->flush($newBlock);
+
+          $newContentArray[$tab][] = $newBlock->getID();
+        }
+      }
+    }
+
+    return $newContentArray;
+  }
+
+  /**
+   * Clone Header Block for a QuoteVersion
+   *
+   */
+
+  public function cloneHeaderBlock($block)
+  {
+  $result = NULL;
+    if(!empty($block) && $block!= NULL){
+          $em = $this->getDoctrine()->getManager();
+
+          $originalBlock = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($block);
+
+          if(!$originalBlock){
+            throw $this->createNotFoundException('Unable to find Content entity.');
+          }
+
+          $newBlock = clone $originalBlock;
+          $newBlock->setId(null);
+          $em->persist($newBlock);
+          $em->flush($newBlock);
+          $result = $newBlock;
+    }
+
+    return $result;
   }
 }
