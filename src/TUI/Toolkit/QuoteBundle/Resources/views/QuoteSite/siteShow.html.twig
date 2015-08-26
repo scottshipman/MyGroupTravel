@@ -57,7 +57,7 @@
                                     <i class="fa fa-calendar-times-o"></i> Expired
                                 </a>
                             {% else %}
-                                <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quoteversion_edit', { 'id': entity.id }) }}">
+                                <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('quote_site_quote_accepted', { 'id': entity.id }) }}">
                                     <i class="fa fa-thumbs-o-up"> </i> Accept Quote
                                 </a>
                             {% endif %}
@@ -74,6 +74,7 @@
                             </a>
                         {% else %}
                         <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quote') }}">
+                        <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" id="change-request" href="#">
                             <i class="fa fa-bullhorn"></i> Request Changes
                         </a>
                         {% endif %}
@@ -237,6 +238,16 @@
                 $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
                 $("#dialog").load('/ajax/contentblocks/' + block + '/edit/' + {{ entity.id}} +'/QuoteVersion', function() {
                     $(this).dialog("option", "title", 'Edit Content Block');
+                });
+            });
+
+            // edit a content block
+            $("#change-request").on('click', function(e){
+                //e.preventDefault();
+                $("#dialog").html("");
+                $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
+                $("#dialog").load('/quote/view/change-request/form/' + {{ entity.id}}, function() {
+                    $(this).dialog("option", "title", "I'd like to make some changes");
                 });
             });
 
