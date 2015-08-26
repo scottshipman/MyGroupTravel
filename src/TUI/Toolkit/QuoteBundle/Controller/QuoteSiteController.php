@@ -84,7 +84,7 @@ class QuoteSiteController extends Controller
 
     // send warning messages
     $warningMsg = array();
-    if($entity[0]->getExpiryDate() < date($date_format)){
+    if(Null!==$entity[0]->getExpiryDate() && $entity[0]->getExpiryDate() < date($date_format)){
       $warningMsg[] = "This quote has expired. Please contact $entity>getQuoteReference()->getSalesAgent()->getFirstName()   $entity>getQuoteReference()->getSalesAgent()->getLasttName()  at $entity>getQuoteReference()->getSalesAgent()->getEmail()";
     }
 
