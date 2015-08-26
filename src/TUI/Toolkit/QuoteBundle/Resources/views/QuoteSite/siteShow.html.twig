@@ -46,7 +46,7 @@
                 <li>Returning: {% if entity.returnDate %}<strong>{{ entity.returnDate|date(format) }}</strong>{% endif %}</li>
                 <li>Board Basis: {% if entity.boardBasis %}<strong>{{ entity.boardBasis }}</strong>{% endif %}</li>
                 <li>Transport: {% if entity.transportType %}<strong>{{ entity.transportType.name }}</strong>{% endif %}</li>
-                <li>Price per person: <span>{% if entity.pricePerson %}<strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %} {{ entity.pricePerson }}</strong>{% endif %}</span></li>
+                <li>Price per person: <span class="quote-price">{% if entity.pricePerson %}<strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %} {{ entity.pricePerson }}</strong>{% endif %}</span></li>
                 <li>Based on {% if entity.payingPlaces  %}<strong>{{ entity.payingPlaces  }}</strong>{% endif %} paying and {% if entity.freePlaces  %}<strong>{{ entity.freePlaces  }}</strong>{% endif %} free places</li>
                 <li>Quote valid until {% if entity.expiryDate  %}<strong>{{ entity.expiryDate|date(format) }}</strong>{% endif %}</li>
                 <ul class="quote-site-actions">
@@ -62,18 +62,33 @@
                                 </a>
                             {% endif %}
                         {% elseif (entity.converted is sameas(true)) and (entity.quoteReference.converted is sameas(true))%}
-                            <i class="fa fa-thumbs-up"> </i> Accepted
+                            <a class="accepted-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+                                <i class="fa fa-thumbs-up"> </i> Accepted
+                            </a>
                         {% endif %}
                     </li>
                     <li>
+                        {% if (entity.converted is sameas(true)) and (entity.quoteReference.converted is sameas(true))%}
+                            <a class="accepted-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+                                <i class="fa fa-bullhorn"></i> Request Changes
+                            </a>
+                        {% else %}
                         <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quote') }}">
                             <i class="fa fa-bullhorn"></i> Request Changes
                         </a>
+                        {% endif %}
                     </li>
                     <li>
-                        <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-                            <i class="fa fa-share"></i> Share this Quote
+
+                        <span class="share-text">
+                            Share this quote with others
+                        </span>
+                        <input type="text" id="share_url" name="share_url" value="{{ url('quote_site_share', { 'id': entity.id, 'quoteNumber': entity.quoteNumber }) }}">
+                        <a href="#" id="copy-button" data-clipboard-target="share_url" title="Click to copy Quote URL." class="not-full mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                            <i class="fa fa-sign-in fa-stack"></i>
                         </a>
+
+
                     </li>
                 </ul>
                 <li>{% if entity.headerBlock  %}{{ entity.headerBlock.body|raw }}{% endif %}</li>
@@ -149,6 +164,7 @@
     </div>
 
     <div id="loader"><img src="{{ asset('bundles/quote/images/loader.gif') }}"></div>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.js"></script>
     <script type="text/javascript" charset="utf-8">
         $(window).load(function() {
             $('.flexslider').flexslider({
@@ -159,6 +175,13 @@
     </script>
     <script>
         $(document).ready(function() {
+
+            // Copy to Clipboard
+            ZeroClipboard.config( { swfPath: "//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf" } );
+            var client = new ZeroClipboard( document.getElementById("copy-button") );
+            client.on('aftercopy', function(event) {
+                $('#copy-button').css('background-color', 'green');
+            });
 
             // Add a new tab to a site
             $("#add-new-tab").on('click', function(){
