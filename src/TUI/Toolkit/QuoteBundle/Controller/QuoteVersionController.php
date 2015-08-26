@@ -997,6 +997,10 @@ class QuoteVersionController extends Controller
     if(is_numeric($pathArr[5])){
       $originalEntity = $em->getRepository('QuoteBundle:QuoteVersion')->find($pathArr[5]);
       $entity->setContent($this->cloneContentBlocks($originalEntity->getContent()));
+
+      // And clone the Header block if it has one
+      $headerBlock = $originalEntity->getHeaderBlock()->getId();
+      $entity->setHeaderBlock($this->cloneHeaderBlock($headerBlock));
     }
 
 
@@ -1232,6 +1236,11 @@ class QuoteVersionController extends Controller
 
   }
 
+  /**
+   * Clone Content Blocks for a QuoteVersion
+   *
+   */
+
   public function cloneContentBlocks($content = array())
   {
     $newContentArray = array();
@@ -1257,5 +1266,32 @@ class QuoteVersionController extends Controller
     }
 
     return $newContentArray;
+  }
+
+  /**
+   * Clone Header Block for a QuoteVersion
+   *
+   */
+
+  public function cloneHeaderBlock($block)
+  {
+  $result = NULL;
+    if(!empty($block) && $block!= NULL){
+          $em = $this->getDoctrine()->getManager();
+
+          $originalBlock = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($block);
+
+          if(!$originalBlock){
+            throw $this->createNotFoundException('Unable to find Content entity.');
+          }
+
+          $newBlock = clone $originalBlock;
+          $newBlock->setId(null);
+          $em->persist($newBlock);
+          $em->flush($newBlock);
+          $result = $newBlock;
+    }
+
+    return $result;
   }
 }

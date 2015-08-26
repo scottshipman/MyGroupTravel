@@ -1,0 +1,19 @@
+{% extends '::site-base.html.twig' %}
+
+{% block title %}{{ entity.name }} {% endblock %}
+{% block page_institution %}<div id="site-quote-name">{% if entity.quoteReference.institution %}{{ entity.quoteReference.institution.name  }}{% endif %} </div>{% endblock %}
+{% block page_title %}{{ entity.quoteReference.name  }}, {{ entity.name  }} {% endblock %}
+
+
+{% block body -%}
+    <div class="login-block">
+        <h2>Enter your Quote Number</h2>
+        <hr>
+        <span style="text-align:center; display:block;">You'll find this on your quote email.</span>
+            {#  {{ dump(entity) }} #}
+
+        {{ form(form) }}
+
+    </div>
+
+{% endblock %}

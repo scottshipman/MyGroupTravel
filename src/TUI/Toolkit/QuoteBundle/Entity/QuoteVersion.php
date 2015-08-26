@@ -957,7 +957,7 @@ class QuoteVersion
    * @param integer $shareViews
    * @return Quote
    */
-  public function setShareViewsiews($shareViews)
+  public function setShareViews($shareViews)
   {
     $this->shareViews = $shareViews;
 
