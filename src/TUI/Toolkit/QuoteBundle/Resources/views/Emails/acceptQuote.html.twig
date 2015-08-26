@@ -20,7 +20,7 @@
                         <li>Based on {{ entity.payingPlaces }} paying plus {{ entity.freePlaces }} free places</li>
                         <li><strong>Quote valid until {{ entity.expiryDate.date }}</strong></li>
                     </ul>
-                    <span style="display: block; text-align: center; overflow: hidden; margin: 20px auto; width: 200px; padding: 20px; color:#fff; background-color:{{ brand.primaryColor }};"><a style="text-decoration: none; color:#fff;" href="{{ absolute_url("/quote/view/" ~ entity.id) }}">View Your Quote</a></span>
+                    <a style="text-decoration: none; color:#fff; display: block; width: 200px; padding: 20px; margin: 20px auto; background-color:{{ brand.primaryColor }}; text-align: center;" href="{{ absolute_url("/quote/view/" ~ entity.id) }}">View Your Quote</a>
                     <hr>
                     <p style="text-align: center; color: #C7C3C5;">
                         You can also paste the link below straight into your browser window:
