@@ -1,9 +1,7 @@
-{% extends '::base.html.twig' %}
-{% block title %}Content Block {{ entity.title }}{% endblock %}
-{% block page_title %}Content Block {{ entity.title }}{% endblock %}
+{# Only visible in Quote #}
 
 {% set class = '' %}
-{% if entity.layoutType.name %}
+{% if entity.layoutType %}
     {% set class = 'content-block-layout-' ~ entity.layoutType.name %}
 {% endif %}
 {% if entity.doubleWidth == 1 %}
@@ -12,11 +10,10 @@
     {% set class = class ~ ' content-block-size-half' %}
 {% endif %}
 
-{% block body -%}
+<div class="content-block content-block-id-{{ entity.id }} {{ class }}">
+    <h2>{{ entity.title }}</h2>
 
-    <div class="content-block content-block-id-{{ entity.id }} {{ class }}">
-        <h2>{{ entity.title }}</h2>
-
+    {% if entity.layoutType %}
         {% if entity.layoutType.name != 'image_bottom' %}
             <div class="content-block-media">
                 {% for media in entity.media %}
@@ -24,11 +21,13 @@
                 {% endfor %}
             </div>
         {% endif %}
+    {% endif %}
 
-        <div class="content-block-body">
-            {{ entity.body|raw }}
-        </div>
+    <div class="content-block-body">
+        {{ entity.body|raw }}
+    </div>
 
+    {% if entity.layoutType %}
         {% if entity.layoutType.name == 'image_bottom' %}
             <div class="content-block-media">
                 {% for media in entity.media %}
@@ -36,14 +35,5 @@
                 {% endfor %}
             </div>
         {% endif %}
-    </div>
-
-    <ul class="record_actions">
-        <li>
-            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_contentblocks') }}">
-                <i class="fa fa-arrow-circle-left"></i> Back to the list
-            </a>
-        </li>
-    </ul>
-
-{% endblock %}
+    {% endif %}
+</div>

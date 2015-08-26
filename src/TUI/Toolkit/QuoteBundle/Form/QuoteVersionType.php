@@ -27,7 +27,7 @@ class QuoteVersionType extends AbstractType
     {
       $require_qn = true;
 
-      // Complex event listener for dealing with Templates
+      // Complex event listener for dealing with Templates and Clones
       $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
         // is this an existing Quote and is a template
         $entity = $event->getData();
@@ -37,8 +37,6 @@ class QuoteVersionType extends AbstractType
         $isNew = false;
         $hasTemplate = false;
         $showAll = false;
-
-
 
         if (!$entity || null === $entity->getId()) {
           $isNew = true;

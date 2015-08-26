@@ -19,7 +19,7 @@
                 <th class="mdl-data-table__cell--non-numeric">Secondary color</th>
                 <th class="mdl-data-table__cell--non-numeric">Special color</th>
                 <th class="mdl-data-table__cell--non-numeric center">Logo</th>
-                <th class="mdl-data-table__cell--non-numeric">Actions</th>
+                <th class="mdl-data-table__cell--non-numeric cell-actions">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -37,7 +37,7 @@
                         <img src="{{ asset(".." ~ entity.media.getRelativePath ~ "/" ~ entity.media.getHashedFilename ) }}" alt="{{ entity.name }}">
                     {% endif %}
                 </td>
-                <td class="mdl-data-table__cell--non-numeric">
+                <td class="mdl-data-table__cell--non-numeric cell-actions">
                     <ul class="table-actions">
                         <li>
                             <a href="{{ path('_manage_brand_show', { 'id': entity.id }) }}"><i class="fa fam-view"></i></a>

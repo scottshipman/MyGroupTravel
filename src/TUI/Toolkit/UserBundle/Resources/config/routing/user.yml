@@ -64,3 +64,7 @@ user_registration_confirmation:
 user_password_set:
   path: /password-set/{id}
   defaults: {_controller: "TUIToolkitUserBundle:User:setPassword" }
+
+user_password_reset:
+  path: /{id}/user-password-reset
+  defaults: {_controller: "TUIToolkitUserBundle:User:resetUserPassword" }

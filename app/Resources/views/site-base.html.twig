@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{% block title %}Welcome{% endblock %} | eToolkit</title>
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+    {# Google Material Design (Lite) Stuff #}
+    <script src="//storage.googleapis.com/code.getmdl.io/1.0.0/material.min.js"></script>
+    <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet"
+          href="//fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+
+    {# Dropzone and Flexslider CSS #}
+    {% stylesheets filter='cssrewrite' '@AppBundle/Resources/assets/css/flexslider.css' '@AppBundle/Resources/assets/css/dropzone.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+
+    {# jQuery UI CSS #}
+    {% stylesheets filter="cssrewrite" 'bundles/app/css/jquery-ui/jquery-ui.css' %}
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}">
+    {% endstylesheets %}
+    {% image '@AppBundle/Resources/public/css/jquery-ui/images/*' %}{% endimage %}
+
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+
+    {% javascripts '@jquery' '@jqueryui' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.7.0/spectrum.min.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.6.1/spectrum.min.css">
+
+    {{ render(controller('BrandBundle:Default:colors')) }}
+
+<div class="marketing-site mdl-layout mdl-js-layout{% if is_granted("ROLE_BRAND") %} mdl-layout--fixed-drawer mdl-layout--overlay-drawer-button{% endif %}">
+
+    {# Display admin menu only if the user is BRAND or higher ROLE #}
+    {% if is_granted("ROLE_BRAND") %}
+        <div class="mdl-layout__drawer">
+
+            <header class="tui-drawer-header">
+                {% if app.user.media %}
+                    <span class="tui-image-avatar"><img src="{{ asset(".." ~ app.user.media.getRelativePath ~ "/" ~ app.user.media.getHashedFilename ) }}" alt="{{ app.user.username }}"></span>
+                {% elseif app.user.firstName and app.user.lastName %}
+                    <span class="tui-text-avatar mdl-typography--headline">{{ app.user.firstName[:1] }}{{ app.user.lastName[:1] }}</span>
+                {% else %}
+                    <span class="tui-text-avatar mdl-typography--headline">{{ app.user.username[:1] }}</span>
+                {% endif %}
+                <div class="tui-avatar-dropdown">
+                    <span>{{ app.user.username }}</span>
+                    <div class="mdl-layout-spacer"></div>
+                    <button id="accbtn" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+                        <i class="material-icons">arrow_drop_down</i>
+                    </button>
+                    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="accbtn">
+                        <li><a class="mdl-menu__item" href="/user/{{ app.user.id }}/show">View</a>
+                        </li>
+                        <li><a class="mdl-menu__item" href="/user/{{ app.user.id }}/edit">Edit</a>
+                        </li>
+                        <li><a class="mdl-menu__item" href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a></li>
+                    </ul>
+                </div>
+            </header>
+
+            <nav class="mdl-navigation">
+                {% block admin_menu %}
+                    {{ knp_menu_render('admin_menu', {'currentClass': 'active'}) }}
+                {% endblock %}
+            </nav>
+
+        </div><!-- mdl-layout__drawer -->
+    {% endif %}
+
+    <main class="mdl-layout__content">
+
+        <div class="header mdl-layout__header">
+            <div class="flash-messages">
+                {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="flash-message flash-message-notice">Notice:<br>{{ flashMessage }}</div>
+                {% endfor %}
+                {% for flashMessage in app.session.flashbag.get('error') %}
+                    <div class="flash-message flash-message-error">Error:<br>{{ flashMessage }}</div>
+                {% endfor %}
+            </div>
+
+            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and not is_granted("ROLE_BRAND") %}
+            <div class="tui-drawer-header">
+                {% if app.user.media %}
+                    <span id="accbtn" class="tui-image-avatar"><img src="{{ asset(".." ~ app.user.media.getRelativePath ~ "/" ~ app.user.media.getHashedFilename ) }}" alt="{{ app.user.username }}"></span>
+                {% elseif app.user.firstName and app.user.lastName %}
+                    <span id="accbtn" class="tui-text-avatar mdl-typography--headline">{{ app.user.firstName[:1] }}{{ app.user.lastName[:1] }}</span>
+                {% else %}
+                    <span id="accbtn" class="tui-text-avatar mdl-typography--headline">{{ app.user.username[:1] }}</span>
+                {% endif %}
+                <div class="tui-avatar-dropdown">
+                    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="accbtn">
+                        <li><a class="mdl-menu__item" href="/user/{{ app.user.id }}/show">View</a>
+                        </li>
+                        <li><a class="mdl-menu__item" href="/user/{{ app.user.id }}/edit">Edit</a>
+                        </li>
+                        <li><a class="mdl-menu__item" href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a></li>
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="brand_logo">
+                {{ render(controller('BrandBundle:Default:index')) }}
+            </div>
+
+            {% block page_institution %}{% endblock %}
+
+            <h1 class="page-title">
+                {% block page_title %}{% endblock %}
+            </h1>
+        </div><!-- header -->
+
+        <div class="content">
+            <div class="inner">
+                {% block body %}{% endblock %}
+            </div>
+        </div>
+
+    </main>
+
+</div>
+<!-- mdl-layout -->
+
+{% javascripts '@toolkit' '@AppBundle/Resources/assets/js/dropzone.js' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}
+
+</body>
+
+</html>

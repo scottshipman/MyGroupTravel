@@ -1,6 +1,6 @@
 {% extends '::base.html.twig' %}
-{% block title %}Quote: {{ entity.quoteReference.name }} {% endblock %}
-{% block page_title %}Quote: {{ entity.quoteReference.name  }} {% endblock %}
+{% block title %}Quote: {{ entity.quoteReference.name  }} - {{ entity.name  }}  {% endblock %}
+{% block page_title %}Quote: {{ entity.quoteReference.name  }} - {{ entity.name  }} {% endblock %}
 
 {%  if 'en_GB' in locale %} {% set format = 'd-m-Y' %} {% else %} {% set format = 'm-d-Y' %} {% endif %}
 
@@ -21,6 +21,22 @@
         {% if is_granted("ROLE_ADMIN") %}
             <li>{{ form(delete_form) }}</li>
         {% endif %}
+        <li>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+               href="{{ path('quote_site_show', { 'id': entity.id, 'quoteNumber': entity.quoteNumber }) }}">
+                <i class="fa fam-preview"> </i> Preview
+            </a>
+        </li>
+
+        <li>
+            <a id="quoteLock" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+                {% if (entity.locked is sameas(false)) %}
+                    <i class="fa fa-lock"> </i> Lock
+                {% else %}
+                <i class="fa fa-unlock"> </i> Unlock
+                {% endif %}
+            </a>
+        </li>
     </ul>
     <h3>Summary</h3>
 
@@ -100,6 +116,18 @@
     </table>
 
     <hr>
+    <h3>Header Content</h3>
+
+    {% if entity.headerBlock %}
+        <a id="edit-headerBlock" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+            <i class="fa fa-pencil-square-o"></i> Edit Header Content
+        </a>
+    {% else %}
+        <a id="add-headerBlock" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+            <i class="fa fa-plus-circle"></i> Add Header Content
+        </a>
+    {% endif %}
+    <hr>
 
     {# RENDER THE CONTENT BLOCKS HERE #}
 
@@ -112,14 +140,16 @@
     </a>
 
     <a id="site-content"></a>
-    <div id="content-blocks-wrapper" class="sortable-tabs">
+    <div id="content-blocks-wrapper" class="content-blocks-wrapper sortable-tabs">
         {%  for tab, blocks in entity.content %}
         <div id="tab-{{ tab|replace({' ': '_'}) }}" class="content-blocks-tab">
-            <span class="content-blocks tab-label"><i class="content-block-tab-handle fa fa-arrows"></i>  <h4 id="tab-label-{{ tab }}" class="editable-tab">{{ tab }}</h4>
-                    {% if blocks | length < 1 %}
-                    <i class="tab-delete content-block-tab-actions fa fa-trash-o"> Delete Tab</i>
-                    {% endif %}
-                 <i class="tab-new content-block-tab-actions fa fa-plus-circle"> Add Content</i>
+            <span class="content-blocks tab-label">
+                <i class="content-block-tab-handle fa fa-arrows"></i>
+                <h4 id="tab-label-{{ tab }}" class="editable-tab">{{ tab }}</h4>
+                {% if blocks | length < 1 %}
+                    <span class="tab-delete icon-label"><i class="content-block-tab-actions fa fa-trash-o"></i> Delete Tab</span>
+                {% endif %}
+                <span class="tab-new icon-label"><i class="content-block-tab-actions fa fa-plus-circle"></i> Add Content</span>
             </span>
 
 
@@ -127,12 +157,12 @@
             <div id="tabs-drawer-{{ tab }}" class="sortable-items content-blocks-drawer">
                     {%  for item in blocks %}
                         <div id="content-blocks-{{ items[item].id }}" class="content-blocks content-blocks-item">
-                            <i class="fa fa-arrows"></i>  {{ items[item].title }}
+                            <i class="fa fa-arrows"></i> {{ items[item].title }}
                             {# probably render a controller here by passing in item as id and have block entity returned #}
                             <div id="content-block-actions-{{ items[item].id }}" class="content-block-actions">
                                 <i class="item-edit content-block-item-action fa fa-pencil-square-o"></i>
                                 <i class="item-delete content-block-item-action fa fa-trash-o"></i>
-                                {% if items[item].locked %}<i class="item-lock content-block-item-action fa fa-unlock-alt"></i> {% else %}  <i class="item-lock content-block-item-action fa fa-lock"></i> {% endif %}
+                                {% if items[item].locked %}<i class="item-lock content-block-item-action fa fa-unlock"></i> {% else %}  <i class="item-lock content-block-item-action fa fa-lock"></i> {% endif %}
                                 {% if items[item].hidden %}<i class="item-hide content-block-item-action fa fa-ban"></i> {% else %} <i class="item-hide content-block-item-action fa fa-eye"></i> {% endif %}
                             </div>
                         </div>
@@ -147,9 +177,46 @@
     <script>
         $(document).ready(function() {
 
+            // Add a headerBlock to a site
+            $("#add-headerBlock").on('click', function(){
+                $("#dialog").html("");
+                $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
+                $("#dialog").load('/manage/contentblocks/new/header/' + {{ entity.id}} +'/QuoteVersion', function() {
+                    $(this).dialog("option", "title", 'Add Header Content');
+                    doMDLpopup( $(this) );
+                });
+            });
+
+            {% if entity.headerBlock %}
+            // Edit the headerBlock for a site
+            $("#edit-headerBlock").on('click', function(){
+                $("#dialog").html("");
+                $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
+                $("#dialog").load('/manage/contentblocks/'+ {{ entity.headerBlock.id }} + '/edit/header/' + {{ entity.id}} +'/QuoteVersion', function() {
+                    $(this).dialog("option", "title", 'Edit Header Content');
+                    doMDLpopup( $(this) );
+                });
+            });
+            {% endif %}
+
             // Add a new tab to a site
             $("#add-new-tab").on('click', function(){
                 contentBlocksAddTab('#content-blocks-wrapper', {{ entity.id }});
+            });
+
+            // Toggle the quoteVersion Lock
+            $("#quoteLock").on('click', function(){
+                $("#loader").css("display", "inline-block");
+                $.ajax({
+                    url: window.location.protocol + '//' + window.location.hostname + '/manage/quoteversion/{{ entity.id }}/lock',
+                    headers: {
+                        "Pragma": "no-cache",
+                        "Expires": -1,
+                        "Cache-Control": "no-cache"
+                    }
+                }).done(function (data) {
+                    window.location.reload(true);
+                });
             });
 
             // remove an empty tab from a site (hard delete)
@@ -177,12 +244,12 @@
                     //add element into DOM
                     $(ancestorTabElement).append(
                         '<div id="content-blocks-' + id + '" class="content-blocks content-blocks-item">' +
-                        '<i class="fa fa-arrows"></i>  ' + title +
+                        '<i class="fa fa-arrows"></i> ' + title +
                         {# probably render a controller here by passing in item as id and have block entity returned #}
                         '<div id="content-block-actions-' + id + '" class="content-block-actions">' +
-                        '<i class="item-edit content-block-item-action fa fa-pencil-square-o"></i>' +
-                        '<i class="item-delete content-block-item-action fa fa-trash-o"></i>' +
-                        '<i class="item-lock content-block-item-action fa fa-lock"></i>' +
+                        '<i class="item-edit content-block-item-action fa fa-pencil-square-o"></i> ' +
+                        '<i class="item-delete content-block-item-action fa fa-trash-o"></i> ' +
+                        '<i class="item-lock content-block-item-action fa fa-lock"></i> ' +
                         '<i class="item-hide content-block-item-action fa fa-ban"></i>' +
                         '</div></div>'
                     );
@@ -199,8 +266,9 @@
                 //e.preventDefault();
                 $("#dialog").html("");
                 $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
-                $("#dialog").load('/ajax/contentblocks/' + block + '/edit/' + {{ entity.id}} +'/QuoteVersion', function() {
+                $("#dialog").load( '/ajax/contentblocks/' + block + '/edit/' + {{ entity.id}} + '/QuoteVersion', function() {
                     $(this).dialog("option", "title", 'Edit Content Block');
+                    doMDLpopup( $(this) );
                 });
             });
 
@@ -267,6 +335,8 @@
 
             // change a tab's name
             $('.editable-tab').editable(function(value, settings) {
+                //strip special chars before accepting
+                value = value.replace(/[^\w\s]/gi, '');
                 return(value);
             }, {
                 width: '20em',

@@ -10,13 +10,31 @@ use libphonenumber\PhoneNumberFormat;
 
 class AjaxuserType extends AbstractType
 {
+
+
+  private $locale;
+
+  public function __construct($locale)
+  {
+    $this->locale = $locale;
+  }
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
+      switch ($this->locale){
+        case 'en_GB.utf8':
+          $phoneFormat = PhoneNumberFormat::NATIONAL;
+          $defaultRegion = 'GB';
+          break;
+        default:
+          $date_label = PhoneNumberFormat::NATIONAL;
+          $date_format = 'US';
+          break;
+      }
       // todo: Add logic so you cant add any role greater than your own
         $builder
           ->add('honorific', 'choice', array(
@@ -48,8 +66,8 @@ class AjaxuserType extends AbstractType
           ->add('phoneNumber', 'tel', array(
             'label' => 'Phone Number',
             'required' => false,
-            'default_region' => 'US',
-            'format' => PhoneNumberFormat::NATIONAL
+            'default_region' => $defaultRegion,
+            'format' => $phoneFormat
           ))
         ;
     }

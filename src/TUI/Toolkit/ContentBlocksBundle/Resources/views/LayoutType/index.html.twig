@@ -16,7 +16,7 @@
                 <th class="mdl-data-table__cell--non-numeric">Name (ID)</th>
                 <th class="mdl-data-table__cell--non-numeric center">Icon</th>
                 <th class="mdl-data-table__cell--non-numeric">Class Name</th>
-                <th class="mdl-data-table__cell--non-numeric">Actions</th>
+                <th class="mdl-data-table__cell--non-numeric cell-actions">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -25,7 +25,7 @@
                 <td class="mdl-data-table__cell--non-numeric"><a href="{{ path('manage_layouttype_show', { 'id': entity.id }) }}">{{ entity.name }}</a> ({{ entity.id }})</td>
                 <td class="mdl-data-table__cell--non-numeric center">{{ entity.icon }}</td>
                 <td class="mdl-data-table__cell--non-numeric">{{ entity.className }}</td>
-                <td class="mdl-data-table__cell--non-numeric">
+                <td class="mdl-data-table__cell--non-numeric cell-actions">
                     <ul class="table-actions">
                         <li>
                             <a href="{{ path('manage_layouttype_show', { 'id': entity.id }) }}"><i class="fa fam-view"></i></a>

@@ -111,12 +111,25 @@ class QuoteVersionController extends Controller
       $grid->addRowAction($editAction);
       $showAction = new RowAction('View', 'manage_quote_show');
       $grid->addRowAction($showAction);
+      $previewAction = new RowAction('Preview', 'quote_site_action_show');
+      $grid->addRowAction($previewAction);
       $cloneAction = new RowAction('Clone', 'manage_quote_clone');
       $grid->addRowAction($cloneAction);
       $deleteAction = new RowAction('Delete', 'manage_quote_quick_delete');
       $deleteAction->setRole('ROLE_ADMIN');
       $deleteAction->setConfirm(true);
       $grid->addRowAction($deleteAction);
+      $lockAction = new RowAction('Lock', 'manage_quoteversion_lock_nonajax');
+      $lockAction->manipulateRender(
+        function ($action, $row)
+        {
+          if ($row->getField('locked') == true) {
+            $action->setTitle('Unlock');
+          }
+          return $action;
+        }
+      );
+      $grid->addRowAction($lockAction);
 
       // Set the default order of the grid
       $grid->setDefaultOrder('created', 'DESC');
@@ -979,6 +992,14 @@ class QuoteVersionController extends Controller
       $cloneform->getData()->getQuoteReference()->setInstitution($institution);
     }
 
+    // clone the content blocks, but first load the original entity since we never did that - only used form values
+    $pathArr = explode('/', $_SERVER['HTTP_REFERER']);
+    if(is_numeric($pathArr[5])){
+      $originalEntity = $em->getRepository('QuoteBundle:QuoteVersion')->find($pathArr[5]);
+      $entity->setContent($this->cloneContentBlocks($originalEntity->getContent()));
+    }
+
+
 
     if ($cloneform->isValid()) {
       $em->persist($entity);
@@ -1150,5 +1171,91 @@ class QuoteVersionController extends Controller
     $this->get('session')->getFlashBag()->add('notice', 'Quote Restored: ' . $quoteVersion->getName());
 
     return $this->redirect($this->generateUrl('manage_quote'));
+  }
+
+
+  /**
+   * Toggles lock status on Quote entity.
+   *
+   */
+  public function lockAction(Request $request, $id)
+  {
+
+    $em = $this->getDoctrine()->getManager();
+
+    $quoteVersion = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+
+    if (!$quoteVersion) {
+      throw $this->createNotFoundException('Unable to find Quote entity.');
+    }
+
+    if($quoteVersion->getLocked()==false){
+      $status = true;
+    } else {
+      $status = false;
+    }
+    $quoteVersion->setLocked($status);
+    $em->persist($quoteVersion);
+    $em->flush();
+    $this->get('session')->getFlashBag()->add('notice', 'Quote Lock has been toggled ');
+
+    return new Response(json_encode( (array) $quoteVersion));
+
+  }
+
+  /**
+   * Toggles lock status Quote entity without ajax.
+   *
+   */
+  public function lockNonajaxAction(Request $request, $id)
+  {
+
+    $em = $this->getDoctrine()->getManager();
+
+    $quoteVersion = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+
+    if (!$quoteVersion) {
+      throw $this->createNotFoundException('Unable to find Quote entity.');
+    }
+
+    if($quoteVersion->getLocked()==false){
+      $status = true;
+    } else {
+      $status = false;
+    }
+    $quoteVersion->setLocked($status);
+    $em->persist($quoteVersion);
+    $em->flush();
+    $this->get('session')->getFlashBag()->add('notice', 'Quote Lock has been toggled ');
+
+    return $this->redirect($this->generateUrl('manage_quote'));
+
+  }
+
+  public function cloneContentBlocks($content = array())
+  {
+    $newContentArray = array();
+    if(!empty($content) && $content!= NULL){
+      foreach($content as $tab => $blocks){
+        foreach($blocks as $block){ // block should be an ID number
+          $em = $this->getDoctrine()->getManager();
+
+          $originalBlock = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($block);
+
+          if(!$originalBlock){
+            throw $this->createNotFoundException('Unable to find Content entity.');
+          }
+
+          $newBlock = clone $originalBlock;
+          $newBlock->setId(null);
+          $em->persist($newBlock);
+          $em->flush($newBlock);
+
+          $newContentArray[$tab][] = $newBlock->getID();
+        }
+      }
+    }
+
+    return $newContentArray;
   }
 }

@@ -15,7 +15,7 @@
             <tr>
                 <th class="mdl-data-table__cell--non-numeric">Name (ID)</th>
                 <th class="mdl-data-table__cell--non-numeric">Visible</th>
-                <th class="mdl-data-table__cell--non-numeric">Actions</th>
+                <th class="mdl-data-table__cell--non-numeric cell-actions">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -31,7 +31,7 @@
                         <i class="fa fa-times"></i>
                     {% endif %}
                 </td>
-                <td class="mdl-data-table__cell--non-numeric">
+                <td class="mdl-data-table__cell--non-numeric cell-actions">
                     <ul class="table-actions">
                         <li>
                             <a href="{{ path('manage_tripstatus_show', { 'id': entity.id }) }}"><i class="fa fam-view"></i></a>

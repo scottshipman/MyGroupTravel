@@ -1,73 +1,6 @@
 (function ($) {
-    /**
-     * Material Design Stuff
-     */
 
-    $('.mdl-layout__drawer .menu_level_1').each(function () {
-        var t = $(this);
-        t.prev().addClass('menu-parent'); // add to link-like span
-        t.css('overflow', 'hidden');
-        if (t.parent().hasClass('current_ancestor')) {
-            t.parent().addClass('expanded');
-            t.children('span').css('margin-top', 0);
-            t.show();
-        } else {
-            t.parent().addClass('collapsed');
-            t.children('span').css('margin-top', '-' + $(this).css('height'));
-            t.hide();
-        }
-    });
-
-    $('.menu-parent').click(function () { // $(this) is the link-like span
-        var t = $(this);
-        if (t.parent().hasClass('collapsed')) {
-            t.parent().removeClass('collapsed').addClass('expanded');
-            t.next().show();
-            t.next().children('span').animate({
-                marginTop: 0
-            }, 200);
-        } else {
-            t.parent().removeClass('expanded').addClass('collapsed');
-            t.next().children('span').animate({
-                marginTop: '-' + $(this).next().css('height')
-            }, 200, 'swing', function () {
-                t.next().hide();
-            });
-        }
-    });
-
-    // Color picker
-    $('#tui_toolkit_brandbundle_brand_primaryColor').addClass('color_picker');
-    $('#tui_toolkit_brandbundle_brand_buttonColor').addClass('color_picker');
-    $('#tui_toolkit_brandbundle_brand_hoverColor').addClass('color_picker');
-
-    $('input.color_picker').spectrum({
-        preferredFormat: "rgb",
-        showPaletteOnly: true,
-        showPalette: true,
-        showInitial: true,
-        hideAfterPaletteSelect: true,
-        palette: [
-            ['rgb(121, 85, 72);', 'rgb(96, 125, 139);', 'rgb(158, 158, 158);'],
-            ['rgb(255, 87, 34);', 'rgb(244, 67, 54);', 'rgb(233, 30, 99);'],
-            ['rgb(156, 39, 176);', 'rgb(103, 58, 183);', 'rgb(63, 81, 181);'],
-            ['rgb(33, 150, 243);', 'rgb(3, 169, 244);', 'rgb(0, 188, 212);'],
-            ['rgb(0, 150, 136);', 'rgb(76, 175, 80);', 'rgb(139, 195, 74);'],
-            ['rgb(205, 220, 57);', 'rgb(255, 235, 59);', 'rgb(255, 193, 7);'],
-            ['rgb(255, 152, 0);'],
-        ]
-    });
-    $('input.color_picker')
-        .parent().removeClass().addClass('mdl-colorfield')
-        .find('label').removeClass().addClass('mdl-label-mimic');
-
-    // Work on date fields
-    $('input[type="date"]').addClass('mdl-date').attr('type', 'text');
-    $('.mdl-date').change(function () {
-        $(this).parent().addClass('is-dirty');
-    });
-
-    //Add Placeholder Fields to Login Form
+    // Add Placeholder Fields to Login Form
     $("#username").attr("placeholder", "Email");
     $("#password").attr("placeholder", "Password");
 
@@ -123,28 +56,8 @@
         $("#dialog").dialog("option", "title", "Loading...").dialog("open");
         $("#dialog").load('/ajax/' + form_type + '/new', function () {
             $(this).dialog("option", "title", 'Create New ' + parts[0]);
-            $(this).find('.mdl-textfield__input').each(function () {
-                if ($(this).attr('required')) {
-                    $(this).parent().addClass('is-invalid');
-                }
-                ;
-            });
+            doMDLpopup( $(this) );
         });
-    });
-
-    $(document).on('focus', '.ui-dialog .mdl-textfield__input', function () {
-        $(this).parent().addClass('is-focused');
-    }).on('blur', '.ui-dialog .mdl-textfield__input', function () {
-        $(this).parent().removeClass('is-focused');
-    }).on('change paste keyup', '.ui-dialog .mdl-textfield__input', function () {
-        if ($(this).val()) {
-            $(this).parent().addClass('is-dirty').addClass('is-upgraded').removeClass('is-invalid');
-        } else {
-            $(this).parent().removeClass('is-dirty').removeClass('is-upgraded');
-            if ($(this).attr('required')) {
-                $(this).parent().addClass('is-invalid');
-            };
-        }
     });
 
     /*
@@ -167,28 +80,6 @@
                 }
 
             }
-        });
-    })
-
-    /**
-     * Dropzone manipulation
-     */
-
-    $(document).on('click', '.media-placeholder-image', function () {
-        $('.media-placeholder-image').css({"display": "none"});
-        $("#dropzone_form").css({"display": "block"});
-        $("#dropzone-form-close").css({"display": "inline-block"});
-    });
-
-    $(document).on('click', '#avatar-label', function () {
-        $('.media-placeholder-image').css({"display": "block"});
-        $("#dropzone_form").css({"display": "none"});
-        $("#dropzone-form-close").css({"display": "none"});
-    });
-
-    $(document).on('submit', '#dropzone_form', function () {
-        $("img#user_media").css({
-            display: "none"
         });
     });
 
@@ -245,90 +136,6 @@
         if ($.trim($(this).html()) == 'Update') {
             $(this).html('<i class="fa fa-check-circle"></i> Update');
         }
-    })
-
-    /**
-     * Add, Edit and Delete Content Block Tabs
-     *
-     */
-
-
+    });
 
 })(jQuery);
-
-/********* Global Methods Go below here ******************************/
-
-/**
- * Persist Content block data to the database/entity
- * @param id - Quote Version # passed from window.path
- */
-
-var contentBlocksUpdate = function (id) {
-    // update server with new data
-    $("#loader").css("display", "inline-block");
-    var result = {};
-    var data = $(".content-blocks-tab");
-    data.each(function (i, obj) {
-        tabText = $(this).find('.editable-tab').text();
-        if ($(this).find('.content-blocks-item').size() == 0) {
-            result[tabText] = '';
-        } else {
-            result[tabText] = [];
-            var children = []
-            $(this).find('.content-blocks-item').each(function (k, v) {
-                children.push(this.id);
-            });
-            result[tabText] = children;
-        }
-    });
-    //POST to server using $.post or $.ajax
-    $.ajax({
-        data: result,
-        type: 'POST',
-        url: '/manage/contentblocks/update/'+ id
-    });
-    //reload the window so changes are redrawn - its lazy non-ajaxy, but...
-    contentBlocksRefresh(id);
-};
-
-/**
- * Add a New Tab for Content Blocks
- * @param elem The parent container of the content blocks
- * @param id The id of the QuoteVersion Object that owns the content blocks
- */
-
-var contentBlocksAddTab= function (elem, id){
-    var newId = $(elem).children().length;
-    $("#content-blocks-wrapper").prepend(
-        '<div id="tab-tab'  + (newId + 1)+ '" class="content-blocks-tab">' +
-        '<span class="content-blocks tab-label"><i class="content-block-tab-handle fa fa-arrows"></i>  <h4 id="tab-label-{{ tab }}" class="editable-tab"> New Tab '  + (newId + 1)+ '</h4>' +
-        '<i class="tab-delete content-block-tab-actions fa fa-trash-o"> Delete Tab</i>' +
-        '<i class="tab-new content-block-tab-actions fa fa-plus-circle"> Add Content</i>' +
-        '</span>' +
-        '<div id="tabs-drawer-tab' + (newId +1) + '" class="sortable-items content-blocks-drawer">' +
-        '</div></div>'
-    );
-
-    $(".sortable-tabs").sortable('refresh');
-    $(".sortable-items").sortable();
-    contentBlocksUpdate(id);
-}
-
-/**
- * Reload the page that shows the content blocks and tabs
- * @param id
- */
-var contentBlocksRefresh = function(id){
-    $.ajax({
-        url: window.location.href,
-        headers: {
-            "Pragma": "no-cache",
-            "Expires": -1,
-            "Cache-Control": "no-cache"
-        }
-    }).done(function () {
-        window.location.hash = 'site-content';
-        window.location.reload(true);
-    });
-}
-

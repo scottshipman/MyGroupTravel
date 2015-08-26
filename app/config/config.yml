@@ -3,7 +3,6 @@ imports:
     - { resource: security.yml }
     - { resource: services.yml }
     - { resource: toolkit.yml }
-#    - { resource: sonata.yml }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
@@ -67,11 +66,16 @@ assetic:
                 inputs:
                     - "%kernel.root_dir%/../vendor/components/jquery/jquery.min.js"
                     - "%kernel.root_dir%/../components/jquery/jquery.form.js"
+                    - @AppBundle/Resources/assets/js/jeditable.js
+                    - @AppBundle/Resources/assets/js/jquery.flexslider.js
                     # - /srv/www/Toolkit/vendor/components/jquery/jquery.min.js
             toolkit:
                 inputs:
-                    - @AppBundle/Resources/assets/js/jeditable.js
                     - @AppBundle/Resources/assets/js/toolkit.js
+                    - @AppBundle/Resources/assets/js/toolkit_mdl.js
+                    - @AppBundle/Resources/assets/js/toolkit_dropzone.js
+                    - @AppBundle/Resources/assets/js/toolkit_colorpicker.js
+                    - @AppBundle/Resources/assets/js/toolkit_global.js
 
             jqueryui:
                 inputs:
@@ -99,7 +103,6 @@ doctrine:
         #   3. Uncomment next line:
         #     path:     "%database_path%"
         types:
-          json:     Sonata\Doctrine\Types\JsonType
           phone_number: Misd\PhoneNumberBundle\Doctrine\DBAL\Types\PhoneNumberType
 
     orm:
@@ -139,10 +142,18 @@ fos_user:
                       sender_name: Toolkit Registration
 
                 enabled:    true
-                template:   TUIToolkitUserBundle:Registration:email.txt.twig
+                template:   TUIToolkitUserBundle:Registration:register_email.html.twig
     from_email:
         address:        noreply@toolkit.com
         sender_name:    TUI Toolkit System
+    resetting:
+            email:
+                from_email:
+                      address: reset@toolkit.com
+                      sender_name: Toolkit Reset
+
+                template:   TUIToolkitUserBundle:Resetting:reset.html.twig
+
 
 knp_menu:
     # use "twig: false" to disable the Twig extension and the TwigRenderer
