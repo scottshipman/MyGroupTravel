@@ -4,7 +4,6 @@
 {% block page_institution %}<div id="site-quote-name">{% if entity.quoteReference.institution %}{{ entity.quoteReference.institution.name  }}{% endif %} </div>{% endblock %}
 {% block page_title %}{{ entity.quoteReference.name  }}, {{ entity.name  }} {% endblock %}
 
-
 {%  if 'en_GB' in locale %} {% set format = 'd-m-Y' %} {% else %} {% set format = 'm-d-Y' %} {% endif %}
 
 {% block body -%}
@@ -13,8 +12,12 @@
 
     <div id="site-quote-number">Quote Number: {% if entity.quoteNumber %}{{ entity.quoteNumber  }} {% endif %}</div>
 
-    <a href="javascript:window.print()" id="print_pdf" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
-        <i class="fa fa-print"></i> Print/PDF
+    <a href="javascript:window.print()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
+        <i class="fa fa-print"></i> Print
+    </a>
+
+    <a href="/quote/print/{{ entity.id }}.pdf" target="_blank" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
+        <i class="fa fa-file-pdf-o"></i> PDF
     </a>
 
     {% if warning | length >0 %}
