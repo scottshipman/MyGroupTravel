@@ -4,7 +4,6 @@
 {% block page_institution %}<div id="site-quote-name">{% if entity.quoteReference.institution %}{{ entity.quoteReference.institution.name  }}{% endif %} </div>{% endblock %}
 {% block page_title %}{{ entity.quoteReference.name  }}, {{ entity.name  }} {% endblock %}
 
-
 {%  if 'en_GB' in locale %} {% set format = 'd-m-Y' %} {% else %} {% set format = 'm-d-Y' %} {% endif %}
 
 {% block body -%}
@@ -13,8 +12,12 @@
 
     <div id="site-quote-number">Quote Number: {% if entity.quoteNumber %}{{ entity.quoteNumber  }} {% endif %}</div>
 
-    <a href="javascript:window.print()" id="print_pdf" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
-        <i class="fa fa-print"></i> Print/PDF
+    <a href="javascript:window.print()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
+        <i class="fa fa-print"></i> Print
+    </a>
+
+    <a href="/quote/print/{{ entity.id }}.pdf" target="_blank" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
+        <i class="fa fa-file-pdf-o"></i> PDF
     </a>
 
     {% if warning | length >0 %}
@@ -25,14 +28,14 @@
         </div>
     {% endif %}
 
-    <div id="site-header">
+    <div id="site-header" class="quote-view-site-header">
         <div id="site-header-slideshow">
             <div class="flexslider">
                 <ul class="slides">
                     {%  if entity.headerBlock %}
                         {% for media in entity.headerBlock.media %}
                         <li>
-                            <img src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}" />
+                            <img src="{{ asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}" />
                         </li>
                         {% endfor %}
                     {% endif %}
@@ -105,7 +108,7 @@
 
     {% if editable %}
         <a id="add-new-tab" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-            <i class="fa fa-plus-circle"></i>  Add New Tab
+            <i class="fa fa-plus-circle"></i> Add New Tab
         </a>
     {% endif %}
 
@@ -164,15 +167,19 @@
     </div>
 
     <div id="loader"><img src="{{ asset('bundles/quote/images/loader.gif') }}"></div>
+
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.js"></script>
+    
     <script type="text/javascript" charset="utf-8">
         $(window).load(function() {
             $('.flexslider').flexslider({
                 directionNav: false,
-                controlNav: false
+                controlNav: false,
+                smoothHeight: true
             });
         });
     </script>
+
     <script>
         $(document).ready(function() {
 

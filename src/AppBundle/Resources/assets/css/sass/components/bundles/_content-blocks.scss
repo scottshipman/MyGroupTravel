@@ -179,6 +179,13 @@ td .layout-icons.image_bottom {
   &.content-block-size-half {
     float: left;
     width: 50%;
+
+    .pdf-layout & {
+      clear: both;
+      float: none;
+      width: auto;
+    }
+
   }
 
   & ~ .record_actions {

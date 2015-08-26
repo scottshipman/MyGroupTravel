@@ -8,6 +8,11 @@
     max-height: none;
   }
 
+  .pdf-layout & {
+    @include mdl-primary-color( background, 6 );
+    padding: 1em;
+  }
+
   h1 {
     margin: 0;
     padding: 0.25em 0;
@@ -29,6 +34,11 @@
   padding: 8px 0;
   float: right;
   color: $text_white;
+
+  .pdf-layout & {
+    float: none;
+    text-align: right;
+  }
 
   img {
     max-width: 120px;
