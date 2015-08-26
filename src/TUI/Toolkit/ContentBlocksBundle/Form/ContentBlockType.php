@@ -39,15 +39,19 @@ class ContentBlockType extends AbstractType
 
             // Dont show locked or hidden fields unless Brand role or higher
             if($securityContext->isGranted('ROLE_BRAND')) {
-             $builder ->add('locked', 'checkbox', array(
+              $builder->add('locked', 'checkbox', array(
                 'required' => FALSE
-              ))
-                ->add('hidden', 'checkbox', array(
-                  'required' => FALSE
-                ));
-                }
+              ));
+              // you cant hide header blocks
+              if (strpos($options['action'], '/header/') === FALSE) {
+                $builder
+                  ->add('hidden', 'checkbox', array(
+                    'required' => FALSE
+                  ));
+              }
+            }
 
-            // only show Layout Type for Content Blocks, not Header Blocks
+            // only show Layout Type , double wide and slideshow for Content Blocks, not Header Blocks
             if(strpos($options['action'], '/header/')===false) {
               $builder
                 ->add('layoutType', 'entity', array(
@@ -56,6 +60,14 @@ class ContentBlockType extends AbstractType
                   'choice_label' => 'name',
                   'expanded' => TRUE,
                   'multiple' => FALSE
+                ))
+                ->add('doubleWidth', 'checkbox', array(
+                  'required' => false
+                ))
+
+                ->add('isSlideshow', 'checkbox', array(
+                  'required' => false,
+                  'label' => 'This is a Slideshow',
                 ));
               }
             $builder
@@ -67,14 +79,7 @@ class ContentBlockType extends AbstractType
 //                    'multiple' => true
                 )
             ))
-            ->add('doubleWidth', 'checkbox', array(
-                'required' => false
-            ))
 
-            ->add('isSlideshow', 'checkbox', array(
-              'required' => false,
-              'label' => 'This is a Slideshow',
-            ))
             ->getForm()
         ;
     }

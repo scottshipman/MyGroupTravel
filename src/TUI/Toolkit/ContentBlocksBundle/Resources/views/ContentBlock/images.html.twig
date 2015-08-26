@@ -1,0 +1,23 @@
+{% if entity.layoutType %}
+    {% if entity.layoutType.name != 'image_bottom' %}
+        <div class="content-block-media">
+            {% for media in entity.media %}
+                <img src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endif %}
+
+<div class="content-block-body">
+    {{ entity.body|raw }}
+</div>
+
+{% if entity.layoutType %}
+    {% if entity.layoutType.name == 'image_bottom' %}
+        <div class="content-block-media">
+            {% for media in entity.media %}
+                <img src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endif %}
