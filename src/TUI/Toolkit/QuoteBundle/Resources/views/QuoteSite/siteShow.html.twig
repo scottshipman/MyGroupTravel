@@ -44,7 +44,7 @@
                 <li>Departing: {% if entity.departureDate %}<strong>{{ entity.departureDate|date(format) }}</strong>{% endif %}</li>
                 <li>{% if entity.duration %}<strong>{{ entity.duration }}</strong>{% endif %}</li>
                 <li>Returning: {% if entity.returnDate %}<strong>{{ entity.returnDate|date(format) }}</strong>{% endif %}</li>
-                <li>Board Basis: {% if entity.boardBasis %}<strong>{{ entity.boardBasis }}</strong>{% endif %}</li>
+                <li>Board Basis: {% if entity.boardBasis %}<strong>{{ entity.boardBasis.name }}</strong>{% endif %}</li>
                 <li>Transport: {% if entity.transportType %}<strong>{{ entity.transportType.name }}</strong>{% endif %}</li>
                 <li>Price per person: <span class="quote-price">{% if entity.pricePerson %}<strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %} {{ entity.pricePerson }}</strong>{% endif %}</span></li>
                 <li>Based on {% if entity.payingPlaces  %}<strong>{{ entity.payingPlaces  }}</strong>{% endif %} paying and {% if entity.freePlaces  %}<strong>{{ entity.freePlaces  }}</strong>{% endif %} free places</li>
