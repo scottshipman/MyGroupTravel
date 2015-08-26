@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>{% block title %}PDF{% endblock %} | eToolkit</title>
+
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css">
+
+    {{ render(controller('BrandBundle:Default:colorsPdf')) }}
+
+<div class="marketing-site pdf-layout">
+
+    <div class="main">
+
+        <div class="header">
+            <div class="brand_logo">
+                {{ render(controller('BrandBundle:Default:index')) }}
+            </div>
+
+            {% block page_institution %}{% endblock %}
+
+            <h1 class="page-title">
+                {% block page_title %}{% endblock %}
+            </h1>
+        </div><!-- header -->
+
+        <div class="content">
+            <div class="inner">
+                {% block body %}{% endblock %}
+            </div>
+        </div>
+
+    </div>
+
+</div><!-- marketing-site pdf-layout -->
+
+</body>
+
+</html>
