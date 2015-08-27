@@ -1,6 +1,7 @@
 {% block body_html %}
     {% autoescape false %}
-    <div style="color:#fff; font-size: 1px; text-align: center;">Ensure receiving emails from {{ brand.name }}, please add us to
+    <div style="color:#fff; font-size: 1px; text-align: center;">Ensure receiving emails from {{ brand.name }}, please
+        add us to
         your contact list.
     </div>
     <div style="height: 150px; background-color:{{ brand.primaryColor }}; color:{{ brand.primaryColor }}; width: 100%;"></div>
@@ -36,7 +37,7 @@
                                         password. Click on the button below and follow the instructions to change your
                                         password</p>
                                     <center>
-                                        <a style="text-decoration: none; color:#fff; display: block; width: 40%; text-align: center; padding: 20px; margin: 20px auto; background-color:{{ brand.primaryColor }}; text-align: center;"
+                                        <a style="text-decoration: none; color:#fff; display: block; width: 40%; text-align: center; padding: 20px; margin: 20px auto; background-color:{{ brand.primaryColor }};"
                                            href="{{ absolute_url("/resetting/reset/" ~ user.confirmationToken) }}">Choose
                                             a
                                             password</a>
