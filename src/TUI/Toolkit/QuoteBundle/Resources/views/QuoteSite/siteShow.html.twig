@@ -87,9 +87,14 @@
                         <span class="share-text">
                             Share this quote with others
                         </span>
-                        <input type="text" id="share_url" name="share_url" value="{{ url('quote_site_share', { 'id': entity.id, 'quoteNumber': entity.quoteNumber }) }}">
-                        <a href="#" id="copy-button" data-clipboard-target="share_url" title="Click to copy Quote URL." class="not-full mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
-                            <i class="fa fa-sign-in fa-stack"></i>
+                        {% if entity.quoteNumber %}
+                            <input type="text" id="share_url" name="share_url" value="{{ url('quote_site_share', { 'id': entity.id, 'quoteNumber': entity.quoteNumber }) }}">
+                        {% else %}
+                            <input type="text" id="share_url" name="share_url" value="{{ url('quote_template_share', { 'id': entity.id }) }}">
+                        {% endif %}
+                                <a href="#" id="copy-button" data-clipboard-target="share_url" title="Click to copy Quote URL." class="not-full mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+
+                                <i class="fa fa-sign-in fa-stack"></i>
                         </a>
 
 
