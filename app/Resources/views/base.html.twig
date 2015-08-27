@@ -40,7 +40,7 @@
 
     {{ render(controller('BrandBundle:Default:colors')) }}
 
-<div class="mdl-layout mdl-js-layout{% if is_granted("ROLE_BRAND") %} mdl-layout--fixed-drawer mdl-layout--overlay-drawer-button{% endif %}">
+<div class="base-site mdl-layout mdl-js-layout{% if is_granted("ROLE_BRAND") %} mdl-layout--fixed-drawer mdl-layout--overlay-drawer-button{% endif %}">
 
     {# Display admin menu only if the user is BRAND or higher ROLE #}
     {% if is_granted("ROLE_BRAND") %}
@@ -135,11 +135,13 @@
             </div>
         </div>
 
+        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
         <footer class="site-footer">
             <div class="center-section">
                 {{ render(controller('BrandBundle:Default:footer')) }}
             </div>
         </footer>
+        {% endif %}
 
     </main>
 

@@ -5,10 +5,10 @@
   padding-bottom: 16px;
   @include clear-fix();
 
-  .pdf-layout & {
+  .pdf-layout &,
+  .base-site & {
     background: transparent;
     color: $text_grey_t2;
-    display: block;
   }
 
   p {
@@ -36,6 +36,11 @@
   .tui-text-avatar {
     float: left;
     margin: 0 0.5em 0.25em 0;
+
+    .pdf-layout & {
+      display: none;
+    }
+
   }
 
   .agent {
@@ -45,10 +50,20 @@
   .quote-info {
     text-align: right;
     margin: 0.5em 0 1em;
+
+    .pdf-layout & {
+      text-align: left;
+    }
+
   }
 
   .quote-label {
     float: left;
+
+    .pdf-layout & {
+      float: none;
+    }
+
   }
 
   .quote-price {
@@ -59,6 +74,11 @@
     display: block;
     margin: 1em 0;
     width: 100%;
+
+    .pdf-layout & {
+      display: none;
+    }
+
   }
 
 }
