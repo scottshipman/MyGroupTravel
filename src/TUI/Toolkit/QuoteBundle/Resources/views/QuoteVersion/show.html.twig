@@ -2,7 +2,7 @@
 {% block title %}Quote: {{ entity.quoteReference.name  }} - {{ entity.name  }}  {% endblock %}
 {% block page_title %}Quote: {{ entity.quoteReference.name  }} - {{ entity.name  }} {% endblock %}
 
-{%  if 'en_GB' in locale %} {% set format = 'd-m-Y' %} {% else %} {% set format = 'm-d-Y' %} {% endif %}
+{%  if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
 
 {% block body -%}
     <ul class="record_actions">
@@ -67,7 +67,7 @@
                 <th>Return</th>
                 <td>{% if entity.returnDate %}{{ entity.returnDate|date(format) }}{% endif %}</td>
                 <th>Board Basis</th>
-                <td>{% if entity.boardBasis %}{{ entity.boardBasis }}{% endif %}</td>
+                <td>{% if entity.boardBasis %}{{ entity.boardBasis.name }}{% endif %}</td>
             </tr>
             <tr>
                 <th>Duration</th>
