@@ -1,9 +1,8 @@
 {% extends '::site-base.html.twig' %}
 
-{% block title %}{{ entity.name }} {% endblock %}
+{% block title %}{{ entity.name }}{% endblock %}
 {% block page_institution %}<div id="site-quote-name">{% if entity.quoteReference.institution %}{{ entity.quoteReference.institution.name  }}{% endif %} </div>{% endblock %}
 {% block page_title %}{{ entity.quoteReference.name  }}, {{ entity.name  }} {% endblock %}
-
 
 {%  if 'en_GB' in locale %} {% set format = 'd-m-Y' %} {% else %} {% set format = 'm-d-Y' %} {% endif %}
 
@@ -24,7 +23,7 @@
     {% if warning | length >0 %}
         <div id="site-warning">
             {% for message in warning %}
-            <p>{{ message }}</p>
+                <p>{{ message }}</p>
             {% endfor %}
         </div>
     {% endif %}
@@ -160,17 +159,10 @@
 
     </div>
 
-    <div id="site-footer">
-        Your Contact is {% if entity.quoteReference.salesAgent %}{{ entity.quoteReference.salesAgent.firstName }} {{ entity.quoteReference.salesAgent.lastName }}
-            <br />
-            <i class="fa fa-envelope-o"></i> {{ entity.quoteReference.salesAgent.email }}
-        {% endif %}
-    </div>
-
     <div id="loader"><img src="{{ asset('bundles/quote/images/loader.gif') }}"></div>
 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.js"></script>
-    
+
     <script type="text/javascript" charset="utf-8">
         $(window).load(function() {
             $('.flexslider').flexslider({
@@ -333,4 +325,42 @@
         });
     </script>
 
+{% endblock %}
+
+
+
+
+
+{% block footer_left %}
+    {% if entity.quoteReference.salesAgent %}
+        <span class="intro">Tour Organizer:</span>
+        {% if entity.quoteReference.salesAgent.media %}
+            <span class="tui-image-avatar"><img src="{{ asset(".." ~ entity.quoteReference.salesAgent.media.getRelativePath ~ "/" ~ entity.quoteReference.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.quoteReference.salesAgent.username }}"></span>
+        {% elseif entity.quoteReference.salesAgent.firstName and entity.quoteReference.salesAgent.lastName %}
+            <span class="tui-text-avatar mdl-typography--headline">{{ entity.quoteReference.salesAgent.firstName[:1] }}{{ entity.quoteReference.salesAgent.lastName[:1] }}</span>
+        {% else %}
+            <span class="tui-text-avatar mdl-typography--headline">{{ entity.quoteReference.salesAgent.username[:1] }}</span>
+        {% endif %}
+        <span class="agent">{{ entity.quoteReference.salesAgent.firstName }} {{ entity.quoteReference.salesAgent.lastName }}<br>
+        {{ entity.quoteReference.salesAgent.email }}</span>
+    {% endif %}
+{% endblock %}
+
+{% block footer_right %}
+    <div class="quote-info"><span class="quote-label">Price per person:</span><span class="quote-price">{% if entity.pricePerson %}<strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong>{% endif %}</span></div>
+    {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
+        {% if date(entity.expiryDate) < date('now') %}
+            <a class="expired-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+                <i class="fa fa-calendar-times-o"></i> Expired
+            </a>
+        {% else %}
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('quote_site_quote_accepted', { 'id': entity.id }) }}">
+                <i class="fa fa-thumbs-o-up"> </i> Accept Quote
+            </a>
+        {% endif %}
+    {% elseif (entity.converted is sameas(true)) and (entity.quoteReference.converted is sameas(true))%}
+        <a class="accepted-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+            <i class="fa fa-thumbs-up"> </i> Accepted
+        </a>
+    {% endif %}
 {% endblock %}
