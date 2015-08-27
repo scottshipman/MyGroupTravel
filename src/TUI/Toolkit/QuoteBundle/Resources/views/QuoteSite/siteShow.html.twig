@@ -32,7 +32,7 @@
                     {%  if entity.headerBlock %}
                         {% for media in entity.headerBlock.media %}
                         <li>
-                            <img src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}" />
+                            <img src="{{ asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) | imagine_filter('slideShow') }}" />
                         </li>
                         {% endfor %}
                     {% endif %}
