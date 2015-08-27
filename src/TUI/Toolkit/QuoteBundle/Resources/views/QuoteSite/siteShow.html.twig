@@ -4,6 +4,7 @@
 {% block page_institution %}<div id="site-quote-name">{% if entity.quoteReference.institution %}{{ entity.quoteReference.institution.name  }}{% endif %} </div>{% endblock %}
 {% block page_title %}{{ entity.quoteReference.name  }}, {{ entity.name  }} {% endblock %}
 
+
 {%  if 'en_GB' in locale %} {% set format = 'd-m-Y' %} {% else %} {% set format = 'm-d-Y' %} {% endif %}
 
 {% block body -%}
@@ -35,7 +36,7 @@
                     {%  if entity.headerBlock %}
                         {% for media in entity.headerBlock.media %}
                         <li>
-                            <img src="{{ asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}" />
+                            <img src="{{ asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) | imagine_filter('slideShow') }}" />
                         </li>
                         {% endfor %}
                     {% endif %}
