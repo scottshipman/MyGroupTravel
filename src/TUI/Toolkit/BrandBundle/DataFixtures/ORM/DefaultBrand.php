@@ -26,6 +26,7 @@ class DefaultBrand implements FixtureInterface
     $brand->setPrimaryColor('rgb(96, 125, 139)');
     $brand->setButtonColor('rgb(33, 150, 243)');
     $brand->setHoverColor('rgb(63, 81, 181)');
+    $brand->setFooterBody('');
 
     $manager->persist($brand);
     $manager->flush();
