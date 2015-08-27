@@ -1,21 +1,9 @@
-.slides img {
-  max-height: 450px;
-  min-width: 100%;
-  height: auto;
-}
+.flexslider {
+  border-radius: 0;
 
-#site-header {
-  padding-top: 3em;
-  width: 100%
-}
+  .slides img {
+    min-width: 100%;
+    height: auto;
+  }
 
-#site-header-slideshow {
-  width: 75%;
-  float: left;
-  padding-right: 3em;
-}
-
-#site-header-summary {
-  width: 25%;
-  float:left;
 }

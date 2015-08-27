@@ -13,8 +13,12 @@
 
     <div id="site-quote-number">Quote Number: {% if entity.quoteNumber %}{{ entity.quoteNumber  }} {% endif %}</div>
 
-    <a href="javascript:window.print()" id="print_pdf" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
-        <i class="fa fa-print"></i> Print/PDF
+    <a href="javascript:window.print()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
+        <i class="fa fa-print"></i> Print
+    </a>
+
+    <a href="/quote/print/{{ entity.id }}.pdf" target="_blank" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
+        <i class="fa fa-file-pdf-o"></i> PDF
     </a>
 
     {% if warning | length >0 %}
@@ -25,14 +29,14 @@
         </div>
     {% endif %}
 
-    <div id="site-header">
+    <div id="site-header" class="quote-view-site-header">
         <div id="site-header-slideshow">
             <div class="flexslider">
                 <ul class="slides">
                     {%  if entity.headerBlock %}
                         {% for media in entity.headerBlock.media %}
                         <li>
-                            <img src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}" />
+                            <img src="{{ asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) | imagine_filter('slideShow') }}" />
                         </li>
                         {% endfor %}
                     {% endif %}
@@ -44,7 +48,7 @@
                 <li>Departing: {% if entity.departureDate %}<strong>{{ entity.departureDate|date(format) }}</strong>{% endif %}</li>
                 <li>{% if entity.duration %}<strong>{{ entity.duration }}</strong>{% endif %}</li>
                 <li>Returning: {% if entity.returnDate %}<strong>{{ entity.returnDate|date(format) }}</strong>{% endif %}</li>
-                <li>Board Basis: {% if entity.boardBasis %}<strong>{{ entity.boardBasis }}</strong>{% endif %}</li>
+                <li>Board Basis: {% if entity.boardBasis %}<strong>{{ entity.boardBasis.name }}</strong>{% endif %}</li>
                 <li>Transport: {% if entity.transportType %}<strong>{{ entity.transportType.name }}</strong>{% endif %}</li>
                 <li>Price per person: <span class="quote-price">{% if entity.pricePerson %}<strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %} {{ entity.pricePerson }}</strong>{% endif %}</span></li>
                 <li>Based on {% if entity.payingPlaces  %}<strong>{{ entity.payingPlaces  }}</strong>{% endif %} paying and {% if entity.freePlaces  %}<strong>{{ entity.freePlaces  }}</strong>{% endif %} free places</li>
@@ -105,7 +109,7 @@
 
     {% if editable %}
         <a id="add-new-tab" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-            <i class="fa fa-plus-circle"></i>  Add New Tab
+            <i class="fa fa-plus-circle"></i> Add New Tab
         </a>
     {% endif %}
 
@@ -164,15 +168,19 @@
     </div>
 
     <div id="loader"><img src="{{ asset('bundles/quote/images/loader.gif') }}"></div>
+
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.js"></script>
+    
     <script type="text/javascript" charset="utf-8">
         $(window).load(function() {
             $('.flexslider').flexslider({
                 directionNav: false,
-                controlNav: false
+                controlNav: false,
+                smoothHeight: true
             });
         });
     </script>
+
     <script>
         $(document).ready(function() {
 

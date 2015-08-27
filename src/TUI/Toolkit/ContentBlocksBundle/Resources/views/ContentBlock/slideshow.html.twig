@@ -1,0 +1,39 @@
+{% if entity.layoutType %}
+    {% if entity.layoutType.name != 'image_bottom' %}
+        <div class="content-block-media">
+            <div class="flexslider">
+                <ul class="slides">
+                    {%  if entity.media %}
+                        {% for media in entity.media %}
+                            <li>
+                                <img src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}" />
+                            </li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+{% endif %}
+
+<div class="content-block-body">
+    {{ entity.body|raw }}
+</div>
+
+{% if entity.layoutType %}
+    {% if entity.layoutType.name == 'image_bottom' %}
+        <div class="content-block-media">
+            <div class="flexslider">
+                <ul class="slides">
+                    {%  if entity.media %}
+                        {% for media in entity.media %}
+                            <li>
+                                <img src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}" />
+                            </li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+{% endif %}
