@@ -3,8 +3,8 @@
     <div class="outer" style="background:#E5E8EA; margin-top: -20px; "></br>
         {% block body_text %}
             {% autoescape false %}
-            <div class="inner" style="width:80%; margin: 0 auto; background-color: #fff; padding-bottom: 25px; margin-top: -90px;">
-                <div class="content" style="position: relative; width: 80%; margin: 0 auto; padding-top: 30px; ">
+            <div class="inner" style="width:80%; margin: 0 auto; background-color: #fff; text-align: center; padding-bottom: 25px; margin-top: -90px;">
+                <div class="content" style="position: relative; width: 80%; margin: 0 auto; text-align: center; padding-top: 30px; ">
                     {% if brand.media %}
                             <img style="margin: 0 auto; position: relative; display: block; max-width: 250px;" src="{{ absolute_url(asset(".." ~ brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename )) }}" alt="{{ brand.name }}">
                     {% else %}
@@ -18,7 +18,7 @@
                     {% endfor %}
                     </ul>
                     <p style="text-align: center">{{ additional }}</p>
-                    <a style="text-decoration: none; color:#fff; display: block; width: 200px; padding: 20px; margin: 20px auto; background-color:{{ brand.primaryColor }}; text-align: center;" href="{{ absolute_url("/manage/quote/" ~ entity.id ~ "/edit") }}">Edit Your Quote</a>
+                    <a style="text-decoration: none; color:#fff; display: block; width: 40%; text-align: center padding: 20px; margin: 20px auto; background-color:{{ brand.primaryColor }};" href="{{ absolute_url("/manage/quote/" ~ entity.id ~ "/edit") }}">Edit Your Quote</a>
                     <hr>
                     <p style="text-align: center; color: #C7C3C5;">
                         You can also paste the link below straight into your browser window:

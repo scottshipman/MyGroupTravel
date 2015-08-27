@@ -3,8 +3,8 @@
     <div class="outer" style="background:#E5E8EA; margin-top: -20px; "></br>
         {% block body_text %}
             {% autoescape false %}
-            <div class="inner" style="width:80%; margin: 0 auto; background-color: #fff; padding-bottom: 25px; margin-top: -90px;">
-                <div class="content" style="position: relative; width: 80%; margin: 0 auto; padding-top: 30px; ">
+            <div class="inner" style="width:80%; margin: 0 auto; background-color: #fff; padding-bottom: 25px; text-align: center; margin-top: -90px;">
+                <div class="content" style="position: relative; width: 80%; margin: 0 auto; text-align: center; padding-top: 30px; ">
                     {% if brand.media %}
                             <img style="margin: 0 auto; position: relative; display: block; max-width: 250px;" src="{{ absolute_url(asset(".." ~ brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename )) }}" alt="{{ brand.name }}">
                     {% else %}
@@ -12,7 +12,7 @@
                     {% endif %}
                     <h2 style="text-align: center; font-weight: 100; color: #283F5F;">Activate your account</h2>
                     <p style="text-align: center; color: #717D82;">Hi {{ user.firstName|capitalize }} {{ user.lastName|capitalize }}</br> To finish activating your account please click the button</p>
-                    <a style="text-decoration: none; color:#fff; display: block; width: 200px; padding: 20px; margin: 20px auto; background-color:{{ brand.primaryColor }}; text-align: center;"href="{{ absolute_url("/resetting/reset/" ~ user.confirmationToken) }}">Activate</a>
+                    <a style="text-decoration: none; color:#fff; display: block; width: 40%; text-align: center; padding: 20px; margin: 20px auto; background-color:{{ brand.primaryColor }}; text-align: center;"href="{{ absolute_url("/resetting/reset/" ~ user.confirmationToken) }}">Activate</a>
                     <hr>
                     <p style="text-align: center; color: #C7C3C5;">
                         You can also paste the link below straight into your browser window:
