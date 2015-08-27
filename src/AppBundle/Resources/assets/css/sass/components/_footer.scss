@@ -1,0 +1,64 @@
+.site-footer {
+  background-color: #424242;
+  color: $text_white;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  @include clear-fix();
+
+  .pdf-layout & {
+    background: transparent;
+    color: $text_grey_t2;
+    display: block;
+  }
+
+  p {
+    margin: 0.5em 0;
+  }
+
+  .left-section {
+    float: left;
+    width: 50%;
+    padding: 0 1em 0 2em;
+  }
+
+  .right-section {
+    float: right;
+    width: 25%;
+    padding: 0 2em 0 1em;
+  }
+
+  .intro {
+    display: block;
+    margin: 0.5em 0 2em;
+  }
+
+  .tui-image-avatar,
+  .tui-text-avatar {
+    float: left;
+    margin: 0 0.5em 0.25em 0;
+  }
+
+  .agent {
+    display: block;
+  }
+
+  .quote-info {
+    text-align: right;
+    margin: 0.5em 0 1em;
+  }
+
+  .quote-label {
+    float: left;
+  }
+
+  .quote-price {
+    font-size: 1.5em;
+  }
+
+  .mdl-button {
+    display: block;
+    margin: 1em 0;
+    width: 100%;
+  }
+
+}
