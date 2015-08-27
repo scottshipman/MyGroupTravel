@@ -33,6 +33,14 @@
             </div>
         </div>
 
+        <div class="site-footer">
+            <div class="center-section">
+                {% block footer_left %}{% endblock %}
+                {% block footer_right %}{% endblock %}
+                {{ render(controller('BrandBundle:Default:footer')) }}
+            </div>
+        </div>
+
     </div>
 
 </div><!-- marketing-site pdf-layout -->
