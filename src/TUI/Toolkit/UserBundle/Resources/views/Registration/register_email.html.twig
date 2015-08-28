@@ -1,31 +1,59 @@
 {% block body_html %}
-    <div style="height: 150px; background-color:{{ brand.primaryColor }}; width: 100%;"></div>
-    <div class="outer" style="background:#E5E8EA; margin-top: -20px; "></br>
-        {% block body_text %}
-            {% autoescape false %}
-            <div class="inner" style="width:80%; margin: 0 auto; background-color: #fff; padding-bottom: 25px; margin-top: -90px;">
-                <div class="content" style="position: relative; width: 80%; margin: 0 auto; padding-top: 30px; ">
-                    {% if brand.media %}
-                            <img style="margin: 0 auto; position: relative; display: block; max-width: 250px;" src="{{ absolute_url(asset(".." ~ brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename )) }}" alt="{{ brand.name }}">
-                    {% else %}
-                        <p style="text-align: center; text-transform: uppercase; color: #283F5F;">{{ brand.name }}</p>
-                    {% endif %}
-                    <h2 style="text-align: center; font-weight: 100; color: #283F5F;">Activate your account</h2>
-                    <p style="text-align: center; color: #717D82;">Hi {{ user.firstName|capitalize }} {{ user.lastName|capitalize }}</br> To finish activating your account please click the button</p>
-                    <a style="text-decoration: none; color:#fff; display: block; width: 200px; padding: 20px; margin: 20px auto; background-color:{{ brand.primaryColor }}; text-align: center;"href="{{ absolute_url("/resetting/reset/" ~ user.confirmationToken) }}">Activate</a>
-                    <hr>
-                    <p style="text-align: center; color: #C7C3C5;">
-                        You can also paste the link below straight into your browser window:
-                    </p></br>
-                    <span style="text-align: center; color:{{ brand.primaryColor }}; display: block;"> <a style="text-decoration: none; color:{{ brand.primaryColor }};" href="{{ absolute_url("/resetting/reset/" ~ user.confirmationToken) }}">{{ absolute_url("/resetting/reset/" ~ user.confirmationToken) }}</a> </span></br>
-                </div>
-            </div>
-            {% endautoescape %}
-        {% endblock %}
-        <footer style="background-color:#E5E8EA; padding-bottom: 25px; padding-top: 25px">
-            <div class="footer-middle" style="width: 60%; margin: 0 auto; position: relative;">
-                <p style="text-align: center; color:#9DA6AA;">Copyright © {{ "now"|date("Y") }} {{ brand.name }}, All rights reserved</p>
-            </div>
-        </footer>
+    {% autoescape false %}
+    <div style="color:#fff; font-size: 1px; text-align: center;">Ensure receiving emails from {{ brand.name }}, please
+        add us to
+        your contact list.
     </div>
+    <div style="height: 150px; background-color:{{ brand.primaryColor }}; color:{{ brand.primaryColor }}; : width: 100%;"></div>
+    <div class="outer" style="background:#E5E8EA; margin-top: -20px; "></br>
+        <table width="100%" table-align="center" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td style="text-align: center;">
+                    <center>
+                        <div class="inner"
+                             style="width:80%; margin: 0 auto; background-color: #fff; text-align: center; padding-bottom: 25px; margin-top: -90px;">
+                            <center>
+                                <div class="content"
+                                     style="position: relative; width: 80%; margin: 0 auto; text-align: center; padding-top: 30px; ">
+                                    <center>
+                                        {% if brand.media %}
+                                            <img style="margin: 0 auto; position: relative; display: block; max-width: 250px;"
+                                                 src="{{ absolute_url(asset(".." ~ brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename )) }}"
+                                                 alt="{{ brand.name }}">
+                                        {% else %}
+                                            <p style="text-align: center; text-transform: uppercase; color: #283F5F;">{{ brand.name }}</p>
+                                        {% endif %}
+                                    </center>
+                                    <h2 style="text-align: center; font-weight: 100; color: #283F5F;">Activate your
+                                        account</h2>
+
+                                    <p style="text-align: center; color: #717D82;">
+                                        Hi {{ user.firstName|capitalize }} {{ user.lastName|capitalize }}</br> To finish
+                                        activating your account please click the button</p>
+                                    <center>
+                                        <a style="text-decoration: none; color:#fff; display: block; width: 40%; text-align: center; padding: 20px; margin: 20px auto; background-color:{{ brand.primaryColor }};"
+                                           href="{{ absolute_url("/resetting/reset/" ~ user.confirmationToken) }}">Activate</a>
+                                    </center>
+                                    <hr>
+                                    <p style="text-align: center; color: #C7C3C5;">
+                                        You can also paste the link below straight into your browser window:
+                                    </p></br>
+                                    <a style="text-decoration: none; color:{{ brand.primaryColor }}; text-align: center; display: block; width: auto;"
+                                       href="{{ absolute_url("/resetting/reset/" ~ user.confirmationToken) }}">{{ absolute_url("/resetting/reset/" ~ user.confirmationToken) }}</a></br>
+                                </div>
+                            </center>
+                        </div>
+                        <footer style="background-color:#E5E8EA; padding-bottom: 25px; padding-top: 25px">
+                            <div class="footer-middle" style="width: 60%; margin: 0 auto; position: relative;">
+                                <p style="text-align: center; color:#9DA6AA;">Copyright
+                                    © {{ "now"|date("Y") }} {{ brand.name }}, All rights reserved</p>
+                            </div>
+                        </footer>
+                    </center>
+                </td>
+            </tr>
+        </table>
+    </div>
+    {% endautoescape %}
 {% endblock %}
+
