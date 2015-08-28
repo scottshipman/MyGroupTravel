@@ -26,11 +26,10 @@ class ContentBlockType extends AbstractType
       if(strpos($options['action'], '/header/')===false) {
 
         $builder
-          ->add('title')
+          ->add('title');
       }
 
         $builder
-            ->add('title')
             ->add('body', 'ckeditor', array(
                 'transformers' => array('html_purifier'),
                 'toolbar' => array('document', 'editing', 'tools', 'basicstyles'),

@@ -22,15 +22,13 @@
             <li>{{ form(delete_form) }}</li>
         {% endif %}
         <li>
-            {%  if entity.quoteNumber %}
-                <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
-                   href="{{ path('quote_site_show', { 'id': entity.id, 'quoteNumber': entity.quoteNumber }) }}">
-                    <i class="fa fam-preview"> </i> Preview
+            {% if entity.quoteNumber %}
+                <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('quote_site_show', { 'id': entity.id, 'quoteNumber': entity.quoteNumber }) }}">
+                    <i class="fa fam-preview"></i> Preview
                 </a>
             {% else %}
-                <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
-                    href="{{ path('quote_site_action_show', { 'id': entity.id }) }}">
-                      <i class="fa fam-preview"> </i> Preview
+                <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('quote_site_action_show', { 'id': entity.id }) }}">
+                    <i class="fa fam-preview"></i> Preview
                 </a>
             {% endif %}
         </li>
