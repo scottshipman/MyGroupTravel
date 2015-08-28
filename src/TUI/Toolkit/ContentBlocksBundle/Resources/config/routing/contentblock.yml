@@ -31,7 +31,7 @@ manage_contentblocks_delete:
 
 contentblocks_update:
     path:   /update/{id}
-    defaults: { _controller: "QuoteBundle:QuoteVersion:newTab" }
+    defaults: { _controller: "ContentBlocksBundle:ContentBlock:newTab" }
     methods:  [POST]
 
 
