@@ -407,6 +407,8 @@ class QuoteVersionController extends Controller
       }
     );
     $grid->addRowAction($editAction);
+    $showAction = new RowAction('View', 'manage_quote_show');
+    $grid->addRowAction($showAction);
     $cloneAction = new RowAction('Clone', 'manage_quote_clone');
     $grid->addRowAction($cloneAction);
     $deleteAction = new RowAction('Delete', 'manage_quote_quick_delete');
@@ -662,20 +664,25 @@ class QuoteVersionController extends Controller
       $locale = $this->container->getParameter('locale');
 
       // Get all Quote versions referencing Parent Quote object
-      $entity = $em->getRepository('QuoteBundle:QuoteVersion')->findById($id);
+      $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find QuoteVersion entity.');
         }
 
 
       // get the content blocks to send to twig
-      $items=array();
-      $content = $entity[0]->getContent();
-      foreach($content as $tab){
-        foreach($tab as $key=>$block){
-          $object=$em->getRepository('ContentBlocksBundle:ContentBlock')->find($block);
-          if($object != null){
-            $items[$block] = $object;
+      $items=array(); $tabs=array();
+      $content = $entity->getContent();
+      foreach($content as $tab => $data){
+        $tabs[$tab] = $data[0];
+        $blocks = isset($data[1]) ? $data[1] : array();
+        if(!empty($blocks)) {
+          foreach ($blocks as $block) {
+            $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find((int) $block);
+            if(!$blockObj){
+              throw $this->createNotFoundException('Unable to find Content Block entity.');
+            }
+            $items[$blockObj->getId()] = $blockObj;
           }
         }
       }
@@ -684,10 +691,11 @@ class QuoteVersionController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('QuoteBundle:QuoteVersion:show.html.twig', array(
-            'entity'      => $entity[0],
+            'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
             'locale'      => $locale,
             'items'       => $items,
+            'tabs'        => $tabs,
         ));
     }
 
@@ -1070,47 +1078,6 @@ class QuoteVersionController extends Controller
             ->getForm()
         ;
     }
-
-  /**
-   * Adds a new tab into the content blocks array field
-   *
-   * @param mixed $id The entity id
-   *
-   * @return Symfony\Component\HttpFoundation\Response
-   */
-  public function newTabAction(Request $request, $id)
-  {
-    $em = $this->getDoctrine()->getManager();
-    $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
-    $content = $entity->getContent();
-    $content=array();
-
-    if ($request->getMethod() == 'POST') {
-      $newContent = $request->request->all();
-    }
-
-    foreach($newContent as $tab => $blocks){
-      $tab = str_replace('_', ' ', $tab);
-      if($blocks !='') {
-        foreach ($blocks as $block) {
-          $content[$tab][] = substr($block, 15);
-        }
-      } else {
-        $content[$tab]=array();
-      }
-  }
-    $entity->setContent($content);
-    $em->persist($entity);
-    $em->flush();
-
-    $responseContent = json_encode($entity->getContent());
-
-    return new Response($responseContent,
-      Response::HTTP_OK,
-      array('content-type' => 'application/json')
-    );
-  }
-
 
   /**
    * quickly Deletes QuoteVersion entity.

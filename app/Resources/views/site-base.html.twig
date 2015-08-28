@@ -19,9 +19,8 @@
           href="//fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
 
     {# Dropzone and Flexslider CSS #}
-    {% stylesheets filter='cssrewrite' '@AppBundle/Resources/assets/css/flexslider.css' '@AppBundle/Resources/assets/css/dropzone.css'
-    %}
-    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% stylesheets filter='cssrewrite' '@AppBundle/Resources/assets/css/flexslider.css' '@AppBundle/Resources/assets/css/dropzone.css' %}
+        <link rel="stylesheet" href="{{ asset_url }}">
     {% endstylesheets %}
 
     {# jQuery UI CSS #}
@@ -129,6 +128,16 @@
                 {% block body %}{% endblock %}
             </div>
         </div>
+
+        <footer class="site-footer">
+            <div class="left-section">
+                {% block footer_left %}{% endblock %}
+            </div>
+            <div class="right-section">
+                {% block footer_right %}{% endblock %}
+                {{ render(controller('BrandBundle:Default:footer')) }}
+            </div>
+        </footer>
 
     </main>
 

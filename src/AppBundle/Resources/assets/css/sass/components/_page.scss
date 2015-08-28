@@ -5,13 +5,19 @@ html {
 }
 
 .content .inner,
-.header {
+.header,
+.site-footer {
   padding-left: $page_gutter;
   padding-right: $page_gutter;
 
   .mdl-layout--fixed-drawer & {
     padding-left: $admin_page_gutter;
     padding-right: $admin_page_gutter;
+  }
+
+  .pdf-layout & {
+    padding-left: 0;
+    padding-right: 0;
   }
 
 }

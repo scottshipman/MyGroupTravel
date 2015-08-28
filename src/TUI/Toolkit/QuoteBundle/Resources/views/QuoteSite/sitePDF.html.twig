@@ -1,0 +1,109 @@
+{% extends '::print-base.html.twig' %}
+
+{% block title %}{{ entity.name }} {% endblock %}
+{% block page_title %}{{ entity.quoteReference.name  }}, {{ entity.name }}{% endblock %}
+
+{% block page_institution %}<div id="site-quote-name">{% if entity.quoteReference.institution %}{{ entity.quoteReference.institution.name  }}{% endif %}</div>{% endblock %}
+
+{% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
+
+{% block body -%}
+
+    <div id="site-quote-number">Quote Number: {% if entity.quoteNumber %}{{ entity.quoteNumber }}{% endif %}</div>
+
+    <div id="site-header" class="quote-view-site-header">
+
+        <div id="site-header-slideshow">
+            {% if entity.headerBlock %}
+                {% for media in entity.headerBlock.media %}
+                    {% if loop.first %}
+                        <img src="{{ app.request.uriForPath( asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) ) }}">
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div id="site-header-summary">
+            <ul id="site-summary-details">
+                {% if entity.departureDate %}<li>Departing: <strong>{{ entity.departureDate|date(format) }}</strong></li>{% endif %}
+                {% if entity.duration %}<li><strong>{{ entity.duration }}</strong></li>{% endif %}
+                {% if entity.returnDate %}<li>Returning: <strong>{{ entity.returnDate|date(format) }}</strong></li>{% endif %}
+                {% if entity.boardBasis %}<li>Board Basis: <strong>{{ entity.boardBasis.name }}</strong></li>{% endif %}
+                {% if entity.transportType %}<li>Transport: <strong>{{ entity.transportType.name }}</strong></li>{% endif %}
+                {% if entity.pricePerson %}<li>Price per person: <span class="quote-price"><strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %} {{ entity.pricePerson }}</strong></span></li>{% endif %}
+                {% if (entity.payingPlaces) or (entity.freePlaces) %}<li>Based on {% if entity.payingPlaces  %}<strong>{{ entity.payingPlaces  }}</strong>{% endif %} paying and {% if entity.freePlaces  %}<strong>{{ entity.freePlaces  }}</strong>{% endif %} free places</li>{% endif %}
+                {% if entity.expiryDate  %}<li>Quote valid until <strong>{{ entity.expiryDate|date(format) }}</strong></li>{% endif %}
+            </ul>
+        </div>
+
+    </div>
+
+    {# RENDER THE CONTENT BLOCKS HERE #}
+
+    <div id="content-wrapper" class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+
+        <div id="content-blocks-wrapper" class="sortable-tabs mdl-tabs__tab-bar">
+            {# render the tabs #}
+            {% set activeTab = 'is-active' %}
+            {% for tab, data in entity.content %}
+                <a id="tab-{{ tab }}" href="#tabs-drawer-{{ tab }}" class="site-content-blocks-tab mdl-tabs__tab {{ activeTab }}">{{ data[0] }}</a>
+                {% set activeTab = '' %}
+            {% endfor %}
+        </div>
+
+        {# render the tabs' content #}
+        {% set activeTab = 'is-active' %}
+        {% for tab, data in entity.content %}
+            <div id="tabs-drawer-{{ tab }}" class="mdl-tabs__panel sortable-items content-blocks-drawer {{ activeTab }} ">
+                {% for item in data[1] %}
+                    <div id="content-blocks-{{ items[item].id }}" class="site-content-blocks site-content-blocks-item">
+                        {# render the actual content block #}
+                        <div id="site-block-content-{{ items[item].id }}" class="site-block-content">
+                            {{ render(controller('ContentBlocksBundle:ContentBlock:show', {'id':  items[item].id })) }}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            {% set activeTab = '' %}
+        {% endfor %}
+
+    </div>
+
+{% endblock %}
+
+
+
+
+
+{% block footer_left %}
+    {% if entity.quoteReference.salesAgent %}
+        <span class="intro">Tour Organizer:</span>
+        {% if entity.quoteReference.salesAgent.media %}
+            <span class="tui-image-avatar"><img src="{{ asset(".." ~ entity.quoteReference.salesAgent.media.getRelativePath ~ "/" ~ entity.quoteReference.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.quoteReference.salesAgent.username }}"></span>
+        {% elseif entity.quoteReference.salesAgent.firstName and entity.quoteReference.salesAgent.lastName %}
+            <span class="tui-text-avatar mdl-typography--headline">{{ entity.quoteReference.salesAgent.firstName[:1] }}{{ entity.quoteReference.salesAgent.lastName[:1] }}</span>
+        {% else %}
+            <span class="tui-text-avatar mdl-typography--headline">{{ entity.quoteReference.salesAgent.username[:1] }}</span>
+        {% endif %}
+        <span class="agent">{{ entity.quoteReference.salesAgent.firstName }} {{ entity.quoteReference.salesAgent.lastName }}<br>
+        {{ entity.quoteReference.salesAgent.email }}</span>
+    {% endif %}
+{% endblock %}
+
+{% block footer_right %}
+    <div class="quote-info"><span class="quote-label">Price per person:</span><span class="quote-price">{% if entity.pricePerson %}<strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong>{% endif %}</span></div>
+    {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
+        {% if date(entity.expiryDate) < date('now') %}
+            <a class="expired-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+                <i class="fa fa-calendar-times-o"></i> Expired
+            </a>
+        {% else %}
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('quote_site_quote_accepted', { 'id': entity.id }) }}">
+                <i class="fa fa-thumbs-o-up"> </i> Accept Quote
+            </a>
+        {% endif %}
+    {% elseif (entity.converted is sameas(true)) and (entity.quoteReference.converted is sameas(true))%}
+        <a class="accepted-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+            <i class="fa fa-thumbs-up"> </i> Accepted
+        </a>
+    {% endif %}
+{% endblock %}

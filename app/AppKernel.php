@@ -27,6 +27,7 @@ class AppKernel extends Kernel
             new Genemu\Bundle\FormBundle\GenemuFormBundle(),
             new Oneup\UploaderBundle\OneupUploaderBundle(),
             new Trsteel\CkeditorBundle\TrsteelCkeditorBundle(),
+            new Liip\ImagineBundle\LiipImagineBundle(),
 
 
             // In Toolkit Project ( in /src directory) bundles...
@@ -74,4 +75,19 @@ class AppKernel extends Kernel
     {
         $loader->load($this->getRootDir().'/config/config_'.$this->getEnvironment().'.yml');
     }
+
+
+    /**
+    * Function extended to load the DOMPDF config without having it saved in cache.
+    * If it's saved in cache, a PDF can only be generated the first time after
+    * the cache is created because constants are defined.
+    *
+    * @see parent
+    */
+    public function boot()
+    {
+        parent::boot();
+        require_once __DIR__.'/config/dompdf.php';
+    }
+    
 }

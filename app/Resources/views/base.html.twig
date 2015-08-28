@@ -40,7 +40,7 @@
 
     {{ render(controller('BrandBundle:Default:colors')) }}
 
-<div class="mdl-layout mdl-js-layout{% if is_granted("ROLE_BRAND") %} mdl-layout--fixed-drawer mdl-layout--overlay-drawer-button{% endif %}">
+<div class="base-site mdl-layout mdl-js-layout{% if is_granted("ROLE_BRAND") %} mdl-layout--fixed-drawer mdl-layout--overlay-drawer-button{% endif %}">
 
     {# Display admin menu only if the user is BRAND or higher ROLE #}
     {% if is_granted("ROLE_BRAND") %}
@@ -48,7 +48,7 @@
 
             <header class="tui-drawer-header">
                 {% if app.user.media %}
-                    <span class="tui-image-avatar"><img src="{{ asset(".." ~ app.user.media.getRelativePath ~ "/" ~ app.user.media.getHashedFilename ) }}" alt="{{ app.user.username }}"></span>
+                    <span class="tui-image-avatar"><img src="{{ asset( app.user.media.getRelativePath ~ "/" ~ app.user.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ app.user.username }}"></span>
                 {% elseif app.user.firstName and app.user.lastName %}
                     <span class="tui-text-avatar mdl-typography--headline">{{ app.user.firstName[:1] }}{{ app.user.lastName[:1] }}</span>
                 {% else %}
@@ -95,7 +95,7 @@
             {% if not is_granted("ROLE_BRAND") %}
             <div class="tui-drawer-header">
                 {% if app.user.media %}
-                    <span id="accbtn" class="tui-image-avatar"><img src="{{ asset(".." ~ app.user.media.getRelativePath ~ "/" ~ app.user.media.getHashedFilename ) }}" alt="{{ app.user.username }}"></span>
+                    <span id="accbtn" class="tui-image-avatar"><img src="{{ asset(".." ~ app.user.media.getRelativePath ~ "/" ~ app.user.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ app.user.username }}"></span>
                 {% elseif app.user.firstName and app.user.lastName %}
                     <span id="accbtn" class="tui-text-avatar mdl-typography--headline">{{ app.user.firstName[:1] }}{{ app.user.lastName[:1] }}</span>
                 {% else %}
@@ -134,6 +134,14 @@
                 {% block body %}{% endblock %}
             </div>
         </div>
+
+        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+        <footer class="site-footer">
+            <div class="center-section">
+                {{ render(controller('BrandBundle:Default:footer')) }}
+            </div>
+        </footer>
+        {% endif %}
 
     </main>
 

@@ -5,7 +5,7 @@
 {% block page_title %}{{ entity.quoteReference.name  }}, {{ entity.name  }} {% endblock %}
 
 
-{%  if 'en_GB' in locale %} {% set format = 'd-m-Y' %} {% else %} {% set format = 'm-d-Y' %} {% endif %}
+{%  if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
 
 {% block body -%}
 
@@ -13,8 +13,12 @@
 
     <div id="site-quote-number">Quote Number: {% if entity.quoteNumber %}{{ entity.quoteNumber  }} {% endif %}</div>
 
-    <a href="javascript:window.print()" id="print_pdf" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
-        <i class="fa fa-print"></i> Print/PDF
+    <a href="javascript:window.print()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
+        <i class="fa fa-print"></i> Print
+    </a>
+
+    <a href="/quote/print/{{ entity.id }}.pdf" target="_blank" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
+        <i class="fa fa-file-pdf-o"></i> PDF
     </a>
 
     {% if warning | length >0 %}
@@ -25,14 +29,14 @@
         </div>
     {% endif %}
 
-    <div id="site-header">
+    <div id="site-header" class="quote-view-site-header">
         <div id="site-header-slideshow">
             <div class="flexslider">
                 <ul class="slides">
                     {%  if entity.headerBlock %}
                         {% for media in entity.headerBlock.media %}
                         <li>
-                            <img src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}" />
+                            <img src="{{ asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) | imagine_filter('slideShow') }}" />
                         </li>
                         {% endfor %}
                     {% endif %}
@@ -41,14 +45,14 @@
         </div>
         <div id="site-header-summary">
             <ul id="site-summary-details">
-                <li>Departing: {% if entity.departureDate %}<strong>{{ entity.departureDate|date(format) }}</strong>{% endif %}</li>
-                <li>{% if entity.duration %}<strong>{{ entity.duration }}</strong>{% endif %}</li>
-                <li>Returning: {% if entity.returnDate %}<strong>{{ entity.returnDate|date(format) }}</strong>{% endif %}</li>
-                <li>Board Basis: {% if entity.boardBasis %}<strong>{{ entity.boardBasis.name }}</strong>{% endif %}</li>
-                <li>Transport: {% if entity.transportType %}<strong>{{ entity.transportType.name }}</strong>{% endif %}</li>
-                <li>Price per person: <span class="quote-price">{% if entity.pricePerson %}<strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %} {{ entity.pricePerson }}</strong>{% endif %}</span></li>
-                <li>Based on {% if entity.payingPlaces  %}<strong>{{ entity.payingPlaces  }}</strong>{% endif %} paying and {% if entity.freePlaces  %}<strong>{{ entity.freePlaces  }}</strong>{% endif %} free places</li>
-                <li>Quote valid until {% if entity.expiryDate  %}<strong>{{ entity.expiryDate|date(format) }}</strong>{% endif %}</li>
+                {% if entity.departureDate %}<li>Departing: <strong>{{ entity.departureDate|date(format) }}</strong></li>{% endif %}
+                {% if entity.duration %}<li><strong>{{ entity.duration }}</strong></li>{% endif %}
+                {% if entity.returnDate %}<li>Returning: <strong>{{ entity.returnDate|date(format) }}</strong></li>{% endif %}
+                {% if entity.boardBasis %}<li>Board Basis: <strong>{{ entity.boardBasis.name }}</strong></li>{% endif %}
+                {% if entity.transportType %}<li>Transport: <strong>{{ entity.transportType.name }}</strong></li>{% endif %}
+                {% if entity.pricePerson %}<li>Price per person: <span class="quote-price"><strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %} {{ entity.pricePerson }}</strong></span></li>{% endif %}
+                {% if (entity.payingPlaces) or (entity.freePlaces) %}<li>Based on {% if entity.payingPlaces  %}<strong>{{ entity.payingPlaces  }}</strong>{% endif %} paying and {% if entity.freePlaces  %}<strong>{{ entity.freePlaces  }}</strong>{% endif %} free places</li>{% endif %}
+                {% if entity.expiryDate  %}<li>Quote valid until <strong>{{ entity.expiryDate|date(format) }}</strong></li>{% endif %}
                 <ul class="quote-site-actions">
                     <li>
                         {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
@@ -73,7 +77,6 @@
                                 <i class="fa fa-bullhorn"></i> Request Changes
                             </a>
                         {% else %}
-                        <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quote') }}">
                         <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" id="change-request" href="#">
                             <i class="fa fa-bullhorn"></i> Request Changes
                         </a>
@@ -84,9 +87,15 @@
                         <span class="share-text">
                             Share this quote with others
                         </span>
-                        <input type="text" id="share_url" name="share_url" value="{{ url('quote_site_share', { 'id': entity.id, 'quoteNumber': entity.quoteNumber }) }}">
-                        <a href="#" id="copy-button" data-clipboard-target="share_url" title="Click to copy Quote URL." class="not-full mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
-                            <i class="fa fa-sign-in fa-stack"></i>
+                        {% if entity.quoteNumber %}
+
+                            <input type="text" id="share_url" name="share_url" value="{{ url('quote_site_share', { 'id': entity.id, 'quoteNumber': entity.quoteNumber }) }}">
+                        {% else %}
+                            <input type="text" id="share_url" name="share_url" value="{{ url('quote_template_share', { 'id': entity.id }) }}">
+                        {% endif %}
+                              <a href="#" id="copy-button" data-clipboard-target="share_url" title="Click to copy Quote URL." class="not-full mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+
+                              <i class="fa fa-sign-in fa-stack"></i>
                         </a>
 
 
@@ -106,7 +115,7 @@
 
     {% if editable %}
         <a id="add-new-tab" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-            <i class="fa fa-plus-circle"></i>  Add New Tab
+            <i class="fa fa-plus-circle"></i> Add New Tab
         </a>
     {% endif %}
 
@@ -115,11 +124,11 @@
         <div id="content-blocks-wrapper" class="sortable-tabs mdl-tabs__tab-bar">
             {# render the tabs#}
             {% set activeTab = 'is-active' %}
-            {%  for tab, blocks in entity.content %}
-                    <a id="tab-{{ tab|replace({' ': '_'}) }}" href="#tabs-drawer-{{ tab | replace({' ': '_'}) }}" class="site-content-blocks-tab mdl-tabs__tab {{ activeTab }}">{{ tab }}</a>
+            {%  for tab, data in entity.content %}
+                    <a id="tab-{{ tab }}" href="#tabs-drawer-{{ tab }}" class="site-content-blocks-tab mdl-tabs__tab {{ activeTab }}">{{ data[0] }}</a>
                     {% if editable %}
                         <span class="content-blocks tab-label"><i class="content-block-tab-handle fa fa-arrows"></i>
-                                {% if blocks | length < 1 %}
+                                {% if data[1] | length < 1 %}
                                 <i class="tab-delete content-block-tab-actions fa fa-trash-o"> Delete Tab</i>
                                 {% endif %}
                              <i class="tab-new content-block-tab-actions fa fa-plus-circle"> Add Content</i>
@@ -131,9 +140,9 @@
 
         {# render the tabs'  content#}
         {% set activeTab = 'is-active' %}
-        {%  for tab, blocks in entity.content %}
-            <div id="tabs-drawer-{{ tab | replace({' ': '_'}) }}" class="mdl-tabs__panel sortable-items content-blocks-drawer {{ activeTab }} ">
-                    {%  for item in blocks %}
+        {%  for tab, data in entity.content %}
+            <div id="tabs-drawer-{{ tab  }}" class="mdl-tabs__panel sortable-items content-blocks-drawer {{ activeTab }} ">
+                    {%  for item in data[1] %}
                         <div id="content-blocks-{{ items[item].id }}" class="site-content-blocks site-content-blocks-item">
                             {% if editable %}
                                 <i class="fa fa-arrows"></i>  {{ items[item].title }}
@@ -157,23 +166,20 @@
 
     </div>
 
-    <div id="site-footer">
-        Your Contact is {% if entity.quoteReference.salesAgent %}{{ entity.quoteReference.salesAgent.firstName }} {{ entity.quoteReference.salesAgent.lastName }}
-            <br />
-            <i class="fa fa-envelope-o"></i> {{ entity.quoteReference.salesAgent.email }}
-        {% endif %}
-    </div>
-
     <div id="loader"><img src="{{ asset('bundles/quote/images/loader.gif') }}"></div>
+
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.js"></script>
+
     <script type="text/javascript" charset="utf-8">
         $(window).load(function() {
             $('.flexslider').flexslider({
                 directionNav: false,
-                controlNav: false
+                controlNav: false,
+                smoothHeight: true
             });
         });
     </script>
+
     <script>
         $(document).ready(function() {
 
@@ -326,4 +332,42 @@
         });
     </script>
 
+{% endblock %}
+
+
+
+
+
+{% block footer_left %}
+    {% if entity.quoteReference.salesAgent %}
+        <span class="intro">Tour Organizer:</span>
+        {% if entity.quoteReference.salesAgent.media %}
+            <span class="tui-image-avatar"><img src="{{ asset(".." ~ entity.quoteReference.salesAgent.media.getRelativePath ~ "/" ~ entity.quoteReference.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.quoteReference.salesAgent.username }}"></span>
+        {% elseif entity.quoteReference.salesAgent.firstName and entity.quoteReference.salesAgent.lastName %}
+            <span class="tui-text-avatar mdl-typography--headline">{{ entity.quoteReference.salesAgent.firstName[:1] }}{{ entity.quoteReference.salesAgent.lastName[:1] }}</span>
+        {% else %}
+            <span class="tui-text-avatar mdl-typography--headline">{{ entity.quoteReference.salesAgent.username[:1] }}</span>
+        {% endif %}
+        <span class="agent">{{ entity.quoteReference.salesAgent.firstName }} {{ entity.quoteReference.salesAgent.lastName }}<br>
+        {{ entity.quoteReference.salesAgent.email }}</span>
+    {% endif %}
+{% endblock %}
+
+{% block footer_right %}
+    <div class="quote-info"><span class="quote-label">Price per person:</span><span class="quote-price">{% if entity.pricePerson %}<strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong>{% endif %}</span></div>
+    {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
+        {% if date(entity.expiryDate) < date('now') %}
+            <a class="expired-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+                <i class="fa fa-calendar-times-o"></i> Expired
+            </a>
+        {% else %}
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('quote_site_quote_accepted', { 'id': entity.id }) }}">
+                <i class="fa fa-thumbs-o-up"> </i> Accept Quote
+            </a>
+        {% endif %}
+    {% elseif (entity.converted is sameas(true)) and (entity.quoteReference.converted is sameas(true))%}
+        <a class="accepted-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+            <i class="fa fa-thumbs-up"> </i> Accepted
+        </a>
+    {% endif %}
 {% endblock %}
