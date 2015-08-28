@@ -2,7 +2,7 @@
     {% if entity.layoutType.name != 'image_bottom' %}
         <div class="content-block-media">
             {% for media in entity.media %}
-                <img src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">
+                <img class="block-image-stacked" src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">
             {% endfor %}
         </div>
     {% endif %}
@@ -16,7 +16,7 @@
     {% if entity.layoutType.name == 'image_bottom' %}
         <div class="content-block-media">
             {% for media in entity.media %}
-                <img src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">
+                <img class="block-image-stacked" src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">
             {% endfor %}
         </div>
     {% endif %}

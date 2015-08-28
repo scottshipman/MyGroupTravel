@@ -23,6 +23,12 @@ class ContentBlockType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
       $securityContext = $this->securityContext;
+        if(strpos($options['action'], '/header/')===false) {
+
+          $builder
+              ->add('title')
+        }
+
         $builder
             ->add('title')
             ->add('body', 'ckeditor', array(
