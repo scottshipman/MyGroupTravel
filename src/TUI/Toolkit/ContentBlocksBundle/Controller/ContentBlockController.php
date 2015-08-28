@@ -398,6 +398,48 @@ class ContentBlockController extends Controller
       array('content-type' => 'application/json')
     );
   }
+  /**
+   * Adds a new tab into the content blocks array field
+   *
+   * @param mixed $id The entity id
+   *
+   * @return Symfony\Component\HttpFoundation\Response
+   */
+  public function newTabAction(Request $request, $id)
+  {
+    $em = $this->getDoctrine()->getManager();
+    $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+    //$content = $entity->getContent();
+    $content=array();
+
+    if ($request->getMethod() == 'POST') {
+      $newContent = $request->request->all();
+    }
+
+    foreach($newContent as $tab => $data){
+      $blocks = isset($data[1]) ? $data[1] : array();
+      if(!empty($blocks)) {
+        $blockArr = array();
+        foreach ($blocks as $block) {
+          $blockArr[] = substr($block, 15);
+        }
+        $content[$tab] = array($data[0], $blockArr);
+      } else {
+        $content[$tab]=array($data[0], array());
+      }
+    }
+    $entity->setContent($content);
+    $em->persist($entity);
+    $em->flush();
+
+    $responseContent = json_encode($entity->getContent());
+
+    return new Response($responseContent,
+      Response::HTTP_OK,
+      array('content-type' => 'application/json')
+    );
+  }
+
 
 
 }

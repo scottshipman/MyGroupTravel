@@ -123,11 +123,11 @@
         <div id="content-blocks-wrapper" class="sortable-tabs mdl-tabs__tab-bar">
             {# render the tabs#}
             {% set activeTab = 'is-active' %}
-            {%  for tab, blocks in entity.content %}
-                    <a id="tab-{{ tab|replace({' ': '_'}) }}" href="#tabs-drawer-{{ tab | replace({' ': '_'}) }}" class="site-content-blocks-tab mdl-tabs__tab {{ activeTab }}">{{ tab }}</a>
+            {%  for tab, data in entity.content %}
+                    <a id="tab-{{ tab }}" href="#tabs-drawer-{{ tab }}" class="site-content-blocks-tab mdl-tabs__tab {{ activeTab }}">{{ data[0] }}</a>
                     {% if editable %}
                         <span class="content-blocks tab-label"><i class="content-block-tab-handle fa fa-arrows"></i>
-                                {% if blocks | length < 1 %}
+                                {% if data[1] | length < 1 %}
                                 <i class="tab-delete content-block-tab-actions fa fa-trash-o"> Delete Tab</i>
                                 {% endif %}
                              <i class="tab-new content-block-tab-actions fa fa-plus-circle"> Add Content</i>
@@ -139,9 +139,9 @@
 
         {# render the tabs'  content#}
         {% set activeTab = 'is-active' %}
-        {%  for tab, blocks in entity.content %}
-            <div id="tabs-drawer-{{ tab | replace({' ': '_'}) }}" class="mdl-tabs__panel sortable-items content-blocks-drawer {{ activeTab }} ">
-                    {%  for item in blocks %}
+        {%  for tab, data in entity.content %}
+            <div id="tabs-drawer-{{ tab  }}" class="mdl-tabs__panel sortable-items content-blocks-drawer {{ activeTab }} ">
+                    {%  for item in data[1] %}
                         <div id="content-blocks-{{ items[item].id }}" class="site-content-blocks site-content-blocks-item">
                             {% if editable %}
                                 <i class="fa fa-arrows"></i>  {{ items[item].title }}
