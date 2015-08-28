@@ -47,7 +47,7 @@ twig:
 # Assetic Configuration
 assetic:
     debug:          "%kernel.debug%"
-    read_from:            '%kernel.root_dir%/../web'
+    read_from:      '%kernel.root_dir%/../web'
     use_controller: false
     bundles:        [BrandBundle, TUIToolkitUserBundle, QuoteBundle, InstitutionBundle, MediaBundle, AppBundle, ContentBlocksBundle, TwigBundle, ContentBlocksBundle]
     #java: /usr/bin/java
@@ -84,6 +84,9 @@ assetic:
 #                inputs:
 #                    - "%kernel.root_dir%/../src/AppBundle/Resources/assets/jquery-ui/jquery-ui.css"
 
+            ckeditorcustomsettings:
+                inputs:
+                  -   "%kernel.root_dir%/../src/AppBundle/Resources/public/js/ckeditor/config.js"
 
 
 # Doctrine Configuration
@@ -263,13 +266,14 @@ trsteel_ckeditor:
         basicstyles: ['Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat']
         paragraph: ['NumberedList','BulletedList','-','Outdent','Indent','-','JustifyLeft', 'JustifyCenter','JustifyRight','JustifyBlock']
         links: ['Link','Unlink','Anchor']
-        insert: ['Image','Flash','Table','HorizontalRule']
+        insert: ['Flash','Table','HorizontalRule']
         styles: ['Styles','Format']
         tools: ['Maximize', 'ShowBlocks']
     ui_color: '#ffffff'
     startup_outline_blocks: true
     width: 800 #Integer or %
     height: 300 #Integer or %
+    custom_config: assetic/ckeditorcustomsettings.js
 
 liip_imagine:
     resolvers:
