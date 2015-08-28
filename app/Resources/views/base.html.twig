@@ -31,9 +31,11 @@
 
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
 
-    {% javascripts '@jquery' '@jqueryui' %}
+    {% javascripts '@jquery' '@jqueryui' '@ckeditorcustomsettings' %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
+
+    {#{% javascripts '@ckeditorcustomsettings' output='js/config.js' %}{% endjavascripts %}#}
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.7.0/spectrum.min.js"></script>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.6.1/spectrum.min.css">
