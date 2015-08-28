@@ -5,8 +5,6 @@
 {%  if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
 
 {% block body -%}
-    {{ dump(items) }}
-    {{ dump(entity.content) }}
     <ul class="record_actions">
         <li>
             <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quote') }}">
