@@ -134,7 +134,15 @@
                 {% block body %}{% endblock %}
             </div>
         </div>
-        
+
+        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+        <footer class="site-footer">
+            <div class="center-section">
+                {{ render(controller('BrandBundle:Default:footer')) }}
+            </div>
+        </footer>
+        {% endif %}
+
     </main>
 
 </div>
