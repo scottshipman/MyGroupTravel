@@ -29,7 +29,7 @@ class ContentBlockType extends AbstractType
           ->add('title');
       }
 
-      $builder
+        $builder
             ->add('body', 'ckeditor', array(
                 'transformers' => array('html_purifier'),
                 'toolbar' => array('document', 'editing', 'tools', 'basicstyles'),

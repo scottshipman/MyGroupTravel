@@ -60,6 +60,13 @@ class Brand
      */
     private $hoverColor;
 
+    /**
+     * @var longtext
+     *
+     * @ORM\Column(name="footerBody", type="text", length=4294967295, nullable=true)
+     */
+    private $footerBody;
+
 
     /**
      * Get id
@@ -184,6 +191,29 @@ class Brand
     public function getHoverColor()
     {
         return $this->hoverColor;
+    }
+
+    /**
+     * Set footerBody
+     *
+     * @param text $footerBody
+     * @return Brand
+     */
+    public function setFooterBody($footerBody)
+    {
+        $this->footerBody = $footerBody;
+
+        return $this;
+    }
+
+    /**
+     * Get footerBody
+     *
+     * @return text
+     */
+    public function getFooterBody()
+    {
+        return $this->footerBody;
     }
 
     /**
