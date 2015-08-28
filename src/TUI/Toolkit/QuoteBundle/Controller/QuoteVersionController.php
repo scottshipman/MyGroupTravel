@@ -407,8 +407,6 @@ class QuoteVersionController extends Controller
       }
     );
     $grid->addRowAction($editAction);
-    $showAction = new RowAction('View', 'manage_quote_show');
-    $grid->addRowAction($showAction);
     $cloneAction = new RowAction('Clone', 'manage_quote_clone');
     $grid->addRowAction($cloneAction);
     $deleteAction = new RowAction('Delete', 'manage_quote_quick_delete');

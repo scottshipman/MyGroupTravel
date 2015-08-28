@@ -14,14 +14,9 @@ quote_site_quote_accepted:
     path:   /accepted/{id}
     defaults: { _controller: "QuoteBundle:QuoteSite:quoteAccepted" }
 
-quote_template_share:
-    path:     /share/{id}
-    defaults: { _controller: "QuoteBundle:QuoteSite:siteShow" }
-
 quote_site_share:
     path:     /share/{id}/{quoteNumber}
     defaults: { _controller: "QuoteBundle:QuoteSite:siteShow" }
-
 
 quote_site_validate:
     path:     /validate/{id}/
