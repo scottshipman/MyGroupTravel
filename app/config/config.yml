@@ -263,13 +263,14 @@ trsteel_ckeditor:
         basicstyles: ['Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat']
         paragraph: ['NumberedList','BulletedList','-','Outdent','Indent','-','JustifyLeft', 'JustifyCenter','JustifyRight','JustifyBlock']
         links: ['Link','Unlink','Anchor']
-        insert: ['Image','Flash','Table','HorizontalRule']
+        insert: ['Flash','Table','HorizontalRule']
         styles: ['Styles','Format']
         tools: ['Maximize', 'ShowBlocks']
     ui_color: '#ffffff'
     startup_outline_blocks: true
     width: 800 #Integer or %
     height: 300 #Integer or %
+    custom_config: static/ckeditor/config.js
 
 liip_imagine:
     resolvers:

@@ -32,7 +32,7 @@ class ContentBlockType extends AbstractType
         $builder
             ->add('body', 'ckeditor', array(
                 'transformers' => array('html_purifier'),
-                'toolbar' => array('document', 'editing', 'tools', 'basicstyles'),
+                'toolbar' => array('document', 'tools', 'basicstyles', 'styles', 'paragraph'),
                 'toolbar_groups' => array(
                     'document' => array('Source')
                 ),
