@@ -719,4 +719,76 @@ class UserController extends Controller
     }
 
 
+    /**
+     * Request reset user password: show form
+     */
+    public function requestAction()
+    {
+        return $this->render('TUIToolkitUserBundle:Resetting:request.html.twig');
+    }
+
+    /**
+     * Request reset user password: submit form and send email
+     */
+    public function sendEmailAction(Request $request)
+    {
+        $mailer = $this->container->get('mailer');
+
+        $em = $this->getDoctrine()->getManager();
+
+        $username = $request->request->get('username');
+
+        /** @var $user UserInterface */
+        $user = $this->get('fos_user.user_manager')->findUserByUsernameOrEmail($username);
+
+        if (null === $user) {
+            return $this->render('TUIToolkitUserBundle:Resetting:request.html.twig', array(
+                'invalid_username' => $username
+            ));
+        }
+
+        if ($user->isPasswordRequestNonExpired($this->container->getParameter('fos_user.resetting.token_ttl'))) {
+            return $this->render('TUIToolkitUserBundle:Resetting:passwordAlreadyRequested.html.twig');
+        }
+
+        if (null === $user->getConfirmationToken()) {
+            /** @var $tokenGenerator \FOS\UserBundle\Util\TokenGeneratorInterface */
+            $tokenGenerator = $this->get('fos_user.util.token_generator');
+            $user->setConfirmationToken($tokenGenerator->generateToken());
+        }
+
+        //Get Brand Stuff
+        $brand = $em->getRepository('BrandBundle:Brand')->findAll();
+        $brand = $brand[0];
+
+
+        $message = \Swift_Message::newInstance()
+            ->setSubject('Toolkit Password Reset')
+            ->setFrom('reset@Toolkit.com')
+            ->setTo($username)
+            ->setBody(
+                $this->renderView(
+                    'TUIToolkitUserBundle:Resetting:reset.html.twig',
+                    array(
+                        'brand' => $brand,
+                        'user' => $user,
+                    )
+                ), 'text/html');
+
+        $em->persist($user);
+        $em->flush();
+
+        $mailer->send($message);
+
+        $user->setPasswordRequestedAt(new \DateTime());
+        $this->get('fos_user.user_manager')->updateUser($user);
+
+        return $this->redirect($this->generateUrl('/'));
+
+//        return new RedirectResponse($this->generateUrl('fos_user_resetting_check_email',
+//            array('email' => $this->getObfuscatedEmail($user))
+//        ));
+    }
+
+
 }
