@@ -4,14 +4,25 @@ $fluid_width : 100%;
 // Desktop initial page widths and calculations
 $page_width : 80%;
 $page_width_reset : (100% / $page_width) * 100%; // 125%
-$page_gutter: (100% - $page_width) / 2; // 10%
-$page_gutter_reset: ($page_width_reset - 100%) / 2; // 12.5%
+$page_gutter : (100% - $page_width) / 2; // 10%
+$page_gutter_reset : ($page_width_reset - 100%) / 2; // 12.5%
 
 // Desktop admin page widths
-$admin_page_width : 90%;
-$admin_page_width_reset : (100% / $admin_page_width) * 100%; // 111.1111%
-$admin_page_gutter: (100% - $admin_page_width) / 2; // 5%
-$admin_page_gutter_reset: ($admin_page_width_reset - 100%) / 2; // 5.5556%
+$admin_page_width : 96%;
+$admin_page_width_reset : (100% / $admin_page_width) * 100%; // 104.1667%
+$admin_page_gutter : (100% - $admin_page_width) / 2; // 2%
+$admin_page_gutter_reset : ($admin_page_width_reset - 100%) / 2; // 2.0833%
 
 // Element widths and heights
-$element-bottom: 32px;
+$element-bottom : 32px;
+
+// Layout (4-column)
+$column_count : 4;
+$column_gutter : 1/8;
+
+$column_total_width : 100% / $column_count; // 25%
+$column_gutter_width : $column_total_width * $column_gutter; // 5%
+$column_size_width : $column_total_width - ($column_gutter_width * 2); // 15%
+
+$column_gutter_width_reset : ((100% / (100% - ($column_gutter_width * 2)) * 100%) - 100%) / 2;  // 5.5556%
+$column_total_width_reset : 100% + $column_gutter_width_reset * 2; // 111.1111%

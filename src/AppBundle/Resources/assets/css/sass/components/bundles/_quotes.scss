@@ -97,12 +97,16 @@
 .quote-view-site-header {
   background-color: lightgrey;
   padding: 2em 0;
-  margin: $element-bottom 0;
+  margin-top: $element-bottom;
+  margin-bottom: $element-bottom;
+  margin-left: -$column_gutter_width_reset;
+  width: $column_total_width_reset;
   @include clear-fix();
 
   .pdf-layout & {
     margin: 0;
     padding: 0;
+    width: 100%;
     background: transparent;
     position: relative;
     overflow: hidden;
@@ -111,9 +115,9 @@
 }
 
 #site-header-slideshow {
-  width: 75%;
   float: left;
-  padding: 0 1em 0 2em;
+  width: $column_total_width * 3;
+  padding: 0 $column_gutter_width;
 
   .pdf-layout & {
     width: 60%;
@@ -129,9 +133,9 @@
 }
 
 #site-header-summary {
-  width: 25%;
   float: right;
-  padding: 0 2em 0 1em;
+  width: $column_total_width;
+  padding: 0 $column_gutter_width;
 
   .pdf-layout & {
     width: 35%;
