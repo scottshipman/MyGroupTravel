@@ -167,7 +167,7 @@
   clear: both;
 }
 
-.content-blocks-drawer {
+.content-blocks-drawer.mdl-tabs__panel {
   margin-left: -$column_gutter_width_reset;
   width: $column_total_width_reset;
 
