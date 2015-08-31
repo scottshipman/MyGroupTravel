@@ -18,7 +18,7 @@ $element-bottom : 32px;
 
 // Layout (4-column)
 $column_count : 4;
-$column_gutter : 1/8;
+$column_gutter : 1/10;
 
 $column_total_width : 100% / $column_count; // 25%
 $column_gutter_width : $column_total_width * $column_gutter; // 5%
