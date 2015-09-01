@@ -1,9 +1,5 @@
 .site-footer {
-  background-color: #424242;
-  color: $text_white;
-  padding-top: 16px;
-  padding-bottom: 16px;
-  @include clear-fix();
+  padding: 16px 0;
 
   .pdf-layout &,
   .base-site & {
@@ -15,16 +11,21 @@
     margin: 0.5em 0;
   }
 
+  .center-section {
+    @include span-all();
+    width: 100%;
+  }
+
   .left-section {
     float: left;
-    width: 50%;
-    padding: 0 1em 0 2em;
+    width: $column_total_width * 3;
+    padding: 0 $column_gutter_width;
   }
 
   .right-section {
     float: right;
-    width: 25%;
-    padding: 0 2em 0 1em;
+    width: $column_total_width;
+    padding: 0 $column_gutter_width;
   }
 
   .intro {
