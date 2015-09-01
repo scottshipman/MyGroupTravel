@@ -114,7 +114,7 @@
                 this.removeFile(file);
             });
             this.on("error", function (file, response) {
-                alert(response);
+                console.log('Error: ' + response);
             });
         }
     });

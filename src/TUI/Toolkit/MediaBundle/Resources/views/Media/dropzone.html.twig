@@ -22,7 +22,7 @@
                     });
 
                     this.on("error", function (file, response) {
-                        alert(response);
+                        console.log('Error: ' + response);
                     });
                     this.on("addedfile", function () {
                         $("#dropzone-form-close").css({"display":"none"});
