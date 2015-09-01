@@ -554,6 +554,14 @@ class UserController extends Controller
                 throw $this->createNotFoundException('Unable to find User entity.');
             }
 
+            // get list of quotes related to this user first (cant delete a user if they are attached)
+          //TODO add a check for Tours, and eventually other objects like payments or something.
+            $quotes = $em->getRepository('QuoteBundle:Quote')->findOneBy(array('organizer' => $entity->getId()));
+            if($quotes){
+              $this->get('session')->getFlashBag()->add('error', 'Unable to delete the User because they are associated with Quotes');
+              return $this->redirect($this->generateUrl('user'));
+            }
+
             $em->remove($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add('notice', 'User Deleted: ' . $id);
@@ -614,6 +622,13 @@ class UserController extends Controller
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find User entity with id:.' . $id);
+        }
+
+        // get list of quotes related to this user first (cant delete a user if they are attached)
+        $quotes = $em->getRepository('QuoteBundle:Quote')->findOneBy(array('organizer' => $entity->getId()));
+        if($quotes){
+          $this->get('session')->getFlashBag()->add('error', 'Unable to delete the User because they are associated with Quotes');
+          return $this->redirect($this->generateUrl('user'));
         }
         $em->remove($entity);
         $em->flush();
