@@ -52,6 +52,9 @@ class QuoteSiteController extends Controller
 
     // if no quoteNumber supplied in URL, then prompt for quoteNumber first
     $securityContext = $this->get('security.context');
+    $user = $securityContext->getToken()->getUser();
+    $permission = $this->get("permission.set_permission")->getPermission($id, 'quote', $user->getId());
+
     if($quoteNumber===NULL && FALSE === $securityContext->isGranted('ROLE_BRAND')){
 
       $promptForm = $this->createPromptTypeForm($id);
@@ -61,7 +64,9 @@ class QuoteSiteController extends Controller
       ));
     }
 
-
+    if ($securityContext->isGranted('ROLE_BRAND') || in_array('organizer', $permission)){
+      $editable = TRUE;
+    }
     // get the content blocks to send to twig
     $items=array(); $tabs=array();
     $content = $entity->getContent();
