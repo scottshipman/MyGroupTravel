@@ -1007,8 +1007,10 @@ class QuoteVersionController extends Controller
       $entity->setContent($this->cloneContentBlocks($originalEntity->getContent()));
 
       // And clone the Header block if it has one
-      $headerBlock = $originalEntity->getHeaderBlock()->getId();
-      $entity->setHeaderBlock($this->cloneHeaderBlock($headerBlock));
+      if ($originalEntity->getHeaderBlock()) {
+          $headerBlock = $originalEntity->getHeaderBlock()->getId();
+          $entity->setHeaderBlock($this->cloneHeaderBlock($headerBlock));
+      }
     }
 
 
@@ -1213,7 +1215,7 @@ class QuoteVersionController extends Controller
     $newContentArray = array();
     if(!empty($content) && $content!= NULL){
       foreach($content as $tab => $blocks){
-        foreach($blocks as $block){ // block should be an ID number
+        foreach($blocks[1] as $block){ // block should be an ID number
           $em = $this->getDoctrine()->getManager();
 
           $originalBlock = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($block);
