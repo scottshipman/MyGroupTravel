@@ -1,12 +1,11 @@
-.header {
-  margin: 0 0 2em;
-  @include clear-fix();
+.flash-messages,
+.brand_logo,
+.page-title,
+#site-quote-name {
+  @include span-all();
+}
 
-  &.mdl-layout__header {
-    display: block;
-    min-height: auto;
-    max-height: none;
-  }
+.header {
 
   .pdf-layout & {
     @include mdl-primary-color( background, 6 );
@@ -15,7 +14,8 @@
 
   h1 {
     margin: 0;
-    padding: 0.25em 0;
+    padding-top: 0.25em;
+    padding-bottom: 0.25em;
     clear: both;
 
     .user_0 & {
@@ -31,14 +31,10 @@
 }
 
 .brand_logo {
-  padding: 8px 0;
-  float: right;
+  padding-top: 8px;
+  padding-bottom: 8px;
   color: $text_white;
-
-  .pdf-layout & {
-    float: none;
-    text-align: right;
-  }
+  text-align: right;
 
   img {
     max-width: 120px;

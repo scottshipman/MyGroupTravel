@@ -178,7 +178,7 @@ td .layout-icons.image_bottom {
 
   &.content-block-size-half {
     float: left;
-    width: 50%;
+    width: $column_total_width * 2;
 
     .pdf-layout & {
       clear: both;
