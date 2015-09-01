@@ -11,7 +11,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use TUI\Toolkit\UserBundle\Form\UserType;
 
-class QuoteChangeRequestType extends AbstractType
+class QuoteAcceptType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -20,19 +20,6 @@ class QuoteChangeRequestType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('changes', 'choice', array(
-                'choices' => array(
-                    'Our numbers have changed' => 'Our numbers have changed',
-                    'Need advice on how to reduce price' => 'Need advice on how to reduce price',
-                    'Can we look at different dates?' => 'Can we look at different dates?',
-                    'Where else do you recommend?' => 'Where else do you recommend?'
-                ),
-                'multiple' => true,
-                'expanded' => true,
-                'required' => false,
-                'mapped' => false,
-
-            ))
             ->add('additional', 'textarea', array(
                 'label' => 'Anything else?',
                 'mapped' => false,
@@ -55,7 +42,6 @@ class QuoteChangeRequestType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-//            'data_class' => 'TUI\Toolkit\QuoteBundle\Entity\QuoteVersion',
         ));
     }
 
@@ -64,6 +50,6 @@ class QuoteChangeRequestType extends AbstractType
      */
     public function getName()
     {
-        return 'tui_toolkit_quotebundle_quotechangerequest';
+        return 'tui_toolkit_quotebundle_quoteaccept';
     }
 }
