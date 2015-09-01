@@ -4,8 +4,8 @@ html {
   background: $bg_grey_l1;
 }
 
-.content .inner,
 .header,
+.content,
 .site-footer {
   padding-left: $page_gutter;
   padding-right: $page_gutter;
@@ -25,7 +25,9 @@ html {
 .content {
 
   .inner {
-    padding-bottom: 4em;
+    @include span-all();
+    padding-top: $element-bottom;
+    padding-bottom: $element-bottom;
 
     > h1 {
       width: $page_width_reset;
@@ -42,8 +44,4 @@ html {
 
   }
 
-}
-
-.mdl-layout__drawer {
-  z-index: 0;
 }

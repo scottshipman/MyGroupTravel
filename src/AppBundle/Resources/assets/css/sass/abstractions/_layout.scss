@@ -44,5 +44,10 @@
     margin-top: -(160px + 36px + 20px);
     margin-bottom: 36px + 20px + 20px;
   }
-  
+
+}
+
+@mixin span-all() {
+  padding-left: $column_gutter_width;
+  padding-right: $column_gutter_width;
 }

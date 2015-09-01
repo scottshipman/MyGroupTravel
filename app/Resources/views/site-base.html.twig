@@ -40,7 +40,7 @@
 
     {{ render(controller('BrandBundle:Default:colors')) }}
 
-<div class="marketing-site mdl-layout mdl-js-layout{% if is_granted("ROLE_BRAND") %} mdl-layout--fixed-drawer mdl-layout--overlay-drawer-button{% endif %}">
+<div class="marketing-site mdl-layout mdl-js-layout {% if is_granted("ROLE_BRAND") %}mdl-layout--fixed-drawer{% endif %}">
 
     {# Display admin menu only if the user is BRAND or higher ROLE #}
     {% if is_granted("ROLE_BRAND") %}
@@ -79,7 +79,7 @@
         </div><!-- mdl-layout__drawer -->
     {% endif %}
 
-    <main class="mdl-layout__content">
+    <main class="mdl-layout__content main">
 
         <div class="header mdl-layout__header">
             <div class="flash-messages">
@@ -129,11 +129,11 @@
             </div>
         </div>
 
-        <footer class="site-footer">
-            <div class="left-section">
+        <footer class="mdl-mini-footer site-footer">
+            <div class="mdl-mini-footer__left-section left-section">
                 {% block footer_left %}{% endblock %}
             </div>
-            <div class="right-section">
+            <div class="mdl-mini-footer__right-section right-section">
                 {% block footer_right %}{% endblock %}
                 {{ render(controller('BrandBundle:Default:footer')) }}
             </div>
