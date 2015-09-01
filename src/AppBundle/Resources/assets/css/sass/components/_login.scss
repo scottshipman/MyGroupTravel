@@ -88,3 +88,11 @@
   }
 
 }
+
+.login-block {
+
+  input[type="submit"] {
+    @include mdl-primary-color( background-color, 6 );
+  }
+
+}

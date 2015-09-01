@@ -17,7 +17,7 @@
     </route>
 
     <route id="fos_user_resetting_reset" path="/reset/{token}" methods="GET POST">
-        <default key="_controller">FOSUserBundle:Resetting:reset</default>
+        <default key="_controller">TUIToolkitUserBundle:User:reset</default>
     </route>
 
 </routes>

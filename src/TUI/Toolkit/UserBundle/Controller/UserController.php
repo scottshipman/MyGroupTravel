@@ -5,6 +5,8 @@ namespace TUI\Toolkit\UserBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -20,6 +22,10 @@ use TUI\Toolkit\MediaBundle\Form\MediaType;
 use APY\DataGridBundle\Grid\Source\Entity;
 use APY\DataGridBundle\Grid\Export\CSVExport;
 use APY\DataGridBundle\Grid\Action\RowAction;
+use FOS\UserBundle\Event\GetResponseUserEvent;
+use FOS\UserBundle\FOSUserEvents;
+use FOS\UserBundle\Event\FormEvent;
+use FOS\UserBundle\Event\FilterUserResponseEvent;
 
 /**
  * User controller.
@@ -269,24 +275,24 @@ class UserController extends Controller
     }
 
 
-  /**
-   * Creates a form to create a User entity.
-   *
-   * @param User $entity The entity
-   *
-   * @return \Symfony\Component\Form\Form The form
-   */
-  private function create_ajaxCreateForm(User $entity)
-  {
-    $locale = $this->container->getParameter('locale');
-    $form = $this->createForm(new AjaxuserType($locale), $entity, array(
-      'action' => $this->generateUrl('user_ajax_create'),
-      'method' => 'POST',
-      'attr'  => array (
-        'id' => 'ajax_organizer_form'
-      ),
-    ));
-      
+    /**
+     * Creates a form to create a User entity.
+     *
+     * @param User $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function create_ajaxCreateForm(User $entity)
+    {
+        $locale = $this->container->getParameter('locale');
+        $form = $this->createForm(new AjaxuserType($locale), $entity, array(
+            'action' => $this->generateUrl('user_ajax_create'),
+            'method' => 'POST',
+            'attr' => array(
+                'id' => 'ajax_organizer_form'
+            ),
+        ));
+
         $form->add('submit', 'submit', array('label' => 'Create'));
 
         return $form;
@@ -700,7 +706,7 @@ class UserController extends Controller
             ->setTo($userEmail)
             ->setBody(
                 $this->renderView(
-                    'TUIToolkitUserBundle:Resetting:reset.html.twig',
+                    'TUIToolkitUserBundle:Resetting:reset_email.html.twig',
                     array(
                         'brand' => $brand,
                         'user' => $user,
@@ -716,15 +722,6 @@ class UserController extends Controller
 
         return $this->redirect($this->generateUrl('user'));
 
-    }
-
-
-    /**
-     * Request reset user password: show form
-     */
-    public function requestAction()
-    {
-        return $this->render('TUIToolkitUserBundle:Resetting:request.html.twig');
     }
 
     /**
@@ -768,7 +765,7 @@ class UserController extends Controller
             ->setTo($username)
             ->setBody(
                 $this->renderView(
-                    'TUIToolkitUserBundle:Resetting:reset.html.twig',
+                    'TUIToolkitUserBundle:Resetting:reset_email.html.twig',
                     array(
                         'brand' => $brand,
                         'user' => $user,
@@ -783,11 +780,90 @@ class UserController extends Controller
         $user->setPasswordRequestedAt(new \DateTime());
         $this->get('fos_user.user_manager')->updateUser($user);
 
-        return $this->redirect($this->generateUrl('/'));
+//        return $this->redirect($this->generateUrl('/user/'));
 
-//        return new RedirectResponse($this->generateUrl('fos_user_resetting_check_email',
-//            array('email' => $this->getObfuscatedEmail($user))
-//        ));
+        return new RedirectResponse($this->generateUrl('fos_user_resetting_check_email',
+            array('email' => $this->getObfuscatedEmail($user))
+        ));
+    }
+
+    /**
+     * Reset user password
+     */
+    public function resetAction(Request $request, $token)
+    {
+        /** @var $formFactory \FOS\UserBundle\Form\Factory\FactoryInterface */
+        $formFactory = $this->get('fos_user.resetting.form.factory');
+        /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
+        $userManager = $this->get('fos_user.user_manager');
+        /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
+        $dispatcher = $this->get('event_dispatcher');
+
+        $user = $userManager->findUserByConfirmationToken($token);
+
+        $em = $this->getDoctrine()->getManager();
+
+        //Get Brand Stuff
+        $brand = $em->getRepository('BrandBundle:Brand')->findAll();
+        $brand = $brand[0];
+
+        if (null === $user) {
+            throw new NotFoundHttpException(sprintf('The user with "confirmation token" does not exist for value "%s"', $token));
+        }
+
+        $event = new GetResponseUserEvent($user, $request);
+        $dispatcher->dispatch(FOSUserEvents::RESETTING_RESET_INITIALIZE, $event);
+
+        if (null !== $event->getResponse()) {
+            return $event->getResponse();
+        }
+
+        $form = $formFactory->createForm();
+        $form->setData($user);
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $event = new FormEvent($form, $request);
+            $dispatcher->dispatch(FOSUserEvents::RESETTING_RESET_SUCCESS, $event);
+
+            $userManager->updateUser($user);
+
+            if (null === $response = $event->getResponse()) {
+                $url = $this->generateUrl('fos_user_profile_show');
+                $response = new RedirectResponse($url);
+            }
+
+            $dispatcher->dispatch(FOSUserEvents::RESETTING_RESET_COMPLETED, new FilterUserResponseEvent($user, $request, $response));
+
+            return $response;
+        }
+
+        return $this->render('TUIToolkitUserBundle:Resetting:reset.html.twig', array(
+            'token' => $token,
+            'brand' => $brand,
+            'user' => $user,
+            'form' => $form->createView(),
+        ));
+    }
+
+    /**
+     * Get the truncated email displayed when requesting the resetting.
+     *
+     * The default implementation only keeps the part following @ in the address.
+     *
+     * @param \FOS\UserBundle\Model\UserInterface $user
+     *
+     * @return string
+     */
+    protected function getObfuscatedEmail($user)
+    {
+        $email = $user->getEmail();
+        if (false !== $pos = strpos($email, '@')) {
+            $email = '...' . substr($email, $pos);
+        }
+
+        return $email;
     }
 
 
