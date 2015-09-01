@@ -31,7 +31,7 @@
 
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
 
-    {% javascripts '@jquery' '@jqueryui' '@ckeditorcustomsettings' %}
+    {% javascripts '@jquery' '@jqueryui' %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
@@ -146,7 +146,7 @@
 </div>
 <!-- mdl-layout -->
 
-{% javascripts '@AppBundle/Resources/assets/js/dropzone.js' '@toolkit' %}
+{% javascripts '@AppBundle/Resources/assets/js/dropzone.js' '@toolkit' '@ckeditorcustomsettings' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 
