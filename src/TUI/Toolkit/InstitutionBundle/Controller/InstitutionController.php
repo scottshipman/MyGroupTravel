@@ -398,6 +398,14 @@ class InstitutionController extends Controller
                 throw $this->createNotFoundException('Unable to find Institution entity.');
             }
 
+            // get list of quotes related to this user first (cant delete a user if they are attached)
+            // todo check for tours or other objects that might apply
+            $quotes = $em->getRepository('QuoteBundle:Quote')->findOneBy(array('institution' => $entity->getId()));
+            if($quotes){
+              $this->get('session')->getFlashBag()->add('error', 'Unable to delete the Institution because it is associated with Quotes');
+              return $this->redirect($this->generateUrl('user'));
+            }
+
             $em->remove($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add('notice', 'Institution Deleted: ' . $entity->getName());
@@ -435,6 +443,15 @@ class InstitutionController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find an Institution entity with id:.' . $id);
         }
+
+        // get list of quotes related to this user first (cant delete a user if they are attached)
+        // todo check for tours or other objects that might apply
+        $quotes = $em->getRepository('QuoteBundle:Quote')->findOneBy(array('institution' => $entity->getId()));
+        if($quotes){
+          $this->get('session')->getFlashBag()->add('error', 'Unable to delete the Institution because it is associated with Quotes');
+          return $this->redirect($this->generateUrl('user'));
+        }
+
         $em->remove($entity);
         $em->flush();
         $this->get('session')->getFlashBag()->add('notice', 'Institution Deleted: ' . $entity->getname());
