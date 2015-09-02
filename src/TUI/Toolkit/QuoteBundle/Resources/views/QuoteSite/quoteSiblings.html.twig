@@ -1,0 +1,36 @@
+{%  if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
+{% set zebra = "odd"  %}
+<h3 id="alternate-quotes-headline">Quotes for {% if tourName %}{{ tourName }}{% else %}this tour{% endif %}</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Tour name</th>
+            <th>Quote number</th>
+            <th>Departure date</th>
+            <th>Date created</th>
+            <th>Price per person</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities%}
+        <tr id="alt~{{ entity.id }}~{{ entity.quoteNumber }}" class="{{ zebra }} alt-quote" quote="{{ entity.id }}" quotenumber="{{ entity.quoteNumber }}">
+            <td>{% if entity.departureDate %}{{ entity.name }}{% endif %}</td>
+            <td>{% if entity.departureDate %}{{ entity.quoteNumber }}{% endif %}</td>
+            <td>{% if entity.departureDate %}{{ entity.departureDate|date(format) }}{% endif %} </td>
+            <td>{% if entity.departureDate %}{{ entity.created |date(format) }}{% endif %}</td>
+            <td>{% if entity.departureDate %}{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}{% endif %}</td>
+        </tr>
+    {% if zebra == "odd" %}{% set zebra = "even" %}{% else %}{% set zebra = "odd" %}{% endif %}
+    {% endfor %}
+    </tbody>
+</table>
+
+<script>
+    $(document).ready(function() {
+        $(".alt-quote").on('click', function(e){
+            var ID = $(this).attr('quote');
+            var quoteNumber = $(this).attr('quotenumber');
+            window.location.href = '/quote/view/' + ID + '/' + quoteNumber
+        });
+    });
+</script>

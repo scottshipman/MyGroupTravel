@@ -24,6 +24,7 @@ use DeepCopy\Filter\ReplaceFilter;
 use DeepCopy\Filter\KeepFilter;
 use DeepCopy\Matcher\PropertyMatcher;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\ConstraintViolationList;
 
 /**
  * QuoteVersion controller.
@@ -906,7 +907,7 @@ class QuoteVersionController extends Controller
                 $new_entity,
                 $uniqueEntity
             );
-            if (!$errors) {
+            if (count($errors)==0) {
                 $new_entity->setId(null);
                 $em->detach($entity);
                 $em->persist($new_entity);
