@@ -71,12 +71,12 @@ class PermissionService
   }
 
   /**
-   * Paramters - Object ID; Class; User ID
+   * Parameters - Object ID; Class; User ID
    *
    * @return Grants
    */
   public function getPermission($object, $class, $user){
-    // update organizer permission record, or create new one
+    // return grants based on user, object and class
     $em = $this->em;
     $qb = $em->createQueryBuilder();
     $qb->select('p.grants')
