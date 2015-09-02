@@ -671,7 +671,7 @@ class QuoteVersionController extends Controller
             $blocks = isset($data[1]) ? $data[1] : array();
             $blockCount = count($blocks);
             if (!empty($blocks)) {
-                if ($blockCount == 1) {
+                if ($blockCount <= 1) {
                     $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($blocks[0]);
                     if (!$blockObj) {
                         throw $this->createNotFoundException('Unable to find Content Block entity.');

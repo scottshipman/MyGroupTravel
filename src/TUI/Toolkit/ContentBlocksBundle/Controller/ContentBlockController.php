@@ -421,7 +421,7 @@ class ContentBlockController extends Controller
       if(!empty($blocks)) {
         $blockArr = array();
         foreach ($blocks as $block) {
-          $blockArr[] = substr($block, 15);
+          $blockArr[] = (int)substr($block, 15);
         }
         $content[$tab] = array($data[0], $blockArr);
       } else {
