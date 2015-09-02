@@ -116,12 +116,12 @@
                 {{ render(controller('BrandBundle:Default:index')) }}
             </div>
 
-            {% block page_institution %}{% endblock %}
-
             <h1 class="page-title">
                 {% block page_title %}{% endblock %}
             </h1>
         </div><!-- header -->
+
+        {% block sub_header %}{% endblock %}
 
         <div class="content">
             <div class="inner">
