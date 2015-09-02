@@ -50,49 +50,11 @@
     <main class="main mdl-layout__content">
 
         {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-        <div class="header mdl-layout__header">
-            <div class="flash-messages">
-                {% for flashMessage in app.session.flashbag.get('notice') %}
-                    <div class="flash-message flash-message-notice">Notice:<br>{{ flashMessage }}</div>
-                {% endfor %}
-                {% for flashMessage in app.session.flashbag.get('error') %}
-                    <div class="flash-message flash-message-error">Error:<br>{{ flashMessage }}</div>
-                {% endfor %}
-            </div>
-
-            {% if not is_granted("ROLE_BRAND") %}
-            <div class="tui-drawer-header">
-                {% if app.user.media %}
-                    <span id="accbtn" class="tui-image-avatar"><img src="{{ asset(".." ~ app.user.media.getRelativePath ~ "/" ~ app.user.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ app.user.username }}"></span>
-                {% elseif app.user.firstName and app.user.lastName %}
-                    <span id="accbtn" class="tui-text-avatar mdl-typography--headline">{{ app.user.firstName[:1] }}{{ app.user.lastName[:1] }}</span>
-                {% else %}
-                    <span id="accbtn" class="tui-text-avatar mdl-typography--headline">{{ app.user.username[:1] }}</span>
-                {% endif %}
-                <div class="tui-avatar-dropdown">
-                    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="accbtn">
-                        <li><a class="mdl-menu__item" href="/user/{{ app.user.id }}/show">View</a>
-                        </li>
-                        <li><a class="mdl-menu__item" href="/user/{{ app.user.id }}/edit">Edit</a>
-                        </li>
-                        <li><a class="mdl-menu__item" href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a></li>
-                    </ul>
-                </div>
-            </div>
-            {% endif %}
-
-            <div class="brand_logo">
+            {% embed "fragments/header.html.twig" %}{% endembed %}
+        {% else %}
+            <div class="brand_logo_login">
                 {{ render(controller('BrandBundle:Default:index')) }}
             </div>
-
-            <h1 class="page-title">
-                {% block page_title %}{% endblock %}
-            </h1>
-        </div><!-- header -->
-        {% else %}
-        <div class="brand_logo_login">
-            {{ render(controller('BrandBundle:Default:index')) }}
-        </div>
         {% endif %}
 
         <div class="content">
@@ -102,11 +64,11 @@
         </div>
 
         {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-        <footer class="mdl-mini-footer site-footer">
-            <div class="mdl-mini-footer__left-section center-section">
-                {{ render(controller('BrandBundle:Default:footer')) }}
-            </div>
-        </footer>
+            <footer class="mdl-mini-footer site-footer">
+                <div class="mdl-mini-footer__left-section center-section">
+                    {{ render(controller('BrandBundle:Default:footer')) }}
+                </div>
+            </footer>
         {% endif %}
 
     </main>
