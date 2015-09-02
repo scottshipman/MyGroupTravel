@@ -19,6 +19,7 @@
             <td>{% if entity.departureDate %}{{ entity.departureDate|date(format) }}{% endif %} </td>
             <td>{% if entity.departureDate %}{{ entity.created |date(format) }}{% endif %}</td>
             <td>{% if entity.departureDate %}{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}{% endif %}</td>
+            <td>{% if date(entity.expiryDate) < date('now') %}<span style="color:red;">Expired</span>{% endif %}</td>
         </tr>
     {% if zebra == "odd" %}{% set zebra = "even" %}{% else %}{% set zebra = "odd" %}{% endif %}
     {% endfor %}
