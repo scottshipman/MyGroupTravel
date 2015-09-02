@@ -5,6 +5,7 @@ html {
 }
 
 .header,
+.sub-header,
 .content,
 .site-footer {
   padding-left: $page_gutter;
@@ -28,6 +29,10 @@ html {
     @include span-all();
     padding-top: $element-bottom;
     padding-bottom: $element-bottom;
+
+    .marketing-site & {
+      padding-top: 0;
+    }
 
     > h1 {
       width: $page_width_reset;

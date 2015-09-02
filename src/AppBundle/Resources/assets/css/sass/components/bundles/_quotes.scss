@@ -17,19 +17,37 @@
 
 }
 
-/**
- * Quote Site page styles
- */
-#site-quote-name {
-  clear: both;
-  font-size: 1.2em;
-  padding-top: 1em;
+.sub-header {
+  background: #fff;
+  padding: $element-bottom 0;
+  margin-bottom: $element-bottom;
+
+  .inner {
+    @include span-all();
+    position: relative;
+  }
+
+  h2 {
+    margin: 0.25em 0;
+    padding: 0 120px 0 0;
+  }
+
+  .institution-logo {
+    position: absolute;
+    top: 0;
+    right: $column_gutter_width;
+    width: 120px;
+    height: 100%;
+
+    img {
+      @include vertical-align();
+    }
+
+  }
+
 }
 
-#site-quote-number {
-  font-size: 16px;
-  margin: 1em 0;
-}
+#site-quote-name {}
 
 #site-summary-details {
   list-style: none;
