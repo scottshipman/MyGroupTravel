@@ -21,6 +21,13 @@
         <i class="fa fa-file-pdf-o"></i> PDF
     </a>
 
+
+    {% if editable %}
+        <a id="layout-editor" href="#" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
+            <i class="fa fa-cogs"></i> Edit
+        </a>
+    {% endif %}
+
     {% if warning | length >0 %}
         <div id="site-warning">
             {% for message in warning %}

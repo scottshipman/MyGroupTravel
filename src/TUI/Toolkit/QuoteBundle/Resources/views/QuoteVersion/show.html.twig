@@ -42,6 +42,11 @@
                 {% endif %}
             </a>
         </li>
+        <li>
+            <a id="generate-link" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+                <i class="fa fa-sign-in fa-stack"></i>Generate quote link
+            </a>
+        </li>
     </ul>
     <h3>Summary</h3>
 
@@ -178,9 +183,31 @@
        </div>
 
        <div id="loader"><img src="{{ asset('bundles/quote/images/loader.gif') }}"></div>
-
+       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.js"></script>
        <script>
            $(document).ready(function() {
+               // Generate a Quote LInk
+
+               $("#generate-link").on('click', function(e){
+                   // todo Get item.id and item.name
+                   var link_html = '<p>Copy and paste this link into your email and send it to your opportunity:</p>'+
+                                   '<input size="35" type="text" id="quote-link-input" name="quote-link-input" class="form-control" value="{{ url('quote_site_action_show', {'id': entity.id}) }}" disabled>'+
+                                   '<a href="#" id="copy-button" data-clipboard-target="quote-link-input" title="Click to copy Quote URL" class="not-full mdl-button mdl-js-button mdl-button--raised mdl-button--colored">'+
+                                        '<i class="fa fa-sign-in fa-stack"></i>' +
+                                    '</a>'+
+                                    '<p>You should also provide the Quote Number: <strong>{{ entity.quoteNumber }}<strong></p>';
+                   //e.preventDefault();
+                   $("#dialog").html(link_html);
+                   $("#dialog").dialog({width:'37%', minHeight: 165, height: 165}).dialog("option", "title", "Quote Link").dialog("open");
+                   // Copy to Clipboard
+                   ZeroClipboard.config( { swfPath: "//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf" } );
+                   var client = new ZeroClipboard( document.getElementById("copy-button") );
+                   client.on('aftercopy', function(event) {
+                       $('#copy-button').css('background-color', 'green');
+                   });
+               });
+
+
 
                // Add a headerBlock to a site
                $("#add-headerBlock").on('click', function(){
