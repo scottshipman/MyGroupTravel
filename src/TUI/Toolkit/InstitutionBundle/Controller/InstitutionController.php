@@ -403,7 +403,7 @@ class InstitutionController extends Controller
             $quotes = $em->getRepository('QuoteBundle:Quote')->findOneBy(array('institution' => $entity->getId()));
             if($quotes){
               $this->get('session')->getFlashBag()->add('error', 'Unable to delete the Institution because it is associated with Quotes');
-              return $this->redirect($this->generateUrl('user'));
+              return $this->redirect($this->generateUrl('manage_institution'));
             }
 
             $em->remove($entity);
@@ -449,7 +449,7 @@ class InstitutionController extends Controller
         $quotes = $em->getRepository('QuoteBundle:Quote')->findOneBy(array('institution' => $entity->getId()));
         if($quotes){
           $this->get('session')->getFlashBag()->add('error', 'Unable to delete the Institution because it is associated with Quotes');
-          return $this->redirect($this->generateUrl('user'));
+          return $this->redirect($this->generateUrl('manage_institution'));
         }
 
         $em->remove($entity);
