@@ -44,39 +44,7 @@
 
     {# Display admin menu only if the user is BRAND or higher ROLE #}
     {% if is_granted("ROLE_BRAND") %}
-        <div class="mdl-layout__drawer">
-
-            <header class="tui-drawer-header">
-                {% if app.user.media %}
-                    <span class="tui-image-avatar"><img src="{{ asset(".." ~ app.user.media.getRelativePath ~ "/" ~ app.user.media.getHashedFilename ) }}" alt="{{ app.user.username }}"></span>
-                {% elseif app.user.firstName and app.user.lastName %}
-                    <span class="tui-text-avatar mdl-typography--headline">{{ app.user.firstName[:1] }}{{ app.user.lastName[:1] }}</span>
-                {% else %}
-                    <span class="tui-text-avatar mdl-typography--headline">{{ app.user.username[:1] }}</span>
-                {% endif %}
-                <div class="tui-avatar-dropdown">
-                    <span>{{ app.user.username }}</span>
-                    <div class="mdl-layout-spacer"></div>
-                    <button id="accbtn" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
-                        <i class="material-icons">arrow_drop_down</i>
-                    </button>
-                    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="accbtn">
-                        <li><a class="mdl-menu__item" href="/user/{{ app.user.id }}/show">View</a>
-                        </li>
-                        <li><a class="mdl-menu__item" href="/user/{{ app.user.id }}/edit">Edit</a>
-                        </li>
-                        <li><a class="mdl-menu__item" href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a></li>
-                    </ul>
-                </div>
-            </header>
-
-            <nav class="mdl-navigation">
-                {% block admin_menu %}
-                    {{ knp_menu_render('admin_menu', {'currentClass': 'active'}) }}
-                {% endblock %}
-            </nav>
-
-        </div><!-- mdl-layout__drawer -->
+        {% embed "fragments/admin_menu.html.twig" %}{% endembed %}
     {% endif %}
 
     <main class="mdl-layout__content main">
