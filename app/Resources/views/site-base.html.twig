@@ -49,22 +49,26 @@
 
     <main class="mdl-layout__content main">
 
-        <div class="header mdl-layout__header">
-            <div class="flash-messages">
-                {% for flashMessage in app.session.flashbag.get('notice') %}
-                    <div class="flash-message flash-message-notice">Notice:<br>{{ flashMessage }}</div>
-                {% endfor %}
-                {% for flashMessage in app.session.flashbag.get('error') %}
-                    <div class="flash-message flash-message-error">Error:<br>{{ flashMessage }}</div>
-                {% endfor %}
-            </div>
+        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+            <div class="header mdl-layout__header">
+                <div class="flash-messages">
+                    {% for flashMessage in app.session.flashbag.get('notice') %}
+                        <div class="flash-message flash-message-notice">Notice:<br>{{ flashMessage }}</div>
+                    {% endfor %}
+                    {% for flashMessage in app.session.flashbag.get('error') %}
+                        <div class="flash-message flash-message-error">Error:<br>{{ flashMessage }}</div>
+                    {% endfor %}
+                </div>
 
-            {% embed "fragments/header.html.twig" %}{% endembed %}
+                {% embed "fragments/header.html.twig" %}{% endembed %}
 
-            <h1 class="page-title">
-                {% block page_title %}{% endblock %}
-            </h1>
-        </div><!-- header -->
+                {% block back_link %}{% endblock %}
+
+                <h1 class="page-title">
+                    {% block page_title %}{% endblock %}
+                </h1>
+            </div><!-- header -->
+        {% endif %}
 
         {% block sub_header %}{% endblock %}
 

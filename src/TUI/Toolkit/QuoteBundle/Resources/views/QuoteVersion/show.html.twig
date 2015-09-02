@@ -1,16 +1,44 @@
-{% extends '::base.html.twig' %}
-{% block title %}Quote: {{ entity.quoteReference.name  }} - {{ entity.name  }}  {% endblock %}
-{% block page_title %}Quote: {{ entity.quoteReference.name  }} - {{ entity.name  }} {% endblock %}
+{% extends '::site-base.html.twig' %}
 
-{%  if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
+{% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
+
+{% block title %}
+    {% if is_granted("ROLE_BRAND") %}
+        Site Show
+    {% else %}
+        {{ entity.quoteReference.name }}, {{ entity.name }}
+    {% endif %}
+{% endblock %}
+{% block page_title %}Site Show{% endblock %}
+
+{% block back_link %}
+    {% if is_granted("ROLE_BRAND") %}
+        <a class="back-link" href="{{ path('manage_quote') }}"><i class="fa fa-arrow-left"></i> Back to the List</a>
+    {% else %}
+        <a class="back-link" href="/"><i class="fa fa-arrow-left"></i> Back to Dashboard</a>
+    {% endif %}
+{% endblock %}
+
+{% block sub_header %}
+    <div class="sub-header">
+      <div class="inner">
+        {% if entity.quoteReference.institution.media %}
+            <div class="institution-logo">
+                <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.quoteReference.institution.name }}">
+            </div>
+        {% endif %}
+
+        {% if entity.quoteReference.institution %}<div id="site-quote-name">{{ entity.quoteReference.institution.name }}</div>{% endif %}
+
+        <h2>{{ entity.quoteReference.name }}{% if is_granted("ROLE_BRAND") %}, {{ entity.name }}{% endif %} {% if entity.quoteNumber %}({{ entity.quoteNumber }}){% endif %}</h2>
+
+        {% if entity.quoteReference.destination %}<div>{{ entity.quoteReference.destination }}</div>{% endif %}
+      </div>
+    </div>
+{% endblock %}
 
 {% block body -%}
     <ul class="record_actions">
-        <li>
-            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quote') }}">
-                 <i class="fa fa-arrow-circle-left"></i> Back to the list
-            </a>
-        </li>
         {% if (entity.locked is sameas(false)) and (is_granted("ROLE_ADMIN")) %}
         <li>
             <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quoteversion_edit', { 'id': entity.id }) }}">
@@ -36,15 +64,15 @@
         <li>
             <a id="quoteLock" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
                 {% if (entity.locked is sameas(false)) %}
-                    <i class="fa fa-lock"> </i> Lock
+                    <i class="fa fa-lock"></i> Lock
                 {% else %}
-                <i class="fa fa-unlock"> </i> Unlock
+                    <i class="fa fa-unlock"></i> Unlock
                 {% endif %}
             </a>
         </li>
         <li>
             <a id="generate-link" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-                <i class="fa fa-sign-in fa-stack"></i>Generate quote link
+                <i class="fa fa-sign-in"></i> Generate quote link
             </a>
         </li>
     </ul>
@@ -381,4 +409,42 @@
         });
     </script>
 
+{% endblock %}
+
+
+
+
+
+{% block footer_left %}
+    {% if entity.quoteReference.salesAgent %}
+        <span class="intro">Tour Organizer:</span>
+        {% if entity.quoteReference.salesAgent.media %}
+            <span class="tui-image-avatar"><img src="{{ asset(".." ~ entity.quoteReference.salesAgent.media.getRelativePath ~ "/" ~ entity.quoteReference.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.quoteReference.salesAgent.username }}"></span>
+        {% elseif entity.quoteReference.salesAgent.firstName and entity.quoteReference.salesAgent.lastName %}
+            <span class="tui-text-avatar mdl-typography--headline">{{ entity.quoteReference.salesAgent.firstName[:1] }}{{ entity.quoteReference.salesAgent.lastName[:1] }}</span>
+        {% else %}
+            <span class="tui-text-avatar mdl-typography--headline">{{ entity.quoteReference.salesAgent.username[:1] }}</span>
+        {% endif %}
+        <span class="agent">{{ entity.quoteReference.salesAgent.firstName }} {{ entity.quoteReference.salesAgent.lastName }}<br>
+        {{ entity.quoteReference.salesAgent.email }}</span>
+    {% endif %}
+{% endblock %}
+
+{% block footer_right %}
+    <div class="quote-info"><span class="quote-label">Price per person:</span><span class="quote-price">{% if entity.pricePerson %}<strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong>{% endif %}</span></div>
+    {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
+        {% if date(entity.expiryDate) < date('now') %}
+            <a class="expired-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+                <i class="fa fa-calendar-times-o"></i> Expired
+            </a>
+        {% else %}
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('quote_site_quote_accepted', { 'id': entity.id }) }}">
+                <i class="fa fa-thumbs-o-up"> </i> Accept Quote
+            </a>
+        {% endif %}
+    {% elseif (entity.converted is sameas(true)) and (entity.quoteReference.converted is sameas(true))%}
+        <a class="accepted-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+            <i class="fa fa-thumbs-up"> </i> Accepted
+        </a>
+    {% endif %}
 {% endblock %}

@@ -17,6 +17,15 @@
 
 }
 
+.back-link {
+  color: inherit;
+  text-decoration: none;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  float: left;
+  @include span-all();
+}
+
 .sub-header {
   background: #fff;
   padding: $element-bottom 0;

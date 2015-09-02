@@ -11,6 +11,14 @@
 {% endblock %}
 {% block page_title %}Site View{% endblock %}
 
+{% block back_link %}
+    {% if is_granted("ROLE_BRAND") %}
+        <a class="back-link" href="{{ path('manage_quoteversion_show', { 'id': entity.id }) }}"><i class="fa fa-arrow-left"></i> Back to Show</a>
+    {% else %}
+        <a class="back-link" href="/"><i class="fa fa-arrow-left"></i> Back to Dashboard</a>
+    {% endif %}
+{% endblock %}
+
 {% block sub_header %}
     <div class="sub-header">
       <div class="inner">
@@ -39,7 +47,7 @@
     </a>
 
     {% if editable %}
-        <a id="layout-editor" href="#" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
+        <a id="layout-editor" href="{{ path('manage_quoteversion_edit', { 'id': entity.id }) }}" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
             <i class="fa fa-cogs"></i> Edit
         </a>
     {% endif %}

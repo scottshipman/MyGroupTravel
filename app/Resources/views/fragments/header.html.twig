@@ -1,4 +1,4 @@
-{% if is_granted('IS_AUTHENTICATED_REMEMBERED') and not is_granted("ROLE_BRAND") %}
+{% if not is_granted("ROLE_BRAND") %}
 <div class="tui-drawer-header">
     {% if app.user.media %}
         <span id="accbtn" class="tui-image-avatar"><img src="{{ asset( app.user.media.getRelativePath ~ "/" ~ app.user.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ app.user.username }}"></span>
