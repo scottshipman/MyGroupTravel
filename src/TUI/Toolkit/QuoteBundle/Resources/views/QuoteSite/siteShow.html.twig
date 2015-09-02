@@ -61,7 +61,7 @@
                                     <i class="fa fa-calendar-times-o"></i> Expired
                                 </a>
                             {% else %}
-                                <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('quote_site_quote_accepted', { 'id': entity.id }) }}">
+                                <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" id="accept-quote" href="#">
                                     <i class="fa fa-thumbs-o-up"> </i> Accept Quote
                                 </a>
                             {% endif %}
@@ -246,12 +246,22 @@
                 });
             });
 
-            // edit a content block
+            // change request popup
             $("#change-request").on('click', function(e){
                 //e.preventDefault();
                 $("#dialog").html("");
                 $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
                 $("#dialog").load('/quote/view/change-request/form/' + {{ entity.id}}, function() {
+                    $(this).dialog("option", "title", "I'd like to make some changes");
+                });
+            });
+
+            // accept quote popup
+            $("#accept-quote").on('click', function(e){
+                //e.preventDefault();
+                $("#dialog").html("");
+                $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
+                $("#dialog").load('/quote/view/accepted/form/' + {{ entity.id}}, function() {
                     $(this).dialog("option", "title", "I'd like to make some changes");
                 });
             });

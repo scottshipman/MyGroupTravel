@@ -40,6 +40,10 @@
                                         places</p>
 
                                     <p><strong>Quote valid until {{ entity.expiryDate.date }}</strong></p>
+                                    {% if additional %}
+                                        <p><strong>Additions:</strong></p>
+                                        <p>{{ additional }}</p>
+                                    {% endif %}
                                     <center>
                                         <a style="text-decoration: none; color:#fff; display: block; width: 40%; padding: 20px; margin: 20px auto; background-color:{{ brand.primaryColor }}; text-align: center;"
                                            href="{{ absolute_url("/quote/view/" ~ entity.id) }}">View Your Quote</a>

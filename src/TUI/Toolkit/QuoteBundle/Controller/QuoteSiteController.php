@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use TUI\Toolkit\QuoteBundle\Form\PromptType;
 use TUI\Toolkit\QuoteBundle\Entity\QuoteVersion;
 use TUI\Toolkit\QuoteBundle\Form\QuoteChangeRequestType;
+use TUI\Toolkit\QuoteBundle\Form\QuoteAcceptType;
 use TUI\Toolkit\PermissionBundle\Entity\Permission;
 use TUI\Toolkit\PermissionBundle\Controller\PermissionService;
 use APY\DataGridBundle\Grid\Source\Entity;
@@ -271,6 +272,31 @@ class QuoteSiteController extends Controller
 
     }
 
+    public function createAcceptFormAction($id)
+    {
+        $acceptForm = $this->createForm(new QuoteAcceptType(), array(), array(
+            'action' => $this->generateUrl('quote_site_quote_accepted', array('id' => $id)),
+            'method' => 'POST',
+        ));
+
+        $acceptForm->add('submit', 'submit', array('label' => 'Go'));
+
+        return $acceptForm;
+
+    }
+
+    public function newAcceptAction($id)
+    {
+        $acceptForm = $this->createAcceptFormAction($id);
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+
+        return $this->render('QuoteBundle:QuoteSite:acceptQuote.html.twig', array(
+            'accept_form' => $acceptForm->createView(),
+            'entity' => $entity,
+        ));
+    }
+
 
     /**
      * Creates the action for when a user accepts a quote
@@ -282,6 +308,10 @@ class QuoteSiteController extends Controller
 
     public function quoteAcceptedAction(Request $request, $id)
     {
+        $acceptForm = $this->createAcceptFormAction($id);
+        $acceptForm->handleRequest($request);
+        $additional = $acceptForm->get('additional')->getData();
+
         $secondaryAgent = "";
         $toArray = array();
         $em = $this->getDoctrine()->getManager();
@@ -311,9 +341,8 @@ class QuoteSiteController extends Controller
 
 
         $message = \Swift_Message::newInstance()
-            ->setSubject('Quote' . $tourName . 'has been accepted!')
+            ->setSubject('Quote' . $tourName . ' has been accepted!')
             ->setFrom($brandName . '@Toolkit.com')
-            ->setTo($toArray)
             ->setBody(
                 $this->renderView(
                     'QuoteBundle:Emails:acceptQuote.html.twig',
@@ -322,14 +351,19 @@ class QuoteSiteController extends Controller
                         'entity' => $entity,
                         'departure' => $departure,
                         'tour_name' => $tourName,
+                        'additional' => $additional,
                     )
                 ), 'text/html');
 
         $em->persist($entity);
         $em->flush();
-        $this->get('mailer')->send($message);
 
-        $this->get('session')->getFlashBag()->add('notice', 'Quote ' . $tourName . 'has been accepted.');
+        foreach($toArray as $user) {
+            $message->setTo($user);
+            $this->get('mailer')->send($message);
+        }
+
+        $this->get('session')->getFlashBag()->add('notice', 'Quote ' . $tourName . ' has been accepted.');
 
         return $this->redirect($this->generateUrl('quote_site_action_show', array('id' => $id)));
 
