@@ -30,17 +30,7 @@ class ContentBlockType extends AbstractType
       }
 
         $builder
-            ->add('body', 'ckeditor', array(
-                'transformers' => array('html_purifier'),
-                'toolbar' => array('document', 'tools', 'basicstyles', 'styles', 'paragraph'),
-                'toolbar_groups' => array(
-                    'document' => array('Source')
-                ),
-                'ui_color' => '#ffffff',
-                'startup_outline_blocks' => false,
-                'width' => '100%',
-                'height' => '320',
-            ));
+            ->add('body', 'ckeditor', array());
 
             // Dont show locked or hidden fields unless Brand role or higher
             if($securityContext->isGranted('ROLE_BRAND')) {
