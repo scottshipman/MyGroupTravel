@@ -265,7 +265,7 @@ trsteel_ckeditor:
     startup_outline_blocks: false
     width: 100% #Integer or %
     height: 300 #Integer or %
-    custom_config: "%kernel.root_dir%/../src/AppBundle/Resources/public/js/ckeditor/config.js"
+    custom_config: "/assetic/ckeditorcustomsettings.js"
 
 liip_imagine:
     resolvers:
