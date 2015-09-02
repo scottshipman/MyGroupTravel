@@ -1,6 +1,6 @@
 {% if brand.media %}
     <div class="logo">
-        <img src="{{ app.request.uriForPath( asset( brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) ) }}" alt="{{ brand.name }}">
+        <img src="{{ asset( brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ brand.name }}">
     </div>
 {% else %}
     {{ brand.name }}
