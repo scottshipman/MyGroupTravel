@@ -49,7 +49,22 @@
 
     <main class="mdl-layout__content main">
 
-        {% embed "fragments/header.html.twig" %}{% endembed %}
+        <div class="header mdl-layout__header">
+            <div class="flash-messages">
+                {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="flash-message flash-message-notice">Notice:<br>{{ flashMessage }}</div>
+                {% endfor %}
+                {% for flashMessage in app.session.flashbag.get('error') %}
+                    <div class="flash-message flash-message-error">Error:<br>{{ flashMessage }}</div>
+                {% endfor %}
+            </div>
+
+            {% embed "fragments/header.html.twig" %}{% endembed %}
+
+            <h1 class="page-title">
+                {% block page_title %}{% endblock %}
+            </h1>
+        </div><!-- header -->
 
         {% block sub_header %}{% endblock %}
 
