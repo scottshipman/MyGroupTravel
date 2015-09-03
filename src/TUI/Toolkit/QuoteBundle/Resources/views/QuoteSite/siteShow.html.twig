@@ -21,7 +21,7 @@
 
 {% block edit_link %}
     {% if is_granted("ROLE_BRAND") %}
-        <a id="link-preview-edit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored link-preview-edit" href="#">Edit</a>
+        <a id="link-preview-edit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored link-preview-edit" href="#">Switch to Edit Mode</a>
     {% endif %}
 {% endblock %}
 
@@ -54,13 +54,11 @@
         <i class="fa fa-file-pdf-o"></i> PDF
     </a>
 
-    {#
     {% if editable %}
         <a id="layout-editor" href="{{ path('manage_quoteversion_edit', { 'id': entity.id }) }}" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
-            <i class="fa fa-cogs"></i> Edit
+            <i class="fa fa-cogs"></i> Edit Quote
         </a>
     {% endif %}
-    #}
 
     {% if warning | length >0 %}
         <div id="site-warning">
@@ -244,10 +242,10 @@
                 var t = $('.mode-toggle');
                 if ( t.hasClass('mode-preview') ) {
                     t.addClass('mode-edit').removeClass('mode-preview');
-                    $(this).html('Preview');
+                    $(this).html('Switch to Preview Mode');
                 } else {
                     t.addClass('mode-preview').removeClass('mode-edit');
-                    $(this).html('Edit');
+                    $(this).html('Switch to Edit Mode');
                 }
             });
 
