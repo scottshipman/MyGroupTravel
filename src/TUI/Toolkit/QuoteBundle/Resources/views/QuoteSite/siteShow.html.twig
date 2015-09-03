@@ -142,6 +142,9 @@
                     {% endif %}
                 {% set activeTab = '' %}
             {% endfor %}
+            {% if alternate %}
+                <a id="tab-alternate-quotes" href="#tabs-drawer-alternate-quotes" class="site-content-blocks-tab mdl-tabs__tab {{ activeTab }}">Alternate Quotes</a>
+            {% endif %}
         </div>
 
         {# render the tabs'  content#}
@@ -169,6 +172,13 @@
             </div>
             {% set activeTab = '' %}
         {% endfor %}
+        {% if alternate %}
+            <div id="tabs-drawer-alternate-options" class="mdl-tabs__panel {{ activeTab }} ">
+
+                    {{ render(controller('QuoteBundle:QuoteSite:getQuoteSiblings', {'id':  entity.quoteReference.id  })) }}
+
+            </div>
+        {% endif %}
 
     </div>
 
@@ -313,7 +323,7 @@
                 });
             });
 
-            // toggle the locked boolean on a content block
+            // delete a content block
             $(".item-delete").on('click', function(e){
                 // todo Get item.id and item.name
                 if (confirm('Are you sure you want to remove this item? Warning: this can not be undone.')) {

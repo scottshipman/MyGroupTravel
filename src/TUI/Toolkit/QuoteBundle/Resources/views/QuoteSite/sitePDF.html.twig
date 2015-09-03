@@ -48,6 +48,9 @@
                 <a id="tab-{{ tab }}" href="#tabs-drawer-{{ tab }}" class="site-content-blocks-tab mdl-tabs__tab {{ activeTab }}">{{ data[0] }}</a>
                 {% set activeTab = '' %}
             {% endfor %}
+            {% if alternate %}
+                <a id="tab-alternate-quotes" href="#tabs-drawer-alternate-quotes" class="site-content-blocks-tab mdl-tabs__tab {{ activeTab }}">Alternate Quotes</a>
+            {% endif %}
         </div>
 
         {# render the tabs' content #}
@@ -65,7 +68,13 @@
             </div>
             {% set activeTab = '' %}
         {% endfor %}
+        {% if alternate %}
+            <div id="tabs-drawer-alternate-options" class="mdl-tabs__panel {{ activeTab }} ">
 
+                {{ render(controller('QuoteBundle:QuoteSite:getQuoteSiblings', {'id':  entity.quoteReference.id  })) }}
+
+            </div>
+        {% endif %}
     </div>
 
 {% endblock %}

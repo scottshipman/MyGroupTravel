@@ -35,7 +35,7 @@ class QuoteSiteController extends Controller
   public function siteShowAction($id, $quoteNumber = null)
   {
 
-
+    $alternate=FALSE;
     $editable = false;
     // TODO if user is allowed to edit then set $editable to true
     // if organizer or if brand or higher (check permission table for organizer)
@@ -102,6 +102,12 @@ class QuoteSiteController extends Controller
     // Record Views
     $this->setQuoteViews($entity->getId());
 
+    // prepare Alternate Quotes flag.
+    $versions = $em->getRepository('QuoteBundle:QuoteVersion')->findByQuoteReference($entity->getQuoteReference());
+    if(count($versions>1)){
+      $alternate=TRUE;
+    }
+
 
     return $this->render('QuoteBundle:QuoteSite:siteShow.html.twig', array(
       'entity'      => $entity,
@@ -111,6 +117,7 @@ class QuoteSiteController extends Controller
       'warning'     => $warningMsg,
       'header'      => $headerBlock,
       'editable'  =>  $editable,
+      'alternate' => $alternate,
     ));
   }
 
@@ -376,6 +383,7 @@ class QuoteSiteController extends Controller
 
     public function sitePDFAction($id, $quoteNumber = null)
     {
+      $alternate=FALSE;
       $editable = false;
       // TODO if user is allowed to edit then set $editable to true
       // if organizer or if brand or higher (check permission table for organizer)
@@ -421,13 +429,20 @@ class QuoteSiteController extends Controller
       $request = $this->getRequest();
       $path = $request->getScheme() . '://' . $request->getHttpHost();
 
+      // prepare Alternate Quotes flag.
+      $versions = $em->getRepository('QuoteBundle:QuoteVersion')->findByQuoteReference($entity[0]->getQuoteReference());
+      if(count($versions>1)){
+        $alternate=TRUE;
+      }
+
       $data = array(
         'entity' => $entity[0],
         'locale' => $locale,
         'items' => $items,
         'header' => $headerBlock,
         'editable' =>  $editable,
-        'path' => $path
+        'path' => $path,
+        'alternate' => $alternate
       );
 
       $html = $this->renderView( 'QuoteBundle:QuoteSite:sitePDF.html.twig', $data );
@@ -453,4 +468,31 @@ class QuoteSiteController extends Controller
       ));
       */
     }
+
+  /**
+   * @param $id
+   *
+   * Get all Quote Versions whose quoteReference is ID and return a stand alone Twig of tabular data
+   */
+  public function getQuoteSiblingsAction($id)
+  {
+    $locale = $this->container->getParameter('locale');
+    $em = $this->getDoctrine()->getManager();
+    $tour = $em->getRepository('QuoteBundle:Quote')->find($id);
+    if(!$tour){
+      throw $this->createNotFoundException('Unable to find Quote entity for alternate quotes tab.');
+    }
+    $tourName = $tour->getName();
+    $entities = $em->getRepository('QuoteBundle:QuoteVersion')->findByQuoteReference($id);
+
+    if(!$entities){
+      throw $this->createNotFoundException('Unable to find QuoteVersion entities for alternate quotes tab.');
+    }
+
+    return $this->render('QuoteBundle:QuoteSite:quoteSiblings.html.twig', array(
+      'entities' => $entities,
+      'locale'  => $locale,
+      'tourName'  => $tourName,
+    ));
+  }
 }
