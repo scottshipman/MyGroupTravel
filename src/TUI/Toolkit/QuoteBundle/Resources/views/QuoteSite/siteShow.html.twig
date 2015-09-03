@@ -156,6 +156,7 @@
             {% set activeTab = 'is-active' %}
             {%  for tab, data in entity.content %}
                     <a id="tab-{{ tab }}" href="#tabs-drawer-{{ tab }}" class="site-content-blocks-tab mdl-tabs__tab {{ activeTab }}">{{ data[0] }}</a>
+                    {#
                     {% if editable %}
                         <span class="content-blocks tab-label"><i class="content-block-tab-handle fa fa-arrows"></i>
                                 {% if data[1] | length < 1 %}
@@ -164,12 +165,14 @@
                              <i class="tab-new content-block-tab-actions fa fa-plus-circle"> Add Content</i>
                         </span>
                     {% endif %}
+                    #}
                 {% set activeTab = '' %}
             {% endfor %}
             {% if alternate %}
                 <a id="tab-alternate-quotes" href="#tabs-drawer-alternate-quotes" class="site-content-blocks-tab mdl-tabs__tab {{ activeTab }}">Alternate Quotes</a>
             {% endif %}
             {% if editable %}
+                <a id="edit-tabs" href="#" class="site-content-blocks-tab mdl-tabs__tab status-preview-edit"><i class="fa fa-pencil"></i> Edit Tabs</a>
                 <a id="add-new-tab" href="#" class="site-content-blocks-tab mdl-tabs__tab status-preview-edit"><i class="fa fa-plus-circle"></i> Add New Tab</a>
             {% endif %}
         </div>
@@ -236,7 +239,8 @@
             });
 
             // Toggle between preview and edit mode for content blocks and tabs
-            $('#link-preview-edit').on('click', function() {
+            $('#link-preview-edit').on('click', function(e) {
+                e.preventDefault();
                 var t = $('.mode-toggle');
                 if ( t.hasClass('mode-preview') ) {
                     t.addClass('mode-edit').removeClass('mode-preview');
