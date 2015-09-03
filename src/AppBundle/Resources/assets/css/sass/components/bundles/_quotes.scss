@@ -206,11 +206,6 @@
 .content-blocks-drawer.mdl-tabs__panel {
   margin-left: -$column_gutter_width_reset;
   width: $column_total_width_reset;
-
-  .content-block {
-    padding: 0 $column_gutter_width;
-  }
-
 }
 
 .alt-quote {
@@ -233,6 +228,36 @@
 
 
 // Preview/Edit toggling
+
+.site-content-blocks-size-half {
+  float: left;
+  width: $column_total_width * 2;
+  padding: 0 $column_gutter_width;
+
+  .pdf-layout & {
+    clear: both;
+    float: none;
+    width: auto;
+  }
+
+  .content-block-size-half {
+    float: none;
+    width: auto;
+    padding: 0;
+  }
+
+}
+
+.site-content-blocks-size-full {
+  clear: both;
+  padding: 0 $column_gutter_width;
+
+  .content-block-size-full {
+    clear: none;
+    padding: 0;
+  }
+
+}
 
 .link-preview-edit {
   float: right;
