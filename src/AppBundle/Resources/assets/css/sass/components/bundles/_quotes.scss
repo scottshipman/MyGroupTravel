@@ -26,11 +26,6 @@
   @include span-all();
 }
 
-.edit-link {
-  float: right;
-  clear: both;
-}
-
 .sub-header {
   background: #fff;
   padding: $element-bottom 0;
@@ -230,4 +225,32 @@
       @include mdl-secondary-color('background-color', 1);
     }
   }
+}
+
+
+
+
+
+
+// Preview/Edit toggling
+
+.link-preview-edit {
+  float: right;
+  clear: both;
+}
+
+.mode-preview {
+
+  .status-preview-edit {
+    display: none;
+  }
+
+}
+
+.mode-edit {
+
+  .status-preview-edit {
+    display: initial;
+  }
+
 }
