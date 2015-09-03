@@ -179,8 +179,13 @@
         {% set activeTab = 'is-active' %}
         {%  for tab, data in entity.content %}
             <div id="tabs-drawer-{{ tab  }}" class="mdl-tabs__panel sortable-items content-blocks-drawer {{ activeTab }} ">
-                    {%  for item in data[1] %}
-                        <div id="content-blocks-{{ items[item].id }}" class="site-content-blocks site-content-blocks-item">
+                    {% for item in data[1] %}
+                        {% if items[item].doubleWidth == 1 %}
+                            {% set class = ' site-content-blocks-size-full' %}
+                        {% else %}
+                            {% set class = ' site-content-blocks-size-half' %}
+                        {% endif %}
+                        <div id="content-blocks-{{ items[item].id }}" class="site-content-blocks site-content-blocks-item{{ class }}">
                             {% if editable %}
                                 {# probably render a controller here by passing in item as id and have block entity returned #}
                                 <div class="move-icon status-preview-edit"><i class="fa fa-arrows"></i></div>
@@ -191,10 +196,8 @@
                                     {% if items[item].hidden %}<i class="item-hide content-block-item-action fa fa-ban"></i>{% else %}<i class="item-hide content-block-item-action fa fa-eye"></i>{% endif %}
                                 </div>
                             {% endif %}
-                            {# render the actual content block#}
-                            <div id="site-block-content-{{ items[item].id }}" class="site-block-content">
-                                {{ render(controller('ContentBlocksBundle:ContentBlock:show', {'id':  items[item].id  })) }}
-                            </div>
+                            {# render the actual content block #}
+                            {{ render(controller('ContentBlocksBundle:ContentBlock:show', {'id':  items[item].id  })) }}
                         </div>
                     {% endfor %}
             </div>
