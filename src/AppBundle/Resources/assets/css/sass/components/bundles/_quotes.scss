@@ -211,15 +211,20 @@
 .alt-quote {
   line-height: 2em;
   cursor: pointer;
-  &:hover{
+
+  &:hover {
     background-color: lightgray;
   }
+
   &.even {
-     @include mdl-secondary-color('background-color', 3);
+    @include mdl-secondary-color('background-color', 3);
+
     &:hover {
       @include mdl-secondary-color('background-color', 1);
     }
+
   }
+
 }
 
 
@@ -286,12 +291,22 @@
     position: absolute;
     top: 6px;
     right: $column_gutter_width;
+    padding-right: 1em;
+  }
+
+  .site-content-blocks-size-half .site-content-block-actions {
+    right: $column_gutter_width * ( 100% / ($column_total_width * 2)); // correction for smaller column
   }
 
   .move-icon {
     position: absolute;
     top: 6px;
     left: $column_gutter_width;
+    padding-left: 1em;
+  }
+
+  .site-content-blocks-size-half .move-icon {
+    left: $column_gutter_width * ( 100% / ($column_total_width * 2)); // correction for smaller column
   }
 
   .content-block {
