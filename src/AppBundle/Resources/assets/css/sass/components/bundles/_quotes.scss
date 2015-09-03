@@ -26,6 +26,11 @@
   @include span-all();
 }
 
+.edit-link {
+  float: right;
+  clear: both;
+}
+
 .sub-header {
   background: #fff;
   padding: $element-bottom 0;

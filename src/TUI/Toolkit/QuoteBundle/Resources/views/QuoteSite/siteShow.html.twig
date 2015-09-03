@@ -19,6 +19,12 @@
     {% endif %}
 {% endblock %}
 
+{% block edit_link %}
+    {% if is_granted("ROLE_BRAND") %}
+        <a id="edit-view-toggle" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored edit-link" href="#">Edit</a>
+    {% endif %}
+{% endblock %}
+
 {% block sub_header %}
     <div class="sub-header">
       <div class="inner">
@@ -38,6 +44,8 @@
 {% endblock %}
 
 {% block body -%}
+<div class="view-mode">
+
     <a href="javascript:window.print()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
         <i class="fa fa-print"></i> Print
     </a>
@@ -201,6 +209,8 @@
         {% endif %}
 
     </div>
+
+</div><!-- view-mode -->
 
     <div id="loader"><img src="{{ asset('bundles/quote/images/loader.gif') }}"></div>
 
