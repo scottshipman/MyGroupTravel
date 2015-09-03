@@ -21,7 +21,7 @@
 
 {% block edit_link %}
     {% if is_granted("ROLE_BRAND") %}
-        <a id="edit-view-toggle" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored edit-link" href="#">Edit</a>
+        <a id="link-preview-edit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored link-preview-edit" href="#">Edit</a>
     {% endif %}
 {% endblock %}
 
@@ -44,7 +44,7 @@
 {% endblock %}
 
 {% block body -%}
-<div class="view-mode">
+<div class="mode-toggle mode-preview">
 
     <a href="javascript:window.print()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
         <i class="fa fa-print"></i> Print
@@ -54,11 +54,13 @@
         <i class="fa fa-file-pdf-o"></i> PDF
     </a>
 
+    {#
     {% if editable %}
         <a id="layout-editor" href="{{ path('manage_quoteversion_edit', { 'id': entity.id }) }}" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
             <i class="fa fa-cogs"></i> Edit
         </a>
     {% endif %}
+    #}
 
     {% if warning | length >0 %}
         <div id="site-warning">
@@ -147,12 +149,6 @@
 
     {# RENDER THE CONTENT BLOCKS HERE #}
 
-    {% if editable %}
-        <a id="add-new-tab" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-            <i class="fa fa-plus-circle"></i> Add New Tab
-        </a>
-    {% endif %}
-
     <a id="site-content"></a>
     <div id="content-wrapper" class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
         <div id="content-blocks-wrapper" class="sortable-tabs mdl-tabs__tab-bar">
@@ -172,6 +168,9 @@
             {% endfor %}
             {% if alternate %}
                 <a id="tab-alternate-quotes" href="#tabs-drawer-alternate-quotes" class="site-content-blocks-tab mdl-tabs__tab {{ activeTab }}">Alternate Quotes</a>
+            {% endif %}
+            {% if editable %}
+                <a id="add-new-tab" href="#" class="site-content-blocks-tab mdl-tabs__tab status-preview-edit"><i class="fa fa-plus-circle"></i> Add New Tab</a>
             {% endif %}
         </div>
 
@@ -234,6 +233,18 @@
             var client = new ZeroClipboard( document.getElementById("copy-button") );
             client.on('aftercopy', function(event) {
                 $('#copy-button').css('background-color', 'green');
+            });
+
+            // Toggle between preview and edit mode for content blocks and tabs
+            $('#link-preview-edit').on('click', function() {
+                var t = $('.mode-toggle');
+                if ( t.hasClass('mode-preview') ) {
+                    t.addClass('mode-edit').removeClass('mode-preview');
+                    $(this).html('Preview');
+                } else {
+                    t.addClass('mode-preview').removeClass('mode-edit');
+                    $(this).html('Edit');
+                }
             });
 
             // Add a new tab to a site
