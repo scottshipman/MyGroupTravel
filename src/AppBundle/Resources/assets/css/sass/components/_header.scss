@@ -1,14 +1,14 @@
 .flash-messages,
 .brand_logo,
-.page-title,
-#site-quote-name {
+.page-title {
   @include span-all();
 }
 
 .header {
+  position: relative;
+  display: block;
 
   .pdf-layout & {
-    @include mdl-primary-color( background, 6 );
     padding: 1em;
   }
 
@@ -34,7 +34,11 @@
   padding-top: 8px;
   padding-bottom: 8px;
   color: $text_white;
-  text-align: right;
+  float: right;
+
+  .pdf-layout & {
+    text-align: right;
+  }
 
   img {
     max-width: 120px;

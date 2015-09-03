@@ -1,18 +1,43 @@
 {% extends '::site-base.html.twig' %}
 
-{% block title %}{{ entity.name }} {% endblock %}
-{% block page_institution %}<div id="site-quote-name">{% if entity.quoteReference.institution %}{{ entity.quoteReference.institution.name  }}{% endif %} </div>{% endblock %}
-{% block page_title %}{{ entity.quoteReference.name  }}, {{ entity.name  }} {% endblock %}
+{% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
 
+{% block title %}
+    {% if is_granted("ROLE_BRAND") %}
+        Site View
+    {% else %}
+        {{ entity.quoteReference.name }}, {{ entity.name }}
+    {% endif %}
+{% endblock %}
+{% block page_title %}Site View{% endblock %}
 
-{%  if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
+{% block back_link %}
+    {% if is_granted("ROLE_BRAND") %}
+        <a class="back-link" href="{{ path('manage_quoteversion_show', { 'id': entity.id }) }}"><i class="fa fa-arrow-left"></i> Back to Show</a>
+    {% else %}
+        <a class="back-link" href="/"><i class="fa fa-arrow-left"></i> Back to Dashboard</a>
+    {% endif %}
+{% endblock %}
+
+{% block sub_header %}
+    <div class="sub-header">
+      <div class="inner">
+        {% if entity.quoteReference.institution.media %}
+            <div class="institution-logo">
+                <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.quoteReference.institution.name }}">
+            </div>
+        {% endif %}
+
+        {% if entity.quoteReference.institution %}<div id="site-quote-name">{{ entity.quoteReference.institution.name }}</div>{% endif %}
+
+        <h2>{{ entity.quoteReference.name }}{% if is_granted("ROLE_BRAND") %}, {{ entity.name }}{% endif %} {% if entity.quoteNumber %}({{ entity.quoteNumber }}){% endif %}</h2>
+
+        {% if entity.quoteReference.destination %}<div>{{ entity.quoteReference.destination }}</div>{% endif %}
+      </div>
+    </div>
+{% endblock %}
 
 {% block body -%}
-
-   {#  {{ dump(entity) }} #}
-
-    <div id="site-quote-number">Quote Number: {% if entity.quoteNumber %}{{ entity.quoteNumber  }} {% endif %}</div>
-
     <a href="javascript:window.print()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
         <i class="fa fa-print"></i> Print
     </a>
@@ -21,9 +46,8 @@
         <i class="fa fa-file-pdf-o"></i> PDF
     </a>
 
-
     {% if editable %}
-        <a id="layout-editor" href="#" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
+        <a id="layout-editor" href="{{ path('manage_quoteversion_edit', { 'id': entity.id }) }}" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
             <i class="fa fa-cogs"></i> Edit
         </a>
     {% endif %}
@@ -57,9 +81,9 @@
                 {% if entity.returnDate %}<li>Returning: <strong>{{ entity.returnDate|date(format) }}</strong></li>{% endif %}
                 {% if entity.boardBasis %}<li>Board Basis: <strong>{{ entity.boardBasis.name }}</strong></li>{% endif %}
                 {% if entity.transportType %}<li>Transport: <strong>{{ entity.transportType.name }}</strong></li>{% endif %}
-                {% if entity.pricePerson %}<li>Price per person: <span class="quote-price"><strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %} {{ entity.pricePerson }}</strong></span></li>{% endif %}
-                {% if (entity.payingPlaces) or (entity.freePlaces) %}<li>Based on {% if entity.payingPlaces  %}<strong>{{ entity.payingPlaces  }}</strong>{% endif %} paying and {% if entity.freePlaces  %}<strong>{{ entity.freePlaces  }}</strong>{% endif %} free places</li>{% endif %}
-                {% if entity.expiryDate  %}<li>Quote valid until <strong>{{ entity.expiryDate|date(format) }}</strong></li>{% endif %}
+                {% if entity.pricePerson %}<li>Price per person: <span class="quote-price"><strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong></span></li>{% endif %}
+                {% if (entity.payingPlaces) or (entity.freePlaces) %}<li>Based on {% if entity.payingPlaces %}<strong>{{ entity.payingPlaces }}</strong>{% endif %} paying and {% if entity.freePlaces %}<strong>{{ entity.freePlaces }}</strong>{% endif %} free places</li>{% endif %}
+                {% if entity.expiryDate %}<li>Quote valid until <strong>{{ entity.expiryDate|date(format) }}</strong></li>{% endif %}
                 <ul class="quote-site-actions">
                     <li>
                         {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
@@ -107,17 +131,13 @@
 
                     </li>
                 </ul>
-                <li>{% if entity.headerBlock  %}{{ entity.headerBlock.body|raw }}{% endif %}</li>
+                <li>{% if entity.headerBlock %}{{ entity.headerBlock.body|raw }}{% endif %}</li>
             </ul>
         </div>
 
     </div>
 
-
     {# RENDER THE CONTENT BLOCKS HERE #}
-
-   {# {{ dump(entity) }} #}
-
 
     {% if editable %}
         <a id="add-new-tab" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">

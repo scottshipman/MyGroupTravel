@@ -279,6 +279,11 @@ liip_imagine:
             filters:
                 thumbnail: { size: [120, 120], mode: inset }
 
+        thumbnailLarge:
+            quality: 100
+            filters:
+                thumbnail: { size: [240, 240], mode: inset }
+
         brandLogo:
             filters:
                 relative_resize: { widen: 120 }
