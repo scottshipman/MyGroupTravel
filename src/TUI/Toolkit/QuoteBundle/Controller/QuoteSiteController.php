@@ -103,8 +103,9 @@ class QuoteSiteController extends Controller
     $this->setQuoteViews($entity->getId());
 
     // prepare Alternate Quotes flag.
-    $versions = $em->getRepository('QuoteBundle:QuoteVersion')->findByQuoteReference($entity->getQuoteReference());
-    if(count($versions>1)){
+    $qr = $entity->getQuotereference()->getId();
+    $versions = $em->getRepository('QuoteBundle:QuoteVersion')->findBy(array('quoteReference' => $qr));
+    if(count($versions) > 1){
       $alternate=TRUE;
     }
 

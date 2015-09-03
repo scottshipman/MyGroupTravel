@@ -204,7 +204,7 @@
             {% set activeTab = '' %}
         {% endfor %}
         {% if alternate %}
-            <div id="tabs-drawer-alternate-options" class="mdl-tabs__panel {{ activeTab }} ">
+            <div id="tabs-drawer-alternate-quotes" class="mdl-tabs__panel {{ activeTab }}">
 
                     {{ render(controller('QuoteBundle:QuoteSite:getQuoteSiblings', {'id':  entity.quoteReference.id  })) }}
 
