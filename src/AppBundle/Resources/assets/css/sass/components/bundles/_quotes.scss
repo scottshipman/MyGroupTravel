@@ -253,4 +253,29 @@
     display: initial;
   }
 
+  .site-content-blocks-item {
+    position: relative;
+    border-top: 32px solid black;
+    @include mdl-primary-color( border-color, 6 );
+    cursor: move;
+
+    &:hover {
+      outline: 1px solid black;
+      @include mdl-primary-color( outline-color, 6 );
+    }
+
+  }
+
+  .site-content-block-actions {
+    position: absolute;
+    top: -26px;
+    right: $column_gutter_width;
+  }
+
+  .move-icon {
+    position: absolute;
+    top: -26px;
+    left: $column_gutter_width;
+  }
+
 }

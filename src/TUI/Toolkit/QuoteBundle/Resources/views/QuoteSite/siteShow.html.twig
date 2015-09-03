@@ -182,13 +182,13 @@
                     {%  for item in data[1] %}
                         <div id="content-blocks-{{ items[item].id }}" class="site-content-blocks site-content-blocks-item">
                             {% if editable %}
-                                <i class="fa fa-arrows"></i>  {{ items[item].title }}
                                 {# probably render a controller here by passing in item as id and have block entity returned #}
-                                <div id="content-block-actions-{{ items[item].id }}" class="site-content-block-actions">
+                                <div class="move-icon status-preview-edit"><i class="fa fa-arrows"></i></div>
+                                <div id="content-block-actions-{{ items[item].id }}" class="site-content-block-actions status-preview-edit">
                                     <i class="item-edit content-block-item-action fa fa-pencil-square-o"></i>
                                     <i class="item-delete content-block-item-action fa fa-trash-o"></i>
                                     {% if items[item].locked %}<i class="item-lock content-block-item-action fa fa-unlock-alt"></i> {% else %}  <i class="item-lock content-block-item-action fa fa-lock"></i> {% endif %}
-                                    {% if items[item].hidden %}<i class="item-hide content-block-item-action fa fa-ban"></i> {% else %} <i class="item-hide content-block-item-action fa fa-eye"></i> {% endif %}
+                                    {% if items[item].hidden %}<i class="item-hide content-block-item-action fa fa-ban"></i>{% else %}<i class="item-hide content-block-item-action fa fa-eye"></i>{% endif %}
                                 </div>
                             {% endif %}
                             {# render the actual content block#}
