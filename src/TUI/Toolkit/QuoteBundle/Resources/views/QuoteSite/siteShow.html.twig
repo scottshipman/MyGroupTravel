@@ -229,6 +229,10 @@
     <script>
         $(document).ready(function() {
 
+            // Disable drag-and-drop on page load b/c the defualt is preview mode
+            $(".sortable-tabs").sortable( "disable" );
+            $(".sortable-items").sortable( "disable" );
+
             // Copy to Clipboard
             ZeroClipboard.config( { swfPath: "//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf" } );
             var client = new ZeroClipboard( document.getElementById("copy-button") );
@@ -241,11 +245,17 @@
                 e.preventDefault();
                 var t = $('.mode-toggle');
                 if ( t.hasClass('mode-preview') ) {
+                    // Switch to edit mode
                     t.addClass('mode-edit').removeClass('mode-preview');
                     $(this).html('Switch to Preview Mode');
+                    $(".sortable-tabs").sortable( "enable" );
+                    $(".sortable-items").sortable( "enable" );
                 } else {
+                    // Switch to preview mode
                     t.addClass('mode-preview').removeClass('mode-edit');
                     $(this).html('Switch to Edit Mode');
+                    $(".sortable-tabs").sortable( "disable" );
+                    $(".sortable-items").sortable( "disable" );
                 }
             });
 
