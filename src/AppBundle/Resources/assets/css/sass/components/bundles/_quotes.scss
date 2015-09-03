@@ -64,10 +64,19 @@
 
   li {
     margin-bottom: 0.25em;
+
+    &.right {
+      text-align: right;
+    }
+
+  }
+
+  .label {
+    float: left;
   }
 
   .quote-price {
-    font-size: 1.3em;
+    font-size: 1.375em;
     font-weight: bold;
     display: block;
   }
