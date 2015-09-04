@@ -73,7 +73,7 @@
             {% if entity.headerBlock %}
                 <div class="contextual-links">
                     <i id="edit-header-block" class="status-preview-edit fa fa-pencil"></i></a>
-                    <i id="lock-header-block"class="status-preview-edit fa fa-unlock-alt"></i> {% else %}  <i id="edit-header-block" class="status-preview-edit fa fa-lock"></i>
+                {% if entity.headerBlock.locked %}<i id="lock-header-block"class="status-preview-edit fa fa-unlock-alt"></i> {% else %} <i id="edit-header-block" class="status-preview-edit fa fa-lock"></i>{% endif %}
                 </div>
             {% endif %}
         {% endif %}
