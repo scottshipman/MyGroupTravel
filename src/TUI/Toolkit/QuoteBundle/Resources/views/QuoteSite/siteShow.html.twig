@@ -70,16 +70,22 @@
     <div id="site-header-editForm" style="display:none;"></div>
     <div id="site-header" class="quote-view-site-header">
         {% if editable %}
-            <div class="contextual-links">
-                <i id="edit-header-block" class="status-preview-edit fa fa-pencil"></i></a>
-                {% if entity.headerBlock.locked %}<i id="lock-header-block"class="status-preview-edit fa fa-unlock-alt"></i> {% else %}  <i id="edit-header-block" class="status-preview-edit fa fa-lock"></i> {% endif %}
-            </div>
+            {% if entity.headerBlock %}
+                <div class="contextual-links">
+                    <i id="edit-header-block" class="status-preview-edit fa fa-pencil"></i></a>
+                    <i id="lock-header-block"class="status-preview-edit fa fa-unlock-alt"></i> {% else %}  <i id="edit-header-block" class="status-preview-edit fa fa-lock"></i> {% endif %}
+                </div>
+            {% endif %}
         {% endif %}
 
         {# render the slideshow using the controller/twig with headerbock.id as param#}
         <div id="site-header-slideshow">
-            {% if entity.headerBlock.locked %}
+            {% if entity.headerBlock %}
                 {{ render(controller('ContentBlocksBundle:HeaderBlock:show', {'id':  entity.headerBlock.id  })) }}
+            {% else %}
+                <a href="#" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                    <i class="fa fa-plus-circle"></i> Add Header Content
+                </a>
             {% endif %}
         </div>
         <div id="site-header-summary">
