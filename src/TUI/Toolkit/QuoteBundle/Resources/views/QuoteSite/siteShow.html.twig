@@ -198,6 +198,8 @@
                             {% endif %}
                             {# render the actual content block #}
                             {{ render(controller('ContentBlocksBundle:ContentBlock:show', {'id':  items[item].id  })) }}
+                            {# give a placeholder for the editable version #}
+                            <div id="editable-content-blocks-{{ items[item].id }}"></div>
                         </div>
                     {% endfor %}
             </div>
@@ -322,6 +324,21 @@
 
                     });
                 {% endif %}
+
+
+                // edit a content block
+                $(".item-edit").on('click', function(e) {
+                    e.preventDefault();
+                    var actionParent = $(this).parent().attr('id');
+                    var block = actionParent.substring(22);
+                    var editBlock = $("#editable-content-blocks-" + block);
+                    var previewBlock = $("#content-block-id-" + block);
+                    editBlock.html('');
+                    editBlock.load('/ajax/contentblocks/' + block + '/edit/' + {{ entity.id }} + '/QuoteVersion', function() {
+                        previewBlock.html('');
+                    });
+                });
+
 
 
             {% endif %}

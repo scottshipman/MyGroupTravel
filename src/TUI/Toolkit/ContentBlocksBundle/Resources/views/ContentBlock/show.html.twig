@@ -10,12 +10,12 @@
     {% set class = class ~ ' content-block-size-half' %}
 {% endif %}
 
-<div class="content-block content-block-id-{{ entity.id }} {{ class }}">
+<div id="content-block-id-{{ entity.id }}" class="content-block content-block-id-{{ entity.id }} {{ class }}">
     <h2>{{ entity.title }}</h2>
 
-{% if entity.isSlideshow==1 %}
-    {% embed "ContentBlocksBundle:ContentBlock:slideshow.html.twig" %}{% endembed %}
-{% else %}
-    {% embed "ContentBlocksBundle:ContentBlock:images.html.twig" %}{% endembed %}
-{% endif %}
+    {% if entity.isSlideshow==1 %}
+        {% embed "ContentBlocksBundle:ContentBlock:slideshow.html.twig" %}{% endembed %}
+    {% else %}
+        {% embed "ContentBlocksBundle:ContentBlock:images.html.twig" %}{% endembed %}
+    {% endif %}
 </div>
