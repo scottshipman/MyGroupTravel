@@ -311,14 +311,20 @@
 
   .content-block {
     border-top: 32px solid black;
-    @include mdl-primary-color( border-color, 6 );
-    cursor: move;
+    @include mdl-primary-color(border-color, 6);
 
     &:hover {
       outline: 1px solid black;
-      @include mdl-primary-color( outline-color, 6 );
+      @include mdl-primary-color(outline-color, 6);
     }
-
   }
+  .move-cursor {
+    cursor: move;
+  }
+
+  .pointer-cursor {
+    cursor: pointer;
+  }
+
 
 }

@@ -69,24 +69,26 @@
     {% endif %}
     <div id="site-header-editForm" style="display:none;"></div>
     <div id="site-header" class="quote-view-site-header">
-        {% if editable %}
-            {% if entity.headerBlock %}
-                <div class="contextual-links">
-                    <i id="edit-header-block" class="status-preview-edit fa fa-pencil"></i></a>
-                {% if entity.headerBlock.locked %}<i id="lock-header-block"class="status-preview-edit fa fa-unlock-alt"></i> {% else %} <i id="edit-header-block" class="status-preview-edit fa fa-lock"></i>{% endif %}
-                </div>
-            {% endif %}
-        {% endif %}
 
         {# render the slideshow using the controller/twig with headerbock.id as param#}
         <div id="site-header-slideshow">
-            {% if entity.headerBlock %}
-                {{ render(controller('ContentBlocksBundle:HeaderBlock:show', {'id':  entity.headerBlock.id  })) }}
-            {% else %}
-                <a href="#" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
-                    <i class="fa fa-plus-circle"></i> Add Header Content
-                </a>
-            {% endif %}
+                {% if editable %}
+                    {% if entity.headerBlock %}
+                        <div class="site-content-blocks-item">
+                            <div class="status-preview-edit site-content-block-actions">
+                                <i id="edit-header-block" class="content-block-item-action fa fa-pencil"></i></a>
+                                {% if entity.headerBlock.locked %}<i id="lock-header-block"class="content-block-item-action fa fa-unlock-alt"></i> {% else %} <i id="edit-header-block" class="content-block-item-action fa fa-lock"></i>{% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endif %}
+                {% if entity.headerBlock %}
+                    {{ render(controller('ContentBlocksBundle:HeaderBlock:show', {'id':  entity.headerBlock.id  })) }}
+                {% else %}
+                    <a id="add-header-content" href="#" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                        <i class="fa fa-plus-circle"></i> Add Header Content
+                    </a>
+                {% endif %}
         </div>
         <div id="site-header-summary">
             <ul id="site-summary-details">
@@ -306,9 +308,13 @@
                                     CKEDITOR.instances.tui_toolkit_contentblocksbundle_contentblock_body.updateElement();
                                 },
                                 success : function (response) {
+                                    var keys = Object.keys(response);
+                                    //["TUI\\Toolkit\\ContentBlocksBundle\\Entity\\ContentBlockbody"]
+                                    console.log(keys['TUI\\Toolkit\\ContentBlocksBundle\\Entity\\ContentBlockbody']);
                                     Object.keys(response).forEach(function (key) {
                                         var val='';
                                         if(~key.indexOf('body')) {
+                                            console.log(key);
                                             var val = response[key];
                                             $('#headerBlock-text').html(val);
                                         }
@@ -328,6 +334,36 @@
                             })
                         });
 
+                    });
+
+                {% else %}
+                    // Add header block in layout mode
+                    $("#add-header-content").on('click', function(e) {
+                        $.ajax({
+                            url: window.location.protocol + '//' + window.location.hostname + '/manage/contentblocks/ajax/new',
+                        }).done(function (response) {
+                            Object.keys(response).forEach(function (key) {
+                                var val='';
+                                var blockId = '';
+                                if(~key.indexOf('body')) {
+                                    var val = response[key];
+                                    $('#headerBlock-text').html(val);
+                                }
+                                if(~key.indexOf('id')) {
+                                    var blockId = response[key];
+                                    // redraw the area by loading a twig file
+                                    $('#site-header-slideshow').load('/manage/contentblocks/header/show/' + blockId, function () {
+                                        $('#site-header-editForm').hide();
+                                        $('#site-header').show();
+                                        $('.flexslider').flexslider({
+                                            directionNav: false,
+                                            controlNav: false,
+                                            smoothHeight: true
+                                        });
+                                    });
+                                }
+                            });
+                        });
                     });
                 {% endif %}
 
