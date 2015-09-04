@@ -67,24 +67,16 @@
             {% endfor %}
         </div>
     {% endif %}
-
+    <div id="site-header-editForm" style="display:none;"></div>
     <div id="site-header" class="quote-view-site-header">
         {% if editable %}
             <i id="edit-header-block" class="status-preview-edit fa fa-pencil"></i></a>
             {% if entity.headerBlock.locked %}<i id="lock-header-block"class="status-preview-edit fa fa-unlock-alt"></i> {% else %}  <i id="edit-header-block" class="status-preview-edit fa fa-lock"></i> {% endif %}
         {% endif %}
+
+        {# render the slideshow using the controller/twig with headerbock.id as param#}
         <div id="site-header-slideshow">
-            <div class="flexslider">
-                <ul class="slides">
-                    {%  if entity.headerBlock %}
-                        {% for media in entity.headerBlock.media %}
-                        <li>
-                            <img src="{{ asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) | imagine_filter('slideShow') }}" />
-                        </li>
-                        {% endfor %}
-                    {% endif %}
-                </ul>
-            </div>
+            {{ render(controller('ContentBlocksBundle:HeaderBlock:show', {'id':  entity.headerBlock.id  })) }}
         </div>
         <div id="site-header-summary">
             <ul id="site-summary-details">
@@ -143,7 +135,7 @@
 
                     </li>
                 </ul>
-                <li>{% if entity.headerBlock %}{{ entity.headerBlock.body|raw }}{% endif %}</li>
+                <li id="headerBlock-text">{% if entity.headerBlock %}{{ entity.headerBlock.body|raw }}{% endif %}</li>
             </ul>
         </div>
 
@@ -285,6 +277,49 @@
                     $(this).dialog("option", "title", "I'd like to make some changes");
                 });
             });
+
+            {# Only place javascript that deals with editing here so it only loads when it needs to #}
+            {% if editable %}
+
+                // edit header block in layout mode
+                $("#edit-header-block").on('click', function(e){
+                    //e.preventDefault();
+                    $("#site-header-editForm").load('/manage/contentblocks/edit/header/layout-editor/{{ entity.headerBlock.id }}', function() {
+                        $('#site-header-editForm').show();
+                        $('#site-header').hide();
+                        // bind header edit form and provide a simple callback function
+                        $('#ajax_headerblock_layout_form').ajaxForm({
+                            beforeSerialize: function() {
+                                CKEDITOR.instances.tui_toolkit_contentblocksbundle_contentblock_body.updateElement();
+                            },
+                            success : function (response) {
+                                Object.keys(response).forEach(function (key) {
+                                    var val='';
+                                    if(~key.indexOf('body')) {
+                                        var val = response[key];
+                                        $('#headerBlock-text').html(val);
+                                    }
+
+                                });
+                                // redraw the area by loading a twig file
+                                $('#site-header-slideshow').load('/manage/contentblocks/header/show/{{ entity.headerBlock.id }}', function() {
+                                    $('#site-header-editForm').hide();
+                                    $('#site-header').show();
+                                    $('.flexslider').flexslider({
+                                        directionNav: false,
+                                        controlNav: false,
+                                        smoothHeight: true
+                                    });
+                                });
+                            }
+                        })
+                    });
+
+                });
+
+
+
+            {% endif %}
 
         });
     </script>

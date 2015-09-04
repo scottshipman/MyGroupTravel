@@ -128,7 +128,7 @@ class HeaderBlockController extends Controller
         $collection = $entity->getMedia()->toArray();
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find ContentBlock entity.');
+            throw $this->createNotFoundException('Unable to find Header Block entity.');
         }
 
         return $this->render('ContentBlocksBundle:HeaderBlock:show.html.twig', array(
@@ -175,6 +175,45 @@ class HeaderBlockController extends Controller
         ));
     }
 
+  /**
+   * Displays a form to edit an existing ContentBlock entity in Layout editor mode.
+   *
+   */
+  public function editLayoutAction($id)
+  {
+    $em = $this->getDoctrine()->getManager();
+
+    $entity = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($id);
+
+    $collection = $entity->getMedia()->toArray();
+    foreach ($collection as $image) {
+      $imageIds[] = $image->getId();
+    }
+
+    if ( isset($imageIds) ) {
+      $collectionIds = implode(',', $imageIds);
+    } else {
+      $collectionIds = '';
+    }
+
+    if (!$entity) {
+      throw $this->createNotFoundException('Unable to find ContentBlock entity.');
+    }
+
+    $entity->setMedia($collectionIds);
+    $editForm = $this->createEditLayoutForm($entity);
+
+    return $this->render('ContentBlocksBundle:ContentBlock:edit.html.twig', array(
+      'entity' => $entity,
+      'collection' => $collection,
+      'collection_ids' => $collectionIds,
+      'edit_form' => $editForm->createView(),
+      'quoteVersion' => null,
+      'class'       => null,
+    ));
+  }
+
+
     /**
     * Creates a form to edit a ContentBlock entity for Header Block.
     *
@@ -197,7 +236,30 @@ class HeaderBlockController extends Controller
         return $form;
     }
 
-    /**
+  /**
+   * Creates a form to edit a ContentBlock entity for Header Block in Layout editor mode.
+   *
+   * @param ContentBlock $entity The entity
+   *
+   * @return \Symfony\Component\Form\Form The form
+   */
+  private function createEditLayoutForm(ContentBlock $entity)
+  {
+    $form = $this->createForm($this->get('form.type.contentblock'), $entity, array(
+      'action' => $this->generateUrl('manage_headerblock_layout_update', array('id' => $entity->getId())),
+      'method' => 'POST',
+      'attr'  => array (
+        'id' => 'ajax_headerblock_layout_form'
+      ),
+    ));
+
+    $form->add('submit', 'submit', array('label' => 'Update'));
+
+    return $form;
+  }
+
+
+  /**
      * Edits an existing ContentBlock entity for Header Block.
      *
      */
@@ -260,6 +322,58 @@ class HeaderBlockController extends Controller
             'class'       => $class,
         ));
     }
+
+  /**
+   * Edits an existing ContentBlock entity for Header Block in Layout Editor
+   * Always returns response object not twigs.
+   *
+   */
+  public function updateLayoutAction(Request $request, $id)
+  {
+    $em = $this->getDoctrine()->getManager();
+
+    $entity = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($id);
+
+    if (!$entity) {
+      throw  $this->createNotFoundException('Unable to find ContentBlock entity.');
+    }
+
+    $editForm = $this->createEditLayoutForm($entity);
+    $editForm->handleRequest($request);
+
+    $medias = array();
+
+    if (NULL != $editForm->getData()->getMedia()) {
+      $fileIdString = $editForm->getData()->getMedia();
+      $fileIds = explode(',', $fileIdString);
+
+      foreach ($fileIds as $fileId) {
+        $image = $em->getRepository('MediaBundle:Media')
+          ->findById($fileId);
+        $medias[] = array_shift($image);
+      }
+    }
+    if (!empty($medias)) {
+      $editForm->getData()->setMedia($medias);
+
+    }
+
+    if ($editForm->isValid()) {
+      $em->persist($entity);
+      $em->flush();
+      $responseContent =  json_encode((array)$entity);
+      return new Response($responseContent,
+        Response::HTTP_OK,
+        array('content-type' => 'application/json')
+      );
+
+    }
+    $responseContent=json_encode((array)$editForm);
+    return new Response($responseContent,
+      419,
+      array('content-type' => 'application/json')
+    );
+  }
 
 
   /**

@@ -1,0 +1,12 @@
+
+    <div class="flexslider">
+        <ul class="slides">
+            {%  if entity %}
+                {% for media in entity.media %}
+                    <li>
+                        <img src="{{ asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) | imagine_filter('slideShow') }}" />
+                    </li>
+                {% endfor %}
+            {% endif %}
+        </ul>
+    </div>

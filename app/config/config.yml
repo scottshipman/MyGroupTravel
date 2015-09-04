@@ -292,3 +292,4 @@ liip_imagine:
             quality: 100
             filters:
                 strip: ~
+                thumbnail: { size: [800, 450], mode: inset }
