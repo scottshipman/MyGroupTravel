@@ -69,6 +69,10 @@
     {% endif %}
 
     <div id="site-header" class="quote-view-site-header">
+        {% if editable %}
+            <i id="edit-header-block" class="status-preview-edit fa fa-pencil"></i></a>
+            {% if entity.headerBlock.locked %}<i id="lock-header-block"class="status-preview-edit fa fa-unlock-alt"></i> {% else %}  <i id="edit-header-block" class="status-preview-edit fa fa-lock"></i> {% endif %}
+        {% endif %}
         <div id="site-header-slideshow">
             <div class="flexslider">
                 <ul class="slides">
@@ -232,7 +236,7 @@
     <script>
         $(document).ready(function() {
 
-            // Disable drag-and-drop on page load b/c the defualt is preview mode
+            // Disable drag-and-drop on page load b/c the default is preview mode
             $(".sortable-tabs").sortable( "disable" );
             $(".sortable-items").sortable( "disable" );
 
@@ -261,6 +265,73 @@
                     $(".sortable-items").sortable( "disable" );
                 }
             });
+
+            // change request popup
+            $("#change-request").on('click', function(e){
+                //e.preventDefault();
+                $("#dialog").html("");
+                $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
+                $("#dialog").load('/quote/view/change-request/form/' + {{ entity.id}}, function() {
+                    $(this).dialog("option", "title", "I'd like to make some changes");
+                });
+            });
+
+            // accept quote popup
+            $("#accept-quote").on('click', function(e){
+                //e.preventDefault();
+                $("#dialog").html("");
+                $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
+                $("#dialog").load('/quote/view/accepted/form/' + {{ entity.id}}, function() {
+                    $(this).dialog("option", "title", "I'd like to make some changes");
+                });
+            });
+
+        });
+    </script>
+
+{% endblock %}
+
+
+
+
+
+{% block footer_left %}
+    {% if entity.quoteReference.salesAgent %}
+        <span class="intro">Tour Organizer:</span>
+        {% if entity.quoteReference.salesAgent.media %}
+            <span class="tui-image-avatar"><img src="{{ asset( entity.quoteReference.salesAgent.media.getRelativePath ~ "/" ~ entity.quoteReference.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.quoteReference.salesAgent.username }}"></span>
+        {% elseif entity.quoteReference.salesAgent.firstName and entity.quoteReference.salesAgent.lastName %}
+            <span class="tui-text-avatar mdl-typography--headline">{{ entity.quoteReference.salesAgent.firstName[:1] }}{{ entity.quoteReference.salesAgent.lastName[:1] }}</span>
+        {% else %}
+            <span class="tui-text-avatar mdl-typography--headline">{{ entity.quoteReference.salesAgent.username[:1] }}</span>
+        {% endif %}
+        <span class="agent">{{ entity.quoteReference.salesAgent.firstName }} {{ entity.quoteReference.salesAgent.lastName }}<br>
+        {{ entity.quoteReference.salesAgent.email }}</span>
+    {% endif %}
+{% endblock %}
+
+{% block footer_right %}
+    <div class="quote-info"><span class="quote-label">Price per person:</span><span class="quote-price">{% if entity.pricePerson %}<strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong>{% endif %}</span></div>
+    {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
+        {% if date(entity.expiryDate) < date('now') %}
+            <a class="expired-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+                <i class="fa fa-calendar-times-o"></i> Expired
+            </a>
+        {% else %}
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('quote_site_quote_accepted', { 'id': entity.id }) }}">
+                <i class="fa fa-thumbs-o-up"> </i> Accept Quote
+            </a>
+        {% endif %}
+    {% elseif (entity.converted is sameas(true)) and (entity.quoteReference.converted is sameas(true))%}
+        <a class="accepted-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+            <i class="fa fa-thumbs-up"> </i> Accepted
+        </a>
+    {% endif %}
+{% endblock %}
+
+{#
+# THIS IS THE OLD JS CODE THAT WE CAN BORROW FROM BUT PROBABLY NOT USED AS IS
+
 
             // Add a new tab to a site
             $("#add-new-tab").on('click', function(){
@@ -293,52 +364,17 @@
                     $(ancestorTabElement).append(
                         '<div id="content-blocks-' + id + '" class="content-blocks content-blocks-item">' +
                         '<i class="fa fa-arrows"></i>  ' + title +
-                        {# probably render a controller here by passing in item as id and have block entity returned #}
                         '<div id="content-block-actions-' + id + '" class="content-block-actions">' +
-                        '<i class="item-edit content-block-item-action fa fa-pencil-square-o"></i>' +
-                        '<i class="item-delete content-block-item-action fa fa-trash-o"></i>' +
-                        '<i class="item-lock content-block-item-action fa fa-lock"></i>' +
-                        '<i class="item-hide content-block-item-action fa fa-ban"></i>' +
-                        '</div></div>'
-                    );
-                    contentBlocksUpdate({{ entity.id }});
-                });
+                            '<i class="item-edit content-block-item-action fa fa-pencil-square-o"></i>' +
+                            '<i class="item-delete content-block-item-action fa fa-trash-o"></i>' +
+                            '<i class="item-lock content-block-item-action fa fa-lock"></i>' +
+                            '<i class="item-hide content-block-item-action fa fa-ban"></i>' +
+                            '</div></div>'
+                        );
+                        contentBlocksUpdate({{ entity.id }});
+                        });
 
-            });
-
-            // edit a content block
-            $(".item-edit").on('click', function(e){
-                // todo Get item.id and item.name
-                var actionParent = $(this).parent().attr('id');
-                var block = actionParent.substring(22);
-                //e.preventDefault();
-                $("#dialog").html("");
-                $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
-                $("#dialog").load('/ajax/contentblocks/' + block + '/edit/' + {{ entity.id}} +'/QuoteVersion', function() {
-                    $(this).dialog("option", "title", 'Edit Content Block');
-                });
-            });
-
-            // change request popup
-            $("#change-request").on('click', function(e){
-                //e.preventDefault();
-                $("#dialog").html("");
-                $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
-                $("#dialog").load('/quote/view/change-request/form/' + {{ entity.id}}, function() {
-                    $(this).dialog("option", "title", "I'd like to make some changes");
-                });
-            });
-
-            // accept quote popup
-            $("#accept-quote").on('click', function(e){
-                //e.preventDefault();
-                $("#dialog").html("");
-                $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
-                $("#dialog").load('/quote/view/accepted/form/' + {{ entity.id}}, function() {
-                    $(this).dialog("option", "title", "I'd like to make some changes");
-                });
-            });
-
+                        });
 
             // toggle the hide boolean on a content block
             $(".item-hide").on('click', function(e){
@@ -411,45 +447,19 @@
                     contentBlocksUpdate({{ entity.id }}); //value
                 }
             });
-        });
-    </script>
-
-{% endblock %}
 
 
+            // edit a content block
+            $(".item-edit").on('click', function(e){
+                // todo Get item.id and item.name
+                var actionParent = $(this).parent().attr('id');
+                var block = actionParent.substring(22);
+                //e.preventDefault();
+                $("#dialog").html("");
+                $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
+                $("#dialog").load('/ajax/contentblocks/' + block + '/edit/' + {{ entity.id}} +'/QuoteVersion', function() {
+                    $(this).dialog("option", "title", 'Edit Content Block');
+                });
+            });
 
-
-
-{% block footer_left %}
-    {% if entity.quoteReference.salesAgent %}
-        <span class="intro">Tour Organizer:</span>
-        {% if entity.quoteReference.salesAgent.media %}
-            <span class="tui-image-avatar"><img src="{{ asset( entity.quoteReference.salesAgent.media.getRelativePath ~ "/" ~ entity.quoteReference.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.quoteReference.salesAgent.username }}"></span>
-        {% elseif entity.quoteReference.salesAgent.firstName and entity.quoteReference.salesAgent.lastName %}
-            <span class="tui-text-avatar mdl-typography--headline">{{ entity.quoteReference.salesAgent.firstName[:1] }}{{ entity.quoteReference.salesAgent.lastName[:1] }}</span>
-        {% else %}
-            <span class="tui-text-avatar mdl-typography--headline">{{ entity.quoteReference.salesAgent.username[:1] }}</span>
-        {% endif %}
-        <span class="agent">{{ entity.quoteReference.salesAgent.firstName }} {{ entity.quoteReference.salesAgent.lastName }}<br>
-        {{ entity.quoteReference.salesAgent.email }}</span>
-    {% endif %}
-{% endblock %}
-
-{% block footer_right %}
-    <div class="quote-info"><span class="quote-label">Price per person:</span><span class="quote-price">{% if entity.pricePerson %}<strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong>{% endif %}</span></div>
-    {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
-        {% if date(entity.expiryDate) < date('now') %}
-            <a class="expired-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-                <i class="fa fa-calendar-times-o"></i> Expired
-            </a>
-        {% else %}
-            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('quote_site_quote_accepted', { 'id': entity.id }) }}">
-                <i class="fa fa-thumbs-o-up"> </i> Accept Quote
-            </a>
-        {% endif %}
-    {% elseif (entity.converted is sameas(true)) and (entity.quoteReference.converted is sameas(true))%}
-        <a class="accepted-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-            <i class="fa fa-thumbs-up"> </i> Accepted
-        </a>
-    {% endif %}
-{% endblock %}
+#}
