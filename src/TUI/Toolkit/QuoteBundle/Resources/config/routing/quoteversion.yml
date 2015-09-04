@@ -6,6 +6,11 @@ manage_quoteversion_show:
     path:     /{id}/show
     defaults: { _controller: "QuoteBundle:QuoteVersion:show" }
 
+manage_quoteversion_show_tabs:
+    path:     /show/tabs/{id}
+    defaults: { _controller: "QuoteBundle:QuoteVersion:showTabs" }
+    methods:  [GET, POST]
+
 manage_quoteversion_new:
     path:     /new
     defaults: { _controller: "QuoteBundle:QuoteVersion:new" }

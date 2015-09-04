@@ -703,6 +703,64 @@ class QuoteVersionController extends Controller
     }
 
     /**
+     * Finds and displays a QuoteVersion entity's tabs.
+     *
+     * param $id quoteReference id
+     *
+     */
+    public function showTabsAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $locale = $this->container->getParameter('locale');
+
+        // Get all Quote versions referencing Parent Quote object
+        $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find QuoteVersion entity.');
+        }
+
+
+        // get the content blocks to send to twig
+        $items = array();
+        $tabs = array();
+        $content = $entity->getContent();
+        foreach ($content as $tab => $data) {
+            $tabs[$tab] = $data[0];
+            $blocks = isset($data[1]) ? $data[1] : array();
+            $blockCount = count($blocks);
+            if (!empty($blocks)) {
+                if ($blockCount <= 1) {
+                    $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($blocks[0]);
+                    if (!$blockObj) {
+                        throw $this->createNotFoundException('Unable to find Content Block entity.');
+                    }
+                    $items[$blockObj->getId()] = $blockObj;
+                } else {
+                    foreach ($blocks as $block) {
+                        $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find((int)$block);
+                        if (!$blockObj) {
+                            throw $this->createNotFoundException('Unable to find Content Block entity.');
+                        }
+                        $items[$blockObj->getId()] = $blockObj;
+                    }
+                }
+            }
+        }
+
+
+        $deleteForm = $this->createDeleteForm($id);
+
+        return $this->render('QuoteBundle:QuoteVersion:siteShowTabOrder.html.twig', array(
+            'entity' => $entity,
+            'delete_form' => $deleteForm->createView(),
+            'locale' => $locale,
+            'items' => $items,
+            'tabs' => $tabs,
+        ));
+    }
+
+    /**
      * Displays a form to edit an existing QuoteVersion entity.
      * @param $id id of the parent Quote object
      */
