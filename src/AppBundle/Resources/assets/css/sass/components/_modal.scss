@@ -59,24 +59,33 @@
       }
     }
 
-      div:nth-child(2) {
-        float: right;
+    div:nth-child(2) {
+      float: right;
 
-        .mdl-textfield {
-          width: 250px;
-        }
-
-      }
-
-      div.button-row {
-        float: right;
+      .mdl-textfield {
+        width: 250px;
       }
 
     }
 
+    div.button-row {
+      float: right;
+    }
+
   }
+
+}
+
 #quote-link-input {
   width: 80%;
   margin-right: 1em;
   line-height: 2em;
+}
+
+.tab-reorder-modal {
+
+  .content-blocks-drawer {
+    display:none;
+  }
+
 }
