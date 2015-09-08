@@ -44,7 +44,6 @@
     margin-bottom: 5px;
   }
 
-
   #tui_toolkit_quotebundle_quotechangerequest {
 
     div:nth-child(1) {
@@ -53,20 +52,20 @@
 
       .mdl-form-wrap {
         padding: 0;
+
+        label:nth-child(1) > span {
+          font-weight: bold;
+        }
+        
       }
     }
 
     div:nth-child(2) {
-      float: right;
 
       .mdl-textfield {
         width: 250px;
       }
 
-    }
-
-    div.button-row {
-      float: right;
     }
 
   }
@@ -82,7 +81,7 @@
 .tab-reorder-modal {
 
   .content-blocks-drawer {
-    display:none;
+    display: none;
   }
 
   .submit-button-container {
@@ -92,7 +91,7 @@
     margin: 20px auto;
 
     .reorder-button {
-      @include mdl-primary-color( background-color, 6 );
+      @include mdl-primary-color(background-color, 6);
       width: 45%;
       display: inline-block;
       margin: 10px 10px;
