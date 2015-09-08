@@ -288,6 +288,7 @@
   }
 
   .site-content-block-actions {
+    cursor: move;
     height: 32px;
     @include mdl-primary-color(background, 6);
   }
@@ -304,6 +305,7 @@
   }
 
   .move-icon {
+    cursor: move;
     position: absolute;
     top: 6px;
     left: $column_gutter_width;

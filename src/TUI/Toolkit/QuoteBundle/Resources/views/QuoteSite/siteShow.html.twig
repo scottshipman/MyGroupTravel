@@ -129,25 +129,28 @@
                      class="mdl-tabs__panel sortable-items content-blocks-drawer {{ activeTab }} ">
                     {% for item in data[1] %}
                         {% if items[item].doubleWidth == 1 %}
-                            {% set class = ' site-content-blocks-size-full' %}
+                            {% set class = 'site-content-blocks-size-full' %}
                         {% else %}
-                            {% set class = ' site-content-blocks-size-half' %}
+                            {% set class = 'site-content-blocks-size-half' %}
                         {% endif %}
-                        <div id="content-blocks-{{ items[item].id }}" class="site-content-blocks site-content-blocks-item{{ class }}">
+                        <div id="content-blocks-{{ items[item].id }}" class="site-content-blocks site-content-blocks-item {{ class }}">
                             {% if editable %}
                                 <div class="site-content-block-actions status-preview-edit">
                                     {# probably render a controller here by passing in item as id and have block entity returned #}
-                                    <div class="move-icon"><i class="fa fa-arrows"></i></div>
-                                    <div id="content-block-actions-{{ items[item].id }}"
-                                         class="edit-icons">
-                                        <i class="item-edit content-block-item-action fa fa-pencil-square-o"></i>
-                                        <i class="item-delete content-block-item-action fa fa-trash-o"></i>
-                                        {% if items[item].locked %}<i
-                                                class="item-lock content-block-item-action fa fa-unlock-alt"></i> {% else %}
-                                            <i class="item-lock content-block-item-action fa fa-lock"></i> {% endif %}
-                                        {% if items[item].hidden %}<i
-                                                class="item-hide content-block-item-action fa fa-ban"></i>{% else %}<i
-                                                class="item-hide content-block-item-action fa fa-eye"></i>{% endif %}
+                                    <div class="move-icon"><i class="fa fa-arrows" title="Rearrange"></i></div>
+                                    <div id="content-block-actions-{{ items[item].id }}" class="edit-icons">
+                                        <i class="item-edit content-block-item-action fa fa-pencil-square-o" title="Edit"></i>
+                                        <i class="item-delete content-block-item-action fa fa-trash-o" title="Delete"></i>
+                                        {% if items[item].locked %}
+                                            <i class="item-lock content-block-item-action fa fa-unlock-alt" title="Unlock"></i>
+                                        {% else %}
+                                            <i class="item-lock content-block-item-action fa fa-lock" title="Lock"></i>
+                                        {% endif %}
+                                        {% if items[item].hidden %}
+                                            <i class="item-hide content-block-item-action fa fa-eye" title="Show"></i>
+                                        {% else %}
+                                            <i class="item-hide content-block-item-action fa fa-ban" title="Hide"></i>
+                                        {% endif %}
                                     </div>
                                 </div>
                             {% endif %}
