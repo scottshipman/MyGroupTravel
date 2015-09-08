@@ -1,7 +1,5 @@
 {% extends '::site-base.html.twig' %}
 
-{% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
-
 {% block title %}
     {% if is_granted("ROLE_BRAND") %}
         Site View
@@ -62,99 +60,44 @@
             <i class="fa fa-file-pdf-o"></i> PDF
         </a>
 
-    {% if warning | length >0 %}
-        <div id="site-warning">
-            {% for message in warning %}
-            <p>{{ message }}</p>
-            {% endfor %}
-        </div>
-    {% endif %}
-    <div id="site-header" class="quote-view-site-header">
-        {# render the slideshow using the controller/twig with headerbock.id as param#}
-        <div id="site-header-editForm" style="display:none;"></div>
-        <div id="site-header-slideshow">
-            {% if entity.headerBlock %}
-                {% if editable %}
-                    <div class="site-content-blocks-item">
-                        <div class="status-preview-edit site-content-block-actions">
-                            <i id="edit-header-block" class="content-block-item-action fa fa-pencil"></i></a>
-                            {% if entity.headerBlock.locked %}<i id="lock-header-block"class="content-block-item-action fa fa-unlock-alt"></i> {% else %} <i id="edit-header-block" class="content-block-item-action fa fa-lock"></i>{% endif %}
+        {% if warning | length >0 %}
+            <div id="site-warning">
+                {% for message in warning %}
+                <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <div id="site-header" class="quote-view-site-header">
+            {# render the slideshow using the controller/twig with headerbock.id as param#}
+            <div id="site-header-editForm" style="display:none;"></div>
+            <div id="site-header-slideshow">
+                {% if entity.headerBlock %}
+                    {% if editable %}
+                        <div class="site-content-blocks-item">
+                            <div class="status-preview-edit site-content-block-actions">
+                                <i id="edit-header-block" class="content-block-item-action fa fa-pencil"></i></a>
+                                {% if entity.headerBlock.locked %}<i id="lock-header-block"class="content-block-item-action fa fa-unlock-alt"></i> {% else %} <i id="edit-header-block" class="content-block-item-action fa fa-lock"></i>{% endif %}
+                            </div>
                         </div>
-                    </div>
-                {% endif %}
-                <div id="site-header-slideshow-content">
-                {{ render(controller('ContentBlocksBundle:HeaderBlock:show', {'id':  entity.headerBlock.id  })) }}
-                </div>
-                    {% else %}
-                {% if editable %}
-                    <a id="add-header-content" href="#" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
-                        <i class="fa fa-plus-circle"></i> Add Header Content
-                    </a>
                     {% endif %}
-            {% endif %}
-        </div>
-        <div id="site-header-summary">
-            <ul id="site-summary-details">
-                {% if entity.departureDate %}<li class="right"><span class="label">Departing:</span> <strong>{{ entity.departureDate|date(format) }}</strong></li>{% endif %}
-                {% if entity.duration %}<li class="right"><span class="label">Duration:</span> <strong>{{ entity.duration }}</strong></li>{% endif %}
-                {% if entity.returnDate %}<li class="right"><span class="label">Returning:</span> <strong>{{ entity.returnDate|date(format) }}</strong></li>{% endif %}
-                {% if entity.boardBasis %}<li class="right"><span class="label">Board Basis:</span> <strong>{{ entity.boardBasis.name }}</strong></li>{% endif %}
-                {% if entity.transportType %}<li class="right"><span class="label">Transport:</span> <strong>{{ entity.transportType.name }}</strong></li>{% endif %}
-                {% if entity.pricePerson %}<li class="right"><span class="label">Price per person:</span> <span class="quote-price"><strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong></span></li>{% endif %}
-                {% if (entity.payingPlaces) or (entity.freePlaces) %}<li>Based on {% if entity.payingPlaces %}<strong>{{ entity.payingPlaces }}</strong>{% endif %} paying and {% if entity.freePlaces %}<strong>{{ entity.freePlaces }}</strong>{% endif %} free places</li>{% endif %}
-                {% if entity.expiryDate %}<li>Quote valid until <strong>{{ entity.expiryDate|date(format) }}</strong></li>{% endif %}
-                <ul class="quote-site-actions">
-                    <li>
-                        {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
-                            {% if date(entity.expiryDate) < date('now') %}
-                                <a class="expired-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-                                    <i class="fa fa-calendar-times-o"></i> Expired
-                                </a>
-                            {% endif %}
+                    <div id="site-header-slideshow-content">
+                    {{ render(controller('ContentBlocksBundle:HeaderBlock:show', {'id':  entity.headerBlock.id  })) }}
+                    </div>
+                        {% else %}
+                    {% if editable %}
+                        <a id="add-header-content" href="#" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                            <i class="fa fa-plus-circle"></i> Add Header Content
+                        </a>
                         {% endif %}
-                        </li>
-                        <li>
-                            {% if (entity.converted is sameas(true)) and (entity.quoteReference.converted is sameas(true)) %}
-                                <a class="accepted-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
-                                   href="#">
-                                    <i class="fa fa-bullhorn"></i> Request Changes
-                                </a>
-                            {% else %}
-                                <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
-                                   id="change-request" href="#">
-                                    <i class="fa fa-bullhorn"></i> Request Changes
-                                </a>
-                            {% endif %}
-                        </li>
-                        <li class="share-text">
-
-                        <span>
-                            Share this quote with others
-                        </span>
-
-                            {% if entity.quoteNumber %}
-                                <div class="input"><input type="text" id="share_url" name="share_url"
-                                                          value="{{ url('quote_site_share', { 'id': entity.id, 'quoteNumber': entity.quoteNumber }) }}"
-                                                          disabled></div>
-                            {% else %}
-                                <div class="input"><input type="text" id="share_url" name="share_url"
-                                                          value="{{ url('quote_template_share', { 'id': entity.id }) }}"
-                                                          disabled></div>
-                            {% endif %}
-
-                            <a href="#" id="copy-button" data-clipboard-target="share_url"
-                               title="Click to copy Quote URL"
-                               class="not-full mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
-                                <i class="fa fa-sign-in fa-stack"></i>
-                            </a>
-
-                        </li>
-                    </ul>
-                    <li id="headerBlock-text">{% if entity.headerBlock %}{{ entity.headerBlock.body|raw }}{% endif %}</li>
-                </ul>
+                {% endif %}
+            </div>
+            <div id="site-header-summary">
+                <div id="site-header-summary-content">
+                {{ render(controller('QuoteBundle:QuoteSite:showSummary', {'id':  entity.id  })) }}
+                </div>
             </div>
 
-        </div>
+        </div> {# end site header#}
 
         {# RENDER THE CONTENT BLOCKS HERE #}
 
@@ -167,16 +110,6 @@
                 {% for tab, data in entity.content %}
                     <a id="tab-{{ tab }}" href="#tabs-drawer-{{ tab }}"
                        class="site-content-blocks-tab mdl-tabs__tab {{ activeTab }}">{{ data[0] }}</a>
-                    {#
-                    {% if editable %}
-                        <span class="content-blocks tab-label"><i class="content-block-tab-handle fa fa-arrows"></i>
-                                {% if data[1] | length < 1 %}
-                                <i class="tab-delete content-block-tab-actions fa fa-trash-o"> Delete Tab</i>
-                                {% endif %}
-                             <i class="tab-new content-block-tab-actions fa fa-plus-circle"> Add Content</i>
-                        </span>
-                    {% endif %}
-                    #}
                     {% set activeTab = '' %}
                 {% endfor %}
                 {% if alternate %}
@@ -304,7 +237,7 @@
                 $("#dialog").html("");
                 $("#dialog").dialog({width: '60%'}).dialog("option", "title", "Loading...").dialog("open");
                 $("#dialog").load('/quote/view/accepted/form/' + {{ entity.id}}, function () {
-                    $(this).dialog("option", "title", "I'd like to make some changes");
+                    $(this).dialog("option", "title", "I'd like to accept this quote");
                 });
             });
 
@@ -331,20 +264,7 @@
                             $('#site-header-slideshow').hide();
                             // bind header edit form and provide a simple callback function
                             $('#ajax_headerblock_layout_form').ajaxForm({
-                                beforeSerialize: function () {
-                                    CKEDITOR.instances.tui_toolkit_contentblocksbundle_contentblock_body.updateElement();
-                                },
                                 success: function (response) {
-                                    var keys = Object.keys(response);
-                                    //["TUI\\Toolkit\\ContentBlocksBundle\\Entity\\ContentBlockbody"]
-                                    Object.keys(response).forEach(function (key) {
-                                        var val = '';
-                                        if (~key.indexOf('body')) {
-                                            var val = response[key];
-                                            $('#headerBlock-text').html(val);
-                                        }
-
-                                    });
                                     // redraw the area by loading a twig file
                                     $('#site-header-slideshow-content').load('/manage/contentblocks/header/show/{{ entity.headerBlock.id }}', function () {
                                         $('#site-header-editForm').empty();
@@ -363,27 +283,22 @@
                 {% else %}
                     // Add header block in layout mode
                     $("#add-header-content").on('click', function(e) {
-                        $.ajax({
-                            url: window.location.protocol + '//' + window.location.hostname + '/manage/contentblocks/ajax/new',
-                        }).done(function (response) {
-                            Object.keys(response).forEach(function (key) {
-                                var val='';
-                                var blockId = '';
-                                if(~key.indexOf('body')) {
-                                    var val = response[key];
-                                    $('#headerBlock-text').html(val);
-                                }
-                                if(~key.indexOf('id')) {
-                                    var blockId = response[key];
-                                    // redraw the area by loading a twig file
-                                    $('#site-header-slideshow').load('/manage/contentblocks/header/show/' + blockId, function () {
-                                        $('#site-header-editForm').hide();
-                                        $('#site-header').show();
-                                        $('.flexslider').flexslider({
-                                            directionNav: false,
-                                            controlNav: false,
-                                            smoothHeight: true
-                                        });
+                        $("#site-header-editForm").load('/manage/contentblocks/ajax/new', function() {
+                            $('#site-header-editForm').show();
+                            $('#site-header-summary-content').hide();
+                            $('#ajax_contentblocks_form').ajaxForm({
+                                success: function (response) {
+                                    Object.keys(response).forEach(function (key) {
+                                        var blockId = '';
+                                        if(~key.indexOf('id')) {
+                                            var blockId = response[key];
+                                            // redraw the area by loading a twig file
+                                            $('#site-header-summary-content').load('/manage/contentblocks/header/show/' + blockId, function () {
+                                                $('#site-header-editForm').empty();
+                                                $('#site-header-editForm').hide();
+                                                $('#site-header-summary-content').show();
+                                            });
+                                        }
                                     });
                                 }
                             });

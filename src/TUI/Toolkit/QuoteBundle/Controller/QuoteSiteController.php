@@ -496,4 +496,24 @@ class QuoteSiteController extends Controller
       'tourName'  => $tourName,
     ));
   }
+
+  /**
+   * @param $id
+   *
+   * Show summary data on Site Show page as embedded twig
+   */
+  public function showSummaryAction($id)
+  {
+    $locale = $this->container->getParameter('locale');
+    $em = $this->getDoctrine()->getManager();
+    $quote = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+    if(!$quote){
+      throw $this->createNotFoundException('Unable to find Quote entity for summary header display.');
+    }
+
+    return $this->render('QuoteBundle:QuoteSite:quoteSummary.html.twig', array(
+      'quote' => $quote,
+      'locale'  => $locale,
+    ));
+  }
 }

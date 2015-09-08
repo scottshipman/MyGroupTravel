@@ -171,6 +171,9 @@ class QuoteVersionType extends AbstractType
                     ->orderBy('c.name', 'ASC');
                     },
               ))
+            ->add('welcomeMsg', 'ckeditor', array(
+                'label' => 'Summary Message',
+            ))
         ;
     }
     
