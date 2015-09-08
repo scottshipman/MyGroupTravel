@@ -78,6 +78,7 @@ var contentBlocksRefresh = function(id){
 
 // Do lots of MDL stuff when a jQuery modal is opened
 var doMDLpopup = function(t) {
+    t.addClass('mdl-form-mimic');
     t.find('.mdl-textfield__input').each(function () {
         if ( $(this).val() ) {
             $(this).parent()
@@ -108,11 +109,11 @@ var doMDLpopup = function(t) {
 };
 
 // Do lots of MDL stuff within a jQuery modal window
-$(document).on('focus', '.ui-dialog .mdl-textfield__input', function () {
+$(document).on('focus', '.mdl-form-mimic .mdl-textfield__input', function () {
     $(this).parent().addClass('is-focused');
-}).on('blur', '.ui-dialog .mdl-textfield__input', function () {
+}).on('blur', '.mdl-form-mimic .mdl-textfield__input', function () {
     $(this).parent().removeClass('is-focused');
-}).on('change paste keyup', '.ui-dialog .mdl-textfield__input', function () {
+}).on('change paste keyup', '.mdl-form-mimic .mdl-textfield__input', function () {
     if ($(this).val()) {
         $(this).parent().addClass('is-dirty').addClass('is-upgraded').removeClass('is-invalid');
     } else {
@@ -123,7 +124,7 @@ $(document).on('focus', '.ui-dialog .mdl-textfield__input', function () {
     }
 });
 
-$(document).on('click', '.ui-dialog .mdl-checkbox__input', function () {
+$(document).on('click', '.mdl-form-mimic .mdl-checkbox__input', function () {
     if ( $(this).is(':checked') ) {
         $(this).parent().addClass('is-checked');
     } else {
@@ -131,7 +132,7 @@ $(document).on('click', '.ui-dialog .mdl-checkbox__input', function () {
     }
 });
 
-$(document).on('click', '.ui-dialog .mdl-radio__button', function () {
+$(document).on('click', '.mdl-form-mimic .mdl-radio__button', function () {
     name = $(this).attr('name');
     $(document).find('input[name="' + name + '"]').parent().removeClass('is-checked');
     if ( $(this).is(':checked') ) {

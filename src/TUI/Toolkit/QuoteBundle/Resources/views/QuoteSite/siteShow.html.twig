@@ -394,12 +394,15 @@
             // edit a content block
             $(".item-edit").on('click', function (e) {
                 e.preventDefault();
+                $("#loader").css("display", "block");
                 var actionParent = $(this).parent().attr('id');
                 var block = actionParent.substring(22);
                 var editBlock = $("#editable-content-blocks-" + block);
                 var previewBlock = $("#content-block-id-" + block);
                 editBlock.html('');
                 editBlock.load('/ajax/contentblocks/' + block + '/edit/' + {{ entity.id }} +'/QuoteVersion', function () {
+                    $("#loader").css("display", "none");
+                    doMDLpopup( editBlock ); // Run the function to add appropriate MDL classes to form elements
                     previewBlock.html('');
                 });
             });

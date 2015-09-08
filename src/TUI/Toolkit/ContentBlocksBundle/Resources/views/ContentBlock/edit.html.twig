@@ -49,7 +49,7 @@
         $('#ajax_contentblocks_form').ajaxForm({
             beforeSerialize: function() {
                 CKEDITOR.instances.tui_toolkit_contentblocksbundle_contentblock_body.updateElement();
-                $("#loader").css("display", "inline-block");
+                $("#loader").css("display", "block");
                 if ( !$('.mode-toggle').hasClass('mode-edit') ) { // If not on quote preview page
                     $('#dialog').dialog("close");
                 }
