@@ -29,12 +29,18 @@
             </div>
         {% endfor %}
     </div>
+    <div class="submit-button-container">
+        <a id ="update-tabs" class="reorder-button" href="#">Submit</a>
+        <a id="close-dialog" class="reorder-button" href="#">Cancel</a>
+    </div>
 </div>
 
 <div id="loader"><img src="{{ asset('bundles/quote/images/loader.gif') }}"></div>
 
 <script>
     $(document).ready(function () {
+
+        var pathArray = '';
 
         $(".sortable-tabs").sortable({
             containment: "parent",
@@ -50,12 +56,23 @@
             start: function (e, ui) {
                 ui.placeholder.height(ui.helper.outerHeight());
             },
-            axis: 'y',
-            update: function (e, ui) {
-                var pathArray = window.location.pathname.split('/');
-                contentBlocksUpdate(pathArray[3]); // fourth [3] part in the path should be quote ID to pass in
-            }
+            axis: 'y'
+
         });
+
+
+        //update tab positions on click event
+        $("#update-tabs").on('click', function (e) {
+            e.preventDefault();
+            var pathArray = window.location.pathname.split('/');
+            contentBlocksUpdate(pathArray[3]);// fourth [3] part in the path should be quote ID to pass in
+        });
+
+        //close dialog box
+        $('#close-dialog').click(function () {
+            window.parent.jQuery('#dialog').dialog('close');
+        });
+
 
 
         // change a tab's name
@@ -71,5 +88,6 @@
                 contentBlocksUpdate({{ entity.id }}); //value
             }
         });
-    });
+    })
+    ;
 </script>
