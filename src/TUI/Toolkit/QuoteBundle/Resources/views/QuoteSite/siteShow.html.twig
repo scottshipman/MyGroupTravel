@@ -83,12 +83,14 @@
                     <div id="site-header-slideshow-content">
                     {{ render(controller('ContentBlocksBundle:HeaderBlock:show', {'id':  entity.headerBlock.id  })) }}
                     </div>
-                        {% else %}
+                {% else %}
                     {% if editable %}
-                        <a id="add-header-content" href="#" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
-                            <i class="fa fa-plus-circle"></i> Add Header Content
-                        </a>
-                        {% endif %}
+                        <div id="site-header-slideshow-content">
+                            <a id="add-header-content" href="#" class="status-preview-edit mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                                <i class="fa fa-plus-circle"></i> Add Header Slideshow
+                            </a>
+                        </div>
+                    {% endif %}
                 {% endif %}
             </div>
             <div id="site-header-summary">
@@ -287,22 +289,26 @@
                         $("#site-header-editForm").load('/manage/contentblocks/new/header/' + {{ entity.id }} +'/QuoteVersion', function() {
                             $('#site-header-editForm').show();
                             $('#site-header-slideshow').hide();
-                            $('#add-header-content').hide();
                             $('#ajax_contentblocks_form').ajaxForm({
                                 success: function (response) {
-                                    console.log('Success');
-                                    Object.keys(response).forEach(function (key) {
-                                        var blockId = '';
-                                        if(~key.indexOf('id')) {
-                                            var blockId = response[key];
-                                            console.log('block id = ' + blockId);
-                                            // redraw the area by loading a twig file
-                                            $('#site-header-summary-content').load('/manage/contentblocks/header/show/' + blockId, function () {
-                                                $('#site-header-editForm').empty();
-                                                $('#site-header-editForm').hide();
-                                                $('#site-header-slideshow').show();
-                                            });
-                                        }
+                                    console.log(response["id"]);
+                                    var blockId = response["id"];
+                                    // redraw the area by loading a twig file
+                                    $('#site-header-slideshow-content').load('/manage/contentblocks/header/show/' + blockId, function () {
+                                        $('#site-header-editForm').empty();
+                                        $('#site-header-editForm').hide();
+                                        $('#site-header-slideshow').show();
+                                        $('.flexslider').flexslider({
+                                            directionNav: false,
+                                            controlNav: false,
+                                            smoothHeight: true
+                                        });
+                                        $('#site-header-slideshow').prepend(
+                                                '<div class="site-content-blocks-item">'+
+                                                '<div class="status-preview-edit site-content-block-actions">'+
+                                                'refresh the page to edit the slideshow'+
+                                                '</div> </div>'
+                                        );
                                     });
                                 }
                             });

@@ -20,21 +20,21 @@ class ContentBlock
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    public $id;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="locked", type="boolean")
      */
-    private $locked;
+    public $locked;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="hidden", type="boolean")
      */
-    private $hidden;
+    public $hidden;
 
     /**
      *
@@ -43,42 +43,42 @@ class ContentBlock
      * @ORM\JoinColumn(name="layouttype", referencedColumnName="id")
      *
      */
-    private $layoutType;
+    public $layoutType;
 
     /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255, nullable=true)
      */
-    private $title;
+    public $title;
 
     /**
      * @var longtext
      *
      * @ORM\Column(name="body", type="text", length=4294967295, nullable=true)
      */
-    private $body;
+    public $body;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="sortOrder", type="integer", nullable=true)
      */
-    private $sortOrder;
+    public $sortOrder;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="doubleWidth", type="boolean")
      */
-    private $doubleWidth;
+    public $doubleWidth;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="isSlideshow", type="boolean")
      */
-    private $isSlideshow;
+    public $isSlideshow;
 
     public function __construct(){
       $this->hidden = false;

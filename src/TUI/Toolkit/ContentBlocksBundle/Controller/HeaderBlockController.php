@@ -59,7 +59,11 @@ class HeaderBlockController extends Controller
 
           $em->flush($quoteVersionEntity);
 
-          $responseContent = json_encode((array) $quoteVersionEntity);
+          //generate js friendly array
+          foreach($entity as $key => $value){
+            $blockArr[$key] = $value;
+          }
+          $responseContent = json_encode($blockArr);
 
           return new Response($responseContent,
             Response::HTTP_OK,
