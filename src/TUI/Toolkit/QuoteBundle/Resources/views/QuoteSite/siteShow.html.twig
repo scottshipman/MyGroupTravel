@@ -286,20 +286,23 @@
                 {% else %}
                     // Add header block in layout mode
                     $("#add-header-content").on('click', function(e) {
-                        $("#site-header-editForm").load('/manage/contentblocks/ajax/new', function() {
+                        $("#site-header-editForm").load('/manage/contentblocks/new/header/' + {{ entity.id }} +'/QuoteVersion', function() {
                             $('#site-header-editForm').show();
-                            $('#site-header-summary-content').hide();
+                            $('#site-header-slideshow').hide();
+                            $('#add-header-content').hide();
                             $('#ajax_contentblocks_form').ajaxForm({
                                 success: function (response) {
+                                    console.log('Success');
                                     Object.keys(response).forEach(function (key) {
                                         var blockId = '';
                                         if(~key.indexOf('id')) {
                                             var blockId = response[key];
+                                            console.log('block id = ' + blockId);
                                             // redraw the area by loading a twig file
                                             $('#site-header-summary-content').load('/manage/contentblocks/header/show/' + blockId, function () {
                                                 $('#site-header-editForm').empty();
                                                 $('#site-header-editForm').hide();
-                                                $('#site-header-summary-content').show();
+                                                $('#site-header-slideshow').show();
                                             });
                                         }
                                     });
