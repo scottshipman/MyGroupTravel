@@ -11,7 +11,7 @@
             <li><strong>Quote valid until {{ entity.expiryDate.date }}</strong></li>
         </ul>
         {% if entity.headerBlock %}
-            <img src="{{ asset(".." ~ entity.headerBlock.media[0].getRelativePath ~ "/" ~ entity.headerBlock.media[0].getHashedFilename ) }}"/>
+            <img src="{{ asset( entity.headerBlock.media[0].getRelativePath ~ "/" ~ entity.headerBlock.media[0].getHashedFilename ) | imagine_filter('modalImage') }}"/>
         {% endif %}
         {{ form(accept_form) }}
     </div>
