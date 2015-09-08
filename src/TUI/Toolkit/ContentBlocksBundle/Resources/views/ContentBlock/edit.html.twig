@@ -59,10 +59,16 @@
                     var blockID = {{ entity.id }};
                     var quoteID = $('.mode-toggle').attr('id').substring(14);
                     var editBlock = $("#editable-content-blocks-" + blockID);
-                    var previewBlock = $("#content-block-id-" + blockID);
+                    var previewBlock = $("#previewable-content-blocks-" + blockID);
                     // Match routing path "/manage/contentblocks/{id}/show/{quoteVersion}/{class}"
                     previewBlock.load('/manage/contentblocks/' + blockID + '/show/' + quoteID + '/QuoteVersion', function() {
                         $("#loader").css("display", "none");
+                        previewBlock.parent().removeClass('site-content-blocks-size-full site-content-blocks-size-half');
+                        if ( $('#tui_toolkit_contentblocksbundle_contentblock_doubleWidth').is(':checked') ) {
+                            previewBlock.parent().addClass('site-content-blocks-size-full');
+                        } else {
+                            previewBlock.parent().addClass('site-content-blocks-size-half');
+                        };
                         editBlock.html('');
                     });
                 } else {

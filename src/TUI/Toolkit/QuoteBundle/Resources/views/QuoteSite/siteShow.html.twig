@@ -202,25 +202,28 @@
                         {% else %}
                             {% set class = ' site-content-blocks-size-half' %}
                         {% endif %}
-                        <div id="content-blocks-{{ items[item].id }}"
-                             class="site-content-blocks site-content-blocks-item{{ class }}">
+                        <div id="content-blocks-{{ items[item].id }}" class="site-content-blocks site-content-blocks-item{{ class }}">
                             {% if editable %}
-                                {# probably render a controller here by passing in item as id and have block entity returned #}
-                                <div class="move-icon status-preview-edit"><i class="fa fa-arrows"></i></div>
-                                <div id="content-block-actions-{{ items[item].id }}"
-                                     class="site-content-block-actions status-preview-edit">
-                                    <i class="item-edit content-block-item-action fa fa-pencil-square-o"></i>
-                                    <i class="item-delete content-block-item-action fa fa-trash-o"></i>
-                                    {% if items[item].locked %}<i
-                                            class="item-lock content-block-item-action fa fa-unlock-alt"></i> {% else %}
-                                        <i class="item-lock content-block-item-action fa fa-lock"></i> {% endif %}
-                                    {% if items[item].hidden %}<i
-                                            class="item-hide content-block-item-action fa fa-ban"></i>{% else %}<i
-                                            class="item-hide content-block-item-action fa fa-eye"></i>{% endif %}
+                                <div class="site-content-block-actions status-preview-edit">
+                                    {# probably render a controller here by passing in item as id and have block entity returned #}
+                                    <div class="move-icon"><i class="fa fa-arrows"></i></div>
+                                    <div id="content-block-actions-{{ items[item].id }}"
+                                         class="edit-icons">
+                                        <i class="item-edit content-block-item-action fa fa-pencil-square-o"></i>
+                                        <i class="item-delete content-block-item-action fa fa-trash-o"></i>
+                                        {% if items[item].locked %}<i
+                                                class="item-lock content-block-item-action fa fa-unlock-alt"></i> {% else %}
+                                            <i class="item-lock content-block-item-action fa fa-lock"></i> {% endif %}
+                                        {% if items[item].hidden %}<i
+                                                class="item-hide content-block-item-action fa fa-ban"></i>{% else %}<i
+                                                class="item-hide content-block-item-action fa fa-eye"></i>{% endif %}
+                                    </div>
                                 </div>
                             {% endif %}
                             {# render the actual content block #}
-                            {{ render(controller('ContentBlocksBundle:ContentBlock:show', {'id':  items[item].id  })) }}
+                            <div id="previewable-content-blocks-{{ items[item].id }}">
+                                {{ render(controller('ContentBlocksBundle:ContentBlock:show', {'id':  items[item].id  })) }}
+                            </div>
                             {# give a placeholder for the editable version #}
                             <div id="editable-content-blocks-{{ items[item].id }}"></div>
                         </div>
@@ -398,7 +401,7 @@
                 var actionParent = $(this).parent().attr('id');
                 var block = actionParent.substring(22);
                 var editBlock = $("#editable-content-blocks-" + block);
-                var previewBlock = $("#content-block-id-" + block);
+                var previewBlock = $("#previewable-content-blocks-" + block);
                 editBlock.html('');
                 editBlock.load('/ajax/contentblocks/' + block + '/edit/' + {{ entity.id }} +'/QuoteVersion', function () {
                     $("#loader").css("display", "none");
