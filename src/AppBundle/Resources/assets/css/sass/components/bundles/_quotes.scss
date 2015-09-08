@@ -288,13 +288,18 @@
   }
 
   .site-content-block-actions {
+    height: 32px;
+    @include mdl-primary-color(background, 6);
+  }
+
+  .edit-icons {
     position: absolute;
     top: 6px;
     right: $column_gutter_width;
     padding-right: 1em;
   }
 
-  .site-content-blocks-size-half .site-content-block-actions {
+  .site-content-blocks-size-half .edit-icons {
     right: $column_gutter_width * ( 100% / ($column_total_width * 2)); // correction for smaller column
   }
 
@@ -309,15 +314,6 @@
     left: $column_gutter_width * ( 100% / ($column_total_width * 2)); // correction for smaller column
   }
 
-  .content-block {
-    border-top: 32px solid black;
-    @include mdl-primary-color(border-color, 6);
-
-    &:hover {
-      outline: 1px solid black;
-      @include mdl-primary-color(outline-color, 6);
-    }
-  }
   .move-cursor {
     cursor: move;
   }
@@ -325,6 +321,5 @@
   .pointer-cursor {
     cursor: pointer;
   }
-
 
 }
