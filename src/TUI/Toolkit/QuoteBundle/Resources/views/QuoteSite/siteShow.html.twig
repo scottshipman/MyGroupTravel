@@ -69,36 +69,29 @@
             {% endfor %}
         </div>
     {% endif %}
-    <div id="site-header-editForm" style="display:none;"></div>
     <div id="site-header" class="quote-view-site-header">
-        {% if editable %}
-            {% if entity.headerBlock %}
-                <div class="contextual-links">
-                    <i id="edit-header-block" class="status-preview-edit fa fa-pencil"></i></a>
-                {% if entity.headerBlock.locked %}<i id="lock-header-block"class="status-preview-edit fa fa-unlock-alt"></i> {% else %} <i id="edit-header-block" class="status-preview-edit fa fa-lock"></i>{% endif %}
-                </div>
-            {% endif %}
-        {% endif %}
-
         {# render the slideshow using the controller/twig with headerbock.id as param#}
+        <div id="site-header-editForm" style="display:none;"></div>
         <div id="site-header-slideshow">
+            {% if entity.headerBlock %}
                 {% if editable %}
-                    {% if entity.headerBlock %}
-                        <div class="site-content-blocks-item">
-                            <div class="status-preview-edit site-content-block-actions">
-                                <i id="edit-header-block" class="content-block-item-action fa fa-pencil"></i></a>
-                                {% if entity.headerBlock.locked %}<i id="lock-header-block"class="content-block-item-action fa fa-unlock-alt"></i> {% else %} <i id="edit-header-block" class="content-block-item-action fa fa-lock"></i>{% endif %}
-                            </div>
+                    <div class="site-content-blocks-item">
+                        <div class="status-preview-edit site-content-block-actions">
+                            <i id="edit-header-block" class="content-block-item-action fa fa-pencil"></i></a>
+                            {% if entity.headerBlock.locked %}<i id="lock-header-block"class="content-block-item-action fa fa-unlock-alt"></i> {% else %} <i id="edit-header-block" class="content-block-item-action fa fa-lock"></i>{% endif %}
                         </div>
-                    {% endif %}
+                    </div>
                 {% endif %}
-                {% if entity.headerBlock %}
-                    {{ render(controller('ContentBlocksBundle:HeaderBlock:show', {'id':  entity.headerBlock.id  })) }}
-                {% else %}
+                <div id="site-header-slideshow-content">
+                {{ render(controller('ContentBlocksBundle:HeaderBlock:show', {'id':  entity.headerBlock.id  })) }}
+                </div>
+                    {% else %}
+                {% if editable %}
                     <a id="add-header-content" href="#" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
                         <i class="fa fa-plus-circle"></i> Add Header Content
                     </a>
-                {% endif %}
+                    {% endif %}
+            {% endif %}
         </div>
         <div id="site-header-summary">
             <ul id="site-summary-details">
@@ -118,6 +111,7 @@
                                     <i class="fa fa-calendar-times-o"></i> Expired
                                 </a>
                             {% endif %}
+                        {% endif %}
                         </li>
                         <li>
                             {% if (entity.converted is sameas(true)) and (entity.quoteReference.converted is sameas(true)) %}
@@ -314,23 +308,19 @@
                 });
             });
 
-            // edit tabs popup
-            $("#edit-tabs").on('click', function (e) {
-                console.log("item");
-                //e.preventDefault();
-                $("#dialog").html("");
-                $("#dialog").dialog({width: '60%'}).dialog("option", "title", "Loading...").dialog("open");
-                console.log("before load");
-                $("#dialog").load('/manage/quoteversion/show/tabs/' + {{ entity.id }}, function () {
-                    console.log("before modal")
-                    $(this).dialog("option", "title", "Rearrange Tabs");
-                    $(".sortable-tabs").sortable("enable");
-                    console.log("after-sortable");
-                });
-            });
-
-            {# Only place javascript that deals with editing here so it only loads when it needs to #}
+            {# Only place javascript below that deals with editing so it only loads when it needs to #}
             {% if editable %}
+
+                // edit tabs popup
+                $("#edit-tabs").on('click', function (e) {
+                    //e.preventDefault();
+                    $("#dialog").html("");
+                    $("#dialog").dialog({width: '60%'}).dialog("option", "title", "Loading...").dialog("open");
+                    $("#dialog").load('/manage/quoteversion/show/tabs/' + {{ entity.id }}, function () {
+                        $(this).dialog("option", "title", "Rearrange Tabs");
+                        $(".sortable-tabs").sortable("enable");
+                    });
+                });
 
                 {% if entity.headerBlock %}
                     // edit header block in layout mode
@@ -338,29 +328,28 @@
                         //e.preventDefault();
                         $("#site-header-editForm").load('/manage/contentblocks/edit/header/layout-editor/{{ entity.headerBlock.id }}', function() {
                             $('#site-header-editForm').show();
-                            $('#site-header').hide();
+                            $('#site-header-slideshow').hide();
                             // bind header edit form and provide a simple callback function
                             $('#ajax_headerblock_layout_form').ajaxForm({
-                                beforeSerialize: function() {
+                                beforeSerialize: function () {
                                     CKEDITOR.instances.tui_toolkit_contentblocksbundle_contentblock_body.updateElement();
                                 },
-                                success : function (response) {
+                                success: function (response) {
                                     var keys = Object.keys(response);
                                     //["TUI\\Toolkit\\ContentBlocksBundle\\Entity\\ContentBlockbody"]
-                                    console.log(keys['TUI\\Toolkit\\ContentBlocksBundle\\Entity\\ContentBlockbody']);
                                     Object.keys(response).forEach(function (key) {
-                                        var val='';
-                                        if(~key.indexOf('body')) {
-                                            console.log(key);
+                                        var val = '';
+                                        if (~key.indexOf('body')) {
                                             var val = response[key];
                                             $('#headerBlock-text').html(val);
                                         }
 
                                     });
                                     // redraw the area by loading a twig file
-                                    $('#site-header-slideshow').load('/manage/contentblocks/header/show/{{ entity.headerBlock.id }}', function() {
+                                    $('#site-header-slideshow-content').load('/manage/contentblocks/header/show/{{ entity.headerBlock.id }}', function () {
+                                        $('#site-header-editForm').empty();
                                         $('#site-header-editForm').hide();
-                                        $('#site-header').show();
+                                        $('#site-header-slideshow').show();
                                         $('.flexslider').flexslider({
                                             directionNav: false,
                                             controlNav: false,
@@ -368,9 +357,9 @@
                                         });
                                     });
                                 }
-
+                            });
+                        });
                     });
-
                 {% else %}
                     // Add header block in layout mode
                     $("#add-header-content").on('click', function(e) {
@@ -402,10 +391,6 @@
                     });
                 {% endif %}
 
-            });
-            {% endif %}
-
-
             // edit a content block
             $(".item-edit").on('click', function (e) {
                 e.preventDefault();
@@ -418,10 +403,7 @@
                     previewBlock.html('');
                 });
             });
-
-
             {% endif %}
-
         });
     </script>
 
