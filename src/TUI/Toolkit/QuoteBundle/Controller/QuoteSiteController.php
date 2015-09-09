@@ -556,7 +556,7 @@ class QuoteSiteController extends Controller
     $locale = $this->container->getParameter('locale');
     $form = $this->createForm(new QuoteSummaryType($locale), $entity, array(
       'action' => $this->generateUrl('quote_summary_update', array('id' => $entity->getId())),
-      'method' => 'PUT',
+      'method' => 'POST',
       'attr'   => array(
         'id'    => 'form-summary-edit-form',
       )
