@@ -30,8 +30,10 @@
         {% endfor %}
     </div>
     <div class="submit-button-container">
-        <a id ="update-tabs" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored reorder-button" href="#"><i class="fa fa-thumbs-o-up"> </i> Submit</a>
-        <a id="close-dialog" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored reorder-button" href="#"><i class="fa fa-ban"> </i> Cancel</a>
+        <a id="update-tabs" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored reorder-button"
+           href="#"><i class="fa fa-thumbs-o-up"> </i> Submit</a>
+        <a id="close-dialog" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored reorder-button"
+           href="#"><i class="fa fa-ban"> </i> Cancel</a>
     </div>
 </div>
 
@@ -39,9 +41,7 @@
 
 <script>
     $(document).ready(function () {
-
-        var pathArray = '';
-
+        
         $(".sortable-tabs").sortable({
             containment: "parent",
             items: "> div",
@@ -66,13 +66,13 @@
             e.preventDefault();
             var pathArray = window.location.pathname.split('/');
             contentBlocksUpdate(pathArray[3]);// fourth [3] part in the path should be quote ID to pass in
+            contentBlocksUpdate({{ entity.id }}); //value
         });
 
         //close dialog box
         $('#close-dialog').click(function () {
             window.parent.jQuery('#dialog').dialog('close');
         });
-
 
 
         // change a tab's name
@@ -83,10 +83,7 @@
         }, {
             width: '20em',
             onblur: "cancel",
-            tooltip: 'Click to edit',
-            callback: function (value, settings) {
-                contentBlocksUpdate({{ entity.id }}); //value
-            }
+            tooltip: 'Click to edit'
         });
     })
     ;
