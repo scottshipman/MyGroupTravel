@@ -441,5 +441,46 @@ class ContentBlockController extends Controller
   }
 
 
+    /**
+     * Adds a new tab into the content blocks array field on the site preview page
+     *
+     * @param mixed $id The entity id
+     *
+     * @return Symfony\Component\HttpFoundation\Response
+     */
+    public function newSiteTabAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+        //$content = $entity->getContent();
+        $content=$entity->getContent();
+
+        if ($request->getMethod() == 'POST') {
+            $newContent = $request->request->all();
+        }
+
+        foreach($newContent as $tab => $data){
+            $blocks = isset($data[1]) ? $data[1] : array();
+            if(!empty($blocks)) {
+                $blockArr = array();
+                foreach ($blocks as $block) {
+                    $blockArr[] = (int)substr($block, 15);
+                }
+                $content[$tab] = array($data[0], $blockArr);
+            } else {
+                $content[$tab]=array($data[0], array());
+            }
+        }
+        $entity->setContent($content);
+        $em->persist($entity);
+        $em->flush();
+
+        $responseContent = json_encode($entity->getContent());
+
+        return new Response($responseContent,
+            Response::HTTP_OK,
+            array('content-type' => 'application/json')
+        );
+    }
 
 }

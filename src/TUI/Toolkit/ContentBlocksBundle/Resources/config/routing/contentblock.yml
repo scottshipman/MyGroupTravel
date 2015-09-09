@@ -34,6 +34,10 @@ contentblocks_update:
     defaults: { _controller: "ContentBlocksBundle:ContentBlock:newTab" }
     methods:  [POST]
 
+manage_contentblocks_new_tab:
+    path: /tab/new/{id}
+    defaults: { _controller: "ContentBlocksBundle:ContentBlock:newSiteTab"}
+    methods:  [POST]
 
 manage_contentblocks_lock:
     path:     /{id}/lock/{quoteVersion}/{class}

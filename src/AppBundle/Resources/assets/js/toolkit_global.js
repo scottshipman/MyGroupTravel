@@ -59,6 +59,29 @@ var contentBlocksAddTab= function (elem, id){
 }
 
 /**
+ * Create new tab and Persist Content block data to the database/entity
+ * @param id - Quote Version # passed from window.path
+ */
+
+var contentBlocksNewTab = function (id) {
+    // update server with new data
+    var newId = new Date().getTime();
+    $("#loader").css("display", "block");
+    var result = {};
+    tabText = "New Tab";
+    TabId = newId;
+    result[TabId] = [tabText, new Array()];
+    //POST to server using $.post or $.ajax
+    $.ajax({
+        data: result,
+        type: 'POST',
+        url: '/manage/contentblocks/tab/new/'+ id
+    });
+    //reload the window so changes are redrawn - its lazy non-ajaxy, but...
+    contentBlocksRefresh(id);
+};
+
+/**
  * Reload the page that shows the content blocks and tabs
  * @param id
  */
