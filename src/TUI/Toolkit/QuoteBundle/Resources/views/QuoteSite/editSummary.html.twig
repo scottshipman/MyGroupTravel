@@ -1,0 +1,15 @@
+
+    {{ form(edit_form) }}
+
+
+    {{ form_javascript(edit_form) }}
+
+    <script>
+        $( document ).ready(function() {
+            $( ".hasDatepicker" ).datepicker( "option", "dateFormat", "dd-mm-yy" );
+            $( ".hasDatepicker" ).change(function(){
+                $(this).parent().addClass('is-dirty');
+            });
+        });
+    </script>
+

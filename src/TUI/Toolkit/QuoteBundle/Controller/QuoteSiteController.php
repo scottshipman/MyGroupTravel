@@ -10,6 +10,7 @@ use TUI\Toolkit\QuoteBundle\Form\PromptType;
 use TUI\Toolkit\QuoteBundle\Entity\QuoteVersion;
 use TUI\Toolkit\QuoteBundle\Form\QuoteChangeRequestType;
 use TUI\Toolkit\QuoteBundle\Form\QuoteAcceptType;
+use TUI\Toolkit\QuoteBundle\Form\QuoteSummaryType;
 use TUI\Toolkit\PermissionBundle\Entity\Permission;
 use TUI\Toolkit\PermissionBundle\Controller\PermissionService;
 use APY\DataGridBundle\Grid\Source\Entity;
@@ -516,4 +517,94 @@ class QuoteSiteController extends Controller
       'locale'  => $locale,
     ));
   }
+
+  /**
+   * @param $id
+   *
+   * Edit summary data on Site Show page using ajaxForm
+   */
+  public function editSummaryAction($id) {
+
+    $em = $this->getDoctrine()->getManager();
+
+      // Get all Quote versions referencing Parent Quote object
+    $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+
+    if (!$entity) {
+    throw $this->createNotFoundException('Unable to find QuoteVersion entity for Summary Edit.' . $id);
+    }
+
+    $editForm = $this->createSummaryEditForm($entity);
+    $date_format = $this->container->getParameter('date_format');
+
+    return $this->render('QuoteBundle:QuoteSite:editSummary.html.twig', array(
+      'entity' => $entity,
+      'edit_form' => $editForm->createView(),
+      'date_format' => $date_format,
+    ));
+  }
+
+  /**
+   * Creates a form to edit a QuoteVersion Summary.
+   *
+   * @param QuoteVersion $entity The entity
+   *
+   * @return \Symfony\Component\Form\Form The form
+   */
+  private function createSummaryEditForm(QuoteVersion $entity)
+  {
+    $locale = $this->container->getParameter('locale');
+    $form = $this->createForm(new QuoteSummaryType($locale), $entity, array(
+      'action' => $this->generateUrl('quote_summary_update', array('id' => $entity->getId())),
+      'method' => 'PUT',
+      'attr'   => array(
+        'id'    => 'form-summary-edit-form',
+      )
+    ));
+
+    $form->add('submit', 'submit', array('label' => 'Update'));
+
+    return $form;
+  }
+
+  /**
+   * Updates an existing QuoteVersion Summary.
+   *
+   */
+  public function updateSummaryAction(Request $request, $id)
+  {
+    $date_format = $this->container->getParameter('date_format');
+    $em = $this->getDoctrine()->getManager();
+    $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+    if (!$entity) {
+      throw $this->createNotFoundException('Unable to find QuoteVersion entity.');
+    }
+
+
+    $editForm = $this->createSummaryEditForm($entity);
+    $editForm->handleRequest($request);
+
+    if ($editForm->isValid()) {
+      $em->flush();
+
+      $responseContent =  json_encode((array) $entity);
+      return new Response($responseContent,
+        Response::HTTP_OK,
+        array('content-type' => 'application/json')
+      );
+
+    }
+
+    return $this->render('QuoteBundle:QuoteVersion:editSummary.html.twig', array(
+      'entity' => $entity,
+      'edit_form' => $editForm->createView(),
+      'delete_form' => $deleteForm->createView(),
+      'template' => $template,
+      'date_format' => $date_format,
+    ));
+  }
+
+
 }
+
+

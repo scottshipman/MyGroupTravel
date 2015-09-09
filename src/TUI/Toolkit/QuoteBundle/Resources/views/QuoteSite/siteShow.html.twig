@@ -69,7 +69,6 @@
         {% endif %}
         <div id="site-header" class="quote-view-site-header">
             {# render the slideshow using the controller/twig with headerbock.id as param#}
-            <div id="site-header-editForm" style="display:none;"></div>
             <div id="site-header-slideshow">
                 {% if entity.headerBlock %}
                     {% if editable %}
@@ -96,11 +95,23 @@
                 {% endif %}
             </div>
             <div id="site-header-summary">
+                {% if editable %}
+                    <div class="site-content-blocks-item">
+                        <div class="status-preview-edit site-content-block-actions">
+                            <div class="edit-icons">
+                                <i id="edit-header-summary" class="content-block-item-action fa fa-pencil-square-o"></i></a>
+                                {% if entity.locked %}<i id="lock-header-summary"class="content-block-item-action fa fa-unlock-alt"></i> {% else %} <i id="lock-header-summary" class="content-block-item-action fa fa-lock"></i>{% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
                 <div id="site-header-summary-content">
                 {{ render(controller('QuoteBundle:QuoteSite:showSummary', {'id':  entity.id  })) }}
                 </div>
             </div>
-
+            {# give a placeholder for the editable version #}
+            <div id="site-header-summary-form" style="display:none;"></div>
+            <div id="site-header-editForm" style="display:none;"></div>
         </div> {# end site header#}
 
         {# RENDER THE CONTENT BLOCKS HERE #}
@@ -264,14 +275,16 @@
                 });
 
 
-                // edit header block in layout mode
+                // edit header slideshow in layout mode
                 $(document).on('click','#edit-header-block', function(e){
-                    //e.preventDefault();
+                    e.preventDefault();
+                    $("#loader").css("display", "block");
                     var blockId = $('#header-block-content-item').attr('blockId')
-                    console.log('block item = ' + blockId);
                     $("#site-header-editForm").load('/manage/contentblocks/edit/header/layout-editor/' +blockId, function() {
+                        $("#loader").css("display", "none");
                         $('#site-header-editForm').show();
                         $('#site-header-slideshow').hide();
+                        doMDLpopup( '#site-header-editForm' ); // run the function to add appropriate MDL classes to form elements
                         // bind header edit form and provide a simple callback function
                         $('#ajax_headerblock_layout_form').ajaxForm({
                             success: function (response) {
@@ -293,9 +306,12 @@
 
                 // Add header block in layout mode
                 $("#add-header-content").on('click', function(e) {
+                    $("#loader").css("display", "block");
                     $("#site-header-editForm").load('/manage/contentblocks/new/header/' + {{ entity.id }} +'/QuoteVersion', function() {
+                        $("#loader").css("display", "none");
                         $('#site-header-editForm').show();
                         $('#site-header-slideshow').hide();
+                        doMDLpopup( '#site-header-editForm' ); // run the function to add appropriate MDL classes to form elements
                         $('#ajax_contentblocks_form').ajaxForm({
                             success: function (response) {
                                 var blockId = response["id"];
@@ -325,22 +341,48 @@
                 });
 
 
-            // edit a content block
-            $(".item-edit").on('click', function (e) {
-                e.preventDefault();
-                $("#loader").css("display", "block");
-                var actionParent = $(this).parent().attr('id');
-                var block = actionParent.substring(22);
-                var editBlock = $("#editable-content-blocks-" + block);
-                var previewBlock = $("#previewable-content-blocks-" + block);
-                editBlock.html('');
-                editBlock.load('/ajax/contentblocks/' + block + '/edit/' + {{ entity.id }} + '/QuoteVersion', function () {
-                    $("#loader").css("display", "none");
-                    $('.item-edit').hide(); // hide ALL edit buttons for all content blocks
-                    doMDLpopup( editBlock ); // run the function to add appropriate MDL classes to form elements
-                    previewBlock.html('');
+                // edit a content block
+                $(".item-edit").on('click', function (e) {
+                    e.preventDefault();
+                    $("#loader").css("display", "block");
+                    var actionParent = $(this).parent().attr('id');
+                    var block = actionParent.substring(22);
+                    var editBlock = $("#editable-content-blocks-" + block);
+                    var previewBlock = $("#previewable-content-blocks-" + block);
+                    editBlock.html('');
+                    editBlock.load('/ajax/contentblocks/' + block + '/edit/' + {{ entity.id }} + '/QuoteVersion', function () {
+                        $("#loader").css("display", "none");
+                        $('.item-edit').hide(); // hide ALL edit buttons for all content blocks
+                        doMDLpopup( editBlock ); // run the function to add appropriate MDL classes to form elements
+                        previewBlock.html('');
+                    });
                 });
-            });
+
+                // edit header summary in layout mode
+                $(document).on('click','#edit-header-summary', function(e){
+                    e.preventDefault();
+                    $("#loader").css("display", "block");
+                    $("#site-header-summary-form").load('/quote/view/summary/edit/{{ entity.id }}', function() {
+                        $("#loader").css("display", "none");
+                        $('#site-header-summary-form').show();
+                        $('#site-header-summary').hide();
+                        $('#site-header-slideshow').hide();
+                        doMDLpopup( $('#site-header-summary-form') ); // run the function to add appropriate MDL classes to form elements
+                        // bind header edit form and provide a simple callback function
+                        $('#form-summary-edit-form').ajaxForm({
+                            success: function (response) {
+                                // redraw the area by loading a twig file
+                                $('#site-header-summary-content').load('/quote/view/summary/show/{{ entity.id }}', function () {
+                                    $('#site-header-summary-form').empty();
+                                    $('#site-header-summary-form').hide();
+                                    $('#site-header-summary').show();
+                                    $('#site-header-slideshow').show();
+                                });
+                            }
+                        });
+                    });
+                });
+
             {% endif %}
         });
     </script>
