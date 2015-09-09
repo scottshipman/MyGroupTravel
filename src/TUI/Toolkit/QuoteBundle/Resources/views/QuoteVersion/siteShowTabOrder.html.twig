@@ -13,16 +13,7 @@
                         <div id="content-blocks-{{ item }}" class="content-blocks content-blocks-item">
                             <i class="fa fa-arrows"></i> {{ items[item].title }}
                             {# probably render a controller here by passing in item as id and have block entity returned #}
-                            <div id="content-block-actions-{{ item }}" class="content-block-actions">
-                                <i class="item-edit content-block-item-action fa fa-pencil-square-o"></i>
-                                <i class="item-delete content-block-item-action fa fa-trash-o"></i>
-                                {% if items[item].locked %}<i
-                                        class="item-lock content-block-item-action fa fa-unlock"></i> {% else %}  <i
-                                        class="item-lock content-block-item-action fa fa-lock"></i> {% endif %}
-                                {% if items[item].hidden %}<i
-                                        class="item-hide content-block-item-action fa fa-ban"></i> {% else %} <i
-                                        class="item-hide content-block-item-action fa fa-eye"></i> {% endif %}
-                            </div>
+                            <div id="content-block-actions-{{ item }}" class="content-block-actions"></div>
                         </div>
                     {% endfor %}
                 </div>
@@ -41,7 +32,8 @@
 
 <script>
     $(document).ready(function () {
-        
+
+        //sortable tabs
         $(".sortable-tabs").sortable({
             containment: "parent",
             items: "> div",
@@ -58,6 +50,19 @@
             },
             axis: 'y'
 
+        });
+
+        //sortable items in tabs
+        $(".sortable-items").sortable({
+            containment: "document",
+            items: "> div",
+            tolerance: "pointer",
+            connectWith: '.sortable-items',
+            placeholder: "items-placeholder",
+            start: function (e, ui) {
+                ui.placeholder.height(ui.helper.outerHeight());
+            },
+            axis: 'y'
         });
 
 
