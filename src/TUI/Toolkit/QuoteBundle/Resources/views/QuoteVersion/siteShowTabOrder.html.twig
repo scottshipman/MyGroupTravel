@@ -28,8 +28,6 @@
     </div>
 </div>
 
-<div id="loader"><img src="{{ asset('bundles/quote/images/loader.gif') }}"></div>
-
 <script>
     $(document).ready(function () {
 
@@ -66,12 +64,13 @@
         });
 
 
-        //update tab positions on click event
+        //update tab positions and content positions on click event
         $("#update-tabs").on('click', function (e) {
             e.preventDefault();
+            //close dialog box
+            window.parent.jQuery('#dialog').dialog('close');
             var pathArray = window.location.pathname.split('/');
-            contentBlocksUpdate(pathArray[3]);// fourth [3] part in the path should be quote ID to pass in
-            contentBlocksUpdate({{ entity.id }}); //value
+            contentBlocksUpdate( pathArray[3], {{ entity.id }} );// fourth [3] part in the path should be quote ID to pass in
         });
 
         //close dialog box
