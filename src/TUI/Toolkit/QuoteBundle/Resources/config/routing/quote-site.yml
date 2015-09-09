@@ -47,8 +47,9 @@ quote_summary_show:
 quote_summary_edit:
     path:     /summary/edit/{id}
     defaults: { _controller: "QuoteBundle:QuoteSite:editSummary" }
+    methods: [POST, GET]
 
 quote_summary_update:
-    path:     /summary/edit/{id}
+    path:     /summary/update/{id}
     defaults: { _controller: "QuoteBundle:QuoteSite:updateSummary" }
-    methods: [POST]
+    methods: [POST, GET]

@@ -104,7 +104,7 @@
                     <div class="site-content-blocks-item">
                         <div class="status-preview-edit site-content-block-actions">
                             <div class="edit-icons">
-                                <i id="edit-header-summary" class="content-block-item-action fa fa-pencil-square-o"></i></a>
+                                <i id="edit-header-summary" class="content-block-item-action item-edit fa fa-pencil-square-o"></i></a>
                                 {% if entity.locked %}<i id="lock-header-summary"class="content-block-item-action fa fa-unlock-alt"></i> {% else %} <i id="lock-header-summary" class="content-block-item-action fa fa-lock"></i>{% endif %}
                             </div>
                         </div>
@@ -296,10 +296,11 @@
                     $("#loader").css("display", "block");
                     var blockId = $('#header-block-content-item').attr('blockId')
                     $("#site-header-editForm").load('/manage/contentblocks/edit/header/layout-editor/' +blockId, function() {
+                        $('.item-edit').hide(); // hide ALL edit buttons for all content blocks
                         $("#loader").css("display", "none");
                         $('#site-header-editForm').show();
                         $('#site-header-slideshow').hide();
-                        doMDLpopup( '#site-header-editForm' ); // run the function to add appropriate MDL classes to form elements
+                        doMDLpopup( $('#site-header-editForm') ); // run the function to add appropriate MDL classes to form elements
                         // bind header edit form and provide a simple callback function
                         $('#ajax_headerblock_layout_form').ajaxForm({
                             success: function (response) {
@@ -308,6 +309,7 @@
                                     $('#site-header-editForm').empty();
                                     $('#site-header-editForm').hide();
                                     $('#site-header-slideshow').show();
+                                    $('.item-edit').show();
                                     $('.flexslider').flexslider({
                                         directionNav: false,
                                         controlNav: false,
@@ -323,10 +325,11 @@
                 $("#add-header-content").on('click', function(e) {
                     $("#loader").css("display", "block");
                     $("#site-header-editForm").load('/manage/contentblocks/new/header/' + {{ entity.id }} +'/QuoteVersion', function() {
+                        $('.item-edit').hide(); // hide ALL edit buttons for all content blocks
                         $("#loader").css("display", "none");
                         $('#site-header-editForm').show();
                         $('#site-header-slideshow').hide();
-                        doMDLpopup( '#site-header-editForm' ); // run the function to add appropriate MDL classes to form elements
+                        doMDLpopup( $('#site-header-editForm') ); // run the function to add appropriate MDL classes to form elements
                         $('#ajax_contentblocks_form').ajaxForm({
                             success: function (response) {
                                 var blockId = response["id"];
@@ -335,6 +338,7 @@
                                     $('#site-header-editForm').empty();
                                     $('#site-header-editForm').hide();
                                     $('#site-header-slideshow').show();
+                                    $('.item-edit').show();
                                     $('.flexslider').flexslider({
                                         directionNav: false,
                                         controlNav: false,
@@ -379,12 +383,17 @@
                     $("#loader").css("display", "block");
                     $("#site-header-summary-form").load('/quote/view/summary/edit/{{ entity.id }}', function() {
                         $("#loader").css("display", "none");
+                        $('.item-edit').hide(); // hide ALL edit buttons for all content blocks
                         $('#site-header-summary-form').show();
                         $('#site-header-summary').hide();
                         $('#site-header-slideshow').hide();
+                        $('.button-row').append('<button id="cancel-reload" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Cancel</button>');
                         doMDLpopup( $('#site-header-summary-form') ); // run the function to add appropriate MDL classes to form elements
                         // bind header edit form and provide a simple callback function
                         $('#form-summary-edit-form').ajaxForm({
+                            beforeSerialize: function() {
+                                CKEDITOR.instances.tui_toolkit_quotebundle_quotesummary_welcomeMsg.updateElement();
+                            },
                             success: function (response) {
                                 // redraw the area by loading a twig file
                                 $('#site-header-summary-content').load('/quote/view/summary/show/{{ entity.id }}', function () {
@@ -392,6 +401,7 @@
                                     $('#site-header-summary-form').hide();
                                     $('#site-header-summary').show();
                                     $('#site-header-slideshow').show();
+                                    $('.item-edit').show();
                                 });
                             }
                         });
