@@ -75,8 +75,10 @@
                     {% if editable %}
                         <div class="site-content-blocks-item">
                             <div class="status-preview-edit site-content-block-actions">
-                                <i id="edit-header-block" class="content-block-item-action fa fa-pencil"></i></a>
-                                {% if entity.headerBlock.locked %}<i id="lock-header-block"class="content-block-item-action fa fa-unlock-alt"></i> {% else %} <i id="edit-header-block" class="content-block-item-action fa fa-lock"></i>{% endif %}
+                                <div class="edit-icons">
+                                    <i id="edit-header-block" class="content-block-item-action fa fa-pencil-square-o"></i></a>
+                                    {% if entity.headerBlock.locked %}<i id="lock-header-block"class="content-block-item-action fa fa-unlock-alt"></i> {% else %} <i id="edit-header-block" class="content-block-item-action fa fa-lock"></i>{% endif %}
+                                </div>
                             </div>
                         </div>
                     {% endif %}
@@ -137,7 +139,7 @@
                         {% endif %}
                         <div id="content-blocks-{{ items[item].id }}" class="site-content-blocks site-content-blocks-item {{ class }}">
                             {% if editable %}
-                                <div class="site-content-block-actions status-preview-edit">
+                                <div class="site-content-block-actions status-preview-edit move-cursor">
                                     {# probably render a controller here by passing in item as id and have block entity returned #}
                                     <div class="move-icon"><i class="fa fa-arrows" title="Rearrange"></i></div>
                                     <div id="content-block-actions-{{ items[item].id }}" class="edit-icons">
