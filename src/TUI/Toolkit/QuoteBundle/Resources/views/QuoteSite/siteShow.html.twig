@@ -151,12 +151,12 @@
                      class="mdl-tabs__panel sortable-items content-blocks-drawer {{ activeTab }} ">
                     {% for item in data[1] %}
                         {% if items[item].doubleWidth == 1 %}
-                            {% set class = 'site-content-blocks-size-full' %}
+                            {% set size = 'full' %}
                         {% else %}
-                            {% set class = 'site-content-blocks-size-half' %}
+                            {% set size = 'half' %}
                         {% endif %}
                         <div id="content-blocks-{{ items[item].id }}"
-                             class="site-content-blocks site-content-blocks-item {{ class }}">
+                             class="site-content-blocks site-content-blocks-item site-content-blocks-size-{{ size }}">
                             {% if editable %}
                                 <div class="site-content-block-actions status-preview-edit move-cursor">
                                     {# probably render a controller here by passing in item as id and have block entity returned #}
@@ -164,6 +164,8 @@
                                     <div id="content-block-actions-{{ items[item].id }}" class="edit-icons">
                                         <i class="item-edit content-block-item-action fa fa-pencil-square-o"
                                            title="Edit"></i>
+                                        <i class="item-resize content-block-item-action fa fa-arrows-h"
+                                           title="Resize"></i>
                                         <i class="item-delete content-block-item-action fa fa-trash-o"
                                            title="Delete"></i>
                                         {% if items[item].locked %}
@@ -354,7 +356,6 @@
                         });
                     });
                 });
-
 
                 // edit a content block
                 $(".item-edit").on('click', function (e) {
