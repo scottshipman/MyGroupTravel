@@ -164,7 +164,7 @@
                                     <div id="content-block-actions-{{ items[item].id }}" class="edit-icons">
                                         <i class="item-edit content-block-item-action fa fa-pencil-square-o"
                                            title="Edit"></i>
-                                        <i class="item-resize content-block-item-action fa fa-arrows-h"
+                                        <i class="item-resize content-block-item-action fa fa-arrows-h {{ size }}"
                                            title="Resize"></i>
                                         <i class="item-delete content-block-item-action fa fa-trash-o"
                                            title="Delete"></i>
@@ -375,6 +375,34 @@
                         $('.item-edit').hide(); // hide ALL edit buttons for all content blocks
                         doMDLpopup( editBlock ); // run the function to add appropriate MDL classes to form elements
                         previewBlock.html('');
+                    });
+                });
+
+                // do the resize stuff on the fly!
+                $('.item-resize').click(function() {
+                    var t = $(this);
+                    $("#loader").css("display", "block");
+                    var blockID = $(this).parent().attr('id').substring(22);
+                    $.ajax({
+                        url: '/manage/contentblocks/' + blockID + '/resize/' + {{ entity.id }} + '/QuoteVersion',
+                        headers: {
+                            "Pragma": "no-cache",
+                            "Expires": -1,
+                            "Cache-Control": "no-cache"
+                        }
+                    }).done(function () {
+                        if ( t.hasClass('half') ) {
+                            // Will now be full
+                            t.addClass('full').removeClass('half');
+                            t.parents('.site-content-blocks').addClass('site-content-blocks-size-full').removeClass('site-content-blocks-size-half');
+                            $('#content-block-id-' + blockID).addClass('content-block-size-full').removeClass('content-block-size-half');
+                        } else {
+                            // Will now be half
+                            t.addClass('half').removeClass('full');
+                            t.parents('.site-content-blocks').addClass('site-content-blocks-size-half').removeClass('site-content-blocks-size-full');
+                            $('#content-block-id-' + blockID).addClass('content-block-size-half').removeClass('content-block-size-full');
+                        }
+                        $("#loader").css("display", "none");
                     });
                 });
 

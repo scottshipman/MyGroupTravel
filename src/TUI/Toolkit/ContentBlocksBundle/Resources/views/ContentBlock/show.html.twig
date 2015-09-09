@@ -5,12 +5,12 @@
     {% set class = 'content-block-layout-' ~ entity.layoutType.name %}
 {% endif %}
 {% if entity.doubleWidth == 1 %}
-    {% set class = class ~ ' content-block-size-full' %}
+    {% set size = 'full' %}
 {% else %}
-    {% set class = class ~ ' content-block-size-half' %}
+    {% set size = 'half' %}
 {% endif %}
 
-<div id="content-block-id-{{ entity.id }}" class="content-block move-cursor content-block-id-{{ entity.id }} {{ class }}">
+<div id="content-block-id-{{ entity.id }}" class="content-block move-cursor content-block-id-{{ entity.id }} {{ class }} content-block-size-{{ size }}">
     <h2>{{ entity.title }}</h2>
 
     {% if entity.isSlideshow==1 %}

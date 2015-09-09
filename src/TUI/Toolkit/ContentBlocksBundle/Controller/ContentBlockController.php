@@ -163,7 +163,7 @@ class ContentBlockController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ContentBlock entity.');
         }
-      
+
         $entity->setMedia($collectionIds);
         $editForm = $this->createEditForm($entity, $quoteVersion, $class);
         $deleteForm = $this->createDeleteForm($id, $quoteVersion, $class);
@@ -329,6 +329,41 @@ class ContentBlockController extends Controller
     } else {
       $value = $entity->getLocked()==true ? false :true;
       $entity->setLocked($value);
+      $em->persist($entity);
+      $em->flush();
+    }
+
+    if ($class=='QuoteVersion'){
+      $parent = $em->getRepository('QuoteBundle:QuoteVersion')->find($quoteVersion);
+    } elseif( $class =='TourVersion'){
+      //$parent = $em->getRepository('TourBundle:TourVersion')->find($quoteVersion);
+    }
+    $responseContent =  json_encode($parent->getContent());
+    return new Response($responseContent,
+      Response::HTTP_OK,
+      array('content-type' => 'application/json')
+    );
+  }
+
+  /**
+   * Locks a ContentBlock entity.
+   *
+   */
+  public function resizeAction(Request $request, $id, $quoteVersion=null, $class=null)
+  {
+    $error = false;
+
+    $em = $this->getDoctrine()->getManager();
+    $entity = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($id);
+
+    if (!$entity) {
+      $error =  $this->createNotFoundException('Unable to find ContentBlock entity.');
+    } else {
+      if ( $entity->getDoubleWidth() == 1 ) {
+        $entity->setDoubleWidth(0);
+      } else {
+        $entity->setDoubleWidth(1);
+      }
       $em->persist($entity);
       $em->flush();
     }

@@ -44,6 +44,11 @@ manage_contentblocks_lock:
     defaults: { _controller: "ContentBlocksBundle:ContentBlock:lock" }
     methods:  [POST, PUT, GET]
 
+manage_contentblocks_resize:
+    path:     /{id}/resize/{quoteVersion}/{class}
+    defaults: { _controller: "ContentBlocksBundle:ContentBlock:resize" }
+    methods:  [POST, PUT, GET]
+
 manage_contentblocks_hide:
     path:     /{id}/hide/{quoteVersion}/{class}
     defaults: { _controller: "ContentBlocksBundle:ContentBlock:hide" }
