@@ -76,11 +76,11 @@
                             <div class="status-preview-edit site-content-block-actions">
                                 <div class="edit-icons">
                                     <i id="edit-header-block"
-                                       class="content-block-item-action fa fa-pencil-square-o"></i></a>
+                                       class="content-block-item-action fa fa-pencil-square-o" title="Edit"></i></a>
                                     {% if entity.headerBlock.locked %}<i id="lock-header-block"
-                                                                         class="content-block-item-action fa fa-unlock-alt"></i> {% else %}
+                                                                         class="content-block-item-action fa fa-unlock-alt" title="Unlock"></i> {% else %}
                                         <i id="edit-header-block"
-                                           class="content-block-item-action fa fa-lock"></i>{% endif %}
+                                           class="content-block-item-action fa fa-lock" title="Lock"></i>{% endif %}
                                 </div>
                             </div>
                         </div>
@@ -104,8 +104,8 @@
                     <div class="site-content-blocks-item">
                         <div class="status-preview-edit site-content-block-actions">
                             <div class="edit-icons">
-                                <i id="edit-header-summary" class="content-block-item-action item-edit fa fa-pencil-square-o"></i></a>
-                                {% if entity.locked %}<i id="lock-header-summary"class="content-block-item-action fa fa-unlock-alt"></i> {% else %} <i id="lock-header-summary" class="content-block-item-action fa fa-lock"></i>{% endif %}
+                                <i id="edit-header-summary" class="content-block-item-action item-edit fa fa-pencil-square-o" title="Edit"></i></a>
+                                {% if entity.locked %}<i id="lock-header-summary"class="content-block-item-action fa fa-unlock-alt" title="Unlock"></i> {% else %} <i id="lock-header-summary" class="content-block-item-action fa fa-lock" title="Lock"></i>{% endif %}
                             </div>
                         </div>
                     </div>
@@ -350,8 +350,8 @@
                                             '<div class="site-content-blocks-item">'+
                                             '<div class="status-preview-edit site-content-block-actions">'+
                                             '<div class="edit-icons">'+
-                                            '<i id="edit-header-block" class="content-block-item-action fa fa-pencil-square-o"></i></a>'+
-                                            '<i id="lock-header-block" class="content-block-item-action fa fa-lock"></i>'+
+                                            '<i id="edit-header-block" class="content-block-item-action fa fa-pencil-square-o" title="Edit"></i></a>'+
+                                            '<i id="lock-header-block" class="content-block-item-action fa fa-lock" title="Lock"></i>'+
                                             '</div>'+
                                             '</div> </div>'
                                     );
