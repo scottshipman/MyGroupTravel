@@ -77,7 +77,7 @@
                             <div class="status-preview-edit site-content-block-actions">
                                 <div class="edit-icons">
                                     <i id="edit-header-block" class="content-block-item-action fa fa-pencil-square-o"></i></a>
-                                    {% if entity.headerBlock.locked %}<i id="lock-header-block"class="content-block-item-action fa fa-unlock-alt"></i> {% else %} <i id="edit-header-block" class="content-block-item-action fa fa-lock"></i>{% endif %}
+                                    {% if entity.headerBlock.locked %}<i id="lock-header-block"class="content-block-item-action fa fa-unlock-alt"></i> {% else %} <i id="lock-header-block" class="content-block-item-action fa fa-lock"></i>{% endif %}
                                 </div>
                             </div>
                         </div>
@@ -263,63 +263,67 @@
                     });
                 });
 
-                {% if entity.headerBlock %}
-                    // edit header block in layout mode
-                    $("#edit-header-block").on('click', function(e){
-                        //e.preventDefault();
-                        $("#site-header-editForm").load('/manage/contentblocks/edit/header/layout-editor/{{ entity.headerBlock.id }}', function() {
-                            $('#site-header-editForm').show();
-                            $('#site-header-slideshow').hide();
-                            // bind header edit form and provide a simple callback function
-                            $('#ajax_headerblock_layout_form').ajaxForm({
-                                success: function (response) {
-                                    // redraw the area by loading a twig file
-                                    $('#site-header-slideshow-content').load('/manage/contentblocks/header/show/{{ entity.headerBlock.id }}', function () {
-                                        $('#site-header-editForm').empty();
-                                        $('#site-header-editForm').hide();
-                                        $('#site-header-slideshow').show();
-                                        $('.flexslider').flexslider({
-                                            directionNav: false,
-                                            controlNav: false,
-                                            smoothHeight: true
-                                        });
+
+                // edit header block in layout mode
+                $(document).on('click','#edit-header-block', function(e){
+                    //e.preventDefault();
+                    var blockId = $('#header-block-content-item').attr('blockId')
+                    console.log('block item = ' + blockId);
+                    $("#site-header-editForm").load('/manage/contentblocks/edit/header/layout-editor/' +blockId, function() {
+                        $('#site-header-editForm').show();
+                        $('#site-header-slideshow').hide();
+                        // bind header edit form and provide a simple callback function
+                        $('#ajax_headerblock_layout_form').ajaxForm({
+                            success: function (response) {
+                                // redraw the area by loading a twig file
+                                $('#site-header-slideshow-content').load('/manage/contentblocks/header/show/'+blockId, function () {
+                                    $('#site-header-editForm').empty();
+                                    $('#site-header-editForm').hide();
+                                    $('#site-header-slideshow').show();
+                                    $('.flexslider').flexslider({
+                                        directionNav: false,
+                                        controlNav: false,
+                                        smoothHeight: true
                                     });
-                                }
-                            });
+                                });
+                            }
                         });
                     });
-                {% else %}
-                    // Add header block in layout mode
-                    $("#add-header-content").on('click', function(e) {
-                        $("#site-header-editForm").load('/manage/contentblocks/new/header/' + {{ entity.id }} +'/QuoteVersion', function() {
-                            $('#site-header-editForm').show();
-                            $('#site-header-slideshow').hide();
-                            $('#ajax_contentblocks_form').ajaxForm({
-                                success: function (response) {
-                                    console.log(response["id"]);
-                                    var blockId = response["id"];
-                                    // redraw the area by loading a twig file
-                                    $('#site-header-slideshow-content').load('/manage/contentblocks/header/show/' + blockId, function () {
-                                        $('#site-header-editForm').empty();
-                                        $('#site-header-editForm').hide();
-                                        $('#site-header-slideshow').show();
-                                        $('.flexslider').flexslider({
-                                            directionNav: false,
-                                            controlNav: false,
-                                            smoothHeight: true
-                                        });
-                                        $('#site-header-slideshow').prepend(
-                                                '<div class="site-content-blocks-item">'+
-                                                '<div class="status-preview-edit site-content-block-actions">'+
-                                                'refresh the page to edit the slideshow'+
-                                                '</div> </div>'
-                                        );
+                });
+
+                // Add header block in layout mode
+                $("#add-header-content").on('click', function(e) {
+                    $("#site-header-editForm").load('/manage/contentblocks/new/header/' + {{ entity.id }} +'/QuoteVersion', function() {
+                        $('#site-header-editForm').show();
+                        $('#site-header-slideshow').hide();
+                        $('#ajax_contentblocks_form').ajaxForm({
+                            success: function (response) {
+                                var blockId = response["id"];
+                                // redraw the area by loading a twig file
+                                $('#site-header-slideshow-content').load('/manage/contentblocks/header/show/' + blockId, function () {
+                                    $('#site-header-editForm').empty();
+                                    $('#site-header-editForm').hide();
+                                    $('#site-header-slideshow').show();
+                                    $('.flexslider').flexslider({
+                                        directionNav: false,
+                                        controlNav: false,
+                                        smoothHeight: true
                                     });
-                                }
-                            });
+                                    $('#site-header-slideshow').prepend(
+                                            '<div class="site-content-blocks-item">'+
+                                            '<div class="status-preview-edit site-content-block-actions">'+
+                                            '<div class="edit-icons">'+
+                                            '<i id="edit-header-block" class="content-block-item-action fa fa-pencil-square-o"></i></a>'+
+                                            '<i id="lock-header-block" class="content-block-item-action fa fa-lock"></i>'+
+                                            '</div>'+
+                                            '</div> </div>'
+                                    );
+                                });
+                            }
                         });
                     });
-                {% endif %}
+                });
+
 
             // edit a content block
             $(".item-edit").on('click', function (e) {
@@ -330,9 +334,10 @@
                 var editBlock = $("#editable-content-blocks-" + block);
                 var previewBlock = $("#previewable-content-blocks-" + block);
                 editBlock.html('');
-                editBlock.load('/ajax/contentblocks/' + block + '/edit/' + {{ entity.id }} +'/QuoteVersion', function () {
+                editBlock.load('/ajax/contentblocks/' + block + '/edit/' + {{ entity.id }} + '/QuoteVersion', function () {
                     $("#loader").css("display", "none");
-                    doMDLpopup( editBlock ); // Run the function to add appropriate MDL classes to form elements
+                    $('.item-edit').hide(); // hide ALL edit buttons for all content blocks
+                    doMDLpopup( editBlock ); // run the function to add appropriate MDL classes to form elements
                     previewBlock.html('');
                 });
             });
