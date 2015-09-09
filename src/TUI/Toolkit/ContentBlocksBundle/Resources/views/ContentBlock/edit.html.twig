@@ -45,6 +45,25 @@
 <script>
     // Wait for the DOM to be loaded
     $(document).ready(function() {
+        // Add a cancel button
+        $('.button-row').append('<button id="cancel-reload" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Cancel</button>');
+
+        // Do stuff w/ cancel button
+        $(document).on('click', '#cancel-reload', function () {
+            if ( $('.mode-toggle').hasClass('mode-edit') ) { // If on quote preview page
+                var blockID = {{ entity.id }};
+                var quoteID = $('.mode-toggle').attr('id').substring(14);
+                var editBlock = $("#editable-content-blocks-" + blockID);
+                var previewBlock = $("#previewable-content-blocks-" + blockID);
+                // Match routing path "/manage/contentblocks/{id}/show/{quoteVersion}/{class}"
+                previewBlock.load('/manage/contentblocks/' + blockID + '/show/' + quoteID + '/QuoteVersion', function() {
+                    $("#loader").css("display", "none");
+                    $('.item-edit').show(); // re-show ALL edit buttons for all content blocks
+                    editBlock.html('');
+                });
+            };
+        });
+
         // Bind form and provide a simple callback function
         $('#ajax_contentblocks_form').ajaxForm({
             beforeSerialize: function() {
@@ -63,6 +82,7 @@
                     // Match routing path "/manage/contentblocks/{id}/show/{quoteVersion}/{class}"
                     previewBlock.load('/manage/contentblocks/' + blockID + '/show/' + quoteID + '/QuoteVersion', function() {
                         $("#loader").css("display", "none");
+                        $('.item-edit').show(); // re-show ALL edit buttons for all content blocks
                         previewBlock.parent().removeClass('site-content-blocks-size-full site-content-blocks-size-half');
                         if ( $('#tui_toolkit_contentblocksbundle_contentblock_doubleWidth').is(':checked') ) {
                             previewBlock.parent().addClass('site-content-blocks-size-full');
@@ -97,7 +117,7 @@
         $(this).parent().remove();
     });
 
-    // Dropzone.autoDiscover = false;
+    {# Dropzone.autoDiscover = false; #}
 
     $('#dropzone_form').dropzone({
         maxFiles: 1,
