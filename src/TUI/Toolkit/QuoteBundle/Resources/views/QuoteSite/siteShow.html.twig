@@ -63,7 +63,7 @@
         {% if warning | length >0 %}
             <div id="site-warning">
                 {% for message in warning %}
-                <p>{{ message }}</p>
+                    <p>{{ message }}</p>
                 {% endfor %}
             </div>
         {% endif %}
@@ -75,19 +75,24 @@
                         <div class="site-content-blocks-item">
                             <div class="status-preview-edit site-content-block-actions">
                                 <div class="edit-icons">
-                                    <i id="edit-header-block" class="content-block-item-action fa fa-pencil-square-o"></i></a>
-                                    {% if entity.headerBlock.locked %}<i id="lock-header-block"class="content-block-item-action fa fa-unlock-alt"></i> {% else %} <i id="lock-header-block" class="content-block-item-action fa fa-lock"></i>{% endif %}
+                                    <i id="edit-header-block"
+                                       class="content-block-item-action fa fa-pencil-square-o"></i></a>
+                                    {% if entity.headerBlock.locked %}<i id="lock-header-block"
+                                                                         class="content-block-item-action fa fa-unlock-alt"></i> {% else %}
+                                        <i id="edit-header-block"
+                                           class="content-block-item-action fa fa-lock"></i>{% endif %}
                                 </div>
                             </div>
                         </div>
                     {% endif %}
                     <div id="site-header-slideshow-content">
-                    {{ render(controller('ContentBlocksBundle:HeaderBlock:show', {'id':  entity.headerBlock.id  })) }}
+                        {{ render(controller('ContentBlocksBundle:HeaderBlock:show', {'id':  entity.headerBlock.id  })) }}
                     </div>
                 {% else %}
                     {% if editable %}
                         <div id="site-header-slideshow-content">
-                            <a id="add-header-content" href="#" class="status-preview-edit mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                            <a id="add-header-content" href="#"
+                               class="status-preview-edit mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
                                 <i class="fa fa-plus-circle"></i> Add Header Slideshow
                             </a>
                         </div>
@@ -106,7 +111,7 @@
                     </div>
                 {% endif %}
                 <div id="site-header-summary-content">
-                {{ render(controller('QuoteBundle:QuoteSite:showSummary', {'id':  entity.id  })) }}
+                    {{ render(controller('QuoteBundle:QuoteSite:showSummary', {'id':  entity.id  })) }}
                 </div>
             </div>
             {# give a placeholder for the editable version #}
@@ -132,8 +137,10 @@
                        class="site-content-blocks-tab mdl-tabs__tab {{ activeTab }}">Alternate Quotes</a>
                 {% endif %}
                 {% if editable %}
-                    <span id="edit-tabs" class="site-content-blocks-tab status-preview-edit"><i class="fa fa-pencil"></i> Edit Tabs</span>
-                    <span id="add-new-tab" class="site-content-blocks-tab status-preview-edit"><i class="fa fa-plus-circle"></i> Add New Tab</span>
+                    <span id="edit-tabs" class="site-content-blocks-tab status-preview-edit"><i
+                                class="fa fa-pencil"></i> Edit Tabs</span>
+                    <span id="add-new-tab" class="site-content-blocks-tab status-preview-edit"><i
+                                class="fa fa-plus-circle"></i> Add New Tab</span>
                 {% endif %}
             </div>
 
@@ -148,16 +155,20 @@
                         {% else %}
                             {% set class = 'site-content-blocks-size-half' %}
                         {% endif %}
-                        <div id="content-blocks-{{ items[item].id }}" class="site-content-blocks site-content-blocks-item {{ class }}">
+                        <div id="content-blocks-{{ items[item].id }}"
+                             class="site-content-blocks site-content-blocks-item {{ class }}">
                             {% if editable %}
                                 <div class="site-content-block-actions status-preview-edit move-cursor">
                                     {# probably render a controller here by passing in item as id and have block entity returned #}
                                     <div class="move-icon"><i class="fa fa-arrows" title="Rearrange"></i></div>
                                     <div id="content-block-actions-{{ items[item].id }}" class="edit-icons">
-                                        <i class="item-edit content-block-item-action fa fa-pencil-square-o" title="Edit"></i>
-                                        <i class="item-delete content-block-item-action fa fa-trash-o" title="Delete"></i>
+                                        <i class="item-edit content-block-item-action fa fa-pencil-square-o"
+                                           title="Edit"></i>
+                                        <i class="item-delete content-block-item-action fa fa-trash-o"
+                                           title="Delete"></i>
                                         {% if items[item].locked %}
-                                            <i class="item-lock content-block-item-action fa fa-unlock-alt" title="Unlock"></i>
+                                            <i class="item-lock content-block-item-action fa fa-unlock-alt"
+                                               title="Unlock"></i>
                                         {% else %}
                                             <i class="item-lock content-block-item-action fa fa-lock" title="Lock"></i>
                                         {% endif %}
@@ -263,17 +274,21 @@
             {# Only place javascript below that deals with editing so it only loads when it needs to #}
             {% if editable %}
 
-                // edit tabs popup
-                $("#edit-tabs").on('click', function (e) {
-                    //e.preventDefault();
-                    $("#dialog").html("");
-                    $("#dialog").dialog({width: '60%'}).dialog("option", "title", "Loading...").dialog("open");
-                    $("#dialog").load('/manage/quoteversion/show/tabs/' + {{ entity.id }}, function () {
-                        $(this).dialog("option", "title", "Rearrange Tabs");
-                        $(".sortable-tabs").sortable("enable");
-                    });
+            // edit tabs popup
+            $("#edit-tabs").on('click', function (e) {
+                //e.preventDefault();
+                $("#dialog").html("");
+                $("#dialog").dialog({width: '60%'}).dialog("option", "title", "Loading...").dialog("open");
+                $("#dialog").load('/manage/quoteversion/show/tabs/' + {{ entity.id }}, function () {
+                    $(this).dialog("option", "title", "Rearrange Tabs");
+                    $(".sortable-tabs").sortable("enable");
                 });
+            });
 
+            // Add a new tab to a site
+            $("#add-new-tab").on('click', function () {
+                contentBlocksNewTab( {{ entity.id }} );
+            });
 
                 // edit header slideshow in layout mode
                 $(document).on('click','#edit-header-block', function(e){
@@ -414,6 +429,7 @@
 {% block footer_right %}
     <div class="quote-info"><span class="quote-label">Price per person:</span><span
                 class="quote-price">{% if entity.pricePerson %}
+
                 <strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong>{% endif %}</span>
     </div>
     {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
