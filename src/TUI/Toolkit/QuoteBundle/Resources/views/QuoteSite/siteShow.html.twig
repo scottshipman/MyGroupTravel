@@ -161,7 +161,7 @@
                                 <div class="site-content-block-actions status-preview-edit move-cursor">
                                     {# probably render a controller here by passing in item as id and have block entity returned #}
                                     <div class="move-icon"><i class="fa fa-arrows" title="Rearrange"></i></div>
-                                    <div id="content-block-actions-{{ items[item].id }}" class="edit-icons">
+                                    <div id="content-block-actions-{{ items[item].id }}" class="edit-icons {% if items[item].locked %}content-block-locked{% endif %}">
                                         <i class="item-edit content-block-item-action fa fa-pencil-square-o"
                                            title="Edit"></i>
                                         <i class="item-resize content-block-item-action fa fa-arrows-h {{ size }}"
@@ -417,8 +417,12 @@
                     }).done(function () {
                         t.toggleClass('fa-unlock-alt').toggleClass('fa-lock');
                         if ( t.attr('title') == 'Unlock') {
+                            // Will now be unlocked
+                            t.parent().removeClass('content-block-locked');
                             t.attr('title', 'Lock');
                         } else {
+                            // Will now be locked
+                            t.parent().addClass('content-block-locked');
                             t.attr('title', 'Unlock');
                         }
                         $("#loader").css("display", "none");

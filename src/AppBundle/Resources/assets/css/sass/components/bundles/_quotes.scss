@@ -315,6 +315,15 @@
     left: $column_gutter_width * ( 100% / ($column_total_width * 2)); // correction for smaller column
   }
 
+  .content-block-locked {
+
+    .item-edit,
+    .item-resize {
+      display: none;
+    }
+
+  }
+
   .move-cursor {
     cursor: move;
   }
@@ -326,4 +335,5 @@
   #site-header-summary-form {
     margin: 2em;
   }
+
 }
