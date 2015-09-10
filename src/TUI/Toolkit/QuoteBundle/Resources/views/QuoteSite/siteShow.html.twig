@@ -254,7 +254,7 @@
             });
 
             // change request popup
-            $("#change-request").on('click', function (e) {
+            $(document).on('click', '#change-request', function (e) {
                 //e.preventDefault();
                 $("#dialog").html("");
                 $("#dialog").dialog({width: '60%'}).dialog("option", "title", "Loading...").dialog("open");
@@ -264,7 +264,7 @@
             });
 
             // accept quote popup
-            $("#accept-quote").on('click', function (e) {
+            $(document).on('click', '#accept-quote', function (e) {
                 //e.preventDefault();
                 $("#dialog").html("");
                 $("#dialog").dialog({width: '60%'}).dialog("option", "title", "Loading...").dialog("open");
@@ -431,6 +431,12 @@
                                     $('#site-header-summary').show();
                                     $('#site-header-slideshow').show();
                                     $('.item-edit').show();
+                                    // Copy to Clipboard
+                                    ZeroClipboard.config({swfPath: "//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf"});
+                                    var client = new ZeroClipboard(document.getElementById("copy-button"));
+                                    client.on('aftercopy', function (event) {
+                                        $('#copy-button').css('background-color', 'green');
+                                    });
                                 });
                             }
                         });
