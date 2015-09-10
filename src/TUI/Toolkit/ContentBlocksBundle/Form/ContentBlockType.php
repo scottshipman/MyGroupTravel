@@ -26,11 +26,10 @@ class ContentBlockType extends AbstractType
       if(strpos($options['action'], '/header/')===false) {
 
         $builder
-          ->add('title');
-      }
+          ->add('title')
+          ->add('body', 'ckeditor', array());
 
-        $builder
-            ->add('body', 'ckeditor', array());
+      }
 
             // Dont show locked or hidden fields unless Brand role or higher
             if($securityContext->isGranted('ROLE_BRAND')) {

@@ -34,10 +34,19 @@ contentblocks_update:
     defaults: { _controller: "ContentBlocksBundle:ContentBlock:newTab" }
     methods:  [POST]
 
+manage_contentblocks_new_tab:
+    path: /tab/new/{id}
+    defaults: { _controller: "ContentBlocksBundle:ContentBlock:newSiteTab"}
+    methods:  [POST]
 
 manage_contentblocks_lock:
     path:     /{id}/lock/{quoteVersion}/{class}
     defaults: { _controller: "ContentBlocksBundle:ContentBlock:lock" }
+    methods:  [POST, PUT, GET]
+
+manage_contentblocks_resize:
+    path:     /{id}/resize/{quoteVersion}/{class}
+    defaults: { _controller: "ContentBlocksBundle:ContentBlock:resize" }
     methods:  [POST, PUT, GET]
 
 manage_contentblocks_hide:
@@ -60,6 +69,11 @@ manage_headerblock_edit:
     defaults: { _controller: "ContentBlocksBundle:HeaderBlock:edit" }
     methods:  [GET]
 
+manage_headerblock_layout_edit:
+    path:   /edit/header/layout-editor/{id}
+    defaults: { _controller: "ContentBlocksBundle:HeaderBlock:editLayout" }
+    methods:  [GET]
+
 manage_headerblock_create:
     path:     /create/header/{quoteVersion}/{class}
     defaults: { _controller: "ContentBlocksBundle:HeaderBlock:create" }
@@ -69,3 +83,13 @@ manage_headerblock_update:
     path:     /{id}/update/header/{quoteVersion}/{class}
     defaults: { _controller: "ContentBlocksBundle:HeaderBlock:update" }
     methods:  [POST]
+
+manage_headerblock_layout_update:
+    path:     /update/header/layout-editor/{id}
+    defaults: { _controller: "ContentBlocksBundle:HeaderBlock:updateLayout" }
+    methods:  [POST]
+
+manage_headerblock_show:
+    path:     /header/show/{id}
+    defaults: { _controller: "ContentBlocksBundle:HeaderBlock:show" }
+    methods:  GET

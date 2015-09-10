@@ -44,10 +44,6 @@
     margin-bottom: 5px;
   }
 
-  img {
-    float: right;
-  }
-
   #tui_toolkit_quotebundle_quotechangerequest {
 
     div:nth-child(1) {
@@ -56,27 +52,47 @@
 
       .mdl-form-wrap {
         padding: 0;
-      }
-    }
 
-      div:nth-child(2) {
-        float: right;
-
-        .mdl-textfield {
-          width: 250px;
+        label:nth-child(1) > span {
+          font-weight: bold;
         }
 
       }
+    }
 
-      div.button-row {
-        float: right;
+    div:nth-child(2) {
+
+      .mdl-textfield {
+        width: 250px;
       }
 
     }
 
   }
+
+}
+
 #quote-link-input {
   width: 80%;
   margin-right: 1em;
   line-height: 2em;
+}
+
+.tab-reorder-modal {
+  
+
+  .submit-button-container {
+
+    position: relative;
+    width: 55%;
+    margin: 20px auto;
+
+    .reorder-button {
+      @include mdl-primary-color(background-color, 6);
+      width: 45%;
+      margin: 10px 10px;
+
+    }
+  }
+
 }

@@ -163,7 +163,7 @@ class ContentBlockController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ContentBlock entity.');
         }
-      
+
         $entity->setMedia($collectionIds);
         $editForm = $this->createEditForm($entity, $quoteVersion, $class);
         $deleteForm = $this->createDeleteForm($id, $quoteVersion, $class);
@@ -349,6 +349,41 @@ class ContentBlockController extends Controller
    * Locks a ContentBlock entity.
    *
    */
+  public function resizeAction(Request $request, $id, $quoteVersion=null, $class=null)
+  {
+    $error = false;
+
+    $em = $this->getDoctrine()->getManager();
+    $entity = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($id);
+
+    if (!$entity) {
+      $error =  $this->createNotFoundException('Unable to find ContentBlock entity.');
+    } else {
+      if ( $entity->getDoubleWidth() == 1 ) {
+        $entity->setDoubleWidth(0);
+      } else {
+        $entity->setDoubleWidth(1);
+      }
+      $em->persist($entity);
+      $em->flush();
+    }
+
+    if ($class=='QuoteVersion'){
+      $parent = $em->getRepository('QuoteBundle:QuoteVersion')->find($quoteVersion);
+    } elseif( $class =='TourVersion'){
+      //$parent = $em->getRepository('TourBundle:TourVersion')->find($quoteVersion);
+    }
+    $responseContent =  json_encode($parent->getContent());
+    return new Response($responseContent,
+      Response::HTTP_OK,
+      array('content-type' => 'application/json')
+    );
+  }
+
+  /**
+   * Locks a ContentBlock entity.
+   *
+   */
   public function hideAction(Request $request, $id, $quoteVersion=null, $class=null)
   {
     $error = false;
@@ -441,5 +476,46 @@ class ContentBlockController extends Controller
   }
 
 
+    /**
+     * Adds a new tab into the content blocks array field on the site preview page
+     *
+     * @param mixed $id The entity id
+     *
+     * @return Symfony\Component\HttpFoundation\Response
+     */
+    public function newSiteTabAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+        //$content = $entity->getContent();
+        $content=$entity->getContent();
+
+        if ($request->getMethod() == 'POST') {
+            $newContent = $request->request->all();
+        }
+
+        foreach($newContent as $tab => $data){
+            $blocks = isset($data[1]) ? $data[1] : array();
+            if(!empty($blocks)) {
+                $blockArr = array();
+                foreach ($blocks as $block) {
+                    $blockArr[] = (int)substr($block, 15);
+                }
+                $content[$tab] = array($data[0], $blockArr);
+            } else {
+                $content[$tab]=array($data[0], array());
+            }
+        }
+        $entity->setContent($content);
+        $em->persist($entity);
+        $em->flush();
+
+        $responseContent = json_encode($entity->getContent());
+
+        return new Response($responseContent,
+            Response::HTTP_OK,
+            array('content-type' => 'application/json')
+        );
+    }
 
 }
