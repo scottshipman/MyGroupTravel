@@ -201,7 +201,9 @@
                                 <i class="item-edit content-block-item-action fa fa-pencil-square-o"></i>
                                 <i class="item-delete content-block-item-action fa fa-trash-o"></i>
                                    {% if items[item].locked %}<i class="item-lock content-block-item-action fa fa-unlock"></i> {% else %}  <i class="item-lock content-block-item-action fa fa-lock"></i> {% endif %}
-                                   {% if items[item].hidden %}<i class="item-hide content-block-item-action fa fa-ban"></i> {% else %} <i class="item-hide content-block-item-action fa fa-eye"></i> {% endif %}
+                                   {#
+                                   {% if items[item].hidden %}<i class="item-hide content-block-item-action fa fa-ban"></i>{% else %}<i class="item-hide content-block-item-action fa fa-eye"></i>{% endif %}
+                                   #}
                                </div>
                            </div>
                        {% endfor %}
@@ -310,7 +312,7 @@
                         '<i class="item-edit content-block-item-action fa fa-pencil-square-o"></i> ' +
                         '<i class="item-delete content-block-item-action fa fa-trash-o"></i> ' +
                         '<i class="item-lock content-block-item-action fa fa-lock"></i> ' +
-                        '<i class="item-hide content-block-item-action fa fa-ban"></i>' +
+                        {# '<i class="item-hide content-block-item-action fa fa-ban"></i>' + #}
                         '</div></div>'
                     );
                     contentBlocksUpdate({{ entity.id }});
@@ -332,7 +334,7 @@
                 });
             });
 
-
+            {#
             // toggle the hide boolean on a content block
             $(".item-hide").on('click', function(e){
                 // todo Get item.id and item.name
@@ -351,7 +353,7 @@
                     window.location.reload(true);
                 });
             });
-
+            #}
 
             // toggle the locked boolean on a content block
             $(".item-lock").on('click', function(e){
