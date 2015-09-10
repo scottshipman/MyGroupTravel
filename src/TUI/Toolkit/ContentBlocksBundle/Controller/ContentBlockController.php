@@ -278,7 +278,7 @@ class ContentBlockController extends Controller
             $entity = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($id);
 
             if (!$entity) {
-                $error =  $this->createNotFoundException('Unable to find ContentBlock entity.');
+                $error =  $this->createNotFoundException('Unable to find ContentBlock entity for deletion.');
             } else {
 
               $em->remove($entity);
@@ -290,6 +290,8 @@ class ContentBlockController extends Controller
       } elseif( $class =='TourVersion'){
         //$parent = $em->getRepository('TourBundle:TourVersion')->find($quoteVersion);
       }
+
+      // rebuild content array and remove block
       $responseContent =  json_encode($parent->getContent());
       return new Response($responseContent,
         Response::HTTP_OK,
