@@ -165,7 +165,7 @@
                                         <i class="item-edit content-block-item-action fa fa-pencil-square-o"
                                            title="Edit"></i>
                                         <i class="item-resize content-block-item-action fa fa-arrows-h {{ size }}"
-                                           title="Resize"></i>
+                                           title="Resize" blockId="{{ items[item].id }}"></i>
                                         <i class="item-delete content-block-item-action fa fa-trash-o"
                                            title="Delete"></i>
                                         {% if items[item].locked %}
@@ -382,7 +382,7 @@
                 $('.item-resize').click(function() {
                     var t = $(this);
                     $("#loader").css("display", "block");
-                    var blockID = $(this).parent().attr('id').substring(22);
+                    var blockID = t.attr('blockId');
                     $.ajax({
                         url: '/manage/contentblocks/' + blockID + '/resize/' + {{ entity.id }} + '/QuoteVersion',
                         headers: {
