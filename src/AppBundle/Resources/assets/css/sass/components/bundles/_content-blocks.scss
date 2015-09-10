@@ -312,3 +312,16 @@ td .layout-icons.image_bottom {
   }
 
 }
+
+#add-content-block {
+
+  border: 2px dashed #000;
+  @include mdl-primary-color(border-color, 6);
+  text-align: center;
+  padding: 20px 0;
+  border-radius: 5px;
+  text-decoration: none;
+  @include mdl-primary-color(color, 6);
+  margin-top: 20px;
+
+}

@@ -189,16 +189,11 @@
                             </div>
                         </div>
                     {% endfor %}
+                    <a id="add-content-block" tabId="{{ tab }}" href="#" class="status-preview-edit site-content-blocks-edit"><i class="fa fa-clone"></i> Add Block</a>
+                    <div id="content-block-editForm" style="display:none;"></div>
                 </div>
                 {% set activeTab = '' %}
             {% endfor %}
-            <div id="site-header-slideshow-content">
-                <a id="add-content-block" href="#"
-                   class="status-preview-edit mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
-                    <i class="fa fa-plus-circle"></i> Add Content Block
-                </a>
-            </div>
-            <div id="content-block-editForm" style="display:none;"></div>
             {% if alternate %}
                 <div id="tabs-drawer-alternate-quotes" class="mdl-tabs__panel {{ activeTab }}">
 
@@ -366,19 +361,36 @@
                     });
                 });
 
-                // Add a content Block
+                //Inline content block creation
                 $("#add-content-block").on('click', function (e) {
                     $("#loader").css("display", "block");
-                    $("#content-block-editForm").load('/manage/contentblocks/new/QuoteVersion/class', function () {
+                    var tabId = $(this).attr("tabId");
+                    console.log(tabId);
+                    $("#content-block-editForm").load('/manage/contentblocks/new/QuoteVersion/' + {{ entity.id }} +'/' + tabId, function () {
                         $('.item-edit').hide(); // hide ALL edit buttons for all content blocks
                         $("#loader").css("display", "none");
                         $('#content-block-editForm').show();
-                        doMDLpopup($('#site-header-editForm')); // run the function to add appropriate MDL classes to form elements
+                        $(".site-content-blocks-edit").hide();
+                        doMDLpopup($('#content-block-editForm')); // run the function to add appropriate MDL classes to form elements
+                        $('#newBlockIdForm').ajaxForm({
+                            success: function (response) {
+                                console.log(response);
+                                $('#content-block-editForm').empty();
+                                $('#content-block-editForm').hide();
+                                window.location.reload();
+                                $("#loader").css("display", "block");
+
+                            },
+                            beforeSerialize: function () {
+                                CKEDITOR.instances.tui_toolkit_contentblocksbundle_contentblock_body.updateElement();
+                            }
+
+                        });
                     });
                 });
 
                 // do the resize stuff on the fly!
-                $('.item-resize').click(function() {
+                $('.item-resize').click(function () {
                     var t = $(this);
                     $("#loader").css("display", "block");
                     var blockID = t.attr('blockId');
@@ -423,12 +435,12 @@
                 });
 
                 // toggle the locked boolean on a content block on the fly!
-                $(".item-lock").on('click', function(e) {
+                $(".item-lock").on('click', function (e) {
                     var t = $(this);
                     $("#loader").css("display", "block");
                     var blockID = t.attr('blockId');
                     $.ajax({
-                        url: '/manage/contentblocks/'+ blockID + '/lock/' + {{ entity.id }} + '/QuoteVersion',
+                        url: '/manage/contentblocks/' + blockID + '/lock/' + {{ entity.id }} +'/QuoteVersion',
                         headers: {
                             "Pragma": "no-cache",
                             "Expires": -1,
@@ -436,7 +448,7 @@
                         }
                     }).done(function () {
                         t.toggleClass('fa-unlock-alt').toggleClass('fa-lock');
-                        if ( t.attr('title') == 'Unlock') {
+                        if (t.attr('title') == 'Unlock') {
                             // Will now be unlocked
                             t.parent().removeClass('content-block-locked');
                             t.attr('title', 'Lock');
@@ -450,14 +462,14 @@
                 });
 
                 // toggle the header summary lock
-                $(document).on('click', '#lock-header-summary', function(e){
+                $(document).on('click', '#lock-header-summary', function (e) {
                     e.preventDefault();
                     $("#loader").css("display", "block");
                     var action = $(this).attr('action');
                     $.ajax({
                         url: '/manage/quoteversion/{{ entity.id }}/lock',
                     }).done(function () {
-                        if (action=='lock'){
+                        if (action == 'lock') {
                             $('#lock-header-summary').addClass('fa-unlock-alt')
                             $('#lock-header-summary').removeClass('fa-lock')
                             $('#lock-header-summary').attr('action', 'unlock')
@@ -472,20 +484,20 @@
                 });
 
                 // edit header summary in layout mode
-                $(document).on('click','#edit-header-summary', function(e){
+                $(document).on('click', '#edit-header-summary', function (e) {
                     e.preventDefault();
                     $("#loader").css("display", "block");
-                    $("#site-header-summary-form").load('/quote/view/summary/edit/{{ entity.id }}', function() {
+                    $("#site-header-summary-form").load('/quote/view/summary/edit/{{ entity.id }}', function () {
                         $("#loader").css("display", "none");
                         $('.item-edit').hide(); // hide ALL edit buttons for all content blocks
                         $('#site-header-summary-form').show();
                         $('#site-header-summary').hide();
                         $('#site-header-slideshow').hide();
                         $('.button-row').append('<button id="cancel-reload" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Cancel</button>');
-                        doMDLpopup( $('#site-header-summary-form') ); // run the function to add appropriate MDL classes to form elements
+                        doMDLpopup($('#site-header-summary-form')); // run the function to add appropriate MDL classes to form elements
                         // bind header edit form and provide a simple callback function
                         $('#form-summary-edit-form').ajaxForm({
-                            beforeSerialize: function() {
+                            beforeSerialize: function () {
                                 CKEDITOR.instances.tui_toolkit_quotebundle_quotesummary_welcomeMsg.updateElement();
                             },
                             success: function (response) {
@@ -509,13 +521,13 @@
                 });
 
                 // delete a content block
-                $(document).on('click', '.item-delete', function(e){
+                $(document).on('click', '.item-delete', function (e) {
                     // todo Get item.id and item.name
                     if (confirm('Are you sure you want to remove this item? Warning: this can not be undone.')) {
                         var blockId = $(this).attr('blockId');
                         $.ajax({
-                            method:'DELETE',
-                            url: '/manage/contentblocks/' + blockId + '/delete/' + {{ entity.id }} + '/QuoteVersion',
+                            method: 'DELETE',
+                            url: '/manage/contentblocks/' + blockId + '/delete/' + {{ entity.id }} +'/QuoteVersion',
                             headers: {
                                 "Pragma": "no-cache",
                                 "Expires": -1,
