@@ -4,7 +4,7 @@
             {% if entity %}
                 {% for media in entity.media %}
                     <li>
-                        <span class="inner-list"><img src="{{ asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) | imagine_filter('slideShow') }}"></span>
+                        <span class="inner-list"><span><img src="{{ asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) | imagine_filter('slideShow') }}"></span></span>
                     </li>
                 {% endfor %}
             {% endif %}
