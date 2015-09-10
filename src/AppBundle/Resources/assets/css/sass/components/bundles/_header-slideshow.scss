@@ -1,0 +1,26 @@
+.header-block-content-item {
+  margin-bottom: 0;
+
+  .flexslider {
+
+    .slides img {
+      width: auto;
+      height: auto;
+      min-width: 0;
+      max-width: 100%;
+      display: inline;
+      vertical-align: top;
+    }
+
+  }
+
+  .inner-list {
+    display: block;
+    width: 100%;
+    height: 0;
+    padding-bottom: (2/3) * 100%;
+    text-align: center;
+    overflow: hidden;
+  }
+
+}
