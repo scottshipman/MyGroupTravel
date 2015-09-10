@@ -36,13 +36,11 @@ class ContentBlockType extends AbstractType
               $builder->add('locked', 'checkbox', array(
                 'required' => FALSE
               ));
-              // you cant hide header blocks
-              if (strpos($options['action'], '/header/') === FALSE) {
-                $builder
-                  ->add('hidden', 'checkbox', array(
-                    'required' => FALSE
-                  ));
-              }
+              // "Hidden" field is now hidden!
+              $builder
+                ->add('hidden', 'hidden', array(
+                  'data' => 0
+                ));
             }
 
             // only show Layout Type , double wide and slideshow for Content Blocks, not Header Blocks
