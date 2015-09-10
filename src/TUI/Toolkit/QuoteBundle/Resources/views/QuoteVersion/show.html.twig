@@ -198,9 +198,9 @@
                              <i class="fa fa-arrows"></i> {{ items[item].title }}
                              {# probably render a controller here by passing in item as id and have block entity returned #}
                             <div id="content-block-actions-{{ item }}" class="content-block-actions">
-                                <i class="item-edit content-block-item-action fa fa-pencil-square-o"></i>
-                                <i class="item-delete content-block-item-action fa fa-trash-o"></i>
-                                   {% if items[item].locked %}<i class="item-lock content-block-item-action fa fa-unlock"></i> {% else %}  <i class="item-lock content-block-item-action fa fa-lock"></i> {% endif %}
+                                <i class="item-edit content-block-item-action fa fa-pencil-square-o" title="Edit"></i>
+                                <i class="item-delete content-block-item-action fa fa-trash-o" title=""Delete" blockID="{{ item }}"></i>
+                                   {% if items[item].locked %}<i class="item-lock content-block-item-action fa fa-unlock" title="Unlock"></i> {% else %}  <i class="item-lock content-block-item-action fa fa-lock" title="Lock"></i> {% endif %}
                                    {#
                                    {% if items[item].hidden %}<i class="item-hide content-block-item-action fa fa-ban"></i>{% else %}<i class="item-hide content-block-item-action fa fa-eye"></i>{% endif %}
                                    #}
@@ -309,9 +309,9 @@
                            '<i class="fa fa-arrows"></i> ' + title +
                            {# probably render a controller here by passing in item as id and have block entity returned #}
                         '<div id="content-block-actions-' + id + '" class="content-block-actions">' +
-                        '<i class="item-edit content-block-item-action fa fa-pencil-square-o"></i> ' +
-                        '<i class="item-delete content-block-item-action fa fa-trash-o"></i> ' +
-                        '<i class="item-lock content-block-item-action fa fa-lock"></i> ' +
+                        '<i class="item-edit content-block-item-action fa fa-pencil-square-o" title="Edit"></i> ' +
+                        '<i class="item-delete content-block-item-action fa fa-trash-o" title="Delete" blockId="' + id + '"></i> ' +
+                        '<i class="item-lock content-block-item-action fa fa-lock" title="Lock"></i> ' +
                         {# '<i class="item-hide content-block-item-action fa fa-ban"></i>' + #}
                         '</div></div>'
                     );
@@ -374,23 +374,21 @@
                 });
             });
 
-            // toggle the locked boolean on a content block
-            $(".item-delete").on('click', function(e){
+            // delete a content block
+               $(document).on('click', '.item-delete', function(e){
                 // todo Get item.id and item.name
                 if (confirm('Are you sure you want to remove this item? Warning: this can not be undone.')) {
-                    var actionParent = $(this).parent().attr('id');
-                    var block = actionParent.substring(22);
+                    var blockId = $(this).attr('blockId');
                     $.ajax({
                         method:'DELETE',
-                        url: '/manage/contentblocks/' + block + '/delete/' + {{ entity.id }} + '/QuoteVersion',
+                        url: '/manage/contentblocks/' + blockId + '/delete/' + {{ entity.id }} + '/QuoteVersion',
                         headers: {
                             "Pragma": "no-cache",
                             "Expires": -1,
                             "Cache-Control": "no-cache"
                         }
                     }).done(function () {
-                        $('#content-blocks-' + block).remove();
-                        contentBlocksUpdate({{ entity.id }});
+                        $('#content-blocks-' + blockId).remove();
                     });
                 }
             });

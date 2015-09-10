@@ -511,7 +511,6 @@
                 $(document).on('click', '.item-delete', function(e){
                     // todo Get item.id and item.name
                     if (confirm('Are you sure you want to remove this item? Warning: this can not be undone.')) {
-                        var actionParent = $(this).parent().attr('id');
                         var blockId = $(this).attr('blockId');
                         $.ajax({
                             method:'DELETE',
@@ -523,7 +522,6 @@
                             }
                         }).done(function () {
                             $('#content-blocks-' + blockId).remove();
-                            // contentBlocksUpdate({{ entity.id }});
                         });
                     }
                 });

@@ -282,7 +282,7 @@ class ContentBlockController extends Controller
             } else {
 
               $em->remove($entity);
-              $em->flush();
+              $em->flush($entity);
             }
 
       if ($class=='QuoteVersion'){
@@ -290,8 +290,23 @@ class ContentBlockController extends Controller
       } elseif( $class =='TourVersion'){
         //$parent = $em->getRepository('TourBundle:TourVersion')->find($quoteVersion);
       }
-
+      if(!$parent){
+        throw  $this->createNotFoundException('Unable to find Quote or Tour in order to update content array.');
+      }
       // rebuild content array and remove block
+      $content = $parent->getContent();
+      foreach($content as $k1=>$q) {
+        foreach($q[1] as $k2=>$v) {
+          if($v == $id) {
+            $foo = '';
+            unset($content[$k1][1][$k2]);
+          }
+        }
+      }
+
+      $parent->setContent($content);
+      $em->flush($parent);
+
       $responseContent =  json_encode($parent->getContent());
       return new Response($responseContent,
         Response::HTTP_OK,
