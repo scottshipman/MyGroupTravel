@@ -166,15 +166,17 @@
                                            title="Edit"></i>
                                         <i class="item-resize content-block-item-action fa fa-arrows-h {{ size }}"
                                            title="Resize" blockId="{{ items[item].id }}"></i>
-                                        <i class="item-delete content-block-item-action fa fa-trash-o"
-                                           title="Delete"></i>
                                         <i class="item-lock content-block-item-action fa {% if items[item].locked %}fa-unlock-alt{% else %}fa-lock{% endif %}"
                                            title="{% if items[item].locked %}Unlock{% else %}Lock{% endif %}" blockId="{{ items[item].id }}"></i>
+                                        <i class="item-delete content-block-item-action fa fa-trash-o"
+                                           title="Delete"></i>
+                                        {#
                                         {% if items[item].hidden %}
                                             <i class="item-hide content-block-item-action fa fa-eye" title="Show"></i>
                                         {% else %}
                                             <i class="item-hide content-block-item-action fa fa-ban" title="Hide"></i>
                                         {% endif %}
+                                        #}
                                     </div>
                                 </div>
                             {% endif %}
