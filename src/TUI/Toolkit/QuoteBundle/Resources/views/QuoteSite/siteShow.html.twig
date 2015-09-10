@@ -78,8 +78,7 @@
                                     <i id="edit-header-block"
                                        class="content-block-item-action fa fa-pencil-square-o" title="Edit"></i></a>
                                     {% if entity.headerBlock.locked %}<i id="lock-header-block"
-                                                                         class="content-block-item-action fa fa-unlock-alt"
-                                                                         title="Unlock"></i> {% else %}
+                                                                         class="content-block-item-action fa fa-unlock-alt" title="Unlock"></i> {% else %}
                                         <i id="edit-header-block"
                                            class="content-block-item-action fa fa-lock" title="Lock"></i>{% endif %}
                                 </div>
@@ -105,14 +104,8 @@
                     <div class="site-content-blocks-item">
                         <div class="status-preview-edit site-content-block-actions">
                             <div class="edit-icons">
-                                <i id="edit-header-summary"
-                                   class="content-block-item-action item-edit fa fa-pencil-square-o"
-                                   title="Edit"></i></a>
-                                {% if entity.locked %}<i id="lock-header-summary"
-                                                         class="content-block-item-action fa fa-unlock-alt"
-                                                         title="Unlock"></i> {% else %} <i id="lock-header-summary"
-                                                                                           class="content-block-item-action fa fa-lock"
-                                                                                           title="Lock"></i>{% endif %}
+                                <i id="edit-header-summary" class="content-block-item-action item-edit fa fa-pencil-square-o" title="Edit"></i></a>
+                                {% if entity.locked %}<i id="lock-header-summary"class="content-block-item-action fa fa-unlock-alt" title="Unlock"></i> {% else %} <i id="lock-header-summary" class="content-block-item-action fa fa-lock" title="Lock"></i>{% endif %}
                             </div>
                         </div>
                     </div>
@@ -168,19 +161,15 @@
                                 <div class="site-content-block-actions status-preview-edit move-cursor">
                                     {# probably render a controller here by passing in item as id and have block entity returned #}
                                     <div class="move-icon"><i class="fa fa-arrows" title="Rearrange"></i></div>
-                                    <div id="content-block-actions-{{ items[item].id }}" class="edit-icons">
+                                    <div id="content-block-actions-{{ items[item].id }}" class="edit-icons {% if items[item].locked %}content-block-locked{% endif %}">
                                         <i class="item-edit content-block-item-action fa fa-pencil-square-o"
                                            title="Edit"></i>
                                         <i class="item-resize content-block-item-action fa fa-arrows-h {{ size }}"
-                                           title="Resize"></i>
+                                           title="Resize" blockId="{{ items[item].id }}"></i>
                                         <i class="item-delete content-block-item-action fa fa-trash-o"
                                            title="Delete"></i>
-                                        {% if items[item].locked %}
-                                            <i class="item-lock content-block-item-action fa fa-unlock-alt"
-                                               title="Unlock"></i>
-                                        {% else %}
-                                            <i class="item-lock content-block-item-action fa fa-lock" title="Lock"></i>
-                                        {% endif %}
+                                        <i class="item-lock content-block-item-action fa {% if items[item].locked %}fa-unlock-alt{% else %}fa-lock{% endif %}"
+                                           title="{% if items[item].locked %}Unlock{% else %}Lock{% endif %}" blockId="{{ items[item].id }}"></i>
                                         {% if items[item].hidden %}
                                             <i class="item-hide content-block-item-action fa fa-eye" title="Show"></i>
                                         {% else %}
@@ -267,7 +256,7 @@
             });
 
             // change request popup
-            $("#change-request").on('click', function (e) {
+            $(document).on('click', '#change-request', function (e) {
                 //e.preventDefault();
                 $("#dialog").html("");
                 $("#dialog").dialog({width: '60%'}).dialog("option", "title", "Loading...").dialog("open");
@@ -277,7 +266,7 @@
             });
 
             // accept quote popup
-            $("#accept-quote").on('click', function (e) {
+            $(document).on('click', '#accept-quote', function (e) {
                 //e.preventDefault();
                 $("#dialog").html("");
                 $("#dialog").dialog({width: '60%'}).dialog("option", "title", "Loading...").dialog("open");
@@ -384,6 +373,32 @@
                 });
             });
 
+                // do the resize stuff on the fly!
+                $('.item-resize').click(function() {
+                    var t = $(this);
+                    $("#loader").css("display", "block");
+                    var blockID = t.attr('blockId');
+                    $.ajax({
+                        url: '/manage/contentblocks/' + blockID + '/resize/' + {{ entity.id }} + '/QuoteVersion',
+                        headers: {
+                            "Pragma": "no-cache",
+                            "Expires": -1,
+                            "Cache-Control": "no-cache"
+                        }
+                    }).done(function () {
+                        if ( t.hasClass('half') ) {
+                            // Will now be full
+                            t.addClass('full').removeClass('half');
+                            t.parents('.site-content-blocks').addClass('site-content-blocks-size-full').removeClass('site-content-blocks-size-half');
+                            $('#content-block-id-' + blockID).addClass('content-block-size-full').removeClass('content-block-size-half');
+                        } else {
+                            // Will now be half
+                            t.addClass('half').removeClass('full');
+                            t.parents('.site-content-blocks').addClass('site-content-blocks-size-half').removeClass('site-content-blocks-size-full');
+                            $('#content-block-id-' + blockID).addClass('content-block-size-half').removeClass('content-block-size-full');
+                        }
+                        $("#loader").css("display", "none");
+                    });
 
             // edit a content block
             $(".item-edit").on('click', function (e) {
@@ -402,61 +417,61 @@
                 });
             });
 
-            // do the resize stuff on the fly!
-            $('.item-resize').click(function() {
-                var t = $(this);
-                $("#loader").css("display", "block");
-                var blockID = $(this).parent().attr('id').substring(22);
-                $.ajax({
-                    url: '/manage/contentblocks/' + blockID + '/resize/' + {{ entity.id }} +'/QuoteVersion',
-                    headers: {
-                        "Pragma": "no-cache",
-                        "Expires": -1,
-                        "Cache-Control": "no-cache"
-                    }
-                }).done(function () {
-                    if (t.hasClass('half')) {
-                        // Will now be full
-                        t.addClass('full').removeClass('half');
-                        t.parents('.site-content-blocks').addClass('site-content-blocks-size-full').removeClass('site-content-blocks-size-half');
-                        $('#content-block-id-' + blockID).addClass('content-block-size-full').removeClass('content-block-size-half');
-                    } else {
-                        // Will now be half
-                        t.addClass('half').removeClass('full');
-                        t.parents('.site-content-blocks').addClass('site-content-blocks-size-half').removeClass('site-content-blocks-size-full');
-                        $('#content-block-id-' + blockID).addClass('content-block-size-half').removeClass('content-block-size-full');
-                    }
-                    $("#loader").css("display", "none");
-                });
-            });
+                    // toggle the locked boolean on a content block on the fly!
+                    $(".item-lock").on('click', function(e) {
+                        var t = $(this);
+                        $("#loader").css("display", "block");
+                        var blockID = t.attr('blockId');
+                        $.ajax({
+                            url: '/manage/contentblocks/'+ blockID + '/lock/' + {{ entity.id }} + '/QuoteVersion',
+                            headers: {
+                                "Pragma": "no-cache",
+                                "Expires": -1,
+                                "Cache-Control": "no-cache"
+                            }
+                        }).done(function () {
+                            t.toggleClass('fa-unlock-alt').toggleClass('fa-lock');
+                            if ( t.attr('title') == 'Unlock') {
+                                // Will now be unlocked
+                                t.parent().removeClass('content-block-locked');
+                                t.attr('title', 'Lock');
+                            } else {
+                                // Will now be locked
+                                t.parent().addClass('content-block-locked');
+                                t.attr('title', 'Unlock');
+                            }
+                            $("#loader").css("display", "none");
+                        });
+                    });
 
-            // edit header summary in layout mode
-            $(document).on('click', '#edit-header-summary', function (e) {
-                e.preventDefault();
-                $("#loader").css("display", "block");
-                $("#site-header-summary-form").load('/quote/view/summary/edit/{{ entity.id }}', function () {
-                    $("#loader").css("display", "none");
-                    $('.item-edit').hide(); // hide ALL edit buttons for all content blocks
-                    $('#site-header-summary-form').show();
-                    $('#site-header-summary').hide();
-                    $('#site-header-slideshow').hide();
-                    $('.button-row').append('<button id="cancel-reload" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Cancel</button>');
-                    doMDLpopup($('#site-header-summary-form')); // run the function to add appropriate MDL classes to form elements
-                    // bind header edit form and provide a simple callback function
-                    $('#form-summary-edit-form').ajaxForm({
-                        beforeSerialize: function () {
-                            CKEDITOR.instances.tui_toolkit_quotebundle_quotesummary_welcomeMsg.updateElement();
-                        },
-                        success: function (response) {
-                            // redraw the area by loading a twig file
-                            $('#site-header-summary-content').load('/quote/view/summary/show/{{ entity.id }}', function () {
-                                $('#site-header-summary-form').empty();
-                                $('#site-header-summary-form').hide();
-                                $('#site-header-summary').show();
-                                $('#site-header-slideshow').show();
-                                $('.item-edit').show();
-                            });
-                        }
+                // edit header summary in layout mode
+                $(document).on('click','#edit-header-summary', function(e){
+                    e.preventDefault();
+                    $("#loader").css("display", "block");
+                    $("#site-header-summary-form").load('/quote/view/summary/edit/{{ entity.id }}', function() {
+                        $("#loader").css("display", "none");
+                        $('.item-edit').hide(); // hide ALL edit buttons for all content blocks
+                        $('#site-header-summary-form').show();
+                        $('#site-header-summary').hide();
+                        $('#site-header-slideshow').hide();
+                        $('.button-row').append('<button id="cancel-reload" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Cancel</button>');
+                        doMDLpopup( $('#site-header-summary-form') ); // run the function to add appropriate MDL classes to form elements
+                        // bind header edit form and provide a simple callback function
+                        $('#form-summary-edit-form').ajaxForm({
+                            beforeSerialize: function() {
+                                CKEDITOR.instances.tui_toolkit_quotebundle_quotesummary_welcomeMsg.updateElement();
+                            },
+                            success: function (response) {
+                                // redraw the area by loading a twig file
+                                $('#site-header-summary-content').load('/quote/view/summary/show/{{ entity.id }}', function () {
+                                    $('#site-header-summary-form').empty();
+                                    $('#site-header-summary-form').hide();
+                                    $('#site-header-summary').show();
+                                    $('#site-header-slideshow').show();
+                                    $('.item-edit').show();
+                                });
+                            }
+                        });
                     });
                 });
             });
@@ -492,8 +507,6 @@
 {% block footer_right %}
     <div class="quote-info"><span class="quote-label">Price per person:</span><span
                 class="quote-price">{% if entity.pricePerson %}
-
-
 
                 <strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong>{% endif %}</span>
     </div>
