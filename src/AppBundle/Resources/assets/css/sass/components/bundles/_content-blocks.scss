@@ -1,3 +1,10 @@
+// CK editor
+form .cke {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+
 .content-blocks-wrapper {
   @include clear-fix();
   margin-top: $element-bottom;
