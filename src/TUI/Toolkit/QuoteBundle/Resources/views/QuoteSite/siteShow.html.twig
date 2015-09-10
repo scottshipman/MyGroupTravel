@@ -168,12 +168,8 @@
                                            title="Resize" blockId="{{ items[item].id }}"></i>
                                         <i class="item-delete content-block-item-action fa fa-trash-o"
                                            title="Delete"></i>
-                                        {% if items[item].locked %}
-                                            <i class="item-lock content-block-item-action fa fa-unlock-alt"
-                                               title="Unlock"></i>
-                                        {% else %}
-                                            <i class="item-lock content-block-item-action fa fa-lock" title="Lock"></i>
-                                        {% endif %}
+                                        <i class="item-lock content-block-item-action fa {% if items[item].locked %}fa-unlock-alt{% else %}fa-lock{% endif %}"
+                                           title="{% if items[item].locked %}Unlock{% else %}Lock{% endif %}" blockId="{{ items[item].id }}"></i>
                                         {% if items[item].hidden %}
                                             <i class="item-hide content-block-item-action fa fa-eye" title="Show"></i>
                                         {% else %}
@@ -406,6 +402,29 @@
                     });
                 });
 
+                // toggle the locked boolean on a content block on the fly!
+                $(".item-lock").on('click', function(e) {
+                    var t = $(this);
+                    $("#loader").css("display", "block");
+                    var blockID = t.attr('blockId');
+                    $.ajax({
+                        url: '/manage/contentblocks/'+ blockID + '/lock/' + {{ entity.id }} + '/QuoteVersion',
+                        headers: {
+                            "Pragma": "no-cache",
+                            "Expires": -1,
+                            "Cache-Control": "no-cache"
+                        }
+                    }).done(function () {
+                        t.toggleClass('fa-unlock-alt').toggleClass('fa-lock');
+                        if ( t.attr('title') == 'Unlock') {
+                            t.attr('title', 'Lock');
+                        } else {
+                            t.attr('title', 'Unlock');
+                        }
+                        $("#loader").css("display", "none");
+                    });
+                });
+
                 // edit header summary in layout mode
                 $(document).on('click','#edit-header-summary', function(e){
                     e.preventDefault();
@@ -549,26 +568,6 @@
                 var block = actionParent.substring(22);
                 $.ajax({
                     url: '/manage/contentblocks/'+ block + '/hide/' + {{ entity.id }} + '/QuoteVersion',
-                    headers: {
-                        "Pragma": "no-cache",
-                        "Expires": -1,
-                        "Cache-Control": "no-cache"
-                    }
-                }).done(function () {
-                    $("#loader").css("display", "inline-block");
-                    window.location.hash = 'site-content';
-                    window.location.reload(true);
-                });
-            });
-
-
-            // toggle the locked boolean on a content block
-            $(".item-lock").on('click', function(e){
-                // todo Get item.id and item.name
-                var actionParent = $(this).parent().attr('id');
-                var block = actionParent.substring(22);
-                $.ajax({
-                    url: '/manage/contentblocks/'+ block + '/lock/' + {{ entity.id }} + '/QuoteVersion',
                     headers: {
                         "Pragma": "no-cache",
                         "Expires": -1,
