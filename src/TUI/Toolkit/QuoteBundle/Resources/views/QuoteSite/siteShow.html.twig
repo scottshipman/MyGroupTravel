@@ -165,7 +165,7 @@
                                         <div class="move-icon"><i class="fa fa-arrows" title="Rearrange"></i></div>
                                         <div id="content-block-actions-{{ items[item].id }}" class="edit-icons {% if items[item].locked %}content-block-locked{% endif %}">
                                             <i class="item-edit content-block-item-action fa fa-pencil-square-o"
-                                               title="Edit"></i>
+                                               title="Edit" blockId="{{ items[item].id }}"></i>
                                             <i class="item-resize content-block-item-action fa fa-arrows-h {{ size }}"
                                                title="Resize" blockId="{{ items[item].id }}"></i>
                                             <i class="item-lock content-block-item-action fa {% if items[item].locked %}fa-unlock-alt{% else %}fa-lock{% endif %}"
@@ -225,6 +225,11 @@
 
     <script>
         $(document).ready(function () {
+
+            //remove the CopytoClipboard button if not Flash
+            if (navigator.mimeTypes ["application/x-shockwave-flash"] == undefined) {
+                $("#cop-button").hide();
+            }
 
             // Disable drag-and-drop on page load b/c the default is preview mode
             $(".sortable-tabs").sortable("disable");
@@ -393,6 +398,9 @@
                         $(".sortable-items").sortable("disable");
                         doMDLpopup($('#content-block-editForm-' + tabId)); // run the function to add appropriate MDL classes to form elements
                         $('#newBlockIdForm').ajaxForm({
+                            beforeSerialize: function () {
+                                CKEDITOR.instances.tui_toolkit_contentblocksbundle_contentblock_body.updateElement();
+                            },
                             success: function (response) {
                                 console.log(response);
                                 $('#content-block-editForm-' + tabId).empty();
@@ -401,11 +409,7 @@
                                 window.location.reload();
                                 $("#loader").css("display", "block");
 
-                            },
-                            beforeSerialize: function () {
-                                CKEDITOR.instances.tui_toolkit_contentblocksbundle_contentblock_body.updateElement();
                             }
-
                         });
                     });
                 });
@@ -426,12 +430,12 @@
                         if (t.hasClass('half')) {
                             // Will now be full
                             t.addClass('full').removeClass('half');
-                            t.parents('.site-content-blocks').addClass('site-content-blocks-size-full').removeClass('site-content-blocks-size-half');
+                            $('#content-blocks-' + blockID).addClass('site-content-blocks-size-full').removeClass('site-content-blocks-size-half');
                             $('#content-block-id-' + blockID).addClass('content-block-size-full').removeClass('content-block-size-half');
                         } else {
                             // Will now be half
                             t.addClass('half').removeClass('full');
-                            t.parents('.site-content-blocks').addClass('site-content-blocks-size-half').removeClass('site-content-blocks-size-full');
+                            $('#content-blocks-' + blockID).addClass('site-content-blocks-size-half').removeClass('site-content-blocks-size-full');
                             $('#content-block-id-' + blockID).addClass('content-block-size-half').removeClass('content-block-size-full');
                         }
                         $("#loader").css("display", "none");
@@ -439,11 +443,10 @@
                 });
 
                 // edit a content block
-                $(".item-edit").on('click', function (e) {
-                    e.preventDefault();
+                $(".item-edit").on('click', function () {
+                    var t = $(this);
                     $("#loader").css("display", "block");
-                    var actionParent = $(this).parent().attr('id');
-                    var block = actionParent.substring(22);
+                    var block = t.attr('blockId');
                     var editBlock = $("#editable-content-blocks-" + block);
                     var previewBlock = $("#previewable-content-blocks-" + block);
                     editBlock.html('');
@@ -514,7 +517,7 @@
                         $('#site-header-summary-form').show();
                         $('#site-header-summary').hide();
                         $('#site-header-slideshow').hide();
-                        $('.button-row').append('<button id="cancel-reload" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Cancel</button>');
+                        $('.button-row').append('<a href="#" id="cancel-reload" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Cancel</a>');
                         doMDLpopup($('#site-header-summary-form')); // run the function to add appropriate MDL classes to form elements
                         // bind header edit form and provide a simple callback function
                         $('#form-summary-edit-form').ajaxForm({

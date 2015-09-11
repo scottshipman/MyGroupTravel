@@ -10,6 +10,17 @@
             $( ".hasDatepicker" ).change(function(){
                 $(this).parent().addClass('is-dirty');
             });
+
+            // Do stuff w/ cancel button
+            $(document).on('click', '#cancel-reload', function (e) {
+                e.preventDefault();
+                $("#loader").css("display", "block");
+                $('#site-header-slideshow').show();
+                $('#site-header-summary').show();
+                $('#site-header-summary-form').html('').hide();
+                $('.item-edit').show();
+                $("#loader").css("display", "none");
+            });
         });
     </script>
 

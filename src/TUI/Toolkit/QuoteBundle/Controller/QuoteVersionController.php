@@ -975,6 +975,17 @@ class QuoteVersionController extends Controller
                 $uniqueEntity
             );
             if (count($errors)==0) {
+
+                // clone the content blocks
+                $new_entity->setContent($this->cloneContentBlocks($entity->getContent()));
+
+                    // And clone the Header block if it has one
+                    if ($entity->getHeaderBlock()) {
+                        $headerBlock = $entity->getHeaderBlock()->getId();
+                        $new_entity->setHeaderBlock($this->cloneHeaderBlock($headerBlock));
+                    }
+
+
                 $new_entity->setId(null);
                 $em->detach($entity);
                 $em->persist($new_entity);
@@ -1299,7 +1310,7 @@ class QuoteVersionController extends Controller
                     $originalBlock = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($block);
 
                     if (!$originalBlock) {
-                        throw $this->createNotFoundException('Unable to find Content entity.');
+                        throw $this->createNotFoundException('Unable to find Content entity while cloning.');
                     }
 
                     $newBlock = clone $originalBlock;
