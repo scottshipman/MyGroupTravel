@@ -1,0 +1,70 @@
+{% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
+<ul id="site-summary-details">
+    {% if quote.departureDate %}<li class="right"><span class="label">Departing:</span> <strong>{{ quote.departureDate|date(format) }}</strong></li>{% endif %}
+    {% if quote.duration %}<li class="right"><span class="label">Duration:</span> <strong>{{ quote.duration }}</strong></li>{% endif %}
+    {% if quote.returnDate %}<li class="right"><span class="label">Returning:</span> <strong>{{ quote.returnDate|date(format) }}</strong></li>{% endif %}
+    {% if quote.boardBasis %}<li class="right"><span class="label">Board Basis:</span> <strong>{{ quote.boardBasis.name }}</strong></li>{% endif %}
+    {% if quote.transportType %}<li class="right"><span class="label">Transport:</span> <strong>{{ quote.transportType.name }}</strong></li>{% endif %}
+    {% if quote.pricePerson %}<li class="right"><span class="label">Price per person:</span> <span class="quote-price"><strong>{% if quote.currency %}{{ quote.currency.htmlSymbol | raw }}{% endif %}{{ quote.pricePerson }}</strong></span></li>{% endif %}
+    {% if (quote.payingPlaces) or (quote.freePlaces) %}<li>Based on {% if quote.payingPlaces %}<strong>{{ quote.payingPlaces }}</strong>{% endif %} paying and {% if quote.freePlaces %}<strong>{{ quote.freePlaces }}</strong>{% endif %} free places</li>{% endif %}
+    {% if quote.expiryDate %}<li>Quote valid until <strong>{{ quote.expiryDate|date(format) }}</strong></li>{% endif %}
+    <ul class="quote-site-actions">
+        <li>
+            {% if (quote.converted is sameas(false)) and (quote.quoteReference.converted is sameas(false)) %}
+                {% if date(quote.expiryDate) < date('now') %}
+                    <a class="expired-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+                       href="#">
+                        <i class="fa fa-calendar-times-o"></i> Expired
+                    </a>
+                {% else %}
+                    <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+                       id="accept-quote" href="#">
+                        <i class="fa fa-thumbs-o-up"> </i> Accept Quote
+                    </a>
+                {% endif %}
+            {% elseif (quote.converted is sameas(true)) and (quote.quoteReference.converted is sameas(true)) %}
+                <a class="accepted-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+                   href="#">
+                    <i class="fa fa-thumbs-up"> </i> Accepted
+                </a>
+            {% endif %}
+        </li>
+        <li>
+            {% if (quote.converted is sameas(true)) and (quote.quoteReference.converted is sameas(true)) %}
+                <a class="accepted-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+                   href="#">
+                    <i class="fa fa-bullhorn"></i> Request Changes
+                </a>
+            {% else %}
+                <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+                   id="change-request" href="#">
+                    <i class="fa fa-bullhorn"></i> Request Changes
+                </a>
+            {% endif %}
+        </li>
+        <li class="share-text">
+
+                        <span>
+                            Share this quote with others
+                        </span>
+
+            {% if quote.quoteNumber %}
+                <div class="input"><input type="text" id="share_url" name="share_url"
+                                          value="{{ url('quote_site_share', { 'id': quote.id, 'quoteNumber': quote.quoteNumber }) }}"
+                                          disabled></div>
+            {% else %}
+                <div class="input"><input type="text" id="share_url" name="share_url"
+                                          value="{{ url('quote_template_share', { 'id': quote.id }) }}"
+                                          disabled></div>
+            {% endif %}
+
+            <a href="#" id="copy-button" data-clipboard-target="share_url"
+               title="Click to copy Quote URL"
+               class="not-full mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                <i class="fa fa-sign-in fa-stack"></i>
+            </a>
+
+        </li>
+    </ul>
+    <li id="headerBlock-text">{% if quote.headerBlock %}{{ quote.welcomeMsg|raw }}{% endif %}</li>
+</ul>

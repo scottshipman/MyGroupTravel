@@ -9,6 +9,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use TUI\Toolkit\QuoteBundle\Form\PromptType;
 use TUI\Toolkit\QuoteBundle\Entity\QuoteVersion;
 use TUI\Toolkit\QuoteBundle\Form\QuoteChangeRequestType;
+use TUI\Toolkit\QuoteBundle\Form\QuoteAcceptType;
+use TUI\Toolkit\QuoteBundle\Form\QuoteSummaryType;
 use TUI\Toolkit\PermissionBundle\Entity\Permission;
 use TUI\Toolkit\PermissionBundle\Controller\PermissionService;
 use APY\DataGridBundle\Grid\Source\Entity;
@@ -34,7 +36,7 @@ class QuoteSiteController extends Controller
   public function siteShowAction($id, $quoteNumber = null)
   {
 
-
+    $alternate=FALSE;
     $editable = false;
     // TODO if user is allowed to edit then set $editable to true
     // if organizer or if brand or higher (check permission table for organizer)
@@ -52,6 +54,9 @@ class QuoteSiteController extends Controller
 
     // if no quoteNumber supplied in URL, then prompt for quoteNumber first
     $securityContext = $this->get('security.context');
+    $user = $securityContext->getToken()->getUser();
+    $permission = $this->get("permission.set_permission")->getPermission($id, 'quote', $user->getId());
+
     if($quoteNumber===NULL && FALSE === $securityContext->isGranted('ROLE_BRAND')){
 
       $promptForm = $this->createPromptTypeForm($id);
@@ -61,7 +66,9 @@ class QuoteSiteController extends Controller
       ));
     }
 
-
+    if ($securityContext->isGranted('ROLE_BRAND') || in_array('organizer', $permission)){
+      $editable = TRUE;
+    }
     // get the content blocks to send to twig
     $items=array(); $tabs=array();
     $content = $entity->getContent();
@@ -96,6 +103,13 @@ class QuoteSiteController extends Controller
     // Record Views
     $this->setQuoteViews($entity->getId());
 
+    // prepare Alternate Quotes flag.
+    $qr = $entity->getQuotereference()->getId();
+    $versions = $em->getRepository('QuoteBundle:QuoteVersion')->findBy(array('quoteReference' => $qr));
+    if(count($versions) > 1){
+      $alternate=TRUE;
+    }
+
 
     return $this->render('QuoteBundle:QuoteSite:siteShow.html.twig', array(
       'entity'      => $entity,
@@ -105,6 +119,7 @@ class QuoteSiteController extends Controller
       'warning'     => $warningMsg,
       'header'      => $headerBlock,
       'editable'  =>  $editable,
+      'alternate' => $alternate,
     ));
   }
 
@@ -271,6 +286,31 @@ class QuoteSiteController extends Controller
 
     }
 
+    public function createAcceptFormAction($id)
+    {
+        $acceptForm = $this->createForm(new QuoteAcceptType(), array(), array(
+            'action' => $this->generateUrl('quote_site_quote_accepted', array('id' => $id)),
+            'method' => 'POST',
+        ));
+
+        $acceptForm->add('submit', 'submit', array('label' => 'Go'));
+
+        return $acceptForm;
+
+    }
+
+    public function newAcceptAction($id)
+    {
+        $acceptForm = $this->createAcceptFormAction($id);
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+
+        return $this->render('QuoteBundle:QuoteSite:acceptQuote.html.twig', array(
+            'accept_form' => $acceptForm->createView(),
+            'entity' => $entity,
+        ));
+    }
+
 
     /**
      * Creates the action for when a user accepts a quote
@@ -282,6 +322,10 @@ class QuoteSiteController extends Controller
 
     public function quoteAcceptedAction(Request $request, $id)
     {
+        $acceptForm = $this->createAcceptFormAction($id);
+        $acceptForm->handleRequest($request);
+        $additional = $acceptForm->get('additional')->getData();
+
         $secondaryAgent = "";
         $toArray = array();
         $em = $this->getDoctrine()->getManager();
@@ -311,9 +355,8 @@ class QuoteSiteController extends Controller
 
 
         $message = \Swift_Message::newInstance()
-            ->setSubject('Quote' . $tourName . 'has been accepted!')
+            ->setSubject('Quote' . $tourName . ' has been accepted!')
             ->setFrom($brandName . '@Toolkit.com')
-            ->setTo($toArray)
             ->setBody(
                 $this->renderView(
                     'QuoteBundle:Emails:acceptQuote.html.twig',
@@ -322,14 +365,19 @@ class QuoteSiteController extends Controller
                         'entity' => $entity,
                         'departure' => $departure,
                         'tour_name' => $tourName,
+                        'additional' => $additional,
                     )
                 ), 'text/html');
 
         $em->persist($entity);
         $em->flush();
-        $this->get('mailer')->send($message);
 
-        $this->get('session')->getFlashBag()->add('notice', 'Quote ' . $tourName . 'has been accepted.');
+        foreach($toArray as $user) {
+            $message->setTo($user);
+            $this->get('mailer')->send($message);
+        }
+
+        $this->get('session')->getFlashBag()->add('notice', 'Quote ' . $tourName . ' has been accepted.');
 
         return $this->redirect($this->generateUrl('quote_site_action_show', array('id' => $id)));
 
@@ -337,6 +385,7 @@ class QuoteSiteController extends Controller
 
     public function sitePDFAction($id, $quoteNumber = null)
     {
+      $alternate=FALSE;
       $editable = false;
       // TODO if user is allowed to edit then set $editable to true
       // if organizer or if brand or higher (check permission table for organizer)
@@ -382,13 +431,20 @@ class QuoteSiteController extends Controller
       $request = $this->getRequest();
       $path = $request->getScheme() . '://' . $request->getHttpHost();
 
+      // prepare Alternate Quotes flag.
+      $versions = $em->getRepository('QuoteBundle:QuoteVersion')->findByQuoteReference($entity[0]->getQuoteReference());
+      if(count($versions>1)){
+        $alternate=TRUE;
+      }
+
       $data = array(
         'entity' => $entity[0],
         'locale' => $locale,
         'items' => $items,
         'header' => $headerBlock,
         'editable' =>  $editable,
-        'path' => $path
+        'path' => $path,
+        'alternate' => $alternate
       );
 
       $html = $this->renderView( 'QuoteBundle:QuoteSite:sitePDF.html.twig', $data );
@@ -414,4 +470,141 @@ class QuoteSiteController extends Controller
       ));
       */
     }
+
+  /**
+   * @param $id
+   *
+   * Get all Quote Versions whose quoteReference is ID and return a stand alone Twig of tabular data
+   */
+  public function getQuoteSiblingsAction($id)
+  {
+    $locale = $this->container->getParameter('locale');
+    $em = $this->getDoctrine()->getManager();
+    $tour = $em->getRepository('QuoteBundle:Quote')->find($id);
+    if(!$tour){
+      throw $this->createNotFoundException('Unable to find Quote entity for alternate quotes tab.');
+    }
+    $tourName = $tour->getName();
+    $entities = $em->getRepository('QuoteBundle:QuoteVersion')->findByQuoteReference($id);
+
+    if(!$entities){
+      throw $this->createNotFoundException('Unable to find QuoteVersion entities for alternate quotes tab.');
+    }
+
+    return $this->render('QuoteBundle:QuoteSite:quoteSiblings.html.twig', array(
+      'entities' => $entities,
+      'locale'  => $locale,
+      'tourName'  => $tourName,
+    ));
+  }
+
+  /**
+   * @param $id
+   *
+   * Show summary data on Site Show page as embedded twig
+   */
+  public function showSummaryAction($id)
+  {
+    $locale = $this->container->getParameter('locale');
+    $em = $this->getDoctrine()->getManager();
+    $quote = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+    if(!$quote){
+      throw $this->createNotFoundException('Unable to find Quote entity for summary header display.');
+    }
+
+    return $this->render('QuoteBundle:QuoteSite:quoteSummary.html.twig', array(
+      'quote' => $quote,
+      'locale'  => $locale,
+    ));
+  }
+
+  /**
+   * @param $id
+   *
+   * Edit summary data on Site Show page using ajaxForm
+   */
+  public function editSummaryAction($id) {
+
+    $em = $this->getDoctrine()->getManager();
+
+      // Get all Quote versions referencing Parent Quote object
+    $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+
+    if (!$entity) {
+    throw $this->createNotFoundException('Unable to find QuoteVersion entity for Summary Edit.' . $id);
+    }
+
+    $editForm = $this->createSummaryEditForm($entity);
+    $date_format = $this->container->getParameter('date_format');
+
+    return $this->render('QuoteBundle:QuoteSite:editSummary.html.twig', array(
+      'entity' => $entity,
+      'edit_form' => $editForm->createView(),
+      'date_format' => $date_format,
+    ));
+  }
+
+  /**
+   * Creates a form to edit a QuoteVersion Summary.
+   *
+   * @param QuoteVersion $entity The entity
+   *
+   * @return \Symfony\Component\Form\Form The form
+   */
+  private function createSummaryEditForm(QuoteVersion $entity)
+  {
+    $locale = $this->container->getParameter('locale');
+    $form = $this->createForm(new QuoteSummaryType($locale), $entity, array(
+      'action' => $this->generateUrl('quote_summary_update', array('id' => $entity->getId())),
+      'method' => 'POST',
+      'attr'   => array(
+        'id'    => 'form-summary-edit-form',
+      )
+    ));
+
+    $form->add('submit', 'submit', array('label' => 'Update'));
+
+    return $form;
+  }
+
+  /**
+   * Updates an existing QuoteVersion Summary.
+   *
+   */
+  public function updateSummaryAction(Request $request, $id)
+  {
+    $date_format = $this->container->getParameter('date_format');
+    $em = $this->getDoctrine()->getManager();
+    $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+    if (!$entity) {
+      throw $this->createNotFoundException('Unable to find QuoteVersion entity.');
+    }
+
+
+    $editForm = $this->createSummaryEditForm($entity);
+    $editForm->handleRequest($request);
+
+    if ($editForm->isValid()) {
+      $em->flush();
+
+      $responseContent =  json_encode((array) $entity);
+      return new Response($responseContent,
+        Response::HTTP_OK,
+        array('content-type' => 'application/json')
+      );
+
+    }
+
+    return $this->render('QuoteBundle:QuoteVersion:editSummary.html.twig', array(
+      'entity' => $entity,
+      'edit_form' => $editForm->createView(),
+      'delete_form' => $deleteForm->createView(),
+      'template' => $template,
+      'date_format' => $date_format,
+    ));
+  }
+
+
 }
+
+

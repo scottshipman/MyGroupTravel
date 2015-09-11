@@ -1,0 +1,103 @@
+<div class="tab-reorder-modal">
+    <div id="content-blocks-wrapper" class="content-blocks-wrapper modal-sortable-tabs">
+        {%  for tab, data in entity.content %}
+            <div id="{{ tab }}" class="content-blocks-tab">
+            <span class="content-blocks tab-label">
+                <i class="content-block-tab-handle fa fa-arrows"></i>
+                <h4 id="tab-label-{{ tab }}" class="editable-tab">{{ data[0] }}</h4>
+                {% if data[1] | length < 1 %}
+                    <span class="tab-delete icon-label"><i class="content-block-tab-actions fa fa-trash-o"></i> Delete Tab</span>
+                {% endif %}
+            </span>
+
+
+                <div id="tabs-drawer-{{ tab }}" class="sortable-items content-blocks-drawer">
+                    {%  for item in data[1] %}
+                        <div id="content-blocks-{{ item }}" class="content-blocks content-blocks-item">
+                            <i class="fa fa-arrows"></i> {{ items[item].title }}
+                            {# probably render a controller here by passing in item as id and have block entity returned #}
+                            <div id="content-block-actions-{{ item }}" class="content-block-actions">
+                                <i class="item-delete content-block-item-action fa fa-trash-o"></i>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="submit-button-container">
+        <a id="update-tabs" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored reorder-button"
+           href="#"><i class="fa fa-thumbs-o-up"> </i> Submit</a>
+        <a id="close-dialog" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored reorder-button"
+           href="#"><i class="fa fa-ban"> </i> Cancel</a>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        //sortable tabs
+        $(".modal-sortable-tabs").sortable({
+            containment: "parent",
+            items: "> div",
+            // handle: ".move",
+            tolerance: "pointer",
+            cursor: "move",
+            opacity: 0.7,
+            revert: 300,
+            delay: 150,
+            dropOnEmpty: true,
+            placeholder: "tabs-placeholder",
+            start: function (e, ui) {
+                ui.placeholder.height(ui.helper.outerHeight());
+            },
+            axis: 'y'
+
+        });
+
+        //sortable items in tabs
+        $(".modal-sortable-items").sortable({
+            containment: "document",
+            items: "> div",
+            tolerance: "pointer",
+            connectWith: '.modal-sortable-items',
+            placeholder: "items-placeholder",
+            start: function (e, ui) {
+                ui.placeholder.height(ui.helper.outerHeight());
+            },
+            axis: 'y'
+        });
+
+
+        //update tab positions and content positions on click event
+        $("#update-tabs").on('click', function (e) {
+            e.preventDefault();
+            //close dialog box
+            window.parent.jQuery('#dialog').dialog('close');
+            var pathArray = window.location.pathname.split('/');
+            contentBlocksUpdate( pathArray[3], {{ entity.id }} );// fourth [3] part in the path should be quote ID to pass in
+//            $(".sortable-tabs").sortable("enable");
+//            $(".sortable-items").sortable("enable");
+            var t = $('#content-wrapper');
+            t.removeClass("disabled");
+        });
+
+        //close dialog box
+        $('#close-dialog').click(function () {
+            window.parent.jQuery('#dialog').dialog('close');
+        });
+
+
+        // change a tab's name
+        $('.editable-tab').editable(function (value, settings) {
+            //strip special chars before accepting
+            //value = value.replace(/[^\w\s]/gi, '');
+            return (value);
+        }, {
+            width: '20em',
+            onblur: "cancel",
+            tooltip: 'Click to edit'
+        });
+    })
+    ;
+</script>

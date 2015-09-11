@@ -10,7 +10,7 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 
-class QuoteVersionType extends AbstractType
+class QuoteSummaryType extends AbstractType
 {
 
   private $locale;
@@ -27,56 +27,6 @@ class QuoteVersionType extends AbstractType
     {
       $require_qn = true;
 
-      // Complex event listener for dealing with Templates and Clones
-      $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
-        // is this an existing Quote and is a template
-        $entity = $event->getData();
-        $form = $event->getForm();
-        $request = explode('/', $_SERVER['REQUEST_URI']);
-        $newTemplate = false;
-        $isNew = false;
-        $hasTemplate = false;
-        $showAll = false;
-
-        if (!$entity || null === $entity->getId()) {
-          $isNew = true;
-        } elseif ($entity->getIsTemplate() == true) {
-          $hasTemplate = true;
-        }
-        if (isset($request[3]) && ($request[3] == "new" || $request[3] =='create') && isset($request[4]) && $request[4] == "template") {
-          $newTemplate = true;
-        }
-
-        // CASE: New Object - hidden isTemplate w value of newTemplate
-        if ($isNew && $newTemplate) {
-          $form->add('isTemplate', 'hidden', array(
-            'data' => true,
-          ));
-          $require_qn = false;
-
-        }
-        if ($isNew && !$newTemplate) {
-          $showAll = true;
-        }
-
-        // CASE: Editing an existing Template - hidden isTemplate w/ true value
-        if ((!$isNew && $hasTemplate)) {
-          $form->add('isTemplate', 'hidden', array(
-            'data' => $hasTemplate,
-          ));
-          $require_qn = false;
-        }
-
-        // CASE Editing an existing quote - hide isTemplate - show other fields
-        if (!$isNew && !$hasTemplate) {
-          $form->add('isTemplate', 'checkbox', array(
-            'required' => FALSE,
-            'label' => "Convert to Template?",
-          ));
-          $showAll = true;
-        };
-        $_SESSION['showAll'] = $showAll;
-      });
 
       switch ($this->locale){
           case 'en_GB.utf8':
@@ -89,22 +39,7 @@ class QuoteVersionType extends AbstractType
             break;
         }
         $builder
-            ->add('revision', 'hidden', array(
-              'mapped' => false,
-            ))
-            ->add('quoteReference', new QuoteType(), array(
-              'label' => 'Quote details',
-            ))
-            // now the versionable fields
-            ->add('name', 'text', array(
-              'label' => 'Quote Name',
-              'required'  => $require_qn,
-            ))
 
-            ->add('quoteNumber', 'text', array(
-              'label' => 'Quote Number',
-              'required' => false,
-            ))
               // Expire default should be now + 30 days
             ->add('expiryDate', 'genemu_jquerydate', array(
               'widget' => 'single_text',
@@ -193,6 +128,6 @@ class QuoteVersionType extends AbstractType
      */
     public function getName()
     {
-        return 'tui_toolkit_quotebundle_quoteversion';
+        return 'tui_toolkit_quotebundle_quotesummary';
     }
 }

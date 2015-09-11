@@ -258,22 +258,14 @@ genemu_form:
 trsteel_ckeditor:
     class: Trsteel\CkeditorBundle\Form\Type\CkeditorType
     transformers: ['html_purifier']
-    toolbar: ['document', 'clipboard', 'editing', '/', 'basicstyles', 'paragraph', 'links', '/', 'insert', 'styles', 'tools']
+    toolbar: ['document', 'tools', 'basicstyles', 'styles', 'paragraph']
     toolbar_groups:
-        document: ['Source','-','Save','-','Templates']
-        clipboard: ['Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo']
-        editing: ['Find','Replace','-','SelectAll']
-        basicstyles: ['Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat']
-        paragraph: ['NumberedList','BulletedList','-','Outdent','Indent','-','JustifyLeft', 'JustifyCenter','JustifyRight','JustifyBlock']
-        links: ['Link','Unlink','Anchor']
-        insert: ['Flash','Table','HorizontalRule']
-        styles: ['Styles','Format']
-        tools: ['Maximize', 'ShowBlocks']
+        document: ['Source']
     ui_color: '#ffffff'
-    startup_outline_blocks: true
-    width: 800 #Integer or %
+    startup_outline_blocks: false
+    width: 100% #Integer or %
     height: 300 #Integer or %
-    custom_config: assetic/ckeditorcustomsettings.js
+    custom_config: "/assetic/ckeditorcustomsettings.js"
 
 liip_imagine:
     resolvers:
@@ -287,6 +279,11 @@ liip_imagine:
             filters:
                 thumbnail: { size: [120, 120], mode: inset }
 
+        thumbnailLarge:
+            quality: 100
+            filters:
+                thumbnail: { size: [240, 240], mode: inset }
+
         brandLogo:
             filters:
                 relative_resize: { widen: 120 }
@@ -295,3 +292,9 @@ liip_imagine:
             quality: 100
             filters:
                 strip: ~
+                thumbnail: { size: [900, 600], mode: inset }
+        modalImage:
+            quality: 100
+            filters:
+                relative_resize: { widen: 300 }
+

@@ -10,6 +10,11 @@ quote_site_change_request:
     defaults: { _controller: "QuoteBundle:QuoteSite:requestChange"}
     methods: [POST, GET]
 
+quote_site_quote_accepted_form:
+    path:   /accepted/form/{id}
+    defaults: { _controller: "QuoteBundle:QuoteSite:newAccept"}
+    methods: [GET]
+
 quote_site_quote_accepted:
     path:   /accepted/{id}
     defaults: { _controller: "QuoteBundle:QuoteSite:quoteAccepted" }
@@ -22,12 +27,10 @@ quote_site_share:
     path:     /share/{id}/{quoteNumber}
     defaults: { _controller: "QuoteBundle:QuoteSite:siteShow" }
 
-
 quote_site_validate:
     path:     /validate/{id}/
     defaults: { _controller: "QuoteBundle:QuoteSite:siteValidate" }
     methods: [POST]
-
 
 quote_site_action_show:
     path:     /{id}
@@ -37,3 +40,16 @@ quote_site_show:
     path:     /{id}/{quoteNumber}
     defaults: { _controller: "QuoteBundle:QuoteSite:siteShow" }
 
+quote_summary_show:
+    path:     /summary/show/{id}
+    defaults: { _controller: "QuoteBundle:QuoteSite:showSummary" }
+
+quote_summary_edit:
+    path:     /summary/edit/{id}
+    defaults: { _controller: "QuoteBundle:QuoteSite:editSummary" }
+    methods: [POST, GET]
+
+quote_summary_update:
+    path:     /summary/update/{id}
+    defaults: { _controller: "QuoteBundle:QuoteSite:updateSummary" }
+    methods: [POST, GET]

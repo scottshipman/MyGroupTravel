@@ -1,0 +1,13 @@
+<div id="header-block-content-item" class="header-block-content-item content-block" blockId="{{ entity.id }}">
+    <div class="flexslider">
+        <ul class="slides">
+            {% if entity %}
+                {% for media in entity.media %}
+                    <li>
+                        <span class="inner-list"><span><img src="{{ asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) | imagine_filter('slideShow') }}"></span></span>
+                    </li>
+                {% endfor %}
+            {% endif %}
+        </ul>
+    </div>
+</div>

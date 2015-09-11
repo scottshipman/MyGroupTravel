@@ -25,3 +25,18 @@
   }
 
 }
+
+.site-content-blocks-tab {
+  cursor: pointer;
+  padding: 0 24px;
+  float: left;
+  position: relative;
+  height: 48px;
+  line-height: 48px;
+  text-align: center;
+  font-weight: 500;
+  font-size: 14px;
+  text-transform: uppercase;
+  color: rgba(0,0,0,.54);
+  overflow: hidden;
+}
