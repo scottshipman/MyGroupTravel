@@ -335,13 +335,7 @@ class QuoteSiteController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('QuoteBundle:QuoteVersion')->findById($id);
         $entity = $entity[0];
-        if ($entity->getConverted() == false) {
-            $entity->setConverted(true);
-        }
-        $quoteConverted = $entity->getQuoteReference()->getConverted();
-        if ($quoteConverted == false) {
-            $entity->getQuoteReference()->setConverted(true);
-        }
+
         $departure = $entity->getDepartureDate();
         $tourName = $entity->getName();
         if ($entity->getQuoteReference()->getSalesAgent()) {

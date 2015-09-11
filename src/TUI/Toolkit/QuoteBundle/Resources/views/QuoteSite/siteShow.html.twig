@@ -268,6 +268,8 @@
                 $("#dialog").dialog({width: '60%'}).dialog("option", "title", "Loading...").dialog("open");
                 $("#dialog").load('/quote/view/change-request/form/' + {{ entity.id}}, function () {
                     $(this).dialog("option", "title", "I'd like to make some changes");
+                    doMDLpopup($('#dialog')); // run the function to add appropriate MDL classes to form elements
+
                 });
             });
 
@@ -278,6 +280,7 @@
                 $("#dialog").dialog({width: '60%'}).dialog("option", "title", "Loading...").dialog("open");
                 $("#dialog").load('/quote/view/accepted/form/' + {{ entity.id}}, function () {
                     $(this).dialog("option", "title", "I'd like to accept this quote");
+                    doMDLpopup($('#dialog')); // run the function to add appropriate MDL classes to form elements
                 });
             });
 
