@@ -39,14 +39,15 @@ class MenuBuilder
     $menu->addChild('Company')
           ->setAttribute('dropdown', true);
     $menu['Company']->addChild('Brands', array('route' => '_manage_brand'));
-    $menu['Company']->addChild('Board Basis', array('route' => '_manage_boardbasis'));
-    $menu['Company']->addChild('Transport Type', array('route' => 'manage_transport'));
-    $menu['Company']->addChild('Currency', array('route' => 'manage_currency'));
     $menu['Company']->addChild('Institutions', array('route' => 'manage_institution'));
 
 
-    $menu->addChild('Tools');
-    $menu['Tools']->addChild('Content Blocks', array('route' => 'manage_contentblocks'));
+    $menu->addChild('Tools')
+      ->setAttribute('dropdown', true);
+    //$menu['Tools']->addChild('Content Blocks', array('route' => 'manage_contentblocks'));
+    $menu['Tools']->addChild('Currency', array('route' => 'manage_currency'));
+    $menu['Tools']->addChild('Board Basis', array('route' => '_manage_boardbasis'));
+    $menu['Tools']->addChild('Transport Type', array('route' => 'manage_transport'));
     $menu['Tools']->addChild('Layout Types', array('route' => 'manage_layouttype'));
     $menu['Tools']->addChild('Trip Status', array('route' => 'manage_tripstatus'));
 

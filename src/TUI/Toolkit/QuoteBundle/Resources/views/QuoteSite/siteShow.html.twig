@@ -29,11 +29,13 @@
 {% block sub_header %}
     <div class="sub-header">
         <div class="inner">
-            {% if entity.quoteReference.institution.media %}
-                <div class="institution-logo">
-                    <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}"
-                         alt="{{ entity.quoteReference.institution.name }}">
-                </div>
+            {% if entity.isTemplate == 0 %} {# no Institutions on Templates #}
+                {% if entity.quoteReference.institution.media %}
+                    <div class="institution-logo">
+                        <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}"
+                             alt="{{ entity.quoteReference.institution.name }}">
+                    </div>
+                {% endif %}
             {% endif %}
 
             {% if entity.quoteReference.institution %}

@@ -350,7 +350,7 @@ class QuoteVersionController extends Controller
             'quoteReference.salesAgent.firstName',
             'quoteReference.salesAgent.lastName',
             'quoteReference.salesAgent.email',
-            'quoteReference.destination',
+            //'quoteReference.destination',
             'created',
             'version',
             'id',
@@ -364,7 +364,12 @@ class QuoteVersionController extends Controller
             'departureDate',
             'returnDate',
             'pricePerson',
-            'currency.name'
+            'currency.name',
+            'views',
+            'shareViews',
+            'organizer_full',
+            'institution_full',
+            'quoteNumber'
         );
 
         // Creates simple grid based on your entity (ORM)
@@ -416,11 +421,15 @@ class QuoteVersionController extends Controller
         $reference = $grid->getColumn('quoteNumber');
         $reference->setFilterable(false);
         // institution
-        $institution = $grid->getColumn('quoteReference.institution.name');
+        $institution = $grid->getColumn('institution_full');
         $institution->setFilterable(false);
         // organizer
         $organizer = $grid->getColumn('organizer_full');
         $organizer->setFilterable(false);
+
+        // rename Primary sales AGent to Created By
+        $organizer = $grid->getColumn('salesAgent_full');
+        $organizer->setTitle('Created By');
 
         // Set the default order of the grid
         $grid->setDefaultOrder('created', 'DESC');
