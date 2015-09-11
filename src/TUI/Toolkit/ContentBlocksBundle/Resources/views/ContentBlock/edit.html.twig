@@ -48,7 +48,7 @@
     // Wait for the DOM to be loaded
     $(document).ready(function() {
         // Add a cancel button
-        $('.button-row').append('<button id="cancel-reload" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Cancel</button>');
+        $('.button-row').append('<a href="#" id="cancel-reload" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Cancel</a>');
 
         // Change the h2's title when editing the title
         $('#tui_toolkit_contentblocksbundle_contentblock_title').on( 'blur change paste keyup input', function() {
@@ -56,8 +56,10 @@
         });
 
         // Do stuff w/ cancel button
-        $(document).on('click', '#cancel-reload', function () {
+        $(document).on('click', '#cancel-reload', function (e) {
+            e.preventDefault();
             if ( $('.mode-toggle').hasClass('mode-edit') ) { // If on quote preview page
+                $("#loader").css("display", "block");
                 var blockID = {{ entity.id }};
                 var quoteID = $('.mode-toggle').attr('id').substring(14);
                 var editBlock = $("#editable-content-blocks-" + blockID);
