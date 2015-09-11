@@ -279,6 +279,10 @@
 
 .mode-edit {
 
+  .content-blocks-drawer {
+    margin-top: $element-bottom / 2;
+  }
+
   .inner-wrapper {
     position: relative;
 
@@ -337,7 +341,9 @@
   }
 
   .add-content-block-form {
+    margin-top: $element-bottom / 2;
     padding: 0 $column_gutter_width;
+    clear: both;
   }
 
 }
