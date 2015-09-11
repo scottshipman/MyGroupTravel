@@ -322,6 +322,6 @@ td .layout-icons.image_bottom {
   border-radius: 5px;
   text-decoration: none;
   @include mdl-primary-color(color, 6);
-  margin-top: 20px;
+  margin: 20px $column_gutter_width;
 
 }
