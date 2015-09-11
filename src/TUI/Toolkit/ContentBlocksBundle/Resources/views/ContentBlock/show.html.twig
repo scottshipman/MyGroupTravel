@@ -10,7 +10,7 @@
     {% set size = 'half' %}
 {% endif %}
 
-<div id="content-block-id-{{ entity.id }}" class="content-block content-block-id-{{ entity.id }} {{ class }}">
+<div id="content-block-id-{{ entity.id }}" class="content-block content-block-id-{{ entity.id }} {{ class }} content-block-size-{{ size }}">
     <h2>{{ entity.title }}</h2>
 
     {% if entity.isSlideshow==1 %}

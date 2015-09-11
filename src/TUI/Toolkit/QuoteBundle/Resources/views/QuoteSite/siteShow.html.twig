@@ -405,10 +405,12 @@
                             // Will now be full
                             t.addClass('full').removeClass('half');
                             t.parents('.site-content-blocks').addClass('site-content-blocks-size-full').removeClass('site-content-blocks-size-half');
+                            $('#content-block-id-' + blockID).addClass('content-block-size-full').removeClass('content-block-size-half');
                         } else {
                             // Will now be half
                             t.addClass('half').removeClass('full');
                             t.parents('.site-content-blocks').addClass('site-content-blocks-size-half').removeClass('site-content-blocks-size-full');
+                            $('#content-block-id-' + blockID).addClass('content-block-size-half').removeClass('content-block-size-full');
                         }
                         $("#loader").css("display", "none");
                     });
