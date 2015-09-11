@@ -314,7 +314,7 @@ td .layout-icons.image_bottom {
 }
 
 #add-content-block {
-
+  clear: both;
   border: 2px dashed #000;
   @include mdl-primary-color(border-color, 6);
   text-align: center;
@@ -323,5 +323,4 @@ td .layout-icons.image_bottom {
   text-decoration: none;
   @include mdl-primary-color(color, 6);
   margin: 20px $column_gutter_width;
-
 }
