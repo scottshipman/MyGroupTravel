@@ -38,6 +38,7 @@ class QuoteSiteController extends Controller
 
     $alternate=FALSE;
     $editable = false;
+    $permission = array();
     // TODO if user is allowed to edit then set $editable to true
     // if organizer or if brand or higher (check permission table for organizer)
 
@@ -55,7 +56,10 @@ class QuoteSiteController extends Controller
     // if no quoteNumber supplied in URL, then prompt for quoteNumber first
     $securityContext = $this->get('security.context');
     $user = $securityContext->getToken()->getUser();
-    $permission = $this->get("permission.set_permission")->getPermission($id, 'quote', $user->getId());
+    if($user !='anon.') {
+      $permission = $this->get("permission.set_permission")
+        ->getPermission($id, 'quote', $user->getId());
+    }
 
     if($quoteNumber===NULL && FALSE === $securityContext->isGranted('ROLE_BRAND')){
 
