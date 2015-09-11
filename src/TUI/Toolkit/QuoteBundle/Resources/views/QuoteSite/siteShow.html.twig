@@ -445,10 +445,11 @@
                     var previewBlock = $("#previewable-content-blocks-" + block);
                     editBlock.html('');
                     editBlock.load('/ajax/contentblocks/' + block + '/edit/' + {{ entity.id }} +'/QuoteVersion', function () {
-                        $("#loader").css("display", "none");
                         $('.item-edit').hide(); // hide ALL edit buttons for all content blocks
+                        $('.add-content-block').hide() // hide ALL Add Block's for all tabs
                         doMDLpopup(editBlock); // run the function to add appropriate MDL classes to form elements
                         previewBlock.html('');
+                        $("#loader").css("display", "none");
                     });
                 });
 

@@ -68,6 +68,7 @@
                 previewBlock.load('/manage/contentblocks/' + blockID + '/show/' + quoteID + '/QuoteVersion', function() {
                     $("#loader").css("display", "none");
                     $('.item-edit').show(); // re-show ALL edit buttons for all content blocks
+                    $('.add-content-block').show() // re-show ALL Add Block's for all tabs
                     editBlock.html('');
                 });
             };
@@ -92,6 +93,7 @@
                     previewBlock.load('/manage/contentblocks/' + blockID + '/show/' + quoteID + '/QuoteVersion', function() {
                         $("#loader").css("display", "none");
                         $('.item-edit').show(); // re-show ALL edit buttons for all content blocks
+                        $('.add-content-block').show() // re-show ALL Add Block's for all tabs
                         $('#content-blocks-' + blockID).removeClass('site-content-blocks-size-full site-content-blocks-size-half');
                         if ( $('#tui_toolkit_contentblocksbundle_contentblock_doubleWidth').is(':checked') ) {
                             $('#content-blocks-' + blockID).addClass('site-content-blocks-size-full');
