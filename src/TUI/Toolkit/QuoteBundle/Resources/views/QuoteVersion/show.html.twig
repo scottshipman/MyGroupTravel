@@ -4,12 +4,12 @@
 
 {% block title %}
     {% if is_granted("ROLE_BRAND") %}
-        Site Show
+        Quote  {% if entity.isTemplate == 1 %} (template) {% endif %}
     {% else %}
         {{ entity.quoteReference.name }}, {{ entity.name }}
     {% endif %}
 {% endblock %}
-{% block page_title %}Site Show{% endblock %}
+{% block page_title %}Quote  {% if entity.isTemplate == 1 %} (template) {% endif %}{% endblock %}
 
 {% block back_link %}
     {% if is_granted("ROLE_BRAND") %}
@@ -22,11 +22,13 @@
 {% block sub_header %}
     <div class="sub-header">
       <div class="inner">
-        {% if entity.quoteReference.institution.media %}
-            <div class="institution-logo">
-                <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.quoteReference.institution.name }}">
-            </div>
-        {% endif %}
+        {% if entity.isTemplate == 0 %} {#only if not a template b/c templates have no institutions #}
+            {% if entity.quoteReference.institution.media %}
+                <div class="institution-logo">
+                    <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.quoteReference.institution.name }}">
+                </div>
+            {% endif %}
+          {% endif %}
 
         {% if entity.quoteReference.institution %}<div id="site-quote-name">{{ entity.quoteReference.institution.name }}</div>{% endif %}
 
@@ -70,11 +72,13 @@
                 {% endif %}
             </a>
         </li>
-        <li>
-            <a id="generate-link" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-                <i class="fa fa-sign-in"></i> Generate quote link
-            </a>
-        </li>
+        {% if entity.isTemplate == 0 %} {# no Quotelinks for templates needed #}
+            <li>
+                <a id="generate-link" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+                    <i class="fa fa-sign-in"></i> Generate quote link
+                </a>
+            </li>
+        {% endif %}
     </ul>
     <h3>Summary</h3>
 
@@ -128,17 +132,18 @@
         </tbody>
     </table>
 
-    <hr>
-
-    <table>
-        <tbody>
-        <tr>
-            <th>Organizer</th><td>{% if entity.quoteReference.organizer %}{{ entity.quoteReference.organizer.firstName }} {{ entity.quoteReference.organizer.lastName }} {{ entity.quoteReference.organizer.email }}{% endif %}
-                {% if entity.quoteReference.organizer %}<a href="{{ path('user_edit', { 'id': entity.quoteReference.organizer.id }) }}" alt = "Edit"><i class="fa fa-pencil-square-o"></i></a>{% endif %}
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    {% if entity.isTemplate == 0 %} {# Templates dont have Organizers #}
+        <hr>
+        <table>
+            <tbody>
+            <tr>
+                <th>Organizer</th><td>{% if entity.quoteReference.organizer %}{{ entity.quoteReference.organizer.firstName }} {{ entity.quoteReference.organizer.lastName }} {{ entity.quoteReference.organizer.email }}{% endif %}
+                    {% if entity.quoteReference.organizer %}<a href="{{ path('user_edit', { 'id': entity.quoteReference.organizer.id }) }}" alt = "Edit"><i class="fa fa-pencil-square-o"></i></a>{% endif %}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    {% endif %}
 
     <hr>
 

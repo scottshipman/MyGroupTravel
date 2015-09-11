@@ -350,7 +350,7 @@ class QuoteVersionController extends Controller
             'quoteReference.salesAgent.firstName',
             'quoteReference.salesAgent.lastName',
             'quoteReference.salesAgent.email',
-            'quoteReference.destination',
+            //'quoteReference.destination',
             'created',
             'version',
             'id',
@@ -364,7 +364,12 @@ class QuoteVersionController extends Controller
             'departureDate',
             'returnDate',
             'pricePerson',
-            'currency.name'
+            'currency.name',
+            'views',
+            'shareViews',
+            'organizer_full',
+            'institution_full',
+            'quoteNumber'
         );
 
         // Creates simple grid based on your entity (ORM)
@@ -416,11 +421,15 @@ class QuoteVersionController extends Controller
         $reference = $grid->getColumn('quoteNumber');
         $reference->setFilterable(false);
         // institution
-        $institution = $grid->getColumn('quoteReference.institution.name');
+        $institution = $grid->getColumn('institution_full');
         $institution->setFilterable(false);
         // organizer
         $organizer = $grid->getColumn('organizer_full');
         $organizer->setFilterable(false);
+
+        // rename Primary sales AGent to Created By
+        $organizer = $grid->getColumn('salesAgent_full');
+        $organizer->setTitle('Created By');
 
         // Set the default order of the grid
         $grid->setDefaultOrder('created', 'DESC');
@@ -966,6 +975,17 @@ class QuoteVersionController extends Controller
                 $uniqueEntity
             );
             if (count($errors)==0) {
+
+                // clone the content blocks
+                $new_entity->setContent($this->cloneContentBlocks($entity->getContent()));
+
+                    // And clone the Header block if it has one
+                    if ($entity->getHeaderBlock()) {
+                        $headerBlock = $entity->getHeaderBlock()->getId();
+                        $new_entity->setHeaderBlock($this->cloneHeaderBlock($headerBlock));
+                    }
+
+
                 $new_entity->setId(null);
                 $em->detach($entity);
                 $em->persist($new_entity);
@@ -1290,7 +1310,7 @@ class QuoteVersionController extends Controller
                     $originalBlock = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($block);
 
                     if (!$originalBlock) {
-                        throw $this->createNotFoundException('Unable to find Content entity.');
+                        throw $this->createNotFoundException('Unable to find Content entity while cloning.');
                     }
 
                     $newBlock = clone $originalBlock;
