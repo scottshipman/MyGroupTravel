@@ -279,6 +279,16 @@
 
 .mode-edit {
 
+  .inner-wrapper {
+    position: relative;
+
+    &:hover {
+      outline: 1px solid #000;
+      @include mdl-primary-color( outline-color, 6 );
+    }
+
+  }
+
   .status-preview-edit {
     display: block;
   }
@@ -295,24 +305,23 @@
   .edit-icons {
     position: absolute;
     top: 6px;
-    right: $column_gutter_width;
-    padding-right: 1em;
-  }
-
-  .site-content-blocks-size-half .edit-icons {
-    right: $column_gutter_width * ( 100% / ($column_total_width * 2)); // correction for smaller column
+    right: 1em;
   }
 
   .move-icon {
     cursor: move;
     position: absolute;
     top: 6px;
-    left: $column_gutter_width;
-    padding-left: 1em;
+    left: 1em;
   }
 
-  .site-content-blocks-size-half .move-icon {
-    left: $column_gutter_width * ( 100% / ($column_total_width * 2)); // correction for smaller column
+  .content-block-locked {
+
+    .item-edit,
+    .item-resize {
+      display: none;
+    }
+
   }
 
   .move-cursor {
@@ -326,4 +335,5 @@
   #site-header-summary-form {
     margin: 2em;
   }
+
 }

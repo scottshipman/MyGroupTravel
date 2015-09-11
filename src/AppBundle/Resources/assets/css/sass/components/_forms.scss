@@ -10,6 +10,11 @@ form {
   position: relative;
 }
 
+.mdl-form-mimic {
+  position: relative;
+  z-index: 1;
+}
+
 .mdl-label-mimic {
   font-size: 12px;
   white-space: nowrap;
@@ -17,7 +22,7 @@ form {
   label {
     @include mdl-primary-color(color, 6);
   }
-  
+
 }
 
 .mdl-form-wrap {

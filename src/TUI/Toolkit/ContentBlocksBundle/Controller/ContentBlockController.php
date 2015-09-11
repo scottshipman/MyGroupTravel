@@ -35,12 +35,12 @@ class ContentBlockController extends Controller
      * Creates a new ContentBlock entity.
      *
      */
-    public function createAction(Request $request, $quoteVersion=null)
+    public function createAction(Request $request, $class = null, $quoteVersion = null, $tabId = null)
     {
         $entity = new ContentBlock();
         $medias = array();
         $em = $this->getDoctrine()->getManager();
-        $form = $this->createCreateForm($entity, $quoteVersion);
+        $form = $this->createCreateForm($entity, $class, $quoteVersion, $tabId);
         $form->handleRequest($request);
 
         if (NULL != $form->getData()->getMedia()) {
@@ -63,20 +63,40 @@ class ContentBlockController extends Controller
             $em->persist($entity);
             $em->flush();
 
-          $responseContent = json_encode($entity->getContent());
+            if ($class == 'QuoteVersion') {
+                $parent = $em->getRepository('QuoteBundle:QuoteVersion')->find($quoteVersion);
+            } elseif ($class == 'TourVersion') {
+                //$parent = $em->getRepository('TourBundle:TourVersion')->find($quoteVersion);
+            }
+            if (!$parent) {
+                throw  $this->createNotFoundException('Unable to find Quote or Tour in order to update content array.');
+            }
+            // rebuild content array and remove block
+            $content = $parent->getContent();
+            foreach ($content as $tab => $data) {
+                if ($tab == $tabId) {
+                    $content[$tab][1][] =  $entity->getId();
+                }
+            }
 
-          return new Response($responseContent,
-            Response::HTTP_OK,
-            array('content-type' => 'application/json')
-          );
+            $parent->setContent($content);
+            $em->flush($parent);
 
-            //return $this->redirect($this->generateUrl('manage_contentblocks_show', array('id' => $entity->getId())));
+            $responseContent = json_encode($entity->getId());
+
+            return new Response($responseContent,
+                Response::HTTP_OK,
+                array('content-type' => 'application/json')
+            );
+
+//            return $this->redirect($this->generateUrl('manage_contentblocks_show', array('id' => $quoteId)));
         }
 
         return $this->render('ContentBlocksBundle:ContentBlock:new.html.twig', array(
-          'entity' => $entity,
-          'form'   => $form->createView(),
-          'quoteVersion'  => $quoteVersion,
+            'entity' => $entity,
+            'form' => $form->createView(),
+            'quoteVersion' => $quoteVersion,
+            '$tabId' => $tabId
         ));
     }
 
@@ -87,11 +107,12 @@ class ContentBlockController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(ContentBlock $entity, $quoteVersion=null, $class=null)
+    private function createCreateForm(ContentBlock $entity, $class = null, $quoteVersion = null, $tabId = null)
     {
         $form = $this->createForm($this->get('form.type.contentblock'), $entity, array(
-            'action' => $this->generateUrl('manage_contentblocks_create', array('quoteVersion' => $quoteVersion, 'class' => $class)),
+            'action' => $this->generateUrl('manage_contentblocks_create', array( 'class' => $class, 'quoteVersion' => $quoteVersion, 'tabId' => $tabId)),
             'method' => 'POST',
+            'attr' => array('id' => 'newBlockIdForm')
         ));
 
         $form->add('submit', 'submit', array('label' => 'Create'));
@@ -103,15 +124,15 @@ class ContentBlockController extends Controller
      * Displays a form to create a new ContentBlock entity.
      *
      */
-    public function newAction($quoteVersion, $class)
+    public function newAction($class=null, $quoteVersion=null, $tabId=null)
     {
         $entity = new ContentBlock();
-        $form   = $this->createCreateForm($entity, $quoteVersion, $class);
+        $form = $this->createCreateForm($entity, $class, $quoteVersion, $tabId);
 
         return $this->render('ContentBlocksBundle:ContentBlock:new.html.twig', array(
             'entity' => $entity,
-            'form'   => $form->createView(),
-            'quoteVersion'  => $quoteVersion,
+            'form' => $form->createView(),
+            'quoteVersion' => $quoteVersion,
         ));
     }
 
@@ -175,7 +196,7 @@ class ContentBlockController extends Controller
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
             'quoteVersion' => $quoteVersion,
-            'class'       => $class,
+            'class' => $class,
         ));
     }
 
@@ -191,8 +212,8 @@ class ContentBlockController extends Controller
         $form = $this->createForm($this->get('form.type.contentblock'), $entity, array(
             'action' => $this->generateUrl('manage_contentblocks_update', array('id' => $entity->getId(), 'quoteVersion' => $quoteVersion, 'class' => $class)),
             'method' => 'POST',
-            'attr'  => array (
-              'id' => 'ajax_contentblocks_form'
+            'attr' => array(
+                'id' => 'ajax_contentblocks_form'
             ),
         ));
 
@@ -262,7 +283,7 @@ class ContentBlockController extends Controller
             'delete_form' => $deleteForm->createView(),
             'collection' => $collection,
             'quoteVersion' => $quoteVersion,
-            'class'       => $class,
+            'class' => $class,
         ));
     }
 
@@ -278,11 +299,11 @@ class ContentBlockController extends Controller
             $entity = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($id);
 
             if (!$entity) {
-                $error =  $this->createNotFoundException('Unable to find ContentBlock entity.');
+                $error =  $this->createNotFoundException('Unable to find ContentBlock entity for deletion.');
             } else {
 
               $em->remove($entity);
-              $em->flush();
+              $em->flush($entity);
             }
 
       if ($class=='QuoteVersion'){
@@ -290,6 +311,23 @@ class ContentBlockController extends Controller
       } elseif( $class =='TourVersion'){
         //$parent = $em->getRepository('TourBundle:TourVersion')->find($quoteVersion);
       }
+      if(!$parent){
+        throw  $this->createNotFoundException('Unable to find Quote or Tour in order to update content array.');
+      }
+      // rebuild content array and remove block
+      $content = $parent->getContent();
+      foreach($content as $k1=>$q) {
+        foreach($q[1] as $k2=>$v) {
+          if($v == $id) {
+            $foo = '';
+            unset($content[$k1][1][$k2]);
+          }
+        }
+      }
+
+      $parent->setContent($content);
+      $em->flush($parent);
+
       $responseContent =  json_encode($parent->getContent());
       return new Response($responseContent,
         Response::HTTP_OK,

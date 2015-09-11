@@ -7,13 +7,13 @@ manage_contentblocks_show:
     defaults: { _controller: "ContentBlocksBundle:ContentBlock:show" }
 
 manage_contentblocks_new:
-    path:     /new/{quoteVersion}/{class}
+    path:     /new/{class}/{quoteVersion}/{tabId}
     defaults: { _controller: "ContentBlocksBundle:ContentBlock:new" }
 
 manage_contentblocks_create:
-    path:     /create/{quoteVersion}/{class}
+    path:     /create/{class}/{quoteVersion}/{tabId}
     defaults: { _controller: "ContentBlocksBundle:ContentBlock:create" }
-    methods:  POST
+    methods:  [POST, GET]
 
 manage_contentblocks_edit:
     path:     /{id}/edit/{quoteVersion}/{class}

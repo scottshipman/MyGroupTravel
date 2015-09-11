@@ -1,5 +1,7 @@
 {# Only visible in Quote #}
 
+<h2 id="edit-title-{{ entity.id }}">{{ entity.title }}</h2>
+
 <div class="media-wrapper">
 
     <div class="existing-media-wrapper">
@@ -47,6 +49,11 @@
     $(document).ready(function() {
         // Add a cancel button
         $('.button-row').append('<button id="cancel-reload" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Cancel</button>');
+
+        // Change the h2's title when editing the title
+        $('#tui_toolkit_contentblocksbundle_contentblock_title').on( 'blur change paste keyup input', function() {
+            $('#edit-title-{{ entity.id }}').html( $(this).val() );
+        });
 
         // Do stuff w/ cancel button
         $(document).on('click', '#cancel-reload', function () {

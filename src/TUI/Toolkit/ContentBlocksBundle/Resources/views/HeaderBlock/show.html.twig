@@ -1,10 +1,10 @@
-<div id="header-block-content-item" class="content-block"  blockId = "{{ entity.id }}">
+<div id="header-block-content-item" class="header-block-content-item content-block" blockId="{{ entity.id }}">
     <div class="flexslider">
         <ul class="slides">
-            {%  if entity %}
+            {% if entity %}
                 {% for media in entity.media %}
                     <li>
-                        <img src="{{ asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) | imagine_filter('slideShow') }}" />
+                        <span class="inner-list"><span><img src="{{ asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) | imagine_filter('slideShow') }}"></span></span>
                     </li>
                 {% endfor %}
             {% endif %}

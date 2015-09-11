@@ -751,7 +751,7 @@ class QuoteVersionController extends Controller
 
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('QuoteBundle:QuoteVersion:siteShowTabOrder.html.twig', array(
+        return $this->render('QuoteBundle:QuoteSite:siteShowTabOrder.html.twig', array(
             'entity' => $entity,
             'delete_form' => $deleteForm->createView(),
             'locale' => $locale,
