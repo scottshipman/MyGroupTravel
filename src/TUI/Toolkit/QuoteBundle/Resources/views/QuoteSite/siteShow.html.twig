@@ -570,7 +570,7 @@
 
 {% block footer_left %}
     {% if entity.quoteReference.salesAgent %}
-        <span class="intro">Tour Organizer:</span>
+        <span class="intro">Primary Business Contact:</span>
         {% if entity.quoteReference.salesAgent.media %}
             <span class="tui-image-avatar"><img
                         src="{{ asset( entity.quoteReference.salesAgent.media.getRelativePath ~ "/" ~ entity.quoteReference.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}"
