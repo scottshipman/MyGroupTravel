@@ -341,7 +341,9 @@
   }
 
   .add-content-block-form {
+    margin-top: $element-bottom / 2;
     padding: 0 $column_gutter_width;
+    clear: both;
   }
 
 }
