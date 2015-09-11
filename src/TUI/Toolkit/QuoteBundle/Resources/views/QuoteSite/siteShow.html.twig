@@ -375,6 +375,8 @@
                         $("#loader").css("display", "none");
                         $('#content-block-editForm-' + tabId).show();
                         $(".site-content-blocks-edit").hide();
+                        $(".sortable-tabs").sortable("disable");
+                        $(".sortable-items").sortable("disable");
                         doMDLpopup($('#content-block-editForm-' + tabId)); // run the function to add appropriate MDL classes to form elements
                         $('#newBlockIdForm').ajaxForm({
                             success: function (response) {
