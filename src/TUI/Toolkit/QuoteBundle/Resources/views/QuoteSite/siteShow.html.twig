@@ -193,7 +193,6 @@
                     {% endfor %}
                     <a id="add-content-block" tabId="{{ tab }}" href="#" class="add-content-block site-content-blocks-edit status-preview-edit"><i class="fa fa-plus-circle"></i> Add Block</a>
                     <div id="content-block-editForm-{{ tab }}" class="add-content-block-form" style="display: none;"></div>
-                    <a id ="content-block-editForm-{{ tab }}-cancel" tabId="{{ tab }}" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored content-block-cancel" style="display:none; background-color: red; color:white;" href="#">Cancel</a>
                 </div>
                 {% set activeTab = '' %}
             {% endfor %}
@@ -370,25 +369,23 @@
                 });
 
                 //Cancel function for inline content block creation
-                $(".content-block-cancel").on('click', function (e) {
+                $(document).on('click', '.content-block-cancel', function (e) {
                     var tabId = $(this).attr("tabId");
-                    console.log("did it click");
-                    console.log('#content-block-editForm-' + tabId);
-                    $('#content-block-editForm-' + tabId).empty();
-                    $('#content-block-editForm-' + tabId).hide();
+                    $('#content-block-editForm-' + tabId).empty().hide();
                     $('.item-edit').show();
                     $(".site-content-blocks-edit").show();
                     $(this).hide();
                     $(".sortable-tabs").sortable("enable");
                     $(".sortable-items").sortable("enable");
-
                 });
 
                 //Inline content block creation
                 $(".site-content-blocks-edit").on('click', function (e) {
+                    e.preventDefault();
                     $("#loader").css("display", "block");
                     var tabId = $(this).attr("tabId");
                     $("#content-block-editForm-" + tabId).load('/manage/contentblocks/new/QuoteVersion/' + {{ entity.id }} +'/' + tabId, function () {
+                        $("#content-block-editForm-" + tabId + " .button-row").append( '<a id ="content-block-editForm-' + tabId + '-cancel" tabId="' + tabId + '" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored content-block-cancel" style="display: none; background-color: red; color: white;" href="#">Cancel</a>' );
                         $('.item-edit').hide(); // hide ALL edit buttons for all content blocks
                         $("#loader").css("display", "none");
                         $('#content-block-editForm-' + tabId).show();
@@ -403,12 +400,9 @@
                             },
                             success: function (response) {
                                 console.log(response);
-                                $('#content-block-editForm-' + tabId).empty();
-                                $('#content-block-editForm-' + tabId).hide();
-                                $(".content-block-cancel").hide();
-                                window.location.reload();
+                                $('#content-block-editForm-' + tabId).empty().hide();
                                 $("#loader").css("display", "block");
-
+                                window.location.reload();
                             }
                         });
                     });
@@ -451,10 +445,11 @@
                     var previewBlock = $("#previewable-content-blocks-" + block);
                     editBlock.html('');
                     editBlock.load('/ajax/contentblocks/' + block + '/edit/' + {{ entity.id }} +'/QuoteVersion', function () {
-                        $("#loader").css("display", "none");
                         $('.item-edit').hide(); // hide ALL edit buttons for all content blocks
+                        $('.add-content-block').hide() // hide ALL Add Block's for all tabs
                         doMDLpopup(editBlock); // run the function to add appropriate MDL classes to form elements
                         previewBlock.html('');
+                        $("#loader").css("display", "none");
                     });
                 });
 
