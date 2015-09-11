@@ -165,7 +165,7 @@
                                         <div class="move-icon"><i class="fa fa-arrows" title="Rearrange"></i></div>
                                         <div id="content-block-actions-{{ items[item].id }}" class="edit-icons {% if items[item].locked %}content-block-locked{% endif %}">
                                             <i class="item-edit content-block-item-action fa fa-pencil-square-o"
-                                               title="Edit"></i>
+                                               title="Edit" blockId="{{ items[item].id }}"></i>
                                             <i class="item-resize content-block-item-action fa fa-arrows-h {{ size }}"
                                                title="Resize" blockId="{{ items[item].id }}"></i>
                                             <i class="item-lock content-block-item-action fa {% if items[item].locked %}fa-unlock-alt{% else %}fa-lock{% endif %}"
@@ -404,12 +404,12 @@
                         if (t.hasClass('half')) {
                             // Will now be full
                             t.addClass('full').removeClass('half');
-                            t.parents('.site-content-blocks').addClass('site-content-blocks-size-full').removeClass('site-content-blocks-size-half');
+                            $('#content-blocks-' + blockID).addClass('site-content-blocks-size-full').removeClass('site-content-blocks-size-half');
                             $('#content-block-id-' + blockID).addClass('content-block-size-full').removeClass('content-block-size-half');
                         } else {
                             // Will now be half
                             t.addClass('half').removeClass('full');
-                            t.parents('.site-content-blocks').addClass('site-content-blocks-size-half').removeClass('site-content-blocks-size-full');
+                            $('#content-blocks-' + blockID).addClass('site-content-blocks-size-half').removeClass('site-content-blocks-size-full');
                             $('#content-block-id-' + blockID).addClass('content-block-size-half').removeClass('content-block-size-full');
                         }
                         $("#loader").css("display", "none");
@@ -417,9 +417,8 @@
                 });
 
                 // edit a content block
-                $(".item-edit").on('click', function (e) {
+                $(".item-edit").on('click', function () {
                     var t = $(this);
-                    e.preventDefault();
                     $("#loader").css("display", "block");
                     var block = t.attr('blockId');
                     var editBlock = $("#editable-content-blocks-" + block);
