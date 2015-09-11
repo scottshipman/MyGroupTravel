@@ -191,8 +191,9 @@
                             </div>
                         </div>
                     {% endfor %}
-                    <a id="add-content-block" tabId="{{ tab }}" href="#" class="add-content-block site-content-blocks-edit status-preview-edit"><i class="fa fa-clone"></i> Add Block</a>
+                    <a id="add-content-block" tabId="{{ tab }}" href="#" class="add-content-block site-content-blocks-edit status-preview-edit"><i class="fa fa-plus-circle"></i> Add Block</a>
                     <div id="content-block-editForm-{{ tab }}" class="add-content-block-form" style="display: none;"></div>
+                    <a id ="content-block-editForm-{{ tab }}-cancel" tabId="{{ tab }}" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored content-block-cancel" style="display:none; background-color: red; color:white;" href="#">Cancel</a>
                 </div>
                 {% set activeTab = '' %}
             {% endfor %}
@@ -368,26 +369,46 @@
                     });
                 });
 
-                // Inline content block creation
-                $(".add-content-block").on('click', function (e) {
+                //Cancel function for inline content block creation
+                $(".content-block-cancel").on('click', function (e) {
+                    var tabId = $(this).attr("tabId");
+                    console.log("did it click");
+                    console.log('#content-block-editForm-' + tabId);
+                    $('#content-block-editForm-' + tabId).empty();
+                    $('#content-block-editForm-' + tabId).hide();
+                    $('.item-edit').show();
+                    $(".site-content-blocks-edit").show();
+                    $(this).hide();
+                    $(".sortable-tabs").sortable("enable");
+                    $(".sortable-items").sortable("enable");
+
+                });
+
+                //Inline content block creation
+                $(".site-content-blocks-edit").on('click', function (e) {
                     $("#loader").css("display", "block");
                     var tabId = $(this).attr("tabId");
-                    console.log(tabId);
                     $("#content-block-editForm-" + tabId).load('/manage/contentblocks/new/QuoteVersion/' + {{ entity.id }} +'/' + tabId, function () {
                         $('.item-edit').hide(); // hide ALL edit buttons for all content blocks
                         $("#loader").css("display", "none");
                         $('#content-block-editForm-' + tabId).show();
-                        $(".site-content-blocks-edit").hide(); // hide All Add Block's on all tabs
-                        doMDLpopup( $('#content-block-editForm-' + tabId) ); // run the function to add MDL classes to form elements
+                        $('#content-block-editForm-' + tabId + '-cancel').show();
+                        $(".site-content-blocks-edit").hide();
+                        $(".sortable-tabs").sortable("disable");
+                        $(".sortable-items").sortable("disable");
+                        doMDLpopup($('#content-block-editForm-' + tabId)); // run the function to add appropriate MDL classes to form elements
                         $('#newBlockIdForm').ajaxForm({
                             beforeSerialize: function () {
                                 CKEDITOR.instances.tui_toolkit_contentblocksbundle_contentblock_body.updateElement();
                             },
                             success: function (response) {
                                 console.log(response);
-                                $('#content-block-editForm').empty().hide();
+                                $('#content-block-editForm-' + tabId).empty();
+                                $('#content-block-editForm-' + tabId).hide();
+                                $(".content-block-cancel").hide();
                                 window.location.reload();
                                 $("#loader").css("display", "block");
+
                             }
                         });
                     });
