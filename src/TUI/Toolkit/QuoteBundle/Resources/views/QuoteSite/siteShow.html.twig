@@ -193,6 +193,7 @@
                     {% endfor %}
                     <a id="add-content-block" tabId="{{ tab }}" href="#" class="status-preview-edit site-content-blocks-edit"><i class="fa fa-clone"></i> Add Block</a>
                     <div id="content-block-editForm-{{ tab }}" style="display:none;"></div>
+                    <a id ="content-block-editForm-{{ tab }}-cancel" tabId="{{ tab }}" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored content-block-cancel" style="display:none; background-color: red; color:white;" href="#">Cancel</a>
                 </div>
                 {% set activeTab = '' %}
             {% endfor %}
@@ -363,17 +364,30 @@
                     });
                 });
 
+                //Cancel function for inline content block creation
+                $(".content-block-cancel").on('click', function (e) {
+                    var tabId = $(this).attr("tabId");
+                    console.log("did it click");
+                    console.log('#content-block-editForm-' + tabId);
+                    $('#content-block-editForm-' + tabId).empty();
+                    $('#content-block-editForm-' + tabId).hide();
+                    $('.item-edit').show();
+                    $(".site-content-blocks-edit").show();
+                    $(this).hide();
+                    $(".sortable-tabs").sortable("enable");
+                    $(".sortable-items").sortable("enable");
+
+                });
+
                 //Inline content block creation
                 $(".site-content-blocks-edit").on('click', function (e) {
                     $("#loader").css("display", "block");
                     var tabId = $(this).attr("tabId");
-                    console.log(tabId);
-                    console.log("#content-block-editForm" + tabId);
                     $("#content-block-editForm-" + tabId).load('/manage/contentblocks/new/QuoteVersion/' + {{ entity.id }} +'/' + tabId, function () {
-                        console.log("did it load");
                         $('.item-edit').hide(); // hide ALL edit buttons for all content blocks
                         $("#loader").css("display", "none");
                         $('#content-block-editForm-' + tabId).show();
+                        $('#content-block-editForm-' + tabId + '-cancel').show();
                         $(".site-content-blocks-edit").hide();
                         $(".sortable-tabs").sortable("disable");
                         $(".sortable-items").sortable("disable");
@@ -383,6 +397,7 @@
                                 console.log(response);
                                 $('#content-block-editForm-' + tabId).empty();
                                 $('#content-block-editForm-' + tabId).hide();
+                                $(".content-block-cancel").hide();
                                 window.location.reload();
                                 $("#loader").css("display", "block");
 
