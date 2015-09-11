@@ -226,8 +226,9 @@
         $(document).ready(function () {
 
             //remove the CopytoClipboard button if not Flash
-            if (navigator.mimeTypes ["application/x-shockwave-flash"] == undefined)
+            if (navigator.mimeTypes ["application/x-shockwave-flash"] == undefined) {
                 $("#cop-button").hide();
+            }
 
             // Disable drag-and-drop on page load b/c the default is preview mode
             $(".sortable-tabs").sortable("disable");
