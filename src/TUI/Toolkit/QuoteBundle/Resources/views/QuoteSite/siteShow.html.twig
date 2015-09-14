@@ -269,7 +269,7 @@
                 $("#dialog").html("");
                 $("#dialog").dialog({width: '60%'}).dialog("option", "title", "Loading...").dialog("open");
                 $("#dialog").load('/quote/view/change-request/form/' + {{ entity.id}}, function () {
-                    $(this).dialog("option", "title", "I'd like to make some changes");
+                    $(this).dialog("option", "title", "I'd prefer to make some changes");
                     doMDLpopup($('#dialog')); // run the function to add appropriate MDL classes to form elements
 
                 });
@@ -281,7 +281,7 @@
                 $("#dialog").html("");
                 $("#dialog").dialog({width: '60%'}).dialog("option", "title", "Loading...").dialog("open");
                 $("#dialog").load('/quote/view/accepted/form/' + {{ entity.id}}, function () {
-                    $(this).dialog("option", "title", "I'd like to accept this quote");
+                    $(this).dialog("option", "title", "Like this quote");
                     doMDLpopup($('#dialog')); // run the function to add appropriate MDL classes to form elements
                 });
             });
@@ -617,12 +617,12 @@
         {% else %}
             <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
                href="{{ path('quote_site_quote_accepted', { 'id': entity.id }) }}">
-                <i class="fa fa-thumbs-o-up"> </i> Accept Quote
+                <i class="fa fa-thumbs-o-up"> </i> Like Quote
             </a>
         {% endif %}
     {% elseif (entity.converted is sameas(true)) and (entity.quoteReference.converted is sameas(true)) %}
         <a class="accepted-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-            <i class="fa fa-thumbs-up"> </i> Accepted
+            <i class="fa fa-thumbs-up"> </i> Liked
         </a>
     {% endif %}
 {% endblock %}
