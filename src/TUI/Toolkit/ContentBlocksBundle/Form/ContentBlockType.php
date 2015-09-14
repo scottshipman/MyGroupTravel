@@ -51,7 +51,8 @@ class ContentBlockType extends AbstractType
                   'data_class' => 'TUI\Toolkit\ContentBlocksBundle\Entity\LayoutType',
                   'choice_label' => 'name',
                   'expanded' => TRUE,
-                  'multiple' => FALSE
+                  'multiple' => FALSE,
+                  'required' => TRUE
                 ))
                 ->add('doubleWidth', 'checkbox', array(
                   'required' => false
