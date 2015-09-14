@@ -77,12 +77,14 @@
                         <div class="site-content-blocks-item">
                             <div class="status-preview-edit site-content-block-actions">
                                 <div class="edit-icons">
+                                    {% if entity.headerBlock.locked %}
+                                    <i id="lock-header-block"
+                                       class="item-lock content-block-item-action fa fa-unlock-alt" title="Unlock" blockId="{{ entity.headerBlock.id }}"></i>
+                                    {% else %}
                                     <i id="edit-header-block"
-                                       class="content-block-item-action fa fa-pencil-square-o" title="Edit"></i></a>
-                                    {% if entity.headerBlock.locked %}<i id="lock-header-block"
-                                                                         class="content-block-item-action fa fa-unlock-alt" title="Unlock"></i> {% else %}
-                                        <i id="edit-header-block"
-                                           class="content-block-item-action fa fa-lock" title="Lock"></i>{% endif %}
+                                       class="content-block-item-action item-edit fa fa-pencil-square-o" title="Edit" blockId="{{ entity.headerBlock.id }}"></i></a>
+                                      <i id="lock-header-block"
+                                       class="item-lock content-block-item-action fa fa-lock" title="Lock" blockId="{{ entity.headerBlock.id }}"></i>{% endif %}
                                 </div>
                             </div>
                         </div>
@@ -106,7 +108,7 @@
                     <div class="site-content-blocks-item">
                         <div class="status-preview-edit site-content-block-actions">
                             <div class="edit-icons">
-                                <i id="edit-header-summary" class="content-block-item-action item-edit fa fa-pencil-square-o" title="Edit"></i>
+                                {% if entity.locked == 0 %}<i id="edit-header-summary" class="content-block-item-action item-edit fa fa-pencil-square-o" title="Edit"></i>{% endif %}
                                 {% if entity.locked %}<i action="unlock" id="lock-header-summary"class="content-block-item-action fa fa-unlock-alt" title="Unlock"></i> {% else %} <i action="lock" id="lock-header-summary" class="content-block-item-action fa fa-lock" title="Lock"></i>{% endif %}
                             </div>
                         </div>
@@ -267,7 +269,7 @@
                 $("#dialog").html("");
                 $("#dialog").dialog({width: '60%'}).dialog("option", "title", "Loading...").dialog("open");
                 $("#dialog").load('/quote/view/change-request/form/' + {{ entity.id}}, function () {
-                    $(this).dialog("option", "title", "I'd like to make some changes");
+                    $(this).dialog("option", "title", "I'd prefer to make some changes");
                     doMDLpopup($('#dialog')); // run the function to add appropriate MDL classes to form elements
 
                 });
@@ -279,7 +281,7 @@
                 $("#dialog").html("");
                 $("#dialog").dialog({width: '60%'}).dialog("option", "title", "Loading...").dialog("open");
                 $("#dialog").load('/quote/view/accepted/form/' + {{ entity.id}}, function () {
-                    $(this).dialog("option", "title", "I'd like to accept this quote");
+                    $(this).dialog("option", "title", "Like this quote");
                     doMDLpopup($('#dialog')); // run the function to add appropriate MDL classes to form elements
                 });
             });
@@ -310,6 +312,7 @@
                     var blockId = $('#header-block-content-item').attr('blockId')
                     $("#site-header-editForm").load('/manage/contentblocks/edit/header/layout-editor/' + blockId, function () {
                         $('.item-edit').hide(); // hide ALL edit buttons for all content blocks
+                        $('.add-content-block').hide();
                         $("#loader").css("display", "none");
                         $('#site-header-editForm').show();
                         $('#site-header-slideshow').hide();
@@ -487,16 +490,26 @@
                 // toggle the header summary lock
                 $(document).on('click', '#lock-header-summary', function (e) {
                     e.preventDefault();
+                    var editElement = $('#edit-header-summary');
                     $("#loader").css("display", "block");
                     var action = $(this).attr('action');
                     $.ajax({
                         url: '/manage/quoteversion/{{ entity.id }}/lock',
                     }).done(function () {
                         if (action == 'lock') {
+                            if (editElement){
+                                editElement.css('display','none');
+                            }
+
                             $('#lock-header-summary').addClass('fa-unlock-alt')
                             $('#lock-header-summary').removeClass('fa-lock')
                             $('#lock-header-summary').attr('action', 'unlock')
                         } else {
+                            if (editElement){
+                                editElement.css('display','inline-block');
+                            } else {
+                                $(this).parent('.edit-icons').prepend('<i id="edit-header-summary" class="content-block-item-action item-edit fa fa-pencil-square-o" title="Edit"></i>');
+                            }
                             $('#lock-header-summary').addClass('fa-lock')
                             $('#lock-header-summary').removeClass('fa-unlock-alt')
                             $('#lock-header-summary').attr('action', 'lock')
@@ -604,12 +617,12 @@
         {% else %}
             <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
                href="{{ path('quote_site_quote_accepted', { 'id': entity.id }) }}">
-                <i class="fa fa-thumbs-o-up"> </i> Accept Quote
+                <i class="fa fa-thumbs-o-up"> </i> Like Quote
             </a>
         {% endif %}
     {% elseif (entity.converted is sameas(true)) and (entity.quoteReference.converted is sameas(true)) %}
         <a class="accepted-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-            <i class="fa fa-thumbs-up"> </i> Accepted
+            <i class="fa fa-thumbs-up"> </i> Liked
         </a>
     {% endif %}
 {% endblock %}

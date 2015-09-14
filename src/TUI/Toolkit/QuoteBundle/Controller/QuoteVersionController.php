@@ -1259,7 +1259,7 @@ class QuoteVersionController extends Controller
         $quoteVersion->setLocked($status);
         $em->persist($quoteVersion);
         $em->flush();
-        $this->get('session')->getFlashBag()->add('notice', 'Quote Lock has been toggled ');
+       // $this->get('session')->getFlashBag()->add('notice', 'Quote Lock has been toggled ');
 
         return new Response(json_encode((array)$quoteVersion));
 
