@@ -215,12 +215,11 @@ td .layout-icons.image_bottom {
 
 }
 
-.content-block-layout-image_right {
+.content-block-layout-image_right,
+.content-block-layout-image_left {
 
   .content-block-media {
-    float: right;
     width: 50%;
-    padding-left: 2em;
 
     img {
       width: 100%;
@@ -229,8 +228,20 @@ td .layout-icons.image_bottom {
   }
 
   .content-block-body {
-    float: left;
     width: 50%;
+  }
+
+}
+
+.content-block-layout-image_right {
+
+  .content-block-media {
+    float: right;
+    padding-left: 2em;
+  }
+
+  .content-block-body {
+    float: left;
   }
 
 }
@@ -239,18 +250,32 @@ td .layout-icons.image_bottom {
 
   .content-block-media {
     float: left;
-    width: 50%;
     padding-right: 2em;
-
-    img {
-      width: 100%;
-    }
-
   }
 
   .content-block-body {
     float: right;
-    width: 50%;
+  }
+
+}
+
+.content-block-layout-image_top,
+.content-block-layout-image_bottom {
+
+  .content-block-media {
+    width: $column_total_width_reset;
+    margin-left: -$column_gutter_width_reset;
+
+    img {
+      width: $column_total_width;
+      padding: 0 $column_gutter_width;
+
+      &:nth-child(4n+1) {
+        clear: left;
+      }
+
+    }
+
   }
 
 }
@@ -259,16 +284,6 @@ td .layout-icons.image_bottom {
 
   .content-block-media {
     margin-bottom: 1em;
-
-    img {
-      width: 25%;
-
-      &:nth-child(4n+1) {
-        clear: left;
-      }
-
-    }
-
   }
 
 }
@@ -277,16 +292,6 @@ td .layout-icons.image_bottom {
 
   .content-block-media {
     margin-top: 1em;
-
-    img {
-      width: 25%;
-
-      &:nth-child(4n+1) {
-        clear: left;
-      }
-
-    }
-
   }
 
 }
@@ -297,14 +302,10 @@ td .layout-icons.image_bottom {
   &.content-block-layout-image_bottom {
 
     img {
-      width: 50%;
+      width: 100%;
 
       &:nth-child(4n+1) {
         clear: none;
-      }
-
-      &:nth-child(2n+1) {
-        clear: left;
       }
 
     }
