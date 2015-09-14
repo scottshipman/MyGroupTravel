@@ -2,7 +2,15 @@
 
 {% set class = '' %}
 {% if entity.layoutType %}
-    {% set class = 'content-block-layout-' ~ entity.layoutType.name %}
+    {% for media in entity.media %}
+        {% if media %}
+            {% set class = 'content-block-layout-' ~ entity.layoutType.name %}
+        {% else %}
+            {% set class = 'content-block-layout-normal' %}
+        {% endif %}
+    {% endfor %}
+{% else %}
+    {% set class = 'content-block-layout-normal' %}
 {% endif %}
 {% if entity.doubleWidth == 1 %}
     {% set size = 'full' %}
