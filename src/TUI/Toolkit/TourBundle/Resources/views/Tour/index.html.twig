@@ -1,15 +1,15 @@
 {% extends '::base.html.twig' %}
 
-{% block title %}Quote Dashboard - Active{% endblock %}
-{% block page_title %}Quote Dashboard - Active{% endblock %}
+{% block title %}Tour Dashboard - Active{% endblock %}
+{% block page_title %}Tour Dashboard - Active{% endblock %}
 
 {% block body %}
 
-    {% embed "QuoteBundle:QuoteVersion:buttons.html.twig" %}{% endembed %}
+    {% embed "TourBundle:Tour:buttons.html.twig" %}{% endembed %}
 
-    {% embed "QuoteBundle:QuoteVersion:quote_tabs.html.twig" %}
+    {% embed "TourBundle:Tour:tour_tabs.html.twig" %}
         {% block active_tab %}
-            <a class="mdl-tabs__tab is-active" href="{{ path('manage_quote') }}">Active Quotes</a>
+            <a class="mdl-tabs__tab is-active" href="{{ path('manage_tour') }}">Active Tours</a>
         {% endblock %}
     {% endembed %}
     {{ grid_search(grid, 'AppBundle:Grid:grid.html.twig') }}

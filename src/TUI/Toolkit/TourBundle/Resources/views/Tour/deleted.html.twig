@@ -1,14 +1,14 @@
 {% extends '::base.html.twig' %}
-{% block title %}Quote Dashboard - Deleted{% endblock %}
-{% block page_title %}Quote Dashboard - Deleted{% endblock %}
+{% block title %}Tour Dashboard - Deleted{% endblock %}
+{% block page_title %}Tour Dashboard - Deleted{% endblock %}
 
 {% block body -%}
 
-    {% embed "QuoteBundle:QuoteVersion:buttons.html.twig" %}{% endembed %}
+    {% embed "TourBundle:Tour:buttons.html.twig" %}{% endembed %}
 
-    {% embed "QuoteBundle:QuoteVersion:quote_tabs.html.twig" %}
+    {% embed "TourBundle:Tour:tour_tabs.html.twig" %}
         {% block deleted_tab %}
-            <a class="mdl-tabs__tab is-active" href="{{ path('manage_quote_deleted') }}">Deleted Quotes</a>
+            <a class="mdl-tabs__tab is-active" href="{{ path('manage_tour_deleted') }}">Deleted Tours</a>
         {% endblock %}
     {% endembed %}
 

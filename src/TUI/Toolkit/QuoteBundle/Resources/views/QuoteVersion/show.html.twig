@@ -121,7 +121,7 @@
                 <th>Paying places</th>
                 <td>{% if entity.payingPlaces  %}{{ entity.payingPlaces  }}{% endif %}</td>
                 <th>Free places</th>
-                <td>{% if entity.payingPlaces  %}{{ entity.payingPlaces  }}{% endif %}</td>
+                <td>{% if entity.freePlaces  %}{{ entity.freePlaces  }}{% endif %}</td>
             </tr>
             <tr>
                 <th>Quote Name</th>
@@ -476,7 +476,7 @@
 
 {% block footer_left %}
     {% if entity.quoteReference.salesAgent %}
-        <span class="intro">Tour Organizer:</span>
+        <span class="intro">Primary Business Contact:</span>
         {% if entity.quoteReference.salesAgent.media %}
             <span class="tui-image-avatar"><img src="{{ asset( entity.quoteReference.salesAgent.media.getRelativePath ~ "/" ~ entity.quoteReference.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.quoteReference.salesAgent.username }}"></span>
         {% elseif entity.quoteReference.salesAgent.firstName and entity.quoteReference.salesAgent.lastName %}

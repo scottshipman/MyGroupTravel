@@ -4,16 +4,16 @@
 
 {% block title %}
     {% if is_granted("ROLE_BRAND") %}
-        Quote  {% if entity.isTemplate == 1 %} (template) {% endif %}
+        Tour
     {% else %}
-        {{ entity.quoteReference.name }}, {{ entity.name }}
+        {{ entity.name }}
     {% endif %}
 {% endblock %}
-{% block page_title %}Quote  {% if entity.isTemplate == 1 %} (template) {% endif %}{% endblock %}
+{% block page_title %}Tour{% endblock %}
 
 {% block back_link %}
     {% if is_granted("ROLE_BRAND") %}
-        <a class="back-link" href="{{ path('manage_quote') }}"><i class="fa fa-arrow-left"></i> Back to the List</a>
+        <a class="back-link" href="{{ path('manage_tour') }}"><i class="fa fa-arrow-left"></i> Back to the List</a>
     {% else %}
         <a class="back-link" href="/"><i class="fa fa-arrow-left"></i> Back to Dashboard</a>
     {% endif %}
@@ -22,19 +22,17 @@
 {% block sub_header %}
     <div class="sub-header">
       <div class="inner">
-        {% if entity.isTemplate == 0 %} {#only if not a template b/c templates have no institutions #}
-            {% if entity.quoteReference.institution.media %}
+            {% if entity.institution.media %}
                 <div class="institution-logo">
-                    <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.quoteReference.institution.name }}">
+                    <img src="{{ asset( entity.institution.media.getRelativePath ~ "/" ~ entity.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.institution.name }}">
                 </div>
             {% endif %}
-          {% endif %}
 
-        {% if entity.quoteReference.institution %}<div id="site-quote-name">{{ entity.quoteReference.institution.name }}</div>{% endif %}
+        {% if entity.institution %}<div id="site-quote-name">{{ entity.institution.name }}</div>{% endif %}
 
-        <h2>{{ entity.quoteReference.name }}{% if is_granted("ROLE_BRAND") %}, {{ entity.name }}{% endif %} {% if entity.quoteNumber %}({{ entity.quoteNumber }}){% endif %}</h2>
+        <h2>{{ entity.name }}{% if entity.quoteNumber %}({{ entity.quoteNumber }}){% endif %}</h2>
 
-        {% if entity.quoteReference.destination %}<div>{{ entity.quoteReference.destination }}</div>{% endif %}
+        {% if entity.destination %}<div>{{ entity.destination }}</div>{% endif %}
       </div>
     </div>
 {% endblock %}
@@ -43,7 +41,7 @@
     <ul class="record_actions">
         {% if (entity.locked is sameas(false)) and (is_granted("ROLE_ADMIN")) %}
         <li>
-            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quoteversion_edit', { 'id': entity.id }) }}">
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_tour_edit', { 'id': entity.id }) }}">
                 <i class="fa fa-pencil-square-o"> </i> Edit
             </a>
         </li>
@@ -53,18 +51,18 @@
         {% endif %}
         <li>
             {% if entity.quoteNumber %}
-                <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('quote_site_show', { 'id': entity.id, 'quoteNumber': entity.quoteNumber }) }}">
+                <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('tour_site_show', { 'id': entity.id, 'quoteNumber': entity.quoteNumber }) }}">
                     <i class="fa fam-preview"></i> Preview
                 </a>
             {% else %}
-                <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('quote_site_action_show', { 'id': entity.id }) }}">
+                <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('tour_site_action_show', { 'id': entity.id }) }}">
                     <i class="fa fam-preview"></i> Preview
                 </a>
             {% endif %}
         </li>
 
         <li>
-            <a id="quoteLock" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+            <a id="tourLock" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
                 {% if (entity.locked is sameas(false)) %}
                     <i class="fa fa-lock"></i> Lock
                 {% else %}
@@ -72,24 +70,22 @@
                 {% endif %}
             </a>
         </li>
-        {% if entity.isTemplate == 0 %} {# no Quotelinks for templates needed #}
             <li>
                 <a id="generate-link" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-                    <i class="fa fa-sign-in"></i> Generate quote link
+                    <i class="fa fa-sign-in"></i> Generate Tour link
                 </a>
             </li>
-        {% endif %}
     </ul>
     <h3>Summary</h3>
 
     <table class="record_properties">
         <tbody>
             <tr>
-                <th>Institution</th><td>{% if entity.quoteReference.institution %}{{ entity.quoteReference.institution.name }}{% endif %}</td>
-                <th>Tour Name</th><td>{% if entity.quoteReference.name %}{{ entity.quoteReference.name }}{% endif %}</td>
+                <th>Institution</th><td>{% if entity.institution %}{{ entity.institution.name }}{% endif %}</td>
+                <th>Tour Name</th><td>{% if entity.name %}{{ entity.name }}{% endif %}</td>
             </tr>
             <tr>
-                <th>Destination</th><td>{% if entity.quoteReference.destination %}{{ entity.quoteReference.destination }}{% endif %}</td>
+                <th>Destination</th><td>{% if entity.destination %}{{ entity.destination }}{% endif %}</td>
                 <th>Quote Number</th><td>{% if entity.quoteNumber %}{{ entity.quoteNumber }}{% endif %}</td>
             </tr>
         </tbody>
@@ -121,39 +117,32 @@
                 <th>Paying places</th>
                 <td>{% if entity.payingPlaces  %}{{ entity.payingPlaces  }}{% endif %}</td>
                 <th>Free places</th>
-                <td>{% if entity.payingPlaces  %}{{ entity.payingPlaces  }}{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Quote Name</th>
-                <td>{% if entity.name  %}{{ entity.name  }}{% endif %}</td>
-                <th>Expiry Date</th>
-                <td>{% if entity.expiryDate  %}{{ entity.expiryDate|date(format) }}{% endif %}</td>
+                <td>{% if entity.freePlaces  %}{{ entity.freePlaces  }}{% endif %}</td>
             </tr>
         </tbody>
     </table>
 
-    {% if entity.isTemplate == 0 %} {# Templates dont have Organizers #}
         <hr>
         <table>
             <tbody>
             <tr>
-                <th>Organizer</th><td>{% if entity.quoteReference.organizer %}{{ entity.quoteReference.organizer.firstName }} {{ entity.quoteReference.organizer.lastName }} {{ entity.quoteReference.organizer.email }}{% endif %}
-                    {% if entity.quoteReference.organizer %}<a href="{{ path('user_edit', { 'id': entity.quoteReference.organizer.id }) }}" alt = "Edit"><i class="fa fa-pencil-square-o"></i></a>{% endif %}
+                <th>Organizer</th><td>{% if entity.organizer %}{{ entity.organizer.firstName }} {{ entity.organizer.lastName }} {{ entity.organizer.email }}{% endif %}
+                    {% if entity.organizer %}<a href="{{ path('user_edit', { 'id': entity.organizer.id }) }}" alt = "Edit"><i class="fa fa-pencil-square-o"></i></a>{% endif %}
                 </td>
             </tr>
             </tbody>
         </table>
-    {% endif %}
+
 
     <hr>
 
     <table>
         <tbody>
         <tr>
-            <th>Primary Business Administrator</th><td>{% if entity.quoteReference.salesAgent %}{{ entity.quoteReference.salesAgent.firstName }} {{ entity.quoteReference.salesAgent.lastName }} {{ entity.quoteReference.salesAgent.email }}{% endif %}</td>
+            <th>Primary Business Administrator</th><td>{% if entity.salesAgent %}{{ entity.salesAgent.firstName }} {{ entity.salesAgent.lastName }} {{ entity.salesAgent.email }}{% endif %}</td>
         </tr>
         <tr>
-            <th>Other Business Administrator</th><td>{% if entity.quoteReference.secondaryContact %}{{ entity.quoteReference.secondaryContact.firstName }} {{ entity.quoteReference.secondaryContact.lastName }} {{ entity.quoteReference.secondaryContact.email }}{% endif %}</td>
+            <th>Other Business Administrator</th><td>{% if entity.secondaryContact %}{{ entity.secondaryContact.firstName }} {{ entity.secondaryContact.lastName }} {{ entity.secondaryContact.email }}{% endif %}</td>
         </tr>
         </tbody>
     </table>
@@ -267,19 +256,19 @@
                    }
                });
 
-               // Generate a Quote LInk
+               // Generate a Tour LInk
 
                $("#generate-link").on('click', function(e){
                    // todo Get item.id and item.name
                    var link_html = '<p>Copy and paste this link into your email and send it to your opportunity:</p>'+
-                                   '<input size="35" type="text" id="quote-link-input" name="quote-link-input" class="form-control" value="{{ url('quote_site_action_show', {'id': entity.id}) }}" disabled>'+
-                                   '<a href="#" id="copy-button" data-clipboard-target="quote-link-input" title="Click to copy Quote URL" class="not-full mdl-button mdl-js-button mdl-button--raised mdl-button--colored">'+
+                                   '<input size="35" type="text" id="tour-link-input" name="tour-link-input" class="form-control" value="{{ url('tour_site_action_show', {'id': entity.id}) }}" disabled>'+
+                                   '<a href="#" id="copy-button" data-clipboard-target="tour-link-input" title="Click to copy Tour URL" class="not-full mdl-button mdl-js-button mdl-button--raised mdl-button--colored">'+
                                         '<i class="fa fa-sign-in fa-stack"></i>' +
                                     '</a>'+
                                     '<p>You should also provide the Quote Number: <strong>{{ entity.quoteNumber }}<strong></p>';
                    //e.preventDefault();
                    $("#dialog").html(link_html);
-                   $("#dialog").dialog({width:'37%', minHeight: 165, height: 165}).dialog("option", "title", "Quote Link").dialog("open");
+                   $("#dialog").dialog({width:'37%', minHeight: 165, height: 165}).dialog("option", "title", "Tour Link").dialog("open");
                    // Copy to Clipboard
                    ZeroClipboard.config( { swfPath: "//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf" } );
                    var client = new ZeroClipboard( document.getElementById("copy-button") );
@@ -294,7 +283,7 @@
                $("#add-headerBlock").on('click', function(){
                    $("#dialog").html("");
                    $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
-                   $("#dialog").load('/manage/headerblock/new/header/' + {{ entity.id}} +'/QuoteVersion', function() {
+                   $("#dialog").load('/manage/headerblock/new/header/' + {{ entity.id}} +'/Tour', function() {
                        $(this).dialog("option", "title", 'Add Header Content');
                        doMDLpopup( $(this) );
                    });
@@ -305,7 +294,7 @@
                $("#edit-headerBlock").on('click', function(){
                    $("#dialog").html("");
                    $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
-                   $("#dialog").load('/manage/headerblock/'+ {{ entity.headerBlock.id }} + '/header/edit/' + {{ entity.id}} +'/QuoteVersion', function() {
+                   $("#dialog").load('/manage/headerblock/'+ {{ entity.headerBlock.id }} + '/header/edit/' + {{ entity.id}} +'/Tour', function() {
                        $(this).dialog("option", "title", 'Edit Header Content');
                        doMDLpopup( $(this) );
                    });
@@ -317,11 +306,11 @@
                    contentBlocksAddTab('#content-blocks-wrapper', {{ entity.id }});
                });
 
-               // Toggle the quoteVersion Lock
-               $("#quoteLock").on('click', function(){
+               // Toggle the Tour Lock
+               $("#tourLock").on('click', function(){
                    $("#loader").css("display", "inline-block");
                    $.ajax({
-                       url: window.location.protocol + '//' + window.location.hostname + '/manage/quoteversion/{{ entity.id }}/lock',
+                       url: window.location.protocol + '//' + window.location.hostname + '/manage/tour/{{ entity.id }}/lock',
                        headers: {
                            "Pragma": "no-cache",
                            "Expires": -1,
@@ -379,7 +368,7 @@
                 //e.preventDefault();
                 $("#dialog").html("");
                 $("#dialog").dialog({width: '60%', modal: false}).dialog("option", "title", "Loading...").dialog("open");
-                $("#dialog").load( '/ajax/contentblocks/' + block + '/edit/' + {{ entity.id}} + '/QuoteVersion', function() {
+                $("#dialog").load( '/ajax/contentblocks/' + block + '/edit/' + {{ entity.id}} + '/Tour', function() {
                     $(this).dialog("option", "title", 'Edit Content Block');
                     doMDLpopup( $(this) );
                 });
@@ -412,7 +401,7 @@
                 $("#loader").css("display", "block");
                 var blockID = t.attr('blockId');
                 $.ajax({
-                    url: '/manage/contentblocks/' + blockID + '/lock/' + {{ entity.id }} +'/QuoteVersion',
+                    url: '/manage/contentblocks/' + blockID + '/lock/' + {{ entity.id }} +'/Tour',
                     headers: {
                         "Pragma": "no-cache",
                         "Expires": -1,
@@ -440,7 +429,7 @@
                     var blockId = $(this).attr('blockId');
                     $.ajax({
                         method:'DELETE',
-                        url: '/manage/contentblocks/' + blockId + '/delete/' + {{ entity.id }} + '/QuoteVersion',
+                        url: '/manage/contentblocks/' + blockId + '/delete/' + {{ entity.id }} + '/Tour',
                         headers: {
                             "Pragma": "no-cache",
                             "Expires": -1,
@@ -475,35 +464,21 @@
 
 
 {% block footer_left %}
-    {% if entity.quoteReference.salesAgent %}
+    {% if entity.organizer %}
         <span class="intro">Tour Organizer:</span>
-        {% if entity.quoteReference.salesAgent.media %}
-            <span class="tui-image-avatar"><img src="{{ asset( entity.quoteReference.salesAgent.media.getRelativePath ~ "/" ~ entity.quoteReference.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.quoteReference.salesAgent.username }}"></span>
-        {% elseif entity.quoteReference.salesAgent.firstName and entity.quoteReference.salesAgent.lastName %}
-            <span class="tui-text-avatar mdl-typography--headline">{{ entity.quoteReference.salesAgent.firstName[:1] }}{{ entity.quoteReference.salesAgent.lastName[:1] }}</span>
+        {% if entity.organizer.media %}
+            <span class="tui-image-avatar"><img src="{{ asset( entity.organizer.media.getRelativePath ~ "/" ~ entity.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.organizer.username }}"></span>
+        {% elseif entity.organizer.firstName and entity.organizer.lastName %}
+            <span class="tui-text-avatar mdl-typography--headline">{{ entity.organizer.firstName[:1] }}{{ entity.organizer.lastName[:1] }}</span>
         {% else %}
-            <span class="tui-text-avatar mdl-typography--headline">{{ entity.quoteReference.salesAgent.username[:1] }}</span>
+            <span class="tui-text-avatar mdl-typography--headline">{{ entity.organizer.username[:1] }}</span>
         {% endif %}
-        <span class="agent">{{ entity.quoteReference.salesAgent.firstName }} {{ entity.quoteReference.salesAgent.lastName }}<br>
-        {{ entity.quoteReference.salesAgent.email }}</span>
+        <span class="agent">{{ entity.organizer.firstName }} {{ entity.organizer.lastName }}<br>
+        {{ entity.organizer.email }}</span>
     {% endif %}
 {% endblock %}
 
 {% block footer_right %}
     <div class="quote-info"><span class="quote-label">Price per person:</span><span class="quote-price">{% if entity.pricePerson %}<strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong>{% endif %}</span></div>
-    {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
-        {% if date(entity.expiryDate) < date('now') %}
-            <a class="expired-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-                <i class="fa fa-calendar-times-o"></i> Expired
-            </a>
-        {% else %}
-            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('quote_site_quote_accepted', { 'id': entity.id }) }}">
-                <i class="fa fa-thumbs-o-up"> </i> Like Quote
-            </a>
-        {% endif %}
-    {% elseif (entity.converted is sameas(true)) and (entity.quoteReference.converted is sameas(true))%}
-        <a class="accepted-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-            <i class="fa fa-thumbs-up"> </i> Liked
-        </a>
-    {% endif %}
+What goes here????
 {% endblock %}

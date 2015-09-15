@@ -17,7 +17,7 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
  * @UniqueEntity(fields={"quoteNumber"}, message="This Quote Number already exists on another Tour.", ignoreNull=true)
  *
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
- * @GRID\Source(columns="id, name, quoteReference.id, institution_full, institution.name, institution.city, quoteNumber, organizer_full, quoteReference.name, salesAgent_full, salesAgent.firstName, salesAgent.lastName,  salesAgent.email, organizer.firstName, organizer.lastName, organizer.email, views, shareViews, deleted, locked, destination, created, version, duration, tripStatus.name, expiryDate, transportType.name, boardBasis.name, freePlaces, payingPlaces, departureDate, returnDate, pricePerson,  currency.name, status, views, shareViews", filterable=false, sortable=true)
+ * @GRID\Source(columns="id, name, quoteReference.id, institution_full, institution.name, institution.city, quoteNumber, organizer_full, quoteReference.name, salesAgent_full, salesAgent.firstName, salesAgent.lastName,  salesAgent.email, organizer.firstName, organizer.lastName, organizer.email, views, shareViews, deleted, locked, destination, created, version, duration, tripStatus.name, expiryDate, transportType.name, boardBasis.name, freePlaces, payingPlaces, departureDate, returnDate, pricePerson,  pricePersonPublic, currency.name, status, views, shareViews", filterable=false, sortable=true)
  * @GRID\Column(id="organizer_full", type="join", columns = {"organizer.firstName", "organizer.lastName", "organizer.email"}, title="Organizer", export=true, filterable=true, operatorsVisible=false)
  * @GRID\Column(id="salesAgent_full", type="join", columns = {"salesAgent.firstName", "salesAgent.lastName", "salesAgent.email"}, title="Primary Business Admin", export=true, filterable=true, operatorsVisible=false)
  * @GRID\Column(id="institution_full", type="join", columns = {"institution.name", "institution.city"}, title="Institution", export=true, filterable=true, operatorsVisible=false)
@@ -99,6 +99,8 @@ class Tour
      * @ORM\JoinColumn(name="organizer", referencedColumnName="id")
      * @GRID\Column(field="organizer.firstName", type="text", title="Organizer First", export=true)
      * @GRID\Column(field="organizer.lastName", type="text", title="Organizer Last", export=true)
+     * @GRID\Column(field="organizer.email", type="text", title="Organizer Email", export=true)
+     *
      */
     private $organizer;
 
@@ -109,6 +111,7 @@ class Tour
      * @ORM\JoinColumn(name="salesAgent", referencedColumnName="id")
      * @GRID\Column(field="salesAgent.firstName", type="text", title="Business Admin first", filterable=false, export=true)
      * @GRID\Column(field="salesAgent.lastName", type="text", title="Business Admin last", filterable=false, export=true)
+     * @GRID\Column(field="salesAgent.email", type="text", title="Business Admin Email", filterable=false, export=true)
      *
      */
     private $salesAgent;
@@ -283,7 +286,7 @@ class Tour
      * @var float
      *
      * @ORM\Column(name="pricePersonPublic", type="float", nullable=true)
-     * @GRID\Column(title="Price / Person", export=true)
+     * @GRID\Column(title="Price per Person", export=true)
      */
     private $pricePersonPublic;
 
