@@ -1,4 +1,5 @@
 {% block body_html %}
+    {%  if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
     {% autoescape false %}
     <div style="color:#fff; font-size: 1px; text-align: center;">Ensure receiving emails from {{ brand.name }}, please
         add us to
@@ -28,18 +29,18 @@
 
                                     <p>Quote Number: {{ entity.quoteNumber }}</p>
 
-                                    <p>Departing: {{ entity.departureDate.date }}</p>
+                                    <p>Departing: {{ entity.departureDate.date|date(format) }}</p>
 
                                     <p>For {{ entity.duration }} days</p>
 
-                                    <p>Returning {{ entity.returnDate.date }}</p>
+                                    <p>Returning {{ entity.returnDate.date|date(format) }}</p>
 
-                                    <p>Price per person: {{ entity.pricePerson }}</p>
+                                    <p>Price per person: {% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</p>
 
                                     <p>Based on {{ entity.payingPlaces }} paying plus {{ entity.freePlaces }} free
                                         places</p>
 
-                                    <p><strong>Quote valid until {{ entity.expiryDate.date }}</strong></p>
+                                    <p><strong>Quote valid until {{ entity.expiryDate.date|date(format) }}</strong></p>
                                     {% if additional %}
                                         <p><strong>Additions:</strong></p>
                                         <p>{{ additional }}</p>
