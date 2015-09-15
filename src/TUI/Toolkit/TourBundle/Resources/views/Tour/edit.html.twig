@@ -1,0 +1,48 @@
+{% extends '::base.html.twig' %}
+
+{% if clone is defined %}{% set title_label = 'Clone' %}{% else %} {% set title_label = 'Edit' %}{% endif %}
+
+{% block title %}{{ title_label }} Quote {% if template is defined %}{{ template }} {% endif %} {{ entity.quoteReference.name }}{% endblock %}
+{% block page_title %}{{ title_label }} Quote {% if template is defined %}{{ template }} {% endif %} {{ entity.quoteReference.name }}{% endblock %}
+
+{% block body -%}
+
+    {{ form(edit_form) }}
+
+<ul class="record_actions">
+    {% if clone is defined %}
+        {# do nothing#}
+    {% else %}
+    <li>
+        <a id="save-revision" onclick="submitQuoteForm();" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+            <i class="fa fa-files-o"></i> Save as New Revision
+        </a>
+    </li>
+    {% endif %}
+    <li>
+        <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quote') }}">
+            <i class="fa fa-arrow-circle-left"></i> Back to the list
+        </a>
+    </li>
+    {% if delete_form is defined %}
+        <li>{{ form(delete_form) }}</li>
+    {% endif %}
+
+</ul>
+    {{ form_javascript(edit_form) }}
+<script language="javascript" type="text/javascript">
+    function submitQuoteForm() {
+        var revision = document.getElementById('tui_toolkit_quotebundle_quoteversion_revision');
+        revision.value = 'revision';
+        document.tui_toolkit_quotebundle_quoteversion.submit();
+    }
+</script>
+    <script>
+        $( document ).ready(function() {
+            $( ".hasDatepicker" ).datepicker( "option", "dateFormat", "dd-mm-yy" );
+            $( ".hasDatepicker" ).change(function(){
+                $(this).parent().addClass('is-dirty');
+            });
+        });
+    </script>
+{% endblock %}

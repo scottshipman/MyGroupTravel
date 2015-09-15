@@ -49,7 +49,7 @@ assetic:
     debug:          "%kernel.debug%"
     read_from:      '%kernel.root_dir%/../web'
     use_controller: false
-    bundles:        [BrandBundle, TUIToolkitUserBundle, QuoteBundle, InstitutionBundle, MediaBundle, AppBundle, ContentBlocksBundle, TwigBundle, ContentBlocksBundle]
+    bundles:        [TourBundle, BrandBundle, TUIToolkitUserBundle, QuoteBundle, InstitutionBundle, MediaBundle, AppBundle, ContentBlocksBundle, TwigBundle, ContentBlocksBundle]
     #java: /usr/bin/java
     filters:
         cssrewrite: ~
