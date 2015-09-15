@@ -53,6 +53,10 @@ class QuoteSiteController extends Controller
             throw $this->createNotFoundException('Unable to find QuoteVersion entity.');
         }
 
+      //Get all brand stuff
+      $brand = $em->getRepository('BrandBundle:Brand')->findAll();
+      $brand = $brand[0];
+
     // if no quoteNumber supplied in URL, then prompt for quoteNumber first
     $securityContext = $this->get('security.context');
     $user = $securityContext->getToken()->getUser();
@@ -124,6 +128,7 @@ class QuoteSiteController extends Controller
       'header'      => $headerBlock,
       'editable'  =>  $editable,
       'alternate' => $alternate,
+      'brand' => $brand,
     ));
   }
 
@@ -404,7 +409,7 @@ class QuoteSiteController extends Controller
       $items=array();
       $content = $entity[0]->getContent();
       foreach($content as $tab){
-        foreach($tab as $key=>$block){
+        foreach($tab[1] as $key=>$block){
           $object=$em->getRepository('ContentBlocksBundle:ContentBlock')->find($block);
           if($object != null){
             $items[$block] = $object;

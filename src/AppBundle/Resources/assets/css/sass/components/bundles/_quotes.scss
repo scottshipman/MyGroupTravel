@@ -54,6 +54,32 @@
 
   }
 
+  .institution-logo-with-brand {
+    position: absolute;
+    top: 0;
+    right: $column_gutter_width * 5;
+    width: 120px;
+    height: 100%;
+
+    img {
+      @include vertical-align();
+    }
+
+  }
+
+  .brand-logo {
+    position: absolute;
+    top: 0;
+    right: $column_gutter_width;
+    width: 120px;
+    height: 100%;
+
+    img {
+      @include vertical-align();
+    }
+
+  }
+
 }
 
 #site-quote-name {}
@@ -258,6 +284,20 @@
 
 
 
+.content-block-locked {
+
+  .item-edit,
+  .item-resize,
+  .item-delete {
+    display: none;
+  }
+
+}
+
+
+
+
+
 // Preview/Edit toggling
 
 .site-content-blocks-size-half {
@@ -311,6 +351,7 @@
 
   .inner-wrapper {
     position: relative;
+    overflow: hidden;
 
     &:hover {
       outline: 1px solid #000;
@@ -343,15 +384,6 @@
     position: absolute;
     top: 6px;
     left: 1em;
-  }
-
-  .content-block-locked {
-
-    .item-edit,
-    .item-resize {
-      display: none;
-    }
-
   }
 
   .move-cursor {
