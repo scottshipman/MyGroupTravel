@@ -30,17 +30,26 @@
     <div class="sub-header">
         <div class="inner">
             {% if entity.isTemplate == 0 %} {# no Institutions on Templates #}
-                {% if entity.quoteReference.institution.media %}
-                    <div class="institution-logo">
-                        <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}"
-                             alt="{{ entity.quoteReference.institution.name }}">
-                    </div>
-                {% endif %}
-                {% if brand.media %}
-                <div class="brand-logo">
-                    <img src="{{ asset( brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}"
-                         alt="{{ brand.name }}">
-                </div>
+                {% if app.user %}
+                    {% if entity.quoteReference.institution.media %}
+                        <div class="institution-logo">
+                            <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}"
+                                 alt="{{ entity.quoteReference.institution.name }}">
+                        </div>
+                    {% endif %}
+                {% elseif not app.user %}
+                    {% if entity.quoteReference.institution.media %}
+                        <div class="institution-logo-with-brand">
+                            <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}"
+                                 alt="{{ entity.quoteReference.institution.name }}">
+                        </div>
+                    {% endif %}
+                    {% if brand.media %}
+                        <div class="brand-logo">
+                            <img src="{{ asset( brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}"
+                                 alt="{{ brand.name }}">
+                        </div>
+                    {% endif %}
                 {% endif %}
             {% endif %}
 
