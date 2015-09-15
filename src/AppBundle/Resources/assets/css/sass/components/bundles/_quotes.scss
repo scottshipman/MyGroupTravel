@@ -258,6 +258,20 @@
 
 
 
+.content-block-locked {
+
+  .item-edit,
+  .item-resize,
+  .item-delete {
+    display: none;
+  }
+
+}
+
+
+
+
+
 // Preview/Edit toggling
 
 .site-content-blocks-size-half {
@@ -344,15 +358,6 @@
     position: absolute;
     top: 6px;
     left: 1em;
-  }
-
-  .content-block-locked {
-
-    .item-edit,
-    .item-resize {
-      display: none;
-    }
-
   }
 
   .move-cursor {
