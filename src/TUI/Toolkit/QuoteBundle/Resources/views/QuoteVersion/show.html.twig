@@ -302,7 +302,7 @@
                $("#edit-headerBlock").on('click', function(){
                    $("#dialog").html("");
                    $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
-                   $("#dialog").load('/manage/headerblock/'+ {{ entity.headerBlock.id }} + '/edit/header/' + {{ entity.id}} +'/QuoteVersion', function() {
+                   $("#dialog").load('/manage/headerblock/'+ {{ entity.headerBlock.id }} + '/header/edit/' + {{ entity.id}} +'/QuoteVersion', function() {
                        $(this).dialog("option", "title", 'Edit Header Content');
                        doMDLpopup( $(this) );
                    });
