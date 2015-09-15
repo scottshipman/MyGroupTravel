@@ -74,13 +74,13 @@ class ContentBlockController extends Controller
             // rebuild content array and remove block
             $content = $parent->getContent();
             foreach ($content as $tab => $data) {
-                if ($tab == $tabId) {
-                    $content[$tab][1][] =  $entity->getId();
-                }
+              if ($tab == $tabId) {
+                $content[$tab][1][] = $entity->getId();
+              }
             }
 
-            $parent->setContent($content);
-            $em->flush($parent);
+              $parent->setContent($content);
+              $em->flush($parent);
 
             $responseContent = json_encode($entity->getId());
 

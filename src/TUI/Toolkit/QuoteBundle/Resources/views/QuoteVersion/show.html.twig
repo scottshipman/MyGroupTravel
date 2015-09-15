@@ -291,7 +291,7 @@
                $("#add-headerBlock").on('click', function(){
                    $("#dialog").html("");
                    $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
-                   $("#dialog").load('/manage/contentblocks/new/header/' + {{ entity.id}} +'/QuoteVersion', function() {
+                   $("#dialog").load('/manage/headerblock/new/header/' + {{ entity.id}} +'/QuoteVersion', function() {
                        $(this).dialog("option", "title", 'Add Header Content');
                        doMDLpopup( $(this) );
                    });
@@ -302,7 +302,7 @@
                $("#edit-headerBlock").on('click', function(){
                    $("#dialog").html("");
                    $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
-                   $("#dialog").load('/manage/contentblocks/'+ {{ entity.headerBlock.id }} + '/edit/header/' + {{ entity.id}} +'/QuoteVersion', function() {
+                   $("#dialog").load('/manage/headerblock/'+ {{ entity.headerBlock.id }} + '/edit/header/' + {{ entity.id}} +'/QuoteVersion', function() {
                        $(this).dialog("option", "title", 'Edit Header Content');
                        doMDLpopup( $(this) );
                    });

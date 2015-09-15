@@ -239,7 +239,7 @@
                 connectWith: '.sortable-items',
                 placeholder: "items-placeholder",
                 start: function (e, ui) {
-                    ui.placeholder.height(ui.helper.outerHeight());
+                    ui.placeholder.height(100);
                 },
                 axis: 'y',
                 update: function(e, ui) {
@@ -330,7 +330,7 @@
                     e.preventDefault();
                     $("#loader").css("display", "block");
                     var blockId = $('#header-block-content-item').attr('blockId')
-                    $("#site-header-editForm").load('/manage/contentblocks/edit/header/layout-editor/' + blockId, function () {
+                    $("#site-header-editForm").load('/manage/headerblock/header/edit/layout-editor/' + blockId, function () {
                         $('.item-edit').hide(); // hide ALL edit buttons for all content blocks
                         $('.add-content-block').hide();
                         $("#loader").css("display", "none");
@@ -341,7 +341,7 @@
                         $('#ajax_headerblock_layout_form').ajaxForm({
                             success: function (response) {
                                 // redraw the area by loading a twig file
-                                $('#site-header-slideshow-content').load('/manage/contentblocks/header/show/' + blockId, function () {
+                                $('#site-header-slideshow-content').load('/manage/headerblock/header/show/' + blockId, function () {
                                     $('#site-header-editForm').empty();
                                     $('#site-header-editForm').hide();
                                     $('#site-header-slideshow').show();
@@ -360,7 +360,7 @@
                 // Add header block in layout mode
                 $("#add-header-content").on('click', function (e) {
                     $("#loader").css("display", "block");
-                    $("#site-header-editForm").load('/manage/contentblocks/new/header/' + {{ entity.id }} +'/QuoteVersion', function () {
+                    $("#site-header-editForm").load('/manage/headerblock/header/new/' + {{ entity.id }} +'/QuoteVersion', function () {
                         $('.item-edit').hide(); // hide ALL edit buttons for all content blocks
                         $("#loader").css("display", "none");
                         $('#site-header-editForm').show();
@@ -370,7 +370,7 @@
                             success: function (response) {
                                 var blockId = response["id"];
                                 // redraw the area by loading a twig file
-                                $('#site-header-slideshow-content').load('/manage/contentblocks/header/show/' + blockId, function () {
+                                $('#site-header-slideshow-content').load('/manage/headerblock/header/show/' + blockId, function () {
                                     $('#site-header-editForm').empty();
                                     $('#site-header-editForm').hide();
                                     $('#site-header-slideshow').show();
