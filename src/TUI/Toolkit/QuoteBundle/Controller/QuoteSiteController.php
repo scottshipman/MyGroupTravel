@@ -404,7 +404,7 @@ class QuoteSiteController extends Controller
       $items=array();
       $content = $entity[0]->getContent();
       foreach($content as $tab){
-        foreach($tab as $key=>$block){
+        foreach($tab[1] as $key=>$block){
           $object=$em->getRepository('ContentBlocksBundle:ContentBlock')->find($block);
           if($object != null){
             $items[$block] = $object;
