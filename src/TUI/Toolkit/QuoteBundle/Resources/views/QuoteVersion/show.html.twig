@@ -240,6 +240,7 @@
                    dropOnEmpty: true,
                    placeholder: "tabs-placeholder",
                    start: function (e, ui) {
+                       $('.editable-tab').editable("disable");
                        ui.placeholder.height(ui.helper.outerHeight());
                    },
                    axis: 'y',
