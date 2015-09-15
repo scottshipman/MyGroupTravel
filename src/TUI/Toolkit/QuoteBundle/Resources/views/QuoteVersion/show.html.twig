@@ -223,6 +223,49 @@
        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.js"></script>
        <script>
            $(document).ready(function() {
+
+               /**
+                * Drag and Drop Sorting
+                */
+
+               $(".sortable-tabs").sortable({
+                   containment: "parent",
+                   items: "> div",
+                   // handle: ".move",
+                   tolerance: "pointer",
+                   cursor: "move",
+                   opacity: 0.7,
+                   revert: 300,
+                   delay: 150,
+                   dropOnEmpty: true,
+                   placeholder: "tabs-placeholder",
+                   start: function (e, ui) {
+                       ui.placeholder.height(ui.helper.outerHeight());
+                   },
+                   axis: 'y',
+                   update: function(e, ui) {
+                       var pathArray = window.location.pathname.split( '/' );
+                       contentBlocksUpdate(pathArray[3]); // fourth [3] part in the path should be quote ID to pass in
+                   }
+               });
+
+
+               $( ".sortable-items" ).sortable({
+                   containment: "document",
+                   items: "> div",
+                   tolerance: "pointer",
+                   connectWith: '.sortable-items',
+                   placeholder: "items-placeholder",
+                   start: function (e, ui) {
+                       ui.placeholder.height(ui.helper.outerHeight());
+                   },
+                   axis: 'y',
+                   update: function(e, ui) {
+                       var pathArray = window.location.pathname.split( '/' );
+                       contentBlocksUpdate(pathArray[3]); // fourth [3] part in the path should be quote ID to pass in
+                   }
+               });
+
                // Generate a Quote LInk
 
                $("#generate-link").on('click', function(e){
@@ -250,7 +293,7 @@
                $("#add-headerBlock").on('click', function(){
                    $("#dialog").html("");
                    $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
-                   $("#dialog").load('/manage/contentblocks/new/header/' + {{ entity.id}} +'/QuoteVersion', function() {
+                   $("#dialog").load('/manage/headerblock/new/header/' + {{ entity.id}} +'/QuoteVersion', function() {
                        $(this).dialog("option", "title", 'Add Header Content');
                        doMDLpopup( $(this) );
                    });
@@ -261,7 +304,7 @@
                $("#edit-headerBlock").on('click', function(){
                    $("#dialog").html("");
                    $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
-                   $("#dialog").load('/manage/contentblocks/'+ {{ entity.headerBlock.id }} + '/edit/header/' + {{ entity.id}} +'/QuoteVersion', function() {
+                   $("#dialog").load('/manage/headerblock/'+ {{ entity.headerBlock.id }} + '/header/edit/' + {{ entity.id}} +'/QuoteVersion', function() {
                        $(this).dialog("option", "title", 'Edit Header Content');
                        doMDLpopup( $(this) );
                    });

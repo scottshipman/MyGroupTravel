@@ -84,48 +84,6 @@
     });
 
     /**
-     * Drag and Drop Sorting
-     */
-
-    $(".sortable-tabs").sortable({
-        containment: "parent",
-        items: "> div",
-        // handle: ".move",
-        tolerance: "pointer",
-        cursor: "move",
-        opacity: 0.7,
-        revert: 300,
-        delay: 150,
-        dropOnEmpty: true,
-        placeholder: "tabs-placeholder",
-        start: function (e, ui) {
-            ui.placeholder.height(ui.helper.outerHeight());
-        },
-        axis: 'y',
-        update: function(e, ui) {
-            var pathArray = window.location.pathname.split( '/' );
-            contentBlocksUpdate(pathArray[3]); // fourth [3] part in the path should be quote ID to pass in
-        }
-    });
-
-
-    $( ".sortable-items" ).sortable({
-        containment: "document",
-        items: "> div",
-        tolerance: "pointer",
-        connectWith: '.sortable-items',
-        placeholder: "items-placeholder",
-        start: function (e, ui) {
-            ui.placeholder.height(ui.helper.outerHeight());
-        },
-        axis: 'y',
-        update: function(e, ui) {
-            var pathArray = window.location.pathname.split( '/' );
-            contentBlocksUpdate(pathArray[3]); // fourth [3] part in the path should be quote ID to pass in
-        }
-    });
-
-    /**
      * Add font-awesome to Delete buttons
      */
 
