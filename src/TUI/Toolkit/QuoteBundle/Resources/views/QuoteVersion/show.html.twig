@@ -240,6 +240,7 @@
                    dropOnEmpty: true,
                    placeholder: "tabs-placeholder",
                    start: function (e, ui) {
+                       $('.editable-tab').editable("disable");
                        ui.placeholder.height(ui.helper.outerHeight());
                    },
                    axis: 'y',
@@ -497,12 +498,12 @@
             </a>
         {% else %}
             <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('quote_site_quote_accepted', { 'id': entity.id }) }}">
-                <i class="fa fa-thumbs-o-up"> </i> Accept Quote
+                <i class="fa fa-thumbs-o-up"> </i> Like Quote
             </a>
         {% endif %}
     {% elseif (entity.converted is sameas(true)) and (entity.quoteReference.converted is sameas(true))%}
         <a class="accepted-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-            <i class="fa fa-thumbs-up"> </i> Accepted
+            <i class="fa fa-thumbs-up"> </i> Liked
         </a>
     {% endif %}
 {% endblock %}
