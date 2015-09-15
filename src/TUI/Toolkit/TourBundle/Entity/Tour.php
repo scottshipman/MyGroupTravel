@@ -95,6 +95,50 @@ class Tour
 
     /**
      * @var integer
+     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\UserBundle\Entity\User", cascade={"persist"})
+     * @ORM\JoinColumn(name="organizer", referencedColumnName="id")
+     * @GRID\Column(field="organizer.firstName", type="text", title="Organizer First", export=true)
+     * @GRID\Column(field="organizer.lastName", type="text", title="Organizer Last", export=true)
+     */
+    private $organizer;
+
+    /**
+     * @var integer
+     *
+     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\UserBundle\Entity\User", cascade={"persist"})
+     * @ORM\JoinColumn(name="salesAgent", referencedColumnName="id")
+     * @GRID\Column(field="salesAgent.firstName", type="text", title="Business Admin first", filterable=false, export=true)
+     * @GRID\Column(field="salesAgent.lastName", type="text", title="Business Admin last", filterable=false, export=true)
+     *
+     */
+    private $salesAgent;
+
+    /**
+     * @var integer
+     *
+     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\UserBundle\Entity\User", cascade={"persist"})
+     * @ORM\JoinColumn(name="secondaryContact", referencedColumnName="id")
+     */
+    private $secondaryContact;
+
+    /**
+     * @var integer
+     * @ORM\JoinColumn(name="institution", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\InstitutionBundle\Entity\Institution", cascade={"all"}, fetch="EAGER")
+     * @GRID\Column(field="institution.name", title="Institution", filterable=true, operatorsVisible=false, export=true)
+     */
+    private $institution;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="destination", type="string")
+     * @GRID\Column(title="Destination", filterable=true, operatorsVisible=false, sortable=true, export=true)
+     */
+    private $destination;
+
+    /**
+     * @var integer
      * @GRID\Column(field="boardBasis.name", title="Board Basis", export=true)
      *
      * @ORM\JoinColumn(name="boardBasis", referencedColumnName="id")
@@ -331,6 +375,124 @@ class Tour
     public function getName()
     {
       return $this->name;
+    }
+
+    /**
+     * Set organizer
+     *
+     * @param string $organizer
+     * @return Tour
+     */
+    public function setOrganizer($organizer)
+    {
+        $this->organizer = $organizer;
+
+        return $this;
+    }
+
+    /**
+     * Get organizer
+     *
+     * @return string
+     */
+    public function getOrganizer()
+    {
+        return $this->organizer;
+    }
+
+    /**
+     * Set salesAgent
+     *
+     * @param integer $salesAgent
+     * @return Tour
+     */
+    public function setSalesAgent($salesAgent)
+    {
+        $this->salesAgent = $salesAgent;
+
+        return $this;
+    }
+
+    /**
+     * Get salesAgent
+     *
+     * @return integer
+     */
+    public function getSalesAgent()
+    {
+        return $this->salesAgent;
+    }
+
+
+    /**
+     * Set secondaryContact
+     *
+     * @param integer $secondaryContact
+     * @return Tour
+     */
+    public function setSecondaryContact($secondaryContact)
+    {
+        $this->secondaryContact = $secondaryContact;
+
+        return $this;
+    }
+
+    /**
+     * Get secondaryContact
+     *
+     * @return integer
+     */
+    public function getSecondaryContact()
+    {
+        return $this->secondaryContact;
+    }
+
+
+    /**
+     * Set institution
+     *
+     * @param integer $institution
+     * @return Tour
+     */
+    public function setInstitution($institution)
+    {
+        $this->institution = $institution;
+
+        return $this;
+    }
+
+    /**
+     * Get institution
+     *
+     * @return integer
+     */
+    public function getInstitution()
+    {
+        return $this->institution;
+    }
+
+
+    /**
+     * Set destination
+     *
+     * @param integer $destination
+     * @return Tour
+     */
+    public function setDestination($destination)
+    {
+        $this->destination = $destination;
+
+        return $this;
+    }
+
+    /**
+     * Get destination
+     *
+     * @return integer
+     */
+    public function getDestination()
+    {
+        return $this->destination;
     }
 
     /**
