@@ -128,6 +128,10 @@ class ContentBlockController extends Controller
     {
         $entity = new ContentBlock();
         $form = $this->createCreateForm($entity, $class, $quoteVersion, $tabId);
+        $em = $this->getDoctrine()->getManager();
+        $default_layout = $em->getRepository('ContentBlocksBundle:LayoutType')->findAll();
+        $default_layout = $default_layout[0];
+        $form->get('layoutType')->setData($default_layout);
 
         return $this->render('ContentBlocksBundle:ContentBlock:new.html.twig', array(
             'entity' => $entity,
