@@ -54,6 +54,32 @@
 
   }
 
+  .institution-logo-with-brand {
+    position: absolute;
+    top: 0;
+    right: $column_gutter_width * 5;
+    width: 120px;
+    height: 100%;
+
+    img {
+      @include vertical-align();
+    }
+
+  }
+
+  .brand-logo {
+    position: absolute;
+    top: 0;
+    right: $column_gutter_width;
+    width: 120px;
+    height: 100%;
+
+    img {
+      @include vertical-align();
+    }
+
+  }
+
 }
 
 #site-quote-name {}
