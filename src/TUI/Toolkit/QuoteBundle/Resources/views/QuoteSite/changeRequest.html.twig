@@ -1,14 +1,15 @@
+{%  if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
 {% block body -%}
     <div class="request-changes">
         <h4>{{ entity.name }}</h4>
         <ul>
             <li>Quote Number: {{ entity.quoteNumber }}</li>
-            <li>Departing: {{ entity.departureDate.date }}</li>
+            <li>Departing: {{ entity.departureDate.date|date(format) }}</li>
             <li>For {{ entity.duration }}</li>
-            <li>Returning {{ entity.returnDate.date }}</li>
-            <li>Price per person: {{ entity.pricePerson }}</li>
+            <li>Returning {{ entity.returnDate.date|date(format) }}</li>
+            <li>Price per person: {% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</li>
             <li>Based on {{ entity.payingPlaces }} paying plus {{ entity.freePlaces }} free places</li>
-            <li><strong>Quote valid until {{ entity.expiryDate.date }}</strong></li>
+            <li><strong>Quote valid until {{ entity.expiryDate.date|date(format) }}</strong></li>
         </ul>
         {% if entity.headerBlock %}
             <img src="{{ asset( entity.headerBlock.media[0].getRelativePath ~ "/" ~ entity.headerBlock.media[0].getHashedFilename ) | imagine_filter('modalImage')}}"/>

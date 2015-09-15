@@ -240,10 +240,15 @@ class QuoteSiteController extends Controller
         $changeForm = $this->createChangeRequestFormAction($id);
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+        $locale = $this->container->getParameter('locale');
+        $date_format = $this->container->getParameter('date_format');
+
 
         return $this->render('QuoteBundle:QuoteSite:changeRequest.html.twig', array(
             'change_request_form' => $changeForm->createView(),
             'entity' => $entity,
+            'locale' => $locale,
+            'date_format' => $date_format,
         ));
     }
 
@@ -308,10 +313,14 @@ class QuoteSiteController extends Controller
         $acceptForm = $this->createAcceptFormAction($id);
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+        $locale = $this->container->getParameter('locale');
+        $date_format = $this->container->getParameter('date_format');
 
         return $this->render('QuoteBundle:QuoteSite:acceptQuote.html.twig', array(
             'accept_form' => $acceptForm->createView(),
             'entity' => $entity,
+            'locale' => $locale,
+            'date_format' => $date_format,
         ));
     }
 
