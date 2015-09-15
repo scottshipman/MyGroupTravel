@@ -200,15 +200,17 @@
             <div id="tabs-drawer-{{ tab }}" class="sortable-items content-blocks-drawer">
                     {%  for item in data[1] %}
                         <div id="content-blocks-{{ item }}" class="content-blocks content-blocks-item">
-                             <i class="fa fa-arrows"></i> {{ items[item].title }}
-                             {# probably render a controller here by passing in item as id and have block entity returned #}
-                            <div id="content-block-actions-{{ item }}" class="content-block-actions">
+                            <i class="fa fa-arrows"></i> {{ items[item].title }}
+                            {# probably render a controller here by passing in item as id and have block entity returned #}
+                            <div id="content-block-actions-{{ item }}" class="content-block-actions {% if items[item].locked %}content-block-locked{% endif %}">
                                 <i class="item-edit content-block-item-action fa fa-pencil-square-o" title="Edit"></i>
                                 <i class="item-delete content-block-item-action fa fa-trash-o" title=""Delete" blockID="{{ item }}"></i>
-                                   {% if items[item].locked %}<i class="item-lock content-block-item-action fa fa-unlock" title="Unlock"></i> {% else %}  <i class="item-lock content-block-item-action fa fa-lock" title="Lock"></i> {% endif %}
-                                   {#
-                                   {% if items[item].hidden %}<i class="item-hide content-block-item-action fa fa-ban"></i>{% else %}<i class="item-hide content-block-item-action fa fa-eye"></i>{% endif %}
-                                   #}
+                                <i class="item-lock content-block-item-action fa {% if items[item].locked %}fa-unlock-alt{% else %}fa-lock{% endif %}" title="{% if items[item].locked %}Unlock{% else %}Lock{% endif %}" blockId="{{ items[item].id }}"></i>
+                                {#
+                                {% if items[item].hidden %}
+                                    <i class="item-hide content-block-item-action fa fa-ban"></i>{% else %}<i class="item-hide content-block-item-action fa fa-eye"></i>
+                                {% endif %}
+                                #}
                                </div>
                            </div>
                        {% endfor %}
@@ -360,22 +362,30 @@
             });
             #}
 
-            // toggle the locked boolean on a content block
-            $(".item-lock").on('click', function(e){
-                // todo Get item.id and item.name
-                var actionParent = $(this).parent().attr('id');
-                var block = actionParent.substring(22);
+            // toggle the locked boolean on a content block on the fly!
+            $(".item-lock").on('click', function (e) {
+                var t = $(this);
+                $("#loader").css("display", "block");
+                var blockID = t.attr('blockId');
                 $.ajax({
-                    url: '/manage/contentblocks/'+ block + '/lock/' + {{ entity.id }} + '/QuoteVersion',
+                    url: '/manage/contentblocks/' + blockID + '/lock/' + {{ entity.id }} +'/QuoteVersion',
                     headers: {
                         "Pragma": "no-cache",
                         "Expires": -1,
                         "Cache-Control": "no-cache"
                     }
                 }).done(function () {
-                    $("#loader").css("display", "inline-block");
-                    window.location.hash = 'site-content';
-                    window.location.reload(true);
+                    t.toggleClass('fa-unlock-alt').toggleClass('fa-lock');
+                    if (t.attr('title') == 'Unlock') {
+                        // Will now be unlocked
+                        t.parent().removeClass('content-block-locked');
+                        t.attr('title', 'Lock');
+                    } else {
+                        // Will now be locked
+                        t.parent().addClass('content-block-locked');
+                        t.attr('title', 'Unlock');
+                    }
+                    $("#loader").css("display", "none");
                 });
             });
 
