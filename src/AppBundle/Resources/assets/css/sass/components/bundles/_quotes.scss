@@ -54,6 +54,32 @@
 
   }
 
+  .institution-logo-with-brand {
+    position: absolute;
+    top: 0;
+    right: $column_gutter_width * 5;
+    width: 120px;
+    height: 100%;
+
+    img {
+      @include vertical-align();
+    }
+
+  }
+
+  .brand-logo {
+    position: absolute;
+    top: 0;
+    right: $column_gutter_width;
+    width: 120px;
+    height: 100%;
+
+    img {
+      @include vertical-align();
+    }
+
+  }
+
 }
 
 #site-quote-name {}
@@ -231,6 +257,46 @@
 
 
 
+.content-block-tabs-bar {
+  align-items: flex-end;
+  height: 48px;
+  margin-top: 48px;
+}
+
+.site-content-blocks-tab {
+  cursor: pointer;
+  padding: 12px 24px;
+  float: left;
+  position: relative;
+  top: 1px;
+  height: auto;
+  line-height: 24px;
+  text-align: center;
+  font-weight: 500;
+  font-size: 14px;
+  text-transform: uppercase;
+  color: rgba(0,0,0,0.54);
+  overflow: visible;
+  max-width: (1/8) * 100%;
+}
+
+
+
+
+
+.content-block-locked {
+
+  .item-edit,
+  .item-resize,
+  .item-delete {
+    display: none;
+  }
+
+}
+
+
+
+
 
 // Preview/Edit toggling
 
@@ -285,6 +351,7 @@
 
   .inner-wrapper {
     position: relative;
+    overflow: hidden;
 
     &:hover {
       outline: 1px solid #000;
@@ -317,15 +384,6 @@
     position: absolute;
     top: 6px;
     left: 1em;
-  }
-
-  .content-block-locked {
-
-    .item-edit,
-    .item-resize {
-      display: none;
-    }
-
   }
 
   .move-cursor {

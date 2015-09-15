@@ -68,6 +68,10 @@
 
     }
 
+    #tui_toolkit_quotebundle_quotechangerequest_submit {
+      float: left;
+    }
+
   }
 
 }
@@ -83,8 +87,7 @@
 
   .submit-button-container {
 
-    position: relative;
-    width: 55%;
+    text-align: center;
     margin: 20px auto;
 
     .reorder-button {

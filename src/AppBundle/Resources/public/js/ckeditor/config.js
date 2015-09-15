@@ -13,6 +13,7 @@ if ( typeof CKEDITOR != 'undefined' ) {
             {"name": "Blue Text", "element": "p", "styles": {"color": "#26a"}},
             {"name": "Orange Text", "element": "p", "styles": {"color": "#ea7200"}},
             {'name': "Green Text", "element": "p", "styles": {"color": "#92b73e"}},
+            {'name': "Red Text", "element": "p", "styles": {"color": "#d62d20"}},
             {
                 "name": "Normal Heading",
                 "element": "p",

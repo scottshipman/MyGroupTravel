@@ -200,15 +200,17 @@
             <div id="tabs-drawer-{{ tab }}" class="sortable-items content-blocks-drawer">
                     {%  for item in data[1] %}
                         <div id="content-blocks-{{ item }}" class="content-blocks content-blocks-item">
-                             <i class="fa fa-arrows"></i> {{ items[item].title }}
-                             {# probably render a controller here by passing in item as id and have block entity returned #}
-                            <div id="content-block-actions-{{ item }}" class="content-block-actions">
+                            <i class="fa fa-arrows"></i> {{ items[item].title }}
+                            {# probably render a controller here by passing in item as id and have block entity returned #}
+                            <div id="content-block-actions-{{ item }}" class="content-block-actions {% if items[item].locked %}content-block-locked{% endif %}">
                                 <i class="item-edit content-block-item-action fa fa-pencil-square-o" title="Edit"></i>
                                 <i class="item-delete content-block-item-action fa fa-trash-o" title=""Delete" blockID="{{ item }}"></i>
-                                   {% if items[item].locked %}<i class="item-lock content-block-item-action fa fa-unlock" title="Unlock"></i> {% else %}  <i class="item-lock content-block-item-action fa fa-lock" title="Lock"></i> {% endif %}
-                                   {#
-                                   {% if items[item].hidden %}<i class="item-hide content-block-item-action fa fa-ban"></i>{% else %}<i class="item-hide content-block-item-action fa fa-eye"></i>{% endif %}
-                                   #}
+                                <i class="item-lock content-block-item-action fa {% if items[item].locked %}fa-unlock-alt{% else %}fa-lock{% endif %}" title="{% if items[item].locked %}Unlock{% else %}Lock{% endif %}" blockId="{{ items[item].id }}"></i>
+                                {#
+                                {% if items[item].hidden %}
+                                    <i class="item-hide content-block-item-action fa fa-ban"></i>{% else %}<i class="item-hide content-block-item-action fa fa-eye"></i>
+                                {% endif %}
+                                #}
                                </div>
                            </div>
                        {% endfor %}
@@ -221,6 +223,50 @@
        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.js"></script>
        <script>
            $(document).ready(function() {
+
+               /**
+                * Drag and Drop Sorting
+                */
+
+               $(".sortable-tabs").sortable({
+                   containment: "parent",
+                   items: "> div",
+                   // handle: ".move",
+                   tolerance: "pointer",
+                   cursor: "move",
+                   opacity: 0.7,
+                   revert: 300,
+                   delay: 150,
+                   dropOnEmpty: true,
+                   placeholder: "tabs-placeholder",
+                   start: function (e, ui) {
+                       $('.editable-tab').editable("disable");
+                       ui.placeholder.height(ui.helper.outerHeight());
+                   },
+                   axis: 'y',
+                   update: function(e, ui) {
+                       var pathArray = window.location.pathname.split( '/' );
+                       contentBlocksUpdate(pathArray[3]); // fourth [3] part in the path should be quote ID to pass in
+                   }
+               });
+
+
+               $( ".sortable-items" ).sortable({
+                   containment: "document",
+                   items: "> div",
+                   tolerance: "pointer",
+                   connectWith: '.sortable-items',
+                   placeholder: "items-placeholder",
+                   start: function (e, ui) {
+                       ui.placeholder.height(ui.helper.outerHeight());
+                   },
+                   axis: 'y',
+                   update: function(e, ui) {
+                       var pathArray = window.location.pathname.split( '/' );
+                       contentBlocksUpdate(pathArray[3]); // fourth [3] part in the path should be quote ID to pass in
+                   }
+               });
+
                // Generate a Quote LInk
 
                $("#generate-link").on('click', function(e){
@@ -248,7 +294,7 @@
                $("#add-headerBlock").on('click', function(){
                    $("#dialog").html("");
                    $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
-                   $("#dialog").load('/manage/contentblocks/new/header/' + {{ entity.id}} +'/QuoteVersion', function() {
+                   $("#dialog").load('/manage/headerblock/new/header/' + {{ entity.id}} +'/QuoteVersion', function() {
                        $(this).dialog("option", "title", 'Add Header Content');
                        doMDLpopup( $(this) );
                    });
@@ -259,7 +305,7 @@
                $("#edit-headerBlock").on('click', function(){
                    $("#dialog").html("");
                    $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
-                   $("#dialog").load('/manage/contentblocks/'+ {{ entity.headerBlock.id }} + '/edit/header/' + {{ entity.id}} +'/QuoteVersion', function() {
+                   $("#dialog").load('/manage/headerblock/'+ {{ entity.headerBlock.id }} + '/header/edit/' + {{ entity.id}} +'/QuoteVersion', function() {
                        $(this).dialog("option", "title", 'Edit Header Content');
                        doMDLpopup( $(this) );
                    });
@@ -332,7 +378,7 @@
                 var block = actionParent.substring(22);
                 //e.preventDefault();
                 $("#dialog").html("");
-                $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
+                $("#dialog").dialog({width: '60%', modal: false}).dialog("option", "title", "Loading...").dialog("open");
                 $("#dialog").load( '/ajax/contentblocks/' + block + '/edit/' + {{ entity.id}} + '/QuoteVersion', function() {
                     $(this).dialog("option", "title", 'Edit Content Block');
                     doMDLpopup( $(this) );
@@ -360,22 +406,30 @@
             });
             #}
 
-            // toggle the locked boolean on a content block
-            $(".item-lock").on('click', function(e){
-                // todo Get item.id and item.name
-                var actionParent = $(this).parent().attr('id');
-                var block = actionParent.substring(22);
+            // toggle the locked boolean on a content block on the fly!
+            $(".item-lock").on('click', function (e) {
+                var t = $(this);
+                $("#loader").css("display", "block");
+                var blockID = t.attr('blockId');
                 $.ajax({
-                    url: '/manage/contentblocks/'+ block + '/lock/' + {{ entity.id }} + '/QuoteVersion',
+                    url: '/manage/contentblocks/' + blockID + '/lock/' + {{ entity.id }} +'/QuoteVersion',
                     headers: {
                         "Pragma": "no-cache",
                         "Expires": -1,
                         "Cache-Control": "no-cache"
                     }
                 }).done(function () {
-                    $("#loader").css("display", "inline-block");
-                    window.location.hash = 'site-content';
-                    window.location.reload(true);
+                    t.toggleClass('fa-unlock-alt').toggleClass('fa-lock');
+                    if (t.attr('title') == 'Unlock') {
+                        // Will now be unlocked
+                        t.parent().removeClass('content-block-locked');
+                        t.attr('title', 'Lock');
+                    } else {
+                        // Will now be locked
+                        t.parent().addClass('content-block-locked');
+                        t.attr('title', 'Unlock');
+                    }
+                    $("#loader").css("display", "none");
                 });
             });
 
@@ -444,12 +498,12 @@
             </a>
         {% else %}
             <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('quote_site_quote_accepted', { 'id': entity.id }) }}">
-                <i class="fa fa-thumbs-o-up"> </i> Accept Quote
+                <i class="fa fa-thumbs-o-up"> </i> Like Quote
             </a>
         {% endif %}
     {% elseif (entity.converted is sameas(true)) and (entity.quoteReference.converted is sameas(true))%}
         <a class="accepted-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-            <i class="fa fa-thumbs-up"> </i> Accepted
+            <i class="fa fa-thumbs-up"> </i> Liked
         </a>
     {% endif %}
 {% endblock %}

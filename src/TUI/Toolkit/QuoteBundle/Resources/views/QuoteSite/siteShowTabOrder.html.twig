@@ -1,23 +1,23 @@
 <div class="tab-reorder-modal">
     <div id="content-blocks-wrapper" class="content-blocks-wrapper modal-sortable-tabs">
         {%  for tab, data in entity.content %}
-            <div id="{{ tab }}" class="content-blocks-tab">
+            <div id="{{ tab }}" class="content-blocks-tab modal-tab" modal-tabId="{{ tab }}">
             <span class="content-blocks tab-label">
                 <i class="content-block-tab-handle fa fa-arrows"></i>
                 <h4 id="tab-label-{{ tab }}" class="editable-tab">{{ data[0] }}</h4>
                 {% if data[1] | length < 1 %}
-                    <span class="tab-delete icon-label"><i class="content-block-tab-actions fa fa-trash-o"></i> Delete Tab</span>
+                    <span class="modal-tab-delete icon-label" tabId="{{ tab }}"><i class="content-block-tab-actions fa fa-trash-o"></i> Delete Tab</span>
                 {% endif %}
             </span>
 
 
-                <div id="tabs-drawer-{{ tab }}" class="sortable-items content-blocks-drawer">
+                <div id="tabs-drawer-{{ tab }}" class="modal-sortable-items content-blocks-drawer">
                     {%  for item in data[1] %}
-                        <div id="content-blocks-{{ item }}" class="content-blocks content-blocks-item">
+                        <div id="content-blocks-modal-{{ item }}" class="content-blocks content-blocks-item" blockId = "content-blocks-{{ item }}">
                             <i class="fa fa-arrows"></i> {{ items[item].title }}
                             {# probably render a controller here by passing in item as id and have block entity returned #}
                             <div id="content-block-actions-{{ item }}" class="content-block-actions">
-                                <i class="item-delete content-block-item-action fa fa-trash-o"></i>
+                                <i class="modal-item-delete content-block-item-action fa fa-trash-o" blockId="{{ item }}"></i>
                             </div>
                         </div>
                     {% endfor %}
@@ -26,9 +26,9 @@
         {% endfor %}
     </div>
     <div class="submit-button-container">
-        <a id="update-tabs" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored reorder-button"
+        <a id="update-tabs" quoteId="{{ entity.id }}" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored reorder-button"
            href="#"><i class="fa fa-thumbs-o-up"> </i> Submit</a>
-        <a id="close-dialog" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored reorder-button"
+        <a id="close-dialog" quoteId="{{ entity.id }}" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored reorder-button"
            href="#"><i class="fa fa-ban"> </i> Cancel</a>
     </div>
 </div>
@@ -68,18 +68,62 @@
             axis: 'y'
         });
 
+        // delete a content block
+        $(document).on('click', '.modal-item-delete', function(e){
+            // todo Get item.id and item.name
+            if (confirm('Are you sure you want to remove this item? Warning: this can not be undone.')) {
+                var blockId = $(this).attr('blockId')
+                var tabParent = $(this).closest('.content-blocks-tab');
+                var parent = tabParent.find('.tab-label');
+                var parentID = tabParent.attr('modal-tabId');
+                var items = parent.find('.content-blocks-item');
+                $('#content-blocks-modal-' + blockId).remove();
+                if(items.length<1){
+                    parent.append('<span class="modal-tab-delete icon-label" tabId="' + parentID+ '"><i class="content-block-tab-actions fa fa-trash-o"></i> Delete Tab</span>');
+                }
+            }
+        });
+
+        // remove an empty tab from a site (hard delete)
+        $(document).on('click', '.modal-tab-delete', function(){
+            var tabId = $(this).attr('tabId');
+            var ancestorTabElement = $("div").find("[modal-tabId ='" + tabId +"']");
+            if (confirm('Are you sure you want to remove this tab? Warning: this can not be undone.')) {
+                $(ancestorTabElement).remove();
+            }
+        });
 
         //update tab positions and content positions on click event
-        $("#update-tabs").on('click', function (e) {
+        $(document).on('click', '#update-tabs', function (e) {
             e.preventDefault();
-            //close dialog box
+            var quoteID = $(this).attr('quoteid');
+            // scrape DOM to get heirarchy of tabs & blocks
+            var result = {};
+            var data = $(".modal-tab");
+            data.each(function (i, obj) {
+                tabText = $(this).find('.editable-tab').text();
+                tabId = $(this).attr('modal-tabid');
+                if ($(this).find('.content-blocks-item').size() == 0) {
+                    result[tabId] = [tabText, new Array()];
+                } else {
+                    var children = []
+                    $(this).find('.content-blocks-item').each(function (k, v) {
+                        children.push($(this).attr('blockid'));
+                    });
+                    result[tabId] = [tabText, children];
+                }
+            });
+            //POST to server using $.post or $.ajax
             window.parent.jQuery('#dialog').dialog('close');
-            var pathArray = window.location.pathname.split('/');
-            contentBlocksUpdate( pathArray[3], {{ entity.id }} );// fourth [3] part in the path should be quote ID to pass in
-//            $(".sortable-tabs").sortable("enable");
-//            $(".sortable-items").sortable("enable");
-            var t = $('#content-wrapper');
-            t.removeClass("disabled");
+            $("#loader").css("display", "block");
+            $.ajax({
+                data: result,
+                type: 'POST',
+                url: '/manage/contentblocks/update/'+ quoteID
+            }).done(function() {
+                window.location.reload(true);
+            });
+
         });
 
         //close dialog box
@@ -95,7 +139,7 @@
             return (value);
         }, {
             width: '20em',
-            onblur: "cancel",
+            onblur: "submit",
             tooltip: 'Click to edit'
         });
     })

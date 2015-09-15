@@ -53,6 +53,10 @@ class QuoteSiteController extends Controller
             throw $this->createNotFoundException('Unable to find QuoteVersion entity.');
         }
 
+      //Get all brand stuff
+      $brand = $em->getRepository('BrandBundle:Brand')->findAll();
+      $brand = $brand[0];
+
     // if no quoteNumber supplied in URL, then prompt for quoteNumber first
     $securityContext = $this->get('security.context');
     $user = $securityContext->getToken()->getUser();
@@ -124,6 +128,7 @@ class QuoteSiteController extends Controller
       'header'      => $headerBlock,
       'editable'  =>  $editable,
       'alternate' => $alternate,
+      'brand' => $brand,
     ));
   }
 
@@ -240,15 +245,22 @@ class QuoteSiteController extends Controller
         $changeForm = $this->createChangeRequestFormAction($id);
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+        $locale = $this->container->getParameter('locale');
+        $date_format = $this->container->getParameter('date_format');
+
 
         return $this->render('QuoteBundle:QuoteSite:changeRequest.html.twig', array(
             'change_request_form' => $changeForm->createView(),
             'entity' => $entity,
+            'locale' => $locale,
+            'date_format' => $date_format,
         ));
     }
 
     public function requestChangeAction(Request $request, $id)
     {
+        $locale = $this->container->getParameter('locale');
+        $date_format = $this->container->getParameter('date_format');
 
         $changeForm = $this->createChangeRequestFormAction($id);
         $changeForm->handleRequest($request);
@@ -279,6 +291,8 @@ class QuoteSiteController extends Controller
                         'additional' => $additional,
                         'departure' => $departure,
                         'tour_name' => $tourName,
+                        'locale' => $locale,
+                        'date_format' => $date_format,
                     )
                 ), 'text/html');
 
@@ -308,10 +322,14 @@ class QuoteSiteController extends Controller
         $acceptForm = $this->createAcceptFormAction($id);
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+        $locale = $this->container->getParameter('locale');
+        $date_format = $this->container->getParameter('date_format');
 
         return $this->render('QuoteBundle:QuoteSite:acceptQuote.html.twig', array(
             'accept_form' => $acceptForm->createView(),
             'entity' => $entity,
+            'locale' => $locale,
+            'date_format' => $date_format,
         ));
     }
 
@@ -326,6 +344,9 @@ class QuoteSiteController extends Controller
 
     public function quoteAcceptedAction(Request $request, $id)
     {
+        $locale = $this->container->getParameter('locale');
+        $date_format = $this->container->getParameter('date_format');
+
         $acceptForm = $this->createAcceptFormAction($id);
         $acceptForm->handleRequest($request);
         $additional = $acceptForm->get('additional')->getData();
@@ -335,13 +356,7 @@ class QuoteSiteController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('QuoteBundle:QuoteVersion')->findById($id);
         $entity = $entity[0];
-        if ($entity->getConverted() == false) {
-            $entity->setConverted(true);
-        }
-        $quoteConverted = $entity->getQuoteReference()->getConverted();
-        if ($quoteConverted == false) {
-            $entity->getQuoteReference()->setConverted(true);
-        }
+
         $departure = $entity->getDepartureDate();
         $tourName = $entity->getName();
         if ($entity->getQuoteReference()->getSalesAgent()) {
@@ -370,6 +385,8 @@ class QuoteSiteController extends Controller
                         'departure' => $departure,
                         'tour_name' => $tourName,
                         'additional' => $additional,
+                        'locale' => $locale,
+                        'date_format' => $date_format,
                     )
                 ), 'text/html');
 
@@ -410,7 +427,7 @@ class QuoteSiteController extends Controller
       $items=array();
       $content = $entity[0]->getContent();
       foreach($content as $tab){
-        foreach($tab as $key=>$block){
+        foreach($tab[1] as $key=>$block){
           $object=$em->getRepository('ContentBlocksBundle:ContentBlock')->find($block);
           if($object != null){
             $items[$block] = $object;

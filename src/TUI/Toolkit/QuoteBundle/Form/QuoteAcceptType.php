@@ -26,7 +26,6 @@ class QuoteAcceptType extends AbstractType
                 'required' => false,
                 'attr' => array(
                     'maxlength' => 500,
-                    'placeholder' => "I'd like to add"
                 )
             ))
             ->add('submit', 'submit', array('label' => 'Submit'))

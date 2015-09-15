@@ -62,22 +62,44 @@
                 $("#loader").css("display", "block");
                 var blockID = {{ entity.id }};
                 var quoteID = $('.mode-toggle').attr('id').substring(14);
-                var editBlock = $("#editable-content-blocks-" + blockID);
-                var previewBlock = $("#previewable-content-blocks-" + blockID);
-                // Match routing path "/manage/contentblocks/{id}/show/{quoteVersion}/{class}"
-                previewBlock.load('/manage/contentblocks/' + blockID + '/show/' + quoteID + '/QuoteVersion', function() {
-                    $("#loader").css("display", "none");
-                    $('.item-edit').show(); // re-show ALL edit buttons for all content blocks
-                    $('.add-content-block').show() // re-show ALL Add Block's for all tabs
-                    editBlock.html('');
-                });
-            };
+                if($(this).closest('form').attr('id')=='ajax_headerblock_layout_form'){ //header slideshow content block
+                    $('#site-header-slideshow-content').load('/manage/headerblock/header/show/' + blockID, function () {
+                        $('#site-header-editForm').empty();
+                        $('#site-header-editForm').hide();
+                        $('#site-header-slideshow').show();
+                        $('.item-edit').show();
+                        $('.flexslider').flexslider({
+                            directionNav: false,
+                            controlNav: false,
+                            smoothHeight: true
+                        });
+                        $('.add-content-block').show(); // re-show ALL Add Block's for all tabs
+                        $("#loader").css("display", "none");
+                    });
+                } else { // regular content block
+                    var editBlock = $("#editable-content-blocks-" + blockID);
+                    var previewBlock = $("#previewable-content-blocks-" + blockID);
+                    // Match routing path "/manage/contentblocks/{id}/show/{quoteVersion}/{class}"
+                    previewBlock.load('/manage/contentblocks/' + blockID + '/show/' + quoteID + '/QuoteVersion', function () {
+                        $("#loader").css("display", "none");
+                        $('.item-edit').show(); // re-show ALL edit buttons for all content blocks
+                        $('.add-content-block').show(); // re-show ALL Add Block's for all tabs
+                        editBlock.html('');
+                    });
+                }
+            } else { // on Quote Edit/Show page
+                $("#dialog").html("");
+                $('#dialog').dialog('close');
+
+            }
         });
 
         // Bind form and provide a simple callback function
         $('#ajax_contentblocks_form').ajaxForm({
             beforeSerialize: function() {
-                CKEDITOR.instances.tui_toolkit_contentblocksbundle_contentblock_body.updateElement();
+                if (typeof CKEDITOR !== 'undefined') {
+                    CKEDITOR.instances.tui_toolkit_contentblocksbundle_contentblock_body.updateElement();
+                }
                 $("#loader").css("display", "block");
                 if ( !$('.mode-toggle').hasClass('mode-edit') ) { // If not on quote preview page
                     $('#dialog').dialog("close");
