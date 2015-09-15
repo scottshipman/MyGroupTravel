@@ -245,15 +245,22 @@ class QuoteSiteController extends Controller
         $changeForm = $this->createChangeRequestFormAction($id);
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+        $locale = $this->container->getParameter('locale');
+        $date_format = $this->container->getParameter('date_format');
+
 
         return $this->render('QuoteBundle:QuoteSite:changeRequest.html.twig', array(
             'change_request_form' => $changeForm->createView(),
             'entity' => $entity,
+            'locale' => $locale,
+            'date_format' => $date_format,
         ));
     }
 
     public function requestChangeAction(Request $request, $id)
     {
+        $locale = $this->container->getParameter('locale');
+        $date_format = $this->container->getParameter('date_format');
 
         $changeForm = $this->createChangeRequestFormAction($id);
         $changeForm->handleRequest($request);
@@ -284,6 +291,8 @@ class QuoteSiteController extends Controller
                         'additional' => $additional,
                         'departure' => $departure,
                         'tour_name' => $tourName,
+                        'locale' => $locale,
+                        'date_format' => $date_format,
                     )
                 ), 'text/html');
 
@@ -313,10 +322,14 @@ class QuoteSiteController extends Controller
         $acceptForm = $this->createAcceptFormAction($id);
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+        $locale = $this->container->getParameter('locale');
+        $date_format = $this->container->getParameter('date_format');
 
         return $this->render('QuoteBundle:QuoteSite:acceptQuote.html.twig', array(
             'accept_form' => $acceptForm->createView(),
             'entity' => $entity,
+            'locale' => $locale,
+            'date_format' => $date_format,
         ));
     }
 
@@ -331,6 +344,9 @@ class QuoteSiteController extends Controller
 
     public function quoteAcceptedAction(Request $request, $id)
     {
+        $locale = $this->container->getParameter('locale');
+        $date_format = $this->container->getParameter('date_format');
+
         $acceptForm = $this->createAcceptFormAction($id);
         $acceptForm->handleRequest($request);
         $additional = $acceptForm->get('additional')->getData();
@@ -369,6 +385,8 @@ class QuoteSiteController extends Controller
                         'departure' => $departure,
                         'tour_name' => $tourName,
                         'additional' => $additional,
+                        'locale' => $locale,
+                        'date_format' => $date_format,
                     )
                 ), 'text/html');
 
