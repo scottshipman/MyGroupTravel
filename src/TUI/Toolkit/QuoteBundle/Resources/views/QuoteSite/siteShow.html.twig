@@ -35,12 +35,12 @@
                         <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}"
                              alt="{{ entity.quoteReference.institution.name }}">
                     </div>
-                    <div class="brand-logo">
-                        <img src="{{ asset( brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}"
-                             alt="{{ brand.name }}">
-
-                    </div>
-                    {#{{ dump(entity) }}#}
+                {% endif %}
+                {% if brand.media %}
+                <div class="brand-logo">
+                    <img src="{{ asset( brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}"
+                         alt="{{ brand.name }}">
+                </div>
                 {% endif %}
             {% endif %}
 
