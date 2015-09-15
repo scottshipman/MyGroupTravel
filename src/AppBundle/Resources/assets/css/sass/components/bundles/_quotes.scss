@@ -311,6 +311,7 @@
 
   .inner-wrapper {
     position: relative;
+    overflow: hidden;
 
     &:hover {
       outline: 1px solid #000;

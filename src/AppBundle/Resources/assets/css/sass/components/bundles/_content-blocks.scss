@@ -265,17 +265,9 @@ td .layout-icons.image_bottom {
 .content-block-layout-image_bottom {
 
   .content-block-media {
-    width: $column_total_width_reset;
-    margin-left: -$column_gutter_width_reset;
 
     img {
-      width: $column_total_width;
-      padding: 0 $column_gutter_width;
-
-      &:nth-child(4n+1) {
-        clear: left;
-      }
-
+      width: 100%;
     }
 
   }
@@ -305,11 +297,6 @@ td .layout-icons.image_bottom {
 
     img {
       width: 100%;
-
-      &:nth-child(4n+1) {
-        clear: none;
-      }
-
     }
 
   }
