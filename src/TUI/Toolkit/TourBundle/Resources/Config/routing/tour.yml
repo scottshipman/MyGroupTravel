@@ -1,0 +1,59 @@
+manage_tour:
+    path:     /
+    defaults: { _controller: "TourBundle:Tour:index" }
+
+manage_tour_show:
+    path:     /{id}/show
+    defaults: { _controller: "TourBundle:Tour:show" }
+
+manage_tour_new:
+    path:     /new
+    defaults: { _controller: "TourBundle:Tour:new" }
+
+manage_tour_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "TourBundle:Tour:edit" }
+
+manage_tour_update:
+    path:     /{id}/update
+    defaults: { _controller: "TourBundle:Tour:update" }
+    methods:  [POST, PUT]
+
+manage_tour_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "TourBundle:Tour:delete" }
+    methods:  [POST, DELETE]
+
+manage_tour_quick_delete:
+    path:     /{id}/quick_delete
+    defaults: { _controller: "TourBundle:Tour:quickdelete" }
+    methods:  [POST, DELETE, GET]
+
+manage_tour_active:
+    path:     /active
+    defaults: { _controller: "TourBundle:Tour:index" }
+
+manage_tour_deleted:
+    path:     /deleted
+    defaults: { _controller: "TourBundle:Tour:deleted" }
+
+manage_tour_restore:
+    path:     /{id}/restore
+    defaults: { _controller: "TourBundle:Tour:restore" }
+
+# Quote Version portion ported to Tour
+
+manage_tour_show_tabs:
+    path:     /show/tabs/{id}
+    defaults: { _controller: "TourBundle:Tour:showTabs" }
+    methods:  [GET, POST]
+
+manage_tour_lock:
+    path:     /{id}/lock
+    defaults: { _controller: "TourBundle:Tour:lock" }
+    methods:  [POST, GET]
+
+manage_tour_lock_nonajax:
+    path:     /{id}/lockAction
+    defaults: { _controller: "TourBundle:Tour:lockNonajax" }
+    methods:  [POST, GET]

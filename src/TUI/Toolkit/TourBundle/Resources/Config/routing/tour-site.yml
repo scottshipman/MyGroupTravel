@@ -1,0 +1,37 @@
+
+# path for a Tours Site View, not admin view
+
+tour_template_share:
+    path:     /share/{id}
+    defaults: { _controller: "TourBundle:TourSite:siteShow" }
+
+tour_site_share:
+    path:     /share/{id}/{quoteNumber}
+    defaults: { _controller: "TourBundle:TourSite:siteShow" }
+
+tour_site_validate:
+    path:     /validate/{id}/
+    defaults: { _controller: "TourBundle:TourSite:siteValidate" }
+    methods: [POST]
+
+tour_site_action_show:
+    path:     /{id}
+    defaults: { _controller: "TourBundle:TourSite:siteShow" }
+
+tour_site_show:
+    path:     /{id}/{quoteNumber}
+    defaults: { _controller: "TourBundle:TourSite:siteShow" }
+
+tour_summary_show:
+    path:     /summary/show/{id}
+    defaults: { _controller: "TourBundle:TourSite:showSummary" }
+
+tour_summary_edit:
+    path:     /summary/edit/{id}
+    defaults: { _controller: "TourBundle:TourSite:editSummary" }
+    methods: [POST, GET]
+
+tour_summary_update:
+    path:     /summary/update/{id}
+    defaults: { _controller: "TourBundle:TourSite:updateSummary" }
+    methods: [POST, GET]

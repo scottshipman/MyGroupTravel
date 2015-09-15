@@ -62,14 +62,6 @@ class Tour
     private $quoteNumber;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="converted", type="boolean")
-     * @GRID\Column(visible=false, filterable=false, export=true)
-     */
-    private $status;
-
-    /**
      * @var date
      *
      * @ORM\Column(name="deleted", type="date", nullable=true)
@@ -242,6 +234,14 @@ class Tour
      * @GRID\Column(title="Price / Person", export=true)
      */
     private $pricePerson;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="pricePersonPublic", type="float", nullable=true)
+     * @GRID\Column(title="Price / Person", export=true)
+     */
+    private $pricePersonPublic;
 
     /**
      * @var DateTime
@@ -678,6 +678,29 @@ class Tour
     {
       return $this->pricePerson;
     }
+    /**
+     * Set pricePersonPublic
+     *
+     * @param string $pricePersonPublic
+     * @return Tour
+     */
+    public function setPricePersonPublic($pricePersonPublic)
+    {
+        $this->pricePersonPublic = $pricePersonPublic;
+
+        return $this;
+    }
+
+    /**
+     * Get pricePersonPublic
+     *
+     * @return float
+     */
+    public function getPricePersonPublic()
+    {
+        return $this->pricePersonPublic;
+    }
+
 
     /**
      * Set returnDate
@@ -795,30 +818,7 @@ class Tour
       return $this->quoteNumber;
     }
 
-    /**
-     * Set status
-     *
-     * @param string $status
-     * @return Quote
-     */
-    public function setStatus($status)
-    {
-      $this->status = $status;
-
-      return $this;
-    }
-
-    /**
-     * Get status
-     *
-     * @return string
-     */
-    public function getStatus()
-    {
-      return $this->status;
-    }
-
-    /**
+   /**
      * Set deleted
      *
      * @param boolean $deleted
