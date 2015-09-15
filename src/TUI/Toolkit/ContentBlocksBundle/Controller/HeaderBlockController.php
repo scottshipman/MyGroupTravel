@@ -50,6 +50,7 @@ class HeaderBlockController extends Controller
           $em->flush($entity);
 
           // add block to quoteVersion headerBlock field
+          // TODO QuoteVersion is hardcoded here and needs to accept any class
           $quoteVersionEntity = $em->getRepository('QuoteBundle:QuoteVersion')->find($quoteVersion);
           if (!$quoteVersionEntity) {
             throw $this->createNotFoundException('Unable to find ContentBlock entity.');

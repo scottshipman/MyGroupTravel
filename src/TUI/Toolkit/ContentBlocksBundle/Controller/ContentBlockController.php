@@ -480,6 +480,8 @@ class ContentBlockController extends Controller
    */
   public function newTabAction(Request $request, $id)
   {
+    // TODO QuoteVersion is hardcoded here, must accpet any class type
+
     $em = $this->getDoctrine()->getManager();
     $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
     //$content = $entity->getContent();
@@ -523,6 +525,8 @@ class ContentBlockController extends Controller
      */
     public function newSiteTabAction(Request $request, $id)
     {
+
+      // TODO QuoteVersion is hardcoded - must accept any class here
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
         //$content = $entity->getContent();
