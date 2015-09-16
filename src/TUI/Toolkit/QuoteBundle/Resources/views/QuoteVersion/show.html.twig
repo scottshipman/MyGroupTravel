@@ -1,6 +1,14 @@
 {% extends '::site-base.html.twig' %}
 
 {% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
+{# if a tour is converted, hide the tab and block edit icons using a css class#}
+{% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
+    {% set editable="" %}
+    {% set cursor="" %}
+{% else %}
+    {% set editable=" hidden" %}
+    {% set cursor=" pointer-cursor" %}
+{% endif %}
 
 {% block title %}
     {% if is_granted("ROLE_BRAND") %}
@@ -42,11 +50,19 @@
 {% block body -%}
     <ul class="record_actions">
         {% if (entity.locked is sameas(false)) and (is_granted("ROLE_ADMIN")) %}
-        <li>
-            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quoteversion_edit', { 'id': entity.id }) }}">
-                <i class="fa fa-pencil-square-o"> </i> Edit
-            </a>
-        </li>
+            {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
+                <li>
+                    <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quoteversion_edit', { 'id': entity.id }) }}">
+                        <i class="fa fa-pencil-square-o"> </i> Edit
+                    </a>
+                </li>
+            {% else %}
+                <li>
+                    <a class="accepted-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+                        <i class="fa fa-paper-plane-o"> </i> Converted
+                    </a>
+                </li>
+            {% endif %}
         {% endif %}
         {% if is_granted("ROLE_ADMIN") %}
             <li>{{ form(delete_form) }}</li>
@@ -193,23 +209,23 @@
     <div id="content-blocks-wrapper" class="content-blocks-wrapper sortable-tabs">
         {%  for tab, data in entity.content %}
         <div id="{{ tab }}" class="content-blocks-tab">
-            <span class="content-blocks tab-label">
-                <i class="content-block-tab-handle fa fa-arrows"></i>
+            <span class="content-blocks tab-label{{ cursor }}">
+                <i class="content-block-tab-handle fa fa-arrows{{ editable }}"></i>
                 <h4 id="tab-label-{{ tab }}" class="editable-tab">{{ data[0] }}</h4>
                 {% if data[1] | length < 1 %}
-                    <span class="tab-delete icon-label"><i class="content-block-tab-actions fa fa-trash-o"></i> Delete Tab</span>
+                    <span class="tab-delete icon-label{{ editable }}"><i class="content-block-tab-actions fa fa-trash-o"></i> Delete Tab</span>
                 {% endif %}
-                <span class="tab-new icon-label"><i class="content-block-tab-actions fa fa-plus-circle"></i> Add Content</span>
+                <span class="tab-new icon-label{{ editable }}"><i class="content-block-tab-actions fa fa-plus-circle"></i> Add Content</span>
             </span>
 
 
 
             <div id="tabs-drawer-{{ tab }}" class="sortable-items content-blocks-drawer">
                     {%  for item in data[1] %}
-                        <div id="content-blocks-{{ item }}" class="content-blocks content-blocks-item {% if items[item].locked %}content-block-locked{% endif %}">
-                            {% if items[item].locked %}<i style="display: none" class="fa fa-arrows"></i> {{ items[item].title }}{% else %}<i class="fa fa-arrows"></i> {{ items[item].title }}{% endif %}
+                        <div id="content-blocks-{{ item }}" class="content-blocks content-blocks-item {% if items[item].locked %}content-block-locked{% endif %}{{ cursor }}">
+                            {% if items[item].locked %}<i style="display: none" class="fa fa-arrows{{ editable }}"></i> {{ items[item].title }}{% else %}<i class="fa fa-arrows{{ editable }}"></i> {{ items[item].title }}{% endif %}
                             {# probably render a controller here by passing in item as id and have block entity returned #}
-                            <div id="content-block-actions-{{ item }}" class="content-block-actions {% if items[item].locked %}content-block-locked{% endif %}">
+                            <div id="content-block-actions-{{ item }}" class="content-block-actions {% if items[item].locked %}content-block-locked{% endif %}{{ editable }}">
                                 <i class="item-edit content-block-item-action fa fa-pencil-square-o" title="Edit"></i>
                                 <i class="item-delete content-block-item-action fa fa-trash-o" title="Delete" blockID="{{ item }}"></i>
                                 <i class="item-lock content-block-item-action fa {% if items[item].locked %}fa-unlock-alt{% else %}fa-lock{% endif %}" title="{% if items[item].locked %}Unlock{% else %}Lock{% endif %}" blockId="{{ items[item].id }}"></i>
@@ -231,49 +247,51 @@
        <script>
            $(document).ready(function() {
 
-               /**
-                * Drag and Drop Sorting
-                */
+               {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
+                   /**
+                    * Drag and Drop Sorting only if not converted)
+                    */
 
-               $(".sortable-tabs").sortable({
-                   containment: "parent",
-                   items: "> div",
-                   // handle: ".move",
-                   tolerance: "pointer",
-                   cursor: "move",
-                   opacity: 0.7,
-                   revert: 300,
-                   delay: 150,
-                   dropOnEmpty: true,
-                   placeholder: "tabs-placeholder",
-                   start: function (e, ui) {
-                       $('.editable-tab').editable("disable");
-                       ui.placeholder.height(ui.helper.outerHeight());
-                   },
-                   axis: 'y',
-                   update: function(e, ui) {
-                       var pathArray = window.location.pathname.split( '/' );
-                       contentBlocksUpdate(pathArray[3]); // fourth [3] part in the path should be quote ID to pass in
-                   }
-               });
+                   $(".sortable-tabs").sortable({
+                       containment: "parent",
+                       items: "> div",
+                       // handle: ".move",
+                       tolerance: "pointer",
+                       cursor: "move",
+                       opacity: 0.7,
+                       revert: 300,
+                       delay: 150,
+                       dropOnEmpty: true,
+                       placeholder: "tabs-placeholder",
+                       start: function (e, ui) {
+                           $('.editable-tab').editable("disable");
+                           ui.placeholder.height(ui.helper.outerHeight());
+                       },
+                       axis: 'y',
+                       update: function(e, ui) {
+                           var pathArray = window.location.pathname.split( '/' );
+                           contentBlocksUpdate(pathArray[3]); // fourth [3] part in the path should be quote ID to pass in
+                       }
+                   });
 
 
-               $( ".sortable-items" ).sortable({
-                   containment: "document",
-                   items: "> div",
-                   cancel: '.content-block-locked',
-                   tolerance: "pointer",
-                   connectWith: '.sortable-items',
-                   placeholder: "items-placeholder",
-                   start: function (e, ui) {
-                       ui.placeholder.height(ui.helper.outerHeight());
-                   },
-                   axis: 'y',
-                   update: function(e, ui) {
-                       var pathArray = window.location.pathname.split( '/' );
-                       contentBlocksUpdate(pathArray[3]); // fourth [3] part in the path should be quote ID to pass in
-                   }
-               });
+                   $( ".sortable-items" ).sortable({
+                       containment: "document",
+                       items: "> div",
+                       cancel: '.content-block-locked',
+                       tolerance: "pointer",
+                       connectWith: '.sortable-items',
+                       placeholder: "items-placeholder",
+                       start: function (e, ui) {
+                           ui.placeholder.height(ui.helper.outerHeight());
+                       },
+                       axis: 'y',
+                       update: function(e, ui) {
+                           var pathArray = window.location.pathname.split( '/' );
+                           contentBlocksUpdate(pathArray[3]); // fourth [3] part in the path should be quote ID to pass in
+                       }
+                   });
+               {% endif %}
 
                // Generate a Quote LInk
 

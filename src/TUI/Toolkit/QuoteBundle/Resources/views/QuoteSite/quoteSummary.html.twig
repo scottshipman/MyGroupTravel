@@ -22,18 +22,13 @@
                         <i class="fa fa-thumbs-o-up"> </i> Like Quote
                     </a>
                 {% endif %}
-            {% elseif (quote.converted is sameas(true)) and (quote.quoteReference.converted is sameas(true)) %}
-                <a class="accepted-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
-                   href="#">
-                    <i class="fa fa-thumbs-up"> </i> Liked
-                </a>
             {% endif %}
         </li>
         <li>
             {% if (quote.converted is sameas(true)) and (quote.quoteReference.converted is sameas(true)) %}
                 <a class="accepted-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
                    href="#">
-                    <i class="fa fa-bullhorn"></i> Request Changes
+                    <i class="fa fa-bullhorn"></i> Converted
                 </a>
             {% else %}
                 <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
