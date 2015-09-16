@@ -1,0 +1,18 @@
+{% extends '::base.html.twig' %}
+{% block title %}Tour Dashboard - Deleted{% endblock %}
+{% block page_title %}Tour Dashboard - Deleted{% endblock %}
+
+{% block body -%}
+
+    {% embed "TourBundle:Tour:buttons.html.twig" %}{% endembed %}
+
+    {% embed "TourBundle:Tour:tour_tabs.html.twig" %}
+        {% block deleted_tab %}
+            <a class="mdl-tabs__tab is-active" href="{{ path('manage_tour_deleted') }}">Deleted Tours</a>
+        {% endblock %}
+    {% endembed %}
+
+    {{ grid_search(grid, 'AppBundle:Grid:grid.html.twig') }}
+    {{ grid(grid, 'AppBundle:Grid:grid.html.twig') }}
+
+    {% endblock %}

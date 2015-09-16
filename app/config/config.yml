@@ -49,7 +49,7 @@ assetic:
     debug:          "%kernel.debug%"
     read_from:      '%kernel.root_dir%/../web'
     use_controller: false
-    bundles:        [BrandBundle, TUIToolkitUserBundle, QuoteBundle, InstitutionBundle, MediaBundle, AppBundle, ContentBlocksBundle, TwigBundle, ContentBlocksBundle]
+    bundles:        [TourBundle, BrandBundle, TUIToolkitUserBundle, QuoteBundle, InstitutionBundle, MediaBundle, AppBundle, ContentBlocksBundle, TwigBundle, ContentBlocksBundle]
     #java: /usr/bin/java
     filters:
         cssrewrite: ~
@@ -258,10 +258,11 @@ genemu_form:
 trsteel_ckeditor:
     class: Trsteel\CkeditorBundle\Form\Type\CkeditorType
     transformers: ['html_purifier']
-    toolbar: ['document', 'tools', 'basicstyles', 'links', 'styles', 'paragraph']
+    toolbar: ['document', 'basicstyles', 'links', 'tools', 'styles', 'paragraph']
     toolbar_groups:
         document: ['Source']
         links: ['Link','Unlink','Anchor']
+        tools: ['Image']
     ui_color: '#ffffff'
     startup_outline_blocks: false
     width: 100% #Integer or %

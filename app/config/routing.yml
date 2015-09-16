@@ -55,6 +55,10 @@ tui_toolkit_currency:
     resource: "@CurrencyBundle/Resources/config/routing.yml"
     prefix:   /
 
+tui_toolkit_tour:
+    resource: "@TourBundle/Resources/config/routing.yml"
+    prefix:   /
+
 # temporary routes until real ones are implemented
 # @todo REMOVE THESE WITH REAL FUNCTIONALITY LATER
 

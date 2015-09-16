@@ -1,0 +1,26 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}Tour Dashboard - Active{% endblock %}
+{% block page_title %}Tour Dashboard - Active{% endblock %}
+
+{% block body %}
+
+    {% embed "TourBundle:Tour:buttons.html.twig" %}{% endembed %}
+
+    {% embed "TourBundle:Tour:tour_tabs.html.twig" %}
+        {% block active_tab %}
+            <a class="mdl-tabs__tab is-active" href="{{ path('manage_tour') }}">Active Tours</a>
+        {% endblock %}
+    {% endembed %}
+    {{ grid_search(grid, 'AppBundle:Grid:grid.html.twig') }}
+    {{ grid(grid, 'AppBundle:Grid:grid.html.twig') }}
+    <div id="loader"><img src="{{ asset('bundles/quote/images/loader.gif') }}"></div>
+    <script>
+        $(document).ready(function() {
+            $(".fam-lock, .fam-unlock").parent().on('click', function() {
+                $("#loader").css("display", "inline-block");
+            });
+        });
+    </script>
+
+{% endblock %}

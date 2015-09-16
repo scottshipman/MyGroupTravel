@@ -65,8 +65,8 @@ class ContentBlockController extends Controller
 
             if ($class == 'QuoteVersion') {
                 $parent = $em->getRepository('QuoteBundle:QuoteVersion')->find($quoteVersion);
-            } elseif ($class == 'TourVersion') {
-                //$parent = $em->getRepository('TourBundle:TourVersion')->find($quoteVersion);
+            } elseif ($class == 'Tour') {
+                $parent = $em->getRepository('TourBundle:Tour')->find($quoteVersion);
             }
             if (!$parent) {
                 throw  $this->createNotFoundException('Unable to find Quote or Tour in order to update content array.');
@@ -270,8 +270,8 @@ class ContentBlockController extends Controller
             //return $this->redirect($this->generateUrl('manage_contentblocks_edit', array('id' => $id)));
           if ($class=='QuoteVersion'){
             $parent = $em->getRepository('QuoteBundle:QuoteVersion')->find($quoteVersion);
-          } elseif( $class =='TourVersion'){
-            //$parent = $em->getRepository('TourBundle:TourVersion')->find($quoteVersion);
+          } elseif( $class =='Tour'){
+            $parent = $em->getRepository('TourBundle:Tour')->find($quoteVersion);
           }
           $responseContent =  json_encode($parent->getContent());
           return new Response($responseContent,
@@ -312,8 +312,8 @@ class ContentBlockController extends Controller
 
       if ($class=='QuoteVersion'){
         $parent = $em->getRepository('QuoteBundle:QuoteVersion')->find($quoteVersion);
-      } elseif( $class =='TourVersion'){
-        //$parent = $em->getRepository('TourBundle:TourVersion')->find($quoteVersion);
+      } elseif( $class =='Tour'){
+        $parent = $em->getRepository('TourBundle:Tour')->find($quoteVersion);
       }
       if(!$parent){
         throw  $this->createNotFoundException('Unable to find Quote or Tour in order to update content array.');
@@ -377,8 +377,8 @@ class ContentBlockController extends Controller
 
     if ($class=='QuoteVersion'){
       $parent = $em->getRepository('QuoteBundle:QuoteVersion')->find($quoteVersion);
-    } elseif( $class =='TourVersion'){
-      //$parent = $em->getRepository('TourBundle:TourVersion')->find($quoteVersion);
+    } elseif( $class =='Tour'){
+      $parent = $em->getRepository('TourBundle:Tour')->find($quoteVersion);
     }
     $responseContent =  json_encode($parent->getContent());
     return new Response($responseContent,
@@ -412,8 +412,8 @@ class ContentBlockController extends Controller
 
     if ($class=='QuoteVersion'){
       $parent = $em->getRepository('QuoteBundle:QuoteVersion')->find($quoteVersion);
-    } elseif( $class =='TourVersion'){
-      //$parent = $em->getRepository('TourBundle:TourVersion')->find($quoteVersion);
+    } elseif( $class =='Tour'){
+      $parent = $em->getRepository('TourBundle:Tour')->find($quoteVersion);
     }
     $responseContent =  json_encode($parent->getContent());
     return new Response($responseContent,
@@ -443,8 +443,8 @@ class ContentBlockController extends Controller
     }
     if ($class=='QuoteVersion'){
       $parent = $em->getRepository('QuoteBundle:QuoteVersion')->find($quoteVersion);
-    } elseif( $class =='TourVersion'){
-      //$parent = $em->getRepository('TourBundle:TourVersion')->find($quoteVersion);
+    } elseif( $class =='Tour'){
+      $parent = $em->getRepository('TourBundle:Tour')->find($quoteVersion);
     }
     $responseContent =  json_encode($parent->getContent());
     return new Response($responseContent,
@@ -484,6 +484,8 @@ class ContentBlockController extends Controller
    */
   public function newTabAction(Request $request, $id)
   {
+    // TODO QuoteVersion is hardcoded here, must accpet any class type
+
     $em = $this->getDoctrine()->getManager();
     $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
     //$content = $entity->getContent();
@@ -527,6 +529,8 @@ class ContentBlockController extends Controller
      */
     public function newSiteTabAction(Request $request, $id)
     {
+
+      // TODO QuoteVersion is hardcoded - must accept any class here
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
         //$content = $entity->getContent();

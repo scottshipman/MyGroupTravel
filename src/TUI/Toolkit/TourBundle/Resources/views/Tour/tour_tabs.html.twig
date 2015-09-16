@@ -1,0 +1,16 @@
+{# Only show this tab stuff if is_granted ROLE_ADMIN #}
+{% if is_granted("ROLE_ADMIN") %}
+    <div class="mdl-tabs-no-swap">
+      <div class="mdl-tabs__tab-bar">
+
+            {% block active_tab %}
+                <a class='mdl-tabs__tab' href="{{ path('manage_tour_active') }}">Active Tours</a>
+            {% endblock %}
+
+            {% block deleted_tab %}
+                <a class='mdl-tabs__tab' href="{{ path('manage_tour_deleted') }}">Deleted Tours</a>
+            {% endblock %}
+
+      </div>
+    </div>
+{% endif %}

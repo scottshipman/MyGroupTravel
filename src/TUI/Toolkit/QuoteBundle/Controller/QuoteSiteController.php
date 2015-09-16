@@ -74,7 +74,8 @@ class QuoteSiteController extends Controller
       ));
     }
 
-    if ($securityContext->isGranted('ROLE_BRAND') || in_array('organizer', $permission)){
+    if ($securityContext->isGranted('ROLE_BRAND') ){
+      if ($entity->getConverted() == false )
       $editable = TRUE;
     }
     // get the content blocks to send to twig
