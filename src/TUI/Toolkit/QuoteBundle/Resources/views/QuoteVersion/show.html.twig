@@ -78,6 +78,13 @@
                     <i class="fa fa-sign-in"></i> Generate quote link
                 </a>
             </li>
+            <li>
+                {% if (entity.converted is sameas(false) and entity.quoteReference.converted is sameas(false)) %}
+                <a id="convert-quote" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quote_convert', { 'id': entity.id }) }}">
+                    <i class="fa fa-paper-plane"></i> Convert to Tour
+                </a>
+                {% endif %}
+            </li>
         {% endif %}
     </ul>
     <h3>Summary</h3>
