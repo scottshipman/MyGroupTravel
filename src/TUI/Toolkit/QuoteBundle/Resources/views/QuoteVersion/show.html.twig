@@ -206,12 +206,12 @@
 
             <div id="tabs-drawer-{{ tab }}" class="sortable-items content-blocks-drawer">
                     {%  for item in data[1] %}
-                        <div id="content-blocks-{{ item }}" class="content-blocks content-blocks-item">
-                            <i class="fa fa-arrows"></i> {{ items[item].title }}
+                        <div id="content-blocks-{{ item }}" class="content-blocks content-blocks-item {% if items[item].locked %}content-block-locked{% endif %}">
+                            {% if items[item].locked %}<i style="display: none" class="fa fa-arrows"></i> {{ items[item].title }}{% else %}<i class="fa fa-arrows"></i> {{ items[item].title }}{% endif %}
                             {# probably render a controller here by passing in item as id and have block entity returned #}
                             <div id="content-block-actions-{{ item }}" class="content-block-actions {% if items[item].locked %}content-block-locked{% endif %}">
                                 <i class="item-edit content-block-item-action fa fa-pencil-square-o" title="Edit"></i>
-                                <i class="item-delete content-block-item-action fa fa-trash-o" title=""Delete" blockID="{{ item }}"></i>
+                                <i class="item-delete content-block-item-action fa fa-trash-o" title="Delete" blockID="{{ item }}"></i>
                                 <i class="item-lock content-block-item-action fa {% if items[item].locked %}fa-unlock-alt{% else %}fa-lock{% endif %}" title="{% if items[item].locked %}Unlock{% else %}Lock{% endif %}" blockId="{{ items[item].id }}"></i>
                                 {#
                                 {% if items[item].hidden %}
@@ -261,6 +261,7 @@
                $( ".sortable-items" ).sortable({
                    containment: "document",
                    items: "> div",
+                   cancel: '.content-block-locked',
                    tolerance: "pointer",
                    connectWith: '.sortable-items',
                    placeholder: "items-placeholder",
@@ -428,12 +429,19 @@
                 }).done(function () {
                     t.toggleClass('fa-unlock-alt').toggleClass('fa-lock');
                     if (t.attr('title') == 'Unlock') {
+//                        $("#loader").css("display", "block");
                         // Will now be unlocked
                         t.parent().removeClass('content-block-locked');
+                        t.parent().parent().removeClass('content-block-locked');
+                        var arrows = t.parent().parent().find(".fa-arrows");
+                        arrows.show();
                         t.attr('title', 'Lock');
                     } else {
                         // Will now be locked
                         t.parent().addClass('content-block-locked');
+                        t.parent().parent().addClass('content-block-locked');
+                        var arrows = t.parent().parent().find(".fa-arrows");
+                        arrows.hide();
                         t.attr('title', 'Unlock');
                     }
                     $("#loader").css("display", "none");
