@@ -258,10 +258,11 @@ genemu_form:
 trsteel_ckeditor:
     class: Trsteel\CkeditorBundle\Form\Type\CkeditorType
     transformers: ['html_purifier']
-    toolbar: ['document', 'tools', 'basicstyles', 'links', 'styles', 'paragraph']
+    toolbar: ['document', 'basicstyles', 'links', 'tools', 'styles', 'paragraph']
     toolbar_groups:
         document: ['Source']
         links: ['Link','Unlink','Anchor']
+        tools: ['Image']
     ui_color: '#ffffff'
     startup_outline_blocks: false
     width: 100% #Integer or %
