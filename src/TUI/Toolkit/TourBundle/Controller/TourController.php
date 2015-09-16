@@ -237,18 +237,18 @@ class TourController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         //handling ajax request for organizer
-        $o_data = $form->getData()->getQuoteReference()->getOrganizer();
+        $o_data = $form->getData()->getOrganizer();
         if (preg_match('/<+(.*?)>/', $o_data, $o_matches)) {
             $email = $o_matches[1];
             $entities = $em->getRepository('TUIToolkitUserBundle:User')
                 ->findByEmail($email);
             if (NULL !== $entities) {
                 $organizer = array_shift($entities);
-                $form->getData()->getQuoteReference()->setOrganizer($organizer);
+                $form->getData()->setOrganizer($organizer);
             }
         }
         //handling ajax request for SalesAgent same as we did with organizer
-        $a_data = $form->getData()->getQuoteReference()->getSalesAgent();
+        $a_data = $form->getData()->getSalesAgent();
         if (preg_match('/<+(.*?)>/', $a_data, $a_matches)) {
             $agentEmail = $a_matches[1];
 
@@ -256,12 +256,12 @@ class TourController extends Controller
                 ->findByEmail($agentEmail);
             if (NULL !== $agentEntities) {
                 $salesAgent = array_shift($agentEntities);
-                $form->getData()->getQuoteReference()->setSalesAgent($salesAgent);
+                $form->getData()->setSalesAgent($salesAgent);
             }
         }
 
         //handling ajax request for SecondaryContact same as we did with organizer
-        $s_data = $form->getData()->getQuoteReference()->getSecondaryContact();
+        $s_data = $form->getData()->getSecondaryContact();
         if (preg_match('/<+(.*?)>/', $s_data, $s_matches)) {
             $secondEmail = $s_matches[1];
             $secondEntities = $em->getRepository('TUIToolkitUserBundle:User')
@@ -269,24 +269,23 @@ class TourController extends Controller
             if (NULL !== $secondEntities) {
                 $secondAgent = array_shift($secondEntities);
                 $form->getData()
-                    ->getQuoteReference()
                     ->setSecondaryContact($secondAgent);
             }
         }
 
         //Handling the request for institution a little different than we did for the other 2.
-        $institutionName = explode(' - ', $form->getData()->getQuoteReference()->getInstitution());
+        $institutionName = explode(' - ', $form->getData()->getInstitution());
         $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findByName($institutionName[0]);
         if (null !== $institutionEntities) {
             $institution = array_shift($institutionEntities);
-            $form->getData()->getQuoteReference()->setInstitution($institution);
+            $form->getData()->setInstitution($institution);
         }
 
         if ($form->isValid()) {
             $em->persist($entity);
             $em->flush();
             // Create organizer permission
-            $permission = $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getQuoteReference()->getOrganizer(), 'organizer');
+            $permission = $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
             $this->get('session')->getFlashBag()->add('notice', 'Tour Saved: ' . $entity->getName());
 
             return $this->redirect($this->generateUrl('manage_tour'));
@@ -522,57 +521,53 @@ class TourController extends Controller
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
         //handling ajax request for organizer
-        $o_data = $editForm->getData()->getQuoteReference()->getOrganizer();
+        $o_data = $editForm->getData()->getOrganizer();
         if (preg_match('/<+(.*?)>/', $o_data, $o_matches)) {
             $email = $o_matches[1];
             $entities = $em->getRepository('TUIToolkitUserBundle:User')
                 ->findByEmail($email);
             if (NULL !== $entities) {
                 $organizer = array_shift($entities);
-                $editForm->getData()->getQuoteReference()->setOrganizer($organizer);
+                $editForm->getData()->setOrganizer($organizer);
             }
         }
         //handling ajax request for SalesAgent same as we did with organizer
-        $a_data = $editForm->getData()->getQuoteReference()->getSalesAgent();
+        $a_data = $editForm->getData()->getSalesAgent();
         if (preg_match('/<+(.*?)>/', $a_data, $a_matches)) {
             $agentEmail = $a_matches[1];
             $agentEntities = $em->getRepository('TUIToolkitUserBundle:User')
                 ->findByEmail($agentEmail);
             if (NULL !== $agentEntities) {
                 $salesAgent = array_shift($agentEntities);
-                $editForm->getData()
-                    ->getQuoteReference()
-                    ->setSalesAgent($salesAgent);
+                $editForm->getData()->setSalesAgent($salesAgent);
             }
         }
 
         //handling ajax request for SecondaryContact same as we did with organizer
-        $s_data = $editForm->getData()->getQuoteReference()->getSecondaryContact();
+        $s_data = $editForm->getData()->getSecondaryContact();
         if (preg_match('/<+(.*?)>/', $s_data, $s_matches)) {
             $secondEmail = $s_matches[1];
             $secondEntities = $em->getRepository('TUIToolkitUserBundle:User')
                 ->findByEmail($secondEmail);
             if (NULL !== $secondEntities) {
                 $secondAgent = array_shift($secondEntities);
-                $editForm->getData()
-                    ->getQuoteReference()
-                    ->setSecondaryContact($secondAgent);
+                $editForm->getData()->setSecondaryContact($secondAgent);
             }
         }
 
         //Handling the request for institution a little different than we did for the other 2.
-        $institutionName = explode(' - ', $editForm->getData()->getQuoteReference()->getInstitution());
+        $institutionName = explode(' - ', $editForm->getData()->getInstitution());
         $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findByName($institutionName[0]);
         $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findByName($institutionName);
         if (null !== $institutionEntities) {
             $institution = array_shift($institutionEntities);
-            $editForm->getData()->getQuoteReference()->setInstitution($institution);
+            $editForm->getData()->setInstitution($institution);
         }
 
 
         if ($editForm->isValid()) {
             $em->flush();
-            $permission = $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getQuoteReference()->getOrganizer(), 'organizer');
+            $permission = $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
             $this->get('session')->getFlashBag()->add('notice', 'Tour Saved: ' . $entity->getName());
             return $this->redirect($this->generateUrl('manage_tour'));
         }
