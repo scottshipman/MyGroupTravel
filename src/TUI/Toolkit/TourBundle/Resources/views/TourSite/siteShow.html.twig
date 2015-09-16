@@ -29,7 +29,6 @@
 {% block sub_header %}
     <div class="sub-header">
         <div class="inner">
-            {% if entity.isTemplate == 0 %} {# no Institutions on Templates #}
                 {% if app.user %}
                     {% if entity.quoteReference.institution.media %}
                         <div class="institution-logo">
@@ -51,7 +50,6 @@
                         </div>
                     {% endif %}
                 {% endif %}
-            {% endif %}
 
             {% if entity.quoteReference.institution %}
                 <div id="site-quote-name">{{ entity.quoteReference.institution.name }}</div>{% endif %}
@@ -130,7 +128,7 @@
                     </div>
                 {% endif %}
                 <div id="site-header-summary-content">
-                    {{ render(controller('QuoteBundle:QuoteSite:showSummary', {'id':  entity.id  })) }}
+                    {{ render(controller('TourBundle:TourSite:showSummary', {'id':  entity.id  })) }}
                 </div>
             </div>
             {# give a placeholder for the editable version #}
@@ -151,10 +149,6 @@
                        class="site-content-blocks-tab mdl-tabs__tab {{ activeTab }}">{{ data[0] }}</a>
                     {% set activeTab = '' %}
                 {% endfor %}
-                {% if alternate %}
-                    <a id="tab-alternate-quotes" href="#tabs-drawer-alternate-quotes"
-                       class="site-content-blocks-tab mdl-tabs__tab {{ activeTab }}">Alternate Quotes</a>
-                {% endif %}
                 {% if editable %}
                     <span id="edit-tabs" class="site-content-blocks-tab status-preview-edit"><i
                                 class="fa fa-pencil"></i> Edit Tabs</span>
@@ -213,14 +207,6 @@
                 </div>
                 {% set activeTab = '' %}
             {% endfor %}
-            {% if alternate %}
-                <div id="tabs-drawer-alternate-quotes" class="mdl-tabs__panel {{ activeTab }}">
-
-                    {{ render(controller('QuoteBundle:QuoteSite:getQuoteSiblings', {'id':  entity.quoteReference.id  })) }}
-
-                </div>
-            {% endif %}
-
         </div>
     </div><!-- view-mode -->
 
@@ -641,20 +627,20 @@
 
                 <strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong>{% endif %}</span>
     </div>
-    {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
-        {% if date(entity.expiryDate) < date('now') %}
-            <a class="expired-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-                <i class="fa fa-calendar-times-o"></i> Expired
-            </a>
-        {% else %}
-            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
-               href="{{ path('quote_site_quote_accepted', { 'id': entity.id }) }}">
-                <i class="fa fa-thumbs-o-up"> </i> Like Quote
-            </a>
-        {% endif %}
-    {% elseif (entity.converted is sameas(true)) and (entity.quoteReference.converted is sameas(true)) %}
-        <a class="accepted-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-            <i class="fa fa-thumbs-up"> </i> Liked
-        </a>
-    {% endif %}
+    {#{% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}#}
+        {#{% if date(entity.expiryDate) < date('now') %}#}
+            {#<a class="expired-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">#}
+                {#<i class="fa fa-calendar-times-o"></i> Expired#}
+            {#</a>#}
+        {#{% else %}#}
+            {#<a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"#}
+               {#href="{{ path('quote_site_quote_accepted', { 'id': entity.id }) }}">#}
+                {#<i class="fa fa-thumbs-o-up"> </i> Like Quote#}
+            {#</a>#}
+        {#{% endif %}#}
+    {#{% elseif (entity.converted is sameas(true)) and (entity.quoteReference.converted is sameas(true)) %}#}
+        {#<a class="accepted-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">#}
+            {#<i class="fa fa-thumbs-up"> </i> Liked#}
+        {#</a>#}
+    {#{% endif %}#}
 {% endblock %}

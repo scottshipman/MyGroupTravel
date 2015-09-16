@@ -102,7 +102,7 @@ class TourSiteController extends Controller
     }
 
     // Record Views
-    $this->setSiteViews($entity->getId());
+    $this->setTourViews($entity->getId());
 
 
 
@@ -287,7 +287,7 @@ class TourSiteController extends Controller
       throw $this->createNotFoundException('Unable to find Tour entity for summary header display.');
     }
 
-    return $this->render('TourBundle:TourSite:quoteSummary.html.twig', array(
+    return $this->render('TourBundle:TourSite:tourSummary.html.twig', array(
       'tour' => $tour,
       'locale'  => $locale,
     ));
