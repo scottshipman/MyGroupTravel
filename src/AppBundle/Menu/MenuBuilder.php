@@ -27,7 +27,7 @@ class MenuBuilder
 
     $menu->addChild('Home', array('route' => '_homepage'));
     $menu->addChild('Quotes', array('route' => 'manage_quote'));
-    $menu->addChild('Tours', array('route' => '_manage_tour_home'));
+    $menu->addChild('Tours', array('route' => 'manage_tour'));
     $menu->addChild('Users', array('route' => 'user'));
 
     $menu->addChild('Reports')

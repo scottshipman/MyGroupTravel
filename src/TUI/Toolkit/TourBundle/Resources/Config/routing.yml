@@ -1,0 +1,11 @@
+tour_manage_tour:
+    resource: "@TourBundle/Resources/config/routing/tour.yml"
+    prefix:   /manage/tour
+
+tour_site:
+    resource: "@TourBundle/Resources/config/routing/tour-site.yml"
+    prefix:   /tour/view
+
+tour_pdf:
+    resource: "@TourBundle/Resources/config/routing/tour-pdf.yml"
+    prefix:   /tour/print

@@ -19,7 +19,7 @@
 {% endblock %}
 
 {% block edit_link %}
-    {% if is_granted("ROLE_BRAND") and entity.converted is sameas(false) %}
+    {% if is_granted("ROLE_BRAND") %}
         <a id="link-preview-edit"
            class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored link-preview-edit" href="#">Switch to
             Edit Mode</a>
@@ -652,5 +652,9 @@
                 <i class="fa fa-thumbs-o-up"> </i> Like Quote
             </a>
         {% endif %}
+    {% elseif (entity.converted is sameas(true)) and (entity.quoteReference.converted is sameas(true)) %}
+        <a class="accepted-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+            <i class="fa fa-thumbs-up"> </i> Liked
+        </a>
     {% endif %}
 {% endblock %}

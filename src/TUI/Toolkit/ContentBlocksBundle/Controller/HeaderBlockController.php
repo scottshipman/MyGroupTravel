@@ -50,6 +50,7 @@ class HeaderBlockController extends Controller
           $em->flush($entity);
 
           // add block to quoteVersion headerBlock field
+          // TODO QuoteVersion is hardcoded here and needs to accept any class
           $quoteVersionEntity = $em->getRepository('QuoteBundle:QuoteVersion')->find($quoteVersion);
           if (!$quoteVersionEntity) {
             throw $this->createNotFoundException('Unable to find ContentBlock entity.');
@@ -306,8 +307,8 @@ class HeaderBlockController extends Controller
             //return $this->redirect($this->generateUrl('manage_contentblocks_edit', array('id' => $id)));
           if ($class=='QuoteVersion'){
             $parent = $em->getRepository('QuoteBundle:QuoteVersion')->find($quoteVersion);
-          } elseif( $class =='TourVersion'){
-            //$parent = $em->getRepository('TourBundle:TourVersion')->find($quoteVersion);
+          } elseif( $class =='Tour'){
+            $parent = $em->getRepository('TourBundle:Tour')->find($quoteVersion);
           }
           $responseContent =  json_encode($parent->getContent());
           return new Response($responseContent,
