@@ -154,9 +154,12 @@
   }
 
   #copy-button {
-    position: absolute;
-    bottom: 0;
-    right: 0;
+    float: right;
+
+    &.hidden + .input {
+      margin-right: 0;
+    }
+
   }
 
 }
