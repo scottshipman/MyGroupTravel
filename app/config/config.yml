@@ -267,6 +267,10 @@ trsteel_ckeditor:
     width: 100% #Integer or %
     height: 300 #Integer or %
     custom_config: "/assetic/ckeditorcustomsettings.js"
+    html_purifier:
+        config:
+            HTML.AllowedAttributes: 'src, href, target, colspan, class'
+            Attr.AllowedFrameTargets: '_blank, _self, _parent, _top'
 
 liip_imagine:
     resolvers:
