@@ -1,5 +1,5 @@
 
 # path for a Quotes Site View, not admin view
 quote_pdf_show:
-    path:     /{id}.pdf
+    path:     /{id}/{quoteNumber}.pdf
     defaults: { _controller: "QuoteBundle:QuoteSite:sitePDF" }
