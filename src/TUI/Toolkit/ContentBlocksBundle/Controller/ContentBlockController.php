@@ -278,7 +278,7 @@ class ContentBlockController extends Controller
             //return $this->redirect($this->generateUrl('manage_contentblocks_edit', array('id' => $id)));
           if ($class=='QuoteVersion'){
             $parent = $em->getRepository('QuoteBundle:QuoteVersion')->find($quoteVersion);
-          } elseif( $class =='Tour'){
+          } elseif( $class =='tour'){
             $parent = $em->getRepository('TourBundle:Tour')->find($quoteVersion);
           }
           $responseContent =  json_encode($parent->getContent());
@@ -320,7 +320,7 @@ class ContentBlockController extends Controller
 
       if ($class=='QuoteVersion'){
         $parent = $em->getRepository('QuoteBundle:QuoteVersion')->find($quoteVersion);
-      } elseif( $class =='Tour'){
+      } elseif( $class =='tour'){
         $parent = $em->getRepository('TourBundle:Tour')->find($quoteVersion);
       }
       if(!$parent){
@@ -385,7 +385,7 @@ class ContentBlockController extends Controller
 
     if ($class=='QuoteVersion'){
       $parent = $em->getRepository('QuoteBundle:QuoteVersion')->find($quoteVersion);
-    } elseif( $class =='Tour'){
+    } elseif( $class =='tour'){
       $parent = $em->getRepository('TourBundle:Tour')->find($quoteVersion);
     }
     $responseContent =  json_encode($parent->getContent());
@@ -420,7 +420,7 @@ class ContentBlockController extends Controller
 
     if ($class=='QuoteVersion'){
       $parent = $em->getRepository('QuoteBundle:QuoteVersion')->find($quoteVersion);
-    } elseif( $class =='Tour'){
+    } elseif( $class =='tour'){
       $parent = $em->getRepository('TourBundle:Tour')->find($quoteVersion);
     }
     $responseContent =  json_encode($parent->getContent());
@@ -451,7 +451,7 @@ class ContentBlockController extends Controller
     }
     if ($class=='QuoteVersion'){
       $parent = $em->getRepository('QuoteBundle:QuoteVersion')->find($quoteVersion);
-    } elseif( $class =='Tour'){
+    } elseif( $class =='tour'){
       $parent = $em->getRepository('TourBundle:Tour')->find($quoteVersion);
     }
     $responseContent =  json_encode($parent->getContent());
@@ -498,7 +498,7 @@ class ContentBlockController extends Controller
       if ($class == "QuoteVersion") {
           $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
       }
-      elseif ($class == "Tour"){
+      elseif ($class == "tour"){
           $entity = $em->getRepository('TourBundle:Tour')->find($id);
       }
     //$content = $entity->getContent();
@@ -548,7 +548,7 @@ class ContentBlockController extends Controller
         if ($class == "QuoteVersion") {
             $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
         }
-        elseif($class == "Tour"){
+        elseif($class == "tour"){
             $entity = $em->getRepository('TourBundle:Tour')->find($id);
         }
         if (!$entity) {
