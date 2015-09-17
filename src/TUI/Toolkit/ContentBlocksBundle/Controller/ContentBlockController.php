@@ -63,9 +63,9 @@ class ContentBlockController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            if ($class == 'QuoteVersion') {
+            if ($class == "QuoteVersion") {
                 $parent = $em->getRepository('QuoteBundle:QuoteVersion')->find($quoteVersion);
-            } elseif ($class == 'Tour') {
+            } elseif ($class == "tour") {
                 $parent = $em->getRepository('TourBundle:Tour')->find($quoteVersion);
             }
             if (!$parent) {
