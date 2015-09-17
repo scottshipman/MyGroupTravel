@@ -527,12 +527,20 @@ class ContentBlockController extends Controller
      *
      * @return Symfony\Component\HttpFoundation\Response
      */
-    public function newSiteTabAction(Request $request, $id)
+    public function newSiteTabAction(Request $request, $id, $class)
     {
 
       // TODO QuoteVersion is hardcoded - must accept any class here
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+        if ($class == "QuoteVersion") {
+            $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+        }
+        elseif($class == "Tour"){
+            $entity = $em->getRepository('TourBundle:Tour')->find($id);
+        }
+        if (!$entity) {
+            throw  $this->createNotFoundException('Unable to find Quote or Tour Entity While Adding a Tab');
+        }
         //$content = $entity->getContent();
         $content=$entity->getContent();
 

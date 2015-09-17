@@ -63,7 +63,7 @@ var contentBlocksAddTab= function (elem, id){
  * @param id - Quote Version # passed from window.path
  */
 
-var contentBlocksNewTab = function (id) {
+var contentBlocksNewTab = function (id, classtype) {
     // update server with new data
     var newId = new Date().getTime();
     $("#loader").css("display", "block");
@@ -75,7 +75,7 @@ var contentBlocksNewTab = function (id) {
     $.ajax({
         data: result,
         type: 'POST',
-        url: '/manage/contentblocks/tab/new/'+ id
+        url: '/manage/contentblocks/tab/new/'+ id + '/' + classtype
     });
     //reload the window so changes are redrawn - its lazy non-ajaxy, but...
     contentBlocksRefresh(id);

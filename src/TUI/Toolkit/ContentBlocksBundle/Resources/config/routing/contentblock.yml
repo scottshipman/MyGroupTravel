@@ -35,7 +35,7 @@ contentblocks_update:
     methods:  [POST]
 
 manage_contentblocks_new_tab:
-    path: /tab/new/{id}
+    path: /tab/new/{id}/{class}
     defaults: { _controller: "ContentBlocksBundle:ContentBlock:newSiteTab"}
     methods:  [POST]
 

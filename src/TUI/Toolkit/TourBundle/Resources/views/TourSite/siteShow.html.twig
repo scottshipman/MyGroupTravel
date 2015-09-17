@@ -11,7 +11,7 @@
 
 {% block back_link %}
     {% if is_granted("ROLE_BRAND") %}
-        <a class="back-link" href="{{ path('manage_quoteversion_show', { 'id': entity.id }) }}"><i
+        <a class="back-link" href="{{ path('manage_tour_show', { 'id': entity.id }) }}"><i
                     class="fa fa-arrow-left"></i> Back to Show</a>
     {% else %}
         <a class="back-link" href="/"><i class="fa fa-arrow-left"></i> Back to Dashboard</a>
@@ -315,7 +315,7 @@
                     //e.preventDefault();
                     $("#dialog").html("");
                     $("#dialog").dialog({width: '60%'}).dialog("option", "title", "Loading...").dialog("open");
-                    $("#dialog").load('/manage/quoteversion/show/tabs/' + {{ entity.id }}, function () {
+                    $("#dialog").load('/manage/tour/show/tabs/' + {{ entity.id }}, function () {
                         $(this).dialog("option", "title", "Rearrange Tabs");
                         $(".modal-sortable-tabs").sortable("enable");
                     });
@@ -323,7 +323,7 @@
 
                 // Add a new tab to a site
                 $("#add-new-tab").on('click', function () {
-                    contentBlocksNewTab({{ entity.id }});
+                    contentBlocksNewTab({{ entity.id }}, "Tour" );
                 });
 
                 // edit header slideshow in layout mode
@@ -361,7 +361,7 @@
                 // Add header block in layout mode
                 $("#add-header-content").on('click', function (e) {
                     $("#loader").css("display", "block");
-                    $("#site-header-editForm").load('/manage/headerblock/header/new/' + {{ entity.id }} +'/QuoteVersion', function () {
+                    $("#site-header-editForm").load('/manage/headerblock/header/new/' + {{ entity.id }} +'/tour', function () {
                         $('.item-edit').hide(); // hide ALL edit buttons for all content blocks
                         $("#loader").css("display", "none");
                         $('#site-header-editForm').show();
@@ -411,7 +411,7 @@
                     e.preventDefault();
                     $("#loader").css("display", "block");
                     var tabId = $(this).attr("tabId");
-                    $("#content-block-editForm-" + tabId).load('/manage/contentblocks/new/QuoteVersion/' + {{ entity.id }} +'/' + tabId, function () {
+                    $("#content-block-editForm-" + tabId).load('/manage/contentblocks/new/tour/' + {{ entity.id }} +'/' + tabId, function () {
                         $("#content-block-editForm-" + tabId + " .button-row").append( '<a id ="content-block-editForm-' + tabId + '-cancel" tabId="' + tabId + '" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored content-block-cancel" style="display: none; background-color: red; color: white;" href="#">Cancel</a>' );
                         $('.item-edit').hide(); // hide ALL edit buttons for all content blocks
                         $("#loader").css("display", "none");
@@ -439,7 +439,7 @@
                     $("#loader").css("display", "block");
                     var blockID = t.attr('blockId');
                     $.ajax({
-                        url: '/manage/contentblocks/' + blockID + '/resize/' + {{ entity.id }} +'/QuoteVersion',
+                        url: '/manage/contentblocks/' + blockID + '/resize/' + {{ entity.id }} +'/tour',
                         headers: {
                             "Pragma": "no-cache",
                             "Expires": -1,
@@ -469,7 +469,7 @@
                     var editBlock = $("#editable-content-blocks-" + block);
                     var previewBlock = $("#previewable-content-blocks-" + block);
                     editBlock.html('');
-                    editBlock.load('/ajax/contentblocks/' + block + '/edit/' + {{ entity.id }} +'/QuoteVersion', function () {
+                    editBlock.load('/ajax/contentblocks/' + block + '/edit/' + {{ entity.id }} +'/tour', function () {
                         $('.item-edit').hide(); // hide ALL edit buttons for all content blocks
                         $('.add-content-block').hide() // hide ALL Add Block's for all tabs
                         doMDLpopup(editBlock); // run the function to add appropriate MDL classes to form elements
@@ -484,7 +484,7 @@
                     $("#loader").css("display", "block");
                     var blockID = t.attr('blockId');
                     $.ajax({
-                        url: '/manage/contentblocks/' + blockID + '/lock/' + {{ entity.id }} +'/QuoteVersion',
+                        url: '/manage/contentblocks/' + blockID + '/lock/' + {{ entity.id }} +'/tour',
                         headers: {
                             "Pragma": "no-cache",
                             "Expires": -1,
@@ -512,7 +512,7 @@
                     $("#loader").css("display", "block");
                     var action = $(this).attr('action');
                     $.ajax({
-                        url: '/manage/quoteversion/{{ entity.id }}/lock',
+                        url: '/manage/tour/{{ entity.id }}/lock',
                     }).done(function () {
                         if (action == 'lock') {
                             if (editElement){
@@ -581,7 +581,7 @@
                         var blockId = $(this).attr('blockId');
                         $.ajax({
                             method: 'DELETE',
-                            url: '/manage/contentblocks/' + blockId + '/delete/' + {{ entity.id }} +'/QuoteVersion',
+                            url: '/manage/contentblocks/' + blockId + '/delete/' + {{ entity.id }} +'/tour',
                             headers: {
                                 "Pragma": "no-cache",
                                 "Expires": -1,
