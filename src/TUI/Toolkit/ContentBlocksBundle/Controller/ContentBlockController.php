@@ -482,12 +482,17 @@ class ContentBlockController extends Controller
    *
    * @return Symfony\Component\HttpFoundation\Response
    */
-  public function newTabAction(Request $request, $id)
+  public function newTabAction(Request $request, $id, $class)
   {
     // TODO QuoteVersion is hardcoded here, must accpet any class type
 
     $em = $this->getDoctrine()->getManager();
-    $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+      if ($class == "QuoteVersion") {
+          $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+      }
+      elseif ($class == "Tour"){
+          $entity = $em->getRepository('TourBundle:Tour')->find($id);
+      }
     //$content = $entity->getContent();
     $content=array();
 

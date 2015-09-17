@@ -30,7 +30,7 @@ manage_contentblocks_delete:
     methods:  [POST, DELETE, GET]
 
 contentblocks_update:
-    path:   /update/{id}
+    path:   /update/{id}/{class}
     defaults: { _controller: "ContentBlocksBundle:ContentBlock:newTab" }
     methods:  [POST]
 
