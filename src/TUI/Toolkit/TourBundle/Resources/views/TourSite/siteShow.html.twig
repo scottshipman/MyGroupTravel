@@ -540,7 +540,7 @@
                 $(document).on('click', '#edit-header-summary', function (e) {
                     e.preventDefault();
                     $("#loader").css("display", "block");
-                    $("#site-header-summary-form").load('/quote/view/summary/edit/{{ entity.id }}', function () {
+                    $("#site-header-summary-form").load('/tour/view/summary/edit/{{ entity.id }}', function () {
                         $("#loader").css("display", "none");
                         $('.item-edit').hide(); // hide ALL edit buttons for all content blocks
                         $('#site-header-summary-form').show();
@@ -551,11 +551,11 @@
                         // bind header edit form and provide a simple callback function
                         $('#form-summary-edit-form').ajaxForm({
                             beforeSerialize: function () {
-                                CKEDITOR.instances.tui_toolkit_quotebundle_quotesummary_welcomeMsg.updateElement();
+                                CKEDITOR.instances.tui_toolkit_tourbundle_toursummary_welcomeMsg.updateElement();
                             },
                             success: function (response) {
                                 // redraw the area by loading a twig file
-                                $('#site-header-summary-content').load('/quote/view/summary/show/{{ entity.id }}', function () {
+                                $('#site-header-summary-content').load('/tour/view/summary/show/{{ entity.id }}', function () {
                                     $('#site-header-summary-form').empty();
                                     $('#site-header-summary-form').hide();
                                     $('#site-header-summary').show();

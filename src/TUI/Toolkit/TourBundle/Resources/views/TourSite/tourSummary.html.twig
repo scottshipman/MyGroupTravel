@@ -54,13 +54,13 @@
                             <i class="fa fa-sign-in fa-stack"></i>
                         </a>
 
-            {% if quote.quoteNumber %}
-                <div class="input"><input type="text" id="share_url" name="share_url" value="{{ url('quote_site_share', { 'id': quote.id, 'quoteNumber': quote.quoteNumber }) }}" readonly="readonly"></div>
+            {% if tour.quoteNumber %}
+                <div class="input"><input type="text" id="share_url" name="share_url" value="{{ url('tour_site_share', { 'id': tour.id, 'quoteNumber': tour.quoteNumber }) }}" readonly="readonly"></div>
             {% else %}
-                <div class="input"><input type="text" id="share_url" name="share_url" value="{{ url('quote_template_share', { 'id': quote.id }) }}" readonly="readonly"></div>
+                <div class="input"><input type="text" id="share_url" name="share_url" value="{{ url('tour_template_share', { 'id': tour.id }) }}" readonly="readonly"></div>
             {% endif %}
 
         </li>
     </ul>
-    <li id="headerBlock-text">{% if quote.headerBlock %}{{ quote.welcomeMsg|raw }}{% endif %}</li>
+    <li id="headerBlock-text">{% if tour.headerBlock %}{{ tour.welcomeMsg|raw }}{% endif %}</li>
 </ul>
