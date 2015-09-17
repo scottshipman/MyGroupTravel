@@ -253,8 +253,7 @@
 
             //remove the CopytoClipboard button if not Flash
             if (navigator.mimeTypes["application/x-shockwave-flash"] == undefined) {
-                $("#copy-button").hide();
-                $('#share_url').attr('disabled', false);
+                $("#copy-button").addClass('hidden');
             }
 
             // Disable drag-and-drop on page load b/c the default is preview mode

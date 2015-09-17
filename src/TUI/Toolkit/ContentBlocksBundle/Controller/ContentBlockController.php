@@ -191,6 +191,14 @@ class ContentBlockController extends Controller
 
         $entity->setMedia($collectionIds);
         $editForm = $this->createEditForm($entity, $quoteVersion, $class);
+
+        // if layout type is Null, set a default
+        if(!$entity->getLayoutType()){
+          $default_layout = $em->getRepository('ContentBlocksBundle:LayoutType')->findAll();
+          $default_layout = $default_layout[0];
+          $editForm->get('layoutType')->setData($default_layout);
+        }
+
         $deleteForm = $this->createDeleteForm($id, $quoteVersion, $class);
 
         return $this->render('ContentBlocksBundle:ContentBlock:edit.html.twig', array(
