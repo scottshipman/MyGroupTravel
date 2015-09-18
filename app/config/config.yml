@@ -232,6 +232,24 @@ oneup_uploader:
               - image/jpeg
               - image/png
               - image/jpg
+        tourassets:
+            frontend: dropzone
+            namer: oneup_uploader.namer.uniqid
+            error_handler: oneup_uploader.error_handler.noop
+            enable_progress:      true
+            enable_cancelation:   true
+            storage:
+                directory: "%kernel.root_dir%/../web/static/uploads/media/tourassets"
+            allowed_mimetypes:
+              - application/msword
+              - application/vnd.openxmlformats-officedocument.wordprocessingml.document
+              - application/vnd.ms-excel
+              - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+              - application/vnd.ms-powerpoint
+              - application/vnd.openxmlformats-officedocument.presentationml.presentation
+              - application/pdf
+
+
 
 stof_doctrine_extensions:
     default_locale: "%locale%"

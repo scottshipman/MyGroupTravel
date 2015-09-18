@@ -1101,4 +1101,42 @@ class Tour
     {
       return $this->created;
     }
+
+
+    /**
+     * @var \TUI\Toolkit\MediaBundle\Entity\Media
+     * @ORM\ManyToMany(targetEntity="TUI\Toolkit\MediaBundle\Entity\Media", cascade={"persist"}, fetch="LAZY")
+     * @ORM\JoinColumn(name="media", referencedColumnName="id")
+     */
+    protected $media;
+
+    /**
+     * @param $media
+     */
+
+    public function addMedia($media)
+    {
+
+        $this->media[] = $media;
+        return $this;
+    }
+
+    /**
+     * @param  $media
+     */
+
+    public function setMedia($media)
+    {
+        $this->media = $media;
+
+        return $media;
+    }
+
+    /**
+     * @return Media
+     */
+    public function getMedia()
+    {
+        return $this->media;
+    }
 }

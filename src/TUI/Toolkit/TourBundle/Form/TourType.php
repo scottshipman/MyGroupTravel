@@ -65,6 +65,15 @@ class TourType extends AbstractType
                 'label' => 'Primary Business Admin',
             ))
 
+            ->add('media', 'hidden', array(
+                'required' => false,
+//                'data_class' => 'TUI\Toolkit\MediaBundle\Entity\Media',
+                'attr' => array(
+                    'class' => 'media-placeholder',
+//                    'multiple' => true
+                )
+            ))
+
         ;
 
 

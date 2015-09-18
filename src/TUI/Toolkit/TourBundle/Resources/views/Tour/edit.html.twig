@@ -1,13 +1,55 @@
 {% extends '::base.html.twig' %}
 
-{% set title_label = 'Edit' %}
+{#{% set title_label = 'Edit' %}#}
 
-{% block title %}{{ title_label }} Tour {{ entity.name }}{% endblock %}
-{% block page_title %}{{ title_label }} Tour {{ entity.name }}{% endblock %}
+{#{% block title %}{{ title_label }} Tour {{ entity.name }}{% endblock %}#}
+{#{% block page_title %}{{ title_label }} Tour {{ entity.name }}{% endblock %}#}
 
+
+    {#<h2 id="edit-title-{{ entity.id }}">{{ entity.title }}</h2>#}
 {% block body -%}
+    <div class="media-wrapper">
 
-    {{ form(edit_form) }}
+        <div class="existing-media-wrapper">
+            <div class="mdl-label-mimic"><label>Promotional Assets</label></div>
+            {% if entity.media %}
+                {% for media in collection %}
+                    <div class="existing-media-item">
+                        <i style = "color: red" class="fa fa-file-pdf-o fa-3x"></i>
+                        {#<img id="{{ media.id }}"#}
+                             {#src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">#}
+                        <a id="media-existing-delete" class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="none">No images uploaded.</p>
+            {% endif %}
+        </div>
+
+        <div class="new-media-wrapper">
+
+            <div class="mdl-label-mimic"><label>New Images</label></div>
+
+            <div id="avatar-label">
+                <div style="display: none;" id="dropzone-form-close"><i class="fa fa-times-circle"></i></div>
+            </div>
+
+            {{ render(controller('MediaBundle:Media:createDropzoneLightForm', {'context':'tourassets'})) }}
+
+            <div id="user_media">
+            <span class="media-placeholder-image new">
+                <i class="fa fa-picture-o fa-3x"></i>
+                <span>Click to upload</span>
+            </span>
+            </div>
+
+        </div>
+
+    </div>
+
+    {{ form_start(edit_form) }}
+    {{ form_widget(edit_form) }}
+    {{ form_end(edit_form) }}
 
 <ul class="record_actions">
 {#    Not sure if revisions apply to tours at all
@@ -35,6 +77,109 @@
             $( ".hasDatepicker" ).change(function(){
                 $(this).parent().addClass('is-dirty');
             });
+
+            $("#dropzone_form").dropzone({
+                maxFiles: 1,
+            acceptedMimeTypes: 'application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation, application/pdf',
+                uploadMultiple: false,
+                init: function () {
+                    var value = $(".media-placeholder").val();
+                    var values = [];
+                    if (value != 0) {
+                        values = value.split(',').map(Number);
+                        if (values.length >= 6) {
+                            $(".new-media-wrapper").css({"display": "none"});
+                        }
+                    }
+                    this.on("success", function (file, response) {
+                        if ($(".media-placeholder").val().length > 0) {
+                            var value = $(".media-placeholder").val();
+                            var values = [];
+                            if (value != 0) {
+                                values = value.split(',').map(Number);
+                                values.push(response.id);
+                                if (values.length >= 6) {
+                                    $(".new-media-wrapper").css({"display": "none"});
+                                }
+                            }
+                            $(".media-placeholder").val(values);
+                        } else {
+                            $(".media-placeholder").val(response.id);
+                        }
+                        $('.existing-media-wrapper').find('.none').hide();
+                        $('.existing-media-wrapper').append('<div class="existing-media-item"><img id="' + response.id + '" src="' + response.relativepath + '/' + response.filename + '"><a class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a></div>');
+                    });
+                    this.on("complete", function (file, response) {
+                        this.removeFile(file);
+                    });
+                    this.on("error", function (file, response) {
+                        console.log('Error: ' + response);
+                    });
+                }
+            });
         });
     </script>
+
+    <script>
+        $(document).on('click', '#media-existing-delete', function (e) {
+            e.preventDefault();
+            var remove = $(this).parent().find('img').attr('id');
+            var value = $(".media-placeholder").val();
+            var values = [];
+            values = value.split(',').map(Number);
+            values = jQuery.grep(values, function (v) {
+                if (values.length <= 6) {
+                    $(".new-media-wrapper").css({"display": "block"});
+                }
+                return v != remove;
+            });
+            $(".media-placeholder").val(values);
+            $(this).parent().remove();
+        });
+
+//         Dropzone.autoDiscover = false;
+
+//        $("#dropzone_form").dropzone({
+//            maxFiles: 1,
+////            acceptedMimeTypes: 'application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation, application/pdf',
+//            uploadMultiple: false,
+//            init: function () {
+//                var value = $(".media-placeholder").val();
+//                var values = [];
+//                if ( value != 0 ) {
+//                    values = value.split(',').map(Number);
+//                    if (values.length >= 6) {
+//                        $(".new-media-wrapper").css({"display": "none"});
+//                    }
+//                }
+//                this.on("success", function (file, response) {
+//                    if ($(".media-placeholder").val().length > 0) {
+//                        var value = $(".media-placeholder").val();
+//                        var values = [];
+//                        if ( value != 0 ) {
+//                            values = value.split(',').map(Number);
+//                            values.push(response.id);
+//                            if (values.length >= 6) {
+//                                $(".new-media-wrapper").css({"display": "none"});
+//                            }
+//                        }
+//                        $(".media-placeholder").val(values);
+//                    } else {
+//                        $(".media-placeholder").val(response.id);
+//                    }
+//                    $('.existing-media-wrapper').find('.none').hide();
+//                    $('.existing-media-wrapper').append('<div class="existing-media-item"><img id="' + response.id + '" src="' + response.relativepath + '/' + response.filename + '"><a class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a></div>');
+//                });
+//                this.on("complete", function (file, response) {
+//                    this.removeFile(file);
+//                });
+//                this.on("error", function (file, response) {
+//                    console.log('Error: ' + response);
+//                });
+//            }
+//        });
+    </script>
+
 {% endblock %}
+
+
