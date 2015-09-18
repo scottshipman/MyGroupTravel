@@ -143,12 +143,12 @@
         <a id="site-content"></a>
 
         <div id="content-wrapper" class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
-            <div id="content-blocks-wrapper" class="content-block-tabs-bar sortable-tabs mdl-tabs__tab-bar">
+            <div id="content-blocks-wrapper" class="content-block-tabs-bar mdl-tabs__tab-bar">
                 {# render the tabs#}
                 {% set activeTab = 'is-active' %}
                 {% for tab, data in entity.content %}
                     <a id="tab-{{ tab }}" href="#tabs-drawer-{{ tab }}"
-                       class="site-content-blocks-tab mdl-tabs__tab {{ activeTab }}">{{ data[0] }}</a>
+                       class="view-tab site-content-blocks-tab mdl-tabs__tab {{ activeTab }}" tabId="{{ tab }}"><span class="tab-name">{{ data[0] }}</span></a>
                     {% set activeTab = '' %}
                 {% endfor %}
                 {% if alternate %}
@@ -163,18 +163,18 @@
                 {% endif %}
             </div>
 
-            {# render the tabs'  content#}
+            {# render the tabs' content #}
             {% set activeTab = 'is-active' %}
             {% for tab, data in entity.content %}
-                <div id="tabs-drawer-{{ tab }}"
-                     class="mdl-tabs__panel sortable-items content-blocks-drawer {{ activeTab }} ">
+                <div id="tabs-drawer-{{ tab }}" class="mdl-tabs__panel content-blocks-drawer {{ activeTab }}">
+                    <div class="sortable-items">
                     {% for item in data[1] %}
                         {% if items[item].doubleWidth == 1 %}
                             {% set size = 'full' %}
                         {% else %}
                             {% set size = 'half' %}
                         {% endif %}
-                        <div id="content-blocks-{{ items[item].id }}" class="site-content-blocks site-content-blocks-item site-content-blocks-size-{{ size }}">
+                        <div id="content-blocks-{{ items[item].id }}" class="site-content-blocks site-content-blocks-item site-content-blocks-size-{{ size }}" blockId="{{ items[item].id }}">
                             <div class="inner-wrapper move-cursor">
                                 {% if editable %}
                                     <div class="site-content-block-actions status-preview-edit">
@@ -208,6 +208,7 @@
                             </div>
                         </div>
                     {% endfor %}
+                    </div><!-- sortable-items -->
                     <a id="add-content-block" tabId="{{ tab }}" href="#" class="add-content-block site-content-blocks-edit status-preview-edit"><i class="fa fa-plus-circle"></i> Add Block</a>
                     <div id="content-block-editForm-{{ tab }}" class="add-content-block-form" style="display: none;"></div>
                 </div>
@@ -249,18 +250,42 @@
 
             $( ".sortable-items" ).sortable({
                 containment: "parent",
-                items: "> div",
                 tolerance: "pointer",
-                connectWith: '.sortable-items',
                 placeholder: "items-placeholder",
                 start: function (e, ui) {
-                    ui.placeholder.height(100);
+                    $(".mode-edit .site-content-blocks-item").addClass('sort-mode');
+                    ui.placeholder.height(ui.helper.outerHeight());
                 },
-                axis: 'y',
+                stop: function (e, ui) {
+                    $(".mode-edit .site-content-blocks-item").removeClass('sort-mode');
+                },
                 update: function(e, ui) {
-                    console.log('resorting...');
-                   // var pathArray = window.location.pathname.split( '/' );
-                   // contentBlocksUpdate(pathArray[3]); // fourth [3] part in the path should be quote ID to pass in
+                    $("#loader").css("display", "block");
+                    // scrape DOM to get hierarchy of tabs and blocks
+                    var result = {};
+                    var data = $(".view-tab"); // a div for each tab
+                    data.each(function (i, obj) {
+                        tabText = $(this).find('.tab-name').text();
+                        tabId = $(this).attr('tabId');
+                        if ( $('#tabs-drawer-' + tabId).find('.site-content-blocks-item').size() == 0 ) {
+                            result[tabId] = [tabText, new Array()];
+                        } else {
+                            var children = [];
+                            $('#tabs-drawer-' + tabId).find('.site-content-blocks-item').each(function (k, v) {
+                                var blockId = 'content-blocks-' + $(this).attr('blockId');
+                                children.push( blockId );
+                            });
+                            result[tabId] = [tabText, children];
+                        }
+                    });
+                    // POST to server using $.ajax
+                    $.ajax({
+                        data: result,
+                        type: 'POST',
+                        url: '/manage/contentblocks/update/' + {{ entity.id }}
+                    }).done(function() {
+                        window.location.reload(true);
+                    });
                 }
             });
 

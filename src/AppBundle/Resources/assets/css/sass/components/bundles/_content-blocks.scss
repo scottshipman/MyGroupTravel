@@ -15,9 +15,7 @@ form .cke {
   background: #ccc;
   width: auto;
   display: block;
-  padding: 20px;
-  margin: 0 0 ($element-bottom / 2) 0;
-  border: 2px dashed #000;
+  outline: 2px dashed #000;
 }
 
 .tabs-placeholder {
@@ -26,12 +24,18 @@ form .cke {
 
 .items-placeholder {
   height: 40px;
+
+  .mode-edit & {
+    height: auto;
+    margin: 0 $column_gutter_width;
+  }
+
 }
 
 .content-blocks-tab {
-  margin-bottom: $element-bottom / 2;
   display: block;
   min-height: 1em;
+  margin-bottom: $element-bottom / 2;
 }
 
 .content-blocks.tab-label {
