@@ -72,9 +72,15 @@
             <i class="fa fa-print"></i> Print
         </a>
 
-        <a href="/quote/print/{{ entity.id }}.pdf" target="_blank"
+        <a href="/tour/print/{{ entity.id }}.pdf" target="_blank"
            class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
             <i class="fa fa-file-pdf-o"></i> PDF
+        </a>
+
+        <a href="/tour/{{ entity.id }}/export" target="_blank"
+           class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
+            <i class="fa fa-file-pdf-o"></i> Download Promo Materials
+
         </a>
 
         {% if warning | length >0 %}
