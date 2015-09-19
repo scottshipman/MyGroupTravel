@@ -130,7 +130,7 @@ class TourController extends Controller
         $grid->addExport(new CSVExport("Tours as CSV", "activeTours", array('delimiter' => ','), "UTF-8", "ROLE_BRAND"));
 
 
-        // Manage the grid redirection, exports and the response of the controller
+        // Manage the grid ion, exports and the response of the controller
         return $grid->getGridResponse('TourBundle:Tour:index.html.twig');
     }
 
@@ -854,7 +854,7 @@ class TourController extends Controller
      *
      */
 
-    public function exportTourAssetsAction(Request $request, $id)
+    public function exportTourAssetsAction(Request $request, $id, $fileName)
     {
 
         $em = $this->getDoctrine()->getManager();
@@ -868,21 +868,23 @@ class TourController extends Controller
         $collection = $entity->getMedia()->toArray() ? $entity->getMedia()->toArray() : NULL;
 
         $zip = new \ZipArchive();
-        $zipName = $entity->getId().".zip";
-        $zip->open($zipName,  \ZipArchive::CREATE);
+        $fileName = $entity->getquoteNumber().".zip";
+        $zip->open($fileName,  \ZipArchive::CREATE);
 
         foreach ($collection as $c){
             $zip->addFromString($c->gethashedFilename(), file_get_contents($c->getfilepath()."/".$c->gethashedFilename()));
         }
 
         $response = new Response();
-        $response->setContent(readfile("../web/".$zipName));
+        $response->setContent(file_get_contents($fileName));
         $zip->close();
         $response->headers->set('Content-Type', 'application/zip');
-        $response->headers('Content-disposition: attachment; filename=../web/"'.$zipName.'"');
-        $response->headers('Content-Length: ' . filesize("../web/" . $zipName));
-        $response->readfile("../web/" . $zipName);
+        $response->headers->set('Content-disposition', 'attachment');
+        $response->headers->set('filename', $fileName);
+        $response->headers->set('Content-Length' , filesize($fileName));
+        $response->file_get_contents($fileName);
         return $response;
+
 
 
     }

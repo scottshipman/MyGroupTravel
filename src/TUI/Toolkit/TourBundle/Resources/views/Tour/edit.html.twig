@@ -9,16 +9,24 @@
     {#<h2 id="edit-title-{{ entity.id }}">{{ entity.title }}</h2>#}
 {% block body -%}
     <div class="media-wrapper">
-
         <div class="existing-media-wrapper">
             <div class="mdl-label-mimic"><label>Promotional Assets</label></div>
             {% if entity.media %}
                 {% for media in collection %}
+                    {#{{ dump(media) }}#}
                     <div class="existing-media-item">
-                        <i style = "color: red" class="fa fa-file-pdf-o fa-3x"></i>
-                        {#<img id="{{ media.id }}"#}
-                             {#src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">#}
-                        <a id="media-existing-delete" class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a>
+                        {% if media.mimetype == "application/pdf" %}
+                            <i style="color: red" class="fa fa-file-pdf-o fa-3x"></i>
+                        {% elseif media.mimetype == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" or media.mimetype == "application/vnd.ms-excel" %}
+                            <i style="color: green" class="fa fa-file-excel-o fa-3x"></i>
+                        {% elseif media.mimetype == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" or media.mimetype == "application/msword" %}
+                            <i style="color: blue" class="fa fa-file-word-o fa-3x"></i>
+                        {% elseif media.mimetype == "application/vnd.openxmlformats-officedocument.presentationml.presentation" or media.mimetype == "application/vnd.ms-powerpoint" %}
+                            <i style="color: orange" class="fa fa-file-powerpoint-o fa-3x"></i>
+                        {% endif %}
+                        <a href="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">{{ media.filename }}</a>
+                        <a id="media-existing-delete" class="existing-delete" href="#"><i
+                                    class="fa fa-times-circle"></i></a>
                     </div>
                 {% endfor %}
             {% else %}
@@ -28,7 +36,7 @@
 
         <div class="new-media-wrapper">
 
-            <div class="mdl-label-mimic"><label>New Images</label></div>
+            <div class="mdl-label-mimic"><label>New Tour Materials</label></div>
 
             <div id="avatar-label">
                 <div style="display: none;" id="dropzone-form-close"><i class="fa fa-times-circle"></i></div>
@@ -38,8 +46,8 @@
 
             <div id="user_media">
             <span class="media-placeholder-image new">
-                <i class="fa fa-picture-o fa-3x"></i>
-                <span>Click to upload</span>
+                <i class="fa fa-file-o fa-3x"></i>
+                <span>Upload Tour Materials</span>
             </span>
             </div>
 
@@ -51,36 +59,36 @@
     {{ form_widget(edit_form) }}
     {{ form_end(edit_form) }}
 
-<ul class="record_actions">
-{#    Not sure if revisions apply to tours at all
-    <li>
-        <a id="save-revision" onclick="submitQuoteForm();" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-            <i class="fa fa-files-o"></i> Save as New Revision
-        </a>
-    </li>
-#}
-    <li>
-        <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_tour') }}">
-            <i class="fa fa-arrow-circle-left"></i> Back to the list
-        </a>
-    </li>
-    {% if delete_form is defined %}
-        <li>{{ form(delete_form) }}</li>
-    {% endif %}
+    <ul class="record_actions">
+        {#    Not sure if revisions apply to tours at all
+            <li>
+                <a id="save-revision" onclick="submitQuoteForm();" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+                    <i class="fa fa-files-o"></i> Save as New Revision
+                </a>
+            </li>
+        #}
+        <li>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_tour') }}">
+                <i class="fa fa-arrow-circle-left"></i> Back to the list
+            </a>
+        </li>
+        {% if delete_form is defined %}
+            <li>{{ form(delete_form) }}</li>
+        {% endif %}
 
-</ul>
+    </ul>
     {{ form_javascript(edit_form) }}
 
     <script>
-        $( document ).ready(function() {
-            $( ".hasDatepicker" ).datepicker( "option", "dateFormat", "dd-mm-yy" );
-            $( ".hasDatepicker" ).change(function(){
+        $(document).ready(function () {
+            $(".hasDatepicker").datepicker("option", "dateFormat", "dd-mm-yy");
+            $(".hasDatepicker").change(function () {
                 $(this).parent().addClass('is-dirty');
             });
 
             $("#dropzone_form").dropzone({
                 maxFiles: 1,
-            acceptedMimeTypes: 'application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation, application/pdf',
+                acceptedMimeTypes: 'application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation, application/pdf',
                 uploadMultiple: false,
                 init: function () {
                     var value = $(".media-placeholder").val();
@@ -107,7 +115,31 @@
                             $(".media-placeholder").val(response.id);
                         }
                         $('.existing-media-wrapper').find('.none').hide();
-                        $('.existing-media-wrapper').append('<div class="existing-media-item"><img id="' + response.id + '" src="' + response.relativepath + '/' + response.filename + '"><a class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a></div>');
+                        console.log(response);
+                        var type = response.mime_type;
+                        console.log(type);
+                        if (type == 'application/pdf') {
+                            var iconColor = "red";
+                            var faIcon = "fa-file-pdf-o";
+                        }
+                        else if (type == 'application/msword' || type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+                            var iconColor = "blue";
+                            var faIcon = "fa-file-word-o";
+                        }
+                        else if (type == 'application/vnd.ms-excel' || type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+                            var iconColor = "green";
+                            var faIcon = "fa-file-excel-o";
+                        }
+                        else if (type == 'application/vnd.ms-powerpoint' || type == 'application/vnd.openxmlformats-officedocument.presentationml.presentation') {
+                            var iconColor = "orange";
+                            var faIcon = "fa-file-powerpoint-o"
+                        }
+                        $('.existing-media-wrapper').append('<div class="existing-media-item">' +
+                        '<i style ="color:' + iconColor + ';' + '" class="fa ' + faIcon + ' fa-3x' + '"></i>' +
+                        '<a id ="asset-link" href="' + response.relativepath + '/' + response.filename + '"></a>' +
+                        '<a class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a></div>');
+                        $("#asset-link").html(response.original_filename);
+
                     });
                     this.on("complete", function (file, response) {
                         this.removeFile(file);
@@ -137,47 +169,47 @@
             $(this).parent().remove();
         });
 
-//         Dropzone.autoDiscover = false;
+        //         Dropzone.autoDiscover = false;
 
-//        $("#dropzone_form").dropzone({
-//            maxFiles: 1,
-////            acceptedMimeTypes: 'application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation, application/pdf',
-//            uploadMultiple: false,
-//            init: function () {
-//                var value = $(".media-placeholder").val();
-//                var values = [];
-//                if ( value != 0 ) {
-//                    values = value.split(',').map(Number);
-//                    if (values.length >= 6) {
-//                        $(".new-media-wrapper").css({"display": "none"});
-//                    }
-//                }
-//                this.on("success", function (file, response) {
-//                    if ($(".media-placeholder").val().length > 0) {
-//                        var value = $(".media-placeholder").val();
-//                        var values = [];
-//                        if ( value != 0 ) {
-//                            values = value.split(',').map(Number);
-//                            values.push(response.id);
-//                            if (values.length >= 6) {
-//                                $(".new-media-wrapper").css({"display": "none"});
-//                            }
-//                        }
-//                        $(".media-placeholder").val(values);
-//                    } else {
-//                        $(".media-placeholder").val(response.id);
-//                    }
-//                    $('.existing-media-wrapper').find('.none').hide();
-//                    $('.existing-media-wrapper').append('<div class="existing-media-item"><img id="' + response.id + '" src="' + response.relativepath + '/' + response.filename + '"><a class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a></div>');
-//                });
-//                this.on("complete", function (file, response) {
-//                    this.removeFile(file);
-//                });
-//                this.on("error", function (file, response) {
-//                    console.log('Error: ' + response);
-//                });
-//            }
-//        });
+        //        $("#dropzone_form").dropzone({
+        //            maxFiles: 1,
+        ////            acceptedMimeTypes: 'application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation, application/pdf',
+        //            uploadMultiple: false,
+        //            init: function () {
+        //                var value = $(".media-placeholder").val();
+        //                var values = [];
+        //                if ( value != 0 ) {
+        //                    values = value.split(',').map(Number);
+        //                    if (values.length >= 6) {
+        //                        $(".new-media-wrapper").css({"display": "none"});
+        //                    }
+        //                }
+        //                this.on("success", function (file, response) {
+        //                    if ($(".media-placeholder").val().length > 0) {
+        //                        var value = $(".media-placeholder").val();
+        //                        var values = [];
+        //                        if ( value != 0 ) {
+        //                            values = value.split(',').map(Number);
+        //                            values.push(response.id);
+        //                            if (values.length >= 6) {
+        //                                $(".new-media-wrapper").css({"display": "none"});
+        //                            }
+        //                        }
+        //                        $(".media-placeholder").val(values);
+        //                    } else {
+        //                        $(".media-placeholder").val(response.id);
+        //                    }
+        //                    $('.existing-media-wrapper').find('.none').hide();
+        //                    $('.existing-media-wrapper').append('<div class="existing-media-item"><img id="' + response.id + '" src="' + response.relativepath + '/' + response.filename + '"><a class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a></div>');
+        //                });
+        //                this.on("complete", function (file, response) {
+        //                    this.removeFile(file);
+        //                });
+        //                this.on("error", function (file, response) {
+        //                    console.log('Error: ' + response);
+        //                });
+        //            }
+        //        });
     </script>
 
 {% endblock %}
