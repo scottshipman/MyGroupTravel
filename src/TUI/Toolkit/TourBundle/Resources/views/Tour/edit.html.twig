@@ -24,7 +24,7 @@
                         {% elseif media.mimetype == "application/vnd.openxmlformats-officedocument.presentationml.presentation" or media.mimetype == "application/vnd.ms-powerpoint" %}
                             <i style="color: orange" class="fa fa-file-powerpoint-o fa-3x"></i>
                         {% endif %}
-                        <a href="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">{{ media.filename }}</a>
+                        <a id ="{{ media.id }}" href="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">{{ media.filename }}</a>
                         <a id="media-existing-delete" class="existing-delete" href="#"><i
                                     class="fa fa-times-circle"></i></a>
                     </div>
@@ -95,7 +95,7 @@
                     var values = [];
                     if (value != 0) {
                         values = value.split(',').map(Number);
-                        if (values.length >= 6) {
+                        if (values.length >= 3) {
                             $(".new-media-wrapper").css({"display": "none"});
                         }
                     }
@@ -106,7 +106,7 @@
                             if (value != 0) {
                                 values = value.split(',').map(Number);
                                 values.push(response.id);
-                                if (values.length >= 6) {
+                                if (values.length >= 3) {
                                     $(".new-media-wrapper").css({"display": "none"});
                                 }
                             }
@@ -117,7 +117,6 @@
                         $('.existing-media-wrapper').find('.none').hide();
                         console.log(response);
                         var type = response.mime_type;
-                        console.log(type);
                         if (type == 'application/pdf') {
                             var iconColor = "red";
                             var faIcon = "fa-file-pdf-o";
@@ -136,9 +135,11 @@
                         }
                         $('.existing-media-wrapper').append('<div class="existing-media-item">' +
                         '<i style ="color:' + iconColor + ';' + '" class="fa ' + faIcon + ' fa-3x' + '"></i>' +
-                        '<a id ="asset-link" href="' + response.relativepath + '/' + response.filename + '"></a>' +
-                        '<a class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a></div>');
-                        $("#asset-link").html(response.original_filename);
+                        '<a id ="'+ response.id + '" href="' + response.relativepath + '/' + response.filename + '"></a>' +
+                        '<a id ="media-existing-delete" class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a></div>');
+                        var id = '#' + response.id;
+                        console.log(id);
+                        $(id).html(response.original_filename);
 
                     });
                     this.on("complete", function (file, response) {
@@ -155,12 +156,13 @@
     <script>
         $(document).on('click', '#media-existing-delete', function (e) {
             e.preventDefault();
-            var remove = $(this).parent().find('img').attr('id');
+            var remove = $(this).parent().find('a').attr('id');
+            console.log(remove)
             var value = $(".media-placeholder").val();
             var values = [];
             values = value.split(',').map(Number);
             values = jQuery.grep(values, function (v) {
-                if (values.length <= 6) {
+                if (values.length <= 3) {
                     $(".new-media-wrapper").css({"display": "block"});
                 }
                 return v != remove;
