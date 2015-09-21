@@ -7,34 +7,187 @@
 
 {% block body -%}
 
-    {{ form(edit_form) }}
+    {{ form_start(edit_form) }}
+    <div class = "tour-edit mdl-card mdl-shadow--2dp">
+        <div class="mdl-card__supporting-text">
+            <h3 class="mdl-card__title">Summary</h3>
+            {{ form_row(edit_form.name) }}
+            {{ form_row(edit_form.quoteNumber) }}
+            {{ form_row(edit_form.version) }}
+            {{ form_row(edit_form.expiryDate) }}
+            {{ form_row(edit_form.institution) }}
+            {{ form_row(edit_form.organizer) }}
+            {{ form_row(edit_form.salesAgent) }}
+            {{ form_row(edit_form.secondaryContact) }}
+        </div>
+    </div>
+    <div class = "tour-edit mdl-card mdl-shadow--2dp">
+        <div class="mdl-card__supporting-text">
+            <h3 class="mdl-card__title">Details</h3>
+            {{ form_row(edit_form.destination) }}
+            {{ form_row(edit_form.departureDate) }}
+            {{ form_row(edit_form.returnDate) }}
+            {{ form_row(edit_form.duration) }}
+            {{ form_row(edit_form.transportType) }}
+            {{ form_row(edit_form.boardBasis) }}
+            {{ form_row(edit_form.payingPlaces) }}
+            {{ form_row(edit_form.freePlaces) }}
+            {{ form_row(edit_form.currency) }}
+            {{ form_row(edit_form.pricePerson) }}
 
-<ul class="record_actions">
-{#    Not sure if revisions apply to tours at all
-    <li>
-        <a id="save-revision" onclick="submitQuoteForm();" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-            <i class="fa fa-files-o"></i> Save as New Revision
-        </a>
-    </li>
-#}
-    <li>
-        <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_tour') }}">
-            <i class="fa fa-arrow-circle-left"></i> Back to the list
-        </a>
-    </li>
-    {% if delete_form is defined %}
-        <li>{{ form(delete_form) }}</li>
-    {% endif %}
+            <div class="form-row">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label is-dirty is-upgraded">
+                    <label class="mdl-label-mimic" for="tui_toolkit_tourbundle_tour_total"><span>Total</span></label>
+                    <input class="mdl-textfield__input" readonly="readonly" type="text" id="tui_toolkit_tourbundle_tour_total" name="tui_toolkit_tourbundle_tour_total">
+                </div>
+            </div>
+        </div>
+    </div>
+  {#   {% do edit_form.submit.setRendered %} #}
+    <div class = "tour-edit mdl-card mdl-shadow--2dp">
+        <div class="mdl-card__supporting-text">
+            <h3 class="mdl-card__title">Payment Schedule</h3>
+            <div class="paymenttasks" data-prototype="{{ form_widget(edit_form.paymentTasks.vars.prototype)|e }}">
+                {# iterate over each existing paymenttask and render its  fields:  #}
+                {% for paymentTask in edit_form.paymentTasks %}
+                    <ul class="payment_task">
+                        <li>{{ form_widget(paymentTask.name) }}</li>
+                        <li>{{ form_widget(paymentTask.value) }}</li>
+                        <li>{{ form_widget(paymentTask.dueDate) }}</li>
+                    </ul>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {{ form_rest(edit_form) }}
+    {{ form_end(edit_form) }}
+    <ul class="mdl-card__actions record_actions">
+    {#    Not sure if revisions apply to tours at all
+        <li>
+            <a id="save-revision" onclick="submitQuoteForm();" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+                <i class="fa fa-files-o"></i> Save as New Revision
+            </a>
+        </li>
+     #}
 
-</ul>
+        <li>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_tour') }}">
+                <i class="fa fa-arrow-circle-left"></i> Back to the list
+            </a>
+        </li>
+        {% if delete_form is defined %}
+            <li>{{ form(delete_form) }}</li>
+        {% endif %}
+
+    </ul>
     {{ form_javascript(edit_form) }}
 
     <script>
+
+        var $collectionHolder;
+
+        // setup an "add a tag" link
+        var $addPaymentTaskLink = $('<a href="#" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add_tag_link" title="Add a Payment"><i class="fa fa-plus"></i>Add Payment</a>');
+        var $newLinkDiv = $('<div></div>').append($addPaymentTaskLink);
+
         $( document ).ready(function() {
-            $( ".hasDatepicker" ).datepicker( "option", "dateFormat", "dd-mm-yy" );
+            // set the total value
+            var price = $('#tui_toolkit_tourbundle_tour_pricePerson').val();
+            var paying = $('#tui_toolkit_tourbundle_tour_payingPlaces').val();
+            $('#tui_toolkit_tourbundle_tour_total').val(price * paying);
+
+            $( ".hasDatepicker" ).datepicker( "option", "dateFormat", "{{ date_format }}" );
             $( ".hasDatepicker" ).change(function(){
                 $(this).parent().addClass('is-dirty');
             });
+
+            // update total when price or paying changes
+            $('#tui_toolkit_tourbundle_tour_pricePerson, #tui_toolkit_tourbundle_tour_payingPlaces').change(function(){
+                var price = $('#tui_toolkit_tourbundle_tour_pricePerson').val();
+                var paying = $('#tui_toolkit_tourbundle_tour_payingPlaces').val();
+                $('#tui_toolkit_tourbundle_tour_total').val(price * paying);
+            });
+
+            // Get the div that holds the collection of payments
+            $collectionHolder = $('div.paymenttasks');
+
+            // add a delete link to all of the existing payment form ul elements
+            $collectionHolder.find('ul.payment_task').each(function() {
+                addPaymentTaskFormDeleteLink($(this), 'li');
+            });
+
+
+            // add the "add a Payment" anchor and li to the Payment div
+            $collectionHolder.append($newLinkDiv);
+
+            // count the current form inputs we have (e.g. 2), use that as the new
+            // index when inserting a new item (e.g. 2)
+            $collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+            $addPaymentTaskLink.on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+
+                // add a new tag form (see next code block)
+                addPaymentTaskForm($collectionHolder, $newLinkDiv);
+            });
         });
+        function addPaymentTaskForm($collectionHolder, $newLinkDiv) {
+            // Get the data-prototype explained earlier
+            var prototype = $collectionHolder.data('prototype');
+
+            // get the new index
+            var index = $collectionHolder.data('index');
+
+            // Replace '__name__' in the prototype's HTML to
+            // instead be a number based on how many items we have
+            var newForm = prototype.replace(/__name__/g, index);
+
+            // increase the index with one for the next item
+            $collectionHolder.data('index', index + 1);
+
+            // Display the form in the page in an div, before the "Add a Payment" link div
+            var $newFormDiv = $('<div class="new_payment_task" task="' + index + '"></div>').append(newForm);
+            $newLinkDiv.before($newFormDiv);
+
+            // add a delete link to the new form
+            addPaymentTaskFormDeleteLink($newFormDiv, 'div');
+
+            //trigger date field popup
+            $("input[id*='_dueDate']").each(function() {
+                var $configs = $.extend({
+                    minDate: new Date(2010, 0, 1),
+                    maxDate: new Date(2030, 11, 31)
+                }, $.datepicker.regional['{{ locale }}'] ,{"dateFormat":"{{ date_format }}"});
+                $(this).datepicker($configs);
+            });
+            $( ".hasDatepicker" ).datepicker( "option", "dateFormat", "{{ date_format }}" );
+            $( ".hasDatepicker" ).change(function(){
+                $(this).parent().addClass('is-dirty');
+            });
+            doMDLpopup($newFormDiv);
+        }
+
+        function addPaymentTaskFormDeleteLink($paymentFormDiv, elem) {
+            var $removeFormA;
+            if (elem=='li'){
+                $removeFormA = $('<li><a href="#" title="Delete this Payment"><i class="fa fam-delete"></i></a></li>');
+                $paymentFormDiv.append($removeFormA);
+            } else {
+                $removeFormA = $('<div class="form-row"><a href="#" title="Delete this Payment"><i class="fa fam-delete"></i></a></div>');
+                var hidden = $paymentFormDiv.find('input[type="hidden"]');
+                console.log(hidden);
+                hidden.before($removeFormA);
+            }
+
+
+            $removeFormA.on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+
+                // remove the li for the tag form
+                $paymentFormDiv.remove();
+            });
+        }
     </script>
 {% endblock %}
