@@ -14,7 +14,7 @@
             {% if entity.media %}
                 {% for media in collection %}
                     {#{{ dump(media) }}#}
-                    <div class="existing-media-item">
+                    <div style= "border-radius: 0px" class="existing-media-item">
                         {% if media.mimetype == "application/pdf" %}
                             <i style="color: red" class="fa fa-file-pdf-o fa-3x"></i>
                         {% elseif media.mimetype == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" or media.mimetype == "application/vnd.ms-excel" %}
@@ -133,7 +133,7 @@
                             var iconColor = "orange";
                             var faIcon = "fa-file-powerpoint-o"
                         }
-                        $('.existing-media-wrapper').append('<div class="existing-media-item">' +
+                        $('.existing-media-wrapper').append('<div style ="border-radius: 0px;" class="existing-media-item">' +
                         '<i style ="color:' + iconColor + ';' + '" class="fa ' + faIcon + ' fa-3x' + '"></i>' +
                         '<a id ="'+ response.id + '" href="' + response.relativepath + '/' + response.filename + '"></a>' +
                         '<a id ="media-existing-delete" class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a></div>');
