@@ -102,7 +102,7 @@ class TourSiteController extends Controller
     }
 
     // Record Views
-    $this->setSiteViews($entity->getId());
+    $this->setTourViews($entity->getId());
 
 
 
@@ -222,17 +222,22 @@ class TourSiteController extends Controller
       }
 
 
-      // get the content blocks to send to twig
-      $items=array();
-      $content = $entity->getContent();
-      foreach($content as $tab){
-        foreach($tab as $key=>$block){
-          $object=$em->getRepository('ContentBlocksBundle:ContentBlock')->find($block);
-          if($object != null){
-            $items[$block] = $object;
-          }
+        // get the content blocks to send to twig
+        $items=array(); $tabs=array();
+        $content = $entity->getContent();
+        foreach($content as $tab => $data){
+            $tabs[$tab] = $data[0];
+            $blocks = isset($data[1]) ? $data[1] : array();
+            if(!empty($blocks)) {
+                foreach ($blocks as $block) {
+                    $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find((int) $block);
+                    if(!$blockObj){
+                        throw $this->createNotFoundException('Unable to find Content Block entity.');
+                    }
+                    $items[$blockObj->getId()] = $blockObj;
+                }
+            }
         }
-      }
 
       // get the content block that is the header block
       $header = $entity->getHeaderBlock();
@@ -245,14 +250,14 @@ class TourSiteController extends Controller
       // send warning messages
       $warningMsg = array();
       if($entity->getExpiryDate() < date($date_format)){
-        $warningMsg[] = "This tour has expired. Please contact $entity>getQuoteReference()->getSalesAgent()->getFirstName()   $entity>getQuoteReference()->getSalesAgent()->getLasttName()  at $entity>getQuoteReference()->getSalesAgent()->getEmail()";
+        $warningMsg[] = "This tour has expired. Please contact $entity-->getSalesAgent()->getFirstName()   $entity-->getSalesAgent()->getLastName()  at $entity-->getSalesAgent()->getEmail()";
       }
 
       $request = $this->getRequest();
       $path = $request->getScheme() . '://' . $request->getHttpHost();
 
       $data = array(
-        'entity' => $entity[0],
+        'entity' => $entity,
         'locale' => $locale,
         'items' => $items,
         'header' => $headerBlock,
@@ -287,7 +292,7 @@ class TourSiteController extends Controller
       throw $this->createNotFoundException('Unable to find Tour entity for summary header display.');
     }
 
-    return $this->render('TourBundle:TourSite:quoteSummary.html.twig', array(
+    return $this->render('TourBundle:TourSite:tourSummary.html.twig', array(
       'tour' => $tour,
       'locale'  => $locale,
     ));

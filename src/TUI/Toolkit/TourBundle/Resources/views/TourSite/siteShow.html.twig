@@ -11,7 +11,7 @@
 
 {% block back_link %}
     {% if is_granted("ROLE_BRAND") %}
-        <a class="back-link" href="{{ path('manage_quoteversion_show', { 'id': entity.id }) }}"><i
+        <a class="back-link" href="{{ path('manage_tour_show', { 'id': entity.id }) }}"><i
                     class="fa fa-arrow-left"></i> Back to Show</a>
     {% else %}
         <a class="back-link" href="/"><i class="fa fa-arrow-left"></i> Back to Dashboard</a>
@@ -29,7 +29,6 @@
 {% block sub_header %}
     <div class="sub-header">
         <div class="inner">
-            {% if entity.isTemplate == 0 %} {# no Institutions on Templates #}
                 {% if app.user %}
                     {% if entity.quoteReference.institution.media %}
                         <div class="institution-logo">
@@ -51,7 +50,6 @@
                         </div>
                     {% endif %}
                 {% endif %}
-            {% endif %}
 
             {% if entity.quoteReference.institution %}
                 <div id="site-quote-name">{{ entity.quoteReference.institution.name }}</div>{% endif %}
@@ -72,7 +70,7 @@
             <i class="fa fa-print"></i> Print
         </a>
 
-        <a href="/quote/print/{{ entity.id }}.pdf" target="_blank"
+        <a href="/tour/print/{{ entity.id }}/{{ entity.quoteNumber }}.pdf" target="_blank"
            class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
             <i class="fa fa-file-pdf-o"></i> PDF
         </a>
@@ -130,7 +128,7 @@
                     </div>
                 {% endif %}
                 <div id="site-header-summary-content">
-                    {{ render(controller('QuoteBundle:QuoteSite:showSummary', {'id':  entity.id  })) }}
+                    {{ render(controller('TourBundle:TourSite:showSummary', {'id':  entity.id  })) }}
                 </div>
             </div>
             {# give a placeholder for the editable version #}
@@ -151,10 +149,6 @@
                        class="site-content-blocks-tab mdl-tabs__tab {{ activeTab }}">{{ data[0] }}</a>
                     {% set activeTab = '' %}
                 {% endfor %}
-                {% if alternate %}
-                    <a id="tab-alternate-quotes" href="#tabs-drawer-alternate-quotes"
-                       class="site-content-blocks-tab mdl-tabs__tab {{ activeTab }}">Alternate Quotes</a>
-                {% endif %}
                 {% if editable %}
                     <span id="edit-tabs" class="site-content-blocks-tab status-preview-edit"><i
                                 class="fa fa-pencil"></i> Edit Tabs</span>
@@ -213,14 +207,6 @@
                 </div>
                 {% set activeTab = '' %}
             {% endfor %}
-            {% if alternate %}
-                <div id="tabs-drawer-alternate-quotes" class="mdl-tabs__panel {{ activeTab }}">
-
-                    {{ render(controller('QuoteBundle:QuoteSite:getQuoteSiblings', {'id':  entity.quoteReference.id  })) }}
-
-                </div>
-            {% endif %}
-
         </div>
     </div><!-- view-mode -->
 
@@ -328,7 +314,7 @@
                     //e.preventDefault();
                     $("#dialog").html("");
                     $("#dialog").dialog({width: '60%'}).dialog("option", "title", "Loading...").dialog("open");
-                    $("#dialog").load('/manage/quoteversion/show/tabs/' + {{ entity.id }}, function () {
+                    $("#dialog").load('/manage/tour/show/tabs/' + {{ entity.id }}, function () {
                         $(this).dialog("option", "title", "Rearrange Tabs");
                         $(".modal-sortable-tabs").sortable("enable");
                     });
@@ -336,7 +322,7 @@
 
                 // Add a new tab to a site
                 $("#add-new-tab").on('click', function () {
-                    contentBlocksNewTab({{ entity.id }});
+                    contentBlocksNewTab({{ entity.id }}, "tour" );
                 });
 
                 // edit header slideshow in layout mode
@@ -374,7 +360,7 @@
                 // Add header block in layout mode
                 $("#add-header-content").on('click', function (e) {
                     $("#loader").css("display", "block");
-                    $("#site-header-editForm").load('/manage/headerblock/header/new/' + {{ entity.id }} +'/QuoteVersion', function () {
+                    $("#site-header-editForm").load('/manage/headerblock/header/new/' + {{ entity.id }} +'/tour', function () {
                         $('.item-edit').hide(); // hide ALL edit buttons for all content blocks
                         $("#loader").css("display", "none");
                         $('#site-header-editForm').show();
@@ -424,7 +410,7 @@
                     e.preventDefault();
                     $("#loader").css("display", "block");
                     var tabId = $(this).attr("tabId");
-                    $("#content-block-editForm-" + tabId).load('/manage/contentblocks/new/QuoteVersion/' + {{ entity.id }} +'/' + tabId, function () {
+                    $("#content-block-editForm-" + tabId).load('/manage/contentblocks/new/tour/' + {{ entity.id }} +'/' + tabId, function () {
                         $("#content-block-editForm-" + tabId + " .button-row").append( '<a id ="content-block-editForm-' + tabId + '-cancel" tabId="' + tabId + '" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored content-block-cancel" style="display: none; background-color: red; color: white;" href="#">Cancel</a>' );
                         $('.item-edit').hide(); // hide ALL edit buttons for all content blocks
                         $("#loader").css("display", "none");
@@ -452,7 +438,7 @@
                     $("#loader").css("display", "block");
                     var blockID = t.attr('blockId');
                     $.ajax({
-                        url: '/manage/contentblocks/' + blockID + '/resize/' + {{ entity.id }} +'/QuoteVersion',
+                        url: '/manage/contentblocks/' + blockID + '/resize/' + {{ entity.id }} +'/tour',
                         headers: {
                             "Pragma": "no-cache",
                             "Expires": -1,
@@ -482,7 +468,7 @@
                     var editBlock = $("#editable-content-blocks-" + block);
                     var previewBlock = $("#previewable-content-blocks-" + block);
                     editBlock.html('');
-                    editBlock.load('/ajax/contentblocks/' + block + '/edit/' + {{ entity.id }} +'/QuoteVersion', function () {
+                    editBlock.load('/ajax/contentblocks/' + block + '/edit/' + {{ entity.id }} +'/tour', function () {
                         $('.item-edit').hide(); // hide ALL edit buttons for all content blocks
                         $('.add-content-block').hide() // hide ALL Add Block's for all tabs
                         doMDLpopup(editBlock); // run the function to add appropriate MDL classes to form elements
@@ -497,7 +483,7 @@
                     $("#loader").css("display", "block");
                     var blockID = t.attr('blockId');
                     $.ajax({
-                        url: '/manage/contentblocks/' + blockID + '/lock/' + {{ entity.id }} +'/QuoteVersion',
+                        url: '/manage/contentblocks/' + blockID + '/lock/' + {{ entity.id }} +'/tour',
                         headers: {
                             "Pragma": "no-cache",
                             "Expires": -1,
@@ -525,7 +511,7 @@
                     $("#loader").css("display", "block");
                     var action = $(this).attr('action');
                     $.ajax({
-                        url: '/manage/quoteversion/{{ entity.id }}/lock',
+                        url: '/manage/tour/{{ entity.id }}/lock',
                     }).done(function () {
                         if (action == 'lock') {
                             if (editElement){
@@ -554,7 +540,7 @@
                 $(document).on('click', '#edit-header-summary', function (e) {
                     e.preventDefault();
                     $("#loader").css("display", "block");
-                    $("#site-header-summary-form").load('/quote/view/summary/edit/{{ entity.id }}', function () {
+                    $("#site-header-summary-form").load('/tour/view/summary/edit/{{ entity.id }}', function () {
                         $("#loader").css("display", "none");
                         $('.item-edit').hide(); // hide ALL edit buttons for all content blocks
                         $('#site-header-summary-form').show();
@@ -565,11 +551,11 @@
                         // bind header edit form and provide a simple callback function
                         $('#form-summary-edit-form').ajaxForm({
                             beforeSerialize: function () {
-                                CKEDITOR.instances.tui_toolkit_quotebundle_quotesummary_welcomeMsg.updateElement();
+                                CKEDITOR.instances.tui_toolkit_tourbundle_toursummary_welcomeMsg.updateElement();
                             },
                             success: function (response) {
                                 // redraw the area by loading a twig file
-                                $('#site-header-summary-content').load('/quote/view/summary/show/{{ entity.id }}', function () {
+                                $('#site-header-summary-content').load('/tour/view/summary/show/{{ entity.id }}', function () {
                                     $('#site-header-summary-form').empty();
                                     $('#site-header-summary-form').hide();
                                     $('#site-header-summary').show();
@@ -594,7 +580,7 @@
                         var blockId = $(this).attr('blockId');
                         $.ajax({
                             method: 'DELETE',
-                            url: '/manage/contentblocks/' + blockId + '/delete/' + {{ entity.id }} +'/QuoteVersion',
+                            url: '/manage/contentblocks/' + blockId + '/delete/' + {{ entity.id }} +'/tour',
                             headers: {
                                 "Pragma": "no-cache",
                                 "Expires": -1,
@@ -640,20 +626,20 @@
 
                 <strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong>{% endif %}</span>
     </div>
-    {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
-        {% if date(entity.expiryDate) < date('now') %}
-            <a class="expired-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-                <i class="fa fa-calendar-times-o"></i> Expired
-            </a>
-        {% else %}
-            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
-               href="{{ path('quote_site_quote_accepted', { 'id': entity.id }) }}">
-                <i class="fa fa-thumbs-o-up"> </i> Like Quote
-            </a>
-        {% endif %}
-    {% elseif (entity.converted is sameas(true)) and (entity.quoteReference.converted is sameas(true)) %}
-        <a class="accepted-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-            <i class="fa fa-thumbs-up"> </i> Liked
-        </a>
-    {% endif %}
+    {#{% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}#}
+        {#{% if date(entity.expiryDate) < date('now') %}#}
+            {#<a class="expired-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">#}
+                {#<i class="fa fa-calendar-times-o"></i> Expired#}
+            {#</a>#}
+        {#{% else %}#}
+            {#<a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"#}
+               {#href="{{ path('quote_site_quote_accepted', { 'id': entity.id }) }}">#}
+                {#<i class="fa fa-thumbs-o-up"> </i> Like Quote#}
+            {#</a>#}
+        {#{% endif %}#}
+    {#{% elseif (entity.converted is sameas(true)) and (entity.quoteReference.converted is sameas(true)) %}#}
+        {#<a class="accepted-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">#}
+            {#<i class="fa fa-thumbs-up"> </i> Liked#}
+        {#</a>#}
+    {#{% endif %}#}
 {% endblock %}

@@ -5,7 +5,7 @@
  * @param id - Quote Version # passed from window.path
  */
 
-var contentBlocksUpdate = function (id) {
+var contentBlocksUpdate = function (id, classtype) {
     // update server with new data
     $("#loader").css("display", "block");
     var result = {};
@@ -27,7 +27,7 @@ var contentBlocksUpdate = function (id) {
     $.ajax({
         data: result,
         type: 'POST',
-        url: '/manage/contentblocks/update/'+ id
+        url: '/manage/contentblocks/update/'+ id + '/' + classtype
     });
     //reload the window so changes are redrawn - its lazy non-ajaxy, but...
     contentBlocksRefresh(id);
@@ -39,7 +39,7 @@ var contentBlocksUpdate = function (id) {
  * @param id The id of the QuoteVersion Object that owns the content blocks
  */
 
-var contentBlocksAddTab= function (elem, id){
+var contentBlocksAddTab= function (elem, id, classtype){
     var newId = new Date().getTime();
     $("#content-blocks-wrapper").prepend(
         '<div id="'  + (newId)+ '" class="content-blocks-tab">' +
@@ -55,7 +55,7 @@ var contentBlocksAddTab= function (elem, id){
 
     $(".sortable-tabs").sortable('refresh');
     $(".sortable-items").sortable();
-    contentBlocksUpdate(id);
+    contentBlocksUpdate(id, classtype);
 }
 
 /**
@@ -63,7 +63,7 @@ var contentBlocksAddTab= function (elem, id){
  * @param id - Quote Version # passed from window.path
  */
 
-var contentBlocksNewTab = function (id) {
+var contentBlocksNewTab = function (id, classtype) {
     // update server with new data
     var newId = new Date().getTime();
     $("#loader").css("display", "block");
@@ -75,7 +75,7 @@ var contentBlocksNewTab = function (id) {
     $.ajax({
         data: result,
         type: 'POST',
-        url: '/manage/contentblocks/tab/new/'+ id
+        url: '/manage/contentblocks/tab/new/'+ id + '/' + classtype
     });
     //reload the window so changes are redrawn - its lazy non-ajaxy, but...
     contentBlocksRefresh(id);

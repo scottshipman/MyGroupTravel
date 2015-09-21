@@ -275,7 +275,7 @@
                        axis: 'y',
                        update: function(e, ui) {
                            var pathArray = window.location.pathname.split( '/' );
-                           contentBlocksUpdate(pathArray[3]); // fourth [3] part in the path should be quote ID to pass in
+                           contentBlocksUpdate(pathArray[3], 'QuoteVersion'); // fourth [3] part in the path should be quote ID to pass in
                        }
                    });
 
@@ -293,7 +293,7 @@
                        axis: 'y',
                        update: function(e, ui) {
                            var pathArray = window.location.pathname.split( '/' );
-                           contentBlocksUpdate(pathArray[3]); // fourth [3] part in the path should be quote ID to pass in
+                           contentBlocksUpdate(pathArray[3], 'QuoteVersion'); // fourth [3] part in the path should be quote ID to pass in
                        }
                    });
                {% endif %}
@@ -345,7 +345,7 @@
 
                // Add a new tab to a site
                $("#add-new-tab").on('click', function(){
-                   contentBlocksAddTab('#content-blocks-wrapper', {{ entity.id }});
+                   contentBlocksAddTab('#content-blocks-wrapper', {{ entity.id }}, 'QuoteVersion');
                });
 
                // Toggle the quoteVersion Lock
@@ -368,7 +368,7 @@
                    var ancestorTabElement = $(this).closest('.content-blocks-tab');
                    if (confirm('Are you sure you want to remove this tab? Warning: this can not be undone.')) {
                        $(ancestorTabElement).remove();
-                       contentBlocksUpdate({{ entity.id }});
+                       contentBlocksUpdate({{ entity.id }}, 'QuoteVersion');
                    }
                });
 
@@ -397,7 +397,7 @@
                         {# '<i class="item-hide content-block-item-action fa fa-ban"></i>' + #}
                         '</div></div>'
                     );
-                    contentBlocksUpdate({{ entity.id }});
+                    contentBlocksUpdate({{ entity.id }}, 'QuoteVersion');
                 });
 
             });
@@ -480,7 +480,7 @@
                     onblur: "cancel",
                     tooltip: 'Click to edit',
                     callback : function(value, settings) {
-                        contentBlocksUpdate({{ entity.id }}); //value
+                        contentBlocksUpdate({{ entity.id }}, 'QuoteVersion'); //value
                     }
                 });
              {% endif %}

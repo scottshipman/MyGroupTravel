@@ -62,6 +62,13 @@
                 $("#loader").css("display", "block");
                 var blockID = {{ entity.id }};
                 var objectID = $('.mode-toggle').attr('id').substring(14);
+                if ($("main").hasClass("Tour"))
+                {
+                    var classtype = "Tour";
+                }
+                else {
+                    var classtype = "QuoteVersion";
+                }
                 if($(this).closest('form').attr('id')=='ajax_headerblock_layout_form'){ //header slideshow content block
                     $('#site-header-slideshow-content').load('/manage/headerblock/header/show/' + blockID, function () {
                         $('#site-header-editForm').empty();
@@ -81,7 +88,7 @@
                     var previewBlock = $("#previewable-content-blocks-" + blockID);
                     // Match routing path "/manage/contentblocks/{id}/show/{objectID}/{class}"
                     //TODO path below cannot hardcode QuoteVersion - must be able to accept any Class type
-                    previewBlock.load('/manage/contentblocks/' + blockID + '/show/' + objectID + '/QuoteVersion', function () {
+                    previewBlock.load('/manage/contentblocks/' + blockID + '/show/' + objectID + '/' + classtype, function () {
                         $("#loader").css("display", "none");
                         $('.item-edit').show(); // re-show ALL edit buttons for all content blocks
                         $('.add-content-block').show(); // re-show ALL Add Block's for all tabs
@@ -112,9 +119,16 @@
                     var objectID = $('.mode-toggle').attr('id').substring(14);
                     var editBlock = $("#editable-content-blocks-" + blockID);
                     var previewBlock = $("#previewable-content-blocks-" + blockID);
+                    if ($("main").hasClass("Tour"))
+                    {
+                        var classtype = "Tour";
+                    }
+                    else {
+                        var classtype = "QuoteVersion";
+                    }
                     // Match routing path "/manage/contentblocks/{id}/show/{quoteVersion}/{class}"
                     // TODO must not hardcode QuoteVersion in path below - need to accept any class type
-                    previewBlock.load('/manage/contentblocks/' + blockID + '/show/' + objectID + '/QuoteVersion', function() {
+                    previewBlock.load('/manage/contentblocks/' + blockID + '/show/' + objectID + '/' + classtype, function() {
                         $("#loader").css("display", "none");
                         $('.item-edit').show(); // re-show ALL edit buttons for all content blocks
                         $('.add-content-block').show() // re-show ALL Add Block's for all tabs
