@@ -252,12 +252,18 @@
                 containment: "parent",
                 tolerance: "pointer",
                 placeholder: "items-placeholder",
+                forcePlaceholderSize: true,
                 start: function (e, ui) {
-                    $(".mode-edit .site-content-blocks-item").addClass('sort-mode');
-                    ui.placeholder.height(ui.helper.outerHeight());
+                    ui.helper.addClass('sort-mode');
+                    ui.placeholder.height( ui.helper.outerHeight() );
+                    if ( ui.helper.css('width') != $(this).css('width') ) { // if the item is floated, through an indirect check
+                        ui.placeholder.css({'float': 'left', 'width': '50%'});
+                    } else {
+                        ui.placeholder.css({'float': 'none', 'width': 'auto', 'clear': 'both'});
+                    }
                 },
                 stop: function (e, ui) {
-                    $(".mode-edit .site-content-blocks-item").removeClass('sort-mode');
+                    ui.helper.removeClass('sort-mode');
                 },
                 update: function(e, ui) {
                     $("#loader").css("display", "block");
