@@ -869,20 +869,28 @@ class TourController extends Controller
 
         $zip = new \ZipArchive();
         $fileName = $entity->getquoteNumber().".zip";
-        $zip->open($fileName,  \ZipArchive::CREATE);
+        $zip->open($fileName,  \ZipArchive::OVERWRITE);
 
         foreach ($collection as $c){
             $zip->addFromString($c->gethashedFilename(), file_get_contents($c->getfilepath()."/".$c->gethashedFilename()));
         }
+        $web_dir = $this->get('kernel')->getRootDir() . '/../web' . $this->getRequest()->getBasePath();
 
-        $response = new Response();
-        $response->setContent(file_get_contents($fileName));
+        $other = $_SERVER['DOCUMENT_ROOT'];
+
+
         $zip->close();
+        $response = new Response();
+//        $response->setContent(readfile($other.'/'.$fileName));
+//        $zip->close();
         $response->headers->set('Content-Type', 'application/zip');
-        $response->headers->set('Content-disposition', 'attachment');
-        $response->headers->set('filename', $fileName);
+        $response->headers->set('Cache-Control', 'private');
+        $response->headers->set('Content-Disposition', 'attachment; filename="'.$fileName.'"');
         $response->headers->set('Content-Length' , filesize($fileName));
-        $response->file_get_contents($fileName);
+//        $response->readfile($other.'/'.$fileName);
+//        $zip->close();
+        $response->setContent(file_get_contents($other.'/'.$fileName));
+
         return $response;
 
 
