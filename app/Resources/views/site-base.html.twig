@@ -47,7 +47,7 @@
         {% embed "fragments/admin_menu.html.twig" %}{% endembed %}
     {% endif %}
 
-    <main class="mdl-layout__content main">
+    <main class="mdl-layout__content main{% if (entity.quoteVersionReference is defined)  %} tour {% else %} QuoteVersion {% endif %}">
 
         {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
             <div class="header mdl-layout__header">
