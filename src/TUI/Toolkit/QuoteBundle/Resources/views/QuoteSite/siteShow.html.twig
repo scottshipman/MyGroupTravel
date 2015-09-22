@@ -225,8 +225,6 @@
         </div>
     </div><!-- view-mode -->
 
-    <div id="loader"><img src="{{ asset('bundles/quote/images/loader.gif') }}"></div>
-
     <script type="text/javascript"
             src="https://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.js"></script>
 
@@ -249,10 +247,11 @@
 
 
             $( ".sortable-items" ).sortable({
-                containment: "parent",
+                // containment: "parent",
                 tolerance: "pointer",
                 placeholder: "items-placeholder",
                 forcePlaceholderSize: true,
+                helper: "clone",
                 start: function (e, ui) {
                     ui.helper.addClass('sort-mode');
                     ui.placeholder.height( ui.helper.outerHeight() );
