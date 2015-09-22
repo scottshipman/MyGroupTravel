@@ -9,3 +9,7 @@ tour_site:
 tour_pdf:
     resource: "@TourBundle/Resources/config/routing/tour-pdf.yml"
     prefix:   /tour/print
+
+tour_paymenttask:
+    resource: "@TourBundle/Resources/config/routing/paymenttask.yml"
+    prefix:   /paymenttask

@@ -1,0 +1,30 @@
+.tour-edit {
+  margin-bottom: 2em;
+  max-width: 650px;
+  width: auto;
+}
+
+.payment_task {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  li {
+    display: inline;
+    .mdl-textfield {
+      width: 135px;
+    }
+  }
+}
+
+.new_payment_task {
+  .form-row {
+    display: inline;
+    list-style-type: none;
+    .mdl-textfield {
+      width: 135px;
+    }
+  }
+  li {
+    display: inline;
+  }
+}

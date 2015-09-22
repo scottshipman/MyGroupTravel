@@ -473,12 +473,14 @@ class TourController extends Controller
         $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($entity->getId());
         $date_format = $this->container->getParameter('date_format');
+        $locale =  $this->container->getParameter('locale');
 
         return $this->render('TourBundle:Tour:edit.html.twig', array(
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
             'date_format' => $date_format,
+            'locale' => $locale,
         ));
     }
 
