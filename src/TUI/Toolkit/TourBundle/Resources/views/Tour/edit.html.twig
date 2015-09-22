@@ -325,10 +325,13 @@
             e.preventDefault();
             var div = $("#dropzone-dialog");
             $("#dialog").html("");
-            $("#dialog").dialog({width: '40%'}).dialog("option", "title", "Upload Promotional Assets").dialog("open");
+            $("#dialog").dialog({width: '40%', height: 'auto'}).dialog("option", "title", "Upload Promotional Assets").dialog("open");
             $("#dialog").append(div);
             div.show();
-            $("#dropzone_form").css({"display": "block"});
+            $("#dropzone_form").css({
+                "display": "block",
+                "margin": "auto"
+            });
         });
     </script>
 
