@@ -8,6 +8,7 @@
 {% block body -%}
 
     {{ form_start(edit_form) }}
+    {# Summary Section #}
     <div class = "tour-edit mdl-card mdl-shadow--2dp">
         <div class="mdl-card__supporting-text">
             <h3 class="mdl-card__title">Summary</h3>
@@ -21,6 +22,7 @@
             {{ form_row(edit_form.secondaryContact) }}
         </div>
     </div>
+    {# Details Section #}
     <div class = "tour-edit mdl-card mdl-shadow--2dp">
         <div class="mdl-card__supporting-text">
             <h3 class="mdl-card__title">Details</h3>
@@ -43,7 +45,7 @@
             </div>
         </div>
     </div>
-  {#   {% do edit_form.submit.setRendered %} #}
+    {# Payment Tasks #}
     <div class = "tour-edit mdl-card mdl-shadow--2dp">
         <div class="mdl-card__supporting-text">
             <h3 class="mdl-card__title">Payment Schedule</h3>
@@ -57,6 +59,16 @@
                     </ul>
                 {% endfor %}
             </div>
+        </div>
+    </div>
+    {# Information Tasks #}
+    <div class = "tour-edit mdl-card mdl-shadow--2dp">
+        <div class="mdl-card__supporting-text">
+            <h3 class="mdl-card__title">Task Deadlines</h3>
+            {{ form_row(edit_form.passportDate) }}
+            {{ form_row(edit_form.passengerDate) }}
+            {{ form_row(edit_form.medicalDate) }}
+            {{ form_row(edit_form.dietaryDate) }}
         </div>
     </div>
     {{ form_rest(edit_form) }}
