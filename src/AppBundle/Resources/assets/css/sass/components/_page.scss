@@ -11,7 +11,7 @@ html {
   padding-left: $page_gutter;
   padding-right: $page_gutter;
 
-  .mdl-layout--fixed-drawer & {
+  .toolkit-fixed-drawer & {
     padding-left: $admin_page_gutter;
     padding-right: $admin_page_gutter;
   }
@@ -39,7 +39,7 @@ html {
       margin-left: -$page_gutter_reset;
       padding: 0.25em $page_gutter_reset;
 
-      .mdl-layout--fixed-drawer & {
+      .toolkit-fixed-drawer & {
         width: $admin_page_width_reset;
         margin-left: -$admin_page_gutter_reset;
         padding: 0.25em $admin_page_gutter_reset;
