@@ -253,16 +253,12 @@
                 forcePlaceholderSize: true,
                 helper: "clone",
                 start: function (e, ui) {
-                    ui.helper.addClass('sort-mode');
                     ui.placeholder.height( ui.helper.outerHeight() );
                     if ( ui.helper.css('width') != $(this).css('width') ) { // if the item is floated, through an indirect check
                         ui.placeholder.css({'float': 'left', 'width': '50%'});
                     } else {
                         ui.placeholder.css({'float': 'none', 'width': 'auto', 'clear': 'both'});
                     }
-                },
-                stop: function (e, ui) {
-                    ui.helper.removeClass('sort-mode');
                 },
                 update: function(e, ui) {
                     $("#loader").css("display", "block");
@@ -287,7 +283,7 @@
                     $.ajax({
                         data: result,
                         type: 'POST',
-                        url: '/manage/contentblocks/update/' + {{ entity.id }}
+                        url: '/manage/contentblocks/update/' + {{ entity.id }} + '/QuoteVersion'
                     }).done(function() {
                         window.location.reload(true);
                     });
