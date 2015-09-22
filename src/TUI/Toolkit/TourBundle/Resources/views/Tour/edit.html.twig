@@ -75,7 +75,6 @@
                 <h3 class="mdl-card__title">Upload Promotional Content</h3>
                     <div class="media-wrapper">
                         <div class="existing-media-wrapper">
-                             <div class="mdl-label-mimic"><label>Promotional Assets</label></div>
                             {% if entity.media %}
                                 {% for media in collection %}
                                     <div class="existing-media-item promo-asset">
@@ -89,7 +88,7 @@
                                             <i style="color: orange" class="fa fa-file-powerpoint-o fa-3x"></i>
                                         {% endif %}
                                     <a id ="{{ media.id }}" href="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">{{ media.filename }}</a>
-                                    <a id="media-existing-delete" class="existing-delete" href="#"><i class="fa fa-trash-o fa-2x"></i></a>
+                                    <a id="media-existing-delete" style= "top: 5px; right: -10px;" class="existing-delete" href="#"><i class="fa fa-trash-o fa-2x"></i></a>
                                     </div>
                                 {% endfor %}
                             {% else %}
@@ -225,7 +224,7 @@
                         $('.existing-media-wrapper').append('<div style ="border-radius: 0px;" class="existing-media-item promo-asset">' +
                         '<i style ="color:' + iconColor + ';' + '" class="fa ' + faIcon + ' fa-3x' + '"></i>' +
                         '<a id ="'+ response.id + '" href="' + response.relativepath + '/' + response.filename + '"></a>' +
-                        '<a id ="media-existing-delete" class="existing-delete" href="#"><i class="fa fa-trash-o fa-2x"></i></a></div></br>');
+                        '<a id ="media-existing-delete" style= "top: 5px; right: -10px;"class="existing-delete" href="#"><i class="fa fa-trash-o fa-2x"></i></a></div></br>');
                         var id = '#' + response.id;
                         console.log(id);
                         $(id).html(response.original_filename);
