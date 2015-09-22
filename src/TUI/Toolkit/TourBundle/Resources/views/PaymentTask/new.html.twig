@@ -1,0 +1,24 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>PaymentTask creation</h1>
+
+    {{ form(form) }}
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('paymenttask') }}">
+            Back to the list
+        </a>
+    </li>
+</ul>
+    {{ form_javascript(form) }}
+    <script>
+        $( document ).ready(function() {
+            $( ".hasDatepicker" ).datepicker( "option", "dateFormat", "dd-mm-yy" );
+            $( ".hasDatepicker" ).change(function(){
+                $(this).parent().addClass('is-dirty');
+            });
+        });
+    </script>
+{% endblock %}

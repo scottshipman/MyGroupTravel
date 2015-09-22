@@ -40,14 +40,14 @@
 
     {{ render(controller('BrandBundle:Default:colors')) }}
 
-<div class="marketing-site mdl-layout mdl-js-layout {% if is_granted("ROLE_BRAND") %}mdl-layout--fixed-drawer{% endif %}">
+<div class="marketing-site toolkit-layout {% if is_granted("ROLE_BRAND") %}toolkit-fixed-drawer{% endif %}">
 
     {# Display admin menu only if the user is BRAND or higher ROLE #}
     {% if is_granted("ROLE_BRAND") %}
         {% embed "fragments/admin_menu.html.twig" %}{% endembed %}
     {% endif %}
 
-    <main class="mdl-layout__content main{% if (entity.quoteVersionReference is defined)  %} tour {% else %} QuoteVersion {% endif %}">
+    <main class="toolkit-main{% if (entity.quoteVersionReference is defined)  %} tour {% else %} QuoteVersion {% endif %}">
 
         {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
             <div class="header mdl-layout__header">
@@ -92,8 +92,9 @@
 
     </main>
 
-</div>
-<!-- mdl-layout -->
+</div><!-- toolkit-layout -->
+
+<div id="loader"><img src="{{ asset('bundles/quote/images/loader.gif') }}"></div>
 
 {% javascripts '@toolkit' '@AppBundle/Resources/assets/js/dropzone.js' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>

@@ -67,7 +67,11 @@ class TourController extends Controller
             'returnDate',
             'pricePerson',
             'pricePersonPublic',
-            'currency.name'
+            'currency.name',
+            'passengerDate',
+            'passportDate',
+            'medicalDate',
+            'dietaryDate',
         );
 
         // Creates simple grid based on your entity (ORM)
@@ -130,9 +134,10 @@ class TourController extends Controller
         $grid->addExport(new CSVExport("Tours as CSV", "activeTours", array('delimiter' => ','), "UTF-8", "ROLE_BRAND"));
 
 
-        // Manage the grid ion, exports and the response of the controller
+        // Manage the grid redirection, exports and the response of the controller
         return $grid->getGridResponse('TourBundle:Tour:index.html.twig');
     }
+
 
 
     /**
@@ -147,32 +152,36 @@ class TourController extends Controller
 
         // hide columns from the screen display
         $hidden = array(
-            'quoteReference.id',
-            'institution.name',
-            'deleted',
-            'locked',
-            'organizer.firstName',
-            'organizer.lastName',
-            'organizer.email',
-            'salesAgent.firstName',
-            'salesAgent.lastName',
-            'salesAgent.email',
-            'destination',
-            'created',
-            'version',
-            'id',
-            'duration',
-            'tripStatus.name',
-            'expiryDate',
-            'transportType.name',
-            'boardBasis.name',
-            'freePlaces',
-            'payingPlaces',
-            'departureDate',
-            'returnDate',
-            'pricePerson',
-            'pricePersonPublic',
-            'currency.name'
+          'quoteReference.id',
+          'institution.name',
+          'deleted',
+          'locked',
+          'organizer.firstName',
+          'organizer.lastName',
+          'organizer.email',
+          'salesAgent.firstName',
+          'salesAgent.lastName',
+          'salesAgent.email',
+          'destination',
+          'created',
+          'version',
+          'id',
+          'duration',
+          'tripStatus.name',
+          'expiryDate',
+          'transportType.name',
+          'boardBasis.name',
+          'freePlaces',
+          'payingPlaces',
+          'departureDate',
+          'returnDate',
+          'pricePerson',
+          'pricePersonPublic',
+          'currency.name',
+          'passengerDate',
+          'passportDate',
+          'medicalDate',
+          'dietaryDate',
         );
 
         // Creates simple grid based on your entity (ORM)
@@ -299,7 +308,7 @@ class TourController extends Controller
 
     /**
      *
-     * /**
+    /**
      * Creates a form to create a Tour entity.
      *
      * @param Tour $entity The entity
@@ -319,7 +328,7 @@ class TourController extends Controller
         ));
         $form->get('quoteReference')->get('salesAgent')->setData($this->get('security.token_storage')->getToken()->getUser());
         $form->get('currency')->setdata($currency);
-        // $form->get('expiryDate')->setdata(new \DateTime('now + 30 days'));
+       // $form->get('expiryDate')->setdata(new \DateTime('now + 30 days'));
         $form->add('submit', 'submit', array('label' => 'Create'));
 
         return $form;
@@ -489,6 +498,7 @@ class TourController extends Controller
         $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($entity->getId());
         $date_format = $this->container->getParameter('date_format');
+        $locale =  $this->container->getParameter('locale');
 
         return $this->render('TourBundle:Tour:edit.html.twig', array(
             'entity' => $entity,
@@ -497,6 +507,7 @@ class TourController extends Controller
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
             'date_format' => $date_format,
+            'locale' => $locale,
         ));
     }
 

@@ -17,7 +17,7 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
  * @UniqueEntity(fields={"quoteNumber"}, message="This Quote Number already exists on another Tour.", ignoreNull=true)
  *
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
- * @GRID\Source(columns="id, name, quoteReference.id, institution_full, institution.name, institution.city, quoteNumber, organizer_full, quoteReference.name, salesAgent_full, salesAgent.firstName, salesAgent.lastName,  salesAgent.email, organizer.firstName, organizer.lastName, organizer.email, views, shareViews, deleted, locked, destination, created, version, duration, tripStatus.name, expiryDate, transportType.name, boardBasis.name, freePlaces, payingPlaces, departureDate, returnDate, pricePerson,  pricePersonPublic, currency.name, status, views, shareViews", filterable=false, sortable=true)
+ * @GRID\Source(columns="id, , institution_full, name, quoteNumber, tripStatus.name, created, destination, quoteReference.id, institution.name,  institution.city, organizer_full, salesAgent_full, salesAgent.firstName, salesAgent.lastName,  salesAgent.email, organizer.firstName, organizer.lastName, organizer.email, views, deleted, locked,  version, duration, expiryDate, transportType.name, boardBasis.name, freePlaces, payingPlaces, departureDate, returnDate, pricePerson,  pricePersonPublic, currency.name, status, passengerDate, passportDate, medicalDate, dietaryDate", filterable=false, sortable=true)
  * @GRID\Column(id="organizer_full", type="join", columns = {"organizer.firstName", "organizer.lastName", "organizer.email"}, title="Organizer", export=true, filterable=true, operatorsVisible=false)
  * @GRID\Column(id="salesAgent_full", type="join", columns = {"salesAgent.firstName", "salesAgent.lastName", "salesAgent.email"}, title="Primary Business Admin", export=true, filterable=true, operatorsVisible=false)
  * @GRID\Column(id="institution_full", type="join", columns = {"institution.name", "institution.city"}, title="Institution", export=true, filterable=true, operatorsVisible=false)
@@ -39,7 +39,7 @@ class Tour
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
-     * @GRID\Column(title="Quote Name", filterable=true, operatorsVisible=false, export=true)
+     * @GRID\Column(title="Tour Name", filterable=true, operatorsVisible=false, export=true)
      *
      */
     private $name;
@@ -128,7 +128,7 @@ class Tour
      * @var integer
      * @ORM\JoinColumn(name="institution", referencedColumnName="id")
      * @ORM\ManyToOne(targetEntity="TUI\Toolkit\InstitutionBundle\Entity\Institution", cascade={"all"}, fetch="EAGER")
-     * @GRID\Column(field="institution.name", title="Institution", filterable=true, operatorsVisible=false, export=true)
+     * @GRID\Column(field="institution.name", title="Institution", filterable=false, operatorsVisible=false, export=true)
      */
     private $institution;
 
@@ -319,18 +319,50 @@ class Tour
     /**
      * @var integer
      *
-     * @ORM\Column(name="shareViews", type="integer")
-     * @GRID\Column(title="Shared Views", filterable=false, export=true)
+     * @ORM\ManyToMany(targetEntity="TUI\Toolkit\TourBundle\Entity\PaymentTask", cascade={"persist"}, fetch="LAZY")
+     * @ORM\JoinColumn(name="paymenttasks", referencedColumnName="id")
      */
-    private $shareViews;
+    public $paymentTasks;
 
 
+    /**
+     * @var DateTime
+     *
+     * @ORM\Column(name="passportDate", type="date", nullable=true)
+     * @GRID\Column(title="Passport Info Due Date", export=true)
+     */
+    private $passportDate;
+
+    /**
+     * @var DateTime
+     *
+     * @ORM\Column(name="passengerDate", type="date", nullable=true)
+     * @GRID\Column(title="Passenger Info Due Date", export=true)
+     */
+    private $passengerDate;
+
+    /**
+     * @var DateTime
+     *
+     * @ORM\Column(name="medicalDate", type="date", nullable=true)
+     * @GRID\Column(title="Medical Info Due Date", export=true)
+     */
+    private $medicalDate;
+
+    /**
+     * @var DateTime
+     *
+     * @ORM\Column(name="dietaryDate", type="date", nullable=true)
+     * @GRID\Column(title="Dietary Info Due Date", export=true)
+     */
+    private $dietaryDate;
 
     public function __construct()
     {
       $this->created = new \DateTime();
       $this->views = 0;
       $this->shareViews = 0;
+      $this->paymentTasks = new ArrayCollection();
     }
 
     /**
@@ -1054,29 +1086,6 @@ class Tour
     }
 
     /**
-     * Set shareViews
-     *
-     * @param integer $shareViews
-     * @return Quote
-     */
-    public function setShareViews($shareViews)
-    {
-      $this->shareViews = $shareViews;
-
-      return $this;
-    }
-
-    /**
-     * Get shareViews
-     *
-     * @return integer
-     */
-    public function getShareViews()
-    {
-      return $this->shareViews;
-    }
-
-    /**
      * Set created
      *
      * @param date $created
@@ -1101,6 +1110,114 @@ class Tour
     {
       return $this->created;
     }
+
+
+    /**
+     * Set passengerDate
+     *
+     * @param \DateTime $passengerDate
+     * @return Tour
+     */
+    public function setPassengerDate($passengerDate)
+    {
+      $this->passengerDate = $passengerDate;
+
+      return $this;
+    }
+
+    /**
+     * Get passengerDate
+     *
+     * @return \DateTime
+     */
+    public function getPassengerDate()
+    {
+      return $this->passengerDate;
+    }
+
+    /**
+     * Set passportDate
+     *
+     * @param \DateTime $passportDate
+     * @return Tour
+     */
+    public function setPassportDate($passportDate)
+    {
+      $this->passportDate = $passportDate;
+
+      return $this;
+    }
+
+    /**
+     * Get passportDate
+     *
+     * @return \DateTime
+     */
+    public function getPassportDate()
+    {
+      return $this->passportDate;
+    }
+
+    /**
+     * Set medicalDate
+     *
+     * @param \DateTime $medicalDate
+     * @return Tour
+     */
+    public function setMedicalDate($medicalDate)
+    {
+      $this->medicalDate = $medicalDate;
+
+      return $this;
+    }
+
+    /**
+     * Get medicalDate
+     *
+     * @return \DateTime
+     */
+    public function getMedicalDate()
+    {
+      return $this->medicalDate;
+    }
+
+    /**
+     * Set dietaryDate
+     *
+     * @param \DateTime $dietaryDate
+     * @return Tour
+     */
+    public function setDietaryDate($dietaryDate)
+    {
+      $this->dietaryDate = $dietaryDate;
+
+      return $this;
+    }
+
+    /**
+     * Get dietaryDate
+     *
+     * @return \DateTime
+     */
+    public function getDietaryDate()
+    {
+      return $this->dietaryDate;
+    }
+
+/****** Helper functions *********/
+
+    /*
+     * add and remove paymentTasks in forms using js/prototype
+     */
+    public function addPaymentTask(PaymentTask $paymentTask)
+      {
+        $this->paymentTasks->add($paymentTask);
+      }
+
+    public function removePaymentTask(PaymentTask $paymentTask)
+      {
+        $this->paymentTasks->removeElement($paymentTask);
+      }
 
 
     /**

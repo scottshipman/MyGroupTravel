@@ -12,9 +12,10 @@
             <a class="mdl-tabs__tab is-active" href="{{ path('manage_quote') }}">Active Quotes</a>
         {% endblock %}
     {% endembed %}
+    
     {{ grid_search(grid, 'AppBundle:Grid:grid.html.twig') }}
     {{ grid(grid, 'AppBundle:Grid:grid.html.twig') }}
-    <div id="loader"><img src="{{ asset('bundles/quote/images/loader.gif') }}"></div>
+
     <script>
         $(document).ready(function() {
             $(".fam-lock, .fam-unlock").parent().on('click', function() {
