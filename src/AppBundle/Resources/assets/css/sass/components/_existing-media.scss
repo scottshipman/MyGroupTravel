@@ -6,6 +6,11 @@
   @include clear-fix();
   margin-bottom: 10px;
 
+  .promo-asset {
+    border-radius: 0px;
+    width: 50%;
+  }
+
   .existing-media-item {
     float: left;
     position: relative;
@@ -32,4 +37,9 @@
 
 .new-media-wrapper {
   margin-bottom: 20px;
+}
+
+.promo-asset {
+  border-radius: 0px !important;
+  width: 50%;
 }
