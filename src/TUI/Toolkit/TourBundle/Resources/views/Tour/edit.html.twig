@@ -26,7 +26,7 @@
                         {% endif %}
                         <a id ="{{ media.id }}" href="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">{{ media.filename }}</a>
                         <a id="media-existing-delete" class="existing-delete" href="#"><i
-                                    class="fa fa-times-circle"></i></a>
+                                    class="fa fa-trash-o"></i></a>
                     </div>
                 {% endfor %}
             {% else %}
@@ -136,7 +136,7 @@
                         $('.existing-media-wrapper').append('<div style ="border-radius: 0px;" class="existing-media-item">' +
                         '<i style ="color:' + iconColor + ';' + '" class="fa ' + faIcon + ' fa-3x' + '"></i>' +
                         '<a id ="'+ response.id + '" href="' + response.relativepath + '/' + response.filename + '"></a>' +
-                        '<a id ="media-existing-delete" class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a></div>');
+                        '<a id ="media-existing-delete" class="existing-delete" href="#"><i class="fa fa-trash-o"></i></a></div>');
                         var id = '#' + response.id;
                         console.log(id);
                         $(id).html(response.original_filename);
