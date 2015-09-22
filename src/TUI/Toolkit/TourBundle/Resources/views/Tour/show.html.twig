@@ -234,7 +234,7 @@
                    axis: 'y',
                    update: function(e, ui) {
                        var pathArray = window.location.pathname.split( '/' );
-                       contentBlocksUpdate(pathArray[3]); // fourth [3] part in the path should be quote ID to pass in
+                       contentBlocksUpdate(pathArray[3], 'tour'); // fourth [3] part in the path should be quote ID to pass in
                    }
                });
 
@@ -251,7 +251,7 @@
                    axis: 'y',
                    update: function(e, ui) {
                        var pathArray = window.location.pathname.split( '/' );
-                       contentBlocksUpdate(pathArray[3]); // fourth [3] part in the path should be quote ID to pass in
+                       contentBlocksUpdate(pathArray[3], 'tour'); // fourth [3] part in the path should be quote ID to pass in
                    }
                });
 
@@ -282,7 +282,7 @@
                $("#add-headerBlock").on('click', function(){
                    $("#dialog").html("");
                    $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
-                   $("#dialog").load('/manage/headerblock/new/header/' + {{ entity.id}} +'/Tour', function() {
+                   $("#dialog").load('/manage/headerblock/new/header/' + {{ entity.id}} +'/tour', function() {
                        $(this).dialog("option", "title", 'Add Header Content');
                        doMDLpopup( $(this) );
                    });
@@ -293,7 +293,7 @@
                $("#edit-headerBlock").on('click', function(){
                    $("#dialog").html("");
                    $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
-                   $("#dialog").load('/manage/headerblock/'+ {{ entity.headerBlock.id }} + '/header/edit/' + {{ entity.id}} +'/Tour', function() {
+                   $("#dialog").load('/manage/headerblock/'+ {{ entity.headerBlock.id }} + '/header/edit/' + {{ entity.id}} +'/tour', function() {
                        $(this).dialog("option", "title", 'Edit Header Content');
                        doMDLpopup( $(this) );
                    });
@@ -302,7 +302,7 @@
 
                // Add a new tab to a site
                $("#add-new-tab").on('click', function(){
-                   contentBlocksAddTab('#content-blocks-wrapper', {{ entity.id }});
+                   contentBlocksAddTab('#content-blocks-wrapper', {{ entity.id }}, 'tour');
                });
 
                // Toggle the Tour Lock
@@ -325,7 +325,7 @@
                    var ancestorTabElement = $(this).closest('.content-blocks-tab');
                    if (confirm('Are you sure you want to remove this tab? Warning: this can not be undone.')) {
                        $(ancestorTabElement).remove();
-                       contentBlocksUpdate({{ entity.id }});
+                       contentBlocksUpdate({{ entity.id }}, 'tour');
                    }
                });
 
@@ -354,7 +354,7 @@
                         {# '<i class="item-hide content-block-item-action fa fa-ban"></i>' + #}
                         '</div></div>'
                     );
-                    contentBlocksUpdate({{ entity.id }});
+                    contentBlocksUpdate({{ entity.id }}, 'tour');
                 });
 
             });
@@ -367,7 +367,7 @@
                 //e.preventDefault();
                 $("#dialog").html("");
                 $("#dialog").dialog({width: '60%', modal: false}).dialog("option", "title", "Loading...").dialog("open");
-                $("#dialog").load( '/ajax/contentblocks/' + block + '/edit/' + {{ entity.id}} + '/Tour', function() {
+                $("#dialog").load( '/ajax/contentblocks/' + block + '/edit/' + {{ entity.id}} + '/tour', function() {
                     $(this).dialog("option", "title", 'Edit Content Block');
                     doMDLpopup( $(this) );
                 });
@@ -400,7 +400,7 @@
                 $("#loader").css("display", "block");
                 var blockID = t.attr('blockId');
                 $.ajax({
-                    url: '/manage/contentblocks/' + blockID + '/lock/' + {{ entity.id }} +'/Tour',
+                    url: '/manage/contentblocks/' + blockID + '/lock/' + {{ entity.id }} +'/tour',
                     headers: {
                         "Pragma": "no-cache",
                         "Expires": -1,
@@ -428,7 +428,7 @@
                     var blockId = $(this).attr('blockId');
                     $.ajax({
                         method:'DELETE',
-                        url: '/manage/contentblocks/' + blockId + '/delete/' + {{ entity.id }} + '/Tour',
+                        url: '/manage/contentblocks/' + blockId + '/delete/' + {{ entity.id }} + '/tour',
                         headers: {
                             "Pragma": "no-cache",
                             "Expires": -1,
@@ -450,7 +450,7 @@
                 onblur: "cancel",
                 tooltip: 'Click to edit',
                 callback : function(value, settings) {
-                    contentBlocksUpdate({{ entity.id }}); //value
+                    contentBlocksUpdate({{ entity.id }}, 'tour'); //value
                 }
             });
         });

@@ -72,7 +72,7 @@
             <i class="fa fa-print"></i> Print
         </a>
 
-        <a href="/quote/print/{{ entity.id }}.pdf" target="_blank"
+        <a href="/quote/print/{{ entity.id }}/{{ entity.quoteNumber }}.pdf" target="_blank"
            class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
             <i class="fa fa-file-pdf-o"></i> PDF
         </a>
@@ -367,7 +367,7 @@
 
                 // Add a new tab to a site
                 $("#add-new-tab").on('click', function () {
-                    contentBlocksNewTab({{ entity.id }});
+                    contentBlocksNewTab({{ entity.id }}, "QuoteVersion");
                 });
 
                 // edit header slideshow in layout mode
