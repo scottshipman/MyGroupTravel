@@ -67,7 +67,11 @@ class TourController extends Controller
             'returnDate',
             'pricePerson',
             'pricePersonPublic',
-            'currency.name'
+            'currency.name',
+            'passengerDate',
+            'passportDate',
+            'medicalDate',
+            'dietaryDate',
         );
 
         // Creates simple grid based on your entity (ORM)
@@ -173,7 +177,11 @@ class TourController extends Controller
           'returnDate',
           'pricePerson',
           'pricePersonPublic',
-          'currency.name'
+          'currency.name',
+          'passengerDate',
+          'passportDate',
+          'medicalDate',
+          'dietaryDate',
         );
 
         // Creates simple grid based on your entity (ORM)

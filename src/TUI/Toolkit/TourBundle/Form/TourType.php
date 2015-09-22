@@ -142,6 +142,34 @@ class TourType extends AbstractType
             'by_reference' => false,
             'allow_delete' => true,
           ))
+
+          ->add('passengerDate', 'genemu_jquerydate', array(
+            'widget' => 'single_text',
+            'required' => false,
+            'label' => 'Passenger Info Due Date ' . $date_label,
+            'format' => $date_format,
+          ))
+
+          ->add('passportDate', 'genemu_jquerydate', array(
+            'widget' => 'single_text',
+            'required' => false,
+            'label' => 'Passport Info Due Date ' . $date_label,
+            'format' => $date_format,
+          ))
+
+          ->add('medicalDate', 'genemu_jquerydate', array(
+            'widget' => 'single_text',
+            'required' => false,
+            'label' => 'Medical Info Due Date ' . $date_label,
+            'format' => $date_format,
+          ))
+
+          ->add('dietaryDate', 'genemu_jquerydate', array(
+            'widget' => 'single_text',
+            'required' => false,
+            'label' => 'Dietary Info Due Date ' . $date_label,
+            'format' => $date_format,
+          ))
         ;
     }
 
