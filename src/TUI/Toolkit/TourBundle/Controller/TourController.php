@@ -865,6 +865,13 @@ class TourController extends Controller
             throw $this->createNotFoundException('Unable to find Tour entity.');
         }
 
+        $web_dir = $_SERVER['DOCUMENT_ROOT'];
+        $exportsDir = $web_dir."/static/exports/";
+
+        if (!file_exists($exportsDir) && !is_dir($exportsDir)){
+            mkdir($exportsDir, 0755);
+        }
+
         $collection = $entity->getMedia()->toArray() ? $entity->getMedia()->toArray() : NULL;
 
         $zip = new \ZipArchive();
@@ -875,8 +882,6 @@ class TourController extends Controller
             $zip->addFromString($c->gethashedFilename(), file_get_contents($c->getfilepath()."/".$c->gethashedFilename()));
         }
 
-        $web_dir = $_SERVER['DOCUMENT_ROOT'];
-
 
         $zip->close();
 
@@ -884,8 +889,8 @@ class TourController extends Controller
         $response->headers->set('Content-Type', 'application/zip');
         $response->headers->set('Cache-Control', 'private');
         $response->headers->set('Content-Disposition', 'attachment; filename="'.$fileName.'"');
-        $response->headers->set('Content-Length' , filesize($fileName));
-        $response->setContent(file_get_contents($web_dir.'/'.$fileName));
+        $response->headers->set('Content-Length' , filesize("static/exports/".$fileName));
+        $response->setContent(file_get_contents($web_dir.'/static/exports/'.$fileName));
 
         return $response;
 
