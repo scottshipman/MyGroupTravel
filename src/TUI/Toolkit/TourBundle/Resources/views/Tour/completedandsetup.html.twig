@@ -1,0 +1,28 @@
+<div class = "tour-edit mdl-card mdl-shadow--2dp">
+    <div class="mdl-card__supporting-text">
+        <h3 class="mdl-card__title">Get Started (Setup Complete is true and IsComplete is true)</h3>
+        <div class="mdl-card__actions mdl-card--border">
+            <div class="mdl-card__supporting-text tour-task">
+                <i class="fa fa-check"></i><p>Sign up to EToolkit</p>
+            </div>
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+            <div class="mdl-card__supporting-text">
+                <i class="fa fa-check"></i><p>Set up your payment settings</p>
+                {% for task in entity.paymentTasks %}
+                    {#{{ render(controller('TourBundle:PaymentTask:edit', { 'id': task.id })) }}#}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+            <div class="mdl-card__supporting-text">
+                <i class="fa fa-clone"></i><a href="{{ path('tour_site_action_show', { 'id': entity.id }) }}">Personalize your website</a>
+            </div>
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+            <div class="mdl-card__supporting-text">
+                <i class="fa fa-share"></i><p>Promote your website</p>
+            </div>
+        </div>
+    </div>
+</div>
