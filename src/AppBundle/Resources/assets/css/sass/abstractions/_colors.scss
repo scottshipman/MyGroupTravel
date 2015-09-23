@@ -157,3 +157,121 @@
   }
 
 }
+
+@mixin mdl-background-image-overlay( $type1, $type2 ) {
+
+  .color_primary_brown & {
+    $color1 : unquote("rgb(#{nth($palette-brown, $type1)})");
+    $color2 : unquote("rgb(#{nth($palette-brown, $type2)})");
+    background: unquote("linear-gradient(to bottom right, #{$color1} 0%, #{$color2} 100%)");
+  }
+
+  .color_primary_blue_grey & {
+    $color1 : unquote("rgb(#{nth($palette-blue-grey, $type1)})");
+    $color2 : unquote("rgb(#{nth($palette-blue-grey, $type2)})");
+    background: unquote("linear-gradient(to bottom right, #{$color1} 0%, #{$color2} 100%)");
+  }
+
+  .color_primary_grey & {
+    $color1 : unquote("rgb(#{nth($palette-grey, $type1)})");
+    $color2 : unquote("rgb(#{nth($palette-grey, $type2)})");
+    background: unquote("linear-gradient(to bottom right, #{$color1} 0%, #{$color2} 100%)");
+  }
+
+  .color_primary_deep_orange & {
+    $color1 : unquote("rgb(#{nth($palette-deep-orange, $type1)})");
+    $color2 : unquote("rgb(#{nth($palette-deep-orange, $type2)})");
+    background: unquote("linear-gradient(to bottom right, #{$color1} 0%, #{$color2} 100%)");
+  }
+
+  .color_primary_red & {
+    $color1 : unquote("rgb(#{nth($palette-red, $type1)})");
+    $color2 : unquote("rgb(#{nth($palette-red, $type2)})");
+    background: unquote("linear-gradient(to bottom right, #{$color1} 0%, #{$color2} 100%)");
+  }
+
+  .color_primary_pink & {
+    $color1 : unquote("rgb(#{nth($palette-pink, $type1)})");
+    $color2 : unquote("rgb(#{nth($palette-pink, $type2)})");
+    background: unquote("linear-gradient(to bottom right, #{$color1} 0%, #{$color2} 100%)");
+  }
+
+  .color_primary_purple & {
+    $color1 : unquote("rgb(#{nth($palette-purple, $type1)})");
+    $color2 : unquote("rgb(#{nth($palette-purple, $type2)})");
+    background: unquote("linear-gradient(to bottom right, #{$color1} 0%, #{$color2} 100%)");
+  }
+
+  .color_primary_deep_purple & {
+    $color1 : unquote("rgb(#{nth($palette-deep-purple, $type1)})");
+    $color2 : unquote("rgb(#{nth($palette-deep-purple, $type2)})");
+    background: unquote("linear-gradient(to bottom right, #{$color1} 0%, #{$color2} 100%)");
+  }
+
+  .color_primary_indigo & {
+    $color1 : unquote("rgb(#{nth($palette-indigo, $type1)})");
+    $color2 : unquote("rgb(#{nth($palette-indigo, $type2)})");
+    background: unquote("linear-gradient(to bottom right, #{$color1} 0%, #{$color2} 100%)");
+  }
+
+  .color_primary_blue & {
+    $color1 : unquote("rgb(#{nth($palette-blue, $type1)})");
+    $color2 : unquote("rgb(#{nth($palette-blue, $type2)})");
+    background: unquote("linear-gradient(to bottom right, #{$color1} 0%, #{$color2} 100%)");
+  }
+
+  .color_primary_light_blue & {
+    $color1 : unquote("rgb(#{nth($palette-light-blue, $type1)})");
+    $color2 : unquote("rgb(#{nth($palette-light-blue, $type2)})");
+    background: unquote("linear-gradient(to bottom right, #{$color1} 0%, #{$color2} 100%)");
+  }
+
+  .color_primary_cyan & {
+    $color1 : unquote("rgb(#{nth($palette-cyan, $type1)})");
+    $color2 : unquote("rgb(#{nth($palette-cyan, $type2)})");
+    background: unquote("linear-gradient(to bottom right, #{$color1} 0%, #{$color2} 100%)");
+  }
+
+  .color_primary_teal & {
+    $color1 : unquote("rgb(#{nth($palette-teal, $type1)})");
+    $color2 : unquote("rgb(#{nth($palette-teal, $type2)})");
+    background: unquote("linear-gradient(to bottom right, #{$color1} 0%, #{$color2} 100%)");
+  }
+
+  .color_primary_green & {
+    $color1 : unquote("rgb(#{nth($palette-green, $type1)})");
+    $color2 : unquote("rgb(#{nth($palette-green, $type2)})");
+    background: unquote("linear-gradient(to bottom right, #{$color1} 0%, #{$color2} 100%)");
+  }
+
+  .color_primary_light_green & {
+    $color1 : unquote("rgb(#{nth($palette-light-green, $type1)})");
+    $color2 : unquote("rgb(#{nth($palette-light-green, $type2)})");
+    background: unquote("linear-gradient(to bottom right, #{$color1} 0%, #{$color2} 100%)");
+  }
+
+  .color_primary_lime & {
+    $color1 : unquote("rgb(#{nth($palette-lime, $type1)})");
+    $color2 : unquote("rgb(#{nth($palette-lime, $type2)})");
+    background: unquote("linear-gradient(to bottom right, #{$color1} 0%, #{$color2} 100%)");
+  }
+
+  .color_primary_yellow & {
+    $color1 : unquote("rgb(#{nth($palette-yellow, $type1)})");
+    $color2 : unquote("rgb(#{nth($palette-yellow, $type2)})");
+    background: unquote("linear-gradient(to bottom right, #{$color1} 0%, #{$color2} 100%)");
+  }
+
+  .color_primary_amber & {
+    $color1 : unquote("rgb(#{nth($palette-amber, $type1)})");
+    $color2 : unquote("rgb(#{nth($palette-amber, $type2)})");
+    background: unquote("linear-gradient(to bottom right, #{$color1} 0%, #{$color2} 100%)");
+  }
+
+  .color_primary_orange & {
+    $color1 : unquote("rgb(#{nth($palette-orange, $type1)})");
+    $color2 : unquote("rgb(#{nth($palette-orange, $type2)})");
+    background: unquote("linear-gradient(to bottom right, #{$color1} 0%, #{$color2} 100%)");
+  }
+
+}
