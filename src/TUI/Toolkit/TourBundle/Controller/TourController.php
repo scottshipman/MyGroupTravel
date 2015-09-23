@@ -368,6 +368,7 @@ class TourController extends Controller
             throw $this->createNotFoundException('Unable to find Tour entity.');
         }
 
+        $collection = $entity->getMedia()->toArray() ? $entity->getMedia()->toArray() : NULL;
 
         // get the content blocks to send to twig
         $items = array();
@@ -403,6 +404,7 @@ class TourController extends Controller
             'entity' => $entity,
             'delete_form' => $deleteForm->createView(),
             'locale' => $locale,
+            'collection' => $collection,
             'items' => $items,
             'tabs' => $tabs,
         ));
@@ -478,6 +480,21 @@ class TourController extends Controller
             throw $this->createNotFoundException('Unable to find Tour entity.' . $id);
         }
 
+        if ($entity->getMedia() != null) {
+            $collection = $entity->getMedia()->toArray();
+            foreach ($collection as $image) {
+                $imageIds[] = $image->getId();
+            }
+
+            if (isset($imageIds)) {
+                $collectionIds = implode(',', $imageIds);
+            } else {
+                $collectionIds = '';
+            }
+
+            $entity->setMedia($collectionIds);
+        }
+
         $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($entity->getId());
         $date_format = $this->container->getParameter('date_format');
@@ -485,13 +502,14 @@ class TourController extends Controller
 
         return $this->render('TourBundle:Tour:edit.html.twig', array(
             'entity' => $entity,
+            'collection' => $collection,
+            'collection_ids' => $collectionIds,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
             'date_format' => $date_format,
             'locale' => $locale,
         ));
     }
-
 
 
     /**
@@ -526,6 +544,8 @@ class TourController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Tour entity.');
         }
+
+        $collection = $entity->getMedia()->toArray();
 
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
@@ -574,6 +594,23 @@ class TourController extends Controller
             $editForm->getData()->setInstitution($institution);
         }
 
+        $medias = array();
+
+        if (NULL != $editForm->getData()->getMedia()) {
+            $fileIdString = $editForm->getData()->getMedia();
+            $fileIds = explode(',', $fileIdString);
+
+            foreach ($fileIds as $fileId) {
+                $image = $em->getRepository('MediaBundle:Media')
+                    ->findById($fileId);
+                $medias[] = array_shift($image);
+            }
+        }
+        if (!empty($medias)) {
+            $editForm->getData()->setMedia($medias);
+
+        }
+
 
         if ($editForm->isValid()) {
             $em->flush();
@@ -584,12 +621,12 @@ class TourController extends Controller
 
         return $this->render('TourBundle:Tour:edit.html.twig', array(
             'entity' => $entity,
+            'collection' => $collection,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
             'date_format' => $date_format,
         ));
     }
-
 
 
     /**
@@ -821,4 +858,55 @@ class TourController extends Controller
 
         return $result;
     }
+
+
+    /**
+     * Export Tour Promotional Assets
+     *
+     */
+
+    public function exportTourAssetsAction(Request $request, $id, $fileName)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('TourBundle:Tour')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Tour entity.');
+        }
+
+        $web_dir = $_SERVER['DOCUMENT_ROOT'];
+        $exportsDir = $web_dir."/static/exports/";
+
+        if (!file_exists($exportsDir) && !is_dir($exportsDir)){
+            mkdir($exportsDir, 0755);
+        }
+
+        $collection = $entity->getMedia()->toArray() ? $entity->getMedia()->toArray() : NULL;
+
+        $zip = new \ZipArchive();
+        $fileName = $entity->getquoteNumber().".zip";
+        $zip->open("static/exports/".$fileName,  \ZipArchive::OVERWRITE);
+
+        foreach ($collection as $c){
+            $zip->addFromString($c->gethashedFilename(), file_get_contents($c->getfilepath()."/".$c->gethashedFilename()));
+        }
+
+
+        $zip->close();
+
+        $response = new Response();
+        $response->headers->set('Content-Type', 'application/zip');
+        $response->headers->set('Cache-Control', 'private');
+        $response->headers->set('Content-Disposition', 'attachment; filename="'.$fileName.'"');
+        $response->headers->set('Content-Length' , filesize("static/exports/".$fileName));
+        $response->setContent(file_get_contents($web_dir.'/static/exports/'.$fileName));
+
+        return $response;
+
+
+
+    }
+
 }

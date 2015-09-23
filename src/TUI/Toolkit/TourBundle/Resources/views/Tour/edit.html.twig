@@ -6,7 +6,6 @@
 {% block page_title %}{{ title_label }} Tour {{ entity.name }}{% endblock %}
 
 {% block body -%}
-
     {{ form_start(edit_form) }}
     {# Summary Section #}
     <div class = "tour-edit mdl-card mdl-shadow--2dp">
@@ -36,7 +35,6 @@
             {{ form_row(edit_form.freePlaces) }}
             {{ form_row(edit_form.currency) }}
             {{ form_row(edit_form.pricePerson) }}
-
             <div class="form-row">
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label is-dirty is-upgraded">
                     <label class="mdl-label-mimic" for="tui_toolkit_tourbundle_tour_total"><span>Total</span></label>
@@ -71,17 +69,49 @@
             {{ form_row(edit_form.dietaryDate) }}
         </div>
     </div>
+    {#Promotional Content#}
+        <div class = "tour-edit mdl-card mdl-shadow--2dp">
+            <div class="mdl-card__supporting-text">
+                <h3 class="mdl-card__title">Upload Promotional Content</h3>
+                    <div class="media-wrapper">
+                        <div class="existing-media-wrapper">
+                            {% if entity.media %}
+                                {% for media in collection %}
+                                    <div class="existing-media-item promo-asset">
+                                        {% if media.mimetype == "application/pdf" %}
+                                            <i style="color: red" class="fa fa-file-pdf-o fa-3x"></i>
+                                        {% elseif media.mimetype == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" or media.mimetype == "application/vnd.ms-excel" %}
+                                            <i style="color: green" class="fa fa-file-excel-o fa-3x"></i>
+                                        {% elseif media.mimetype == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" or media.mimetype == "application/msword" %}
+                                            <i style="color: blue" class="fa fa-file-word-o fa-3x"></i>
+                                        {% elseif media.mimetype == "application/vnd.openxmlformats-officedocument.presentationml.presentation" or media.mimetype == "application/vnd.ms-powerpoint" %}
+                                            <i style="color: orange" class="fa fa-file-powerpoint-o fa-3x"></i>
+                                        {% endif %}
+                                    <a id ="{{ media.id }}" href="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">{{ media.filename }}</a>
+                                    <a id="media-existing-delete" style= "top: 5px; right: -10px;" class="existing-delete" href="#"><i class="fa fa-trash-o fa-2x"></i></a>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <p class="none">No assets uploaded.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                <a id="promo-assets-upload" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+                    <i class="fa fa-cloud-upload"></i> Upload Promotional Assets
+                </a>
+
+                <a id="promo-assets-closed" style="display: none;" class="accepted-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="">
+                    <i class="fa fa-cloud-upload"></i> Cannot Upload Any More Assets
+                </a>
+            </div>
+        </div>
     {{ form_rest(edit_form) }}
     {{ form_end(edit_form) }}
+    <div id="dropzone-dialog" style="display: none;">
+        {{ render(controller('MediaBundle:Media:createDropzoneLightForm', {'context':'tourassets'})) }}
+    </div>
+    {#{{ form_javascript(edit_form) }}#}
     <ul class="mdl-card__actions record_actions">
-    {#    Not sure if revisions apply to tours at all
-        <li>
-            <a id="save-revision" onclick="submitQuoteForm();" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-                <i class="fa fa-files-o"></i> Save as New Revision
-            </a>
-        </li>
-     #}
-
         <li>
             <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_tour') }}">
                 <i class="fa fa-arrow-circle-left"></i> Back to the list
@@ -92,7 +122,6 @@
         {% endif %}
 
     </ul>
-    {{ form_javascript(edit_form) }}
 
     <script>
 
@@ -142,6 +171,74 @@
 
                 // add a new tag form (see next code block)
                 addPaymentTaskForm($collectionHolder, $newLinkDiv);
+            });
+
+            $("#dropzone_form").dropzone({
+                maxFiles: 1,
+                acceptedMimeTypes: 'application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation, application/pdf',
+                uploadMultiple: false,
+                init: function () {
+                    var value = $(".media-placeholder").val();
+                    var values = [];
+                    if (value != 0) {
+                        values = value.split(',').map(Number);
+                        if (values.length >= 10) {
+                            $("#promo-assets-upload").css({"display": "none"});
+                            $("#promo-assets-closed").css({"display": "inline-block"});
+                        }
+                    }
+                    this.on("success", function (file, response) {
+                        if ($(".media-placeholder").val().length > 0) {
+                            var value = $(".media-placeholder").val();
+                            var values = [];
+                            if (value != 0) {
+                                values = value.split(',').map(Number);
+                                values.push(response.id);
+                                if (values.length >= 10) {
+                                    $("#promo-assets-upload").css({"display": "none"});
+                                    $("#promo-assets-closed").css({"display": "inline-block"});
+                                }
+                            }
+                            $(".media-placeholder").val(values);
+                        } else {
+                            $(".media-placeholder").val(response.id);
+                        }
+                        $('.existing-media-wrapper').find('.none').hide();
+                        var type = response.mime_type;
+                        if (type == 'application/pdf') {
+                            var iconColor = "red";
+                            var faIcon = "fa-file-pdf-o";
+                        }
+                        else if (type == 'application/msword' || type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+                            var iconColor = "blue";
+                            var faIcon = "fa-file-word-o";
+                        }
+                        else if (type == 'application/vnd.ms-excel' || type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+                            var iconColor = "green";
+                            var faIcon = "fa-file-excel-o";
+                        }
+                        else if (type == 'application/vnd.ms-powerpoint' || type == 'application/vnd.openxmlformats-officedocument.presentationml.presentation') {
+                            var iconColor = "orange";
+                            var faIcon = "fa-file-powerpoint-o"
+                        }
+                        $('.existing-media-wrapper').append('<div style ="border-radius: 0px;" class="existing-media-item promo-asset">' +
+                        '<i style ="color:' + iconColor + ';' + '" class="fa ' + faIcon + ' fa-3x' + '"></i>' +
+                        '<a id ="'+ response.id + '" href="' + response.relativepath + '/' + response.filename + '"></a>' +
+                        '<a id ="media-existing-delete" style= "top: 5px; right: -10px;"class="existing-delete" href="#"><i class="fa fa-trash-o fa-2x"></i></a></div></br>');
+                        var id = '#' + response.id;
+                        console.log(id);
+                        $(id).html(response.original_filename);
+                        $("#dialog").dialog('close');
+
+                    });
+                    this.on("complete", function (file, response) {
+                        this.removeFile(file);
+                        $("#dialog").dialog('close');
+                    });
+                    this.on("error", function (file, response) {
+                        console.log('Error: ' + response);
+                    });
+                }
             });
         });
         function addPaymentTaskForm($collectionHolder, $newLinkDiv) {
@@ -202,4 +299,39 @@
             });
         }
     </script>
+
+    <script>
+        $(document).on('click', '#media-existing-delete', function (e) {
+            e.preventDefault();
+            var remove = $(this).parent().find('a').attr('id');
+            console.log(remove)
+            var value = $(".media-placeholder").val();
+            var values = [];
+            values = value.split(',').map(Number);
+            values = jQuery.grep(values, function (v) {
+                if (values.length <= 10) {
+                    $("#promo-assets-upload").css({"display": "inline-block"});
+                    $("#promo-assets-closed").css({"display": "none"});
+                }
+                return v != remove;
+            });
+            $(".media-placeholder").val(values);
+            $(this).parent().remove();
+        });
+
+        //Add new promo items popup because we can't render a dropzone form within another form
+        $(document).on('click', '#promo-assets-upload', function (e) {
+            e.preventDefault();
+            var div = $("#dropzone-dialog");
+            $("#dialog").html("");
+            $("#dialog").dialog({width: '40%', height: 'auto'}).dialog("option", "title", "Upload Promotional Assets").dialog("open");
+            $("#dialog").append(div);
+            div.show();
+            $("#dropzone_form").css({
+                "display": "block",
+                "margin": "auto"
+            });
+        });
+    </script>
+
 {% endblock %}

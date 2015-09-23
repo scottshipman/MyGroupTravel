@@ -170,6 +170,15 @@ class TourType extends AbstractType
             'label' => 'Dietary Info Due Date ' . $date_label,
             'format' => $date_format,
           ))
+            ->add('media', 'hidden', array(
+                'required' => false,
+//                'data_class' => 'TUI\Toolkit\MediaBundle\Entity\Media',
+                'attr' => array(
+                    'class' => 'media-placeholder',
+//                    'multiple' => true
+                )
+            ))
+
         ;
     }
 
