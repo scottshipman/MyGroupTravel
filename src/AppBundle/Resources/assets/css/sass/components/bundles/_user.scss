@@ -20,8 +20,8 @@
     right: 0;
     bottom: 0;
     left: 0;
-    //@include mdl-image-overlay-color(background-image);
-     background-image: linear-gradient(to top right, #A1A1A1, #EBEBEB);
+    @include mdl-background-image-overlay(8,4);
+    // background-image: linear-gradient(to top right, #A1A1A1, #EBEBEB);
     opacity: .6;
   }
 
