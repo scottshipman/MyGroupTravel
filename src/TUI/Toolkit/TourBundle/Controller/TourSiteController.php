@@ -55,7 +55,7 @@ class TourSiteController extends Controller
     $user = $securityContext->getToken()->getUser();
     if($user !='anon.') {
       $permission = $this->get("permission.set_permission")
-        ->getPermission($id, 'quote', $user->getId());
+        ->getPermission($id, 'tour', $user->getId());
     }
 
     if($quoteNumber===NULL && FALSE === $securityContext->isGranted('ROLE_BRAND')){
