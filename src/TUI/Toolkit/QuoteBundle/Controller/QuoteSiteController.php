@@ -375,7 +375,7 @@ class QuoteSiteController extends Controller
 
 
         $message = \Swift_Message::newInstance()
-            ->setSubject('Quote' . $tourName . ' has been accepted!')
+            ->setSubject('Quote ' . $tourName . ' has been accepted!')
             ->setFrom($brandName . '@Toolkit.com')
             ->setBody(
                 $this->renderView(

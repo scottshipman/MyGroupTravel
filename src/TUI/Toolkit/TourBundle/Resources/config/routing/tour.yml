@@ -53,3 +53,7 @@ manage_tour_lock_nonajax:
     path:     /{id}/lockAction
     defaults: { _controller: "TourBundle:Tour:lockNonajax" }
     methods:  [POST, GET]
+
+manage_tour_export_assets:
+    path:     /{id}/export/{fileName}
+    defaults: { _controller: "TourBundle:Tour:exportTourAssets" }

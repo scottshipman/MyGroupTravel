@@ -158,83 +158,120 @@
 
 }
 
-@mixin mdl-image-overlay-color($prop) {
+@mixin mdl-background-image-overlay( $type1, $type2 ) {
 
   .color_primary_brown & {
-    #{$prop}: linear-gradient(to top right, unquote("rgb(#{nth($palette-brown, 6)})"), unquote("rgb(#{nth($palette-brown, 7)})") );
+    $color1 : unquote("rgb(#{nth($palette-brown, $type1)})");
+    $color2 : unquote("rgb(#{nth($palette-brown, $type2)})");
+    background: unquote("linear-gradient(to bottom right, #{$color1} 0%, #{$color2} 100%)");
   }
 
   .color_primary_blue_grey & {
-    #{$prop}: linear-gradient(to top right, unquote("rgb(#{nth($palette-blue-grey, 6)})"), unquote("rgb(#{nth($palette-blue-grey, 7)})") );
+    $color1 : unquote("rgb(#{nth($palette-blue-grey, $type1)})");
+    $color2 : unquote("rgb(#{nth($palette-blue-grey, $type2)})");
+    background: unquote("linear-gradient(to bottom right, #{$color1} 0%, #{$color2} 100%)");
   }
 
   .color_primary_grey & {
-    #{$prop}: linear-gradient(to top right, unquote("rgb(#{nth($palette-grey, 6)})"), unquote("rgb(#{nth($palette-grey, 7)})") );
+    $color1 : unquote("rgb(#{nth($palette-grey, $type1)})");
+    $color2 : unquote("rgb(#{nth($palette-grey, $type2)})");
+    background: unquote("linear-gradient(to bottom right, #{$color1} 0%, #{$color2} 100%)");
   }
 
   .color_primary_deep_orange & {
-    #{$prop}: linear-gradient(to top right, unquote("rgb(#{nth($palette-deep-orange, 6)})"), unquote("rgb(#{nth($palette-deep-orange, 7)})") );
+    $color1 : unquote("rgb(#{nth($palette-deep-orange, $type1)})");
+    $color2 : unquote("rgb(#{nth($palette-deep-orange, $type2)})");
+    background: unquote("linear-gradient(to bottom right, #{$color1} 0%, #{$color2} 100%)");
   }
 
   .color_primary_red & {
-    #{$prop}: linear-gradient(to top right, unquote("rgb(#{nth($palette-red, 6)})"), unquote("rgb(#{nth($palette-red, 7)})") );
+    $color1 : unquote("rgb(#{nth($palette-red, $type1)})");
+    $color2 : unquote("rgb(#{nth($palette-red, $type2)})");
+    background: unquote("linear-gradient(to bottom right, #{$color1} 0%, #{$color2} 100%)");
   }
 
   .color_primary_pink & {
-    #{$prop}: linear-gradient(to top right, unquote("rgb(#{nth($palette-pink, 6)})"), unquote("rgb(#{nth($palette-pink, 7)})") );
+    $color1 : unquote("rgb(#{nth($palette-pink, $type1)})");
+    $color2 : unquote("rgb(#{nth($palette-pink, $type2)})");
+    background: unquote("linear-gradient(to bottom right, #{$color1} 0%, #{$color2} 100%)");
   }
 
   .color_primary_purple & {
-    #{$prop}: linear-gradient(to top right, unquote("rgb(#{nth($palette-purple, 6)})"), unquote("rgb(#{nth($palette-purple, 7)})") );
+    $color1 : unquote("rgb(#{nth($palette-purple, $type1)})");
+    $color2 : unquote("rgb(#{nth($palette-purple, $type2)})");
+    background: unquote("linear-gradient(to bottom right, #{$color1} 0%, #{$color2} 100%)");
   }
 
   .color_primary_deep_purple & {
-    #{$prop}: linear-gradient(to top right, unquote("rgb(#{nth($palette-deep-purple, 6)})"), unquote("rgb(#{nth($palette-deep-purple, 7)})") );
+    $color1 : unquote("rgb(#{nth($palette-deep-purple, $type1)})");
+    $color2 : unquote("rgb(#{nth($palette-deep-purple, $type2)})");
+    background: unquote("linear-gradient(to bottom right, #{$color1} 0%, #{$color2} 100%)");
   }
 
   .color_primary_indigo & {
-    #{$prop}: linear-gradient(to top right, unquote("rgb(#{nth($palette-indigo, 6)})"), unquote("rgb(#{nth($palette-indigo, 7)})") );
+    $color1 : unquote("rgb(#{nth($palette-indigo, $type1)})");
+    $color2 : unquote("rgb(#{nth($palette-indigo, $type2)})");
+    background: unquote("linear-gradient(to bottom right, #{$color1} 0%, #{$color2} 100%)");
   }
 
   .color_primary_blue & {
-    #{$prop}: linear-gradient(to top right, unquote("rgb(#{nth($palette-blue, 6)})"), unquote("rgb(#{nth($palette-blue, 7)})") );
+    $color1 : unquote("rgb(#{nth($palette-blue, $type1)})");
+    $color2 : unquote("rgb(#{nth($palette-blue, $type2)})");
+    background: unquote("linear-gradient(to bottom right, #{$color1} 0%, #{$color2} 100%)");
   }
 
   .color_primary_light_blue & {
-    #{$prop}: linear-gradient(to top right, unquote("rgb(#{nth($palette-light-blue, 6)})"), unquote("rgb(#{nth($palette-light-blue, 7)})") );
+    $color1 : unquote("rgb(#{nth($palette-light-blue, $type1)})");
+    $color2 : unquote("rgb(#{nth($palette-light-blue, $type2)})");
+    background: unquote("linear-gradient(to bottom right, #{$color1} 0%, #{$color2} 100%)");
   }
 
   .color_primary_cyan & {
-    #{$prop}: linear-gradient(to top right, unquote("rgb(#{nth($palette-cyan, 6)})"), unquote("rgb(#{nth($palette-cyan, 7)})") );
+    $color1 : unquote("rgb(#{nth($palette-cyan, $type1)})");
+    $color2 : unquote("rgb(#{nth($palette-cyan, $type2)})");
+    background: unquote("linear-gradient(to bottom right, #{$color1} 0%, #{$color2} 100%)");
   }
 
   .color_primary_teal & {
-    #{$prop}: linear-gradient(to top right, unquote("rgb(#{nth($palette-teal, 6)})"), unquote("rgb(#{nth($palette-teal, 7)})") );
+    $color1 : unquote("rgb(#{nth($palette-teal, $type1)})");
+    $color2 : unquote("rgb(#{nth($palette-teal, $type2)})");
+    background: unquote("linear-gradient(to bottom right, #{$color1} 0%, #{$color2} 100%)");
   }
 
   .color_primary_green & {
-    #{$prop}: linear-gradient(to top right, unquote("rgb(#{nth($palette-green, 6)})"), unquote("rgb(#{nth($palette-green, 7)})") );
+    $color1 : unquote("rgb(#{nth($palette-green, $type1)})");
+    $color2 : unquote("rgb(#{nth($palette-green, $type2)})");
+    background: unquote("linear-gradient(to bottom right, #{$color1} 0%, #{$color2} 100%)");
   }
 
   .color_primary_light_green & {
-    #{$prop}: linear-gradient(to top right, unquote("rgb(#{nth($palette-light-green, 6)})"), unquote("rgb(#{nth($palette-light-green, 7)})") );
+    $color1 : unquote("rgb(#{nth($palette-light-green, $type1)})");
+    $color2 : unquote("rgb(#{nth($palette-light-green, $type2)})");
+    background: unquote("linear-gradient(to bottom right, #{$color1} 0%, #{$color2} 100%)");
   }
 
   .color_primary_lime & {
-    #{$prop}: linear-gradient(to top right, unquote("rgb(#{nth($palette-lime, 6)})"), unquote("rgb(#{nth($palette-lime, 7)})") );
-
+    $color1 : unquote("rgb(#{nth($palette-lime, $type1)})");
+    $color2 : unquote("rgb(#{nth($palette-lime, $type2)})");
+    background: unquote("linear-gradient(to bottom right, #{$color1} 0%, #{$color2} 100%)");
   }
 
   .color_primary_yellow & {
-    #{$prop}: linear-gradient(to top right, unquote("rgb(#{nth($palette-yellow, 6)})"), unquote("rgb(#{nth($palette-yellow, 7)})") );
+    $color1 : unquote("rgb(#{nth($palette-yellow, $type1)})");
+    $color2 : unquote("rgb(#{nth($palette-yellow, $type2)})");
+    background: unquote("linear-gradient(to bottom right, #{$color1} 0%, #{$color2} 100%)");
   }
 
   .color_primary_amber & {
-    #{$prop}: linear-gradient(to top right, unquote("rgb(#{nth($palette-amber, 6)})"), unquote("rgb(#{nth($palette-amber, 7)})") );
+    $color1 : unquote("rgb(#{nth($palette-amber, $type1)})");
+    $color2 : unquote("rgb(#{nth($palette-amber, $type2)})");
+    background: unquote("linear-gradient(to bottom right, #{$color1} 0%, #{$color2} 100%)");
   }
 
   .color_primary_orange & {
-    #{$prop}: linear-gradient(to top right, unquote("rgb(#{nth($palette-orange, 6)})"), unquote("rgb(#{nth($palette-orange, 7)})") );
+    $color1 : unquote("rgb(#{nth($palette-orange, $type1)})");
+    $color2 : unquote("rgb(#{nth($palette-orange, $type2)})");
+    background: unquote("linear-gradient(to bottom right, #{$color1} 0%, #{$color2} 100%)");
   }
 
 }

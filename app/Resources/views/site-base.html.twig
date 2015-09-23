@@ -66,7 +66,7 @@
 
                 <div class="page-title">
                     {% block edit_link %}{% endblock %}
-                    
+
                     <h1>{% block page_title %}{% endblock %}</h1>
                 </div>
             </div><!-- header -->
@@ -81,11 +81,13 @@
         </div>
 
         <footer class="mdl-mini-footer site-footer">
-            <div class="mdl-mini-footer__left-section left-section">
+            <div class="mdl-mini-footer__left-section footer-left-section">
                 {% block footer_left %}{% endblock %}
             </div>
-            <div class="mdl-mini-footer__right-section right-section">
+            <div class="mdl-mini-footer__right-section footer-right-section">
                 {% block footer_right %}{% endblock %}
+            </div>
+            <div class="mdl-mini-footer__left-section footer-full-section">
                 {{ render(controller('BrandBundle:Default:footer')) }}
             </div>
         </footer>

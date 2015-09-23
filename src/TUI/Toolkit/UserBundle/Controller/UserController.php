@@ -704,12 +704,27 @@ class UserController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $user = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
-        // Create token
-        $tokenGenerator = $this->container->get('fos_user.util.token_generator');
-
-        //Get some user info
-        $user->setConfirmationToken($tokenGenerator->generateToken());
+        $username = $user->getUserName();
         $userEmail = $user->getEmail();
+
+        /** @var $user UserInterface */
+        $user = $this->get('fos_user.user_manager')->findUserByUsernameOrEmail($username);
+
+        if (null === $user) {
+            return $this->render('TUIToolkitUserBundle:Resetting:request.html.twig', array(
+                'invalid_username' => $username
+            ));
+        }
+
+        if ($user->isPasswordRequestNonExpired($this->container->getParameter('fos_user.resetting.token_ttl'))) {
+            return $this->render('TUIToolkitUserBundle:Resetting:passwordAlreadyRequested.html.twig');
+        }
+
+        if (null === $user->getConfirmationToken()) {
+            /** @var $tokenGenerator \FOS\UserBundle\Util\TokenGeneratorInterface */
+            $tokenGenerator = $this->get('fos_user.util.token_generator');
+            $user->setConfirmationToken($tokenGenerator->generateToken());
+        }
 
         //Get Brand Stuff
         $brand = $em->getRepository('BrandBundle:Brand')->findAll();
@@ -732,6 +747,9 @@ class UserController extends Controller
         $em->flush();
 
         $mailer->send($message);
+
+        $user->setPasswordRequestedAt(new \DateTime());
+        $this->get('fos_user.user_manager')->updateUser($user);
 
         $this->get('session')->getFlashBag()->add('notice', 'A Notification was sent to ' . $user->getEmail());
 
