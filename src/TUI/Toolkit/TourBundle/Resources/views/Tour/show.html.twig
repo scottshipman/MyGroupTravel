@@ -26,13 +26,13 @@
         <ul class="tour-show-submenu">
             <li><strong>Tour Summary</strong></li>
             <hr>
-            <li><label>Institution</label></br>{{ entity.institution.name }}</li>
+            <li><label>Institution</label></br><strong>{{ entity.institution.name }}</strong></li>
             <hr>
-            <li><label>Departure Date</label></br>{{ entity.departureDate|date(format) }}</li>
+            <li><label>Departure Date</label></br><strong>{{ entity.departureDate|date(format) }}</strong></li>
             <hr>
-            <li><label>Number Of Passengers</label></br>Some number</li>
+            <li><label>Number Of Passengers</label></br><strong>Some number</strong></li>
             <hr>
-            <li><label>Price Per Passenger</label></br>{{ entity.pricePersonPublic }}</li>
+            <li><label>Price Per Passenger</label></br><strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePersonPublic }}</strong></li>
             <hr>
         </ul>
 
@@ -40,102 +40,24 @@
             {% if entity.organizer.media %}
                 <img class="tui-image-avatar" src="{{ asset( entity.organizer.media.getRelativePath ~ "/" ~ entity.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.organizer.username }}">
             {% endif %}
+            <a class="add-organizer" href="#"><i class="fa fa-plus-circle fa-3x"></i></a>
     </div>
 
     </br>
     <div class="tour-show-right-column">
+
     {% if entity.SetupComplete == true and entity.isComplete == true %}
 
-    <div class = "tour-edit mdl-card mdl-shadow--2dp">
-        <div class="mdl-card__supporting-text">
-            <h3 class="mdl-card__title">Get Started (Setup Complete is true and IsComplete is true)</h3>
-            <div class="mdl-card__actions mdl-card--border">
-                <div class="mdl-card__supporting-text">
-                    <i class="fa fa-check"></i><p>Sign up to EToolkit</p>
-                </div>
-            </div>
-            <div class="mdl-card__actions mdl-card--border">
-                <div class="mdl-card__supporting-text">
-                    <i class="fa fa-check"></i><p>Set up your payment settings</p>
-                    {% for task in entity.paymentTasks %}
-                        {#{{ render(controller('TourBundle:PaymentTask:edit', { 'id': task.id })) }}#}
-                    {% endfor %}
-                </div>
-            </div>
-            <div class="mdl-card__actions mdl-card--border">
-                <div class="mdl-card__supporting-text">
-                    <i class="fa fa-clone"></i><a href="{{ path('tour_site_action_show', { 'id': entity.id }) }}">Personalize your website</a>
-                </div>
-            </div>
-            <div class="mdl-card__actions mdl-card--border">
-                <div class="mdl-card__supporting-text">
-                    <i class="fa fa-share"></i><p>Promote your website</p>
-                </div>
-            </div>
-        </div>
-    </div>
+        {{ render(controller('TourBundle:Tour:getTourCompletedAndSetup', { 'id': entity.id } )) }}
 
     {% elseif entity.SetupComplete == true and entity.isComplete == false %}
 
-        <div class = "tour-edit mdl-card mdl-shadow--2dp">
-            <div class="mdl-card__supporting-text">
-                <h3 class="mdl-card__title">Get Started (Setup Complete is true and IsComplete is false)</h3>
-                <div class="mdl-card__actions mdl-card--border">
-                    <div class="mdl-card__supporting-text">
-                        <i class="fa fa-check"></i><p>Sign up to EToolkit</p>
-                    </div>
-                </div>
-                <div class="mdl-card__actions mdl-card--border">
-                    <div class="mdl-card__supporting-text">
-                        <i class="fa fa-check"></i><p>Set up your payment settings</p>
-                        {% for task in entity.paymentTasks %}
-                            {#{{ render(controller('TourBundle:PaymentTask:edit', { 'id': task.id })) }}#}
-                        {% endfor %}
-                    </div>
-                </div>
-                <div class="mdl-card__actions mdl-card--border">
-                    <div class="mdl-card__supporting-text">
-                        <i class="fa fa-clone"></i><a href="{{ path('tour_site_action_show', { 'id': entity.id }) }}">Personalize your website</a>
-                    </div>
-                </div>
-                <div class="mdl-card__actions mdl-card--border">
-                    <div class="mdl-card__supporting-text">
-                        <i class="fa fa-share"></i><p>Promote your website</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        {{ render(controller('TourBundle:Tour:getTourNotCompletedAndSetup', { 'id': entity.id } )) }}
+
 
     {% elseif entity.SetupComplete == false %}
 
-        <div class = "tour-edit mdl-card mdl-shadow--2dp">
-            <div class="mdl-card__supporting-text">
-                <h3 class="mdl-card__title">Get Started (Setup Complete is false)</h3>
-                <div class="mdl-card__actions mdl-card--border">
-                    <div class="mdl-card__supporting-text">
-                        <i class="fa fa-check"></i><p>Sign up to EToolkit</p>
-                    </div>
-                </div>
-                <div class="mdl-card__actions mdl-card--border">
-                    <div class="mdl-card__supporting-text">
-                        <i class="fa fa-check"></i><p>Set up your payment settings</p>
-                        {% for task in entity.paymentTasks %}
-                            {#{{ render(controller('TourBundle:PaymentTask:edit', { 'id': task.id })) }}#}
-                        {% endfor %}
-                    </div>
-                </div>
-                <div class="mdl-card__actions mdl-card--border">
-                    <div class="mdl-card__supporting-text">
-                        <i class="fa fa-clone"></i><a href="{{ path('tour_site_action_show', { 'id': entity.id }) }}">Personalize your website</a>
-                    </div>
-                </div>
-                <div class="mdl-card__actions mdl-card--border">
-                    <div class="mdl-card__supporting-text">
-                        <i class="fa fa-share"></i><p>Promote your website</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        {{ render(controller('TourBundle:Tour:getTourNotSetup', { 'id': entity.id } )) }}
 
     {% endif %}
 

@@ -909,4 +909,54 @@ class TourController extends Controller
 
     }
 
+    /**
+     * @param $id
+     * @return Response
+     */
+
+    public function getTourCompletedAndSetupAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('TourBundle:Tour')->find($id);
+
+        return $this->render('TourBundle:Tour:completedandsetup.html.twig', array(
+            'entity' => $entity,
+        ));
+
+    }
+
+    /**
+     * @param $id
+     * @return Response
+     */
+
+    public function getTourNotCompletedAndSetupAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('TourBundle:Tour')->find($id);
+
+        return $this->render('TourBundle:Tour:notCompletedAndSetup.html.twig', array(
+            'entity' => $entity,
+        ));
+
+    }
+
+    /**
+     * @param $id
+     * @return Response
+     */
+
+    public function getTourNotSetupAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('TourBundle:Tour')->find($id);
+
+        return $this->render('TourBundle:Tour:notSetup.html.twig', array(
+            'entity' => $entity,
+        ));
+
+    }
 }
