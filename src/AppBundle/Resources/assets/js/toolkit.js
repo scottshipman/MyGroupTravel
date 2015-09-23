@@ -96,4 +96,21 @@
         }
     });
 
+    /**
+     * Add a mimic label to the ckeditor
+     */
+
+    $('textarea').each( function() {
+        if ( !$(this).next().is('label') ) {
+            var labelText = $(this).attr('name');
+            labelText = labelText.split('[');
+            labelText = labelText[1].split(']');
+            labelText = labelText[0].replace(/([a-z])([A-Z])/g, '$1 $2');
+            labelText = labelText.toLowerCase();
+            labelText = labelText.charAt(0).toUpperCase() + labelText.slice(1);
+            $(this).before('<label class="mdl-label-mimic">' + labelText + '</label>');
+            $(this).parent().addClass('cke-wrapper');
+        };
+    });
+
 })(jQuery);
