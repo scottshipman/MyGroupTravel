@@ -502,8 +502,10 @@ class QuoteVersionController extends Controller
         }
 
         //Handling the request for institution a little different than we did for the other 2.
-        $institutionName = explode(' - ', $form->getData()->getQuoteReference()->getInstitution());
-        $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findByName($institutionName[0]);
+        $institutionParts = explode(' - ', $form->getData()->getQuoteReference()->getInstitution());
+        $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findBy(
+          array('name' => $institutionParts[0], 'city' => $institutionParts[1])
+        );
         if (null !== $institutionEntities) {
             $institution = array_shift($institutionEntities);
             $form->getData()->getQuoteReference()->setInstitution($institution);
@@ -953,9 +955,10 @@ class QuoteVersionController extends Controller
         }
 
         //Handling the request for institution a little different than we did for the other 2.
-        $institutionName = explode(' - ', $editForm->getData()->getQuoteReference()->getInstitution());
-        $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findByName($institutionName[0]);
-        $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findByName($institutionName);
+        $institutionParts = explode(' - ', $editForm->getData()->getQuoteReference()->getInstitution());
+        $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findBy(
+            array('name' => $institutionParts[0], 'city' => $institutionParts[1])
+        );
         if (null !== $institutionEntities) {
             $institution = array_shift($institutionEntities);
             $editForm->getData()->getQuoteReference()->setInstitution($institution);
@@ -1084,9 +1087,10 @@ class QuoteVersionController extends Controller
         }
 
         //Handling the request for institution a little different than we did for the other 2.
-        $institutionName = explode(' - ', $cloneform->getData()->getQuoteReference()->getInstitution());
-        $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findByName($institutionName[0]);
-        $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findByName($institutionName);
+        $institutionParts = explode(' - ', $cloneform->getData()->getQuoteReference()->getInstitution());
+        $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findBy(
+          array('name' => $institutionParts[0], 'city' => $institutionParts[1])
+        );
         if (null !== $institutionEntities) {
             $institution = array_shift($institutionEntities);
             $cloneform->getData()->getQuoteReference()->setInstitution($institution);
