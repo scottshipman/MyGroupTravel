@@ -35,3 +35,7 @@ tour_summary_update:
     path:     /summary/update/{id}
     defaults: { _controller: "TourBundle:TourSite:updateSummary" }
     methods: [POST, GET]
+
+manage_tour_export_assets:
+    path:     /export/{id}/{fileName}
+    defaults: { _controller: "TourBundle:Tour:exportTourAssets" }

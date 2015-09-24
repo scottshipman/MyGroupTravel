@@ -54,18 +54,5 @@ manage_tour_lock_nonajax:
     defaults: { _controller: "TourBundle:Tour:lockNonajax" }
     methods:  [POST, GET]
 
-manage_tour_export_assets:
-    path:     /{id}/export/{fileName}
-    defaults: { _controller: "TourBundle:Tour:exportTourAssets" }
 
-manage_tour_get_completed_and_setup:
-    path:     /{id}/completed/setup
-    defaults: { _controller: "TourBundle:Tour:getTourCompletedAndSetup" }
 
-manage_tour_get_not_completed_and_setup:
-    path:     /{id}/notcompleted/setup
-    defaults: { _controller: "TourBundle:Tour:getTourNotCompletedAndSetup" }
-
-manage_tour_get_not_setup:
-    path:     /{id}/notsetup
-    defaults: { _controller: "TourBundle:Tour:getTourNotCompletedAndSetup" }
