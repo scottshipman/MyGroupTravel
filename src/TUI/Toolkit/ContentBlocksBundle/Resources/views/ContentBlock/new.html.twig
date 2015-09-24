@@ -59,7 +59,7 @@
             var values = [];
             values = value.split(',').map(Number);
             values = jQuery.grep(values, function (v) {
-                if (values.length <= 6) {
+                if (values.length <= 15) {
                     $(".new-media-wrapper").css({"display": "block"});
                 }
                 return v != remove;
@@ -79,7 +79,7 @@
                 var values = [];
                 if ( value != 0 ) {
                     values = value.split(',').map(Number);
-                    if (values.length >= 6) {
+                    if (values.length >= 15) {
                         $(".new-media-wrapper").css({"display": "none"});
                     }
                 }
@@ -90,7 +90,7 @@
                         if ( value != 0 ) {
                             values = value.split(',').map(Number);
                             values.push(response.id);
-                            if (values.length >= 6) {
+                            if (values.length >= 15) {
                                 $(".new-media-wrapper").css({"display": "none"});
                             }
                         }

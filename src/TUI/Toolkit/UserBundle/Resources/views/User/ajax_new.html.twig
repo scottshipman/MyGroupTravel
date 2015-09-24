@@ -8,12 +8,19 @@
             // bind form and provide a simple callback function
             $('#ajax_organizer_form').ajaxForm({
                 success : function (response) {
+                    if ($('#tui_toolkit_quotebundle_quoteversion_quoteReference_organizer').length>0) {
+                        var elem = $('#tui_toolkit_quotebundle_quoteversion_quoteReference_organizer');
+                    }
+                    if ($('#tui_toolkit_tourbundle_tour_organizer').length>0) {
+                        var elem = $('#tui_toolkit_tourbundle_tour_organizer');
+                    }
+                    console.log(elem);
                     $('#dialog').dialog( "close" );
                     // make the floating label leave the field and change to valid color
-                    $('#tui_toolkit_quotebundle_quoteversion_quoteReference_organizer').parent().addClass('is-dirty');
-                    $('#tui_toolkit_quotebundle_quoteversion_quoteReference_organizer').parent().removeClass('is-invalid');
+                    elem.parent().addClass('is-dirty');
+                    elem.parent().removeClass('is-invalid');
                     // add the value to the field
-                    $('#tui_toolkit_quotebundle_quoteversion_quoteReference_organizer').val(response);
+                    elem.val(response);
                 }
             })
         });
