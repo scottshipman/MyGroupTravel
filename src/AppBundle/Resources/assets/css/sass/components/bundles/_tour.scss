@@ -41,17 +41,34 @@
   .tour-show-submenu {
     list-style: none;
 
+  }
+
+  .tour-edit-organizer-left {
+    float: left;
+
     label {
       font-size: 11px;
       color: #ccc;
+      float: left;
     }
+
+    .tui-text-avatar,
+    .tui-image-avatar {
+      float: left;
+    }
+  }
+
+  label {
+    font-size: 11px;
+    color: #ccc;
   }
 
   .add-organizer {
     color: #ccc;
     display: inline;
+    float: left;
 
-    &:after{
+    &:after {
       content: 'Add/remove organizers';
       display: inline-block;
       border: 1px solid #ccc;
@@ -68,7 +85,7 @@
   z-index: 5;
 
   .tour-task {
-    color:#ccc;
+    color: #ccc;
   }
 
   i {
