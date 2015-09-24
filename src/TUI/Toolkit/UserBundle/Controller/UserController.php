@@ -501,10 +501,15 @@ class UserController extends Controller
 
 
         if ($editForm->isValid()) {
+            $entity->setUsername($editForm->getData()->getEmail());
             $em->flush();
             $this->get('session')->getFlashBag()->add('notice', 'User Saved: ' . $entity->getUsername());
 
+          if (true === $this->get('security.context')->isGranted('ROLE_BRAND')) {
             return $this->redirect($this->generateUrl('user'));
+          } else {
+            return $this->redirect('/profile');
+          }
         }
 
         return $this->render('TUIToolkitUserBundle:User:edit.html.twig', array(
