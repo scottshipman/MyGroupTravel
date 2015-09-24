@@ -2,14 +2,15 @@
 
 {% block title %}
     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-        Welcome {{ app.user.username }}
+       {#  Welcome {{ app.user.username }} #}
+        My Tours
     {% else %}
         User Login
     {% endif %}
 {% endblock %}
 {% block page_title %}
     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-        Welcome {{ app.user.username }}
+        My Tours {# Put menu item here #}
     {% else %}
         User Login
     {% endif %}

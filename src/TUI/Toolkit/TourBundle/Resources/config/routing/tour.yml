@@ -2,10 +2,6 @@ manage_tour:
     path:     /
     defaults: { _controller: "TourBundle:Tour:index" }
 
-manage_tour_show:
-    path:     /{id}/show
-    defaults: { _controller: "TourBundle:Tour:show" }
-
 manage_tour_new:
     path:     /new
     defaults: { _controller: "TourBundle:Tour:new" }

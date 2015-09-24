@@ -1,0 +1,7 @@
+
+# path for a Tours dashboard, not admin view
+
+
+manage_tour_show:
+    path:     /{id}/show
+    defaults: { _controller: "TourBundle:Tour:show" }
