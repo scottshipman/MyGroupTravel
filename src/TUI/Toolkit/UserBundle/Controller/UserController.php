@@ -899,5 +899,110 @@ class UserController extends Controller
         return $email;
     }
 
+  /**
+   * getQuotes
+   *
+   * Display a list of Quotes on a User Profile page
+   *
+   * @param id
+   * return twig
+   */
+  public function getQuotesAction($id)
+  {
+    $locale = $this->container->getParameter('locale');
+    switch ($locale) {
+      case 'en_GB.utf8':
+        $format = 'd-m-Y';
+        break;
+      default:
+        $format = 'm-d-Y';
+        break;
+    }
+    // if user is brand or admin, list quotes where they are salesAgent or SecondaryContact
+    // dont show expired or converted quotes for brand/admins either
+    // if user is customer, list quotes by Permission Entity
+    $quotes=array();
+    $securityContext = $this->get('security.context');
+    if ($securityContext->isGranted('ROLE_BRAND'))
+    {
+      $today = new \DateTime();
+      $qb= $this->getDoctrine()->getManager()->createQueryBuilder();
+      $qb
+        ->select('qv', 'q')
+        ->from('QuoteBundle:QuoteVersion', 'qv')
+        ->leftJoin('qv.quoteReference', 'q', 'WITH', 'q.id = qv.quoteReference')
+        ->where('q.salesAgent = ?1')
+        ->orWhere('q.secondaryContact = ?2')
+        ->AndWhere('qv.converted = false')
+        ->AndWhere('qv.expiryDate < ?3')
+        ->AndWhere('q.converted = false')
+        ->AndWhere('qv.isTemplate = false')
+      ;
+      $qb->setParameter(1 ,$id);
+      $qb->setParameter(2 ,$id);
+      $qb->setParameter(3, $today->format($format));
+      $query = $qb->getQuery();
+      $quotes = $query->getResult();
+    } else {
+      $em = $this->getDoctrine()->getManager();
+      $permissions = $em->getRepository('PermissionBundle:Permission')->findBy(array('user' => $id, 'class' => 'quote'));
+      // this only returns pointers to quotes, so loop through and build quotes array
+      foreach( $permissions as $permission )
+      {
+        $quotes[] = $em->getRepository('QuoteBundle:Quote')->find($permission->getObject());
+      }
+    }
+
+    return $this->render('TUIToolkitUserBundle:User:myQuotes.html.twig', array(
+      'quotes' => $quotes,
+      'locale' => $locale,
+    ));
+  }
+
+  /**
+   * getTours
+   *
+   * Display a list of Tours on a User Profile page
+   *
+   * @param id
+   * return twig
+   */
+  public function getToursAction($id)
+  {
+    $locale = $this->container->getParameter('locale');
+    // if user is brand or admin, list quotes where they are salesAgent or SecondaryContact
+    // if user is customer, list quotes by Permission Entity
+    $tours=array();
+    $securityContext = $this->get('security.context');
+    if ($securityContext->isGranted('ROLE_BRAND'))
+    {
+      $qb= $this->getDoctrine()->getManager()->createQueryBuilder();
+      $qb
+      ->select('t')
+      ->from('TourBundle:Tour', 't')
+      ->where('t.salesAgent = ?1')
+      ->orWhere('t.secondaryContact = ?2');
+      $qb->setParameter(1, $id);
+      $qb->setParameter(2, $id);
+      $query = $qb->getQuery();
+      $tours = $query->getResult();
+
+
+    } else {
+      $em = $this->getDoctrine()->getManager();
+      $permissions = $em->getRepository('PermissionBundle:Permission')->findBy(array('user' => $id, 'class' => 'tour'));
+      // this only returns pointers to tours, so loop through and build tours array
+      foreach( $permissions as $permission )
+      {
+        $tours[] = $em->getRepository('TourBundle:Tour')->find($permission->getObject());
+      }
+    }
+
+
+    return $this->render('TUIToolkitUserBundle:User:myTours.html.twig', array(
+      'tours' => $tours,
+      'locale' => $locale,
+    ));
+  }
 
 }
