@@ -40,7 +40,7 @@
 
     {{ render(controller('BrandBundle:Default:colors')) }}
 
-<div class="base-site toolkit-layout {% if is_granted("ROLE_BRAND") %}toolkit-fixed-drawer{% endif %}">
+<div class="base-site toolkit-layout {% if is_granted("ROLE_BRAND") %}toolkit-fixed-drawer{% else %}toolkit-no-drawer{% endif %}">
 
     {# Display admin menu only if the user is BRAND or higher ROLE #}
     {% if is_granted("ROLE_BRAND") %}
@@ -51,6 +51,7 @@
 
         {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
             <div class="header mdl-layout__header">
+              <div class="sizer">
                 <div class="flash-messages">
                     {% for flashMessage in app.session.flashbag.get('notice') %}
                         <div class="flash-message flash-message-notice">Notice:<br>{{ flashMessage }}</div>
@@ -67,6 +68,7 @@
                 <div class="page-title">
                     <h1>{% block page_title %}{% endblock %}</h1>
                 </div>
+              </div>
             </div><!-- header -->
         {% else %}
             <div class="brand_logo_login">
@@ -75,16 +77,20 @@
         {% endif %}
 
         <div class="content">
+          <div class="sizer">
             <div class="inner">
                 {% block body %}{% endblock %}
             </div>
+          </div>
         </div>
 
         {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
             <footer class="mdl-mini-footer site-footer">
+              <div class="sizer">
                 <div class="mdl-mini-footer__left-section footer-full-section">
                     {{ render(controller('BrandBundle:Default:footer')) }}
                 </div>
+              </div>
             </footer>
         {% endif %}
 
