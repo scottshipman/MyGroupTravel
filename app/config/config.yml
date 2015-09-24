@@ -38,6 +38,8 @@ framework:
 
 # Twig Configuration
 twig:
+    globals:
+      locale: %locale%
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
     form:
