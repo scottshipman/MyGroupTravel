@@ -28,7 +28,8 @@
 
 .sub-header {
   background: #fff;
-  padding: $element-bottom 0;
+  padding-top: $element-bottom;
+  padding-bottom: $element-bottom;
   margin-bottom: $element-bottom;
 
   .inner {
