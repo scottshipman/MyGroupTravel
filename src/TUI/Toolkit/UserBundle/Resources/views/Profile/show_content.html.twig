@@ -1,0 +1,30 @@
+{% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
+<div class="profile-content">
+
+<div class="fos_user_user_show">
+    <div class = "profile-details">
+        {# user details here #}
+        <p>Name:
+        {{ user.firstName }} {{ user.lastName }}
+        </p>
+        <p>Email:  {{ user.email }}
+        </p>
+        <p>Created:  {{ user.created |date (format) }}
+        </p>
+        <p><a href="" ><i class="fa fa-pencil">Edit My Profile</i></a>
+
+        </p>
+
+    </div>
+    <div class = "profile-permissions">
+        {# list tours and quotes here #}
+        {% if is_granted("ROLE_BRAND") %}
+            {{ render(controller('TUIToolkitUserBundle:User:getQuotes', {'id' : user.id })) }}
+        {% endif %}
+
+        {{ render(controller('TUIToolkitUserBundle:User:getTours', {'id' : user.id })) }}
+    </div>
+    <div style="clear:both;"></div>
+
+</div>
+</div>
