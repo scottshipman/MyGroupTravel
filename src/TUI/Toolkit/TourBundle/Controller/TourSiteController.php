@@ -192,11 +192,9 @@ class TourSiteController extends Controller
       $em = $this->getDoctrine()->getManager();
       $entity = $em->getRepository('TourBundle:Tour')->find($id);
       if ($entity) {
-        if(strpos($_SERVER['REQUEST_URI'], 'share')===false) {
-          $entity->setViews($entity->getViews() + 1);
-        } else {
-          $entity->setShareViews($entity->getShareViews() + 1);
-        }
+
+        $entity->setViews($entity->getViews() + 1);
+
         $em->persist($entity);
         $em->flush();
         return;

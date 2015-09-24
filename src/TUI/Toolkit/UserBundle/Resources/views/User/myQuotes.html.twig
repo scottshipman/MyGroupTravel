@@ -18,13 +18,13 @@
         {% if is_granted("ROLE_BRAND") %}
             <span quoteid= "{{ quote.id }}" class="profile-quote-edit"><i class= "profile-quote-edit-link fa fa-pencil">edit</i></span>
         {% endif %}
-        <span class="date-span" >{{ quote.departureDate|date(format)  }} - {{ quote.returnDate|date(format)  }} | {{ quote.quoteReference.destination }}</span>
+        <span class="date-span" >{% if quote.departureDate and quote.returnDate%}{{ quote.departureDate|date(format)  }} - {{ quote.returnDate|date(format)  }} |{% endif %} {% if quote.quoteReference.destination %}{{ quote.quoteReference.destination }}{% endif %}</span>
     </div>
     <div class="mdl-card__supporting-text profile-tour-details">
         <ul>
             <li>
                 <div class="profile-list-item seperator">
-                    {{ quote.currency.htmlSymbol | raw}}{{ quote.pricePerson }}<br /><label>Price</label>
+                    {% if quote.currency %}{{ quote.currency.htmlSymbol | raw}}{% endif %}{% if quote.pricePerson %}{{ quote.pricePerson }}{% endif %}<br /><label>Price</label>
                 </div>
             </li>
             <li>

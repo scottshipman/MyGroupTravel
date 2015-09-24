@@ -26,7 +26,7 @@
             {% if is_granted("ROLE_BRAND") %}
                 <span tourid= "{{ tour.id }}" class="profile-quote-edit"><i class= "profile-quote-edit-link fa fa-pencil">edit</i></span>
             {% endif %}
-                <span class="date-span" >{{ tour.departureDate|date(format)  }} - {{ tour.departureDate|date(format)  }} | {{ tour.quoteReference.destination }}</span>
+                <span class="date-span" >{% if tour.departureDate and tour.returnDate %}{{ tour.departureDate|date(format)  }} - {{ tour.departureDate|date(format)  }} |{% endif %} {% if tour.destination %}{{ tour.destination }}{% endif %}</span>
 
         </div>
         <div class="mdl-card__supporting-text profile-tour-details">
@@ -34,9 +34,9 @@
                <li>
                    <div class="profile-list-item seperator">
                         {% if (tour.organizer.id == app.user.id) or (tour.salesAgent.id == app.user.id) %}
-                             {{ tour.currency.htmlSymbol | raw}}{{ tour.pricePerson }}<br /><label>Price</label>
+                            {% if tour.currency %}{{ tour.currency.htmlSymbol | raw}}{% endif %}{% if tour.pricePerson %}{{ tour.pricePerson }}{% endif %}<br /><label>Price</label>
                         {% else %} {# show the Public price for passenger/parents#}
-                             {{ tour.currency.htmlSymbol | raw}}{{ tour.pricePersonPublic }}<br /><label>Price</label>
+                       {% if tour.currency %}{{ tour.currency.htmlSymbol | raw}}{% endif %}{% if tour.pricePersonPublic %}{{ tour.pricePersonPublic }}{% endif %}<br /><label>Price</label>
                         {% endif %}
                    </div>
                </li>
