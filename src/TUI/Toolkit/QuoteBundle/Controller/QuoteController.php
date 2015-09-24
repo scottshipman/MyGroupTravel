@@ -259,8 +259,10 @@ class QuoteController extends Controller
       //  $tour->setContent()
       //  $tour->setHeaderBlock();
       $blockId = $quoteVersion->getHeaderBlock()->getId();
-      $headerBlock = $this->cloneHeaderBlock($blockId);
-      $tour->setHeaderBlock($headerBlock);
+      if($blockId) {
+        $headerBlock = $this->cloneHeaderBlock($blockId);
+        $tour->setHeaderBlock($headerBlock);
+      }
 
       $content = $this->cloneContentBlocks($quoteVersion->getContent());
       $tour->setContent($content);
