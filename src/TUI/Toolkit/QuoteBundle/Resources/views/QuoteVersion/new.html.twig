@@ -4,7 +4,19 @@
 
 {% block body -%}
 
-    {{  form(form) }}
+    {{ form_start(form) }}
+
+    {{ form_row(form.quoteReference.institution) }}
+    {{ form_row(form.quoteReference.name) }}
+    {{ form_row(form.quoteNumber) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.quoteReference.organizer) }}
+    {{ form_row(form.quoteReference.salesAgent) }}
+    {{ form_row(form.quoteReference.secondaryContact) }}
+    {{ form_rest(form) }}
+
+    {{ form_end(form) }}
+
 
 
     <ul class="record_actions">
