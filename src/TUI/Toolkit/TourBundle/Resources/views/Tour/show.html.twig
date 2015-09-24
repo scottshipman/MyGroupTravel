@@ -229,7 +229,11 @@
                    placeholder: "tabs-placeholder",
                    start: function (e, ui) {
                        $('.editable-tab').editable("disable");
+                       $('.editable-tab')[0].reset();
                        ui.placeholder.height(ui.helper.outerHeight());
+                   },
+                   stop: function (e, ui) {
+                       $('.editable-tab').editable("enable");
                    },
                    axis: 'y',
                    update: function(e, ui) {
@@ -442,12 +446,9 @@
 
             // change a tab's name
             $('.editable-tab').editable(function(value, settings) {
-                //strip special chars before accepting
-                //value = value.replace(/[^\w\s]/gi, '');
                 return(value);
             }, {
                 width: '20em',
-                onblur: "cancel",
                 tooltip: 'Click to edit',
                 callback : function(value, settings) {
                     contentBlocksUpdate({{ entity.id }}, 'tour'); //value
