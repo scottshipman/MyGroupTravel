@@ -28,6 +28,7 @@
 
 {% block sub_header %}
     <div class="sub-header">
+      <div class="sizer">
         <div class="inner">
                 {% if app.user %}
                     {% if entity.quoteReference.institution.media %}
@@ -59,6 +60,7 @@
             {% if entity.quoteReference.destination %}
                 <div>{{ entity.quoteReference.destination }}</div>{% endif %}
         </div>
+      </div>
     </div>
 {% endblock %}
 

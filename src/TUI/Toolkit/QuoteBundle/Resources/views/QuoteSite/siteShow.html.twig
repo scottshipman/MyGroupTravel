@@ -28,6 +28,7 @@
 
 {% block sub_header %}
     <div class="sub-header">
+      <div class="sizer">
         <div class="inner">
             {% if entity.isTemplate == 0 %} {# no Institutions on Templates #}
                 {% if app.user %}
@@ -61,6 +62,7 @@
             {% if entity.quoteReference.destination %}
                 <div>{{ entity.quoteReference.destination }}</div>{% endif %}
         </div>
+      </div>
     </div>
 {% endblock %}
 
