@@ -24,7 +24,7 @@
                 </h3>
             </a>
             {% if is_granted("ROLE_BRAND") %}
-                <span tourid= "{{ tour.id }}" class="profile-quote-edit"><i class= "profile-quote-edit-link fa fa-pencil">edit</i></span>
+                <span tourid= "{{ tour.id }}" class="profile-tour-edit"><i class= "profile-quote-edit-link fa fa-pencil">edit</i></span>
             {% endif %}
                 <span class="date-span" >{% if tour.departureDate and tour.returnDate %}{{ tour.departureDate|date(format)  }} - {{ tour.departureDate|date(format)  }} |{% endif %} {% if tour.destination %}{{ tour.destination }}{% endif %}</span>
 
@@ -77,9 +77,8 @@
 <script>
     //edit quotes action
     $(document).ready(function () {
-        $(document).on('click', '.profile-quote-edit', function (e) {
+        $(document).on('click', '.profile-tour-edit', function (e) {
             var tourid = $(this).attr('tourid');
-            console.log($(this));
             window.location.href = '/manage/tour/' + tourid + '/edit';
         });
 
