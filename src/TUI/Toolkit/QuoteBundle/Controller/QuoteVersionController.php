@@ -516,7 +516,7 @@ class QuoteVersionController extends Controller
             $permission = $this->get("permission.set_permission")->setPermission($entity->getQuoteReference()->getId(), 'quote', $entity->getQuoteReference()->getOrganizer(), 'organizer');
             $this->get('session')->getFlashBag()->add('notice', 'Quote Saved: ' . $entity->getName());
 
-            return $this->redirect($this->generateUrl('manage_quote'));
+            return $this->redirect($this->generateUrl('manage_quote_show', array('id' => $entity->getId())));
         }
         $date_format = $this->container->getParameter('date_format');
         return $this->render('QuoteBundle:QuoteVersion:new.html.twig', array(
@@ -1010,7 +1010,7 @@ class QuoteVersionController extends Controller
             $em->flush();
             $permission = $this->get("permission.set_permission")->setPermission($entity->getQuoteReference()->getId(), 'quote', $entity->getQuoteReference()->getOrganizer(), 'organizer');
             $this->get('session')->getFlashBag()->add('notice', 'Quote Saved: ' . $entity->getName());
-            return $this->redirect($this->generateUrl('manage_quote' . $route));
+            return $this->redirect($this->generateUrl('manage_quote_show', array('id' => $entity->getId())));
         }
 
         return $this->render('QuoteBundle:QuoteVersion:edit.html.twig', array(
