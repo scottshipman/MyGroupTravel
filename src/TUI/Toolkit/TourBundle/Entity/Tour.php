@@ -8,6 +8,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Annotations;
 use Gedmo\Mapping\Annotation as Gedmo;
 use APY\DataGridBundle\Grid\Mapping as GRID;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Tour
@@ -76,6 +77,22 @@ class Tour
      * @GRID\Column(visible=false, filterable=false, export=true)
      */
     private $locked = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isComplete", type="boolean")
+     * @GRID\Column(visible=false, filterable=false, export=true)
+     */
+    private $isComplete = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="setupComplete", type="boolean")
+     * @GRID\Column(visible=false, filterable=false, export=true)
+     */
+    private $setupComplete = false;
 
     /**
      * @var DateTime
@@ -1061,6 +1078,26 @@ class Tour
       return $this->locked;
     }
 
+    /**
+     * Set isComplete
+     *
+     * @param boolean $isComplete
+     * @return Tour
+     */
+    public function setIsComplete($isComplete)
+    {
+        $this->isComplete = $isComplete;
+    }
+
+    /**
+     * Get isComplete
+     *
+     * @return boolean
+     */
+    public function getIsComplete()
+    {
+        return $this->isComplete;
+    }
 
     /**
      * Set views
@@ -1255,5 +1292,28 @@ class Tour
     public function getMedia()
     {
         return $this->media;
+    }
+
+    /**
+     * Set setupComplete
+     *
+     * @param boolean $setupComplete
+     * @return Quote
+     */
+    public function setSetupComplete($setupComplete)
+    {
+        $this->setupComplete = $setupComplete;
+
+        return $this;
+    }
+
+    /**
+     * Get setupComplete
+     *
+     * @return boolean
+     */
+    public function getSetupComplete()
+    {
+        return $this->setupComplete;
     }
 }

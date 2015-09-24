@@ -5,3 +5,15 @@
 manage_tour_show:
     path:     /{id}/show
     defaults: { _controller: "TourBundle:Tour:show" }
+
+manage_tour_get_completed_and_setup:
+    path:     /{id}/completed/setup
+    defaults: { _controller: "TourBundle:Tour:getTourCompletedAndSetup" }
+
+manage_tour_get_not_completed_and_setup:
+    path:     /{id}/notcompleted/setup
+    defaults: { _controller: "TourBundle:Tour:getTourNotCompletedAndSetup" }
+
+manage_tour_get_not_setup:
+    path:     /{id}/notsetup
+    defaults: { _controller: "TourBundle:Tour:getTourNotCompletedAndSetup" }

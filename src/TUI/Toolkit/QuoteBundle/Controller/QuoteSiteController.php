@@ -376,7 +376,7 @@ class QuoteSiteController extends Controller
 
         $message = \Swift_Message::newInstance()
             ->setSubject('Quote ' . $tourName . ' has been accepted!')
-            ->setFrom($brandName . '@Toolkit.com')
+            ->setFrom('Notify@Toolkit.com')
             ->setBody(
                 $this->renderView(
                     'QuoteBundle:Emails:acceptQuote.html.twig',

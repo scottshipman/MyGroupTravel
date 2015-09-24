@@ -28,3 +28,61 @@
     display: inline;
   }
 }
+
+.tour-show-left-column {
+  float: left;
+  min-width: 300px;
+  padding-right: 30px;
+  margin-top: 20px;
+  margin-bottom: 40px;
+  position: relative;
+  z-index: 5;
+
+  .tour-show-submenu {
+    list-style: none;
+
+    label {
+      font-size: 11px;
+      color: #ccc;
+    }
+  }
+
+  .add-organizer {
+    color: #ccc;
+    display: inline;
+
+    &:after{
+      content: 'Add/remove organizers';
+      display: inline-block;
+      border: 1px solid #ccc;
+      padding: 5px;
+      margin-left: 10px;
+    }
+  }
+}
+
+.tour-show-right-column {
+  margin-top: -50px;
+  position: relative;
+  float: right;
+  z-index: 5;
+
+  .tour-task {
+    color:#ccc;
+  }
+
+  i {
+    display: inline;
+  }
+
+  p {
+    margin-left: 10px;
+    display: inline;
+  }
+
+  a {
+    margin-left: 10px;
+    display: inline;
+    text-decoration: none;
+  }
+}
