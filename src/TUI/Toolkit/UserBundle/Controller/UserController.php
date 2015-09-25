@@ -777,11 +777,12 @@ class UserController extends Controller
      */
     public function confirmAction(Request $request, $token)
     {
-        /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
-        $userManager = $this->get('fos_user.user_manager');
-
         /** @var $formFactory \FOS\UserBundle\Form\Factory\FactoryInterface */
         $formFactory = $this->get('fos_user.resetting.form.factory');
+        /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
+        $userManager = $this->get('fos_user.user_manager');
+        /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
+        $dispatcher = $this->get('event_dispatcher');
 
         $user = $userManager->findUserByConfirmationToken($token);
 
@@ -789,10 +790,6 @@ class UserController extends Controller
             throw new NotFoundHttpException(sprintf('The user with confirmation token "%s" does not exist', $token));
         }
 
-        /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
-        $dispatcher = $this->get('event_dispatcher');
-
-//        $user->setConfirmationToken(null);
         $user->setEnabled(true);
 
         $event = new GetResponseUserEvent($user, $request);
@@ -828,7 +825,7 @@ class UserController extends Controller
             return $response;
         }
 
-        return $this->render('TUIToolkitUserBundle:Resetting:reset.html.twig', array(
+        return $this->render('TUIToolkitUserBundle:Registration:activation.html.twig', array(
             'token' => $token,
             'user' => $user,
             'form' => $form->createView(),
@@ -926,9 +923,9 @@ class UserController extends Controller
         $event = new GetResponseUserEvent($user, $request);
         $dispatcher->dispatch(FOSUserEvents::RESETTING_RESET_INITIALIZE, $event);
 
-        if (null !== $event->getResponse()) {
-            return $event->getResponse();
-        }
+//        if (null !== $event->getResponse()) {
+//            return $event->getResponse();
+//        }
 
         $form = $formFactory->createForm();
         $form->setData($user);
