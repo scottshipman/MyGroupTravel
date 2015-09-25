@@ -12,7 +12,7 @@
 
     }
 
-    if ($('#fos_user_resetting_form').length) {
+    if ($('.fos_user_resetting_reset').length) {
         $("#fos_user_resetting_form_plainPassword_first").attr("placeholder", "New Password");
         $("#fos_user_resetting_form_plainPassword_second").attr("placeholder", "Confirm New Password");
         $('h2').text("Reset Password").show();
