@@ -290,7 +290,7 @@ trsteel_ckeditor:
     custom_config: "/assetic/ckeditorcustomsettings.js"
     html_purifier:
         config:
-            HTML.AllowedAttributes: 'src, href, target, colspan, class'
+            HTML.AllowedAttributes: 'src, href, target, colspan, class, style'
             Attr.AllowedFrameTargets: '_blank, _self, _parent, _top'
 
 liip_imagine:
