@@ -1,0 +1,12 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+
+<form action="{{ path('user_resetting_reset', {'token': token}) }}" {{ form_enctype(form) }} method="POST"
+      class="fos_user_activation">
+    <h2>Set Password</h2>
+    {{ form_widget(form) }}
+    <div>
+        <input class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type="submit" value="{{ 'resetting.reset.submit'|trans }}"/>
+    </div>
+</form>
+
