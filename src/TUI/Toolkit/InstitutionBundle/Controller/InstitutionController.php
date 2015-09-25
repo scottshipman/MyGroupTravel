@@ -371,7 +371,7 @@ class InstitutionController extends Controller
             $em->flush();
             $this->get('session')->getFlashBag()->add('notice', 'Institution Saved: ' . $entity->getName());
 
-            return $this->redirect($this->generateUrl('manage_institution_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('manage_institution'));
         }
 
         return $this->render('InstitutionBundle:Institution:edit.html.twig', array(

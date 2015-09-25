@@ -20,7 +20,7 @@
     right: 0;
     bottom: 0;
     left: 0;
-    @include mdl-background-image-overlay(8,4);
+    @include mdl-background-image-overlay(5,2);
     // background-image: linear-gradient(to top right, #A1A1A1, #EBEBEB);
     opacity: .6;
   }
@@ -40,7 +40,7 @@
     }
 
   }
-  .profile-quote-edit {
+  .profile-quote-edit, .profile-tour-edit {
     position: absolute;
     top: 1em;
     right: 1em;

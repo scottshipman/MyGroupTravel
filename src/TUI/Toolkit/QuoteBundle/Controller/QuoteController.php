@@ -176,8 +176,9 @@ class QuoteController extends Controller
         $institutions = $query->getArrayResult();
         foreach ($institutions as $institution) {
             $choices[] = array(
-                'label' => $institution['name'],
-                'value' => $institution['name'],
+                'label' => $institution['name']. ' - ' . $institution['city'],
+                'value' => $institution['name']. ' - ' . $institution['city'],
+
             );
         }
 

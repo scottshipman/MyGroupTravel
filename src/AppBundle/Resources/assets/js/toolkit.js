@@ -26,7 +26,9 @@
     $('body').append('<div id="dialog"></div>');
     var elements = {
         '#tui_toolkit_quotebundle_quoteversion_quoteReference_organizer': 'Organizer',
-        '#tui_toolkit_quotebundle_quoteversion_quoteReference_institution': 'Institution'
+        '#tui_toolkit_quotebundle_quoteversion_quoteReference_institution': 'Institution',
+        '#tui_toolkit_tourbundle_tour_organizer': 'Organizer',
+        '#tui_toolkit_tourbundle_tour_institution': 'Institution'
     };
     $.each(elements, function (element, type) {
         if (element.length) {
@@ -67,7 +69,11 @@
     var suggest = ['tui_toolkit_quotebundle_quoteversion_quoteReference_organizer',
         'tui_toolkit_quotebundle_quoteversion_quoteReference_institution',
         'tui_toolkit_quotebundle_quoteversion_quoteReference_salesAgent',
-        'tui_toolkit_quotebundle_quoteversion_quoteReference_secondaryContact'];
+        'tui_toolkit_quotebundle_quoteversion_quoteReference_secondaryContact',
+        'tui_toolkit_tourbundle_tour_organizer',
+        'tui_toolkit_tourbundle_tour_institution',
+        'tui_toolkit_tourbundle_tour_salesAgent',
+        'tui_toolkit_tourbundle_tour_secondaryContact'];
 
     $.each(suggest, function (index, formfield) {
         $('#' + formfield).autocomplete({
