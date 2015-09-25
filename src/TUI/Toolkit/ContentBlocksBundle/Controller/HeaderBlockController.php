@@ -21,7 +21,7 @@ class HeaderBlockController extends Controller
      * Creates a new ContentBlock entity as a Header Block.
      *
      */
-    public function createAction(Request $request, $quoteVersion=null, $class=null)
+    public function createAction(Request $request, $quoteVersion = null, $class = null)
     {
         $entity = new ContentBlock();
         $medias = array();
@@ -47,36 +47,41 @@ class HeaderBlockController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
-          $em->flush($entity);
+            $em->flush($entity);
 
-          // add block to quoteVersion headerBlock field
-          $quoteVersionEntity = $em->getRepository('QuoteBundle:QuoteVersion')->find($quoteVersion);
-          if (!$quoteVersionEntity) {
-            throw $this->createNotFoundException('Unable to find ContentBlock entity.');
-          }
-          $quoteVersionEntity->setHeaderBlock($entity);
-          $em->persist($quoteVersionEntity);
+            // add block to quoteVersion headerBlock field
+            // TODO QuoteVersion is hardcoded here and needs to accept any class
+            if ($class == "tour") {
+                $quoteVersionEntity = $em->getRepository('TourBundle:Tour')->find($quoteVersion);
+            } elseif ($class == "QuoteVersion") {
+                $quoteVersionEntity = $em->getRepository('QuoteBundle:QuoteVersion')->find($quoteVersion);
+            }
+            if (!$quoteVersionEntity) {
+                throw $this->createNotFoundException('Unable to find ContentBlock entity.');
+            }
+            $quoteVersionEntity->setHeaderBlock($entity);
+            $em->persist($quoteVersionEntity);
 
-          $em->flush($quoteVersionEntity);
+            $em->flush($quoteVersionEntity);
 
-          //generate js friendly array
-          foreach($entity as $key => $value){
-            $blockArr[$key] = $value;
-          }
-          $responseContent = json_encode($blockArr);
+            //generate js friendly array
+            foreach ($entity as $key => $value) {
+                $blockArr[$key] = $value;
+            }
+            $responseContent = json_encode($blockArr);
 
-          return new Response($responseContent,
-            Response::HTTP_OK,
-            array('content-type' => 'application/json')
-          );
+            return new Response($responseContent,
+                Response::HTTP_OK,
+                array('content-type' => 'application/json')
+            );
 
             //return $this->redirect($this->generateUrl('manage_contentblocks_show', array('id' => $entity->getId())));
         }
 
         return $this->render('ContentBlocksBundle:ContentBlock:new.html.twig', array(
-          'entity' => $entity,
-          'form'   => $form->createView(),
-          'quoteVersion'  => $quoteVersion,
+            'entity' => $entity,
+            'form' => $form->createView(),
+            'quoteVersion' => $quoteVersion,
         ));
     }
 
@@ -87,14 +92,14 @@ class HeaderBlockController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(ContentBlock $entity, $quoteVersion=null, $class=null)
+    private function createCreateForm(ContentBlock $entity, $quoteVersion = null, $class = null)
     {
         $form = $this->createForm($this->get('form.type.contentblock'), $entity, array(
             'action' => $this->generateUrl('manage_headerblock_create', array('quoteVersion' => $quoteVersion, 'class' => $class)),
-          'method' => 'POST',
-          'attr'  => array (
-            'id' => 'ajax_contentblocks_form'
-          ),
+            'method' => 'POST',
+            'attr' => array(
+                'id' => 'ajax_contentblocks_form'
+            ),
         ));
 
         $form->add('submit', 'submit', array('label' => 'Create'));
@@ -109,13 +114,13 @@ class HeaderBlockController extends Controller
     public function newAction($quoteVersion, $class)
     {
         $entity = new ContentBlock();
-        $form   = $this->createCreateForm($entity, $quoteVersion, $class);
+        $form = $this->createCreateForm($entity, $quoteVersion, $class);
 
         return $this->render('ContentBlocksBundle:ContentBlock:new.html.twig', array(
             'entity' => $entity,
-            'form'   => $form->createView(),
-            'quoteVersion'  => $quoteVersion,
-            'class'   => $class
+            'form' => $form->createView(),
+            'quoteVersion' => $quoteVersion,
+            'class' => $class
         ));
     }
 
@@ -145,7 +150,7 @@ class HeaderBlockController extends Controller
      * Displays a form to edit an existing ContentBlock entity.
      *
      */
-    public function editAction($id, $quoteVersion=null, $class=null)
+    public function editAction($id, $quoteVersion = null, $class = null)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -156,7 +161,7 @@ class HeaderBlockController extends Controller
             $imageIds[] = $image->getId();
         }
 
-        if ( isset($imageIds) ) {
+        if (isset($imageIds)) {
             $collectionIds = implode(',', $imageIds);
         } else {
             $collectionIds = '';
@@ -165,7 +170,7 @@ class HeaderBlockController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ContentBlock entity.');
         }
-      
+
         $entity->setMedia($collectionIds);
         $editForm = $this->createEditForm($entity, $quoteVersion, $class);
 
@@ -175,63 +180,63 @@ class HeaderBlockController extends Controller
             'collection_ids' => $collectionIds,
             'edit_form' => $editForm->createView(),
             'quoteVersion' => $quoteVersion,
-            'class'       => $class,
+            'class' => $class,
         ));
     }
 
-  /**
-   * Displays a form to edit an existing ContentBlock entity in Layout editor mode.
-   *
-   */
-  public function editLayoutAction($id)
-  {
-    $em = $this->getDoctrine()->getManager();
+    /**
+     * Displays a form to edit an existing ContentBlock entity in Layout editor mode.
+     *
+     */
+    public function editLayoutAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
 
-    $entity = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($id);
+        $entity = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($id);
 
-    $collection = $entity->getMedia()->toArray();
-    foreach ($collection as $image) {
-      $imageIds[] = $image->getId();
+        $collection = $entity->getMedia()->toArray();
+        foreach ($collection as $image) {
+            $imageIds[] = $image->getId();
+        }
+
+        if (isset($imageIds)) {
+            $collectionIds = implode(',', $imageIds);
+        } else {
+            $collectionIds = '';
+        }
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find ContentBlock entity.');
+        }
+
+        $entity->setMedia($collectionIds);
+        $editForm = $this->createEditLayoutForm($entity);
+
+        return $this->render('ContentBlocksBundle:ContentBlock:edit.html.twig', array(
+            'entity' => $entity,
+            'collection' => $collection,
+            'collection_ids' => $collectionIds,
+            'edit_form' => $editForm->createView(),
+            'quoteVersion' => null,
+            'class' => null,
+        ));
     }
-
-    if ( isset($imageIds) ) {
-      $collectionIds = implode(',', $imageIds);
-    } else {
-      $collectionIds = '';
-    }
-
-    if (!$entity) {
-      throw $this->createNotFoundException('Unable to find ContentBlock entity.');
-    }
-
-    $entity->setMedia($collectionIds);
-    $editForm = $this->createEditLayoutForm($entity);
-
-    return $this->render('ContentBlocksBundle:ContentBlock:edit.html.twig', array(
-      'entity' => $entity,
-      'collection' => $collection,
-      'collection_ids' => $collectionIds,
-      'edit_form' => $editForm->createView(),
-      'quoteVersion' => null,
-      'class'       => null,
-    ));
-  }
 
 
     /**
-    * Creates a form to edit a ContentBlock entity for Header Block.
-    *
-    * @param ContentBlock $entity The entity
-    *
-    * @return \Symfony\Component\Form\Form The form
-    */
-    private function createEditForm(ContentBlock $entity, $quoteVersion=null, $class=null)
+     * Creates a form to edit a ContentBlock entity for Header Block.
+     *
+     * @param ContentBlock $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createEditForm(ContentBlock $entity, $quoteVersion = null, $class = null)
     {
         $form = $this->createForm($this->get('form.type.contentblock'), $entity, array(
             'action' => $this->generateUrl('manage_headerblock_update', array('id' => $entity->getId(), 'quoteVersion' => $quoteVersion, 'class' => $class)),
             'method' => 'POST',
-            'attr'  => array (
-              'id' => 'ajax_contentblocks_form'
+            'attr' => array(
+                'id' => 'ajax_contentblocks_form'
             ),
         ));
 
@@ -240,34 +245,34 @@ class HeaderBlockController extends Controller
         return $form;
     }
 
-  /**
-   * Creates a form to edit a ContentBlock entity for Header Block in Layout editor mode.
-   *
-   * @param ContentBlock $entity The entity
-   *
-   * @return \Symfony\Component\Form\Form The form
-   */
-  private function createEditLayoutForm(ContentBlock $entity)
-  {
-    $form = $this->createForm($this->get('form.type.contentblock'), $entity, array(
-      'action' => $this->generateUrl('manage_headerblock_layout_update', array('id' => $entity->getId())),
-      'method' => 'POST',
-      'attr'  => array (
-        'id' => 'ajax_headerblock_layout_form'
-      ),
-    ));
+    /**
+     * Creates a form to edit a ContentBlock entity for Header Block in Layout editor mode.
+     *
+     * @param ContentBlock $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createEditLayoutForm(ContentBlock $entity)
+    {
+        $form = $this->createForm($this->get('form.type.contentblock'), $entity, array(
+            'action' => $this->generateUrl('manage_headerblock_layout_update', array('id' => $entity->getId())),
+            'method' => 'POST',
+            'attr' => array(
+                'id' => 'ajax_headerblock_layout_form'
+            ),
+        ));
 
-    $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => 'Update'));
 
-    return $form;
-  }
+        return $form;
+    }
 
 
-  /**
+    /**
      * Edits an existing ContentBlock entity for Header Block.
      *
      */
-    public function updateAction(Request $request, $id, $quoteVersion=null, $class=null)
+    public function updateAction(Request $request, $id, $quoteVersion = null, $class = null)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -280,8 +285,8 @@ class HeaderBlockController extends Controller
             throw  $this->createNotFoundException('Unable to find ContentBlock entity.');
         }
 
-          $editForm = $this->createEditForm($entity, $quoteVersion, $class);
-          $editForm->handleRequest($request);
+        $editForm = $this->createEditForm($entity, $quoteVersion, $class);
+        $editForm->handleRequest($request);
 
         $medias = array();
 
@@ -304,16 +309,16 @@ class HeaderBlockController extends Controller
             $em->flush();
 
             //return $this->redirect($this->generateUrl('manage_contentblocks_edit', array('id' => $id)));
-          if ($class=='QuoteVersion'){
-            $parent = $em->getRepository('QuoteBundle:QuoteVersion')->find($quoteVersion);
-          } elseif( $class =='TourVersion'){
-            //$parent = $em->getRepository('TourBundle:TourVersion')->find($quoteVersion);
-          }
-          $responseContent =  json_encode($parent->getContent());
-          return new Response($responseContent,
-            Response::HTTP_OK,
-            array('content-type' => 'application/json')
-          );
+            if ($class == 'QuoteVersion') {
+                $parent = $em->getRepository('QuoteBundle:QuoteVersion')->find($quoteVersion);
+            } elseif ($class == 'tour') {
+                $parent = $em->getRepository('TourBundle:Tour')->find($quoteVersion);
+            }
+            $responseContent = json_encode($parent->getContent());
+            return new Response($responseContent,
+                Response::HTTP_OK,
+                array('content-type' => 'application/json')
+            );
 
         }
 
@@ -323,85 +328,85 @@ class HeaderBlockController extends Controller
             'delete_form' => $deleteForm->createView(),
             'collection' => $collection,
             'quoteVersion' => $quoteVersion,
-            'class'       => $class,
+            'class' => $class,
         ));
     }
 
-  /**
-   * Edits an existing ContentBlock entity for Header Block in Layout Editor
-   * Always returns response object not twigs.
-   *
-   */
-  public function updateLayoutAction(Request $request, $id)
-  {
-    $em = $this->getDoctrine()->getManager();
+    /**
+     * Edits an existing ContentBlock entity for Header Block in Layout Editor
+     * Always returns response object not twigs.
+     *
+     */
+    public function updateLayoutAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
 
-    $entity = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($id);
+        $entity = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($id);
 
-    if (!$entity) {
-      throw  $this->createNotFoundException('Unable to find ContentBlock entity.');
+        if (!$entity) {
+            throw  $this->createNotFoundException('Unable to find ContentBlock entity.');
+        }
+
+        $editForm = $this->createEditLayoutForm($entity);
+        $editForm->handleRequest($request);
+
+        $medias = array();
+
+        if (NULL != $editForm->getData()->getMedia()) {
+            $fileIdString = $editForm->getData()->getMedia();
+            $fileIds = explode(',', $fileIdString);
+
+            foreach ($fileIds as $fileId) {
+                $image = $em->getRepository('MediaBundle:Media')
+                    ->findById($fileId);
+                $medias[] = array_shift($image);
+            }
+        }
+        if (!empty($medias)) {
+            $editForm->getData()->setMedia($medias);
+
+        }
+
+        if ($editForm->isValid()) {
+            $em->persist($entity);
+            $em->flush();
+            $responseContent = json_encode((array)$entity);
+            return new Response($responseContent,
+                Response::HTTP_OK,
+                array('content-type' => 'application/json')
+            );
+
+        }
+        $responseContent = json_encode((array)$editForm);
+        return new Response($responseContent,
+            419,
+            array('content-type' => 'application/json')
+        );
     }
 
-    $editForm = $this->createEditLayoutForm($entity);
-    $editForm->handleRequest($request);
 
-    $medias = array();
+    /**
+     * Generate a New Contentblock via ajax call.
+     *
+     */
+    public function ajaxNewAction(Request $request)
+    {
+        $error = false;
 
-    if (NULL != $editForm->getData()->getMedia()) {
-      $fileIdString = $editForm->getData()->getMedia();
-      $fileIds = explode(',', $fileIdString);
+        $em = $this->getDoctrine()->getManager();
+        $entity = new ContentBlock();
+        $entity->setTitle('New Header Block');
 
-      foreach ($fileIds as $fileId) {
-        $image = $em->getRepository('MediaBundle:Media')
-          ->findById($fileId);
-        $medias[] = array_shift($image);
-      }
+        $em->persist($entity);
+        $em->flush();
+
+        $responseContent = json_encode(array($entity->getId() => $entity->getTitle()));
+
+        return new Response($responseContent,
+            Response::HTTP_OK,
+            array('content-type' => 'application/json')
+        );
     }
-    if (!empty($medias)) {
-      $editForm->getData()->setMedia($medias);
-
-    }
-
-    if ($editForm->isValid()) {
-      $em->persist($entity);
-      $em->flush();
-      $responseContent =  json_encode((array)$entity);
-      return new Response($responseContent,
-        Response::HTTP_OK,
-        array('content-type' => 'application/json')
-      );
-
-    }
-    $responseContent=json_encode((array)$editForm);
-    return new Response($responseContent,
-      419,
-      array('content-type' => 'application/json')
-    );
-  }
-
-
-  /**
-   * Generate a New Contentblock via ajax call.
-   *
-   */
-  public function ajaxNewAction(Request $request)
-  {
-    $error = false;
-
-    $em = $this->getDoctrine()->getManager();
-    $entity = new ContentBlock();
-    $entity->setTitle('New Header Block');
-
-      $em->persist($entity);
-      $em->flush();
-
-    $responseContent = json_encode(array($entity->getId() => $entity->getTitle()));
-
-    return new Response($responseContent,
-      Response::HTTP_OK,
-      array('content-type' => 'application/json')
-    );
-  }
 
 
 }

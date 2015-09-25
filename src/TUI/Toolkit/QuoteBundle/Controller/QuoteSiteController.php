@@ -53,6 +53,10 @@ class QuoteSiteController extends Controller
             throw $this->createNotFoundException('Unable to find QuoteVersion entity.');
         }
 
+      //Get all brand stuff
+      $brand = $em->getRepository('BrandBundle:Brand')->findAll();
+      $brand = $brand[0];
+
     // if no quoteNumber supplied in URL, then prompt for quoteNumber first
     $securityContext = $this->get('security.context');
     $user = $securityContext->getToken()->getUser();
@@ -70,7 +74,8 @@ class QuoteSiteController extends Controller
       ));
     }
 
-    if ($securityContext->isGranted('ROLE_BRAND') || in_array('organizer', $permission)){
+    if ($securityContext->isGranted('ROLE_BRAND') ){
+      if ($entity->getConverted() == false )
       $editable = TRUE;
     }
     // get the content blocks to send to twig
@@ -124,6 +129,7 @@ class QuoteSiteController extends Controller
       'header'      => $headerBlock,
       'editable'  =>  $editable,
       'alternate' => $alternate,
+      'brand' => $brand,
     ));
   }
 
@@ -240,15 +246,22 @@ class QuoteSiteController extends Controller
         $changeForm = $this->createChangeRequestFormAction($id);
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+        $locale = $this->container->getParameter('locale');
+        $date_format = $this->container->getParameter('date_format');
+
 
         return $this->render('QuoteBundle:QuoteSite:changeRequest.html.twig', array(
             'change_request_form' => $changeForm->createView(),
             'entity' => $entity,
+            'locale' => $locale,
+            'date_format' => $date_format,
         ));
     }
 
     public function requestChangeAction(Request $request, $id)
     {
+        $locale = $this->container->getParameter('locale');
+        $date_format = $this->container->getParameter('date_format');
 
         $changeForm = $this->createChangeRequestFormAction($id);
         $changeForm->handleRequest($request);
@@ -279,6 +292,8 @@ class QuoteSiteController extends Controller
                         'additional' => $additional,
                         'departure' => $departure,
                         'tour_name' => $tourName,
+                        'locale' => $locale,
+                        'date_format' => $date_format,
                     )
                 ), 'text/html');
 
@@ -308,10 +323,14 @@ class QuoteSiteController extends Controller
         $acceptForm = $this->createAcceptFormAction($id);
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+        $locale = $this->container->getParameter('locale');
+        $date_format = $this->container->getParameter('date_format');
 
         return $this->render('QuoteBundle:QuoteSite:acceptQuote.html.twig', array(
             'accept_form' => $acceptForm->createView(),
             'entity' => $entity,
+            'locale' => $locale,
+            'date_format' => $date_format,
         ));
     }
 
@@ -326,6 +345,9 @@ class QuoteSiteController extends Controller
 
     public function quoteAcceptedAction(Request $request, $id)
     {
+        $locale = $this->container->getParameter('locale');
+        $date_format = $this->container->getParameter('date_format');
+
         $acceptForm = $this->createAcceptFormAction($id);
         $acceptForm->handleRequest($request);
         $additional = $acceptForm->get('additional')->getData();
@@ -353,8 +375,8 @@ class QuoteSiteController extends Controller
 
 
         $message = \Swift_Message::newInstance()
-            ->setSubject('Quote' . $tourName . ' has been accepted!')
-            ->setFrom($brandName . '@Toolkit.com')
+            ->setSubject('Quote ' . $tourName . ' has been accepted!')
+            ->setFrom('Notify@Toolkit.com')
             ->setBody(
                 $this->renderView(
                     'QuoteBundle:Emails:acceptQuote.html.twig',
@@ -364,6 +386,8 @@ class QuoteSiteController extends Controller
                         'departure' => $departure,
                         'tour_name' => $tourName,
                         'additional' => $additional,
+                        'locale' => $locale,
+                        'date_format' => $date_format,
                     )
                 ), 'text/html');
 
@@ -404,7 +428,7 @@ class QuoteSiteController extends Controller
       $items=array();
       $content = $entity[0]->getContent();
       foreach($content as $tab){
-        foreach($tab as $key=>$block){
+        foreach($tab[1] as $key=>$block){
           $object=$em->getRepository('ContentBlocksBundle:ContentBlock')->find($block);
           if($object != null){
             $items[$block] = $object;

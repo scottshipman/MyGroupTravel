@@ -15,9 +15,7 @@ form .cke {
   background: #ccc;
   width: auto;
   display: block;
-  padding: 20px;
-  margin: 0 0 ($element-bottom / 2) 0;
-  border: 2px dashed #000;
+  outline: 2px dashed #000;
 }
 
 .tabs-placeholder {
@@ -26,6 +24,11 @@ form .cke {
 
 .items-placeholder {
   height: 40px;
+
+  .mode-edit & {
+    height: auto;
+  }
+
 }
 
 .content-blocks-tab {
@@ -45,6 +48,10 @@ form .cke {
     margin: 0;
   }
 
+}
+
+.content-blocks.default-cursor {
+  cursor: default;
 }
 
 .content-blocks-item {
@@ -83,7 +90,8 @@ form .cke {
   line-height: 32px;
 }
 
-.sortable-items, .content-blocks-drawer  {
+.sortable-items,
+.content-blocks-drawer {
   min-height: 1em;
 }
 
@@ -202,6 +210,8 @@ td .layout-icons.image_bottom {
   h2 {
     margin: 0;
     padding: 24px 0;
+    @include mdl-primary-color(color, 6);
+
   }
 
 }
@@ -263,17 +273,9 @@ td .layout-icons.image_bottom {
 .content-block-layout-image_bottom {
 
   .content-block-media {
-    width: $column_total_width_reset;
-    margin-left: -$column_gutter_width_reset;
 
     img {
-      width: $column_total_width;
-      padding: 0 $column_gutter_width;
-
-      &:nth-child(4n+1) {
-        clear: left;
-      }
-
+      width: 100%;
     }
 
   }
@@ -303,11 +305,6 @@ td .layout-icons.image_bottom {
 
     img {
       width: 100%;
-
-      &:nth-child(4n+1) {
-        clear: none;
-      }
-
     }
 
   }

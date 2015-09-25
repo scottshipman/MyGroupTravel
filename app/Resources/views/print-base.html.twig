@@ -16,6 +16,7 @@
     <div class="main">
 
         <div class="header">
+          <div class="sizer">
             <div class="brand_logo">
                 {{ render(controller('BrandBundle:Default:index')) }}
             </div>
@@ -25,20 +26,25 @@
             <h1 class="page-title">
                 {% block page_title %}{% endblock %}
             </h1>
+          </div>
         </div><!-- header -->
 
         <div class="content">
+          <div class="sizer">
             <div class="inner">
                 {% block body %}{% endblock %}
             </div>
+          </div>
         </div>
 
         <div class="site-footer">
-            <div class="center-section">
+          <div class="sizer">
+            <div class="footer-full-section">
                 {% block footer_left %}{% endblock %}
                 {% block footer_right %}{% endblock %}
                 {{ render(controller('BrandBundle:Default:footer')) }}
             </div>
+          </div>
         </div>
 
     </div>

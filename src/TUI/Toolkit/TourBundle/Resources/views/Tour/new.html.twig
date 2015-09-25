@@ -1,0 +1,33 @@
+{% extends '::base.html.twig' %}
+{% block title %}Create Tour{% endblock %}
+{% block page_title %}Create Tour{% endblock %}
+
+{% block body -%}
+
+    {{  form(form) }}
+
+
+    <ul class="record_actions">
+        <li>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+               href="{{ path('manage_tour') }}">
+                <i class="fa fa-arrow-circle-left"></i> Back to the list
+            </a>
+        </li>
+    </ul>
+    {{ form_javascript(form) }}
+    <script>
+        $( document ).ready(function() {
+           $( ".hasDatepicker" ).datepicker( "option", "dateFormat", "{{ date_format }}" );
+            $( ".hasDatepicker" ).change(function(){
+                console.log(this);
+                if ($(this).val()){
+                    console.log ('has value');
+                    $(this).parent().addClass('is-dirty');
+                } else if (!$(this).val()) {
+                    $(this).parent().removeClass('is-dirty');
+                }
+            });
+        });
+    </script>
+{% endblock %}

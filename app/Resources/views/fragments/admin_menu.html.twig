@@ -1,4 +1,4 @@
-<div class="mdl-layout__drawer">
+<div class="toolkit-drawer mdl-layout__drawer">
 
     <header class="tui-drawer-header">
         {% if app.user.media %}
@@ -15,7 +15,7 @@
                 <i class="material-icons">arrow_drop_down</i>
             </button>
             <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="accbtn">
-                <li><a class="mdl-menu__item" href="/user/{{ app.user.id }}/show">View</a>
+                <li><a class="mdl-menu__item" href="/profile">View</a>
                 </li>
                 <li><a class="mdl-menu__item" href="/user/{{ app.user.id }}/edit">Edit</a>
                 </li>

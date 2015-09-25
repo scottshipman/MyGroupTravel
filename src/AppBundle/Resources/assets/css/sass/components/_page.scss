@@ -8,17 +8,42 @@ html {
 .sub-header,
 .content,
 .site-footer {
-  padding-left: $page_gutter;
-  padding-right: $page_gutter;
+  width: auto;
+  padding-left: 0;
+  padding-right: 0;
 
-  .mdl-layout--fixed-drawer & {
-    padding-left: $admin_page_gutter;
-    padding-right: $admin_page_gutter;
-  }
+  .sizer {
+    width: auto;
 
-  .pdf-layout & {
-    padding-left: 0;
-    padding-right: 0;
+    .toolkit-no-drawer & {
+      margin-left: $page_gutter;
+      margin-right: $page_gutter;
+
+      @media screen and (min-width: 1320px) {
+        max-width: 1280px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+    }
+
+    .toolkit-fixed-drawer & {
+      margin-left: $admin_page_gutter;
+      margin-right: $admin_page_gutter;
+
+      @media screen and (min-width: 1560px) { // 1320px plus 240px for sidebar
+        max-width: 1280px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+    }
+
+    .pdf-layout & {
+      margin-left: 0;
+      margin-right: 0;
+    }
+
   }
 
 }
@@ -39,7 +64,7 @@ html {
       margin-left: -$page_gutter_reset;
       padding: 0.25em $page_gutter_reset;
 
-      .mdl-layout--fixed-drawer & {
+      .toolkit-fixed-drawer & {
         width: $admin_page_width_reset;
         margin-left: -$admin_page_gutter_reset;
         padding: 0.25em $admin_page_gutter_reset;

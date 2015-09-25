@@ -63,10 +63,10 @@ class ContentBlockController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            if ($class == 'QuoteVersion') {
+            if ($class == "QuoteVersion") {
                 $parent = $em->getRepository('QuoteBundle:QuoteVersion')->find($quoteVersion);
-            } elseif ($class == 'TourVersion') {
-                //$parent = $em->getRepository('TourBundle:TourVersion')->find($quoteVersion);
+            } elseif ($class == "tour") {
+                $parent = $em->getRepository('TourBundle:Tour')->find($quoteVersion);
             }
             if (!$parent) {
                 throw  $this->createNotFoundException('Unable to find Quote or Tour in order to update content array.');
@@ -74,13 +74,13 @@ class ContentBlockController extends Controller
             // rebuild content array and remove block
             $content = $parent->getContent();
             foreach ($content as $tab => $data) {
-                if ($tab == $tabId) {
-                    $content[$tab][1][] =  $entity->getId();
-                }
+              if ($tab == $tabId) {
+                $content[$tab][1][] = $entity->getId();
+              }
             }
 
-            $parent->setContent($content);
-            $em->flush($parent);
+              $parent->setContent($content);
+              $em->flush($parent);
 
             $responseContent = json_encode($entity->getId());
 
@@ -128,6 +128,10 @@ class ContentBlockController extends Controller
     {
         $entity = new ContentBlock();
         $form = $this->createCreateForm($entity, $class, $quoteVersion, $tabId);
+        $em = $this->getDoctrine()->getManager();
+        $default_layout = $em->getRepository('ContentBlocksBundle:LayoutType')->findAll();
+        $default_layout = $default_layout[0];
+        $form->get('layoutType')->setData($default_layout);
 
         return $this->render('ContentBlocksBundle:ContentBlock:new.html.twig', array(
             'entity' => $entity,
@@ -187,6 +191,14 @@ class ContentBlockController extends Controller
 
         $entity->setMedia($collectionIds);
         $editForm = $this->createEditForm($entity, $quoteVersion, $class);
+
+        // if layout type is Null, set a default
+        if(!$entity->getLayoutType()){
+          $default_layout = $em->getRepository('ContentBlocksBundle:LayoutType')->findAll();
+          $default_layout = $default_layout[0];
+          $editForm->get('layoutType')->setData($default_layout);
+        }
+
         $deleteForm = $this->createDeleteForm($id, $quoteVersion, $class);
 
         return $this->render('ContentBlocksBundle:ContentBlock:edit.html.twig', array(
@@ -266,8 +278,8 @@ class ContentBlockController extends Controller
             //return $this->redirect($this->generateUrl('manage_contentblocks_edit', array('id' => $id)));
           if ($class=='QuoteVersion'){
             $parent = $em->getRepository('QuoteBundle:QuoteVersion')->find($quoteVersion);
-          } elseif( $class =='TourVersion'){
-            //$parent = $em->getRepository('TourBundle:TourVersion')->find($quoteVersion);
+          } elseif( $class =='tour'){
+            $parent = $em->getRepository('TourBundle:Tour')->find($quoteVersion);
           }
           $responseContent =  json_encode($parent->getContent());
           return new Response($responseContent,
@@ -308,8 +320,8 @@ class ContentBlockController extends Controller
 
       if ($class=='QuoteVersion'){
         $parent = $em->getRepository('QuoteBundle:QuoteVersion')->find($quoteVersion);
-      } elseif( $class =='TourVersion'){
-        //$parent = $em->getRepository('TourBundle:TourVersion')->find($quoteVersion);
+      } elseif( $class =='tour'){
+        $parent = $em->getRepository('TourBundle:Tour')->find($quoteVersion);
       }
       if(!$parent){
         throw  $this->createNotFoundException('Unable to find Quote or Tour in order to update content array.');
@@ -373,8 +385,8 @@ class ContentBlockController extends Controller
 
     if ($class=='QuoteVersion'){
       $parent = $em->getRepository('QuoteBundle:QuoteVersion')->find($quoteVersion);
-    } elseif( $class =='TourVersion'){
-      //$parent = $em->getRepository('TourBundle:TourVersion')->find($quoteVersion);
+    } elseif( $class =='tour'){
+      $parent = $em->getRepository('TourBundle:Tour')->find($quoteVersion);
     }
     $responseContent =  json_encode($parent->getContent());
     return new Response($responseContent,
@@ -408,8 +420,8 @@ class ContentBlockController extends Controller
 
     if ($class=='QuoteVersion'){
       $parent = $em->getRepository('QuoteBundle:QuoteVersion')->find($quoteVersion);
-    } elseif( $class =='TourVersion'){
-      //$parent = $em->getRepository('TourBundle:TourVersion')->find($quoteVersion);
+    } elseif( $class =='tour'){
+      $parent = $em->getRepository('TourBundle:Tour')->find($quoteVersion);
     }
     $responseContent =  json_encode($parent->getContent());
     return new Response($responseContent,
@@ -439,8 +451,8 @@ class ContentBlockController extends Controller
     }
     if ($class=='QuoteVersion'){
       $parent = $em->getRepository('QuoteBundle:QuoteVersion')->find($quoteVersion);
-    } elseif( $class =='TourVersion'){
-      //$parent = $em->getRepository('TourBundle:TourVersion')->find($quoteVersion);
+    } elseif( $class =='tour'){
+      $parent = $em->getRepository('TourBundle:Tour')->find($quoteVersion);
     }
     $responseContent =  json_encode($parent->getContent());
     return new Response($responseContent,
@@ -478,10 +490,17 @@ class ContentBlockController extends Controller
    *
    * @return Symfony\Component\HttpFoundation\Response
    */
-  public function newTabAction(Request $request, $id)
+  public function newTabAction(Request $request, $id, $class)
   {
+    // TODO QuoteVersion is hardcoded here, must accpet any class type
+
     $em = $this->getDoctrine()->getManager();
-    $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+      if ($class == "QuoteVersion") {
+          $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+      }
+      elseif ($class == "tour"){
+          $entity = $em->getRepository('TourBundle:Tour')->find($id);
+      }
     //$content = $entity->getContent();
     $content=array();
 
@@ -521,10 +540,20 @@ class ContentBlockController extends Controller
      *
      * @return Symfony\Component\HttpFoundation\Response
      */
-    public function newSiteTabAction(Request $request, $id)
+    public function newSiteTabAction(Request $request, $id, $class)
     {
+
+      // TODO QuoteVersion is hardcoded - must accept any class here
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+        if ($class == "QuoteVersion") {
+            $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+        }
+        elseif($class == "tour"){
+            $entity = $em->getRepository('TourBundle:Tour')->find($id);
+        }
+        if (!$entity) {
+            throw  $this->createNotFoundException('Unable to find Quote or Tour Entity While Adding a Tab');
+        }
         //$content = $entity->getContent();
         $content=$entity->getContent();
 

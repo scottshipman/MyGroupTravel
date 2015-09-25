@@ -9,6 +9,8 @@ namespace TUI\Toolkit\QuoteBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use TUI\Toolkit\TourBundle\Entity\Tour;
+use TUI\Toolkit\QuoteBundle\Controller\QuoteVersionController;
 
 /**
  * Quote controller.
@@ -174,8 +176,9 @@ class QuoteController extends Controller
         $institutions = $query->getArrayResult();
         foreach ($institutions as $institution) {
             $choices[] = array(
-                'label' => $institution['name'],
-                'value' => $institution['name'],
+                'label' => $institution['name']. ' - ' . $institution['city'],
+                'value' => $institution['name']. ' - ' . $institution['city'],
+
             );
         }
 
@@ -186,5 +189,150 @@ class QuoteController extends Controller
 
         return $response;
     }
+
+    public function convertAction(Request $request, $id)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $quoteVersion = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+
+        if (!$quoteVersion) {
+          throw $this->createNotFoundException('Unable to find Quote Version while converting to tour.');
+        }
+
+        $quoteReference = $quoteVersion->getQuoteReference();
+        $quote = $em->getRepository('QuoteBundle:Quote')->find($quoteReference);
+
+        if (!$quote) {
+          throw $this->createNotFoundException('Unable to find Quote while converting to tour.');
+        }
+
+        // just in case - dont convert if the following rules fail
+
+        if($quote->getConverted() == TRUE ){
+          throw $this->createNotFoundException('Cannot convert the quote because its already converted.');
+        }
+
+        $siblings = $em->getRepository('QuoteBundle:QuoteVersion')->findBy(array('quoteReference' => $quoteReference));
+        foreach($siblings as $sibling){
+          if($sibling->getConverted() == TRUE){
+            throw $this->createNotFoundException('Cannot convert the quote because one of its siblings has already been converted.');
+          }
+        }
+
+        $quote->setConverted(TRUE);
+        $quoteVersion->setConverted(TRUE);
+
+        $em->persist($quote);
+        $em->persist($quoteVersion);
+
+        $tour = new Tour();
+        $tour->setQuoteNumber($quoteVersion->getQuoteNumber());
+        $tour->setQuoteReference($quote);
+        $tour->setQuoteVersionReference($quoteVersion);
+
+       // $tour->setBoardBasis($quoteVersion->getBoardBasis());
+        $tour->getCreated(new \DateTime());
+        $tour->setCurrency($quoteVersion->getCurrency());
+        $tour->setDepartureDate($quoteVersion->getDepartureDate());
+        $tour->setDestination($quote->getDestination());
+        $tour->setDuration($quoteVersion->getDuration());
+        $tour->setExpiryDate($quoteVersion->getExpiryDate());
+        $tour->setFreePlaces($quoteVersion->getFreePlaces());
+
+        $tour->setInstitution($quote->getInstitution());
+        $tour->setLocked(FALSE);
+        $tour->setName($quote->getName() . ' - ' . $quoteVersion->getName());
+        $tour->setOrganizer($quote->getOrganizer());
+        $tour->setPayingPlaces($quoteVersion->getPayingPlaces());
+        $tour->setPricePerson($quoteVersion->getPricePerson());
+        $tour->setPricePersonPublic($quoteVersion->getPricePerson());
+        $tour->setReturnDate($quoteVersion->getReturnDate());
+        $tour->setSalesAgent($quote->getSalesAgent());
+        $tour->setSecondaryContact($quote->getSecondaryContact());
+        $tour->setTotalPrice(0);
+        $tour->setTransportType($quoteVersion->getTransportType());
+        //$tour->setTripStatus();
+        $tour->setWelcomeMsg($quoteVersion->getWelcomeMsg());
+
+
+      //  $tour->setContent()
+      //  $tour->setHeaderBlock();
+      $blockId = $quoteVersion->getHeaderBlock()->getId();
+      if($blockId) {
+        $headerBlock = $this->cloneHeaderBlock($blockId);
+        $tour->setHeaderBlock($headerBlock);
+      }
+
+      $content = $this->cloneContentBlocks($quoteVersion->getContent());
+      $tour->setContent($content);
+
+      $em->persist($tour);
+      $em->flush();
+
+      return $this->redirect($this->generateUrl('manage_tour_edit', array('id' => $tour->getId())));
+
+    }
+
+  /**
+   * Clone Content Blocks for a QuoteVersion
+   *
+   */
+
+  public function cloneContentBlocks($content = array())
+  {
+    $newContentArray = array();
+    if (!empty($content) && $content != NULL) {
+      foreach ($content as $tab => $blocks) {
+        foreach ($blocks[1] as $block) { // block should be an ID number
+          $em = $this->getDoctrine()->getManager();
+
+          $originalBlock = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($block);
+
+          if (!$originalBlock) {
+            throw $this->createNotFoundException('Unable to find Content entity while cloning.');
+          }
+
+          $newBlock = clone $originalBlock;
+          $newBlock->setId(null);
+          $em->persist($newBlock);
+          $em->flush($newBlock);
+
+          $newContentArray[$tab][0] = $blocks[0];
+          $newContentArray[$tab][1][] = $newBlock->getID();
+        }
+      }
+    }
+
+    return $newContentArray;
+  }
+
+  /**
+   * Clone Header Block for a QuoteVersion
+   *
+   */
+
+  public function cloneHeaderBlock($block)
+  {
+    $result = NULL;
+    if (!empty($block) && $block != NULL) {
+      $em = $this->getDoctrine()->getManager();
+
+      $originalBlock = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($block);
+
+      if (!$originalBlock) {
+        throw $this->createNotFoundException('Unable to find Content entity.');
+      }
+
+      $newBlock = clone $originalBlock;
+      $newBlock->setId(null);
+      $em->persist($newBlock);
+      $em->flush($newBlock);
+      $result = $newBlock;
+    }
+
+    return $result;
+  }
 
 }

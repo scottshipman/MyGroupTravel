@@ -1,5 +1,6 @@
 .site-footer {
-  padding: 16px 0;
+  padding-top: 16px;
+  padding-bottom: 16px;
 
   .pdf-layout &,
   .base-site & {
@@ -9,23 +10,6 @@
 
   p {
     margin: 0.5em 0;
-  }
-
-  .center-section {
-    @include span-all();
-    width: 100%;
-  }
-
-  .left-section {
-    float: left;
-    width: $column_total_width * 3;
-    padding: 0 $column_gutter_width;
-  }
-
-  .right-section {
-    float: right;
-    width: $column_total_width;
-    padding: 0 $column_gutter_width;
   }
 
   .intro {
@@ -82,4 +66,28 @@
 
   }
 
+}
+
+.footer-full-section {
+  clear: both;
+  @include span-all();
+  width: 100%;
+
+  .footer-left-section ~ &,
+  .footer-right-section ~ & {
+    margin-top: 1em;
+  }
+
+}
+
+.footer-left-section {
+  float: left;
+  width: $column_total_width * 3;
+  padding: 0 $column_gutter_width;
+}
+
+.footer-right-section {
+  float: right;
+  width: $column_total_width;
+  padding: 0 $column_gutter_width;
 }

@@ -38,10 +38,14 @@ security:
             - { path: ^/manage/, role: ROLE_BRAND }
             - { path: ^/user/password-set/, role: ROLE_CUSTOMER }
             - { path: ^/user/add/, role: ROLE_CUSTOMER }
+            - { path: ^/user/[0-9]+/edit$, role: ROLE_CUSTOMER }
+            - { path: ^/user/[0-9]+/update$, role: ROLE_CUSTOMER }
             - { path: ^/user/new, role: ROLE_BRAND }
             - { path: ^/user/, role: ROLE_BRAND }
             - { path: ^/profile/, role: ROLE_CUSTOMER }
+            - { path: ^/tour/dashboard, role: ROLE_CUSTOMER }
             - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
             - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
             - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+
 

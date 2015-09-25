@@ -5,6 +5,7 @@ namespace TUI\Toolkit\QuoteBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use TUI\Toolkit\QuoteBundle\Entity\QuoteVersion;
 use TUI\Toolkit\QuoteBundle\Form\QuoteVersionType;
@@ -56,7 +57,7 @@ class QuoteVersionController extends Controller
             'quoteReference.salesAgent.lastName',
             'quoteReference.salesAgent.email',
             'quoteReference.destination',
-            'created',
+//            'created',
             'version',
             'id',
             'duration',
@@ -171,7 +172,7 @@ class QuoteVersionController extends Controller
             'quoteReference.salesAgent.lastName',
             'quoteReference.salesAgent.email',
             'quoteReference.destination',
-            'created',
+//            'created',
             'version',
             'id',
             'duration',
@@ -265,7 +266,7 @@ class QuoteVersionController extends Controller
             'quoteReference.salesAgent.lastName',
             'quoteReference.salesAgent.email',
             'quoteReference.destination',
-            'created',
+//            'created',
             'version',
             'id',
             'duration',
@@ -351,7 +352,7 @@ class QuoteVersionController extends Controller
             'quoteReference.salesAgent.lastName',
             'quoteReference.salesAgent.email',
             //'quoteReference.destination',
-            'created',
+//            'created',
             'version',
             'id',
             'duration',
@@ -501,8 +502,10 @@ class QuoteVersionController extends Controller
         }
 
         //Handling the request for institution a little different than we did for the other 2.
-        $institutionName = explode(' - ', $form->getData()->getQuoteReference()->getInstitution());
-        $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findByName($institutionName[0]);
+        $institutionParts = explode(' - ', $form->getData()->getQuoteReference()->getInstitution());
+        $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findBy(
+          array('name' => $institutionParts[0], 'city' => $institutionParts[1])
+        );
         if (null !== $institutionEntities) {
             $institution = array_shift($institutionEntities);
             $form->getData()->getQuoteReference()->setInstitution($institution);
@@ -515,7 +518,7 @@ class QuoteVersionController extends Controller
             $permission = $this->get("permission.set_permission")->setPermission($entity->getQuoteReference()->getId(), 'quote', $entity->getQuoteReference()->getOrganizer(), 'organizer');
             $this->get('session')->getFlashBag()->add('notice', 'Quote Saved: ' . $entity->getName());
 
-            return $this->redirect($this->generateUrl('manage_quote'));
+            return $this->redirect($this->generateUrl('manage_quote_show', array('id' => $entity->getId())));
         }
         $date_format = $this->container->getParameter('date_format');
         return $this->render('QuoteBundle:QuoteVersion:new.html.twig', array(
@@ -952,9 +955,10 @@ class QuoteVersionController extends Controller
         }
 
         //Handling the request for institution a little different than we did for the other 2.
-        $institutionName = explode(' - ', $editForm->getData()->getQuoteReference()->getInstitution());
-        $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findByName($institutionName[0]);
-        $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findByName($institutionName);
+        $institutionParts = explode(' - ', $editForm->getData()->getQuoteReference()->getInstitution());
+        $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findBy(
+            array('name' => $institutionParts[0], 'city' => $institutionParts[1])
+        );
         if (null !== $institutionEntities) {
             $institution = array_shift($institutionEntities);
             $editForm->getData()->getQuoteReference()->setInstitution($institution);
@@ -1009,7 +1013,7 @@ class QuoteVersionController extends Controller
             $em->flush();
             $permission = $this->get("permission.set_permission")->setPermission($entity->getQuoteReference()->getId(), 'quote', $entity->getQuoteReference()->getOrganizer(), 'organizer');
             $this->get('session')->getFlashBag()->add('notice', 'Quote Saved: ' . $entity->getName());
-            return $this->redirect($this->generateUrl('manage_quote' . $route));
+            return $this->redirect($this->generateUrl('manage_quote_show', array('id' => $entity->getId())));
         }
 
         return $this->render('QuoteBundle:QuoteVersion:edit.html.twig', array(
@@ -1083,9 +1087,10 @@ class QuoteVersionController extends Controller
         }
 
         //Handling the request for institution a little different than we did for the other 2.
-        $institutionName = explode(' - ', $cloneform->getData()->getQuoteReference()->getInstitution());
-        $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findByName($institutionName[0]);
-        $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findByName($institutionName);
+        $institutionParts = explode(' - ', $cloneform->getData()->getQuoteReference()->getInstitution());
+        $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findBy(
+          array('name' => $institutionParts[0], 'city' => $institutionParts[1])
+        );
         if (null !== $institutionEntities) {
             $institution = array_shift($institutionEntities);
             $cloneform->getData()->getQuoteReference()->setInstitution($institution);

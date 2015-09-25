@@ -1,7 +1,7 @@
 <div class="tab-reorder-modal">
     <div id="content-blocks-wrapper" class="content-blocks-wrapper modal-sortable-tabs">
         {%  for tab, data in entity.content %}
-            <div id="{{ tab }}" class="content-blocks-tab" modal-tabId="{{ tab }}">
+            <div id="{{ tab }}" class="content-blocks-tab modal-tab" modal-tabId="{{ tab }}">
             <span class="content-blocks tab-label">
                 <i class="content-block-tab-handle fa fa-arrows"></i>
                 <h4 id="tab-label-{{ tab }}" class="editable-tab">{{ data[0] }}</h4>
@@ -13,7 +13,7 @@
 
                 <div id="tabs-drawer-{{ tab }}" class="modal-sortable-items content-blocks-drawer">
                     {%  for item in data[1] %}
-                        <div id="content-blocks-modal-{{ item }}" class="content-blocks content-blocks-item">
+                        <div id="content-blocks-modal-{{ item }}" class="content-blocks content-blocks-item" blockId = "content-blocks-{{ item }}">
                             <i class="fa fa-arrows"></i> {{ items[item].title }}
                             {# probably render a controller here by passing in item as id and have block entity returned #}
                             <div id="content-block-actions-{{ item }}" class="content-block-actions">
@@ -49,7 +49,12 @@
             dropOnEmpty: true,
             placeholder: "tabs-placeholder",
             start: function (e, ui) {
+                $('.editable-tab').editable("disable");
+                $('.editable-tab')[0].reset();
                 ui.placeholder.height(ui.helper.outerHeight());
+            },
+            stop: function (e, ui) {
+                $('.editable-tab').editable("enable");
             },
             axis: 'y'
 
@@ -94,17 +99,36 @@
         });
 
         //update tab positions and content positions on click event
-        $("#update-tabs").on('click', function (e) {
+        $(document).on('click', '#update-tabs', function (e) {
             e.preventDefault();
-            //close dialog box
+            var quoteID = $(this).attr('quoteid');
+            // scrape DOM to get heirarchy of tabs & blocks
+            var result = {};
+            var data = $(".modal-tab");
+            data.each(function (i, obj) {
+                tabText = $(this).find('.editable-tab').text();
+                tabId = $(this).attr('modal-tabid');
+                if ($(this).find('.content-blocks-item').size() == 0) {
+                    result[tabId] = [tabText, new Array()];
+                } else {
+                    var children = []
+                    $(this).find('.content-blocks-item').each(function (k, v) {
+                        children.push($(this).attr('blockid'));
+                    });
+                    result[tabId] = [tabText, children];
+                }
+            });
+            //POST to server using $.post or $.ajax
             window.parent.jQuery('#dialog').dialog('close');
-            //var pathArray = window.location.pathname.split('/');
-            var quoteID = $(this).attr('quoteId');
-            contentBlocksUpdate(quoteID);
-//            $(".sortable-tabs").sortable("enable");
-//            $(".sortable-items").sortable("enable");
-            var t = $('#content-wrapper');
-            t.removeClass("disabled");
+            $("#loader").css("display", "block");
+            $.ajax({
+                data: result,
+                type: 'POST',
+                url: '/manage/contentblocks/update/'+ quoteID + '/QuoteVersion'
+            }).done(function() {
+                window.location.reload(true);
+            });
+
         });
 
         //close dialog box
@@ -115,12 +139,10 @@
 
         // change a tab's name
         $('.editable-tab').editable(function (value, settings) {
-            //strip special chars before accepting
-            //value = value.replace(/[^\w\s]/gi, '');
             return (value);
         }, {
             width: '20em',
-            onblur: "cancel",
+            onblur: "submit",
             tooltip: 'Click to edit'
         });
     })

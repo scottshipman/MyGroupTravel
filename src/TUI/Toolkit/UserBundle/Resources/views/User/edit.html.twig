@@ -2,6 +2,8 @@
 {% block title %}Edit '{{ entity.username }}'{% endblock %}
 {% block page_title %}Edit '{{ entity.username }}'{% endblock %}
 
+
+
 {% block body -%}
     <div id="avatar-label" class="mdl-label-mimic">Profile Image
         <div style="display:none;" id="dropzone-form-close"><i class="fa fa-times-circle"></i></div>
@@ -44,11 +46,13 @@
     {{ form_widget(edit_form) }}
     {{ form_end(edit_form) }}
 
-    <ul class="record_actions">
-        <li>
-            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('user') }}">
-                <i class="fa fa-arrow-circle-left"></i> Back to the list</a>
-        </li>
-        <li>{{ form(delete_form) }}</li>
-    </ul>
+    {% if is_granted("ROLE_BRAND") %}
+        <ul class="record_actions">
+            <li>
+                <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('user') }}">
+                    <i class="fa fa-arrow-circle-left"></i> Back to the list</a>
+            </li>
+            <li>{{ form(delete_form) }}</li>
+        </ul>
+    {% endif %}
 {% endblock %}

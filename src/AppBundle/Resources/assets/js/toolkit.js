@@ -26,7 +26,9 @@
     $('body').append('<div id="dialog"></div>');
     var elements = {
         '#tui_toolkit_quotebundle_quoteversion_quoteReference_organizer': 'Organizer',
-        '#tui_toolkit_quotebundle_quoteversion_quoteReference_institution': 'Institution'
+        '#tui_toolkit_quotebundle_quoteversion_quoteReference_institution': 'Institution',
+        '#tui_toolkit_tourbundle_tour_organizer': 'Organizer',
+        '#tui_toolkit_tourbundle_tour_institution': 'Institution'
     };
     $.each(elements, function (element, type) {
         if (element.length) {
@@ -67,7 +69,11 @@
     var suggest = ['tui_toolkit_quotebundle_quoteversion_quoteReference_organizer',
         'tui_toolkit_quotebundle_quoteversion_quoteReference_institution',
         'tui_toolkit_quotebundle_quoteversion_quoteReference_salesAgent',
-        'tui_toolkit_quotebundle_quoteversion_quoteReference_secondaryContact'];
+        'tui_toolkit_quotebundle_quoteversion_quoteReference_secondaryContact',
+        'tui_toolkit_tourbundle_tour_organizer',
+        'tui_toolkit_tourbundle_tour_institution',
+        'tui_toolkit_tourbundle_tour_salesAgent',
+        'tui_toolkit_tourbundle_tour_secondaryContact'];
 
     $.each(suggest, function (index, formfield) {
         $('#' + formfield).autocomplete({
@@ -84,48 +90,6 @@
     });
 
     /**
-     * Drag and Drop Sorting
-     */
-
-    $(".sortable-tabs").sortable({
-        containment: "parent",
-        items: "> div",
-        // handle: ".move",
-        tolerance: "pointer",
-        cursor: "move",
-        opacity: 0.7,
-        revert: 300,
-        delay: 150,
-        dropOnEmpty: true,
-        placeholder: "tabs-placeholder",
-        start: function (e, ui) {
-            ui.placeholder.height(ui.helper.outerHeight());
-        },
-        axis: 'y',
-        update: function(e, ui) {
-            var pathArray = window.location.pathname.split( '/' );
-            contentBlocksUpdate(pathArray[3]); // fourth [3] part in the path should be quote ID to pass in
-        }
-    });
-
-
-    $( ".sortable-items" ).sortable({
-        containment: "document",
-        items: "> div",
-        tolerance: "pointer",
-        connectWith: '.sortable-items',
-        placeholder: "items-placeholder",
-        start: function (e, ui) {
-            ui.placeholder.height(ui.helper.outerHeight());
-        },
-        axis: 'y',
-        update: function(e, ui) {
-            var pathArray = window.location.pathname.split( '/' );
-            contentBlocksUpdate(pathArray[3]); // fourth [3] part in the path should be quote ID to pass in
-        }
-    });
-
-    /**
      * Add font-awesome to Delete buttons
      */
 
@@ -136,6 +100,23 @@
         if ($.trim($(this).html()) == 'Update') {
             $(this).html('<i class="fa fa-check-circle"></i> Update');
         }
+    });
+
+    /**
+     * Add a mimic label to the ckeditor
+     */
+
+    $('textarea').each( function() {
+        if ( !$(this).next().is('label') ) {
+            var labelText = $(this).attr('name');
+            labelText = labelText.split('[');
+            labelText = labelText[1].split(']');
+            labelText = labelText[0].replace(/([a-z])([A-Z])/g, '$1 $2');
+            labelText = labelText.toLowerCase();
+            labelText = labelText.charAt(0).toUpperCase() + labelText.slice(1);
+            $(this).before('<label class="mdl-label-mimic">' + labelText + '</label>');
+            $(this).parent().addClass('cke-wrapper');
+        };
     });
 
 })(jQuery);

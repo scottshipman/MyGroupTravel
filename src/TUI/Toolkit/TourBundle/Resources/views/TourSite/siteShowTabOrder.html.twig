@@ -1,0 +1,150 @@
+<div class="tab-reorder-modal">
+    <div id="content-blocks-wrapper" class="content-blocks-wrapper modal-sortable-tabs">
+        {%  for tab, data in entity.content %}
+            <div id="{{ tab }}" class="content-blocks-tab modal-tab" modal-tabId="{{ tab }}">
+            <span class="content-blocks tab-label">
+                <i class="content-block-tab-handle fa fa-arrows"></i>
+                <h4 id="tab-label-{{ tab }}" class="editable-tab">{{ data[0] }}</h4>
+                {% if data[1] | length < 1 %}
+                    <span class="modal-tab-delete icon-label" tabId="{{ tab }}"><i class="content-block-tab-actions fa fa-trash-o"></i> Delete Tab</span>
+                {% endif %}
+            </span>
+
+
+                <div id="tabs-drawer-{{ tab }}" class="modal-sortable-items content-blocks-drawer">
+                    {%  for item in data[1] %}
+                        <div id="content-blocks-modal-{{ item }}" class="content-blocks content-blocks-item" blockId = "content-blocks-{{ item }}">
+                            <i class="fa fa-arrows"></i> {{ items[item].title }}
+                            {# probably render a controller here by passing in item as id and have block entity returned #}
+                            <div id="content-block-actions-{{ item }}" class="content-block-actions">
+                                <i class="modal-item-delete content-block-item-action fa fa-trash-o" blockId="{{ item }}"></i>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="submit-button-container">
+        <a id="update-tabs" quoteId="{{ entity.id }}" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored reorder-button"
+           href="#"><i class="fa fa-thumbs-o-up"> </i> Submit</a>
+        <a id="close-dialog" quoteId="{{ entity.id }}" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored reorder-button"
+           href="#"><i class="fa fa-ban"> </i> Cancel</a>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        //sortable tabs
+        $(".modal-sortable-tabs").sortable({
+            containment: "parent",
+            items: "> div",
+            // handle: ".move",
+            tolerance: "pointer",
+            cursor: "move",
+            opacity: 0.7,
+            revert: 300,
+            delay: 150,
+            dropOnEmpty: true,
+            placeholder: "tabs-placeholder",
+            start: function (e, ui) {
+                $('.editable-tab').editable("disable");
+                $('.editable-tab')[0].reset();
+                ui.placeholder.height(ui.helper.outerHeight());
+            },
+            stop: function (e, ui) {
+                $('.editable-tab').editable("enable");
+            },
+            axis: 'y'
+
+        });
+
+        //sortable items in tabs
+        $(".modal-sortable-items").sortable({
+            containment: "document",
+            items: "> div",
+            tolerance: "pointer",
+            connectWith: '.modal-sortable-items',
+            placeholder: "items-placeholder",
+            start: function (e, ui) {
+                ui.placeholder.height(ui.helper.outerHeight());
+            },
+            axis: 'y'
+        });
+
+        // delete a content block
+        $(document).on('click', '.modal-item-delete', function(e){
+            // todo Get item.id and item.name
+            if (confirm('Are you sure you want to remove this item? Warning: this can not be undone.')) {
+                var blockId = $(this).attr('blockId')
+                var tabParent = $(this).closest('.content-blocks-tab');
+                var parent = tabParent.find('.tab-label');
+                var parentID = tabParent.attr('modal-tabId');
+                var items = parent.find('.content-blocks-item');
+                $('#content-blocks-modal-' + blockId).remove();
+                if(items.length<1){
+                    parent.append('<span class="modal-tab-delete icon-label" tabId="' + parentID+ '"><i class="content-block-tab-actions fa fa-trash-o"></i> Delete Tab</span>');
+                }
+            }
+        });
+
+        // remove an empty tab from a site (hard delete)
+        $(document).on('click', '.modal-tab-delete', function(){
+            var tabId = $(this).attr('tabId');
+            var ancestorTabElement = $("div").find("[modal-tabId ='" + tabId +"']");
+            if (confirm('Are you sure you want to remove this tab? Warning: this can not be undone.')) {
+                $(ancestorTabElement).remove();
+            }
+        });
+
+        //update tab positions and content positions on click event
+        $(document).on('click', '#update-tabs', function (e) {
+            e.preventDefault();
+            var quoteID = $(this).attr('quoteid');
+            // scrape DOM to get heirarchy of tabs & blocks
+            var result = {};
+            var data = $(".modal-tab");
+            data.each(function (i, obj) {
+                tabText = $(this).find('.editable-tab').text();
+                tabId = $(this).attr('modal-tabid');
+                if ($(this).find('.content-blocks-item').size() == 0) {
+                    result[tabId] = [tabText, new Array()];
+                } else {
+                    var children = []
+                    $(this).find('.content-blocks-item').each(function (k, v) {
+                        children.push($(this).attr('blockid'));
+                    });
+                    result[tabId] = [tabText, children];
+                }
+            });
+            //POST to server using $.post or $.ajax
+            window.parent.jQuery('#dialog').dialog('close');
+            $("#loader").css("display", "block");
+            $.ajax({
+                data: result,
+                type: 'POST',
+                url: '/manage/contentblocks/update/'+ quoteID + '/tour'
+            }).done(function() {
+                window.location.reload(true);
+            });
+
+        });
+
+        //close dialog box
+        $('#close-dialog').click(function () {
+            window.parent.jQuery('#dialog').dialog('close');
+        });
+
+
+        // change a tab's name
+        $('.editable-tab').editable(function (value, settings) {
+            return (value);
+        }, {
+            width: '20em',
+            onblur: "submit",
+            tooltip: 'Click to edit'
+        });
+    })
+    ;
+</script>

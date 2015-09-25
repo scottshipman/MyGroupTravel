@@ -1,0 +1,5 @@
+
+# path for a Tour Site View, not admin view
+tour_pdf_show:
+    path:     /{id}/{quoteNumber}.pdf
+    defaults: { _controller: "TourBundle:TourSite:sitePDF" }

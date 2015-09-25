@@ -1,4 +1,4 @@
-{# Only visible in Quote #}
+
 
 <h2 id="edit-title-{{ entity.id }}">{{ entity.title }}</h2>
 
@@ -58,15 +58,19 @@
         // Do stuff w/ cancel button
         $(document).on('click', '#cancel-reload', function (e) {
             e.preventDefault();
-            if ( $('.mode-toggle').hasClass('mode-edit') ) { // If on quote preview page
+            if ( $('.mode-toggle').hasClass('mode-edit') ) { // If on preview page
                 $("#loader").css("display", "block");
                 var blockID = {{ entity.id }};
-                var quoteID = $('.mode-toggle').attr('id').substring(14);
-                console.log($(this).closest('form').attr('id'));
+                var objectID = $('.mode-toggle').attr('id').substring(14);
+                if ($("main").hasClass("Tour"))
+                {
+                    var classtype = "Tour";
+                }
+                else {
+                    var classtype = "QuoteVersion";
+                }
                 if($(this).closest('form').attr('id')=='ajax_headerblock_layout_form'){ //header slideshow content block
-                    console.log('cancel slideshow edit');
-                    $('#site-header-slideshow-content').load('/manage/contentblocks/header/show/' + blockID, function () {
-                        console.log('ajax load content');
+                    $('#site-header-slideshow-content').load('/manage/headerblock/header/show/' + blockID, function () {
                         $('#site-header-editForm').empty();
                         $('#site-header-editForm').hide();
                         $('#site-header-slideshow').show();
@@ -80,39 +84,51 @@
                         $("#loader").css("display", "none");
                     });
                 } else { // regular content block
-                    console.log('cancel regular block edit');
                     var editBlock = $("#editable-content-blocks-" + blockID);
                     var previewBlock = $("#previewable-content-blocks-" + blockID);
-                    // Match routing path "/manage/contentblocks/{id}/show/{quoteVersion}/{class}"
-                    previewBlock.load('/manage/contentblocks/' + blockID + '/show/' + quoteID + '/QuoteVersion', function () {
+                    // Match routing path "/manage/contentblocks/{id}/show/{objectID}/{class}"
+                    //TODO path below cannot hardcode QuoteVersion - must be able to accept any Class type
+                    previewBlock.load('/manage/contentblocks/' + blockID + '/show/' + objectID + '/' + classtype, function () {
                         $("#loader").css("display", "none");
                         $('.item-edit').show(); // re-show ALL edit buttons for all content blocks
                         $('.add-content-block').show(); // re-show ALL Add Block's for all tabs
                         editBlock.html('');
                     });
                 }
-            };
+            } else { // on Edit/Show page
+                $("#dialog").html("");
+                $('#dialog').dialog('close');
+
+            }
         });
 
         // Bind form and provide a simple callback function
         $('#ajax_contentblocks_form').ajaxForm({
             beforeSerialize: function() {
-                if (CKEDITOR.instances) {
+                if (typeof CKEDITOR !== 'undefined') {
                     CKEDITOR.instances.tui_toolkit_contentblocksbundle_contentblock_body.updateElement();
                 }
                 $("#loader").css("display", "block");
-                if ( !$('.mode-toggle').hasClass('mode-edit') ) { // If not on quote preview page
+                if ( !$('.mode-toggle').hasClass('mode-edit') ) { // If not on preview page
                     $('#dialog').dialog("close");
                 }
             },
             success: function(response) {
-                if ( $('.mode-toggle').hasClass('mode-edit') ) { // If on quote preview page
+                if ( $('.mode-toggle').hasClass('mode-edit') ) { // If on preview page
                     var blockID = {{ entity.id }};
-                    var quoteID = $('.mode-toggle').attr('id').substring(14);
+                    var objectID = $('.mode-toggle').attr('id').substring(14);
                     var editBlock = $("#editable-content-blocks-" + blockID);
                     var previewBlock = $("#previewable-content-blocks-" + blockID);
+                    if ($("main").hasClass("Tour"))
+                    {
+                        var classtype = "Tour";
+                    }
+                    else {
+                        var classtype = "QuoteVersion";
+                    }
                     // Match routing path "/manage/contentblocks/{id}/show/{quoteVersion}/{class}"
-                    previewBlock.load('/manage/contentblocks/' + blockID + '/show/' + quoteID + '/QuoteVersion', function() {
+                    // TODO must not hardcode QuoteVersion in path below - need to accept any class type
+                    previewBlock.load('/manage/contentblocks/' + blockID + '/show/' + objectID + '/' + classtype, function() {
                         $("#loader").css("display", "none");
                         $('.item-edit').show(); // re-show ALL edit buttons for all content blocks
                         $('.add-content-block').show() // re-show ALL Add Block's for all tabs
@@ -141,7 +157,7 @@
         var values = [];
         values = value.split(',').map(Number);
         values = jQuery.grep(values, function (v) {
-            if (values.length <= 6) {
+            if (values.length <= 15) {
                 $(".new-media-wrapper").css({"display": "block"});
             }
             return v != remove;
@@ -161,7 +177,7 @@
             var values = [];
             if ( value != 0 ) {
                 values = value.split(',').map(Number);
-                if (values.length >= 6) {
+                if (values.length >= 15) {
                     $(".new-media-wrapper").css({"display": "none"});
                 }
             }
@@ -172,7 +188,7 @@
                     if ( value != 0 ) {
                         values = value.split(',').map(Number);
                         values.push(response.id);
-                        if (values.length >= 6) {
+                        if (values.length >= 15) {
                             $(".new-media-wrapper").css({"display": "none"});
                         }
                     }

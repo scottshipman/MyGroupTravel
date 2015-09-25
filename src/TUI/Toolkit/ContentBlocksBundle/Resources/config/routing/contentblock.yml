@@ -30,12 +30,12 @@ manage_contentblocks_delete:
     methods:  [POST, DELETE, GET]
 
 contentblocks_update:
-    path:   /update/{id}
+    path:   /update/{id}/{class}
     defaults: { _controller: "ContentBlocksBundle:ContentBlock:newTab" }
     methods:  [POST]
 
 manage_contentblocks_new_tab:
-    path: /tab/new/{id}
+    path: /tab/new/{id}/{class}
     defaults: { _controller: "ContentBlocksBundle:ContentBlock:newSiteTab"}
     methods:  [POST]
 
@@ -59,37 +59,4 @@ manage_contentblocks_ajax_new:
     defaults: { _controller: "ContentBlocksBundle:ContentBlock:ajaxNew" }
     methods:  [GET]
 
-manage_headerblock_new:
-    path:   /new/header/{quoteVersion}/{class}
-    defaults: { _controller: "ContentBlocksBundle:HeaderBlock:new" }
-    methods:  [GET]
 
-manage_headerblock_edit:
-    path:   /{id}/edit/header/{quoteVersion}/{class}
-    defaults: { _controller: "ContentBlocksBundle:HeaderBlock:edit" }
-    methods:  [GET]
-
-manage_headerblock_layout_edit:
-    path:   /edit/header/layout-editor/{id}
-    defaults: { _controller: "ContentBlocksBundle:HeaderBlock:editLayout" }
-    methods:  [GET]
-
-manage_headerblock_create:
-    path:     /create/header/{quoteVersion}/{class}
-    defaults: { _controller: "ContentBlocksBundle:HeaderBlock:create" }
-    methods:  POST
-
-manage_headerblock_update:
-    path:     /{id}/update/header/{quoteVersion}/{class}
-    defaults: { _controller: "ContentBlocksBundle:HeaderBlock:update" }
-    methods:  [POST]
-
-manage_headerblock_layout_update:
-    path:     /update/header/layout-editor/{id}
-    defaults: { _controller: "ContentBlocksBundle:HeaderBlock:updateLayout" }
-    methods:  [POST]
-
-manage_headerblock_show:
-    path:     /header/show/{id}
-    defaults: { _controller: "ContentBlocksBundle:HeaderBlock:show" }
-    methods:  GET

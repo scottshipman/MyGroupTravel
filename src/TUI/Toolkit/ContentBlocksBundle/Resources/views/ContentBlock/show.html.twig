@@ -1,6 +1,5 @@
-{# Only visible in Quote #}
-
 {% set class = '' %}
+
 {% if entity.layoutType %}
     {% for media in entity.media %}
         {% if media %}
@@ -12,6 +11,11 @@
 {% else %}
     {% set class = 'content-block-layout-normal' %}
 {% endif %}
+
+{% if not entity.body %}
+    {% set class = 'content-block-layout-normal' %}
+{% endif %}
+
 {% if entity.doubleWidth == 1 %}
     {% set size = 'full' %}
 {% else %}

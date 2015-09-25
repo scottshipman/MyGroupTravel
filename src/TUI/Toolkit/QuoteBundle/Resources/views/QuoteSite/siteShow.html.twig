@@ -19,7 +19,7 @@
 {% endblock %}
 
 {% block edit_link %}
-    {% if is_granted("ROLE_BRAND") %}
+    {% if is_granted("ROLE_BRAND") and entity.converted is sameas(false) %}
         <a id="link-preview-edit"
            class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored link-preview-edit" href="#">Switch to
             Edit Mode</a>
@@ -28,13 +28,29 @@
 
 {% block sub_header %}
     <div class="sub-header">
+      <div class="sizer">
         <div class="inner">
             {% if entity.isTemplate == 0 %} {# no Institutions on Templates #}
-                {% if entity.quoteReference.institution.media %}
-                    <div class="institution-logo">
-                        <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}"
-                             alt="{{ entity.quoteReference.institution.name }}">
-                    </div>
+                {% if app.user %}
+                    {% if entity.quoteReference.institution.media %}
+                        <div class="institution-logo">
+                            <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}"
+                                 alt="{{ entity.quoteReference.institution.name }}">
+                        </div>
+                    {% endif %}
+                {% elseif not app.user %}
+                    {% if entity.quoteReference.institution.media %}
+                        <div class="institution-logo-with-brand">
+                            <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}"
+                                 alt="{{ entity.quoteReference.institution.name }}">
+                        </div>
+                    {% endif %}
+                    {% if brand.media %}
+                        <div class="brand-logo">
+                            <img src="{{ asset( brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}"
+                                 alt="{{ brand.name }}">
+                        </div>
+                    {% endif %}
                 {% endif %}
             {% endif %}
 
@@ -46,6 +62,7 @@
             {% if entity.quoteReference.destination %}
                 <div>{{ entity.quoteReference.destination }}</div>{% endif %}
         </div>
+      </div>
     </div>
 {% endblock %}
 
@@ -57,7 +74,7 @@
             <i class="fa fa-print"></i> Print
         </a>
 
-        <a href="/quote/print/{{ entity.id }}.pdf" target="_blank"
+        <a href="/quote/print/{{ entity.id }}/{{ entity.quoteNumber }}.pdf" target="_blank"
            class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
             <i class="fa fa-file-pdf-o"></i> PDF
         </a>
@@ -128,12 +145,12 @@
         <a id="site-content"></a>
 
         <div id="content-wrapper" class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
-            <div id="content-blocks-wrapper" class="content-block-tabs-bar sortable-tabs mdl-tabs__tab-bar">
+            <div id="content-blocks-wrapper" class="content-block-tabs-bar mdl-tabs__tab-bar">
                 {# render the tabs#}
                 {% set activeTab = 'is-active' %}
                 {% for tab, data in entity.content %}
                     <a id="tab-{{ tab }}" href="#tabs-drawer-{{ tab }}"
-                       class="site-content-blocks-tab mdl-tabs__tab {{ activeTab }}">{{ data[0] }}</a>
+                       class="view-tab site-content-blocks-tab mdl-tabs__tab {{ activeTab }}" tabId="{{ tab }}"><span class="tab-name">{{ data[0] }}</span></a>
                     {% set activeTab = '' %}
                 {% endfor %}
                 {% if alternate %}
@@ -148,18 +165,18 @@
                 {% endif %}
             </div>
 
-            {# render the tabs'  content#}
+            {# render the tabs' content #}
             {% set activeTab = 'is-active' %}
             {% for tab, data in entity.content %}
-                <div id="tabs-drawer-{{ tab }}"
-                     class="mdl-tabs__panel sortable-items content-blocks-drawer {{ activeTab }} ">
+                <div id="tabs-drawer-{{ tab }}" class="mdl-tabs__panel content-blocks-drawer {{ activeTab }}">
+                    <div class="sortable-items">
                     {% for item in data[1] %}
                         {% if items[item].doubleWidth == 1 %}
                             {% set size = 'full' %}
                         {% else %}
                             {% set size = 'half' %}
                         {% endif %}
-                        <div id="content-blocks-{{ items[item].id }}" class="site-content-blocks site-content-blocks-item site-content-blocks-size-{{ size }}">
+                        <div id="content-blocks-{{ items[item].id }}" class="site-content-blocks site-content-blocks-item site-content-blocks-size-{{ size }}" blockId="{{ items[item].id }}">
                             <div class="inner-wrapper move-cursor">
                                 {% if editable %}
                                     <div class="site-content-block-actions status-preview-edit">
@@ -193,6 +210,7 @@
                             </div>
                         </div>
                     {% endfor %}
+                    </div><!-- sortable-items -->
                     <a id="add-content-block" tabId="{{ tab }}" href="#" class="add-content-block site-content-blocks-edit status-preview-edit"><i class="fa fa-plus-circle"></i> Add Block</a>
                     <div id="content-block-editForm-{{ tab }}" class="add-content-block-form" style="display: none;"></div>
                 </div>
@@ -208,8 +226,6 @@
 
         </div>
     </div><!-- view-mode -->
-
-    <div id="loader"><img src="{{ asset('bundles/quote/images/loader.gif') }}"></div>
 
     <script type="text/javascript"
             src="https://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.js"></script>
@@ -227,14 +243,63 @@
     <script>
         $(document).ready(function () {
 
+            /**
+             * Drag and Drop Sorting
+             */
+
+
+            $( ".sortable-items" ).sortable({
+                // containment: "parent",
+                tolerance: "pointer",
+                placeholder: "items-placeholder",
+                forcePlaceholderSize: true,
+                helper: "clone",
+                start: function (e, ui) {
+                    ui.placeholder.height( ui.helper.outerHeight() );
+                    if ( ui.helper.css('width') != $(this).css('width') ) { // if the item is floated, through an indirect check
+                        ui.placeholder.css({'float': 'left', 'width': '50%'});
+                    } else {
+                        ui.placeholder.css({'float': 'none', 'width': 'auto', 'clear': 'both'});
+                    }
+                },
+                update: function(e, ui) {
+                    $("#loader").css("display", "block");
+                    // scrape DOM to get hierarchy of tabs and blocks
+                    var result = {};
+                    var data = $(".view-tab"); // a div for each tab
+                    data.each(function (i, obj) {
+                        tabText = $(this).find('.tab-name').text();
+                        tabId = $(this).attr('tabId');
+                        if ( $('#tabs-drawer-' + tabId).find('.site-content-blocks-item').size() == 0 ) {
+                            result[tabId] = [tabText, new Array()];
+                        } else {
+                            var children = [];
+                            $('#tabs-drawer-' + tabId).find('.site-content-blocks-item').each(function (k, v) {
+                                var blockId = 'content-blocks-' + $(this).attr('blockId');
+                                children.push( blockId );
+                            });
+                            result[tabId] = [tabText, children];
+                        }
+                    });
+                    // POST to server using $.ajax
+                    $.ajax({
+                        data: result,
+                        type: 'POST',
+                        url: '/manage/contentblocks/update/' + {{ entity.id }} + '/QuoteVersion'
+                    }).done(function() {
+                        window.location.reload(true);
+                    });
+                }
+            });
+            $( ".sortable-items" ).disableSelection();
+
+
             //remove the CopytoClipboard button if not Flash
             if (navigator.mimeTypes["application/x-shockwave-flash"] == undefined) {
-                $("#copy-button").hide();
-                $('#share_url').attr('disabled', false);
+                $("#copy-button").addClass('hidden');
             }
 
             // Disable drag-and-drop on page load b/c the default is preview mode
-            $(".sortable-tabs").sortable("disable");
             $(".sortable-items").sortable("disable");
 
             // Copy to Clipboard
@@ -252,13 +317,11 @@
                     // Switch to edit mode
                     t.addClass('mode-edit').removeClass('mode-preview');
                     $(this).html('Switch to Preview Mode');
-                    $(".sortable-tabs").sortable("enable");
                     $(".sortable-items").sortable("enable");
                 } else {
                     // Switch to preview mode
                     t.addClass('mode-preview').removeClass('mode-edit');
                     $(this).html('Switch to Edit Mode');
-                    $(".sortable-tabs").sortable("disable");
                     $(".sortable-items").sortable("disable");
                 }
             });
@@ -296,13 +359,13 @@
                     $("#dialog").dialog({width: '60%'}).dialog("option", "title", "Loading...").dialog("open");
                     $("#dialog").load('/manage/quoteversion/show/tabs/' + {{ entity.id }}, function () {
                         $(this).dialog("option", "title", "Rearrange Tabs");
-                        $(".sortable-tabs").sortable("enable");
+                        $(".modal-sortable-tabs").sortable("enable");
                     });
                 });
 
                 // Add a new tab to a site
                 $("#add-new-tab").on('click', function () {
-                    contentBlocksNewTab({{ entity.id }});
+                    contentBlocksNewTab({{ entity.id }}, "QuoteVersion");
                 });
 
                 // edit header slideshow in layout mode
@@ -310,7 +373,7 @@
                     e.preventDefault();
                     $("#loader").css("display", "block");
                     var blockId = $('#header-block-content-item').attr('blockId')
-                    $("#site-header-editForm").load('/manage/contentblocks/edit/header/layout-editor/' + blockId, function () {
+                    $("#site-header-editForm").load('/manage/headerblock/header/edit/layout-editor/' + blockId, function () {
                         $('.item-edit').hide(); // hide ALL edit buttons for all content blocks
                         $('.add-content-block').hide();
                         $("#loader").css("display", "none");
@@ -321,7 +384,7 @@
                         $('#ajax_headerblock_layout_form').ajaxForm({
                             success: function (response) {
                                 // redraw the area by loading a twig file
-                                $('#site-header-slideshow-content').load('/manage/contentblocks/header/show/' + blockId, function () {
+                                $('#site-header-slideshow-content').load('/manage/headerblock/header/show/' + blockId, function () {
                                     $('#site-header-editForm').empty();
                                     $('#site-header-editForm').hide();
                                     $('#site-header-slideshow').show();
@@ -340,7 +403,7 @@
                 // Add header block in layout mode
                 $("#add-header-content").on('click', function (e) {
                     $("#loader").css("display", "block");
-                    $("#site-header-editForm").load('/manage/contentblocks/new/header/' + {{ entity.id }} +'/QuoteVersion', function () {
+                    $("#site-header-editForm").load('/manage/headerblock/header/new/' + {{ entity.id }} +'/QuoteVersion', function () {
                         $('.item-edit').hide(); // hide ALL edit buttons for all content blocks
                         $("#loader").css("display", "none");
                         $('#site-header-editForm').show();
@@ -350,7 +413,7 @@
                             success: function (response) {
                                 var blockId = response["id"];
                                 // redraw the area by loading a twig file
-                                $('#site-header-slideshow-content').load('/manage/contentblocks/header/show/' + blockId, function () {
+                                $('#site-header-slideshow-content').load('/manage/headerblock/header/show/' + blockId, function () {
                                     $('#site-header-editForm').empty();
                                     $('#site-header-editForm').hide();
                                     $('#site-header-slideshow').show();
@@ -382,7 +445,6 @@
                     $('.item-edit').show();
                     $(".site-content-blocks-edit").show();
                     $(this).hide();
-                    $(".sortable-tabs").sortable("enable");
                     $(".sortable-items").sortable("enable");
                 });
 
@@ -398,7 +460,6 @@
                         $('#content-block-editForm-' + tabId).show();
                         $('#content-block-editForm-' + tabId + '-cancel').show();
                         $(".site-content-blocks-edit").hide();
-                        $(".sortable-tabs").sortable("disable");
                         $(".sortable-items").sortable("disable");
                         doMDLpopup($('#content-block-editForm-' + tabId)); // run the function to add appropriate MDL classes to form elements
                         $('#newBlockIdForm').ajaxForm({
@@ -406,7 +467,6 @@
                                 CKEDITOR.instances.tui_toolkit_contentblocksbundle_contentblock_body.updateElement();
                             },
                             success: function (response) {
-                                console.log(response);
                                 $('#content-block-editForm-' + tabId).empty().hide();
                                 $("#loader").css("display", "block");
                                 window.location.reload();
@@ -620,144 +680,5 @@
                 <i class="fa fa-thumbs-o-up"> </i> Like Quote
             </a>
         {% endif %}
-    {% elseif (entity.converted is sameas(true)) and (entity.quoteReference.converted is sameas(true)) %}
-        <a class="accepted-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-            <i class="fa fa-thumbs-up"> </i> Liked
-        </a>
     {% endif %}
 {% endblock %}
-
-{#
-# THIS IS THE OLD JS CODE THAT WE CAN BORROW FROM BUT PROBABLY NOT USED AS IS
-
-
-            // Add a new tab to a site
-            $("#add-new-tab").on('click', function(){
-                contentBlocksAddTab('#content-blocks-wrapper', {{ entity.id }});
-            });
-
-            // remove an empty tab from a site (hard delete)
-            $(".tab-delete").on('click', function(){
-                var ancestorTabElement = $(this).closest('.content-blocks-tab');
-                if (confirm('Are you sure you want to remove this tab? Warning: this can not be undone.')) {
-                    $(ancestorTabElement).remove();
-                    contentBlocksUpdate({{ entity.id }});
-                }
-            });
-
-            // Add a content block into a tab
-            $(".tab-new").on('click', function(){
-                var ancestorTabElement=$(this).closest('.content-blocks-tab').children('.sortable-items');
-                $.ajax({
-                    url: window.location.protocol + '//' + window.location.hostname + '/manage/contentblocks/ajax/new',
-                    headers: {
-                        "Pragma": "no-cache",
-                        "Expires": -1,
-                        "Cache-Control": "no-cache"
-                    }
-                }).done(function (data) {
-                    var id=(Object.keys(data).toString());
-                    var title = data[id];
-                    //add element into DOM
-                    $(ancestorTabElement).append(
-                        '<div id="content-blocks-' + id + '" class="content-blocks content-blocks-item">' +
-                        '<i class="fa fa-arrows"></i>  ' + title +
-                        '<div id="content-block-actions-' + id + '" class="content-block-actions">' +
-                            '<i class="item-edit content-block-item-action fa fa-pencil-square-o"></i>' +
-                            '<i class="item-delete content-block-item-action fa fa-trash-o"></i>' +
-                            '<i class="item-lock content-block-item-action fa fa-lock"></i>' +
-                            '<i class="item-hide content-block-item-action fa fa-ban"></i>' +
-                            '</div></div>'
-                        );
-                        contentBlocksUpdate({{ entity.id }});
-                        });
-
-                        });
-
-            // toggle the hide boolean on a content block
-            $(".item-hide").on('click', function(e){
-                // todo Get item.id and item.name
-                var actionParent = $(this).parent().attr('id');
-                var block = actionParent.substring(22);
-                $.ajax({
-                    url: '/manage/contentblocks/'+ block + '/hide/' + {{ entity.id }} + '/QuoteVersion',
-                    headers: {
-                        "Pragma": "no-cache",
-                        "Expires": -1,
-                        "Cache-Control": "no-cache"
-                    }
-                }).done(function () {
-                    $("#loader").css("display", "inline-block");
-                    window.location.hash = 'site-content';
-                    window.location.reload(true);
-                });
-            });
-
-
-            // toggle the locked boolean on a content block
-            $(".item-lock").on('click', function(e){
-                // todo Get item.id and item.name
-                var actionParent = $(this).parent().attr('id');
-                var block = actionParent.substring(22);
-                $.ajax({
-                    url: '/manage/contentblocks/'+ block + '/lock/' + {{ entity.id }} + '/QuoteVersion',
-                    headers: {
-                        "Pragma": "no-cache",
-                        "Expires": -1,
-                        "Cache-Control": "no-cache"
-                    }
-                }).done(function () {
-                    $("#loader").css("display", "inline-block");
-                    window.location.hash = 'site-content';
-                    window.location.reload(true);
-                });
-            });
-
-            // delete a content block
-            $(".item-delete").on('click', function(e){
-                // todo Get item.id and item.name
-                if (confirm('Are you sure you want to remove this item? Warning: this can not be undone.')) {
-                    var actionParent = $(this).parent().attr('id');
-                    var block = actionParent.substring(22);
-                    $.ajax({
-                        method:'DELETE',
-                        url: '/manage/contentblocks/' + block + '/delete/' + {{ entity.id }} + '/QuoteVersion',
-                        headers: {
-                            "Pragma": "no-cache",
-                            "Expires": -1,
-                            "Cache-Control": "no-cache"
-                        }
-                    }).done(function () {
-                        $('#content-blocks-' + block).remove();
-                        contentBlocksUpdate({{ entity.id }});
-                    });
-                }
-            });
-
-            // change a tab's name
-            $('.editable-tab').editable(function(value, settings) {
-                return(value);
-            }, {
-                width: '20em',
-                onblur: "cancel",
-                tooltip: 'Click to edit',
-                callback : function(value, settings) {
-                    contentBlocksUpdate({{ entity.id }}); //value
-                }
-            });
-
-
-            // edit a content block
-            $(".item-edit").on('click', function(e){
-                // todo Get item.id and item.name
-                var actionParent = $(this).parent().attr('id');
-                var block = actionParent.substring(22);
-                //e.preventDefault();
-                $("#dialog").html("");
-                $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
-                $("#dialog").load('/ajax/contentblocks/' + block + '/edit/' + {{ entity.id}} +'/QuoteVersion', function() {
-                    $(this).dialog("option", "title", 'Edit Content Block');
-                });
-            });
-
-#}

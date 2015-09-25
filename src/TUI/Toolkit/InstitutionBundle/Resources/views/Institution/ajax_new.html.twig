@@ -12,12 +12,18 @@
         // bind form and provide a simple callback function
         $('#ajax_institution_form').ajaxForm({
             success : function (response) {
+                if ($('#tui_toolkit_quotebundle_quoteversion_quoteReference_institution').length>0) {
+                    var elem = $('#tui_toolkit_quotebundle_quoteversion_quoteReference_institution');
+                }
+                if ($('#tui_toolkit_tourbundle_tour_institution').length>0) {
+                    var elem = $('#tui_toolkit_tourbundle_tour_institution');
+                }
                 $('#dialog').dialog( "close" );
                 // make the floating label leave the field and change to valid color
-                $('#tui_toolkit_quotebundle_quoteversion_quoteReference_institution').parent().addClass('is-dirty');
-                $('#tui_toolkit_quotebundle_quoteversion_quoteReference_institution').parent().removeClass('is-invalid');
+                elem.parent().addClass('is-dirty');
+                elem.parent().removeClass('is-invalid');
                 // add the value to the field
-                $('#tui_toolkit_quotebundle_quoteversion_quoteReference_institution').val(response);
+                elem.val(response);
             }
         })
     });

@@ -1,4 +1,5 @@
 {% block body_html %}
+    {%  if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
     {% autoescape false %}
     <div style="color:#fff; font-size: 1px; text-align: center;">Ensure receiving emails from {{ brand.name }}, please
         add us to
@@ -26,27 +27,21 @@
                                     </center>
                                     <h4>{{ entity.name }}</h4>
 
+                                    <p>Institution Name: {{ entity.quoteReference.institution }}</p>
+
+                                    <p>Tour Name : {{ entity.name }}</p>
+
                                     <p>Quote Number: {{ entity.quoteNumber }}</p>
 
-                                    <p>Departing: {{ entity.departureDate.date }}</p>
+                                    <p>Organizer Name/Email: {{ entity.quoteReference.organizer.firstName }} {{ entity.quoteReference.organizer.lastName }} {{ entity.quoteReference.organizer.email }}</p>
 
-                                    <p>For {{ entity.duration }} days</p>
-
-                                    <p>Returning {{ entity.returnDate.date }}</p>
-
-                                    <p>Price per person: {{ entity.pricePerson }}</p>
-
-                                    <p>Based on {{ entity.payingPlaces }} paying plus {{ entity.freePlaces }} free
-                                        places</p>
-
-                                    <p><strong>Quote valid until {{ entity.expiryDate.date }}</strong></p>
                                     {% if additional %}
                                         <p><strong>Additions:</strong></p>
                                         <p>{{ additional }}</p>
                                     {% endif %}
                                     <center>
                                         <a style="text-decoration: none; color:#fff; display: block; width: 40%; padding: 20px; margin: 20px auto; background-color:{{ brand.primaryColor }}; text-align: center;"
-                                           href="{{ absolute_url("/quote/view/" ~ entity.id) }}">View Your Quote</a>
+                                           href="{{ absolute_url("/quote/view/" ~ entity.id) }}">View Quote</a>
                                     </center>
                                     <hr>
                                     <p style="text-align: center; color: #C7C3C5;">

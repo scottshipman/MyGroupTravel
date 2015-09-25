@@ -38,6 +38,8 @@ framework:
 
 # Twig Configuration
 twig:
+    globals:
+      locale: %locale%
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
     form:
@@ -49,7 +51,7 @@ assetic:
     debug:          "%kernel.debug%"
     read_from:      '%kernel.root_dir%/../web'
     use_controller: false
-    bundles:        [BrandBundle, TUIToolkitUserBundle, QuoteBundle, InstitutionBundle, MediaBundle, AppBundle, ContentBlocksBundle, TwigBundle, ContentBlocksBundle]
+    bundles:        [TourBundle, BrandBundle, TUIToolkitUserBundle, QuoteBundle, InstitutionBundle, MediaBundle, AppBundle, ContentBlocksBundle, TwigBundle, ContentBlocksBundle]
     #java: /usr/bin/java
     filters:
         cssrewrite: ~
@@ -232,6 +234,24 @@ oneup_uploader:
               - image/jpeg
               - image/png
               - image/jpg
+        tourassets:
+            frontend: dropzone
+            namer: oneup_uploader.namer.uniqid
+            error_handler: oneup_uploader.error_handler.noop
+            enable_progress:      true
+            enable_cancelation:   true
+            storage:
+                directory: "%kernel.root_dir%/../web/static/uploads/media/tourassets"
+            allowed_mimetypes:
+              - application/msword
+              - application/vnd.openxmlformats-officedocument.wordprocessingml.document
+              - application/vnd.ms-excel
+              - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+              - application/vnd.ms-powerpoint
+              - application/vnd.openxmlformats-officedocument.presentationml.presentation
+              - application/pdf
+
+
 
 stof_doctrine_extensions:
     default_locale: "%locale%"
@@ -258,15 +278,20 @@ genemu_form:
 trsteel_ckeditor:
     class: Trsteel\CkeditorBundle\Form\Type\CkeditorType
     transformers: ['html_purifier']
-    toolbar: ['document', 'tools', 'basicstyles', 'links', 'styles', 'paragraph']
+    toolbar: ['document', 'basicstyles', 'links', 'tools', 'styles', 'paragraph']
     toolbar_groups:
         document: ['Source']
         links: ['Link','Unlink','Anchor']
+        tools: ['Image']
     ui_color: '#ffffff'
     startup_outline_blocks: false
     width: 100% #Integer or %
     height: 300 #Integer or %
     custom_config: "/assetic/ckeditorcustomsettings.js"
+    html_purifier:
+        config:
+            HTML.AllowedAttributes: 'src, href, target, colspan, class, style'
+            Attr.AllowedFrameTargets: '_blank, _self, _parent, _top'
 
 liip_imagine:
     resolvers:
@@ -293,7 +318,7 @@ liip_imagine:
             quality: 100
             filters:
                 strip: ~
-                thumbnail: { size: [900, 600], mode: inset }
+                thumbnail: { size: [1600, 900], mode: inset }
         modalImage:
             quality: 100
             filters:

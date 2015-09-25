@@ -1,0 +1,670 @@
+{% extends '::site-base.html.twig' %}
+
+{% block title %}
+    {% if is_granted("ROLE_BRAND") %}
+        Site View
+    {% else %}
+        {{ entity.quoteReference.name }}, {{ entity.name }}
+    {% endif %}
+{% endblock %}
+{% block page_title %}Site View{% endblock %}
+
+{% block back_link %}
+    {% if is_granted("ROLE_BRAND") %}
+        <a class="back-link" href="{{ path('manage_tour_show', { 'id': entity.id }) }}"><i
+                    class="fa fa-arrow-left"></i> Back to Show</a>
+    {% else %}
+        <a class="back-link" href="/"><i class="fa fa-arrow-left"></i> Back to Dashboard</a>
+    {% endif %}
+{% endblock %}
+
+{% block edit_link %}
+    {% if editable %}
+   {#  {% if is_granted("ROLE_BRAND") %} #}
+        <a id="link-preview-edit"
+           class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored link-preview-edit" href="#">Switch to
+            Edit Mode</a>
+        <a id="promote-tour" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored link-preview-edit">Promote</a>
+
+    {% endif %}
+{% endblock %}
+
+{% block sub_header %}
+    <div class="sub-header">
+      <div class="sizer">
+        <div class="inner">
+                {% if app.user %}
+                    {% if entity.quoteReference.institution.media %}
+                        <div class="institution-logo">
+                            <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}"
+                                 alt="{{ entity.quoteReference.institution.name }}">
+                        </div>
+                    {% endif %}
+                {% elseif not app.user %}
+                    {% if entity.quoteReference.institution.media %}
+                        <div class="institution-logo-with-brand">
+                            <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}"
+                                 alt="{{ entity.quoteReference.institution.name }}">
+                        </div>
+                    {% endif %}
+                    {% if brand.media %}
+                        <div class="brand-logo">
+                            <img src="{{ asset( brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}"
+                                 alt="{{ brand.name }}">
+                        </div>
+                    {% endif %}
+                {% endif %}
+
+            {% if entity.quoteReference.institution %}
+                <div id="site-quote-name">{{ entity.quoteReference.institution.name }}</div>{% endif %}
+
+            <h2>{{ entity.quoteReference.name }}{% if is_granted("ROLE_BRAND") %}, {{ entity.name }}{% endif %} {% if entity.quoteNumber %}({{ entity.quoteNumber }}){% endif %}</h2>
+
+            {% if entity.quoteReference.destination %}
+                <div>{{ entity.quoteReference.destination }}</div>{% endif %}
+        </div>
+      </div>
+    </div>
+{% endblock %}
+
+{% block body -%}
+    <div id="quote-version-{{ entity.id }}" class="mode-toggle mode-preview">
+
+        <a href="javascript:window.print()"
+           class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
+            <i class="fa fa-print"></i> Print
+        </a>
+
+        <a href="/tour/print/{{ entity.id }}/{{ entity.quoteNumber }}.pdf" target="_blank"
+           class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
+            <i class="fa fa-file-pdf-o"></i> PDF
+        </a>
+
+        <a href="/tour/view/export/{{ entity.id }}/{{ entity.quoteNumber }}.zip" target="_blank"
+           class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
+            <i class="fa fa-download"></i> Download Promo Materials
+
+        </a>
+
+        {% if warning | length >0 %}
+            <div id="site-warning">
+                {% for message in warning %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <div id="site-header" class="quote-view-site-header">
+            {# render the slideshow using the controller/twig with headerbock.id as param#}
+            <div id="site-header-slideshow">
+                {% if entity.headerBlock %}
+                    {% if editable %}
+                        <div class="site-content-blocks-item">
+                            <div class="status-preview-edit site-content-block-actions">
+                                <div class="edit-icons">
+                                    {% if entity.headerBlock.locked %}
+                                    <i id="lock-header-block"
+                                       class="item-lock content-block-item-action fa fa-unlock-alt" title="Unlock" blockId="{{ entity.headerBlock.id }}"></i>
+                                    {% else %}
+                                    <i id="edit-header-block"
+                                       class="content-block-item-action item-edit fa fa-pencil-square-o" title="Edit" blockId="{{ entity.headerBlock.id }}"></i></a>
+                                      <i id="lock-header-block"
+                                       class="item-lock content-block-item-action fa fa-lock" title="Lock" blockId="{{ entity.headerBlock.id }}"></i>{% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div id="site-header-slideshow-content">
+                        {{ render(controller('ContentBlocksBundle:HeaderBlock:show', {'id':  entity.headerBlock.id  })) }}
+                    </div>
+                {% else %}
+                    {% if editable %}
+                        <div id="site-header-slideshow-content">
+                            <a id="add-header-content" href="#"
+                               class="status-preview-edit mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                                <i class="fa fa-plus-circle"></i> Add Header Slideshow
+                            </a>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+            <div id="site-header-summary">
+                {% if editable %}
+                    <div class="site-content-blocks-item">
+                        <div class="status-preview-edit site-content-block-actions">
+                            <div class="edit-icons">
+                                {% if entity.locked == 0 %}<i id="edit-header-summary" class="content-block-item-action item-edit fa fa-pencil-square-o" title="Edit"></i>{% endif %}
+                                {% if entity.locked %}<i action="unlock" id="lock-header-summary"class="content-block-item-action fa fa-unlock-alt" title="Unlock"></i> {% else %} <i action="lock" id="lock-header-summary" class="content-block-item-action fa fa-lock" title="Lock"></i>{% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                <div id="site-header-summary-content">
+                    {{ render(controller('TourBundle:TourSite:showSummary', {'id':  entity.id  })) }}
+                </div>
+            </div>
+            {# give a placeholder for the editable version #}
+            <div id="site-header-summary-form" style="display:none;"></div>
+            <div id="site-header-editForm" style="display:none;"></div>
+        </div> {# end site header#}
+
+        {# RENDER THE CONTENT BLOCKS HERE #}
+
+        <a id="site-content"></a>
+
+        <div id="content-wrapper" class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+            <div id="content-blocks-wrapper" class="content-block-tabs-bar sortable-tabs mdl-tabs__tab-bar">
+                {# render the tabs#}
+                {% set activeTab = 'is-active' %}
+                {% for tab, data in entity.content %}
+                    <a id="tab-{{ tab }}" href="#tabs-drawer-{{ tab }}"
+                       class="site-content-blocks-tab mdl-tabs__tab {{ activeTab }}">{{ data[0] }}</a>
+                    {% set activeTab = '' %}
+                {% endfor %}
+                {% if editable %}
+                    <span id="edit-tabs" class="site-content-blocks-tab status-preview-edit"><i
+                                class="fa fa-pencil"></i> Edit Tabs</span>
+                    <span id="add-new-tab" class="site-content-blocks-tab status-preview-edit"><i
+                                class="fa fa-plus-circle"></i> Add New Tab</span>
+                {% endif %}
+            </div>
+
+            {# render the tabs'  content#}
+            {% set activeTab = 'is-active' %}
+            {% for tab, data in entity.content %}
+                <div id="tabs-drawer-{{ tab }}"
+                     class="mdl-tabs__panel sortable-items content-blocks-drawer {{ activeTab }} ">
+                    {% for item in data[1] %}
+                        {% if items[item].doubleWidth == 1 %}
+                            {% set size = 'full' %}
+                        {% else %}
+                            {% set size = 'half' %}
+                        {% endif %}
+                        <div id="content-blocks-{{ items[item].id }}" class="site-content-blocks site-content-blocks-item site-content-blocks-size-{{ size }}">
+                            <div class="inner-wrapper move-cursor">
+                                {% if editable %}
+                                    <div class="site-content-block-actions status-preview-edit">
+                                        {# probably render a controller here by passing in item as id and have block entity returned #}
+                                        <div class="move-icon"><i class="fa fa-arrows" title="Rearrange"></i></div>
+                                        <div id="content-block-actions-{{ items[item].id }}" class="edit-icons {% if items[item].locked %}content-block-locked{% endif %}">
+                                            <i class="item-edit content-block-item-action fa fa-pencil-square-o"
+                                               title="Edit" blockId="{{ items[item].id }}"></i>
+                                            <i class="item-resize content-block-item-action fa fa-arrows-h {{ size }}"
+                                               title="Resize" blockId="{{ items[item].id }}"></i>
+                                            <i class="item-lock content-block-item-action fa {% if items[item].locked %}fa-unlock-alt{% else %}fa-lock{% endif %}"
+                                               title="{% if items[item].locked %}Unlock{% else %}Lock{% endif %}" blockId="{{ items[item].id }}"></i>
+                                            <i class="item-delete content-block-item-action fa fa-trash-o"
+                                               title="Delete" blockId = "{{ items[item].id }}"></i>
+                                            {#
+                                            {% if items[item].hidden %}
+                                                <i class="item-hide content-block-item-action fa fa-eye" title="Show"></i>
+                                            {% else %}
+                                                <i class="item-hide content-block-item-action fa fa-ban" title="Hide"></i>
+                                            {% endif %}
+                                            #}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                {# render the actual content block #}
+                                <div id="previewable-content-blocks-{{ items[item].id }}">
+                                    {{ render(controller('ContentBlocksBundle:ContentBlock:show', {'id':  items[item].id  })) }}
+                                </div>
+                                {# give a placeholder for the editable version #}
+                                <div id="editable-content-blocks-{{ items[item].id }}"></div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <a id="add-content-block" tabId="{{ tab }}" href="#" class="add-content-block site-content-blocks-edit status-preview-edit"><i class="fa fa-plus-circle"></i> Add Block</a>
+                    <div id="content-block-editForm-{{ tab }}" class="add-content-block-form" style="display: none;"></div>
+                </div>
+                {% set activeTab = '' %}
+            {% endfor %}
+        </div>
+    </div><!-- view-mode -->
+
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.js"></script>
+
+    <script type="text/javascript" charset="utf-8">
+        $(window).load(function () {
+            $('.flexslider').flexslider({
+                directionNav: false,
+                controlNav: false,
+                smoothHeight: true
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+
+            /**
+             * Drag and Drop Sorting
+             */
+
+
+            $( ".sortable-items" ).sortable({
+                containment: "parent",
+                items: "> div",
+                tolerance: "pointer",
+                connectWith: '.sortable-items',
+                placeholder: "items-placeholder",
+                start: function (e, ui) {
+                    ui.placeholder.height(100);
+                },
+                axis: 'y',
+                update: function(e, ui) {
+                    console.log('resorting...');
+                   // var pathArray = window.location.pathname.split( '/' );
+                   // contentBlocksUpdate(pathArray[3]); // fourth [3] part in the path should be quote ID to pass in
+                }
+            });
+
+            // Disable drag-and-drop on page load b/c the default is preview mode
+            $(".sortable-items").sortable("disable");
+
+            // Toggle between preview and edit mode for content blocks and tabs
+            $('#link-preview-edit').on('click', function (e) {
+                e.preventDefault();
+                var t = $('.mode-toggle');
+                if (t.hasClass('mode-preview')) {
+                    // Switch to edit mode
+                    t.addClass('mode-edit').removeClass('mode-preview');
+                    $(this).html('Switch to Preview Mode');
+                    $(".sortable-items").sortable("enable");
+                } else {
+                    // Switch to preview mode
+                    t.addClass('mode-preview').removeClass('mode-edit');
+                    $(this).html('Switch to Edit Mode');
+                    $(".sortable-items").sortable("disable");
+                }
+            });
+
+            // change request popup
+            $(document).on('click', '#change-request', function (e) {
+                //e.preventDefault();
+                $("#dialog").html("");
+                $("#dialog").dialog({width: '60%'}).dialog("option", "title", "Loading...").dialog("open");
+                $("#dialog").load('/quote/view/change-request/form/' + {{ entity.id}}, function () {
+                    $(this).dialog("option", "title", "I'd prefer to make some changes");
+                    doMDLpopup($('#dialog')); // run the function to add appropriate MDL classes to form elements
+
+                });
+            });
+
+            // accept quote popup
+            $(document).on('click', '#accept-quote', function (e) {
+                //e.preventDefault();
+                $("#dialog").html("");
+                $("#dialog").dialog({width: '60%'}).dialog("option", "title", "Loading...").dialog("open");
+                $("#dialog").load('/quote/view/accepted/form/' + {{ entity.id}}, function () {
+                    $(this).dialog("option", "title", "Like this quote");
+                    doMDLpopup($('#dialog')); // run the function to add appropriate MDL classes to form elements
+                });
+            });
+
+            {# Only place javascript below that deals with editing so it only loads when it needs to #}
+            {% if editable %}
+
+                // edit tabs popup
+                $("#edit-tabs").on('click', function (e) {
+                    //e.preventDefault();
+                    $("#dialog").html("");
+                    $("#dialog").dialog({width: '60%'}).dialog("option", "title", "Loading...").dialog("open");
+                    $("#dialog").load('/manage/tour/show/tabs/' + {{ entity.id }}, function () {
+                        $(this).dialog("option", "title", "Rearrange Tabs");
+                        $(".modal-sortable-tabs").sortable("enable");
+                    });
+                });
+
+                // Add a new tab to a site
+                $("#add-new-tab").on('click', function () {
+                    contentBlocksNewTab({{ entity.id }}, "tour" );
+                });
+
+                // edit header slideshow in layout mode
+                $(document).on('click', '#edit-header-block', function (e) {
+                    e.preventDefault();
+                    $("#loader").css("display", "block");
+                    var blockId = $('#header-block-content-item').attr('blockId')
+                    $("#site-header-editForm").load('/manage/headerblock/header/edit/layout-editor/' + blockId, function () {
+                        $('.item-edit').hide(); // hide ALL edit buttons for all content blocks
+                        $('.add-content-block').hide();
+                        $("#loader").css("display", "none");
+                        $('#site-header-editForm').show();
+                        $('#site-header-slideshow').hide();
+                        doMDLpopup($('#site-header-editForm')); // run the function to add appropriate MDL classes to form elements
+                        // bind header edit form and provide a simple callback function
+                        $('#ajax_headerblock_layout_form').ajaxForm({
+                            success: function (response) {
+                                // redraw the area by loading a twig file
+                                $('#site-header-slideshow-content').load('/manage/headerblock/header/show/' + blockId, function () {
+                                    $('#site-header-editForm').empty();
+                                    $('#site-header-editForm').hide();
+                                    $('#site-header-slideshow').show();
+                                    $('.item-edit').show();
+                                    $('.flexslider').flexslider({
+                                        directionNav: false,
+                                        controlNav: false,
+                                        smoothHeight: true
+                                    });
+                                });
+                            }
+                        });
+                    });
+                });
+
+                // Add header block in layout mode
+                $("#add-header-content").on('click', function (e) {
+                    $("#loader").css("display", "block");
+                    $("#site-header-editForm").load('/manage/headerblock/header/new/' + {{ entity.id }} +'/tour', function () {
+                        $('.item-edit').hide(); // hide ALL edit buttons for all content blocks
+                        $("#loader").css("display", "none");
+                        $('#site-header-editForm').show();
+                        $('#site-header-slideshow').hide();
+                        doMDLpopup($('#site-header-editForm')); // run the function to add appropriate MDL classes to form elements
+                        $('#ajax_contentblocks_form').ajaxForm({
+                            success: function (response) {
+                                var blockId = response["id"];
+                                // redraw the area by loading a twig file
+                                $('#site-header-slideshow-content').load('/manage/headerblock/header/show/' + blockId, function () {
+                                    $('#site-header-editForm').empty();
+                                    $('#site-header-editForm').hide();
+                                    $('#site-header-slideshow').show();
+                                    $('.item-edit').show();
+                                    $('.flexslider').flexslider({
+                                        directionNav: false,
+                                        controlNav: false,
+                                        smoothHeight: true
+                                    });
+                                    $('#site-header-slideshow').prepend(
+                                            '<div class="site-content-blocks-item">' +
+                                            '<div class="status-preview-edit site-content-block-actions">' +
+                                            '<div class="edit-icons">' +
+                                            '<i id="edit-header-block" class="content-block-item-action fa fa-pencil-square-o" title="Edit"></i></a>' +
+                                            '<i id="lock-header-block" class="content-block-item-action fa fa-lock" title="Lock"></i>' +
+                                            '</div>' +
+                                            '</div> </div>'
+                                    );
+                                });
+                            }
+                        });
+                    });
+                });
+
+                //Cancel function for inline content block creation
+                $(document).on('click', '.content-block-cancel', function (e) {
+                    var tabId = $(this).attr("tabId");
+                    $('#content-block-editForm-' + tabId).empty().hide();
+                    $('.item-edit').show();
+                    $(".site-content-blocks-edit").show();
+                    $(this).hide();
+                    $(".sortable-items").sortable("enable");
+                });
+
+                //Inline content block creation
+                $(".site-content-blocks-edit").on('click', function (e) {
+                    e.preventDefault();
+                    $("#loader").css("display", "block");
+                    var tabId = $(this).attr("tabId");
+                    $("#content-block-editForm-" + tabId).load('/manage/contentblocks/new/tour/' + {{ entity.id }} +'/' + tabId, function () {
+                        $("#content-block-editForm-" + tabId + " .button-row").append( '<a id ="content-block-editForm-' + tabId + '-cancel" tabId="' + tabId + '" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored content-block-cancel" style="display: none; background-color: red; color: white;" href="#">Cancel</a>' );
+                        $('.item-edit').hide(); // hide ALL edit buttons for all content blocks
+                        $("#loader").css("display", "none");
+                        $('#content-block-editForm-' + tabId).show();
+                        $('#content-block-editForm-' + tabId + '-cancel').show();
+                        $(".site-content-blocks-edit").hide();
+                        $(".sortable-items").sortable("disable");
+                        doMDLpopup($('#content-block-editForm-' + tabId)); // run the function to add appropriate MDL classes to form elements
+                        $('#newBlockIdForm').ajaxForm({
+                            beforeSerialize: function () {
+                                CKEDITOR.instances.tui_toolkit_contentblocksbundle_contentblock_body.updateElement();
+                            },
+                            success: function (response) {
+                                $('#content-block-editForm-' + tabId).empty().hide();
+                                $("#loader").css("display", "block");
+                                window.location.reload();
+                            }
+                        });
+                    });
+                });
+
+                // do the resize stuff on the fly!
+                $('.item-resize').click(function () {
+                    var t = $(this);
+                    $("#loader").css("display", "block");
+                    var blockID = t.attr('blockId');
+                    $.ajax({
+                        url: '/manage/contentblocks/' + blockID + '/resize/' + {{ entity.id }} +'/tour',
+                        headers: {
+                            "Pragma": "no-cache",
+                            "Expires": -1,
+                            "Cache-Control": "no-cache"
+                        }
+                    }).done(function () {
+                        if (t.hasClass('half')) {
+                            // Will now be full
+                            t.addClass('full').removeClass('half');
+                            $('#content-blocks-' + blockID).addClass('site-content-blocks-size-full').removeClass('site-content-blocks-size-half');
+                            $('#content-block-id-' + blockID).addClass('content-block-size-full').removeClass('content-block-size-half');
+                        } else {
+                            // Will now be half
+                            t.addClass('half').removeClass('full');
+                            $('#content-blocks-' + blockID).addClass('site-content-blocks-size-half').removeClass('site-content-blocks-size-full');
+                            $('#content-block-id-' + blockID).addClass('content-block-size-half').removeClass('content-block-size-full');
+                        }
+                        $("#loader").css("display", "none");
+                    });
+                });
+
+                // edit a content block
+                $(".item-edit").on('click', function () {
+                    var t = $(this);
+                    $("#loader").css("display", "block");
+                    var block = t.attr('blockId');
+                    var editBlock = $("#editable-content-blocks-" + block);
+                    var previewBlock = $("#previewable-content-blocks-" + block);
+                    editBlock.html('');
+                    editBlock.load('/ajax/contentblocks/' + block + '/edit/' + {{ entity.id }} +'/tour', function () {
+                        $('.item-edit').hide(); // hide ALL edit buttons for all content blocks
+                        $('.add-content-block').hide() // hide ALL Add Block's for all tabs
+                        doMDLpopup(editBlock); // run the function to add appropriate MDL classes to form elements
+                        previewBlock.html('');
+                        $("#loader").css("display", "none");
+                    });
+                });
+
+                // toggle the locked boolean on a content block on the fly!
+                $(".item-lock").on('click', function (e) {
+                    var t = $(this);
+                    $("#loader").css("display", "block");
+                    var blockID = t.attr('blockId');
+                    $.ajax({
+                        url: '/manage/contentblocks/' + blockID + '/lock/' + {{ entity.id }} +'/tour',
+                        headers: {
+                            "Pragma": "no-cache",
+                            "Expires": -1,
+                            "Cache-Control": "no-cache"
+                        }
+                    }).done(function () {
+                        t.toggleClass('fa-unlock-alt').toggleClass('fa-lock');
+                        if (t.attr('title') == 'Unlock') {
+                            // Will now be unlocked
+                            t.parent().removeClass('content-block-locked');
+                            t.attr('title', 'Lock');
+                        } else {
+                            // Will now be locked
+                            t.parent().addClass('content-block-locked');
+                            t.attr('title', 'Unlock');
+                        }
+                        $("#loader").css("display", "none");
+                    });
+                });
+
+                // toggle the header summary lock
+                $(document).on('click', '#lock-header-summary', function (e) {
+                    e.preventDefault();
+                    var editElement = $('#edit-header-summary');
+                    $("#loader").css("display", "block");
+                    var action = $(this).attr('action');
+                    $.ajax({
+                        url: '/manage/tour/{{ entity.id }}/lock',
+                    }).done(function () {
+                        if (action == 'lock') {
+                            if (editElement){
+                                editElement.css('display','none');
+                            }
+
+                            $('#lock-header-summary').addClass('fa-unlock-alt')
+                            $('#lock-header-summary').removeClass('fa-lock')
+                            $('#lock-header-summary').attr('action', 'unlock')
+                        } else {
+                            if (editElement){
+                                editElement.css('display','inline-block');
+                            } else {
+                                $(this).parent('.edit-icons').prepend('<i id="edit-header-summary" class="content-block-item-action item-edit fa fa-pencil-square-o" title="Edit"></i>');
+                            }
+                            $('#lock-header-summary').addClass('fa-lock')
+                            $('#lock-header-summary').removeClass('fa-unlock-alt')
+                            $('#lock-header-summary').attr('action', 'lock')
+                        }
+                        $("#loader").css("display", "none");
+                    });
+
+                });
+
+                // edit header summary in layout mode
+                $(document).on('click', '#edit-header-summary', function (e) {
+                    e.preventDefault();
+                    $("#loader").css("display", "block");
+                    $("#site-header-summary-form").load('/tour/view/summary/edit/{{ entity.id }}', function () {
+                        $("#loader").css("display", "none");
+                        $('.item-edit').hide(); // hide ALL edit buttons for all content blocks
+                        $('#site-header-summary-form').show();
+                        $('#site-header-summary').hide();
+                        $('#site-header-slideshow').hide();
+                        $('.button-row').append('<a href="#" id="cancel-reload" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Cancel</a>');
+                        doMDLpopup($('#site-header-summary-form')); // run the function to add appropriate MDL classes to form elements
+                        // bind header edit form and provide a simple callback function
+                        $('#form-summary-edit-form').ajaxForm({
+                            beforeSerialize: function () {
+                                CKEDITOR.instances.tui_toolkit_tourbundle_toursummary_welcomeMsg.updateElement();
+                            },
+                            success: function (response) {
+                                // redraw the area by loading a twig file
+                                $('#site-header-summary-content').load('/tour/view/summary/show/{{ entity.id }}', function () {
+                                    $('#site-header-summary-form').empty();
+                                    $('#site-header-summary-form').hide();
+                                    $('#site-header-summary').show();
+                                    $('#site-header-slideshow').show();
+                                    $('.item-edit').show();
+                                    // Copy to Clipboard
+                                    ZeroClipboard.config({swfPath: "//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf"});
+                                    var client = new ZeroClipboard(document.getElementById("copy-button"));
+                                    client.on('aftercopy', function (event) {
+                                        $('#copy-button').css('background-color', 'green');
+                                    });
+                                });
+                            }
+                        });
+                    });
+                });
+
+                // delete a content block
+                $(document).on('click', '.item-delete', function (e) {
+                    // todo Get item.id and item.name
+                    if (confirm('Are you sure you want to remove this item? Warning: this can not be undone.')) {
+                        var blockId = $(this).attr('blockId');
+                        $.ajax({
+                            method: 'DELETE',
+                            url: '/manage/contentblocks/' + blockId + '/delete/' + {{ entity.id }} +'/tour',
+                            headers: {
+                                "Pragma": "no-cache",
+                                "Expires": -1,
+                                "Cache-Control": "no-cache"
+                            }
+                        }).done(function () {
+                            $('#content-blocks-' + blockId).remove();
+                        });
+                    }
+                });
+
+            // Promote Popup
+            $(document).on('click', '#promote-tour', function (e) {
+                e.preventDefault();
+                var shareValue = "{{ url('tour_site_show', { 'id': entity.id, 'quoteNumber' : entity.quoteNumber }) }}";
+                $("#dialog").html('<h3>Share this Tour with others</h3>' +
+                                  '<div><p>To send this tour to others, copy the URL below.</p></div>' +
+                                  '<div class="input"><input style="width:70%; padding:.25em; margin:1em;" type="text" id="share_url" name="share_url" value="' + shareValue + '" readonly="readonly">' +
+                                  '<a href="#" id="copy-button" data-clipboard-target="share_url"' +
+                                  'title="Click to copy Tour URL"' +
+                                  'class="not-full mdl-button mdl-js-button mdl-button--raised mdl-button--colored">' +
+                                  '<i class="fa fa-sign-in fa-stack"></i>' +
+                                  '</a></div>'
+                                 );
+                $("#dialog").dialog({width: '30%', height: '200'}).dialog("option", "title", "Promote the Tour").dialog("open");
+                // Copy to Clipboard
+                ZeroClipboard.config({swfPath: "//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf"});
+                var client = new ZeroClipboard(document.getElementById("copy-button"));
+                client.on('aftercopy', function (event) {
+                    $('#copy-button').css('background-color', 'green');
+                });
+                //remove the CopytoClipboard button if not Flash
+                if (navigator.mimeTypes["application/x-shockwave-flash"] == undefined) {
+                    $("#copy-button").addClass('hidden');
+                    $('share_url').css('width', '80%');
+                }
+                doMDL_popup('.input');
+
+            });
+
+            {% endif %}
+        });
+    </script>
+
+{% endblock %}
+
+
+
+
+
+{% block footer_left %}
+    {% if entity.quoteReference.salesAgent %}
+        <span class="intro">Primary Business Contact:</span>
+        {% if entity.quoteReference.salesAgent.media %}
+            <span class="tui-image-avatar"><img
+                        src="{{ asset( entity.quoteReference.salesAgent.media.getRelativePath ~ "/" ~ entity.quoteReference.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}"
+                        alt="{{ entity.quoteReference.salesAgent.username }}"></span>
+        {% elseif entity.quoteReference.salesAgent.firstName and entity.quoteReference.salesAgent.lastName %}
+            <span class="tui-text-avatar mdl-typography--headline">{{ entity.quoteReference.salesAgent.firstName[:1] }}{{ entity.quoteReference.salesAgent.lastName[:1] }}</span>
+        {% else %}
+            <span class="tui-text-avatar mdl-typography--headline">{{ entity.quoteReference.salesAgent.username[:1] }}</span>
+        {% endif %}
+        <span class="agent">{{ entity.quoteReference.salesAgent.firstName }} {{ entity.quoteReference.salesAgent.lastName }}
+            <br>
+            {{ entity.quoteReference.salesAgent.email }}</span>
+    {% endif %}
+{% endblock %}
+
+{% block footer_right %}
+    <div class="quote-info"><span class="quote-label">Price per person:</span><span
+                class="quote-price">{% if entity.pricePerson %}
+
+                <strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong>{% endif %}</span>
+    </div>
+    {#{% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}#}
+        {#{% if date(entity.expiryDate) < date('now') %}#}
+            {#<a class="expired-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">#}
+                {#<i class="fa fa-calendar-times-o"></i> Expired#}
+            {#</a>#}
+        {#{% else %}#}
+            {#<a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"#}
+               {#href="{{ path('quote_site_quote_accepted', { 'id': entity.id }) }}">#}
+                {#<i class="fa fa-thumbs-o-up"> </i> Like Quote#}
+            {#</a>#}
+        {#{% endif %}#}
+    {#{% elseif (entity.converted is sameas(true)) and (entity.quoteReference.converted is sameas(true)) %}#}
+        {#<a class="accepted-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">#}
+            {#<i class="fa fa-thumbs-up"> </i> Liked#}
+        {#</a>#}
+    {#{% endif %}#}
+{% endblock %}

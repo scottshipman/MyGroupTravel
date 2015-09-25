@@ -1,0 +1,35 @@
+// Revisions to the MDL layout to remove at least flex box
+
+body {
+  position: relative;
+}
+
+.toolkit-layout {
+  display: block;
+  overflow: auto;
+  width: auto;
+}
+
+.toolkit-drawer {
+  display: block;
+  position: fixed;
+
+  .toolkit-fixed-drawer > & {
+    transform: translateX(0);
+  }
+
+}
+
+.toolkit-main {
+  display: block;
+  margin-left: 0;
+
+  .toolkit-fixed-drawer > & {
+    margin-left: 240px;
+  }
+
+}
+
+.site-footer {
+  display: block;
+}

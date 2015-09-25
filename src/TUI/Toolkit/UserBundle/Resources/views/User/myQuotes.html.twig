@@ -1,0 +1,80 @@
+{% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
+{#  {{ dump(quotes) }} #}
+
+{%  for quote in quotes %}
+<div class = "tour-edit mdl-card mdl-shadow--2dp">
+    {% set bgpath = '' %}
+    {% if quote.headerBlock %}
+        {% for media in quote.headerBlock.media %}
+            {% if loop.first %}
+                {% set bgpath = app.request.uriForPath( asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) )   %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    <div class="mdl-card__supporting-text profile-tour-header" style="background-image: url({{ bgpath }});background-size: 100% 100% ;">
+        {% if quote.quoteNumber %}
+            <a href="{{ path('quote_site_show', {'id': quote.id, 'quoteNumber': quote.quoteNumber}) }}" class="">
+        {% else %}
+            <a href="{{ path('quote_site_show', {'id': quote.id}) }}" class="">
+        {% endif %}
+            <h3 class="mdl-card__title">Quote: {{ quote.quoteReference.name }} - {{ quote.name }} <i class="fa fa-arrow-right"></i></h3>
+        </a>
+        {% if is_granted("ROLE_BRAND") %}
+            <span quoteid= "{{ quote.id }}" class="profile-quote-edit"><i class= "profile-quote-edit-link fa fa-pencil">edit</i></span>
+        {% endif %}
+        <span class="date-span" >{% if quote.departureDate and quote.returnDate%}{{ quote.departureDate|date(format)  }} - {{ quote.returnDate|date(format)  }} |{% endif %} {% if quote.quoteReference.destination %}{{ quote.quoteReference.destination }}{% endif %}</span>
+    </div>
+    <div class="mdl-card__supporting-text profile-tour-details">
+        <ul>
+            <li>
+                <div class="profile-list-item seperator">
+                    {% if quote.currency %}{{ quote.currency.htmlSymbol | raw}}{% endif %}{% if quote.pricePerson %}{{ quote.pricePerson }}{% endif %}<br /><label>Price</label>
+                </div>
+            </li>
+            <li>
+                <div class="profile-list-item seperator">
+                    {{ quote.quoteReference.institution.name}}<br /><label>Institution</label>
+                </div>
+            </li>
+            <li>
+                <div class="profile-list-item">
+                    {% if quote.quoteReference.organizer.id == app.user.id %}
+                        {% if quote.quoteReference.salesAgent.media %}
+                            <span class="tui-image-avatar">
+                                    <img src="{{ asset( quote.quoteReference.salesAgent.media.getRelativePath ~ "/" ~ quote.quoteReference.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ quote.quoteReference.salesAgent.username }}"></span>
+                        {% elseif quote.quoteReference.salesAgent.firstName and tour.salesAgent.lastName %}
+                            <span class="tui-text-avatar mdl-typography--headline">{{ quote.quoteReference.salesAgent.firstName[:1] }}{{ quote.quoteReference.salesAgent.lastName[:1] }}</span>
+                        {% else %}
+                            <span class="tui-text-avatar mdl-typography--headline">{{ quote.quoteReference.salesAgent.username[:1] }}</span>
+
+                        {% endif %}
+                        {{ quote.quoteReference.salesAgent.firstName }} {{ tour.salesAgent.lastName }} <br /> {{ quote.quoteReference.salesAgent.email }}<br /><label>Business Contact</label>
+                    {% else %}
+                        {% if quote.quoteReference.organizer.media %}
+                            <span class="tui-image-avatar">
+                                    <img src="{{ asset( quote.quoteReference.organizer.media.getRelativePath ~ "/" ~ quote.quoteReference.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ quote.quoteReference.organizer.username }}"></span>
+                        {% elseif quote.quoteReference.organizer.firstName and quote.quoteReference.organizer.lastName %}
+                            <span class="tui-text-avatar mdl-typography--headline">{{ quote.quoteReference.organizer.firstName[:1] }}{{ quote.quoteReference.organizer.lastName[:1] }}</span>
+                        {% else %}
+                            <span class="tui-text-avatar mdl-typography--headline">{{ quote.quoteReference.organizer.username[:1] }}</span>
+
+                        {% endif %}
+                        {{ quote.quoteReference.organizer.firstName }} {{ quote.quoteReference.organizer.lastName }}  <br /> {{ quote.quoteReference.organizer.email }}<br /><label>Organizer</label>
+                    {% endif %}
+                </div>
+
+            </li>
+        </ul>
+    </div>
+</div>
+{% endfor %}
+<script>
+    //edit quotes action
+    $(document).ready(function () {
+        $(document).on('click', '.profile-quote-edit', function (e) {
+            var quoteid = $(this).attr('quoteid');
+            window.location.href = '/manage/quote/' + quoteid + '/edit';
+        });
+
+    });
+</script>
