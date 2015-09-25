@@ -16,7 +16,7 @@
         <default key="_controller">FOSUserBundle:Resetting:checkEmail</default>
     </route>
 
-    <route id="fos_user_resetting_reset" path="/reset/{token}" methods="GET POST">
+    <route id="user_resetting_reset" path="/reset/{token}" methods="GET POST">
         <default key="_controller">TUIToolkitUserBundle:User:reset</default>
     </route>
 
