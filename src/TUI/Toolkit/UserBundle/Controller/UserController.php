@@ -784,6 +784,8 @@ class UserController extends Controller
         /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
         $dispatcher = $this->get('event_dispatcher');
 
+        $em = $this->getDoctrine()->getManager();
+
         $user = $userManager->findUserByConfirmationToken($token);
 
         if (null === $user) {
@@ -801,6 +803,10 @@ class UserController extends Controller
         $form->handleRequest($request);
 
         $userManager->updateUser($user);
+
+        //Get Brand Stuff
+        $brand = $em->getRepository('BrandBundle:Brand')->findAll();
+        $brand = $brand[0];
 
         if (null === $response = $event->getResponse()) {
             $url = $this->generateUrl('fos_user_registration_confirmed');
@@ -827,6 +833,7 @@ class UserController extends Controller
 
         return $this->render('TUIToolkitUserBundle:Registration:activation.html.twig', array(
             'token' => $token,
+            'brand' => $brand,
             'user' => $user,
             'form' => $form->createView(),
         ));
