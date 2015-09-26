@@ -1,12 +1,20 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
+<div class="logo">
+{% if brand.media %}
+        <img src="{{ asset( brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ brand.name }}">
+{% else %}
+        <h2>{{ brand.name }}</h2>
+{% endif %}
+</div>
 
+<div id="activation-form" class="main_login">
 <form action="{{ path('user_resetting_reset', {'token': token}) }}" {{ form_enctype(form) }} method="POST"
       class="fos_user_activation">
     <h2>Set Password</h2>
     {{ form_widget(form) }}
     <div>
-        <input class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type="submit" value="{{ 'resetting.reset.submit'|trans }}"/>
+        <input type="submit" value="Set Password"/>
     </div>
 </form>
-
+</div>
