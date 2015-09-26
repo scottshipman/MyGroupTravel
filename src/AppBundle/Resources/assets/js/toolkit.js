@@ -15,8 +15,23 @@
     if ($('.fos_user_resetting_reset').length) {
         $("#fos_user_resetting_form_plainPassword_first").attr("placeholder", "New Password");
         $("#fos_user_resetting_form_plainPassword_second").attr("placeholder", "Confirm New Password");
-        $('h2').text("Reset Password").show();
+        //$('h2').text("Reset Password").show();
         $('.login-reset a').attr("href", "/").text("Sign In").css({"color": "#8DC74B"});
+    }
+
+    if($('#activation-form').length) {
+        $('#fos_user_resetting_form_plainPassword_first').attr("placeholder", "Password");
+        $('#fos_user_resetting_form_plainPassword_second').attr("placeholder", "Confirm Password");
+        $('.header').css({'display':'none'});
+        $('main').css({'margin-left':'0'});
+        $('.toolkit-drawer').css({'display':'none'});
+        $('.inner').prepend($('.logo'));
+        $('.logo').css({'text-align': 'center'});
+
+    }
+
+    if ($('.profile-content').length) {
+        $('.login-block').removeClass('login-block');
     }
 
 
