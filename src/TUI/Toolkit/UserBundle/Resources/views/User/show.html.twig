@@ -57,7 +57,7 @@
             <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
                href="{{ path('user_edit', { 'id': entity.id }) }}"><i class="fa fa-pencil-square-o"></i> Edit
             </a></li>
-        <li>{{ form(delete_form) }}</li>
+        {% if delete_form %}<li>{{ form(delete_form) }}</li>{% endif %}
         {% if entity.enabled==false %}
         <li>
             <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"

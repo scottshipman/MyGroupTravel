@@ -100,6 +100,14 @@ class UserController extends Controller
         $deleteAction = new RowAction('Delete', 'user_quick_delete');
         $deleteAction->setRole('ROLE_ADMIN');
         $deleteAction->setConfirm(true);
+        $deleteAction->manipulateRender(
+          function ($action, $row) { // only show if canDeleteUser is true
+            if ($this->canDeleteUser($row->getField('id')) == false) {
+              return null;
+            }
+            return $action;
+          }
+        );
         $grid->addRowAction($deleteAction);
 
         //manipulate the Columns
@@ -346,12 +354,16 @@ class UserController extends Controller
         }
 
         $editForm = $this->createEditForm($entity);
-        $deleteForm = $this->createDeleteForm($id);
+        if ($this->canDeleteUser($id)) {
+          $deleteForm = $this->createDeleteForm($id)->createView();
+        } else {
+          $deleteForm =Null;
+        }
 
         return $this->render('TUIToolkitUserBundle:User:show.html.twig', array(
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'delete_form' => $deleteForm,
         ));
     }
 
@@ -375,7 +387,11 @@ class UserController extends Controller
       if ($securityContext->isGranted('ROLE_BRAND') or $user->getID() == $id ) {
 
         $editForm = $this->createEditForm($entity);
-        $deleteForm = $this->createDeleteForm($id);
+        if ($this->canDeleteUser($id)) {
+          $deleteForm = $this->createDeleteForm($id)->createView();
+        } else {
+          $deleteForm = Null;
+        }
 
         return $this->render('TUIToolkitUserBundle:User:edit.html.twig', array(
           'entity' => $entity,
@@ -571,15 +587,15 @@ class UserController extends Controller
 
             // get list of quotes related to this user first (cant delete a user if they are attached)
           //TODO add a check for Tours, and eventually other objects like payments or something.
-            $quotes = $em->getRepository('QuoteBundle:Quote')->findOneBy(array('organizer' => $entity->getId()));
-            if($quotes){
-              $this->get('session')->getFlashBag()->add('error', 'Unable to delete the User because they are associated with Quotes');
-              return $this->redirect($this->generateUrl('user'));
+            if ($this->canDeleteUser($entity->getId())) {
+              $em->remove($entity);
+              $em->flush();
+              $this->get('session')->getFlashBag()->add('notice', 'User Deleted: ' . $id);
+            } else {
+              $this->get('session')->getFlashBag()->add('notice', 'Unable to delete this user because they are associated qith Quotes or Tours');
             }
 
-            $em->remove($entity);
-            $em->flush();
-            $this->get('session')->getFlashBag()->add('notice', 'User Deleted: ' . $id);
+
         }
 
         return $this->redirect($this->generateUrl('user'));
@@ -594,11 +610,11 @@ class UserController extends Controller
      */
     private function createDeleteForm($id)
     {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('user_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm();
+      return $this->createFormBuilder()
+          ->setAction($this->generateUrl('user_delete', array('id' => $id)))
+          ->setMethod('DELETE')
+          ->add('submit', 'submit', array('label' => 'Delete'))
+          ->getForm();
     }
 
     /**
@@ -639,15 +655,14 @@ class UserController extends Controller
             throw $this->createNotFoundException('Unable to find User entity with id:.' . $id);
         }
 
-        // get list of quotes related to this user first (cant delete a user if they are attached)
-        $quotes = $em->getRepository('QuoteBundle:Quote')->findOneBy(array('organizer' => $entity->getId()));
-        if($quotes){
-          $this->get('session')->getFlashBag()->add('error', 'Unable to delete the User because they are associated with Quotes');
-          return $this->redirect($this->generateUrl('user'));
-        }
+      if ($this->canDeleteUser($entity->getId())) {
         $em->remove($entity);
         $em->flush();
         $this->get('session')->getFlashBag()->add('notice', 'User Deleted: ' . $entity->getUsername());
+      } else {
+          $this->get('session')->getFlashBag()->add('error', 'Unable to delete the User because they are associated with Quotes');
+          return $this->redirect($this->generateUrl('user'));
+        }
 
         return $this->redirect($this->generateUrl('user'));
     }
@@ -1018,6 +1033,28 @@ class UserController extends Controller
       'tours' => $tours,
       'locale' => $locale,
     ));
+  }
+
+  public function canDeleteUser($id)
+  {
+
+    $em = $this->getDoctrine()->getManager();
+
+    $permissions = $em->getRepository('PermissionBundle:Permission')->findOneBy(array('user' => $id));
+    $primary_organizerq = $em->getRepository('QuoteBundle:Quote')->findOneBy(array('organizer' => $id));
+    $primary_adminq = $em->getRepository('QuoteBundle:Quote')->findOneBy(array('salesAgent' => $id));
+    $secondary_adminq = $em->getRepository('QuoteBundle:Quote')->findOneBy(array('secondaryContact' => $id));
+    $primary_organizert = $em->getRepository('TourBundle:Tour')->findOneBy(array('organizer' => $id));
+    $primary_admint = $em->getRepository('TourBundle:Tour')->findOneBy(array('salesAgent' => $id));
+    $secondary_admint = $em->getRepository('TourBundle:Tour')->findOneBy(array('secondaryContact' => $id));
+
+    if($primary_organizerq || $primary_adminq || $secondary_adminq || $primary_organizert || $primary_admint || $secondary_admint || $permissions) {
+      //$this->get('session')->getFlashBag()->add('error', 'Unable to delete the User because they are associated with Quotes or Tours');
+      //return $this->redirect($this->generateUrl('user'));
+      return false;
+    } else {
+      return true;
+    }
   }
 
 }
