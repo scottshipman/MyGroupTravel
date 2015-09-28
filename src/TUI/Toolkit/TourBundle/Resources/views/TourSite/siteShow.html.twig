@@ -240,19 +240,14 @@
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
+    {% if editable %}
+        {% javascripts '@toolkit_siteshow_edit' %}
+            <script type="text/javascript" src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+    {% endif %}
+
     <script>
         $(document).ready(function () {
-
-            // accept quote popup
-            $(document).on('click', '#accept-quote', function (e) {
-                //e.preventDefault();
-                $("#dialog").html("");
-                $("#dialog").dialog({width: '60%'}).dialog("option", "title", "Loading...").dialog("open");
-                $("#dialog").load('/quote/view/accepted/form/' + {{ entity.id}}, function () {
-                    $(this).dialog("option", "title", "Like this quote");
-                    doMDLpopup($('#dialog')); // run the function to add appropriate MDL classes to form elements
-                });
-            });
 
             {# Only place javascript below that deals with editing so it only loads when it needs to #}
             {% if editable %}
