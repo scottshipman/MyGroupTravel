@@ -19,26 +19,6 @@
     {% endif %}
 {% endblock %}
 
-{#{% block sub_header %}#}
-    {#<div class="sub-header">#}
-      {#<div class="sizer">#}
-        {#<div class="inner">#}
-              {#{% if entity.institution.media %}#}
-                  {#<div class="institution-logo">#}
-                      {#<img src="{{ asset( entity.institution.media.getRelativePath ~ "/" ~ entity.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.institution.name }}">#}
-                  {#</div>#}
-              {#{% endif %}#}
-
-          {#{% if entity.institution %}<div id="site-quote-name">{{ entity.institution.name }}</div>{% endif %}#}
-
-          {#<h2>{{ entity.name }}{% if entity.quoteNumber %}({{ entity.quoteNumber }}){% endif %}</h2>#}
-
-          {#{% if entity.destination %}<div>{{ entity.destination }}</div>{% endif %}#}
-        {#</div>#}
-      {#</div>#}
-    {#</div>#}
-{#{% endblock %}#}
-
 {% block body -%}
 
     {#{{ dump(entity) }}#}
