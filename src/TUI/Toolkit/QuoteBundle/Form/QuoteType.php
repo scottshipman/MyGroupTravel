@@ -21,8 +21,8 @@ class QuoteType extends AbstractType
     {
       // CASE Editing a quote or creating a new quote - show non-Template fields
       $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
-        if ($_SESSION['showAll']) {
-          $form = $event->getForm();
+        $form = $event->getForm();
+        if ($_SESSION['showAll']) { // editing a quote
           $form
             ->add('secondaryContact', 'genemu_jqueryautocomplete_entity', array(
               'class' => 'TUI\Toolkit\UserBundle\Entity\User',
@@ -53,7 +53,17 @@ class QuoteType extends AbstractType
             ));
 
 
-        };
+        } else {
+          // change label on Prim Biz Admin
+          $form->add('salesAgent', 'genemu_jqueryautocomplete_entity', array(
+            'required' => true,
+            'class' => 'TUI\Toolkit\UserBundle\Entity\User',
+            'route_name' => 'retrieve_salesagent_name',
+            'data_class' => 'TUI\Toolkit\UserBundle\Entity\User',
+            'label' => 'Template Owner',
+          ));
+
+        }
       });
 
       $builder
