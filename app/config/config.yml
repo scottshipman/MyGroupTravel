@@ -90,6 +90,10 @@ assetic:
                 inputs:
                   -   "%kernel.root_dir%/../src/AppBundle/Resources/public/js/ckeditor/config.js"
 
+            toolkit_siteshow:
+                inputs:
+                    - @AppBundle/Resources/assets/js/toolkit_siteshow.js
+
 
 # Doctrine Configuration
 doctrine:
