@@ -234,11 +234,11 @@ $(document).ready(function () {
         var entityClass = $('.site-show').attr('entityClass');
         var t = $(this);
         $("#loader").css("display", "block");
-        var block = t.attr('blockId');
-        var editBlock = $("#editable-content-blocks-" + block);
-        var previewBlock = $("#previewable-content-blocks-" + block);
+        var blockId = t.attr('blockId');
+        var editBlock = $("#editable-content-blocks-" + blockId);
+        var previewBlock = $("#previewable-content-blocks-" + blockId);
         editBlock.html('');
-        editBlock.load('/ajax/contentblocks/' + block + '/edit/' + entityId + '/' + entityClass, function () {
+        editBlock.load('/ajax/contentblocks/' + blockId + '/edit/' + entityId + '/' + entityClass, function () {
             $('.item-edit').hide(); // hide ALL edit buttons for all content blocks
             $('.add-content-block').hide() // hide ALL Add Block's for all tabs
             doMDLpopup(editBlock); // run the function to add appropriate MDL classes to form elements

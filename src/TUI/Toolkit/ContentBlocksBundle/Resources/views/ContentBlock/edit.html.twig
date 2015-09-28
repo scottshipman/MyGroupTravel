@@ -115,28 +115,21 @@
             },
             success: function(response) {
                 if ( $('.mode-toggle').hasClass('mode-edit') ) { // If on preview page
-                    var blockID = {{ entity.id }};
-                    var objectID = $('.mode-toggle').attr('id').substring(14);
-                    var editBlock = $("#editable-content-blocks-" + blockID);
-                    var previewBlock = $("#previewable-content-blocks-" + blockID);
-                    if ($("main").hasClass("Tour"))
-                    {
-                        var classtype = "Tour";
-                    }
-                    else {
-                        var classtype = "QuoteVersion";
-                    }
+                    var blockId = {{ entity.id }};
+                    var entityId = $('.site-show').attr('entityId');
+                    var entityClass = $('.site-show').attr('entityClass');
+                    var editBlock = $("#editable-content-blocks-" + blockId);
+                    var previewBlock = $("#previewable-content-blocks-" + blockId);
                     // Match routing path "/manage/contentblocks/{id}/show/{quoteVersion}/{class}"
-                    // TODO must not hardcode QuoteVersion in path below - need to accept any class type
-                    previewBlock.load('/manage/contentblocks/' + blockID + '/show/' + objectID + '/' + classtype, function() {
+                    previewBlock.load('/manage/contentblocks/' + blockId + '/show/' + entityId + '/' + entityClass, function() {
                         $("#loader").css("display", "none");
                         $('.item-edit').show(); // re-show ALL edit buttons for all content blocks
                         $('.add-content-block').show() // re-show ALL Add Block's for all tabs
-                        $('#content-blocks-' + blockID).removeClass('site-content-blocks-size-full site-content-blocks-size-half');
+                        $('#content-blocks-' + blockId).removeClass('site-content-blocks-size-full site-content-blocks-size-half');
                         if ( $('#tui_toolkit_contentblocksbundle_contentblock_doubleWidth').is(':checked') ) {
-                            $('#content-blocks-' + blockID).addClass('site-content-blocks-size-full');
+                            $('#content-blocks-' + blockId).addClass('site-content-blocks-size-full');
                         } else {
-                            $('#content-blocks-' + blockID).addClass('site-content-blocks-size-half');
+                            $('#content-blocks-' + blockId).addClass('site-content-blocks-size-half');
                         };
                         editBlock.html('');
                     });
