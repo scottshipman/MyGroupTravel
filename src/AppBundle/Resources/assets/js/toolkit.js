@@ -4,19 +4,26 @@
     $("#username").attr("placeholder", "Email");
     $("#password").attr("placeholder", "Password");
 
-    if ($("form").hasClass("fos_user_resetting_request")) {
-        $("body").addClass("main_login");
-        $('h2').text('Reset Password').show();
-        $("#username").attr("placeholder", "Email Address");
-        $('.login-reset a').attr("href", "/").text("Sign In").css({"color": "#8DC74B"});
 
-    }
-
-    if ($('#fos_user_resetting_form').length) {
+    if ($('#reset-password-form').length) {
         $("#fos_user_resetting_form_plainPassword_first").attr("placeholder", "New Password");
         $("#fos_user_resetting_form_plainPassword_second").attr("placeholder", "Confirm New Password");
         $('h2').text("Reset Password").show();
         $('.login-reset a').attr("href", "/").text("Sign In").css({"color": "#8DC74B"});
+    }
+
+    if($('#activation-form').length) {
+        $('#fos_user_resetting_form_plainPassword_first').attr("placeholder", "Password");
+        $('#fos_user_resetting_form_plainPassword_second').attr("placeholder", "Confirm Password");
+        $('h2').text("Set Password").show();
+        $('.login-reset').css({'display': 'none'});
+        $('input[type="submit"]').css({'margin-bottom': '20px'});
+        $('.login-block .login-form > div').css({'color': 'black'});
+
+    }
+
+    if ($('.profile-content').length) {
+        $('.login-block').removeClass('login-block');
     }
 
 
