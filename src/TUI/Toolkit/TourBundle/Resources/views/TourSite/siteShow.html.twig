@@ -7,7 +7,18 @@
         {{ entity.quoteReference.name }}, {{ entity.name }}
     {% endif %}
 {% endblock %}
-{% block page_title %}Site View{% endblock %}
+
+{% block page_title %}
+    <span>Site View</span>
+{% endblock %}
+
+{% block page_title_menu %}
+    <button id="tour-title-drop" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-menu-drop">
+        <i class="material-icons">arrow_drop_down</i>
+    </button>
+    {% embed "TourBundle:Tour:tourMenu.html.twig" %}
+    {% endembed %}
+{% endblock %}
 
 {% block back_link %}
     {% if is_granted("ROLE_BRAND") %}

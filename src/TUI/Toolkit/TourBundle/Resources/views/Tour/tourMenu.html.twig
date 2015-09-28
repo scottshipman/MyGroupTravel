@@ -1,0 +1,7 @@
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="tour-title-drop">
+    <span>
+        <li><a href="{{ path('_homepage') }}" class="mdl-menu__item">My Tours</a></li>
+        <li><a href="{{ path('manage_tour_show', { 'id': entity.id }) }}" class="mdl-menu__item">Tour Dashboard</a></li>
+        <li><a href="{{ path('tour_site_action_show', { 'id': entity.id }) }}" class="mdl-menu__item">Preview Tour</a></li>
+    </span>
+</ul>
