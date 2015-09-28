@@ -279,6 +279,7 @@
                        },
                        axis: 'y',
                        update: function(e, ui) {
+                           console.log(ui);
                            var pathArray = window.location.pathname.split( '/' );
                            contentBlocksUpdate(pathArray[3], 'QuoteVersion'); // fourth [3] part in the path should be quote ID to pass in
                        }
