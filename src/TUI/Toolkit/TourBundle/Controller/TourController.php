@@ -361,6 +361,19 @@ class TourController extends Controller
      */
     public function showAction($id)
     {
+        $editable = FALSE;
+        $permission = array();
+
+        $securityContext = $this->get('security.context');
+        $user = $securityContext->getToken()->getUser();
+        if ($user != 'anon.') {
+            $permission = $this->get("permission.set_permission")->getPermission($id, 'tour', $user->getId());
+        }
+
+        if ($securityContext->isGranted('ROLE_BRAND') || in_array('organizer', $permission)) {
+          $editable = TRUE;
+        }
+
         $em = $this->getDoctrine()->getManager();
 
         $locale = $this->container->getParameter('locale');
@@ -409,6 +422,7 @@ class TourController extends Controller
             'collection' => $collection,
             'items' => $items,
             'tabs' => $tabs,
+            'editable' => $editable,
         ));
     }
 

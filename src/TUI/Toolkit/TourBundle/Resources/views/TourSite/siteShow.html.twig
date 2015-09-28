@@ -17,6 +17,11 @@
         <i class="material-icons">arrow_drop_down</i>
     </button>
     {% embed "TourBundle:Tour:tourMenu.html.twig" %}
+        {% if editable %}
+            {% block tour_dashboard_link %}
+                <li><a href="{{ path('manage_tour_show', { 'id': entity.id }) }}" class="mdl-menu__item">Tour Dashboard</a></li>
+            {% endblock %}
+        {% endif %}
     {% endembed %}
 {% endblock %}
 
