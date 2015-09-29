@@ -260,7 +260,7 @@
 
                    $(".sortable-tabs").sortable({
                        containment: "parent",
-                       items: "> div",
+                       items: "> div.content-blocks-tab",
                        // handle: ".move",
                        tolerance: "pointer",
                        cursor: "move",
@@ -271,7 +271,7 @@
                        placeholder: "tabs-placeholder",
                        start: function (e, ui) {
                            $('.editable-tab').editable("disable");
-                           $('.editable-tab')[0].reset();
+                          // $('.editable-tab')[0].reset();
                            ui.placeholder.height(ui.helper.outerHeight());
                        },
                        stop: function (e, ui) {
@@ -287,8 +287,8 @@
 
 
                    $( ".sortable-items" ).sortable({
-                       containment: "document",
-                       items: "> div",
+                       containment: "#content-blocks-wrapper",
+                       items: "> div.content-blocks",
                        cancel: '.content-block-locked',
                        tolerance: "pointer",
                        connectWith: '.sortable-items',
