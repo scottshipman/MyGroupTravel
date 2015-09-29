@@ -41,12 +41,22 @@ class QuoteVersionType extends AbstractType
 
             if (!$entity || null === $entity->getId()) {
                 $isNew = true;
-            } elseif ($entity->getIsTemplate() == true) {
+            }
+
+            if ($entity->getIsTemplate() == true) {
                 $hasTemplate = true;
             }
             if (isset($request[3]) && ($request[3] == "new" || $request[3] == 'create') && isset($request[4]) && $request[4] == "template") {
                 $newTemplate = true;
             }
+
+            if(isset($request[4]) && $request[4] == "duplicate-template"){
+                $newTemplate = true;
+            }
+
+            if(isset($_REQUEST['tui_toolkit_quotebundle_quoteversion']['isTemplate']) && $_REQUEST['tui_toolkit_quotebundle_quoteversion']['isTemplate'] =='1'){
+              $newTemplate = true;
+          }
 
             // CASE: New Object - hidden isTemplate w value of newTemplate
             if ($isNew && $newTemplate) {
@@ -64,7 +74,7 @@ class QuoteVersionType extends AbstractType
             }
 
             // CASE: Editing an existing Template - hidden isTemplate w/ true value
-            if ((!$isNew && $hasTemplate)) {
+            if ($hasTemplate) {
                 $require_qn = false;
                 $form->add('isTemplate', 'hidden', array(
                     'data' => $hasTemplate,
