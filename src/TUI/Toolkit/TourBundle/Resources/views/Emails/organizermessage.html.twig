@@ -5,7 +5,7 @@
         add us to
         your contact list.
     </div>
-    <div style="height: 150px; background-color:{{ brand.primaryColor }}; color:{{ brand.primaryColor }}; width: 100%;"></div>
+    <div style="height: 150px; background-color:{{ brand.primaryColor }}; color:{{ brand.primaryColor }}; width: 100%;"><p style="text-align: center; color: white; margin-top: 0; padding-top: 20px;">Full deposit due by [deposit due date] for {{ entity.name }}</p></div>
     <div class="outer" style="background:#E5E8EA; margin-top: -20px; "></br>
         <table width="100%" table-align="center" border="0" cellspacing="0" cellpadding="0">
             <tr>
@@ -33,22 +33,23 @@
 
                                     <p>Quote Number: {{ entity.quoteNumber }}</p>
 
-                                    <p>Organizer Name/Email: {{ entity.quoteReference.organizer.firstName }} {{ entity.quoteReference.organizer.lastName }} {{ entity.quoteReference.organizer.email }}</p>
+                                    <p>Destination: {{ entity.destination }}</p>
 
                                     {% if additional %}
-                                        <p><strong>Additions:</strong></p>
-                                        <p>{{ additional }}</p>
+                                        <hr>
+                                        <h2 style="text-align: center; font-weight: 100; color: #283F5F;">Message from {{ agent.firstName }} {{ agent.lastName }} at {{ brand.name }}</h2>
+                                        <p style="text-align: center; color: #717D82;">{{ additional }}</p>
                                     {% endif %}
                                     <center>
                                         <a style="text-decoration: none; color:#fff; display: block; width: 40%; padding: 20px; margin: 20px auto; background-color:{{ brand.primaryColor }}; text-align: center;"
-                                           href="{{ absolute_url("/quote/view/" ~ entity.id) }}">View Quote</a>
+                                           href="{{ absolute_url('/tour/dashboard/' ~ entity.id ~ '/show') }}">Manage your tour</a>
                                     </center>
                                     <hr>
                                     <p style="text-align: center; color: #C7C3C5;">
                                         You can also paste the link below straight into your browser window:
                                     </p></br>
                                     <a style="text-decoration: none; display: block; width: auto; margin: 0 auto; text-align: center; color:{{ brand.primaryColor }};"
-                                       href="{{ absolute_url("/quote/view/" ~ entity.id) }}">{{ absolute_url("/quote/view/" ~ entity.id) }}</a></br>
+                                       href="{{ absolute_url('/tour/dashboard/' ~ entity.id ~ '/show') }}">{{ absolute_url('/tour/dashboard/' ~ entity.id ~ '/show') }}</a></br>
                                 </div>
                             </center>
                         </div>
