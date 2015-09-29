@@ -270,9 +270,8 @@
                        dropOnEmpty: true,
                        placeholder: "tabs-placeholder",
                        start: function (e, ui) {
-                           $('.editable-tab').editable("disable");
-                          // $('.editable-tab')[0].reset();
                            ui.placeholder.height(ui.helper.outerHeight());
+                           $('.editable-tab').editable("disable");
                        },
                        stop: function (e, ui) {
                            $('.editable-tab').editable("enable");
@@ -475,18 +474,26 @@
                 }
             });
 
-             {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
-                // change a tab's name
-                $('.editable-tab').editable(function(value, settings) {
-                    return(value);
-                }, {
-                    width: '20em',
-                    tooltip: 'Click to edit',
-                    callback : function(value, settings) {
-                        contentBlocksUpdate({{ entity.id }}, 'QuoteVersion'); //value
-                    }
-                });
-             {% endif %}
+            {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
+              // change a tab's name
+              var enableTabSortable = function(settings, self) {
+                  $(".sortable-tabs").sortable("enable");
+              };
+              var disableTabSortable = function(settings, self) {
+                  $(".sortable-tabs").sortable("disable");
+              };
+              $(".editable-tab").editable(function(value, settings) {
+                  return(value);
+              }, {
+                  width: '20em',
+                  tooltip: 'Click to edit...',
+                  onedit: disableTabSortable,
+                  onreset: enableTabSortable,
+                  callback : function(value, settings) {
+                      contentBlocksUpdate({{ entity.id }}, 'QuoteVersion');
+                  }
+              });
+            {% endif %}
         });
     </script>
 
