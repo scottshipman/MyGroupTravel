@@ -260,7 +260,7 @@
 
                    $(".sortable-tabs").sortable({
                        containment: "parent",
-                       items: "> div",
+                       items: "> div.content-blocks-tab",
                        // handle: ".move",
                        tolerance: "pointer",
                        cursor: "move",
@@ -270,9 +270,8 @@
                        dropOnEmpty: true,
                        placeholder: "tabs-placeholder",
                        start: function (e, ui) {
-                           $('.editable-tab').editable("disable");
-                           $('.editable-tab')[0].reset();
                            ui.placeholder.height(ui.helper.outerHeight());
+                           $('.editable-tab').editable("disable");
                        },
                        stop: function (e, ui) {
                            $('.editable-tab').editable("enable");
@@ -287,8 +286,8 @@
 
 
                    $( ".sortable-items" ).sortable({
-                       containment: "document",
-                       items: "> div",
+                       containment: "#content-blocks-wrapper",
+                       items: "> div.content-blocks",
                        cancel: '.content-block-locked',
                        tolerance: "pointer",
                        connectWith: '.sortable-items',
@@ -475,18 +474,26 @@
                 }
             });
 
-             {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
-                // change a tab's name
-                $('.editable-tab').editable(function(value, settings) {
-                    return(value);
-                }, {
-                    width: '20em',
-                    tooltip: 'Click to edit',
-                    callback : function(value, settings) {
-                        contentBlocksUpdate({{ entity.id }}, 'QuoteVersion'); //value
-                    }
-                });
-             {% endif %}
+            {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
+              // change a tab's name
+              var enableTabSortable = function(settings, self) {
+                  $(".sortable-tabs").sortable("enable");
+              };
+              var disableTabSortable = function(settings, self) {
+                  $(".sortable-tabs").sortable("disable");
+              };
+              $(".editable-tab").editable(function(value, settings) {
+                  return(value);
+              }, {
+                  width: '20em',
+                  tooltip: 'Click to edit...',
+                  onedit: disableTabSortable,
+                  onreset: enableTabSortable,
+                  callback : function(value, settings) {
+                      contentBlocksUpdate({{ entity.id }}, 'QuoteVersion');
+                  }
+              });
+            {% endif %}
         });
     </script>
 
@@ -518,14 +525,10 @@
             <a class="expired-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
                 <i class="fa fa-calendar-times-o"></i> Expired
             </a>
-        {% else %}
-            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('quote_site_quote_accepted', { 'id': entity.id }) }}">
-                <i class="fa fa-thumbs-o-up"> </i> Like Quote
-            </a>
         {% endif %}
     {% elseif (entity.converted is sameas(true)) and (entity.quoteReference.converted is sameas(true))%}
         <a class="accepted-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-            <i class="fa fa-thumbs-up"> </i> Liked
+            <i class="fa fa-thumbs-up"> </i> Converted to Tour
         </a>
     {% endif %}
 {% endblock %}
