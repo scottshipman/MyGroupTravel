@@ -396,7 +396,7 @@ class UserController extends Controller
         return $this->render('TUIToolkitUserBundle:User:edit.html.twig', array(
           'entity' => $entity,
           'edit_form' => $editForm->createView(),
-          'delete_form' => $deleteForm->createView(),
+          'delete_form' => $deleteForm,
         ));
       } else {
         throw new AccessDeniedException('You do not have the ability to edit this User\'s information.');
