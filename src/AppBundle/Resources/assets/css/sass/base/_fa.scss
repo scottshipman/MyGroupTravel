@@ -79,4 +79,9 @@
   }
 }
 
+.fam-email {
+  &:before {
+    content: '\f0e0';
+  }
+}
 
