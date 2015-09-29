@@ -41,14 +41,14 @@
                                     {% endif %}
                                     <center>
                                         <a style="text-decoration: none; color:#fff; display: block; width: 40%; padding: 20px; margin: 20px auto; background-color:{{ brand.primaryColor }}; text-align: center;"
-                                           href="{{ absolute_url("/quote/view/" ~ entity.id) }}">View Quote</a>
+                                           href="{{ absolute_url("/manage/quoteversion/" ~ entity.id ~ "/show") }}">View Quote</a>
                                     </center>
                                     <hr>
                                     <p style="text-align: center; color: #C7C3C5;">
                                         You can also paste the link below straight into your browser window:
                                     </p></br>
                                     <a style="text-decoration: none; display: block; width: auto; margin: 0 auto; text-align: center; color:{{ brand.primaryColor }};"
-                                       href="{{ absolute_url("/quote/view/" ~ entity.id) }}">{{ absolute_url("/quote/view/" ~ entity.id) }}</a></br>
+                                       href="{{ absolute_url("/manage/quoteversion/" ~ entity.id ~ "/show") }}">{{ absolute_url("/manage/quoteversion/" ~ entity.id ~ "/show") }}</a></br>
                                 </div>
                             </center>
                         </div>

@@ -1,0 +1,11 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+<div id="activation-form" class="main_login">
+<form action="{{ path('user_resetting_reset', {'token': token}) }}" {{ form_enctype(form) }} method="POST"
+      class="fos_user_activation">
+    {{ form_widget(form) }}
+    <div>
+        <input type="submit" value="Set Password"/>
+    </div>
+</form>
+</div>
