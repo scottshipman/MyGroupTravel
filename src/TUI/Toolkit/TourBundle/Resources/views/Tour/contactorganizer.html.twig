@@ -13,7 +13,6 @@
         </div>
         <div style="clear: both"></div>
         <h3>Share this Tour with others</h3>
-        <div><p>To send this tour to others, copy the URL below.</p></div>
         <div class="input"><input style="width:70%; padding:.25em; margin:1em;" type="text" id="share_url" name="share_url" value="{{ app.request.getSchemeAndHttpHost() }}/tour/view/{{ entity.id }}/{{ entity.quoteNumber }}" readonly="readonly">
             <a href="#" id="copy-button" data-clipboard-target="share_url" title="Click to copy Tour URL" class="not-full mdl-button mdl-js-button mdl-button--raised mdl-button--colored"><i class="fa fa-sign-in fa-stack"></i></a></div>
         <div class="message">
@@ -25,7 +24,7 @@
     </div>
     <script>
         $(document).ready(function () {
-            //Copy to Clipboard
+            // Copy to Clipboard
             ZeroClipboard.config({swfPath: "//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf"});
             var client = new ZeroClipboard(document.getElementById("copy-button"));
             client.on('aftercopy', function (event) {
@@ -36,7 +35,6 @@
                 $("#copy-button").addClass('hidden');
                 $('share_url').css('width', '80%');
             }
-            doMDL_popup('.input');
         });
     </script>
 {% endblock %}
