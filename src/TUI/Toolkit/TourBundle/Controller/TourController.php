@@ -8,6 +8,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use TUI\Toolkit\TourBundle\Entity\Tour;
 use TUI\Toolkit\QuoteBundle\Entity\QuoteVersion;
+use TUI\Toolkit\TourBundle\Form\ContactOrganizerType;
+use TUI\Toolkit\UserBundle\Controller\UserController;
 use TUI\Toolkit\TourBundle\Form\TourType;
 use TUI\Toolkit\PermissionBundle\Entity\Permission;
 use TUI\Toolkit\PermissionBundle\Controller\PermissionService;
@@ -119,6 +121,10 @@ class TourController extends Controller
             }
         );
         $grid->addRowAction($lockAction);
+        $emailAction = new RowAction('Email', 'manage_tour_notify_organizers_form');
+        $emailAction->setRole('ROLE_ADMIN');
+        $grid->addRowAction($emailAction);
+
 
         // Set the default order of the grid
         $grid->setDefaultOrder('created', 'DESC');
@@ -974,6 +980,120 @@ class TourController extends Controller
         return $this->render('TourBundle:Tour:notSetup.html.twig', array(
             'entity' => $entity,
         ));
+
+    }
+
+    /**
+     * Creates a form to make a change request to a QuoteVersion entity.
+     *
+     * @param QuoteVersion $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+
+    public function createNotifyOrganizerFormAction($id)
+    {
+        $locale = $this->container->getParameter('locale');
+        $notifyForm = $this->createForm(new ContactOrganizerType($locale), array(), array(
+            'action' => $this->generateUrl('manage_tour_notify_organizers', array('id' => $id)),
+            'method' => 'POST',
+        ));
+
+        $notifyForm->add('submit', 'submit', array('label' => 'Send'));
+
+        return $notifyForm;
+
+    }
+
+    public function newNotifyOrganizerAction($id)
+    {
+        $notifyForm = $this->createNotifyOrganizerFormAction($id);
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('TourBundle:Tour')->find($id);
+        $locale = $this->container->getParameter('locale');
+        $date_format = $this->container->getParameter('date_format');
+
+
+        return $this->render('TourBundle:Tour:contactorganizer.html.twig', array(
+            'notify_form' => $notifyForm->createView(),
+            'entity' => $entity,
+            'locale' => $locale,
+            'date_format' => $date_format,
+        ));
+    }
+
+    public function organizerNotifyAction(Request $request, $id)
+    {
+
+        $locale = $this->container->getParameter('locale');
+        $date_format = $this->container->getParameter('date_format');
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('TourBundle:Tour')->find($id);
+
+        $notifyForm = $this->createNotifyOrganizerFormAction($id);
+        $notifyForm->handleRequest($request);
+        $additional = $notifyForm->get('message')->getData();
+
+        $organizerEmail = $entity->getOrganizer()->getEmail();
+
+        //get brand stuff
+        $brand = $em->getRepository('BrandBundle:Brand')->findAll();
+        $brand = $brand[0];
+
+        $departure = $entity->getDepartureDate();
+        $tourName = $entity->getName();
+
+        if ($entity->getOrganizer()->isEnabled() == true) {
+
+            $message = \Swift_Message::newInstance()
+                ->setSubject('Quote ' . $tourName . ' has been accepted!')
+                ->setFrom('Notify@Toolkit.com')
+                ->setTo($organizerEmail)
+                ->setBody(
+                    $this->renderView(
+                        'TourBundle:Emails:organizermessage.html.twig',
+                        array(
+                            'brand' => $brand,
+                            'entity' => $entity,
+                            'departure' => $departure,
+                            'tour_name' => $tourName,
+                            'additional' => $additional,
+                            'locale' => $locale,
+                            'date_format' => $date_format,
+                        )
+                    ), 'text/html');
+        }
+
+        elseif($entity->getOrganizer()->isEnabled() == false){
+            $user = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
+            // Create token
+            $tokenGenerator = $this->container->get('fos_user.util.token_generator');
+
+            //Get some user info
+            $user->setConfirmationToken($tokenGenerator->generateToken());
+
+            $message = \Swift_Message::newInstance()
+                ->setSubject('Toolkit Registration Confirmation')
+                ->setFrom('registration@Toolkit.com')
+                ->setTo($organizerEmail)
+                ->setBody(
+                    $this->renderView(
+                        'TourBundle:Emails:organizersetupmessage.html.twig',
+                        array(
+                            'brand' => $brand,
+                            'user' => $user,
+                        )
+                    ), 'text/html');
+        }
+
+        $em->persist($entity);
+        $em->flush();
+        $this->get('mailer')->send($message);
+        $this->get('session')->getFlashBag()->add('notice', 'Your Message has been sent to '. $organizerEmail);
+
+
+        return $this->redirect($this->generateUrl('_manage_tour_home', array('id' => $id)));
 
     }
 }
