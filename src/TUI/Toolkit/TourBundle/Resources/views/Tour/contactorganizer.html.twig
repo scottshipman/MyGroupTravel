@@ -1,0 +1,22 @@
+{%  if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
+{% block body -%}
+
+    {#{{ dump(entity) }}#}
+
+    <div class="notify-organizer">
+        <div class="left-column">
+            <p>Tour Name: <strong>{{ entity.name }}</strong></p>
+            <p>Reference: <strong>{{ entity.quoteNumber }}</strong></p>
+        </div>
+        <div class="right-column">
+            <p>Institution: <strong>{{ entity.institution.name }}</strong></p>
+            <p>Destination: <strong>{{ entity.destination }}</strong></p>
+        </div>
+        <div class="message">
+            <h3>Your Message</h3>
+            <h4>To:</h4><p>{{ entity.organizer.firstName }} {{ entity.organizer.lastName }} ({{ entity.organizer.email }})</p>
+            <p>Message Text:</p>
+            {{ form(notify_form) }}
+        </div>
+    </div>
+{% endblock %}
