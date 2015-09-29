@@ -39,7 +39,7 @@ class ContactOrganizerType extends AbstractType
         $builder
 
             ->add('message', 'textarea', array(
-                'label' => 'Message to the organizer/organizers',
+                'label' => 'Message to the organiser',
                 'mapped' => false,
                 'required' => false,
                 'attr' => array(
