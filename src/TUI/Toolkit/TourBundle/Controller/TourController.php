@@ -1036,6 +1036,9 @@ class TourController extends Controller
         $additional = $notifyForm->get('message')->getData();
 
         $organizerEmail = $entity->getOrganizer()->getEmail();
+        $BusinessPersonId = $entity->getSalesAgent()->getId();
+
+        $agent = $em->getRepository('TUIToolkitUserBundle:User')->find($BusinessPersonId);
 
         //get brand stuff
         $brand = $em->getRepository('BrandBundle:Brand')->findAll();
@@ -1047,7 +1050,7 @@ class TourController extends Controller
         if ($entity->getOrganizer()->isEnabled() == true) {
 
             $message = \Swift_Message::newInstance()
-                ->setSubject('Quote ' . $tourName . ' has been accepted!')
+                ->setSubject('Set Up Your Tour')
                 ->setFrom('Notify@Toolkit.com')
                 ->setTo($organizerEmail)
                 ->setBody(
@@ -1061,6 +1064,7 @@ class TourController extends Controller
                             'additional' => $additional,
                             'locale' => $locale,
                             'date_format' => $date_format,
+                            'agent' => $agent,
                         )
                     ), 'text/html');
         }
@@ -1074,15 +1078,21 @@ class TourController extends Controller
             $user->setConfirmationToken($tokenGenerator->generateToken());
 
             $message = \Swift_Message::newInstance()
-                ->setSubject('Toolkit Registration Confirmation')
-                ->setFrom('registration@Toolkit.com')
+                ->setSubject('Set Up Your Tour')
+                ->setFrom('Notify@Toolkit.com')
                 ->setTo($organizerEmail)
                 ->setBody(
                     $this->renderView(
                         'TourBundle:Emails:organizersetupmessage.html.twig',
                         array(
                             'brand' => $brand,
+                            'entity' => $entity,
                             'user' => $user,
+                            'additional' => $additional,
+                            'agent' => $agent,
+                            'locale' => $locale,
+                            'date_format' => $date_format,
+
                         )
                     ), 'text/html');
         }
