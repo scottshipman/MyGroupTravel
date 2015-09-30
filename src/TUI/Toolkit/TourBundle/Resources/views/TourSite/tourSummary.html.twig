@@ -6,7 +6,7 @@
     {% if tour.boardBasis %}<li class="right"><span class="label">Board Basis:</span> <strong>{{ tour.boardBasis.name }}</strong></li>{% endif %}
     {% if tour.transportType %}<li class="right"><span class="label">Transport:</span> <strong>{{ tour.transportType.name }}</strong></li>{% endif %}
     {% if tour.pricePerson %}<li class="right"><span class="label">Price per person:</span> <span class="tour-price"><strong>{% if tour.currency %}{{ tour.currency.htmlSymbol | raw }}{% endif %}{{ tour.pricePerson }}</strong></span></li>{% endif %}
-    {% if (tour.payingPlaces) or (tour.freePlaces) %}<li>Based on {% if tour.payingPlaces %}<strong>{{ tour.payingPlaces }}</strong>{% endif %} paying and {% if tour.freePlaces %}<strong>{{ tour.freePlaces }}</strong>{% endif %} free places</li>{% endif %}
+    {% if (tour.payingPlaces) or (tour.freePlaces) %}<li>Based on {% if tour.payingPlaces %}<strong>{{ tour.payingPlaces }}</strong>{% endif %} paying {% if tour.freePlaces != 0 %} and <strong>{{ tour.freePlaces }}</strong> free {% endif %}places</li>{% endif %}
     {% if tour.expiryDate %}<li>Tour valid until <strong>{{ tour.expiryDate|date(format) }}</strong></li>{% endif %}
     <ul class="quote-site-actions">
         <li>

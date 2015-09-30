@@ -1,4 +1,4 @@
-
+{# No base! #}
 
 <h2 id="edit-title-{{ entity.id }}">{{ entity.title }}</h2>
 
@@ -9,9 +9,8 @@
         {% if entity.media %}
             {% for media in collection %}
                 <div class="existing-media-item">
-                    <img id="{{ media.id }}"
-                         src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">
-                    <a id="media-existing-delete" class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a>
+                    <img id="{{ media.id }}" src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">
+                    <a class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a>
                 </div>
             {% endfor %}
         {% else %}
@@ -48,7 +47,7 @@
     // Wait for the DOM to be loaded
     $(document).ready(function() {
         // Add a cancel button
-        $('.button-row').append('<a href="#" id="cancel-reload" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Cancel</a>');
+        $('.ajax_contentblocks_form').find('.button-row').append('<a href="#" id="cancel-reload" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Cancel</a>');
 
         // Change the h2's title when editing the title
         $('#tui_toolkit_contentblocksbundle_contentblock_title').on( 'blur change paste keyup input', function() {
@@ -143,7 +142,7 @@
 </script>
 
 <script>
-    $(document).on('click', '#media-existing-delete', function (e) {
+    $(document).on('click', '.existing-delete', function (e) {
         e.preventDefault();
         var remove = $(this).parent().find('img').attr('id');
         var value = $(".media-placeholder").val();

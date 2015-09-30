@@ -59,11 +59,14 @@ $(document).ready(function () {
             t.addClass('mode-edit').removeClass('mode-preview');
             $(this).html('Switch to Preview Mode');
             $(".sortable-items").sortable("enable");
+            $('.add-content-block').show() // show ALL Add Block's for all tabs
         } else {
             // Switch to preview mode
             t.addClass('mode-preview').removeClass('mode-edit');
             $(this).html('Switch to Edit Mode');
             $(".sortable-items").sortable("disable");
+            $('.add-content-block').hide() // hide ALL Add Block's for all tabs
+
         }
     });
 
@@ -166,6 +169,7 @@ $(document).ready(function () {
         $('.item-edit').show();
         $(".site-content-blocks-edit").show();
         $(this).hide();
+        //$('.add-content-block').hide() // hide ALL Add Block's for all tabs
         $(".sortable-items").sortable("enable");
     });
 
@@ -320,7 +324,7 @@ $(document).ready(function () {
             $('#site-header-summary-form').show();
             $('#site-header-summary').hide();
             $('#site-header-slideshow').hide();
-            $('.button-row').append('<a href="#" id="cancel-reload" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Cancel</a>');
+            $('.form-summary-edit-form').find('.button-row').append('<a href="#" id="cancel-reload" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Cancel</a>');
             doMDLpopup($('#site-header-summary-form')); // run the function to add appropriate MDL classes to form elements
             // bind header edit form and provide a simple callback function
             $('#form-summary-edit-form').ajaxForm({

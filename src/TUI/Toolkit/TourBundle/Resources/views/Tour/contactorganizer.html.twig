@@ -1,0 +1,40 @@
+{%  if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
+{% block body -%}
+
+{#{{ dump() }}#}
+    <div class="notify-organizer">
+        <div class="left-column">
+            <p>Tour Name: <strong>{{ entity.name }}</strong></p>
+            <p>Reference: <strong>{{ entity.quoteNumber }}</strong></p>
+        </div>
+        <div class="right-column">
+            <p>Institution: <strong>{{ entity.institution.name }}</strong></p>
+            <p>Destination: <strong>{{ entity.destination }}</strong></p>
+        </div>
+        <div style="clear: both"></div>
+        <h3>Share this Tour with others</h3>
+        <div class="input"><input style="width:70%; padding:.25em; margin:1em;" type="text" id="share_url" name="share_url" value="{{ app.request.getSchemeAndHttpHost() }}/tour/view/{{ entity.id }}/{{ entity.quoteNumber }}" readonly="readonly">
+            <a href="#" id="copy-button" data-clipboard-target="share_url" title="Click to copy Tour URL" class="not-full mdl-button mdl-js-button mdl-button--raised mdl-button--colored"><i class="fa fa-sign-in fa-stack"></i></a></div>
+        <div class="message">
+            <h3>Your Message</h3>
+            <h4>To:</h4><p><strong>{{ entity.organizer.firstName }} {{ entity.organizer.lastName }} ({{ entity.organizer.email }})</strong></p>
+            <h4>Message Text:</h4>
+            {{ form(notify_form) }}
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            // Copy to Clipboard
+            ZeroClipboard.config({swfPath: "//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf"});
+            var client = new ZeroClipboard(document.getElementById("copy-button"));
+            client.on('aftercopy', function (event) {
+                $('#copy-button').css('background-color', 'green');
+            });
+            //remove the CopytoClipboard button if not Flash
+            if (navigator.mimeTypes["application/x-shockwave-flash"] == undefined) {
+                $("#copy-button").addClass('hidden');
+                $('share_url').css('width', '80%');
+            }
+        });
+    </script>
+{% endblock %}

@@ -12,16 +12,35 @@
             <a class="mdl-tabs__tab is-active" href="{{ path('manage_tour') }}">Active Tours</a>
         {% endblock %}
     {% endembed %}
-    
+
     {{ grid_search(grid, 'AppBundle:Grid:grid.html.twig') }}
     {{ grid(grid, 'AppBundle:Grid:grid.html.twig') }}
-
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.js"></script>
     <script>
         $(document).ready(function() {
             $(".fam-lock, .fam-unlock").parent().on('click', function() {
                 $("#loader").css("display", "inline-block");
             });
+
+            /**
+             * manipulate the tour index page for business users when they want contact/notify organizers
+             */
+
+            if($("a[title='Email']").length) {
+                var link = $("a[title='Email']").attr('href');
+                $("a[title='Email']").attr("href", "#");
+                $(document).on('click', "a[title='Email']", function (e) {
+                    //e.preventDefault();
+                    $("#dialog").html("");
+                    $("#dialog").dialog({width: '60%'}).dialog("option", "title", "Loading...").dialog("open");
+                    $("#dialog").load(link , function () {
+                        $(this).dialog("option", "title", "Email the organizer");
+                        doMDLpopup($('#dialog')); // run the function to add appropriate MDL classes to form elements
+                    });
+                });
+            }
         });
     </script>
+
 
 {% endblock %}
