@@ -131,6 +131,18 @@ class QuoteVersionController extends Controller
         );
         $grid->addRowAction($lockAction);
 
+        // add business admin last name filter
+        $column = $grid->getColumn('quoteReference.salesAgent.lastName');
+        $column->setFilterable(true);
+        $column->setTitle('Primary Business Admin (Last Name)');
+        $column->setOperatorsVisible(false);
+
+        // add organizer last name filter
+        $column = $grid->getColumn('quoteReference.organizer.lastName');
+        $column->setFilterable(true);
+        $column->setTitle('Organizer (Last Name)');
+        $column->setOperatorsVisible(false);
+
         // Set the default order of the grid
         $grid->setDefaultOrder('created', 'DESC');
 
@@ -221,6 +233,18 @@ class QuoteVersionController extends Controller
         $deleteAction->setConfirm(true);
         $grid->addRowAction($deleteAction);
 
+        // add business admin last name filter
+        $column = $grid->getColumn('quoteReference.salesAgent.lastName');
+        $column->setFilterable(true);
+        $column->setTitle('Primary Business Admin (Last Name)');
+        $column->setOperatorsVisible(false);
+
+        // add organizer last name filter
+        $column = $grid->getColumn('quoteReference.organizer.lastName');
+        $column->setFilterable(true);
+        $column->setTitle('Organizer (Last Name)');
+        $column->setOperatorsVisible(false);
+
         // Set the default order of the grid
         $grid->setDefaultOrder('created', 'DESC');
 
@@ -310,6 +334,17 @@ class QuoteVersionController extends Controller
         $restoreAction = new RowAction('Restore', 'manage_quote_restore');
         $grid->addRowAction($restoreAction);
 
+        // add business admin last name filter
+        $column = $grid->getColumn('quoteReference.salesAgent.lastName');
+        $column->setFilterable(true);
+        $column->setTitle('Primary Business Admin (Last Name)');
+        $column->setOperatorsVisible(false);
+
+        // add organizer last name filter
+        $column = $grid->getColumn('quoteReference.organizer.lastName');
+        $column->setFilterable(true);
+        $column->setTitle('Organizer (Last Name)');
+        $column->setOperatorsVisible(false);
 
         // Set the default order of the grid
         $grid->setDefaultOrder('created', 'DESC');
