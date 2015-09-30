@@ -225,7 +225,8 @@ class ContentBlockController extends Controller
             'action' => $this->generateUrl('manage_contentblocks_update', array('id' => $entity->getId(), 'quoteVersion' => $quoteVersion, 'class' => $class)),
             'method' => 'POST',
             'attr' => array(
-                'id' => 'ajax_contentblocks_form'
+                'id' => 'ajax_contentblocks_form',
+                'class' => 'ajax_contentblocks_form',
             ),
         ));
 

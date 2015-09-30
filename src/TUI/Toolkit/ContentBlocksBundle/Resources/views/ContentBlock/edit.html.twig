@@ -47,7 +47,7 @@
     // Wait for the DOM to be loaded
     $(document).ready(function() {
         // Add a cancel button
-        $('.button-row').append('<a href="#" id="cancel-reload" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Cancel</a>');
+        $('.ajax_contentblocks_form').find('.button-row').append('<a href="#" id="cancel-reload" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Cancel</a>');
 
         // Change the h2's title when editing the title
         $('#tui_toolkit_contentblocksbundle_contentblock_title').on( 'blur change paste keyup input', function() {

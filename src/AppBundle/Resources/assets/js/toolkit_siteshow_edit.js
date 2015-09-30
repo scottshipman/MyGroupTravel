@@ -320,7 +320,7 @@ $(document).ready(function () {
             $('#site-header-summary-form').show();
             $('#site-header-summary').hide();
             $('#site-header-slideshow').hide();
-            $('.button-row').append('<a href="#" id="cancel-reload" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Cancel</a>');
+            $('.form-summary-edit-form').find('.button-row').append('<a href="#" id="cancel-reload" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Cancel</a>');
             doMDLpopup($('#site-header-summary-form')); // run the function to add appropriate MDL classes to form elements
             // bind header edit form and provide a simple callback function
             $('#form-summary-edit-form').ajaxForm({
