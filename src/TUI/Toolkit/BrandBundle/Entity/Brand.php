@@ -53,12 +53,9 @@ class Brand
      */
     private $buttonColor;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="hoverColor", type="string", length=32)
-     */
-    private $hoverColor;
+    // @var string
+    // @ORM\Column(name="hoverColor", type="string", length=32)
+    // private $hoverColor; */
 
     /**
      * @var longtext
@@ -170,12 +167,12 @@ class Brand
         return $this->buttonColor;
     }
 
-    /**
+    /*
      * Set hoverColor
      *
      * @param string $hoverColor
      * @return Brand
-     */
+
     public function setHoverColor($hoverColor)
     {
         $this->hoverColor = $hoverColor;
@@ -187,11 +184,11 @@ class Brand
      * Get hoverColor
      *
      * @return string
-     */
+
     public function getHoverColor()
     {
         return $this->hoverColor;
-    }
+    } */
 
     /**
      * Set footerBody
