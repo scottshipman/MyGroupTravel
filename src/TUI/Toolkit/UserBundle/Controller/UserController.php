@@ -229,13 +229,21 @@ class UserController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $entity->setPassword('');
-            $entity->setUsername($entity->getEmail());
             $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
-            $em->flush();
+            if ($em->getRepository('TUIToolkitUserBundle:User')->findByEmail($entity->getEmail()))
+            {
+                $existingUser = $em->getRepository('TUIToolkitUserBundle:User')->findByEmail($entity->getEmail());
+                $existingUser = $existingUser[0];
+                return new Response($existingUser);
 
-            return new Response($entity);
+            }else {
+                $entity->setPassword('');
+                $entity->setUsername($entity->getEmail());
+                $em->persist($entity);
+                $em->flush();
+
+                return new Response($entity);
+            }
         }
 
         return $this->render('TUIToolkitUserBundle:User:ajax_new.html.twig', array(
