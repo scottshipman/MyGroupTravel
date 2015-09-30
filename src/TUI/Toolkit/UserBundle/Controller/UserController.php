@@ -78,6 +78,12 @@ class UserController extends Controller
         //$column->setFilterType('select');
         $column->setOperatorsVisible(false);
 
+        // add last name filter
+        $column = $grid->getColumn('lastName');
+        $column->setFilterable(true);
+        $column->setTitle('Last Name');
+        $column->setOperatorsVisible(false);
+
         // Add action column
         $editAction = new RowAction('Edit', 'user_edit');
         $grid->addRowAction($editAction);
@@ -115,7 +121,7 @@ class UserController extends Controller
         $column->setTitle('Last Login');
 
         // Set the default order of the grid
-        $grid->setDefaultOrder('created', 'DESC');
+        $grid->setDefaultOrder('id', 'ASC');
 
 
         // Set the selector of the number of items per page
@@ -404,7 +410,7 @@ class UserController extends Controller
         return $this->render('TUIToolkitUserBundle:User:edit.html.twig', array(
           'entity' => $entity,
           'edit_form' => $editForm->createView(),
-          'delete_form' => $deleteForm->createView(),
+          'delete_form' => $deleteForm,
         ));
       } else {
         throw new AccessDeniedException('You do not have the ability to edit this User\'s information.');

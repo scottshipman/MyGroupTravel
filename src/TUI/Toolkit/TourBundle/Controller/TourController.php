@@ -126,6 +126,17 @@ class TourController extends Controller
         $emailAction->setRole('ROLE_ADMIN');
         $grid->addRowAction($emailAction);
 
+        // add business admin last name filter
+        $column = $grid->getColumn('salesAgent.lastName');
+        $column->setFilterable(true);
+        $column->setTitle('Primary Business Admin (Last Name)');
+        $column->setOperatorsVisible(false);
+
+        // add organizer last name filter
+        $column = $grid->getColumn('organizer.lastName');
+        $column->setFilterable(true);
+        $column->setTitle('Organizer (Last Name)');
+        $column->setOperatorsVisible(false);
 
         // Set the default order of the grid
         $grid->setDefaultOrder('created', 'DESC');
@@ -220,6 +231,17 @@ class TourController extends Controller
         $restoreAction = new RowAction('Restore', 'manage_tour_restore');
         $grid->addRowAction($restoreAction);
 
+        // add business admin last name filter
+        $column = $grid->getColumn('salesAgent.lastName');
+        $column->setFilterable(true);
+        $column->setTitle('Primary Business Admin (Last Name)');
+        $column->setOperatorsVisible(false);
+
+        // add organizer last name filter
+        $column = $grid->getColumn('organizer.lastName');
+        $column->setFilterable(true);
+        $column->setTitle('Organizer (Last Name)');
+        $column->setOperatorsVisible(false);
 
         // Set the default order of the grid
         $grid->setDefaultOrder('created', 'DESC');
