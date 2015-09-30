@@ -59,11 +59,14 @@ $(document).ready(function () {
             t.addClass('mode-edit').removeClass('mode-preview');
             $(this).html('Switch to Preview Mode');
             $(".sortable-items").sortable("enable");
+            $('.add-content-block').show() // show ALL Add Block's for all tabs
         } else {
             // Switch to preview mode
             t.addClass('mode-preview').removeClass('mode-edit');
             $(this).html('Switch to Edit Mode');
             $(".sortable-items").sortable("disable");
+            $('.add-content-block').hide() // hide ALL Add Block's for all tabs
+
         }
     });
 
@@ -166,6 +169,7 @@ $(document).ready(function () {
         $('.item-edit').show();
         $(".site-content-blocks-edit").show();
         $(this).hide();
+        //$('.add-content-block').hide() // hide ALL Add Block's for all tabs
         $(".sortable-items").sortable("enable");
     });
 
