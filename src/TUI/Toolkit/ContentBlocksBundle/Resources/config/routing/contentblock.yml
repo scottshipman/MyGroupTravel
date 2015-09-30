@@ -22,7 +22,7 @@ manage_contentblocks_edit:
 manage_contentblocks_update:
     path:     /{id}/update/{quoteVersion}/{class}
     defaults: { _controller: "ContentBlocksBundle:ContentBlock:update" }
-    methods:  [POST]
+    methods:  [POST, GET]
 
 manage_contentblocks_delete:
     path:     /{id}/delete/{quoteVersion}/{class}
