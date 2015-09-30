@@ -49,9 +49,9 @@ class Brand
     /**
      * @var string
      *
-     * @ORM\Column(name="buttonColor", type="string", length=32)
+     * @ORM\Column(name="secondaryColor", type="string", length=32)
      */
-    private $buttonColor;
+    private $secondaryColor;
 
     // @var string
     // @ORM\Column(name="hoverColor", type="string", length=32)
@@ -145,26 +145,26 @@ class Brand
     }
 
     /**
-     * Set buttonColor
+     * Set secondaryColor
      *
-     * @param string $buttonColor
+     * @param string $secondaryColor
      * @return Brand
      */
-    public function setButtonColor($buttonColor)
+    public function setSecondaryColor($secondaryColor)
     {
-        $this->buttonColor = $buttonColor;
+        $this->secondaryColor = $secondaryColor;
 
         return $this;
     }
 
     /**
-     * Get buttonColor
+     * Get secondaryColor
      *
      * @return string
      */
-    public function getButtonColor()
+    public function getSecondaryColor()
     {
-        return $this->buttonColor;
+        return $this->secondaryColor;
     }
 
     /*

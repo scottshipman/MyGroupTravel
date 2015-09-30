@@ -20,7 +20,7 @@ class BrandType extends AbstractType
             ->add('name')
             ->add('division')
             ->add('primaryColor')
-            ->add('buttonColor')
+            ->add('secondaryColor')
             // ->add('hoverColor')
             ->add('footerBody', 'ckeditor', array())
             ->add('media', 'hidden', array(

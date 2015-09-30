@@ -2,7 +2,7 @@
 
     // Color picker
     $('#tui_toolkit_brandbundle_brand_primaryColor').addClass('color_picker color_picker_full');
-    $('#tui_toolkit_brandbundle_brand_buttonColor').addClass('color_picker color_picker_lite');
+    $('#tui_toolkit_brandbundle_brand_secondaryColor').addClass('color_picker color_picker_lite');
     // $('#tui_toolkit_brandbundle_brand_hoverColor').addClass('color_picker color_picker_full');
 
     $('input.color_picker_full').spectrum({
