@@ -19,24 +19,17 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('app');
-
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
-        // call it like this:
-        // $this->container->parameters['toolkit']['responsibility'];
-
         $rootNode->children()
-          ->scalarNode('brand')->end()
-          ->arrayNode( 'responsibility' )
+          ->arrayNode('html_purifier')
+            ->addDefaultsIfNotSet()
             ->children()
-              ->arrayNode('responsibility_class')->end()
-              ->arrayNode('responsibility_roles')->end()
+              ->variableNode('config')
+                ->defaultValue(array())
+                ->info('The default html purifer config. See http://htmlpurifier.org/live/configdoc/plain.html for more information.')
+              ->end()
             ->end()
           ->end()
-        ->end()
         ;
-
         return $treeBuilder;
     }
 }

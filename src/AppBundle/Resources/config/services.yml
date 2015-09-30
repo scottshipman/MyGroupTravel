@@ -11,5 +11,6 @@ services:
 
   app.transformer.tuihtmlpurifier:
     class: AppBundle\Transformer\TuiHTMLPurifier
+    arguments: ['@service_container']
     tags:
       - { name: trsteel_ckeditor.transformer, alias: tuihtmlpurifier}

@@ -3,6 +3,7 @@
 namespace AppBundle\Transformer;
 
 use Symfony\Component\Form\DataTransformerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class TuiHTMLPurifier implements DataTransformerInterface
 {
@@ -14,6 +15,16 @@ class TuiHTMLPurifier implements DataTransformerInterface
    * @var array
    */
   private $config;
+
+  /**
+   * @param array $config
+   */
+  public function __construct(ContainerInterface $container)
+  {
+    $this->container = $container;
+    $parameter = $this->container->getParameter('app.html_purifier');
+    $this->config = $parameter['config'];
+  }
 
   /**
    * {@inheritDoc}
@@ -39,7 +50,23 @@ class TuiHTMLPurifier implements DataTransformerInterface
   protected function getPurifier()
   {
     if (null === $this->purifier) {
-      $this->purifier = new \HTMLPurifier($this->config);
+
+      // tweak the config
+      $config = \HTMLPurifier_Config::createDefault();
+      $config->set('HTML.DefinitionID', 'tui html purifier');
+      $config->set('HTML.DefinitionRev', 1);
+      foreach($this->config as $key => $value){
+        $config->set($key, $value);
+      }
+      if ($def = $config->maybeGetRawHTMLDefinition()) {
+        // our custom add-ons will go here
+        $def->addAttribute('iframe', 'allowfullscreen', 'Bool');
+
+      }
+
+
+      $this->purifier = new \HTMLPurifier($config);
+
     }
     return $this->purifier;
   }

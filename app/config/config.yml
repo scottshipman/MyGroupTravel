@@ -297,6 +297,11 @@ trsteel_ckeditor:
     width: 100% #Integer or %
     height: 300 #Integer or %
     custom_config: "/assetic/ckeditorcustomsettings.js"
+    external_plugins:
+        youtube:
+            path: "/bundles/app/youtube"
+
+app:
     html_purifier:
         config:
             HTML.AllowedAttributes: 'src, href, target, colspan, class, style, action, allowfullscreen, frameborder, height, width'
@@ -308,10 +313,6 @@ trsteel_ckeditor:
             HTML.SafeObject: true
             Output.FlashCompat: true
             URI.SafeIframeRegexp: '/(http:|https:)?\/\/(www\.)?(youtube.com|youtu.be)\/(watch)?(\?v=)?(\S+)?/'
-
-    external_plugins:
-        youtube:
-            path: "/bundles/app/youtube"
 
 liip_imagine:
     resolvers:
