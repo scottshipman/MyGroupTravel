@@ -285,12 +285,13 @@ genemu_form:
 
 trsteel_ckeditor:
     class: Trsteel\CkeditorBundle\Form\Type\CkeditorType
-    transformers: ['html_purifier']
-    toolbar: ['document', 'basicstyles', 'links', 'tools', 'styles', 'paragraph']
+    transformers: [] #['html_purifier']
+    toolbar: ['document', 'basicstyles', 'links', 'insert', 'styles', 'paragraph']
     toolbar_groups:
         document: ['Source']
         links: ['Link','Unlink','Anchor']
-        tools: ['Image']
+        insert: ['Youtube', 'Image', 'Table', 'Undo', 'Redo']
+        styles: ['Styles']
     ui_color: '#ffffff'
     startup_outline_blocks: false
     width: 100% #Integer or %
@@ -298,8 +299,20 @@ trsteel_ckeditor:
     custom_config: "/assetic/ckeditorcustomsettings.js"
     html_purifier:
         config:
-            HTML.AllowedAttributes: 'src, href, target, colspan, class, style'
+            HTML.AllowedAttributes: 'src, href, target, colspan, class, style, action, allowfullscreen, frameborder, height, width'
             Attr.AllowedFrameTargets: '_blank, _self, _parent, _top'
+           # HTML.AllowedElements: ''
+            Filter.YouTube: true
+            HTML.SafeIframe: true
+            HTML.Trusted: true
+            HTML.SafeEmbed: true
+            HTML.SafeObject: true
+            Output.FlashCompat: true
+            URI.SafeIframeRegexp: '/(http:|https:)?\/\/(www\.)?(youtube.com|youtu.be)\/(watch)?(\?v=)?(\S+)?/'
+
+    external_plugins:
+        youtube:
+            path: "/bundles/app/youtube"
 
 liip_imagine:
     resolvers:
