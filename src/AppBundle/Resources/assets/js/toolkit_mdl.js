@@ -41,16 +41,48 @@
     });
 
     //Turn Row Actions into a dropdown menu
-    if ($('.grid-row-actions').length)
-    {
-        $('.grid-column-__actions.mdl-data-table__cell--non-numeric.last-column.last-row').prepend('<a id="rowactionbtn" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"><i class="material-icons">arrow_drop_down</i></a>');
-        $('.grid-row-actions').addClass('mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect');
-        $('.grid-row-actions').attr('for', 'rowactionbtn');
-        $('.grid-row-actions').each(function() {
-            $(this).find('a').each(function() {
-            $(this).addClass('mdl-menu__item');
+    if ($('.grid-row-actions').length) {
+        $('.grid-row-actions').each(function (index) {
+            console.log(index);
+            var btn = "rowactionbtn-" + index;
+            console.log(btn);
+            $(this).parent().prepend('<a id="'+ btn +'" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"><i class="material-icons">arrow_drop_down</i></a>');
+            $(this).addClass('mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect');
+            $(this).attr('for', btn);
+            $('.grid-row-actions.mdl-menu').css({'min-width': '330px'});
+
+            $(this).find('a').each(function () {
+                $(this).addClass('mdl-menu__item');
             });
+        });
+        $('table td .fa').css({
+            'position': 'relative',
+            'top': '50%',
+            'transform': 'translateY(-50%)',
+            '-ms-transform': 'translateY(-50%)',
+            '-webkit-transform': 'translateY(-50%)'
+        });
+    }
+    else if ($('.table-actions').length) {
+        $('.table-actions').each(function (index) {
+            console.log(index);
+            var btn = "rowactionbtn-" + index;
+            console.log(btn);
+            $(this).parent().prepend('<a id="'+ btn +'" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"><i class="material-icons">arrow_drop_down</i></a>');
+            $(this).addClass('mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect');
+            $(this).attr('for', btn);
+
+            $(this).find('a').each(function () {
+                $(this).addClass('mdl-menu__item');
+            });
+        });
+        $('table td .fa').css({
+            'position': 'relative',
+            'top': '50%',
+            'transform': 'translateY(-50%)',
+            '-ms-transform': 'translateY(-50%)',
+            '-webkit-transform': 'translateY(-50%)'
         });
     }
 
-})(jQuery);
+    })(jQuery);
