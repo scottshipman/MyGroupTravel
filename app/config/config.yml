@@ -285,7 +285,7 @@ genemu_form:
 
 trsteel_ckeditor:
     class: Trsteel\CkeditorBundle\Form\Type\CkeditorType
-    transformers: [] #['html_purifier']
+    transformers: ['tuihtmlpurifier'] #['html_purifier']
     toolbar: ['document', 'basicstyles', 'links', 'insert', 'styles', 'paragraph']
     toolbar_groups:
         document: ['Source']
@@ -302,7 +302,6 @@ trsteel_ckeditor:
             HTML.AllowedAttributes: 'src, href, target, colspan, class, style, action, allowfullscreen, frameborder, height, width'
             Attr.AllowedFrameTargets: '_blank, _self, _parent, _top'
            # HTML.AllowedElements: ''
-            Filter.YouTube: true
             HTML.SafeIframe: true
             HTML.Trusted: true
             HTML.SafeEmbed: true

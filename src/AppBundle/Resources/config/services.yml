@@ -8,3 +8,8 @@ services:
 #           - [ setContainer,[ @service_container ] ]
 #        tags:
 #           - { name: security.voter }
+
+  app.transformer.tuihtmlpurifier:
+    class: AppBundle\Transformer\TuiHTMLPurifier
+    tags:
+      - { name: trsteel_ckeditor.transformer, alias: tuihtmlpurifier}
