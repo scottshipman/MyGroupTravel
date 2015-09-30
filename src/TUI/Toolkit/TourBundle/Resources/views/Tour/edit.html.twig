@@ -87,8 +87,8 @@
                                         {% elseif media.mimetype == "application/vnd.openxmlformats-officedocument.presentationml.presentation" or media.mimetype == "application/vnd.ms-powerpoint" %}
                                             <i style="color: orange" class="fa fa-file-powerpoint-o fa-3x"></i>
                                         {% endif %}
-                                    <a id ="{{ media.id }}" href="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">{{ media.filename }}</a>
-                                    <a id="media-existing-delete" style= "top: 5px; right: -10px;" class="existing-delete" href="#"><i class="fa fa-trash-o fa-2x"></i></a>
+                                    <a id="{{ media.id }}" href="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">{{ media.filename }}</a>
+                                    <a class="existing-delete" style= "top: 5px; right: -10px;" href="#"><i class="fa fa-trash-o fa-2x"></i></a>
                                     </div>
                                 {% endfor %}
                             {% else %}
@@ -223,8 +223,8 @@
                         }
                         $('.existing-media-wrapper').append('<div style ="border-radius: 0px;" class="existing-media-item promo-asset">' +
                         '<i style ="color:' + iconColor + ';' + '" class="fa ' + faIcon + ' fa-3x' + '"></i>' +
-                        '<a id ="'+ response.id + '" href="' + response.relativepath + '/' + response.filename + '"></a>' +
-                        '<a id ="media-existing-delete" style= "top: 5px; right: -10px;"class="existing-delete" href="#"><i class="fa fa-trash-o fa-2x"></i></a></div></br>');
+                        '<a id="'+ response.id + '" href="' + response.relativepath + '/' + response.filename + '"></a>' +
+                        '<a class="existing-delete" style= "top: 5px; right: -10px;" href="#"><i class="fa fa-trash-o fa-2x"></i></a></div></br>');
                         var id = '#' + response.id;
                         console.log(id);
                         $(id).html(response.original_filename);
@@ -301,7 +301,7 @@
     </script>
 
     <script>
-        $(document).on('click', '#media-existing-delete', function (e) {
+        $(document).on('click', '.existing-delete', function (e) {
             e.preventDefault();
             var remove = $(this).parent().find('a').attr('id');
             console.log(remove)

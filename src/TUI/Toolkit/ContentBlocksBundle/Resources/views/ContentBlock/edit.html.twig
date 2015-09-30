@@ -1,4 +1,4 @@
-
+{# No base! #}
 
 <h2 id="edit-title-{{ entity.id }}">{{ entity.title }}</h2>
 
@@ -9,9 +9,8 @@
         {% if entity.media %}
             {% for media in collection %}
                 <div class="existing-media-item">
-                    <img id="{{ media.id }}"
-                         src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">
-                    <a id="media-existing-delete" class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a>
+                    <img id="{{ media.id }}" src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">
+                    <a class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a>
                 </div>
             {% endfor %}
         {% else %}
@@ -143,7 +142,7 @@
 </script>
 
 <script>
-    $(document).on('click', '#media-existing-delete', function (e) {
+    $(document).on('click', '.existing-delete', function (e) {
         e.preventDefault();
         var remove = $(this).parent().find('img').attr('id');
         var value = $(".media-placeholder").val();
