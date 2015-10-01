@@ -28,34 +28,31 @@ body {
   padding-right: 0;
 
   .sizer {
-    width: auto;
+    margin-left: auto;
+    margin-right: auto;
 
-    .toolkit-no-drawer &,
-    .toolkit-fixed-drawer.collapse-admin-menu & {
-      margin-left: $page_gutter;
-      margin-right: $page_gutter;
+    .toolkit-no-drawer & {
+      width: $page_width;
 
       @media screen and (min-width: 1320px) {
+        width: auto;
         max-width: $page_max_width;
-        margin-left: auto;
-        margin-right: auto;
       }
 
     }
 
     .toolkit-fixed-drawer & {
-      margin-left: $admin_page_gutter;
-      margin-right: $admin_page_gutter;
+      width: $admin_page_width;
 
       @media screen and (min-width: 1560px) { // 1320px plus 240px for sidebar
+        width: auto;
         max-width: $page_max_width;
-        margin-left: auto;
-        margin-right: auto;
       }
 
     }
 
     .pdf-layout & {
+      width: auto;
       margin-left: 0;
       margin-right: 0;
     }

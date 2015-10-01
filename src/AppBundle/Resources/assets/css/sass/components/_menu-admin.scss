@@ -72,17 +72,6 @@
 
 }
 
-.toolkit-drawer,
-.collapse-admin-menu .toolkit-drawer {
-  -webkit-transform: translateX(-($admin_menu_width));
-  -ms-transform: translateX(-($admin_menu_width));
-  transform: translateX(-($admin_menu_width));
-}
-
-.toolkit-fixed-drawer.collapse-admin-menu > .toolkit-main {
-  margin-left: 0;
-}
-
 .admin-menu-toggle {
   position: absolute;
   left: 0;
@@ -100,11 +89,67 @@
   transition-property: left;
 
   .toolkit-fixed-drawer & {
-    left: $admin_menu_width;
+
+    @include breakpoint_desktop() {
+      left: $admin_menu_width;
+    }
+
   }
 
-  .collapse-admin-menu & {
+}
+
+
+/* Expand and collapse */
+
+.collapse-admin-menu {
+
+  .toolkit-drawer {
+    -webkit-transform: translateX(-($admin_menu_width));
+    -ms-transform: translateX(-($admin_menu_width));
+    transform: translateX(-($admin_menu_width));
+  }
+
+  &.toolkit-fixed-drawer > .toolkit-main {
+    margin-left: 0;
+  }
+
+  .admin-menu-toggle {
     left: 0;
+  }
+
+  .header,
+  .sub-header,
+  .content,
+  .site-footer {
+
+    .sizer {
+      width: $page_width;
+
+      @media screen and (min-width: 1320px) {
+        width: auto;
+        max-width: $page_max_width;
+      }
+
+    }
+
+  }
+
+}
+
+.expand-admin-menu {
+
+  .toolkit-drawer {
+    -webkit-transform: translateX(0);
+    -ms-transform: translateX(0);
+    transform: translateX(0);
+  }
+
+  &.toolkit-fixed-drawer > .toolkit-main {
+    margin-left: $admin_menu_width;
+  }
+
+  .admin-menu-toggle {
+    left: $admin_menu_width;
   }
 
 }
