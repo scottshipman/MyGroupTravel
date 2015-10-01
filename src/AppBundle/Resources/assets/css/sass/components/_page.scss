@@ -16,12 +16,13 @@ html {
   .sizer {
     width: auto;
 
-    .toolkit-no-drawer & {
+    .toolkit-no-drawer &,
+    .toolkit-fixed-drawer.collapse-admin-menu & {
       margin-left: $page_gutter;
       margin-right: $page_gutter;
 
       @media screen and (min-width: 1320px) {
-        max-width: 1280px;
+        max-width: $page_max_width;
         margin-left: auto;
         margin-right: auto;
       }
@@ -33,7 +34,7 @@ html {
       margin-right: $admin_page_gutter;
 
       @media screen and (min-width: 1560px) { // 1320px plus 240px for sidebar
-        max-width: 1280px;
+        max-width: $page_max_width;
         margin-left: auto;
         margin-right: auto;
       }
