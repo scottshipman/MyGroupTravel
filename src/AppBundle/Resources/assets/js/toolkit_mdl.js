@@ -40,4 +40,13 @@
         $(this).parent().addClass('is-dirty');
     });
 
+    // Work on table scrolling
+    $('.mdl-data-table').wrap('<div class="mld-data-table__wrapper" />')
+        .css('margin-bottom', 0)
+        .parent().css({
+            'overflow': 'scroll',
+            'overflow': 'auto',
+            'margin-bottom': '1em'
+        });
+
 })(jQuery);
