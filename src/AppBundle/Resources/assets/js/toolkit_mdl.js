@@ -43,13 +43,13 @@
     //Turn Row Actions into a dropdown menu
     if ($('.grid-row-actions').length) {
         $('.grid-row-actions').each(function (index) {
-            console.log(index);
+            var size = $(this).children().length;
             var btn = "rowactionbtn-" + index;
-            console.log(btn);
-            $(this).parent().prepend('<a id="'+ btn +'" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"><i class="material-icons">arrow_drop_down</i></a>');
+            $(this).parent().prepend('<a id="'+ btn +'" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"><i class="fa fa-ellipsis-v"></i></a>');
             $(this).addClass('mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect');
             $(this).attr('for', btn);
-            $('.grid-row-actions.mdl-menu').css({'min-width': '330px'});
+            var pixels = (50 * size) + 30;
+            $(this).parent().find('.mdl-menu').css({'min-width': pixels + 'px'});
 
             $(this).find('a').each(function () {
                 $(this).addClass('mdl-menu__item');
@@ -65,12 +65,13 @@
     }
     else if ($('.table-actions').length) {
         $('.table-actions').each(function (index) {
-            console.log(index);
+            var size = $(this).children().length;
             var btn = "rowactionbtn-" + index;
-            console.log(btn);
-            $(this).parent().prepend('<a id="'+ btn +'" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"><i class="material-icons">arrow_drop_down</i></a>');
+            $(this).parent().prepend('<a id="'+ btn +'" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"><i class="fa fa-ellipsis-v"></i></a>');
             $(this).addClass('mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect');
             $(this).attr('for', btn);
+            var pixels = (50 * size) + 30;
+            $(this).parent().find('.mdl-menu').css({'min-width': pixels + 'px'});
 
             $(this).find('a').each(function () {
                 $(this).addClass('mdl-menu__item');
