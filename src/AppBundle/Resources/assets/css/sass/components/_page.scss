@@ -5,6 +5,20 @@ html {
   overflow-y: scroll;
 }
 
+body {
+
+  &:before {
+    content: 'mobile';
+    display: none;
+
+    @include breakpoint_desktop() {
+      content: 'desktop';
+    }
+
+  }
+
+}
+
 .header,
 .sub-header,
 .content,

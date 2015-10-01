@@ -64,11 +64,6 @@
       .mdl-navigation__link {
         font-weight: 400;
         padding: 10px $layout-header-desktop-indent 10px ($layout-header-desktop-indent * 2);
-
-        @media screen and (max-width: $layout-screen-size-threshold) {
-          padding: 10px $layout-header-mobile-indent 10px ($layout-header-mobile-indent * 2);
-        }
-
       }
 
     }

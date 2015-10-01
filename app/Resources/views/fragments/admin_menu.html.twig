@@ -36,8 +36,14 @@
 
 <script>
     $(document).ready(function() {
+        if ( toolkitBreakpoint() === 'desktop' ) {
+            $('.toolkit-fixed-drawer').addClass('expand-admin-menu');
+        } else {
+            $('.toolkit-fixed-drawer').addClass('collapse-admin-menu');
+        };
+
         $('.admin-menu-toggle').click( function() {
-            $(this).parent().toggleClass('collapse-admin-menu');
-        })
+            $(this).parent().toggleClass('collapse-admin-menu').toggleClass('expand-admin-menu');
+        });
     });
 </script>

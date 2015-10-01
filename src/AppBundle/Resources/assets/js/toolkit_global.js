@@ -39,7 +39,7 @@ var contentBlocksUpdate = function (id, classtype) {
  * @param id The id of the QuoteVersion Object that owns the content blocks
  */
 
-var contentBlocksAddTab= function (elem, id, classtype){
+var contentBlocksAddTab = function (elem, id, classtype) {
     var newId = new Date().getTime();
     $("#content-blocks-wrapper").prepend(
         '<div id="'  + (newId)+ '" class="content-blocks-tab">' +
@@ -85,7 +85,7 @@ var contentBlocksNewTab = function (id, classtype) {
  * Reload the page that shows the content blocks and tabs
  * @param id
  */
-var contentBlocksRefresh = function(id){
+var contentBlocksRefresh = function(id) {
     $.ajax({
         url: window.location.href,
         headers: {
@@ -164,3 +164,12 @@ $(document).on('click', '.mdl-form-mimic .mdl-radio__button', function () {
         $(this).parent().removeClass('is-checked');
     }
 });
+
+
+var toolkitBreakpoint = function() {
+    var breakpoint = window
+        .getComputedStyle( document.querySelector('body'), ':before' )
+        .getPropertyValue( 'content' )
+        .replace( /['"]+/g, '' );
+    return breakpoint;
+};
