@@ -33,7 +33,7 @@ body {
   transition-property: margin-left;
 
   .toolkit-fixed-drawer > & {
-    margin-left: 240px;
+    margin-left: $admin_menu_width;
   }
 
 }

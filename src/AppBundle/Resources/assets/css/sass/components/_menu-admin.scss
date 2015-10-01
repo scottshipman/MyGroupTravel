@@ -79,9 +79,9 @@
 
 .toolkit-drawer,
 .collapse-admin-menu .toolkit-drawer {
-  -webkit-transform: translateX(-240px);
-  -ms-transform: translateX(-240px);
-  transform: translateX(-240px);
+  -webkit-transform: translateX(-($admin_menu_width));
+  -ms-transform: translateX(-($admin_menu_width));
+  transform: translateX(-($admin_menu_width));
 }
 
 .toolkit-fixed-drawer.collapse-admin-menu > .toolkit-main {
@@ -105,7 +105,7 @@
   transition-property: left;
 
   .toolkit-fixed-drawer & {
-    left: 240px;
+    left: $admin_menu_width;
   }
 
   .collapse-admin-menu & {
