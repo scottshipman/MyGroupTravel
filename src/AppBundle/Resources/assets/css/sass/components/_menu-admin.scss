@@ -78,13 +78,13 @@
 }
 
 .toolkit-drawer,
-.toolkit-drawer.collapse-menu {
+.collapse-admin-menu .toolkit-drawer {
   -webkit-transform: translateX(-240px);
   -ms-transform: translateX(-240px);
   transform: translateX(-240px);
 }
 
-.toolkit-fixed-drawer > .toolkit-main.collapse-menu {
+.toolkit-fixed-drawer.collapse-admin-menu > .toolkit-main {
   margin-left: 0;
 }
 
@@ -108,7 +108,7 @@
     left: 240px;
   }
 
-  &.collapse-menu {
+  .collapse-admin-menu & {
     left: 0;
   }
 
