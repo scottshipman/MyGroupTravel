@@ -1,5 +1,13 @@
 /********* Global Methods Go below here ******************************/
 
+var toolkitBreakpoint = function() {
+    var breakpoint = window
+        .getComputedStyle( document.querySelector('body'), ':before' )
+        .getPropertyValue( 'content' )
+        .replace( /['"]+/g, '' );
+    return breakpoint;
+};
+
 /**
  * Persist Content block data to the database/entity
  * @param id - Quote Version # passed from window.path
@@ -164,12 +172,3 @@ $(document).on('click', '.mdl-form-mimic .mdl-radio__button', function () {
         $(this).parent().removeClass('is-checked');
     }
 });
-
-
-var toolkitBreakpoint = function() {
-    var breakpoint = window
-        .getComputedStyle( document.querySelector('body'), ':before' )
-        .getPropertyValue( 'content' )
-        .replace( /['"]+/g, '' );
-    return breakpoint;
-};

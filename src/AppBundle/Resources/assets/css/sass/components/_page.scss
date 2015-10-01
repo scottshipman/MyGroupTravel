@@ -32,7 +32,11 @@ body {
     margin-right: auto;
 
     .toolkit-no-drawer & {
-      width: $page_width;
+      width: $admin_page_width;
+
+      @include breakpoint_desktop() {
+        width: $page_width;
+      }
 
       @media screen and (min-width: 1320px) {
         width: auto;
