@@ -284,12 +284,12 @@ genemu_form:
 
 trsteel_ckeditor:
     class: Trsteel\CkeditorBundle\Form\Type\CkeditorType
-    transformers: [] # ['tuihtmlpurifier'] #['html_purifier']
+    transformers:  ['tuihtmlpurifier'] #['html_purifier']
     toolbar: ['document', 'basicstyles', 'links', 'insert', 'styles', 'paragraph']
     toolbar_groups:
         document: ['Source', 'Undo', 'Redo']
         links: ['Link','Unlink','Anchor']
-        insert: ['Embed', 'Image', 'Table']
+        insert: ['Embed', 'Image', 'Table', 'Iframe', 'CreateDiv']
         styles: ['Styles']
     ui_color: '#ffffff'
     startup_outline_blocks: false
@@ -355,7 +355,7 @@ trsteel_ckeditor:
 app:
     html_purifier:
         config:
-            HTML.AllowedAttributes: 'src, href, target, colspan, class, style, action, allowfullscreen, frameborder, height, width'
+            HTML.AllowedAttributes: 'alt, src, href, target, colspan, class, style, action, allowfullscreen, frameborder, height, width'
             Attr.AllowedFrameTargets: '_blank, _self, _parent, _top'
            # HTML.AllowedElements: ''
             HTML.SafeIframe: true
