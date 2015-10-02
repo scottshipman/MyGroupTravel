@@ -28,6 +28,7 @@ class AppKernel extends Kernel
             new Oneup\UploaderBundle\OneupUploaderBundle(),
             new Trsteel\CkeditorBundle\TrsteelCkeditorBundle(),
             new Liip\ImagineBundle\LiipImagineBundle(),
+            new FM\ElfinderBundle\FMElfinderBundle(),
 
 
             // In Toolkit Project ( in /src directory) bundles...

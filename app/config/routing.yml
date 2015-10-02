@@ -71,6 +71,9 @@ _tui_toolkit_reports_opportunity:
 _tui_toolkit_manage_company_currency:
   path: /
 
+_ckeditor_upload:
+   path:     /_ckeditor/upload
+   defaults: { _controller: "AppBundle:Default:ckeditorUpload" }
 
 ## This is for Sonata Media Bundle
 #gallery:
@@ -95,3 +98,6 @@ tui_toolkit_media:
 
 _liip_imagine:
     resource: "@LiipImagineBundle/Resources/config/routing.xml"
+
+elfinder:
+     resource: "@FMElfinderBundle/Resources/config/routing.yml"

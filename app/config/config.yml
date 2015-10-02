@@ -260,7 +260,6 @@ oneup_uploader:
               - application/pdf
 
 
-
 stof_doctrine_extensions:
     default_locale: "%locale%"
 
@@ -285,21 +284,73 @@ genemu_form:
 
 trsteel_ckeditor:
     class: Trsteel\CkeditorBundle\Form\Type\CkeditorType
-    transformers: ['tuihtmlpurifier'] #['html_purifier']
+    transformers: [] # ['tuihtmlpurifier'] #['html_purifier']
     toolbar: ['document', 'basicstyles', 'links', 'insert', 'styles', 'paragraph']
     toolbar_groups:
-        document: ['Source']
+        document: ['Source', 'Undo', 'Redo']
         links: ['Link','Unlink','Anchor']
-        insert: ['Youtube', 'Image', 'Table', 'Undo', 'Redo']
+        insert: ['Embed', 'Image', 'Table']
         styles: ['Styles']
     ui_color: '#ffffff'
     startup_outline_blocks: false
     width: 100% #Integer or %
     height: 300 #Integer or %
     custom_config: "/assetic/ckeditorcustomsettings.js"
+    filebrowser_image_upload_url:
+            route: _ckeditor_upload
+#    filebrowser_image_browse_url:
+#            route: elfinder
+#            route_parameters:
+#                 instance: ckeditor
     external_plugins:
-        youtube:
-            path: "/bundles/app/youtube"
+#        youtube:
+#            path: "/bundles/app/ckeditor-plugins/youtube"
+#        dialog:
+#            path: "/bundles/app/ckeditor-plugins/dialog"
+#        dialogui:
+#            path: "/bundles/app/ckeditor-plugins/dialogui"
+        fakeobjects:
+            path: "/bundles/app/ckeditor-plugins/fakeobjects"
+        filetools:
+            path: "/bundles/app/ckeditor-plugins/filetools"
+        floatpanel:
+            path: "/bundles/app/ckeditor-plugins/floatpanel"
+        indent:
+            path: "/bundles/app/ckeditor-plugins/indent"
+        lineutils:
+            path: "/bundles/app/ckeditor-plugins/lineutils"
+        listblock:
+            path: "/bundles/app/ckeditor-plugins/listblock"
+        embedbase:
+            path: "/bundles/app/ckeditor-plugins/embedbase"
+        menu:
+            path: "/bundles/app/ckeditor-plugins/menu"
+        menubutton:
+            path: "/bundles/app/ckeditor-plugins/menubutton"
+        notification:
+            path: "/bundles/app/ckeditor-plugins/notification"
+        notificationaggregator:
+            path: "/bundles/app/ckeditor-plugins/notificationaggregator"
+        panel:
+            path: "/bundles/app/ckeditor-plugins/panel"
+        popup:
+            path: "/bundles/app/ckeditor-plugins/popup"
+        richcombo:
+            path: "/bundles/app/ckeditor-plugins/richcombo"
+        button:
+            path: "/bundles/app/ckeditor-plugins/button"
+        uploadwidget:
+            path: "/bundles/app/ckeditor-plugins/uploadwidget"
+        widget:
+            path: "/bundles/app/ckeditor-plugins/widget"
+#        uploadimage:
+#            path: "/bundles/app/ckeditor-plugins/uploadimage"
+        embed:
+            path: "/bundles/app/ckeditor-plugins/embed"
+#        imageuploader:
+#            path: "/bundles/app/ckeditor-plugins/imageuploader"
+        embedsemantic:
+            path: "/bundles/app/ckeditor-plugins/embedsemantic"
 
 app:
     html_purifier:
@@ -345,3 +396,21 @@ liip_imagine:
             filters:
                 relative_resize: { widen: 300 }
 
+fm_elfinder:
+    instances:
+        ckeditor:
+            locale:  en # defaults to current request locale
+            editor: ckeditor # other options are tinymce, tinymce4, form, custom and simple
+            fullscreen: true # defaults true, applies to simple and ckeditor editors
+            theme: smoothness # jquery theme
+            include_assets: true # disable if you want to handle loading of the javascript and css assets yourself
+            connector:
+                debug: false # defaults to false
+                roots:       # at least one root must be defined
+                    uploads:
+                        show_hidden: false # defaults to false
+                        driver: LocalFileSystem
+                        path: static/uploads/media/ckeditor
+                        upload_allow: ['image/png', 'image/jpg', 'image/jpeg']
+                        upload_deny: ['all']
+                        upload_max_size: 32M
