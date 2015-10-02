@@ -132,6 +132,12 @@ class QuoteVersionController extends Controller
         );
         $grid->addRowAction($lockAction);
 
+        //set default filter value
+        $usr= $this->get('security.context')->getToken()->getUser();
+        $lastName = $usr->getLastName();
+        $filters = array('quoteReference.salesAgent.lastName' => array('operator' => 'like', 'from' => $lastName));
+        $grid->setDefaultFilters($filters);
+
         // add business admin last name filter
         $column = $grid->getColumn('quoteReference.salesAgent.lastName');
         $column->setFilterable(true);
@@ -256,6 +262,11 @@ class QuoteVersionController extends Controller
         //set no data message
         $grid->setNoDataMessage("There are no converted quotes to show. Please check your filter settings and try again.");
 
+        //set default filter value
+        $usr= $this->get('security.context')->getToken()->getUser();
+        $lastName = $usr->getLastName();
+        $filters = array('quoteReference.salesAgent.lastName' => array('operator' => 'like', 'from' => $lastName));
+        $grid->setDefaultFilters($filters);
 
         // Export of the grid
         $grid->addExport(new CSVExport("Converted Quotes as CSV", "convertedQuotes", array('delimiter' => ','), "UTF-8", "ROLE_BRAND"));
@@ -358,6 +369,11 @@ class QuoteVersionController extends Controller
         //set no data message
         $grid->setNoDataMessage("There are no deleted quotes to show. Please check your filter settings and try again.");
 
+        //set default filter value
+        $usr= $this->get('security.context')->getToken()->getUser();
+        $lastName = $usr->getLastName();
+        $filters = array('quoteReference.salesAgent.lastName' => array('operator' => 'like', 'from' => $lastName));
+        $grid->setDefaultFilters($filters);
 
         // Export of the grid
         $grid->addExport(new CSVExport("Deleted Quotes as CSV", "deletedQuotes", array('delimiter' => ','), "UTF-8", "ROLE_BRAND"));
