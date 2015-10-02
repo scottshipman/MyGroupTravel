@@ -289,7 +289,7 @@ trsteel_ckeditor:
     toolbar_groups:
         document: ['Source', 'Undo', 'Redo']
         links: ['Link','Unlink','Anchor']
-        insert: ['Embed', 'Image', 'Table', 'Iframe', 'CreateDiv']
+        insert: ['Embed', 'Image', 'Table']
         styles: ['Styles']
     ui_color: '#ffffff'
     startup_outline_blocks: false
