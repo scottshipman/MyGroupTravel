@@ -169,7 +169,8 @@
 
 }
 
-.expired-quote, .accepted-quote {
+.expired-quote,
+.accepted-quote {
   -khtml-opacity: 0.70;
   -moz-opacity: 0.70;
   -ms-filter: ”alpha(opacity=70)”;
@@ -201,9 +202,16 @@
 
 #site-header-slideshow,
 #site-header-editForm {
-  float: left;
-  width: $column_total_width * 3;
-  padding: 0 $column_gutter_width;
+  @include span-all();
+
+  @include breakpoint_tablet() {
+    float: left;
+    width: $column_total_width * 2;
+  }
+
+  @include breakpoint_desktop() {
+    width: $column_total_width * 3;
+  }
 
   .pdf-layout & {
     width: 60%;
@@ -218,10 +226,27 @@
 
 }
 
+#site-header-summary,
+#site-header-summary-form {
+  margin-top: $element-bottom;
+
+  @include breakpoint_tablet() {
+    margin-top: 0;
+  }
+
+}
+
 #site-header-summary {
-  float: right;
-  width: $column_total_width;
-  padding: 0 $column_gutter_width;
+  @include span-all();
+
+  @include breakpoint_tablet() {
+    float: right;
+    width: $column_total_width * 2;
+  }
+
+  @include breakpoint_desktop() {
+    width: $column_total_width;
+  }
 
   .pdf-layout & {
     width: 35%;
@@ -352,7 +377,7 @@
 
 .link-preview-edit {
   float: right;
-  //clear: both;
+  padding: (((56px * 1.35) - 36px) / 2) 0;
 }
 
 .content-blocks-drawer {
