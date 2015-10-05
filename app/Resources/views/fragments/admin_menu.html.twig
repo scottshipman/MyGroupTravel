@@ -49,7 +49,11 @@
 
         $('.admin-menu-toggle').click( function() {
             $(this).parent().toggleClass('collapse-admin-menu').toggleClass('expand-admin-menu');
-            $('#admin-menu-obfuscator').toggle();
+            if ( $(this).parent().hasClass('collapse-admin-menu') ) {
+                $('#admin-menu-obfuscator').hide();
+            } else {
+                $('#admin-menu-obfuscator').show();
+            }
         });
     });
 </script>

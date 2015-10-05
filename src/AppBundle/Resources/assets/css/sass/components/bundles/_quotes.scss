@@ -239,8 +239,12 @@
 }
 
 .content-blocks-drawer.mdl-tabs__panel {
-  margin-left: -$column_gutter_width_reset;
-  width: $column_total_width_reset;
+
+  @include breakpoint_tablet() {
+    margin-left: -$column_gutter_width_reset;
+    width: $column_total_width_reset;
+  }
+
 }
 
 .alt-quote {
@@ -310,9 +314,12 @@
 // Preview/Edit toggling
 
 .site-content-blocks-size-half {
-  float: left;
-  width: $column_total_width * 2;
-  padding: 0 $column_gutter_width;
+
+  @include breakpoint_tablet() {
+    float: left;
+    width: $column_total_width * 2;
+    padding: 0 $column_gutter_width;
+  }
 
   .pdf-layout & {
     clear: both;
@@ -321,9 +328,13 @@
   }
 
   .content-block-size-half {
-    float: none;
-    width: auto;
-    padding: 0;
+
+    @include breakpoint_tablet() {
+      float: none;
+      width: auto;
+      padding: 0;
+    }
+
   }
 
 }
