@@ -117,27 +117,6 @@
     left: 0;
   }
 
-  .header,
-  .sub-header,
-  .content,
-  .site-footer {
-
-    .sizer {
-      width: $admin_page_width;
-
-      @include breakpoint_desktop() {
-        width: $page_width;
-      }
-
-      @media screen and (min-width: 1320px) {
-        width: auto;
-        max-width: $page_max_width;
-      }
-
-    }
-
-  }
-
 }
 
 .expand-admin-menu {

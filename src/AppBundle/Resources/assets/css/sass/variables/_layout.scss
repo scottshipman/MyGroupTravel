@@ -1,18 +1,12 @@
 // Tablet initial page widths
 $fluid_width : 100%;
 
-// Desktop initial page widths and calculations
-$page_width : 80%;
+// Page widths and gutters
+$page_width : 96%;
 $page_max_width : 1280px;
-$page_width_reset : (100% / $page_width) * 100%; // 125%
-$page_gutter : (100% - $page_width) / 2; // 10%
-$page_gutter_reset : ($page_width_reset - 100%) / 2; // 12.5%
-
-// Tablet and desktop w/ admin menu page widths
-$admin_page_width : 96%;
-$admin_page_width_reset : (100% / $admin_page_width) * 100%; // 104.1667%
-$admin_page_gutter : (100% - $admin_page_width) / 2; // 2%
-$admin_page_gutter_reset : ($admin_page_width_reset - 100%) / 2; // 2.0833%
+$page_width_reset : (100% / $page_width) * 100%; // 104.1667%
+$page_gutter : (100% - $page_width) / 2; // 2%
+$page_gutter_reset : ($page_width_reset - 100%) / 2; // 2.0833%
 
 // Element widths and heights
 $element-bottom : 32px;

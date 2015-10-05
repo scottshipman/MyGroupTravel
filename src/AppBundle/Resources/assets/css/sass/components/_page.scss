@@ -30,35 +30,14 @@ body {
   .sizer {
     margin-left: auto;
     margin-right: auto;
-
-    .toolkit-no-drawer & {
-      width: $admin_page_width;
-
-      @include breakpoint_desktop() {
-        width: $page_width;
-      }
-
-      @media screen and (min-width: 1320px) {
-        width: auto;
-        max-width: $page_max_width;
-      }
-
-    }
-
-    .toolkit-fixed-drawer & {
-      width: $admin_page_width;
-
-      @media screen and (min-width: 1560px) { // 1320px plus 240px for sidebar
-        width: auto;
-        max-width: $page_max_width;
-      }
-
-    }
+    width: $page_width;
+    max-width: $page_max_width;
 
     .pdf-layout & {
-      width: auto;
       margin-left: 0;
       margin-right: 0;
+      width: auto;
+      max-width: none;
     }
 
   }
@@ -80,13 +59,6 @@ body {
       width: $page_width_reset;
       margin-left: -$page_gutter_reset;
       padding: 0.25em $page_gutter_reset;
-
-      .toolkit-fixed-drawer & {
-        width: $admin_page_width_reset;
-        margin-left: -$admin_page_gutter_reset;
-        padding: 0.25em $admin_page_gutter_reset;
-      }
-
     }
 
   }
