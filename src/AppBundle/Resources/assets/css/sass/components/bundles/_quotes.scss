@@ -8,11 +8,15 @@
   background: $text_grey_t1;
   z-index: 9999;
 
-  img {
+  .loader-icon {
+    font-size: 72px;
+    line-height: 1;
+    width: 72px;
+    height: 72px;
     position: absolute;
     top: 50%;
     left: 50%;
-    margin: -39px 0 0 -40px;
+    margin: -36px 0 0 -36px;
   }
 
 }
