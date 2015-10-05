@@ -1,0 +1,4 @@
+media_manage_mediawrapper:
+    resource: "@MediaBundle/Resources/config/routing/mediawrapper.yml"
+    prefix:   /manage/mediawrapper
+
