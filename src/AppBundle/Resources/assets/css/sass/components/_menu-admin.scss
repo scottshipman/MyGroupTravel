@@ -98,6 +98,22 @@
 
 }
 
+#admin-menu-obfuscator {
+  display: none;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: $text_grey_t1;
+  z-index: 1;
+
+  @include breakpoint_desktop() {
+    display: none !important;
+  }
+
+}
+
 
 /* Expand and collapse */
 
@@ -128,7 +144,12 @@
   }
 
   &.toolkit-fixed-drawer > .toolkit-main {
-    margin-left: $admin_menu_width;
+    margin-left: 0;
+
+    @include breakpoint_desktop() {
+      margin-left: $admin_menu_width;
+    }
+
   }
 
   .admin-menu-toggle {

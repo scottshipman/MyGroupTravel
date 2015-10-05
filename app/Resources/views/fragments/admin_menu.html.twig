@@ -36,14 +36,20 @@
 
 <script>
     $(document).ready(function() {
+        $('.toolkit-layout').after('<div id="admin-menu-obfuscator" />');
+
+        // On page load, not on browser window change
         if ( toolkitBreakpoint() === 'desktop' ) {
             $('.toolkit-fixed-drawer').addClass('expand-admin-menu');
+            $('#admin-menu-obfuscator').show();
         } else {
             $('.toolkit-fixed-drawer').addClass('collapse-admin-menu');
+            $('#admin-menu-obfuscator').hide();
         };
 
         $('.admin-menu-toggle').click( function() {
             $(this).parent().toggleClass('collapse-admin-menu').toggleClass('expand-admin-menu');
+            $('#admin-menu-obfuscator').toggle();
         });
     });
 </script>
