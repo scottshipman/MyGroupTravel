@@ -32,6 +32,7 @@
 /web/static/
 /web/images/
 /web/media/
+/web/assets/
 
 # Core .htaccess
 /web/.htaccess
