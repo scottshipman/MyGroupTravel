@@ -58,7 +58,10 @@ $(document).ready(function () {
             // Switch to edit mode
             t.addClass('mode-edit').removeClass('mode-preview');
             $(this).html('Switch to Preview Mode');
-            $(".sortable-items").sortable("enable");
+            if ( toolkitBreakpointAllowDrag() ) {
+                // Sorting not allowed on phone for content blocks
+                $(".sortable-items").sortable("enable");
+            };
             $('.add-content-block').show() // show ALL Add Block's for all tabs
         } else {
             // Switch to preview mode
@@ -170,7 +173,10 @@ $(document).ready(function () {
         $(".site-content-blocks-edit").show();
         $(this).hide();
         //$('.add-content-block').hide() // hide ALL Add Block's for all tabs
-        $(".sortable-items").sortable("enable");
+        if ( toolkitBreakpointAllowDrag() ) {
+            // Sorting not allowed on phone for content blocks
+            $(".sortable-items").sortable("enable");
+        };
     });
 
     // Inline content block creation

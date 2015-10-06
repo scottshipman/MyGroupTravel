@@ -8,6 +8,14 @@ var toolkitBreakpoint = function() {
     return breakpoint;
 };
 
+var toolkitBreakpointAllowDrag = function() {
+    if ( toolkitBreakpoint() !== 'phone' ) {
+        return true;
+    } else {
+        return false;
+    }
+};
+
 /**
  * Persist Content block data to the database/entity
  * @param id - Quote Version # passed from window.path
