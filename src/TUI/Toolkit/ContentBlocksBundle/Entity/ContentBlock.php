@@ -87,7 +87,7 @@ class ContentBlock
       $this->isSlideshow = false;
       $this->sortOrder = 1;
       $this->body = "";
-      $this->media = new ArrayCollection();
+      $this->mediaWrapper = new ArrayCollection();
     }
 
   /**
@@ -298,40 +298,40 @@ class ContentBlock
 
 
   /**
-     * @var \TUI\Toolkit\MediaBundle\Entity\Media
-     * @ORM\ManyToMany(targetEntity="TUI\Toolkit\MediaBundle\Entity\Media", cascade={"persist"}, fetch="LAZY")
-     * @ORM\JoinColumn(name="media", referencedColumnName="id")
+     * @var \TUI\Toolkit\MediaBundle\Entity\MediaWrapper
+     * @ORM\ManyToMany(targetEntity="TUI\Toolkit\MediaBundle\Entity\MediaWrapper", cascade={"persist"}, fetch="LAZY")
+     * @ORM\JoinColumn(name="mediawrapper", referencedColumnName="id")
      */
-    protected $media;
+    protected $mediaWrapper;
 
     /**
-     * @param $media
+     * @param $mediaWrapper
      */
 
-    public function addMedia($media)
+    public function addMediaWrapper($mediaWrapper)
     {
 
-        $this->media[] = $media;
+        $this->mediaWrapper[] = $mediaWrapper;
         return $this;
     }
 
     /**
-     * @param  $media
+     * @param  $mediaWrapper
      */
 
-    public function setMedia($media)
+    public function setMediaWrapper($mediaWrapper)
     {
-        $this->media = $media;
+        $this->mediaWrapper = $mediaWrapper;
 
-        return $media;
+        return $mediaWrapper;
     }
 
     /**
-     * @return Media
+     * @return mediaWrapper
      */
-    public function getMedia()
+    public function getMediaWrapper()
     {
-        return $this->media;
+        return $this->mediaWrapper;
     }
 
 }
