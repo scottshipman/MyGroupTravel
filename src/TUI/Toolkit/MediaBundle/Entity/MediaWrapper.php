@@ -33,9 +33,13 @@ class MediaWrapper
     protected $weight;
 
     /**
-     * @var \TUI\Toolkit\MediaBundle\Entity\Media
-     * @ORM\ManyToMany(targetEntity="TUI\Toolkit\MediaBundle\Entity\Media", cascade={"persist"}, fetch="LAZY")
-     * @ORM\JoinColumn(name="media", referencedColumnName="id")
+     * Bidirectional - Many media have many mediaWrappers (OWNING SIDE)
+     *
+     * @ORM\ManyToMany(targetEntity="TUI\Toolkit\MediaBundle\Entity\Media", inversedBy="mediaWrappers")
+     * @ORM\JoinTable(name="media_wrapper_media",
+     *      joinColumns={@ORM\JoinColumn(name="media_wrapper_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="media_id", referencedColumnName="id")}
+     *  )
      */
     protected $media;
 
@@ -45,8 +49,8 @@ class MediaWrapper
 
 
     public function __toString() {
-        if(null !== $this->filename){
-            return $this->filename;
+        if(null !== $this->title){
+            return $this->title;
         } else {return '';}
     }
 
