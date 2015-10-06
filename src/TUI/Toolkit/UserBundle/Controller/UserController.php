@@ -387,6 +387,10 @@ class UserController extends Controller
      */
     public function editAction($id)
     {
+      // set a session var for referrer to return user back to it
+      $referer = $_SERVER['HTTP_REFERER'] ?  $_SERVER['HTTP_REFERER'] : null;
+      $_SESSION['user_edit_return'] = $referer;
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
@@ -472,6 +476,23 @@ class UserController extends Controller
                 ));
         }
 
+        if ($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
+          $form->add('enabled', 'checkbox', array(
+            'required' => FALSE,
+          ))
+            ->add('roles', 'choice', array(
+              'choices' => array(
+                'ROLE_USER' => 'User',
+                'ROLE_CUSTOMER' => 'CUSTOMER',
+                'ROLE_BRAND' => 'BRAND',
+                'ROLE_ADMIN' => 'ADMIN',
+                'ROLE_SUPER_ADMIN' => 'SUPER_ADMIN',
+              ),
+              'multiple' => TRUE,
+              'expanded' => TRUE,
+            ));
+        }
+
         $form->add('submit', 'submit', array('label' => 'Update'));
 
         return $form;
@@ -535,10 +556,13 @@ class UserController extends Controller
             $em->flush();
             $this->get('session')->getFlashBag()->add('notice', 'User Saved: ' . $entity->getUsername());
 
-          if (true === $this->get('security.context')->isGranted('ROLE_BRAND')) {
-            return $this->redirect($this->generateUrl('user'));
-          } else {
+          if (null !== $_SESSION['user_edit_return']) {
+            return $this->redirect($_SESSION['user_edit_return']);
+          }
+          elseif (false === $this->get('security.context')->isGranted('ROLE_BRAND')) {
             return $this->redirect('/profile');
+          } else {
+            return $this->redirect($_SESSION['user_edit_return']);
           }
         }
 

@@ -64,15 +64,99 @@
       .mdl-navigation__link {
         font-weight: 400;
         padding: 10px $layout-header-desktop-indent 10px ($layout-header-desktop-indent * 2);
-
-        @media screen and (max-width: $layout-screen-size-threshold) {
-          padding: 10px $layout-header-mobile-indent 10px ($layout-header-mobile-indent * 2);
-        }
-
       }
 
     }
 
+  }
+
+}
+
+.admin-menu-toggle {
+  font-size: 28px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 28px;
+  text-align: center;
+  margin: 0.5em;
+  cursor: pointer;
+  z-index: 5;
+  // MDL styling to get slider effect
+  will-change: transform;
+  -webkit-transition-duration: .2s;
+  transition-duration: .2s;
+  -webkit-transition-timing-function: cubic-bezier(.4,0,.2,1);
+  transition-timing-function: cubic-bezier(.4,0,.2,1);
+  -webkit-transition-property: left;
+  transition-property: left;
+
+  .toolkit-fixed-drawer & {
+
+    @include breakpoint_desktop() {
+      left: $admin_menu_width;
+    }
+
+  }
+
+}
+
+#admin-menu-obfuscator {
+  display: none;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: $text_grey_t1;
+  z-index: 1;
+
+  @include breakpoint_desktop() {
+    display: none !important;
+  }
+
+}
+
+
+/* Expand and collapse */
+
+.collapse-admin-menu {
+
+  .toolkit-drawer {
+    -webkit-transform: translateX(-($admin_menu_width));
+    -ms-transform: translateX(-($admin_menu_width));
+    transform: translateX(-($admin_menu_width));
+  }
+
+  &.toolkit-fixed-drawer > .toolkit-main {
+    margin-left: 0;
+  }
+
+  .admin-menu-toggle {
+    left: 0;
+  }
+
+}
+
+.expand-admin-menu {
+
+  .toolkit-drawer {
+    -webkit-transform: translateX(0);
+    -ms-transform: translateX(0);
+    transform: translateX(0);
+  }
+
+  &.toolkit-fixed-drawer > .toolkit-main {
+    margin-left: 0;
+
+    @include breakpoint_desktop() {
+      margin-left: $admin_menu_width;
+    }
+
+  }
+
+  .admin-menu-toggle {
+    left: $admin_menu_width;
   }
 
 }
