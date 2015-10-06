@@ -8,22 +8,27 @@
   background: $text_grey_t1;
   z-index: 9999;
 
-  img {
+  .loader-icon {
+    font-size: 72px;
+    line-height: 1;
+    width: 72px;
+    height: 72px;
     position: absolute;
     top: 50%;
     left: 50%;
-    margin: -39px 0 0 -40px;
+    margin: -36px 0 0 -36px;
   }
 
 }
 
 .back-link {
+  line-height: 2;
   color: inherit;
   text-decoration: none;
-  padding-top: 8px;
-  padding-bottom: 8px;
   float: left;
-  @include span-all();
+  margin: 1em 0 1em (-$column_gutter_width_reset);
+  position: relative;
+  left: 4em;
 }
 
 .sub-header {
@@ -39,7 +44,7 @@
 
   h2 {
     margin: 0.25em 0;
-    padding: 0 120px 0 0;
+    padding: 0 (120px + 12px) 0 0;
   }
 
   .institution-logo {
@@ -165,7 +170,8 @@
 
 }
 
-.expired-quote, .accepted-quote {
+.expired-quote,
+.accepted-quote {
   -khtml-opacity: 0.70;
   -moz-opacity: 0.70;
   -ms-filter: ”alpha(opacity=70)”;
@@ -197,9 +203,16 @@
 
 #site-header-slideshow,
 #site-header-editForm {
-  float: left;
-  width: $column_total_width * 3;
-  padding: 0 $column_gutter_width;
+  @include span-all();
+
+  @include breakpoint_tablet() {
+    float: left;
+    width: $column_total_width * 2;
+  }
+
+  @include breakpoint_desktop() {
+    width: $column_total_width * 3;
+  }
 
   .pdf-layout & {
     width: 60%;
@@ -214,10 +227,27 @@
 
 }
 
+#site-header-summary,
+#site-header-summary-form {
+  margin-top: $element-bottom;
+
+  @include breakpoint_tablet() {
+    margin-top: 0;
+  }
+
+}
+
 #site-header-summary {
-  float: right;
-  width: $column_total_width;
-  padding: 0 $column_gutter_width;
+  @include span-all();
+
+  @include breakpoint_tablet() {
+    float: right;
+    width: $column_total_width * 2;
+  }
+
+  @include breakpoint_desktop() {
+    width: $column_total_width;
+  }
 
   .pdf-layout & {
     width: 35%;
@@ -235,8 +265,12 @@
 }
 
 .content-blocks-drawer.mdl-tabs__panel {
-  margin-left: -$column_gutter_width_reset;
-  width: $column_total_width_reset;
+
+  @include breakpoint_tablet() {
+    margin-left: -$column_gutter_width_reset;
+    width: $column_total_width_reset;
+  }
+
 }
 
 .alt-quote {
@@ -306,9 +340,12 @@
 // Preview/Edit toggling
 
 .site-content-blocks-size-half {
-  float: left;
-  width: $column_total_width * 2;
-  padding: 0 $column_gutter_width;
+
+  @include breakpoint_tablet() {
+    float: left;
+    width: $column_total_width * 2;
+    padding: 0 $column_gutter_width;
+  }
 
   .pdf-layout & {
     clear: both;
@@ -317,9 +354,13 @@
   }
 
   .content-block-size-half {
-    float: none;
-    width: auto;
-    padding: 0;
+
+    @include breakpoint_tablet() {
+      float: none;
+      width: auto;
+      padding: 0;
+    }
+
   }
 
 }
@@ -337,7 +378,7 @@
 
 .link-preview-edit {
   float: right;
-  //clear: both;
+  padding: (((56px * 1.35) - 36px) / 2) 0;
 }
 
 .content-blocks-drawer {

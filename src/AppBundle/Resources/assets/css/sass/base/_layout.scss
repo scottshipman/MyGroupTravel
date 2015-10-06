@@ -12,27 +12,3 @@
 .default-cursor {
   cursor: default;
 }
-
-
-.collapse-menu {
-  .mdl-navigation {
-    display: none;
-  }
-  #tui-drawer-header {
-    display: none;
-  }
-  width: 40px;
-}
-
-
-
-
-.toolkit-fixed-drawer > .toolkit-main.expand-main {
-  margin-left: 40px;
-}
-
-.mdl-layout__drawer .fa-bars {
-  float: right;
-  margin: 1em;
-  cursor: pointer;
-}

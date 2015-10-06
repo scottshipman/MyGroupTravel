@@ -40,7 +40,16 @@
         $(this).parent().addClass('is-dirty');
     });
 
-    //Turn Row Actions into a dropdown menu
+    // Work on table scrolling
+    $('.mdl-data-table').wrap('<div class="mld-data-table__wrapper" />')
+        .css('margin-bottom', 0)
+        .parent().css({
+            'overflow': 'scroll',
+            'overflow': 'auto',
+            'margin-bottom': '1em'
+        });
+
+    // Turn Row Actions into a dropdown menu
     if ($('.grid-row-actions').length) {
         $('.grid-row-actions').each(function (index) {
             var size = $(this).children().length;
@@ -84,6 +93,6 @@
             '-ms-transform': 'translateY(-50%)',
             '-webkit-transform': 'translateY(-50%)'
         });
-    }
+    };
 
-    })(jQuery);
+})(jQuery);

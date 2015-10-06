@@ -1,5 +1,13 @@
 /********* Global Methods Go below here ******************************/
 
+var toolkitBreakpoint = function() {
+    var breakpoint = window
+        .getComputedStyle( document.querySelector('body'), ':before' )
+        .getPropertyValue( 'content' )
+        .replace( /['"]+/g, '' );
+    return breakpoint;
+};
+
 /**
  * Persist Content block data to the database/entity
  * @param id - Quote Version # passed from window.path
@@ -39,7 +47,7 @@ var contentBlocksUpdate = function (id, classtype) {
  * @param id The id of the QuoteVersion Object that owns the content blocks
  */
 
-var contentBlocksAddTab= function (elem, id, classtype){
+var contentBlocksAddTab = function (elem, id, classtype) {
     var newId = new Date().getTime();
     $("#content-blocks-wrapper").prepend(
         '<div id="'  + (newId)+ '" class="content-blocks-tab">' +
@@ -85,7 +93,7 @@ var contentBlocksNewTab = function (id, classtype) {
  * Reload the page that shows the content blocks and tabs
  * @param id
  */
-var contentBlocksRefresh = function(id){
+var contentBlocksRefresh = function(id) {
     $.ajax({
         url: window.location.href,
         headers: {
