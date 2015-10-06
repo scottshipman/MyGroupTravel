@@ -51,7 +51,19 @@
         draggable: false,
         resizable: false,
         title: 'Loading...',
-        autoOpen: false
+        autoOpen: false,
+        open: function (e, ui) {
+            if ( !toolkitBreakpointAllowDrag() ) {
+                // Modal to full screen on phone
+                $("#dialog")
+                    .dialog("option", "width", "100%")
+                    .dialog("option", "height", $(window).height() );
+            } else {
+                $("#dialog")
+                    .dialog("option", "width", "60%")
+                    .dialog("option", "height", 400 );
+            };
+        }
     });
 
     $(".modal").on("click", function (e) {
