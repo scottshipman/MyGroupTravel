@@ -82,7 +82,9 @@
                     var value = $(".media-placeholder").val();
                     var values = [];
                     if ( value != 0 ) {
-                        values = value.split(',').map(Number);
+                        $(".caption-textfield").css({"display":"block"});
+                        $(".caption-label").css({"display":"block"});
+                        updateMediaWrapper($(".existing-media-wrapper"));
                         if (values.length >= 15) {
                             $(".new-media-wrapper").css({"display": "none"});
                         }
