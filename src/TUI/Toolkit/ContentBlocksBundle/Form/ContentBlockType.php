@@ -64,7 +64,7 @@ class ContentBlockType extends AbstractType
                 ));
               }
             $builder
-              ->add('media', 'hidden', array(
+              ->add('mediaWrapper', 'hidden', array(
                 'required' => false,
 //                'data_class' => 'TUI\Toolkit\MediaBundle\Entity\Media',
                 'attr' => array(
