@@ -75,7 +75,7 @@ $(document).ready(function () {
         var entityId = $('.site-show').attr('entityId');
         var entityPath = $('.site-show').attr('entityPath');
         $("#dialog").html("");
-        $("#dialog").dialog({width: '60%'}).dialog("option", "title", "Loading...").dialog("open");
+        $("#dialog").dialog("open");
         $("#dialog").load('/manage/' + entityPath + '/show/tabs/' + entityId, function () {
             $(this).dialog("option", "title", "Rearrange Tabs");
             $(".modal-sortable-tabs").sortable("enable");

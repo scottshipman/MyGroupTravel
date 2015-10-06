@@ -1,14 +1,5 @@
 /********* Global Methods Go below here *********/
 
-var toolkitDialogDefaults = {
-    modal: true,
-    width: '60%',
-    draggable: false,
-    resizable: false,
-    title: 'Loading...',
-    autoOpen: false
-};
-
 var toolkitBreakpoint = function() {
     var breakpoint = window
         .getComputedStyle( document.querySelector('body'), ':before' )

@@ -16,7 +16,7 @@ $(document).ready(function () {
         e.preventDefault();
         var entityId = $('.site-show').attr('entityId');
         $("#dialog").html("");
-        $("#dialog").dialog({width: '60%'}).dialog("option", "title", "Loading...").dialog("open");
+        $("#dialog").dialog("open");
         $("#dialog").load('/quote/view/change-request/form/' + entityId, function () {
             $(this).dialog("option", "title", "I'd prefer to make some changes");
             doMDLpopup($('#dialog')); // run the function to add appropriate MDL classes to form elements
@@ -28,7 +28,7 @@ $(document).ready(function () {
         e.preventDefault();
         var entityId = $('.site-show').attr('entityId');
         $("#dialog").html("");
-        $("#dialog").dialog({width: '60%'}).dialog("option", "title", "Loading...").dialog("open");
+        $("#dialog").dialog("open");
         $("#dialog").load('/quote/view/accepted/form/' + entityId, function () {
             $(this).dialog("option", "title", "Like this quote");
             doMDLpopup($('#dialog')); // run the function to add appropriate MDL classes to form elements

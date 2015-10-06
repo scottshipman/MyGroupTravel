@@ -45,15 +45,13 @@
     });
 
     $("#dialog").dialog({
-        autoOpen: false,
         modal: true,
-        width: 600,
-        height: 400
-        /*        buttons: {
-         "Close": function() {
-         $(this).dialog("close");
-         }
-         }*/
+        width: '60%',
+        height: 400,
+        draggable: false,
+        resizable: false,
+        title: 'Loading...',
+        autoOpen: false
     });
 
     $(".modal").on("click", function (e) {
@@ -62,7 +60,7 @@
         var form_type = parts[0].toLowerCase();
         //e.preventDefault();
         $("#dialog").html("");
-        $("#dialog").dialog("option", "title", "Loading...").dialog("open");
+        $("#dialog").dialog("open");
         $("#dialog").load('/ajax/' + form_type + '/new', function () {
             $(this).dialog("option", "title", 'Create New ' + parts[0]);
             doMDLpopup( $(this) );
