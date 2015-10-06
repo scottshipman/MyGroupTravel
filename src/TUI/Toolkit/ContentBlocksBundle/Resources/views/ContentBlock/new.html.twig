@@ -2,7 +2,7 @@
 
     <div class="media-wrapper">
 
-        <div class="existing-media-wrapper">
+        <div class="existing-media-wrapper sortable-images">
             <div class="mdl-label-mimic"><label>Uploaded Images</label></div>
             <p class="none">No images uploaded.</p>
         </div>
@@ -72,6 +72,28 @@
                 updateMediaWrapper($(".existing-media-wrapper"));
             });
 
+            //Sortable images for content blocks
+            $(".sortable-images").sortable({
+                containment: "parent",
+                items: "> div.existing-media-item",
+                // handle: ".move",
+                tolerance: "pointer",
+                cursor: "move",
+                opacity: 0.7,
+                revert: 300,
+                delay: 150,
+                dropOnEmpty: true,
+//        placeholder: "tabs-placeholder",
+                start: function (e, ui) {
+                    ui.placeholder.height(ui.helper.outerHeight());
+                },
+                stop: function (e, ui) {
+                    updateMediaWrapper($(".existing-media-wrapper"));
+                },
+                axis: 'x,y'
+
+            });
+
             // Dropzone.autoDiscover = false;
 
             $('#dropzone_form').dropzone({
@@ -84,6 +106,7 @@
                     if ( value != 0 ) {
                         $(".caption-textfield").css({"display":"block"});
                         $(".caption-label").css({"display":"block"});
+                        $(".sortable-images").sortable("enable");
                         updateMediaWrapper($(".existing-media-wrapper"));
                         if (values.length >= 15) {
                             $(".new-media-wrapper").css({"display": "none"});
