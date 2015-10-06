@@ -2,10 +2,12 @@
     <div class="flexslider">
         <ul class="slides">
             {% if entity %}
-                {% for media in entity.media %}
+                {% for mediaWrapper in entity.mediaWrapper %}
+                    {% for media in mediaWrapper.media %}
                     <li>
-                        <span class="inner-list"><span><img src="{{ asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) | imagine_filter('slideShow') }}"></span></span>
+                        <span class="inner-list"><span><img src="{{ asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) | imagine_filter('slideShow') }}" title="{{ mediaWrapper.title }}" alt="{{ mediaWrapper.title }}"></span></span>
                     </li>
+                        {% endfor %}
                 {% endfor %}
             {% endif %}
         </ul>
