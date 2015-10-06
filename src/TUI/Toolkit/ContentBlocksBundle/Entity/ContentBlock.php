@@ -301,6 +301,7 @@ class ContentBlock
      * @var \TUI\Toolkit\MediaBundle\Entity\MediaWrapper
      * @ORM\ManyToMany(targetEntity="TUI\Toolkit\MediaBundle\Entity\MediaWrapper", cascade={"persist"}, fetch="LAZY")
      * @ORM\JoinColumn(name="mediawrapper", referencedColumnName="id")
+     * @ORM\OrderBy({"weight" = "ASC"})
      */
     protected $mediaWrapper;
 
