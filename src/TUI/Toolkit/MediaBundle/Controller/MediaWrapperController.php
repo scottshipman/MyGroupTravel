@@ -2,6 +2,7 @@
 
 namespace TUI\Toolkit\MediaBundle\Controller;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -30,53 +31,37 @@ class MediaWrapperController extends Controller
             'entities' => $entities,
         ));
     }
+
     /**
      * Creates a new MediaWrapper entity.
      *
      */
-    public function createAction(Request $request, $fileArrays)
+    public function createAction(Request $request, $fileArray)
     {
-        $entity = new MediaWrapper();
-        $form = $this->createCreateForm($entity);
-        $form->handleRequest($request);
-        $em = $this->getDoctrine()->getManager();
-        $wrapper = array();
-        $images = array();
 
-        if($fileArrays != NULL) {
-            foreach ($fileArrays as $properties) {
-                    $image = $em->getRepository('MediaBundle:Media')
-                        ->find($properties[0]);
-                    $images[] = $image;
-                    $form->getData()->setMedia($images);
-                    $form->getData()->setTitle($properties[1]);
-                    $form->getData()->setWeight($properties[2]);
-                    $em->persist($entity);
-                    $em->flush();
-                    $wrapper[] = $entity;
-                }
+            $entity = new MediaWrapper();
+            $form = $this->createCreateForm($entity);
+            $form->handleRequest($request);
+            $em = $this->getDoctrine()->getManager();
+            $images = array();
 
+            $image = $em->getRepository('MediaBundle:Media')
+                ->find($fileArray[0]);
+            $images[] = $image;
+            $form->getData()->setMedia($images);
+            $form->getData()->setTitle($fileArray[1]);
+            $form->getData()->setWeight($fileArray[2]);
+            $em->persist($entity);
+            $em->flush($entity);
 
-//            if ($form->isValid()) {
-//                $em = $this->getDoctrine()->getManager();
-//                $em->persist($wrapper);
+        $serializer = $this->container->get('serializer');
+        $imageWrapper = $serializer->serialize($entity, 'json');
 
-                $responseContent = $wrapper;
+        return new Response($imageWrapper);
 
-            return new Response($responseContent,
-                Response::HTTP_OK,
-                array('content-type' => 'application/json')
-            );
-
-//                return $this->redirect($this->generateUrl('manage_mediawrapper_show', array('id' => $entity->getId())));
-//            }
-        }
-
-//        return $this->render('MediaBundle:MediaWrapper:new.html.twig', array(
-//            'entity' => $entity,
-//            'form'   => $form->createView(),
-//        ));
     }
+
+
 
     /**
      * Creates a form to create a MediaWrapper entity.
@@ -85,7 +70,8 @@ class MediaWrapperController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(MediaWrapper $entity)
+    private
+    function createCreateForm(MediaWrapper $entity)
     {
         $form = $this->createForm(new MediaWrapperType(), $entity, array(
             'action' => $this->generateUrl('manage_mediawrapper_create'),
@@ -101,14 +87,15 @@ class MediaWrapperController extends Controller
      * Displays a form to create a new MediaWrapper entity.
      *
      */
-    public function newAction()
+    public
+    function newAction()
     {
         $entity = new MediaWrapper();
-        $form   = $this->createCreateForm($entity);
+        $form = $this->createCreateForm($entity);
 
         return $this->render('MediaBundle:MediaWrapper:new.html.twig', array(
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'form' => $form->createView(),
         ));
     }
 
@@ -116,7 +103,8 @@ class MediaWrapperController extends Controller
      * Finds and displays a MediaWrapper entity.
      *
      */
-    public function showAction($id)
+    public
+    function showAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -129,7 +117,7 @@ class MediaWrapperController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('MediaBundle:MediaWrapper:show.html.twig', array(
-            'entity'      => $entity,
+            'entity' => $entity,
             'delete_form' => $deleteForm->createView(),
         ));
     }
@@ -138,7 +126,8 @@ class MediaWrapperController extends Controller
      * Displays a form to edit an existing MediaWrapper entity.
      *
      */
-    public function editAction($id)
+    public
+    function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -152,20 +141,21 @@ class MediaWrapperController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('MediaBundle:MediaWrapper:edit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-    * Creates a form to edit a MediaWrapper entity.
-    *
-    * @param MediaWrapper $entity The entity
-    *
-    * @return \Symfony\Component\Form\Form The form
-    */
-    private function createEditForm(MediaWrapper $entity)
+     * Creates a form to edit a MediaWrapper entity.
+     *
+     * @param MediaWrapper $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private
+    function createEditForm(MediaWrapper $entity)
     {
         $form = $this->createForm(new MediaWrapperType(), $entity, array(
             'action' => $this->generateUrl('manage_mediawrapper_update', array('id' => $entity->getId())),
@@ -176,11 +166,13 @@ class MediaWrapperController extends Controller
 
         return $form;
     }
+
     /**
      * Edits an existing MediaWrapper entity.
      *
      */
-    public function updateAction(Request $request, $id)
+    public
+    function updateAction(Request $request, $id, $fileArray)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -190,27 +182,41 @@ class MediaWrapperController extends Controller
             throw $this->createNotFoundException('Unable to find MediaWrapper entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
-        if ($editForm->isValid()) {
-            $em->flush();
+        $media = $entity->getMedia()->toArray();
 
-            return $this->redirect($this->generateUrl('manage_mediawrapper_edit', array('id' => $id)));
-        }
+        $editForm->getData()->setMedia($media);
+        $editForm->getData()->setTitle($fileArray[1]);
+        $editForm->getData()->setWeight($fileArray[2]);
 
-        return $this->render('MediaBundle:MediaWrapper:edit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        $em->persist($entity);
+        $em->flush($entity);
+//        $em->clear();
+
+        $serializer = $this->container->get('serializer');
+        $imageWrapper = $serializer->serialize($entity, 'json');
+
+        return new Response($imageWrapper);
+
+//        if ($editForm->isValid()) {
+
+//            return $this->redirect($this->generateUrl('manage_mediawrapper_edit', array('id' => $id)));
+
+
+//        return $this->render('MediaBundle:MediaWrapper:edit.html.twig', array(
+//            'entity' => $entity,
+//            'edit_form' => $editForm->createView(),
+//        ));
     }
+
     /**
      * Deletes a MediaWrapper entity.
      *
      */
-    public function deleteAction(Request $request, $id)
+    public
+    function deleteAction(Request $request, $id)
     {
         $form = $this->createDeleteForm($id);
         $form->handleRequest($request);
@@ -237,13 +243,13 @@ class MediaWrapperController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm($id)
+    private
+    function createDeleteForm($id)
     {
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('manage_mediawrapper_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-        ;
+            ->getForm();
     }
 }
