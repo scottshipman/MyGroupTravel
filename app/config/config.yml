@@ -151,10 +151,6 @@ fos_user:
     user_class: TUI\Toolkit\UserBundle\Entity\User
     registration:
             confirmation:
-                from_email:
-                      address: registration@toolkit.com
-                      sender_name: Toolkit Registration
-
                 enabled:    true
                 template:   TUIToolkitUserBundle:Registration:register_email.html.twig
     from_email:
@@ -162,10 +158,6 @@ fos_user:
         sender_name:    TUI Toolkit System
     resetting:
             email:
-                from_email:
-                      address: reset@toolkit.com
-                      sender_name: Toolkit Reset
-
                 template:   TUIToolkitUserBundle:Resetting:reset.html.twig
 
 

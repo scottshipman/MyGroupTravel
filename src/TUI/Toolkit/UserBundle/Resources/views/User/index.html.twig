@@ -1,17 +1,17 @@
 {% extends '::base.html.twig' %}
-{% block title %}User Dashboard{% endblock %}
-{% block page_title %}User Dashboard{% endblock %}
+{% block title %}{% trans %}user.title.index{% endtrans %}{% endblock %}
+{% block page_title %}{% trans %}user.page_title.index{% endtrans %}{% endblock %}
 
 {% block body -%}
 
     <ul class="record_actions">
         <li>
-            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('user_new') }}"><i class="fa fa-plus-circle"></i> Create a new User</a>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('user_new') }}"><i class="fa fa-plus-circle"></i> {% trans %}user.actions.create_new{% endtrans %}</a>
         </li>
     </ul>
 {% embed "TUIToolkitUserBundle:User:user_tabs.html.twig" %}
     {% block user_tab %}
-        <a class="mdl-tabs__tab is-active" href="{{ path('user') }}">Current Users</a>
+        <a class="mdl-tabs__tab is-active" href="{{ path('user') }}">{% trans %}user.tabs.current{% endtrans %}</a>
     {% endblock %}
 {% endembed %}
 

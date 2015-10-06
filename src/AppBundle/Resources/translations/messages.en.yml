@@ -2,13 +2,17 @@
 
 app:
   ckeditor-upload:
-    empty-file: No file uploaded.
-    zero-file: The file is of zero length.
-    wrong-file: The image must be in either JPG or PNG format. Please upload a JPG or PNG instead.
-    no-file: You may be attempting to hack our server. We’re on to you; expect a knock on the door sometime soon.
-    move-error: Error moving uploaded file. Check the script is granted Read/Write/Modify permissions.
+      empty-file: No file uploaded.
+      zero-file: The file is of zero length.
+      wrong-file: The image must be in either JPG or PNG format. Please upload a JPG or PNG instead.
+      no-file: You may be attempting to hack our server. We’re on to you; expect a knock on the door sometime soon.
+      move-error: Error moving uploaded file. Check the script is granted Read/Write/Modify permissions.
 
 
+  tui_drawer:
+      actions:
+          edit: Edit
+          view: View
 # add generic App level messages in the following format
 #  'original text' : new text
 

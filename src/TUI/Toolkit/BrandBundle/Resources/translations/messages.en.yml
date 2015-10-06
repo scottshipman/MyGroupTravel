@@ -31,3 +31,8 @@ brand:
     flash:
         save: Brand Saved -
         delete: Brand deleted -
+
+    form:
+        label:
+            p_color: Primary color
+            s_color: Secondary color

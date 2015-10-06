@@ -1,6 +1,6 @@
 {% extends '::base.html.twig' %}
-{% block title %}User '{{ entity.username }}'{% endblock %}
-{% block page_title %}User '{{ entity.username }}'{% endblock %}
+{% block title %}{% trans %}user.title.show{% endtrans %} '{{ entity.username }}'{% endblock %}
+{% block page_title %}{% trans %}user.page_title.show{% endtrans %} '{{ entity.username }}'{% endblock %}
 {% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
 {% block body -%}
 
@@ -11,28 +11,28 @@
             <td class="mdl-data-table__cell--non-numeric">{{ entity.id }}</td>
         </tr>
         <tr>
-            <td class="mdl-data-table__cell--non-numeric th-mimic">Name</td>
+            <td class="mdl-data-table__cell--non-numeric th-mimic">{% trans %}user.table.label.name{% endtrans %}</td>
             <td class="mdl-data-table__cell--non-numeric">{{ entity.firstName }} {{ entity.lastName }}</td>
         </tr>
         <tr>
-            <td class="mdl-data-table__cell--non-numeric th-mimic">Phone Number</td>
+            <td class="mdl-data-table__cell--non-numeric th-mimic">{% trans %}user.table.label.phone{% endtrans %}</td>
             <td class="mdl-data-table__cell--non-numeric">{{ entity.phoneNumber }}</td>
         </tr>
         <tr>
 
-            <td class="mdl-data-table__cell--non-numeric th-mimic">Created</td>
+            <td class="mdl-data-table__cell--non-numeric th-mimic">{% trans %}user.table.label.created{% endtrans %}</td>
             <td class="mdl-data-table__cell--non-numeric">{{ entity.created | date (format)}}</td>
         </tr>
         <tr>
-            <td class="mdl-data-table__cell--non-numeric th-mimic">Enabled</td>
+            <td class="mdl-data-table__cell--non-numeric th-mimic">{% trans %}user.table.label.enabled{% endtrans %}</td>
             <td class="mdl-data-table__cell--non-numeric">{% if entity.enabled %}<i class="fa fa-check"></i>{% endif %}</td>
         </tr>
         <tr>
-            <td class="mdl-data-table__cell--non-numeric th-mimic">Last Login</td>
+            <td class="mdl-data-table__cell--non-numeric th-mimic">{% trans %}user.table.label.last_login{% endtrans %}</td>
             <td class="mdl-data-table__cell--non-numeric">{% if entity.lastLogin %}{{ entity.lastLogin | date (format)}} {% else %} Never {% endif %}</td>
         </tr>
         <tr>
-            <td class="mdl-data-table__cell--non-numeric th-mimic">Avatar</td>
+            <td class="mdl-data-table__cell--non-numeric th-mimic">{% trans %}user.table.label.avatar{% endtrans %}</td>
             <td class="mdl-data-table__cell--non-numeric center">
                 <div id="user_dropzone">
                     {{ render(controller('MediaBundle:Media:createDropzoneForm', {'context':'user'})) }}
@@ -51,17 +51,17 @@
     <ul class="record_actions">
         <li>
             <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('user') }}">
-                <i class="fa fa-arrow-circle-left"></i> Back to the list</a>
+                <i class="fa fa-arrow-circle-left"></i> {% trans %}user.actions.back{% endtrans %}</a>
         </li>
         <li>
             <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
-               href="{{ path('user_edit', { 'id': entity.id }) }}"><i class="fa fa-pencil-square-o"></i> Edit
+               href="{{ path('user_edit', { 'id': entity.id }) }}"><i class="fa fa-pencil-square-o"></i> {% trans %}user.actions.edit{% endtrans %}
             </a></li>
         {% if delete_form %}<li>{{ form(delete_form) }}</li>{% endif %}
         {% if entity.enabled==false %}
         <li>
             <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
-               href="{{ path('user_registration_confirmation', { 'id': entity.id }) }}"><i class="fa fa-paper-plane"></i> Send New User Notification
+               href="{{ path('user_registration_confirmation', { 'id': entity.id }) }}"><i class="fa fa-paper-plane"></i> {% trans %}user.actions.notify{% endtrans %}
             </a>
         </li>
         {% endif %}

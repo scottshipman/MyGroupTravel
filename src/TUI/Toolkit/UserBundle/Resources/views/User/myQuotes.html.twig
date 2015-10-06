@@ -17,7 +17,7 @@
         {% else %}
             <a href="{{ path('quote_site_show', {'id': quote.id}) }}" class="">
         {% endif %}
-            <h3 class="mdl-card__title">Quote: {{ quote.quoteReference.name }} - {{ quote.name }} <i class="fa fa-arrow-right"></i></h3>
+            <h3 class="mdl-card__title">{% trans %}user.profile.my_quotes.quote{% endtrans %}: {{ quote.quoteReference.name }} - {{ quote.name }} <i class="fa fa-arrow-right"></i></h3>
         </a>
         {% if is_granted("ROLE_BRAND") %}
             <span quoteid= "{{ quote.id }}" class="profile-quote-edit"><i class= "profile-quote-edit-link fa fa-pencil">edit</i></span>
@@ -28,12 +28,12 @@
         <ul>
             <li>
                 <div class="profile-list-item seperator">
-                    {% if quote.currency %}{{ quote.currency.htmlSymbol | raw}}{% endif %}{% if quote.pricePerson %}{{ quote.pricePerson }}{% endif %}<br /><label>Price</label>
+                    {% if quote.currency %}{{ quote.currency.htmlSymbol | raw}}{% endif %}{% if quote.pricePerson %}{{ quote.pricePerson }}{% endif %}<br /><label>{% trans %}user.profile.my_quotes.price{% endtrans %}</label>
                 </div>
             </li>
             <li>
                 <div class="profile-list-item seperator">
-                    {{ quote.quoteReference.institution.name}}<br /><label>Institution</label>
+                    {{ quote.quoteReference.institution.name}}<br /><label>{% trans %}user.profile.my_quotes.institution{% endtrans %}</label>
                 </div>
             </li>
             <li>
@@ -48,7 +48,7 @@
                             <span class="tui-text-avatar mdl-typography--headline">{{ quote.quoteReference.salesAgent.username[:1] }}</span>
 
                         {% endif %}
-                        {{ quote.quoteReference.salesAgent.firstName }} {{ tour.salesAgent.lastName }} <br /> {{ quote.quoteReference.salesAgent.email }}<br /><label>Business Contact</label>
+                        {{ quote.quoteReference.salesAgent.firstName }} {{ tour.salesAgent.lastName }} <br /> {{ quote.quoteReference.salesAgent.email }}<br /><label>{% trans %}user.profile.my_quotes.salesAgent{% endtrans %}</label>
                     {% else %}
                         {% if quote.quoteReference.organizer.media %}
                             <span class="tui-image-avatar">
@@ -59,7 +59,7 @@
                             <span class="tui-text-avatar mdl-typography--headline">{{ quote.quoteReference.organizer.username[:1] }}</span>
 
                         {% endif %}
-                        {{ quote.quoteReference.organizer.firstName }} {{ quote.quoteReference.organizer.lastName }}  <br /> {{ quote.quoteReference.organizer.email }}<br /><label>Organizer</label>
+                        {{ quote.quoteReference.organizer.firstName }} {{ quote.quoteReference.organizer.lastName }}  <br /> {{ quote.quoteReference.organizer.email }}<br /><label>{% trans %}user.profile.my_quotes.organizer{% endtrans %}</label>
                     {% endif %}
                 </div>
 

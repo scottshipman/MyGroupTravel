@@ -20,7 +20,7 @@
                 {%  set tourlink = path('tour_site_show', {'id': tour.id, 'quoteNumber': tour.quoteNumber}) %}
             {% endif %}
             <a href="{{ tourlink }}" class="">
-                <h3 class="mdl-card__title">Tour: {{ tour.name }} <i class="fa fa-arrow-right"></i>
+                <h3 class="mdl-card__title">{% trans %}user.profile.my_quotes.tour{% endtrans %}: {{ tour.name }} <i class="fa fa-arrow-right"></i>
                 </h3>
             </a>
             {% if is_granted("ROLE_BRAND") %}
@@ -34,14 +34,14 @@
                <li>
                    <div class="profile-list-item seperator">
                         {% if (tour.organizer.id == app.user.id) or (tour.salesAgent.id == app.user.id) %}
-                            {% if tour.currency %}{{ tour.currency.htmlSymbol | raw}}{% endif %}{% if tour.pricePerson %}{{ tour.pricePerson }}{% endif %}<br /><label>Price</label>
+                            {% if tour.currency %}{{ tour.currency.htmlSymbol | raw}}{% endif %}{% if tour.pricePerson %}{{ tour.pricePerson }}{% endif %}<br /><label>{% trans %}user.profile.my_quotes.price{% endtrans %}</label>
                         {% else %} {# show the Public price for passenger/parents#}
-                       {% if tour.currency %}{{ tour.currency.htmlSymbol | raw}}{% endif %}{% if tour.pricePersonPublic %}{{ tour.pricePersonPublic }}{% endif %}<br /><label>Price</label>
+                       {% if tour.currency %}{{ tour.currency.htmlSymbol | raw}}{% endif %}{% if tour.pricePersonPublic %}{{ tour.pricePersonPublic }}{% endif %}<br /><label>{% trans %}user.profile.my_quotes.price{% endtrans %}</label>
                         {% endif %}
                    </div>
                </li>
                <li>
-                   <div class="profile-list-item seperator">{{ dtgFinal }}<br /><label>Days to go</label> </div>
+                   <div class="profile-list-item seperator">{{ dtgFinal }}<br /><label>{% trans %}user.profile.my_quotes.days{% endtrans %}</label> </div>
                </li>
                <li>
                    <div class="profile-list-item">
@@ -55,7 +55,7 @@
                                 <span class="tui-text-avatar mdl-typography--headline">{{ tour.salesAgent.username[:1] }}</span>
 
                             {% endif %}
-                        {{ tour.salesAgent.firstName }} {{ tour.salesAgent.lastName }} <br /> {{ tour.salesAgent.email }}<br /><label>Business Contact</label>
+                        {{ tour.salesAgent.firstName }} {{ tour.salesAgent.lastName }} <br /> {{ tour.salesAgent.email }}<br /><label>{% trans %}user.profile.my_quotes.salesAgent{% endtrans %}</label>
                         {% else %}
                             {% if tour.organizer.media %}
                                 <span class="tui-image-avatar">
@@ -66,7 +66,7 @@
                                 <span class="tui-text-avatar mdl-typography--headline">{{ tour.organizer.username[:1] }}</span>
 
                             {% endif %}
-                             {{ tour.organizer.firstName }} {{ tour.organizer.lastName }}  <br /> {{ tour.organizer.email }}<br /><label>Organizer</label>
+                             {{ tour.organizer.firstName }} {{ tour.organizer.lastName }}  <br /> {{ tour.organizer.email }}<br /><label>{% trans %}user.profile.my_quotes.organizer{% endtrans %}</label>
                         {% endif %}
                    </div>
                </li>

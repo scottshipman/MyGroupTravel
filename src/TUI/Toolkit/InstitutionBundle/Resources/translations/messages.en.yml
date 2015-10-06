@@ -61,3 +61,14 @@ institution:
 
       media:
           label: Click to upload
+
+      form:
+          label:
+              name: Name
+              address1: Address 1
+              address2: Address 2
+              city: City
+              state: State
+              county: COunty
+              post_code: ZipCode
+              country: Country

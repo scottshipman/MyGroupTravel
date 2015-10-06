@@ -1,6 +1,6 @@
 {% extends '::base.html.twig' %}
-{% block title %}Create New User{% endblock %}
-{% block page_title %}Create New User{% endblock %}
+{% block title %}{% trans %}user.title.new{% endtrans %}{% endblock %}
+{% block page_title %}{% trans %}user.page_title.new{% endtrans %}{% endblock %}
 
 {% block body -%}
 
@@ -11,7 +11,7 @@
         <ul class="record_actions">
     <li>
         <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('user') }}">
-            <i class="fa fa-arrow-circle-left"></i> Back to the list
+            <i class="fa fa-arrow-circle-left"></i> {% trans %}user.actions.back{% endtrans %}
         </a>
     </li>
 </ul>
