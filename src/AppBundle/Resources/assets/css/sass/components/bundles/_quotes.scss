@@ -22,12 +22,13 @@
 }
 
 .back-link {
+  line-height: 2;
   color: inherit;
   text-decoration: none;
-  padding-top: 8px;
-  padding-bottom: 8px;
   float: left;
-  @include span-all();
+  margin: 1em 0 1em (-$column_gutter_width_reset);
+  position: relative;
+  left: 4em;
 }
 
 .sub-header {

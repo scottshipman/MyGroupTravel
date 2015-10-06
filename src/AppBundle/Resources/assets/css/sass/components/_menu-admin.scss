@@ -73,9 +73,12 @@
 }
 
 .admin-menu-toggle {
+  font-size: 28px;
   position: absolute;
   left: 0;
   top: 0;
+  width: 28px;
+  text-align: center;
   margin: 0.5em;
   cursor: pointer;
   z-index: 5;
