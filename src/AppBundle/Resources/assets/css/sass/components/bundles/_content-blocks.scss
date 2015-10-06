@@ -185,20 +185,15 @@ td .layout-icons.image_bottom {
 
 .content-block {
   @include clear-fix();
+  clear: both;
   margin-bottom: $element-bottom;
 
-  &.content-block-size-full {
-    clear: both;
-  }
-
   &.content-block-size-half {
-    float: left;
-    width: $column_total_width * 2;
 
-    .pdf-layout & {
-      clear: both;
-      float: none;
-      width: auto;
+    @include breakpoint_tablet() {
+      clear: none;
+      float: left;
+      width: $column_total_width * 2;
     }
 
   }

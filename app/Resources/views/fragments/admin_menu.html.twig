@@ -1,5 +1,7 @@
+<i class="admin-menu-toggle fa fa-bars"></i>
+
 <div class="toolkit-drawer mdl-layout__drawer">
-    <i class="fa fa-bars fa-2"></i>
+
     <header id="tui-drawer-header" class="tui-drawer-header">
         {% if app.user.media %}
             <span class="tui-image-avatar"><img src="{{ asset( app.user.media.getRelativePath ~ "/" ~ app.user.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ app.user.username }}"></span>
@@ -31,12 +33,27 @@
     </nav>
 
 </div><!-- mdl-layout__drawer -->
+
 <script>
     $(document).ready(function() {
-        $('.fa-bars').click(function(){
-            $('.toolkit-drawer').toggleClass('collapse-menu', 500);
-            $('.tui-drawer-header').toggleClass('collapse-menu', 500);
-            $('.toolkit-fixed-drawer > .toolkit-main').toggleClass('expand-main', 500);
-        })
+        $('.toolkit-layout').after('<div id="admin-menu-obfuscator" />');
+
+        // On page load, not on browser window change
+        if ( toolkitBreakpoint() === 'desktop' ) {
+            $('.toolkit-fixed-drawer').addClass('expand-admin-menu');
+            $('#admin-menu-obfuscator').show();
+        } else {
+            $('.toolkit-fixed-drawer').addClass('collapse-admin-menu');
+            $('#admin-menu-obfuscator').hide();
+        };
+
+        $('.admin-menu-toggle').click( function() {
+            $(this).parent().toggleClass('collapse-admin-menu').toggleClass('expand-admin-menu');
+            if ( $(this).parent().hasClass('collapse-admin-menu') ) {
+                $('#admin-menu-obfuscator').hide();
+            } else {
+                $('#admin-menu-obfuscator').show();
+            }
+        });
     });
 </script>
