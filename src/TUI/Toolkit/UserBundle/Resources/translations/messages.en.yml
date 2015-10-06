@@ -1,0 +1,62 @@
+#Bundle/Resources/translations/messages.en.yml
+
+:
+      title:
+          edit: Edit User
+          index: User
+          new: Create New User
+          show: Transportation
+
+      page_title:
+          edit: Edit User
+          index: User
+          new: Create New User
+          show: User
+
+      actions:
+          back: Back to the list
+          edit: Edit
+          update: Update
+          create: Create
+          delete: Delete
+          create_new: Create a New User
+
+      table:
+          label:
+              name: Name (ID)
+              action: Actions
+              visible: Visible
+
+          actions:
+              view: View
+              edit: Edit
+
+      flash:
+          save: User Saved -
+          delete: User deleted -
+          restore: User Restored -
+
+      grid:
+          no_result: There are no Users to show. Please check your filter settings and try again.
+          no_result-deleted: There are no Deleted Users to show. Please check your filter settings and try again.
+          export: Users as CSV
+          export_deleted: Deleted Users as CSV
+          filter:
+              title:
+                  role: Role
+                  email: Email
+                  enabled: Enabled
+                  lname: Last Name
+          column:
+              title:
+                  last_login: Last Login
+          
+      tabs:
+          deleted: Deleted Users
+          current:  Current Users
+          
+      avatar:
+          label: Company Logo    
+          
+      media:
+          label: Click to upload    

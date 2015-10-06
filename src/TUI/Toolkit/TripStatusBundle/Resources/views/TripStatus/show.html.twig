@@ -1,17 +1,17 @@
 {% extends '::base.html.twig' %}
-{% block title %}Trip Status '{{ entity.name }}'{% endblock %}
-{% block page_title %}Trip Status '{{ entity.name }}'{% endblock %}
+{% block title %}{% trans %}tripstatus.title.show{% endtrans %} '{{ entity.name }}'{% endblock %}
+{% block page_title %}{% trans %}tripstatus.page_title.show{% endtrans %} '{{ entity.name }}'{% endblock %}
 
 {% block body -%}
 
     <table class="mdl-data-table mdl-js-data-table">
         <tbody>
             <tr>
-                <td class="mdl-data-table__cell--non-numeric th-mimic">Name (ID)</td>
+                <td class="mdl-data-table__cell--non-numeric th-mimic">{% trans %}tripstatus.table.label.name{% endtrans %}</td>
                 <td class="mdl-data-table__cell--non-numeric">{{ entity.name }} ({{ entity.id }})</td>
             </tr>
             <tr>
-                <td class="mdl-data-table__cell--non-numeric th-mimic">Visible</td>
+                <td class="mdl-data-table__cell--non-numeric th-mimic">{% trans %}tripstatus.table.label.visible{% endtrans %}</td>
                 <td class="mdl-data-table__cell--non-numeric">{{ entity.visible }}</td>
             </tr>
         </tbody>
@@ -20,12 +20,12 @@
         <ul class="record_actions">
     <li>
         <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_tripstatus') }}">
-            <i class="fa fa-arrow-circle-left"></i> Back to the list
+            <i class="fa fa-arrow-circle-left"></i> {% trans %}tripstatus.actions.back{% endtrans %}
         </a>
     </li>
     <li>
         <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_tripstatus_edit', { 'id': entity.id }) }}">
-            <i class="fa fa-pencil-square-o"></i> Edit
+            <i class="fa fa-pencil-square-o"></i> {% trans %}tripstatus.actions.edit{% endtrans %}
         </a>
     </li>
     <li>{{ form(delete_form) }}</li>

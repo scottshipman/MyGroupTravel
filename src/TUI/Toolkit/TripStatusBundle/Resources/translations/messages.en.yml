@@ -1,0 +1,37 @@
+#TripStatusBundle/Resources/translations/messages.en.yml
+
+tripstatus:
+      title:
+          edit: Edit Trip Status
+          index: Trip Status
+          new: Create New Trip Status
+          show: Transportation
+
+      page_title:
+          edit: Edit Trip Status
+          index: Trip Status
+          new: Create New Trip Status
+          show: Trip Status
+
+      actions:
+          back: Back to the list
+          edit: Edit
+          update: Update
+          create: Create
+          delete: Delete
+          create_new: Create a New Trip Status
+
+      table:
+          label:
+              name: Name (ID)
+              action: Actions
+              visible: Visible
+
+          actions:
+              view: View
+              edit: Edit
+
+      flash:
+          save: Trip Status Saved -
+          delete: Trip Status deleted -
+          restore: Trip Status Restored -

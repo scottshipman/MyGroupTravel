@@ -1,0 +1,30 @@
+#contentBlocksBundle/Resources/translations/messages.en.yml
+
+contentBlocks:
+      title:
+          edit: Edit Content Block
+          index: Manage Content Block
+          new: Create New Content Block
+          show: Content Block
+      page_title:
+          edit: Edit Content Block
+          index: Manage Content Block
+          new: Create New Content Block
+          show: Content Block
+
+      actions:
+          back: Back to the list
+          edit: Edit
+
+
+      table:
+          label:
+              name: Name (ID)
+              action: Actions
+          actions:
+              view: View
+              edit: Edit
+
+      flash:
+          save: Content Block Saved -
+          delete: Content Block deleted -

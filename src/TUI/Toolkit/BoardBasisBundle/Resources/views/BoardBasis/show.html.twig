@@ -1,13 +1,13 @@
 {% extends '::base.html.twig' %}
-{% block title %}Board '{{ entity.name }}'{% endblock %}
-{% block page_title %}Board '{{ entity.name }}'{% endblock %}
+{% block title %}{% trans %}boardBasis.title.show{% endtrans %} '{{ entity.name }}'{% endblock %}
+{% block page_title %}{% trans %}boardBasis.page_title.show{% endtrans %} '{{ entity.name }}'{% endblock %}
 
 {% block body -%}
 
     <table class="mdl-data-table mdl-js-data-table">
         <tbody>
             <tr>
-                <td class="mdl-data-table__cell--non-numeric th-mimic">Name (ID)</td>
+                <td class="mdl-data-table__cell--non-numeric th-mimic">{% trans %}boardBasis.table.label.name{% endtrans %}</td>
                 <td class="mdl-data-table__cell--non-numeric">{{ entity.name }} ({{ entity.id }})</td>
             </tr>
         </tbody>
@@ -16,12 +16,12 @@
         <ul class="record_actions">
     <li>
         <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('_manage_boardbasis') }}">
-            <i class="fa fa-arrow-circle-left"></i> Back to the list
+            <i class="fa fa-arrow-circle-left"></i> {% trans %}boardBasis.actions.back{% endtrans %}
         </a>
     </li>
     <li>
         <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('_manage_boardbasis_edit', { 'id': entity.id }) }}">
-            <i class="fa fa-pencil-square-o"></i> Edit
+            <i class="fa fa-pencil-square-o"></i> {% trans %}boardBasis.actions.edit{% endtrans %}
         </a>
     </li>
     <li>{{ form(delete_form) }}</li>

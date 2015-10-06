@@ -1,10 +1,10 @@
 {% extends '::base.html.twig' %}
-{% block title %}Create Institution{% endblock %}
-{% block page_title %}Create Institution{% endblock %}
+{% block title %}{% trans %}institution.title.new{% endtrans %}{% endblock %}
+{% block page_title %}{% trans %}institution.page_title.new{% endtrans %}{% endblock %}
 
 {% block body -%}
 
-    <div id="avatar-label" class="mdl-label-mimic">Institution Image
+    <div id="avatar-label" class="mdl-label-mimic">{% trans %}institution.avatar.label{% endtrans %}
         <div style="display:none;" id="dropzone-form-close"><i class="fa fa-times-circle"></i></div>
     </div>
     {{ render(controller('MediaBundle:Media:createDropzoneForm', {'context':'institution'})) }}
@@ -28,7 +28,7 @@
         <li>
             <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
                href="{{ path('manage_institution') }}">
-                <i class="fa fa-arrow-circle-left"></i> Back to the list
+                <i class="fa fa-arrow-circle-left"></i> {% trans %}institution.actions.back{% endtrans %}
             </a>
         </li>
     </ul>

@@ -60,28 +60,28 @@ class UserController extends Controller
         // add roles filter
         $column = $grid->getColumn('roles');
         $column->setFilterable(true);
-        $column->setTitle('Role');
+        $column->setTitle($this->get('translator')->trans('user.grid.filter.title.role'));
         $column->setFilterType('select');
         $column->setOperatorsVisible(false);
 
         // add email filter
         $column = $grid->getColumn('email');
         $column->setFilterable(true);
-        $column->setTitle('Email');
+        $column->setTitle($this->get('translator')->trans('user.grid.filter.title.email'));
         //$column->setFilterType('select');
         $column->setOperatorsVisible(false);
 
         // add enabled filter
         $column = $grid->getColumn('enabled');
         $column->setFilterable(true);
-        $column->setTitle('Enabled');
+        $column->setTitle($this->get('translator')->trans('user.grid.filter.title.enabled'));
         //$column->setFilterType('select');
         $column->setOperatorsVisible(false);
 
         // add last name filter
         $column = $grid->getColumn('lastName');
         $column->setFilterable(true);
-        $column->setTitle('Last Name');
+        $column->setTitle($this->get('translator')->trans('user.grid.filter.title.lname'));
         $column->setOperatorsVisible(false);
 
         // Add action column
@@ -118,7 +118,7 @@ class UserController extends Controller
 
         //manipulate the Columns
         $column = $grid->getColumn('lastLogin');
-        $column->setTitle('Last Login');
+        $column->setTitle($this->get('translator')->trans('user.grid.column.title.last_login'));
 
         // Set the default order of the grid
         $grid->setDefaultOrder('id', 'ASC');

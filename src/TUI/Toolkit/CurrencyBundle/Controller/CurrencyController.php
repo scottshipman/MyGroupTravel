@@ -43,7 +43,7 @@ class CurrencyController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-          $this->get('session')->getFlashBag()->add('notice', 'Currency Saved: '. $entity->getName());
+          $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('currency.flash.save'). $entity->getName());
 
 
           return $this->redirect($this->generateUrl('manage_currency_show', array('id' => $entity->getId())));
@@ -69,7 +69,7 @@ class CurrencyController extends Controller
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('currency.actions.create')));
 
         return $form;
     }
@@ -149,7 +149,7 @@ class CurrencyController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('currency.actions.update')));
 
         return $form;
     }
@@ -173,7 +173,7 @@ class CurrencyController extends Controller
 
         if ($editForm->isValid()) {
             $em->flush();
-          $this->get('session')->getFlashBag()->add('notice', 'Currency Saved: '. $entity->getName());
+          $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('currency.flash.save'). $entity->getName());
 
             return $this->redirect($this->generateUrl('manage_currency_edit', array('id' => $id)));
         }
@@ -194,19 +194,23 @@ class CurrencyController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('CurrencyBundle:Currency')->find($id);
+          $em = $this->getDoctrine()->getManager();
+          $entity = $em->getRepository('CurrencyBundle:Currency')->find($id);
 
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Currency entity.');
-            }
+          if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Currency entity.');
+          }
 
-            $em->remove($entity);
-            $em->flush();
-          $this->get('session')->getFlashBag()->add('notice', 'Currency Deleted: '. $entity->getName());
+          $em->remove($entity);
+          $em->flush();
+          $this->get('session')
+            ->getFlashBag()
+            ->add('notice', $this->get('translator')
+                ->trans('currency.flash.delete') . $entity->getName());
+
+
+          return $this->redirect($this->generateUrl('manage_currency'));
         }
-
-        return $this->redirect($this->generateUrl('manage_currency'));
     }
 
     /**
@@ -221,7 +225,7 @@ class CurrencyController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('manage_currency_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->add('submit', 'submit', array('label' => $this->get('translator')->trans('currency.actions.delete')))
             ->getForm()
         ;
     }

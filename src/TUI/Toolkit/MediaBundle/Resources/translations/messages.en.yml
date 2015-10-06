@@ -1,0 +1,45 @@
+#MediaBundle/Resources/translations/messages.en.yml
+
+media:
+      title:
+          edit: Edit Media
+          index: Media Dashboard
+          new: Create New Media
+          show: Media
+          deleted: Media Dashboard - Deleted
+      page_title:
+          edit: Edit Media
+          index: Media Dashboard
+          new: Create New Media
+          show: Media
+
+      actions:
+          back: Back to the list
+          edit: Edit
+          update: Update
+          create: Create
+          delete: Delete
+          create_new: Create a New Media
+          upload: Upload a new file
+
+      table:
+          label:
+              name: Name (ID)
+              action: Actions
+              filename: Filename
+              context: Context
+
+          actions:
+              view: View
+              edit: Edit
+
+      flash:
+          save: Media Saved -
+          delete: Media deleted -
+          restore: Media Restored -
+
+      media:
+          label: Click to upload
+
+      dropzone:
+          default_message: Drop files here,<br /> or click to upload

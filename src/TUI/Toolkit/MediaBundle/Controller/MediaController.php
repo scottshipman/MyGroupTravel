@@ -57,7 +57,7 @@ use TUI\Toolkit\MediaBundle\Form\MediaType;
       $em = $this->getDoctrine()->getManager();
       $em->persist($entity);
       $em->flush();
-      $this->get('session')->getFlashBag()->add('notice', 'Media Saved: ' . $entity->getFilename());
+      $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('media.flash.save') . $entity->getFilename());
 
 
       return $this->redirect($this->generateUrl('media', array('id' => $entity->getId())));
@@ -184,7 +184,7 @@ use TUI\Toolkit\MediaBundle\Form\MediaType;
       'method' => 'PUT',
     ));
 
-    $form->add('submit', 'submit', array('label' => 'Update'));
+    $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('media.actions.update')));
 
     return $form;
   }
@@ -212,7 +212,7 @@ use TUI\Toolkit\MediaBundle\Form\MediaType;
 
     if ($editForm->isValid()) {
       $em->flush();
-      $this->get('session')->getFlashBag()->add('notice', 'Media Saved: ' . $entity->getFilename());
+      $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('media.flash.save') . $entity->getFilename());
       return $this->redirect($this->generateUrl('media_edit', array('id' => $id)));
     }
 

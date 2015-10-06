@@ -43,7 +43,7 @@ class TripStatusController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-          $this->get('session')->getFlashBag()->add('notice', 'Trip Status Saved: '. $entity->getName());
+          $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tripstatus.flash.save') . $entity->getName());
 
             return $this->redirect($this->generateUrl('manage_tripstatus_show', array('id' => $entity->getId())));
         }
@@ -68,7 +68,7 @@ class TripStatusController extends Controller
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('tripstatus.actions.create')));
 
         return $form;
     }
@@ -148,7 +148,7 @@ class TripStatusController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('tripstatus.actions.update')));
 
         return $form;
     }
@@ -172,7 +172,7 @@ class TripStatusController extends Controller
 
         if ($editForm->isValid()) {
             $em->flush();
-          $this->get('session')->getFlashBag()->add('notice', 'Trip Status Saved: '. $entity->getName());
+          $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tripstatus.flash.save'). $entity->getName());
 
             return $this->redirect($this->generateUrl('manage_tripstatus_edit', array('id' => $id)));
         }
@@ -202,7 +202,7 @@ class TripStatusController extends Controller
 
             $em->remove($entity);
             $em->flush();
-          $this->get('session')->getFlashBag()->add('notice', 'Trip Status Deleted: '. $entity->getName());
+          $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tripstatus.flash.delete'). $entity->getName());
         }
 
         return $this->redirect($this->generateUrl('manage_tripstatus'));
@@ -220,7 +220,7 @@ class TripStatusController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('manage_tripstatus_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->add('submit', 'submit', array('label' => $this->get('translator')->trans('tripstatus.actions.delete')))
             ->getForm()
         ;
     }

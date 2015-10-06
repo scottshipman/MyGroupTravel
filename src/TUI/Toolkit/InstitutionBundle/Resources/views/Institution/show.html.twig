@@ -1,45 +1,45 @@
 {% extends '::base.html.twig' %}
-{% block title %}Institution {{ entity.name }}{% endblock %}
-{% block page_title %}Institution {{ entity.name }}{% endblock %}
+{% block title %}{% trans %}institution.title.show{% endtrans %} {{ entity.name }}{% endblock %}
+{% block page_title %}{% trans %}institution.page_title.show{% endtrans %} {{ entity.name }}{% endblock %}
 
 {% block body -%}
 
     <table class="mdl-data-table mdl-js-data-table">
         <tbody>
         <tr>
-            <td class="mdl-data-table__cell--non-numeric th-mimic">Name (ID)</td>
+            <td class="mdl-data-table__cell--non-numeric th-mimic">{% trans %}institution.table.label.name{% endtrans %}</td>
             <td class="mdl-data-table__cell--non-numeric">{{ entity.name }} ({{ entity.id }})</td>
         </tr>
         <tr>
-            <td class="mdl-data-table__cell--non-numeric th-mimic">Address 1</td>
+            <td class="mdl-data-table__cell--non-numeric th-mimic">{% trans %}institution.table.label.address1{% endtrans %}</td>
             <td class="mdl-data-table__cell--non-numeric">{{ entity.address1 }}</td>
         </tr>
         <tr>
-            <td class="mdl-data-table__cell--non-numeric th-mimic">Address 2</td>
+            <td class="mdl-data-table__cell--non-numeric th-mimic">{% trans %}institution.table.label.address2{% endtrans %}</td>
             <td class="mdl-data-table__cell--non-numeric">{{ entity.address2 }}</td>
         </tr>
         <tr>
-            <td class="mdl-data-table__cell--non-numeric th-mimic">City</td>
+            <td class="mdl-data-table__cell--non-numeric th-mimic">{% trans %}institution.table.label.city{% endtrans %}</td>
             <td class="mdl-data-table__cell--non-numeric">{{ entity.city }}</td>
         </tr>
         <tr>
-            <td class="mdl-data-table__cell--non-numeric th-mimic">County</td>
+            <td class="mdl-data-table__cell--non-numeric th-mimic">{% trans %}institution.table.label.county{% endtrans %}</td>
             <td class="mdl-data-table__cell--non-numeric">{{ entity.county }}</td>
         </tr>
         <tr>
-            <td class="mdl-data-table__cell--non-numeric th-mimic">State</td>
+            <td class="mdl-data-table__cell--non-numeric th-mimic">{% trans %}institution.table.label.state{% endtrans %}</td>
             <td class="mdl-data-table__cell--non-numeric">{{ entity.state }}</td>
         </tr>
         <tr>
-            <td class="mdl-data-table__cell--non-numeric th-mimic">Postcode</td>
+            <td class="mdl-data-table__cell--non-numeric th-mimic">{% trans %}institution.table.label.postcode{% endtrans %}</td>
             <td class="mdl-data-table__cell--non-numeric">{{ entity.postCode }}</td>
         </tr>
         <tr>
-            <td class="mdl-data-table__cell--non-numeric th-mimic">Country</td>
+            <td class="mdl-data-table__cell--non-numeric th-mimic">{% trans %}institution.table.label.country{% endtrans %}</td>
             <td class="mdl-data-table__cell--non-numeric">{{ entity.country }}</td>
         </tr>
         <tr>
-            <th>Logo</th>
+            <th>{% trans %}institution.avatar.label{% endtrans %}</th>
             {% if entity.media %}
                 <td class="logo">
                     <img src="{{ asset(".." ~ entity.media.getRelativePath ~ "/" ~ entity.media.getHashedFilename ) }}">
@@ -53,13 +53,13 @@
         <li>
             <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
                href="{{ path('manage_institution') }}">
-                <i class="fa fa-arrow-circle-left"></i> Back to the list
+                <i class="fa fa-arrow-circle-left"></i> {% trans %}institution.actions.back{% endtrans %}
             </a>
         </li>
         <li>
             <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
             href="{{ path('manage_institution_edit', { 'id': entity.id }) }}">
-                <i class="fa fa-pencil-square-o"></i> Edit
+                <i class="fa fa-pencil-square-o"></i> {% trans %}institution.actions.edit{% endtrans %}
             </a>
         </li>
         <li>{{ form(delete_form) }}</li>
