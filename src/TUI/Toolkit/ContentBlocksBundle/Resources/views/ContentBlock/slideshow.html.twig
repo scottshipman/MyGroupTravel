@@ -3,11 +3,13 @@
         <div class="content-block-media">
             <div class="flexslider">
                 <ul class="slides">
-                    {%  if entity.media %}
-                        {% for media in entity.media %}
-                            <li>
-                                <img src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}" />
-                            </li>
+                    {%  if entity.mediaWrapper %}
+                        {% for mediaWrapper in entity.mediaWrapper %}
+                            {% for media in mediaWrapper.media %}
+                                <li>
+                                    <img src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}" title="{{ mediaWrapper.title }}" alt="{{ mediaWrapper.title }}" />
+                                </li>
+                            {% endfor %}
                         {% endfor %}
                     {% endif %}
                 </ul>
@@ -25,11 +27,13 @@
         <div class="content-block-media">
             <div class="flexslider">
                 <ul class="slides">
-                    {%  if entity.media %}
-                        {% for media in entity.media %}
-                            <li>
-                                <img src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}" />
-                            </li>
+                    {%  if entity.mediaWrapper %}
+                        {% for mediaWrapper in entity.mediaWrapper %}
+                            {% for media in mediaWrapper.media %}
+                                <li>
+                                    <img src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}" title="{{ mediaWrapper.title }}" alt="{{ mediaWrapper.title }}" />
+                                </li>
+                            {% endfor %}
                         {% endfor %}
                     {% endif %}
                 </ul>

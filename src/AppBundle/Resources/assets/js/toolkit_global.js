@@ -139,6 +139,21 @@ var doMDLpopup = function(t) {
     });
 };
 
+//Update Content Block Image arrays for title field and weight
+var updateMediaWrapper = function(e) {
+    var items = [];
+    var weight = 1;
+    e.find('.existing-media-item').each( function(){
+        var id = $(this).find('img').attr('id');
+        var caption = $(this).find(".caption").val();
+        items.push([id, caption, weight]);
+        weight++;
+    });
+    var processed_items = JSON.stringify(items);
+    $(".media-placeholder").val(processed_items);
+
+}
+
 // Do lots of MDL stuff within a jQuery modal window
 $(document).on('focus', '.mdl-form-mimic .mdl-textfield__input', function () {
     $(this).parent().addClass('is-focused');

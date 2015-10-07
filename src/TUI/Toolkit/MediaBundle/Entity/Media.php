@@ -65,8 +65,12 @@ class Media
      */
     protected $filesize;
 
-
-
+    /**
+     * Bidirectional (INVERSE SIDE)
+     *
+     * @ORM\ManyToMany(targetEntity="MediaWrapper", mappedBy="media")
+     */
+    private $mediaWrappers;
 
 
   public function __toString() {
@@ -243,4 +247,25 @@ class Media
   {
     return $this->filesize;
   }
+
+    /**
+     * Set mediaWrappers
+     *
+     * @return media
+     */
+    public function setMediaWrappers($mediaWrappers)
+    {
+        $this->mediaWrappers=$mediaWrappers;
+        return $this;
+    }
+
+    /**
+     * Get mediaWrappers
+     *
+     * @return string $filesize
+     */
+    public function getMediaWrappers()
+    {
+        return $this->mediaWrappers;
+    }
 }

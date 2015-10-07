@@ -4,14 +4,20 @@
 
 <div class="media-wrapper">
 
-    <div class="existing-media-wrapper">
+    <div class="existing-media-wrapper sortable-images">
         <div class="mdl-label-mimic"><label>Uploaded Images</label></div>
-        {% if entity.media %}
-            {% for media in collection %}
+        {% if entity.mediaWrapper %}
+            {% for mediaWrapper in collection %}
+                {% for media in mediaWrapper.media %}
                 <div class="existing-media-item">
-                    <img id="{{ media.id }}" src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">
+                    <img id="{{ media.id }}" src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}" title="{{ mediaWrapper.title }}" alt="{{ mediaWrapper.title }}">
                     <a class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a>
+                    <div style="display: none" class="caption-textfield mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="caption mdl-textfield__input" type="text" data="{{ mediaWrapper.id }}" value="{{ mediaWrapper.title }}" name="caption" id="{{ mediaWrapper.id }}-caption">
+                        <label class="mdl-textfield__label" for="{{ mediaWrapper.id }}">Caption</label></div>
+                    <div id="{{ mediaWrapper.id }}-label" style="display: none" class="caption-label mdl-textfield mdl-js-textfield mdl-textfield--floating-label"></div>
                 </div>
+                {% endfor %}
             {% endfor %}
         {% else %}
             <p class="none">No images uploaded.</p>
@@ -158,7 +164,35 @@
         $(this).parent().remove();
     });
 
-    {# Dropzone.autoDiscover = false; #}
+    //Get the caption and weight fields and push them to the associative array
+    $(document).on('change', 'input', function() {
+        updateMediaWrapper($(".existing-media-wrapper"));
+    });
+
+
+    //Sortable images for content blocks
+    $(".sortable-images").sortable({
+        containment: "parent",
+        items: "> div.existing-media-item",
+        // handle: ".move",
+        tolerance: "pointer",
+        cursor: "move",
+        opacity: 0.7,
+        revert: 300,
+        delay: 150,
+        dropOnEmpty: true,
+//        placeholder: "tabs-placeholder",
+        start: function (e, ui) {
+            ui.placeholder.height(ui.helper.outerHeight());
+        },
+        stop: function (e, ui) {
+            updateMediaWrapper($(".existing-media-wrapper"));
+        },
+        axis: 'x,y'
+
+    });
+
+    // Dropzone.autoDiscover = false;
 
     $('#dropzone_form').dropzone({
         maxFiles: 1,
@@ -168,28 +202,25 @@
             var value = $(".media-placeholder").val();
             var values = [];
             if ( value != 0 ) {
-                values = value.split(',').map(Number);
+                $(".caption-textfield").css({"display":"block"});
+                $(".caption-label").css({"display":"block"});
+                $(".sortable-images").sortable("enable");
+                updateMediaWrapper($(".existing-media-wrapper"));
                 if (values.length >= 15) {
                     $(".new-media-wrapper").css({"display": "none"});
                 }
             }
             this.on("success", function (file, response) {
-                if ($(".media-placeholder").val().length > 0) {
-                    var value = $(".media-placeholder").val();
-                    var values = [];
-                    if ( value != 0 ) {
-                        values = value.split(',').map(Number);
-                        values.push(response.id);
-                        if (values.length >= 15) {
-                            $(".new-media-wrapper").css({"display": "none"});
-                        }
-                    }
-                    $(".media-placeholder").val(values);
-                } else {
-                    $(".media-placeholder").val(response.id);
-                }
                 $('.existing-media-wrapper').find('.none').hide();
-                $('.existing-media-wrapper').append('<div class="existing-media-item"><img id="' + response.id + '" src="' + response.relativepath + '/' + response.filename + '"><a class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a></div>');
+                $('.existing-media-wrapper').append('<div class="existing-media-item"><img id="' + response.id + '" src="' + response.relativepath + '/' + response.filename + '">' +
+                '<a class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a>' +
+                '<div id="'+ response.id +'"class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">' +
+                '<input class="caption mdl-textfield__input" type="text" data="'+ response.id +'" name="caption" id="'+ response.id + '-caption">' +
+                '<label class="mdl-textfield__label" for="'+ response.id + '">Caption</label></div>' +
+                '<div id="'+ response.id +'"class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">' +
+                '</div></div>');
+                $('.mdl-textfield').css({'display': 'block'});
+                updateMediaWrapper($(".existing-media-wrapper"));
             });
             this.on("complete", function (file, response) {
                 this.removeFile(file);

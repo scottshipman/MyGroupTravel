@@ -1,12 +1,14 @@
 {% set class = '' %}
 
 {% if entity.layoutType %}
-    {% for media in entity.media %}
-        {% if media %}
-            {% set class = 'content-block-layout-' ~ entity.layoutType.name %}
-        {% else %}
-            {% set class = 'content-block-layout-normal' %}
-        {% endif %}
+    {% for mediaWrapper in entity.mediaWrapper %}
+        {% for media in mediaWrapper.media %}
+            {% if media %}
+                {% set class = 'content-block-layout-' ~ entity.layoutType.name %}
+            {% else %}
+                {% set class = 'content-block-layout-normal' %}
+            {% endif %}
+        {% endfor %}
     {% endfor %}
 {% else %}
     {% set class = 'content-block-layout-normal' %}
