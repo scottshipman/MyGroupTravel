@@ -1,0 +1,21 @@
+html {
+  overflow-y: scroll;
+}
+
+body {
+
+  &:before {
+    content: 'phone';
+    display: none;
+
+    @include breakpoint_tablet() {
+      content: 'tablet';
+    }
+
+    @include breakpoint_desktop() {
+      content: 'desktop';
+    }
+
+  }
+
+}

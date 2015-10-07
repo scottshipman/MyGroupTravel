@@ -58,7 +58,10 @@ $(document).ready(function () {
             // Switch to edit mode
             t.addClass('mode-edit').removeClass('mode-preview');
             $(this).html('Switch to Preview Mode');
-            $(".sortable-items").sortable("enable");
+            if ( toolkitBreakpointAllowDrag() ) {
+                // Sorting not allowed on phone for content blocks
+                $(".sortable-items").sortable("enable");
+            };
             $('.add-content-block').show() // show ALL Add Block's for all tabs
         } else {
             // Switch to preview mode
@@ -75,7 +78,7 @@ $(document).ready(function () {
         var entityId = $('.site-show').attr('entityId');
         var entityPath = $('.site-show').attr('entityPath');
         $("#dialog").html("");
-        $("#dialog").dialog({width: '60%'}).dialog("option", "title", "Loading...").dialog("open");
+        $("#dialog").dialog("open");
         $("#dialog").load('/manage/' + entityPath + '/show/tabs/' + entityId, function () {
             $(this).dialog("option", "title", "Rearrange Tabs");
             $(".modal-sortable-tabs").sortable("enable");
@@ -170,7 +173,10 @@ $(document).ready(function () {
         $(".site-content-blocks-edit").show();
         $(this).hide();
         //$('.add-content-block').hide() // hide ALL Add Block's for all tabs
-        $(".sortable-items").sortable("enable");
+        if ( toolkitBreakpointAllowDrag() ) {
+            // Sorting not allowed on phone for content blocks
+            $(".sortable-items").sortable("enable");
+        };
     });
 
     // Inline content block creation

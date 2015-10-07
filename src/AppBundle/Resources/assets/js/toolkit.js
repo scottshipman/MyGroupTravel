@@ -45,15 +45,25 @@
     });
 
     $("#dialog").dialog({
-        autoOpen: false,
         modal: true,
-        width: 600,
-        height: 400
-        /*        buttons: {
-         "Close": function() {
-         $(this).dialog("close");
-         }
-         }*/
+        width: '60%',
+        height: 400,
+        draggable: false,
+        resizable: false,
+        title: 'Loading...',
+        autoOpen: false,
+        open: function (e, ui) {
+            if ( !toolkitBreakpointAllowDrag() ) {
+                // Modal to full screen on phone
+                $("#dialog")
+                    .dialog("option", "width", "100%")
+                    .dialog("option", "height", $(window).height() );
+            } else {
+                $("#dialog")
+                    .dialog("option", "width", "60%")
+                    .dialog("option", "height", 400 );
+            };
+        }
     });
 
     $(".modal").on("click", function (e) {
@@ -62,7 +72,7 @@
         var form_type = parts[0].toLowerCase();
         //e.preventDefault();
         $("#dialog").html("");
-        $("#dialog").dialog("option", "title", "Loading...").dialog("open");
+        $("#dialog").dialog("open");
         $("#dialog").load('/ajax/' + form_type + '/new', function () {
             $(this).dialog("option", "title", 'Create New ' + parts[0]);
             doMDLpopup( $(this) );

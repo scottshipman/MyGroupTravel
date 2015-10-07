@@ -1,4 +1,4 @@
-/********* Global Methods Go below here ******************************/
+/********* Global Methods Go below here *********/
 
 var toolkitBreakpoint = function() {
     var breakpoint = window
@@ -6,6 +6,14 @@ var toolkitBreakpoint = function() {
         .getPropertyValue( 'content' )
         .replace( /['"]+/g, '' );
     return breakpoint;
+};
+
+var toolkitBreakpointAllowDrag = function() {
+    if ( toolkitBreakpoint() !== 'phone' ) {
+        return true;
+    } else {
+        return false;
+    }
 };
 
 /**
