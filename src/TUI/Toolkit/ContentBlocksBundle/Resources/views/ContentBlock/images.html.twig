@@ -1,8 +1,10 @@
 {% if entity.layoutType %}
     {% if entity.layoutType.name != 'image_bottom' %}
         <div class="content-block-media">
-            {% for media in entity.media %}
-                <img class="block-image-stacked" src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">
+            {% for mediaWrapper in entity.mediaWrapper %}
+                {% for media in mediaWrapper.media %}
+                <img class="block-image-stacked" src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}" title="{{ mediaWrapper.title }}" alt="{{ mediaWrapper.title }}">
+                {% endfor %}
             {% endfor %}
         </div>
     {% endif %}
@@ -15,9 +17,11 @@
 {% if entity.layoutType %}
     {% if entity.layoutType.name == 'image_bottom' %}
         <div class="content-block-media">
-            {% for media in entity.media %}
-                <img class="block-image-stacked" src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">
+        {% for mediaWrapper in entity.mediaWrapper %}
+            {% for media in mediaWrapper.media %}
+                <img class="block-image-stacked" src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}" title="{{ mediaWrapper.title }}" alt="{{ mediaWrapper.title }}">
             {% endfor %}
+        {% endfor %}
         </div>
     {% endif %}
 {% endif %}

@@ -2,21 +2,6 @@
 
 html {
   background: $bg_grey_l1;
-  overflow-y: scroll;
-}
-
-body {
-
-  &:before {
-    content: 'mobile';
-    display: none;
-
-    @include breakpoint_desktop() {
-      content: 'desktop';
-    }
-
-  }
-
 }
 
 .header,

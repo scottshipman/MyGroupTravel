@@ -197,6 +197,7 @@ class Tour
      *
      * @ORM\Column(name="freePlaces", type="integer", nullable=true)
      * @GRID\Column(title="Free Places", export=true)
+     * @Assert\GreaterThanOrEqual(value = 0)
      */
     private $freePlaces;
 
@@ -205,6 +206,7 @@ class Tour
      *
      * @ORM\Column(name="payingPlaces", type="integer", nullable=true)
      * @GRID\Column(title="Paying Places", export=true)
+     * @Assert\GreaterThanOrEqual(value = 0)
      */
     private $payingPlaces;
 
@@ -297,6 +299,7 @@ class Tour
      *
      * @ORM\Column(name="pricePerson", type="float", nullable=true)
      * @GRID\Column(title="Price / Person", export=true)
+     * @Assert\GreaterThanOrEqual(value = 0)
      */
     private $pricePerson;
 
@@ -305,6 +308,7 @@ class Tour
      *
      * @ORM\Column(name="pricePersonPublic", type="float", nullable=true)
      * @GRID\Column(title="Price per Person", export=true)
+     * @Assert\GreaterThanOrEqual(value = 0)
      */
     private $pricePersonPublic;
 

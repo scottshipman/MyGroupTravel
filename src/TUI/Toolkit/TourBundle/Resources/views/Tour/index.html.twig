@@ -32,7 +32,7 @@
                 $(document).on('click', "a[title='Email']", function (e) {
                     //e.preventDefault();
                     $("#dialog").html("");
-                    $("#dialog").dialog({width: '60%'}).dialog("option", "title", "Loading...").dialog("open");
+                    $("#dialog").dialog("open");
                     $("#dialog").load(link , function () {
                         $(this).dialog("option", "title", "Email the organizer");
                         doMDLpopup($('#dialog')); // run the function to add appropriate MDL classes to form elements
