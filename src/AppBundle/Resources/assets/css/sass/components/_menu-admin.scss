@@ -63,7 +63,12 @@
 
       .mdl-navigation__link {
         font-weight: 400;
-        padding: 10px $layout-header-desktop-indent 10px ($layout-header-desktop-indent * 2);
+        padding: 10px $layout-header-mobile-indent 10px ($layout-header-mobile-indent * 2);
+
+        @include breakpoint_tablet {
+          padding: 10px $layout-header-desktop-indent 10px ($layout-header-desktop-indent * 2);
+        }
+
       }
 
     }

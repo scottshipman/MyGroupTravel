@@ -44,44 +44,52 @@
 
   h2 {
     margin: 0.25em 0;
-    padding: 0 (120px + 12px) 0 0;
+    padding: 0;
+
+    &.has-school-logo,
+    &.has-brand-logo {
+
+      @include breakpoint_phone() {
+        padding-right: 120px + 12px;
+      }
+
+    }
+
+    &.has-school-logo.has-brand-logo {
+
+      @include breakpoint_phone() {
+        padding-right: (120px + 12px) * 2;
+      }
+
+    }
+
   }
 
-  .institution-logo {
-    position: absolute;
-    top: 0;
-    right: $column_gutter_width;
+  .institution-logo,
+  .institution-logo-with-brand,
+  .brand-logo {
     width: 120px;
     height: 100%;
+    @include inline-block-vertical();
 
-    img {
-      @include vertical-align();
+    @include breakpoint_phone() {
+      display: block;
+      position: absolute;
+      top: 0;
+      right: $column_gutter_width;
+
+      img {
+        @include vertical-align();
+      }
+
     }
 
   }
 
   .institution-logo-with-brand {
-    position: absolute;
-    top: 0;
-    right: $column_gutter_width * 5;
-    width: 120px;
-    height: 100%;
 
-    img {
-      @include vertical-align();
-    }
-
-  }
-
-  .brand-logo {
-    position: absolute;
-    top: 0;
-    right: $column_gutter_width;
-    width: 120px;
-    height: 100%;
-
-    img {
-      @include vertical-align();
+    @include breakpoint_phone() {
+      margin-right: 120px + 12px;
     }
 
   }
