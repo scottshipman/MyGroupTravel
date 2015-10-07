@@ -150,6 +150,7 @@ class QuoteVersion
      *
      * @ORM\Column(name="freePlaces", type="integer", nullable=true)
      * @GRID\Column(title="Free Places", export=true)
+     * @Assert\GreaterThan(value = 0)
      */
     private $freePlaces;
 
@@ -158,6 +159,7 @@ class QuoteVersion
      *
      * @ORM\Column(name="payingPlaces", type="integer", nullable=true)
      * @GRID\Column(title="Paying Places", export=true)
+     * @Assert\GreaterThan(value = 0)
      */
     private $payingPlaces;
 
