@@ -305,15 +305,22 @@
 
 
 .content-block-tabs-bar {
+  display: block;
   align-items: flex-end;
-  height: 48px;
+  height: auto;
   margin-top: 48px;
+
+  @include breakpoint_tablet() {
+    display: flex;
+    height: 48px;
+  }
+
 }
 
 .site-content-blocks-tab {
   cursor: pointer;
   padding: 12px 24px;
-  float: left;
+  float: none;
   position: relative;
   top: 1px;
   height: auto;
@@ -324,7 +331,19 @@
   text-transform: uppercase;
   color: rgba(0,0,0,0.54);
   overflow: visible;
-  max-width: (1/8) * 100%;
+  width: 100%;
+
+  @include breakpoint_tablet() {
+    padding: 12px 16px;
+    float: left;
+    width: auto;
+    max-width: (1/8) * 100%;
+  }
+
+  @include breakpoint_desktop() {
+    padding: 12px 24px;
+  }
+
 }
 
 
