@@ -367,7 +367,10 @@
 
 .site-content-blocks-size-full {
   clear: both;
-  padding: 0 $column_gutter_width;
+
+  @include breakpoint_tablet() {
+    padding: 0 $column_gutter_width;
+  }
 
   .content-block-size-full {
     clear: none;
@@ -387,6 +390,33 @@
     min-height: none;
     float: left;
     width: 100%;
+  }
+
+}
+
+.site-content-block-actions {
+  height: 32px;
+  @include mdl-primary-color(background, 6);
+
+  .move-icon {
+    cursor: move;
+    position: absolute;
+    top: 6px;
+    left: 1em;
+
+    .ui-sortable-disabled & {
+      display: none;
+    }
+
+  }
+
+}
+
+.move-cursor {
+  cursor: move;
+
+  .ui-sortable-disabled & {
+    cursor: default;
   }
 
 }
@@ -428,26 +458,10 @@
     position: relative;
   }
 
-  .site-content-block-actions {
-    height: 32px;
-    @include mdl-primary-color(background, 6);
-  }
-
   .edit-icons {
     position: absolute;
     top: 6px;
     right: 1em;
-  }
-
-  .move-icon {
-    cursor: move;
-    position: absolute;
-    top: 6px;
-    left: 1em;
-  }
-
-  .move-cursor {
-    cursor: move;
   }
 
   .pointer-cursor {
