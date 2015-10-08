@@ -44,8 +44,7 @@
     $('.mdl-data-table').wrap('<div class="mld-data-table__wrapper" />')
         .css('margin-bottom', 0)
         .parent().css({
-            'overflow': 'scroll',
-            //'overflow': 'auto',
+            'overflow': 'auto',
             'margin-bottom': '1em'
         });
 
@@ -54,7 +53,7 @@
         $('.grid-row-actions').each(function (index) {
             var size = $(this).children().length;
             var btn = "rowactionbtn-" + index;
-            $(this).parent().prepend('<a id="' + btn + '" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"><i class="fa fa-ellipsis-v"></i></a>');
+            $(this).parent().prepend('<a id="'+ btn +'" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"><i class="fa fa-ellipsis-v"></i></a>');
             $(this).addClass('mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect');
             $(this).attr('for', btn);
             var pixels = (50 * size) + 34;
@@ -76,7 +75,7 @@
         $('.table-actions').each(function (index) {
             var size = $(this).children().length;
             var btn = "rowactionbtn-" + index;
-            $(this).parent().prepend('<a id="' + btn + '" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"><i class="fa fa-ellipsis-v"></i></a>');
+            $(this).parent().prepend('<a id="'+ btn +'" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"><i class="fa fa-ellipsis-v"></i></a>');
             $(this).addClass('mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect');
             $(this).attr('for', btn);
             var pixels = (50 * size) + 30;
