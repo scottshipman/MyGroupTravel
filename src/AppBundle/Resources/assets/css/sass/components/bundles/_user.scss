@@ -1,21 +1,25 @@
 .profile-content {
   position: relative;
 }
+
 .profile-permissions {
   float: right;
   margin-top: -70px;
   z-index: 5;
   position: relative;
+  width: $column_total_width * 2;
 }
 
 .profile-details {
   float: left;
 }
-.profile-tour-header{
-  width: 100%;
-  height: 175px;
+
+.profile-tour-header {
+  height: 180px;
   position: relative;
-  background-color: #4c4c4c;
+  justify-content: flex-end;
+  flex-direction: column;
+
   &:before {
     content: '';
     position: absolute;
@@ -23,69 +27,120 @@
     right: 0;
     bottom: 0;
     left: 0;
-    @include mdl-background-image-overlay(5,2);
+    @include mdl-background-image-overlay(9, 5);
     // background-image: linear-gradient(to top right, #A1A1A1, #EBEBEB);
-    opacity: .6;
+    opacity: 0.6;
   }
 
-    h3, span {
-    color: white;
-    text-shadow: 2px 2px #000000;
-    position: absolute;
-    bottom: .5em;
+  > * {
+    color: #fff;
+    position: relative;
   }
-  h3 {
-    font-size: 1.4em;
-    font-weight: bold;
+
+  .date-span {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin-top: 0.5em;
+    // text-shadow: 2px 2px #000;
+  }
+
+  h2 {
     padding: 0;
-    i {
-      margin: 1em;
+    flex-direction: row;
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      font-weight: inherit;
     }
 
   }
-  .profile-quote-edit, .profile-tour-edit {
+
+  .profile-quote-edit,
+  .profile-tour-edit {
     position: absolute;
-    top: 1em;
-    right: 1em;
+    top: 16px;
+    right: 16px;
     cursor: pointer;
   }
+
 }
 
 .profile-tour-details {
-  width: 100%;
   position: relative;
-  padding: 20px;
+
   ul {
     list-style-type: none;
-    margin: 0 auto;
-    -webkit-margin-before: 0;
-    -webkit-padding-start: 0;
-    margin-left: -20px;
-    li {
-      .profile-list-item {
-        padding: 1em;
-        float: left;
-        max-width: 40%;
-        label {
-          font-size: 1em;
-          opacity: .5;
-          position: relative;
-          bottom: 0
-        }
-        .tui-text-avatar {
-          line-height: 0;
-        }
-      }
-      .profile-list-item.seperator {
-          border-right: 1px solid darkgray;
-          font-size: 1.5em;
-          label {
-            font-size: 1em;
-            position: relative;
-            bottom: 0
-          }
-      }
-      display: inline;
-    }
+    margin: 0;
+    padding: 0;
   }
+
+  .profile-list-item {
+    float: left;
+    position: relative;
+
+    &.item-1 {
+      font-size: 1.5em;
+      padding-right: 16px;
+      width: 25%;
+
+      &:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: -1px;
+        border-right: 1px solid #757575;
+      }
+
+    }
+
+    &.item-2 {
+      font-size: 1.5em;
+      padding-right: 17px;
+      padding-left: 17px;
+      width: 30%;
+
+      &:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        border-left: 1px solid #757575;
+      }
+
+      &:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        border-right: 1px solid #757575;
+      }
+
+    }
+
+    &.item-3 {
+      padding-left: 16px;
+      width: 45%;
+
+      &:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: -1px;
+        border-left: 1px solid #757575;
+      }
+
+    }
+
+    label {
+      opacity: 0.5;
+    }
+
+  }
+
 }

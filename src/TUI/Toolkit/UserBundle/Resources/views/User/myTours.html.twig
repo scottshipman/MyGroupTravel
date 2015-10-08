@@ -4,37 +4,38 @@
 {%  for tour in tours %}
     {% set dtg  = date(tour.departureDate).diff(date("now")) %}
     {% if dtg.days < 1 %} {%  set dtgFinal = 0  %} {% else %} {% set dtgFinal = dtg.days %}{% endif %}
-    <div class = "tour-edit mdl-card mdl-shadow--2dp">
+    <div class="tour-edit mdl-card mdl-shadow--2dp">
         {% set bgpath = ' ' %}
         {% if tour.headerBlock %}
             {% for mediaWrapper in tour.headerBlock.mediaWrapper %}
                 {% for media in mediaWrapper.media %}
                     {% if loop.first %}
-                        {% set bgpath = app.request.uriForPath( asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) )   %}
+                        {% set bgpath = app.request.uriForPath( asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) ) %}
                     {% endif %}
                 {% endfor %}
             {% endfor %}
         {% endif %}
-        <div class="mdl-card__supporting-text profile-tour-header" style="background-image: url({{ bgpath }});background-size: 100% 100% ;">
-            {% if (is_granted("ROLE_BRAND")) or (tour.organizer.id == app.user.id) %}
-                {%  set tourlink = path('manage_tour_show', {'id': tour.id}) %}
-            {% else %}
-                {%  set tourlink = path('tour_site_show', {'id': tour.id, 'quoteNumber': tour.quoteNumber}) %}
-            {% endif %}
-            <a href="{{ tourlink }}" class="">
-                <h3 class="mdl-card__title">Tour: {{ tour.name }} <i class="fa fa-arrow-right"></i>
-                </h3>
-            </a>
-            {% if is_granted("ROLE_BRAND") %}
-                <span tourid= "{{ tour.id }}" class="profile-tour-edit"><i class= "profile-quote-edit-link fa fa-pencil">edit</i></span>
-            {% endif %}
-                <span class="date-span" >{% if tour.departureDate and tour.returnDate %}{{ tour.departureDate|date(format)  }} - {{ tour.departureDate|date(format)  }} |{% endif %} {% if tour.destination %}{{ tour.destination }}{% endif %}</span>
 
+        <div class="profile-tour-header mdl-card__title" style="background-image: url({{ bgpath }}); background-size: cover;">
+            {% if (is_granted("ROLE_BRAND")) or (tour.organizer.id == app.user.id) %}
+                {% set tourlink = path('manage_tour_show', {'id': tour.id}) %}
+            {% else %}
+                {% set tourlink = path('tour_site_show', {'id': tour.id, 'quoteNumber': tour.quoteNumber}) %}
+            {% endif %}
+
+            <h2 class="mdl-card__title-text"><a href="{{ tourlink }}" class="">Tour: {{ tour.name }} <i class="fa fa-arrow-right"></i></a></h2>
+
+            {% if is_granted("ROLE_BRAND") %}
+                <span tourid="{{ tour.id }}" class="profile-tour-edit"><i class="profile-quote-edit-link fa fa-pencil"></i> Edit</span>
+            {% endif %}
+
+            <span class="date-span">{% if tour.departureDate and tour.returnDate %}{{ tour.departureDate|date(format)  }} - {{ tour.departureDate|date(format)  }} | {% endif %}{% if tour.destination %}{{ tour.destination }}{% endif %}</span>
         </div>
+
         <div class="mdl-card__supporting-text profile-tour-details">
            <ul>
                <li>
-                   <div class="profile-list-item seperator">
+                   <div class="profile-list-item item-1">
                         {% if (tour.organizer.id == app.user.id) or (tour.salesAgent.id == app.user.id) %}
                             {% if tour.currency %}{{ tour.currency.htmlSymbol | raw}}{% endif %}{% if tour.pricePerson %}{{ tour.pricePerson }}{% endif %}<br /><label>Price</label>
                         {% else %} {# show the Public price for passenger/parents#}
@@ -43,10 +44,10 @@
                    </div>
                </li>
                <li>
-                   <div class="profile-list-item seperator">{{ dtgFinal }}<br /><label>Days to go</label> </div>
+                   <div class="profile-list-item item-2">{{ dtgFinal }}<br /><label>Days to go</label> </div>
                </li>
                <li>
-                   <div class="profile-list-item">
+                   <div class="profile-list-item item-3">
                        {% if tour.organizer.id == app.user.id %}
                             {% if tour.salesAgent.media %}
                                 <span class="tui-image-avatar">
