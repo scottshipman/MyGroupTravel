@@ -19,14 +19,15 @@
         <div class="profile-tour-header mdl-card__title" style="background-image: url({{ bgpath }}); background-size: cover;">
             {% if (is_granted("ROLE_BRAND")) or (tour.organizer.id == app.user.id) %}
                 {% set tourlink = path('manage_tour_show', {'id': tour.id}) %}
+                {% set tourEdit = path('manage_tour_edit', {'id': tour.id}) %}
             {% else %}
                 {% set tourlink = path('tour_site_show', {'id': tour.id, 'quoteNumber': tour.quoteNumber}) %}
             {% endif %}
 
-            <h2 class="mdl-card__title-text"><a href="{{ tourlink }}" class="">Tour: {{ tour.name }} <i class="fa fa-arrow-right"></i></a></h2>
+            <h2 class="mdl-card__title-text"><a href="{{ tourlink }}">Tour: {{ tour.name }} <i class="fa fa-arrow-right"></i></a></h2>
 
             {% if is_granted("ROLE_BRAND") %}
-                <span tourid="{{ tour.id }}" class="profile-tour-edit"><i class="profile-quote-edit-link fa fa-pencil"></i> Edit</span>
+                <a href="{{ tourEdit }}" tourid="{{ tour.id }}" class="profile-tour-edit"><i class="profile-quote-edit-link fa fa-pencil"></i> Edit</a>
             {% endif %}
 
             <span class="date-span">{% if tour.departureDate and tour.returnDate %}{{ tour.departureDate|date(format)  }} - {{ tour.departureDate|date(format)  }} | {% endif %}{% if tour.destination %}{{ tour.destination }}{% endif %}</span>
@@ -77,13 +78,3 @@
         </div>
     </div>
 {% endfor %}
-<script>
-    //edit quotes action
-    $(document).ready(function () {
-        $(document).on('click', '.profile-tour-edit', function (e) {
-            var tourid = $(this).attr('tourid');
-            window.location.href = '/manage/tour/' + tourid + '/edit';
-        });
-
-    });
-</script>
