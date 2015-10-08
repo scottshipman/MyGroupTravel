@@ -1,17 +1,33 @@
 .profile-content {
   position: relative;
+
+  @include breakpoint_tablet() {
+    width: $column_total_width_reset;
+    margin-left: -$column_gutter_width_reset;
+  }
+
 }
 
 .profile-permissions {
-  float: right;
-  margin-top: -70px;
-  z-index: 5;
   position: relative;
-  width: $column_total_width * 2;
+  z-index: 5;
+
+  @include breakpoint_tablet() {
+    float: left;
+    margin-top: -(50px + 32px);
+    width: $column_total_width * 2;
+  }
+
 }
 
 .profile-details {
-  float: left;
+
+  @include breakpoint_tablet() {
+    float: left;
+    width: $column_total_width * 2;
+    padding: 0 $column_gutter_width;
+  }
+
 }
 
 .profile-tour-header {
@@ -48,6 +64,7 @@
   h2 {
     padding: 0;
     flex-direction: row;
+    width: 100%;
 
     a {
       color: inherit;
@@ -83,63 +100,45 @@
 
     &.item-1,
     &.item-2 {
-      font-size: 20px;
+      font-size: 18px;
       line-height: 1.5;
-      min-height: 76px;
+
+      @include breakpoint_desktop() {
+        min-height: 76px;
+      }
+
     }
 
     &.item-1 {
       padding-right: 16px;
-      width: 20%;
+      width: 50%;
 
-      &:after {
-        content: '';
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        right: -1px;
-        border-right: 1px solid #757575;
+      @include breakpoint_desktop() {
+        width: 20%;
       }
 
     }
 
     &.item-2 {
-      padding-right: 17px;
-      padding-left: 17px;
-      width: 30%;
+      padding-left: 16px;
+      width: 50%;
+      border-left: 1px solid #757575;
 
-      &:before {
-        content: '';
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        border-left: 1px solid #757575;
-      }
-
-      &:after {
-        content: '';
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        right: 0;
+      @include breakpoint_desktop() {
+        padding-right: 16px;
+        width: 30%;
         border-right: 1px solid #757575;
       }
 
     }
 
     &.item-3 {
-      padding-left: 16px;
-      width: 50%;
+      width: 100%;
       line-height: 24px;
 
-      &:before {
-        content: '';
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: -1px;
-        border-left: 1px solid #757575;
+      @include breakpoint_desktop() {
+        padding-left: 16px;
+        width: 50%;
       }
 
       label {
