@@ -84,9 +84,9 @@
   top: 0;
   width: 28px;
   text-align: center;
-  margin: 0.5em;
+  margin: 16px;
   cursor: pointer;
-  z-index: 5;
+  z-index: 10;
   // MDL styling to get slider effect
   will-change: transform;
   -webkit-transition-duration: .2s;
@@ -99,14 +99,14 @@
   .toolkit-fixed-drawer & {
 
     @include breakpoint_desktop() {
-      left: $admin_menu_width;
+      // left: $admin_menu_width;
     }
 
   }
 
 }
 
-#admin-menu-obfuscator {
+.admin-menu-obfuscator {
   display: none;
   position: fixed;
   top: 0;
@@ -138,7 +138,7 @@
   }
 
   .admin-menu-toggle {
-    left: 0;
+    // left: 0;
   }
 
 }
@@ -161,7 +161,7 @@
   }
 
   .admin-menu-toggle {
-    left: $admin_menu_width;
+    // left: $admin_menu_width;
   }
 
 }

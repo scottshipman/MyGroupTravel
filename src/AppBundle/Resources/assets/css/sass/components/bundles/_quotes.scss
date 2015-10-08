@@ -26,9 +26,15 @@
   color: inherit;
   text-decoration: none;
   float: left;
-  margin: 1em 0 1em (-$column_gutter_width_reset);
+  margin: 1em 0 1em (-$page_gutter_reset);
   position: relative;
-  left: 4em;
+  left: 28px + (16px * 2);
+
+  @include breakpoint_desktop() {
+    left: 0;
+    margin-left: $column_gutter_width;
+  }
+
 }
 
 .sub-header {

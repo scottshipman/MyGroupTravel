@@ -1,4 +1,4 @@
-<i class="admin-menu-toggle fa fa-bars mdl-color-text--primary-contrast"></i>
+<i id="admin-menu-toggle" class="admin-menu-toggle fa fa-bars mdl-color-text--primary-contrast"></i>
 
 <div class="toolkit-drawer mdl-layout__drawer">
 
@@ -36,7 +36,7 @@
 
 <script>
     $(document).ready(function() {
-        $('.toolkit-layout').after('<div id="admin-menu-obfuscator" />');
+        $('.toolkit-layout').after('<div id="admin-menu-obfuscator" class="admin-menu-obfuscator" />');
 
         // On page load, not on browser window change
         if ( toolkitBreakpoint() === 'desktop' ) {
@@ -47,13 +47,17 @@
             $('#admin-menu-obfuscator').hide();
         };
 
-        $('.admin-menu-toggle').click( function() {
+        $('#admin-menu-toggle').click( function() {
             $(this).parent().toggleClass('collapse-admin-menu').toggleClass('expand-admin-menu');
             if ( $(this).parent().hasClass('collapse-admin-menu') ) {
                 $('#admin-menu-obfuscator').hide();
             } else {
                 $('#admin-menu-obfuscator').show();
             }
+        });
+
+        $(document).on('click', '#admin-menu-obfuscator', function() {
+            $('#admin-menu-toggle').trigger('click');
         });
     });
 </script>
