@@ -45,7 +45,7 @@
         .css('margin-bottom', 0)
         .parent().css({
             'overflow': 'scroll',
-            'overflow': 'auto',
+            //'overflow': 'auto',
             'margin-bottom': '1em'
         });
 
@@ -54,10 +54,10 @@
         $('.grid-row-actions').each(function (index) {
             var size = $(this).children().length;
             var btn = "rowactionbtn-" + index;
-            $(this).parent().prepend('<a id="'+ btn +'" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"><i class="fa fa-ellipsis-v"></i></a>');
+            $(this).parent().prepend('<a id="' + btn + '" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"><i class="fa fa-ellipsis-v"></i></a>');
             $(this).addClass('mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect');
             $(this).attr('for', btn);
-            var pixels = (50 * size) + 30;
+            var pixels = (50 * size) + 34;
             $(this).parent().find('.mdl-menu').css({'min-width': pixels + 'px'});
 
             $(this).find('a').each(function () {
@@ -76,7 +76,7 @@
         $('.table-actions').each(function (index) {
             var size = $(this).children().length;
             var btn = "rowactionbtn-" + index;
-            $(this).parent().prepend('<a id="'+ btn +'" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"><i class="fa fa-ellipsis-v"></i></a>');
+            $(this).parent().prepend('<a id="' + btn + '" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"><i class="fa fa-ellipsis-v"></i></a>');
             $(this).addClass('mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect');
             $(this).attr('for', btn);
             var pixels = (50 * size) + 30;
@@ -93,6 +93,13 @@
             '-ms-transform': 'translateY(-50%)',
             '-webkit-transform': 'translateY(-50%)'
         });
-    };
+    }
+    ;
+    //
+    if ($(".mdl-data-table").length) {
+        var tableRow = $("a[title='Unlock']").parent().parent().parent().parent();
+        tableRow.css({"background-color": "#ccc", "opacity": "0.4"});
+        tableRow.append('<i style = "position:absolute; right:55%;"class="fa fa-unlock-alt fa-4x"></i>');
+    }
 
 })(jQuery);
