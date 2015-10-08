@@ -129,7 +129,7 @@ class ContentBlockController extends Controller
             'attr' => array('id' => 'newBlockIdForm')
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('contentBlocks.actions.create')));
 
         return $form;
     }
@@ -244,7 +244,7 @@ class ContentBlockController extends Controller
             ),
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('contentBlocks.actions.update')));
 
         return $form;
     }
@@ -388,7 +388,7 @@ class ContentBlockController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('manage_contentblocks_delete', array('id' => $id, 'quoteVersion' => $quoteVersion, 'class' => $class)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->add('submit', 'submit', array('label' => $this->get('translator')->trans('contentBlocks.actions.delete')))
             ->getForm();
     }
 
@@ -500,7 +500,7 @@ class ContentBlockController extends Controller
 
     $em = $this->getDoctrine()->getManager();
     $entity = new ContentBlock();
-    $entity->setTitle('New Content Block');
+    $entity->setTitle($this->get('translator')->trans('contentBlocks.placeholder.title'));
 
       $em->persist($entity);
       $em->flush();

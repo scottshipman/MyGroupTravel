@@ -15,12 +15,19 @@ contentBlocks:
       actions:
           back: Back to the list
           edit: Edit
+          create: Create
+          update: Update
+          upload: Click to upload
+          cancel: Cancel
 
 
       table:
           label:
               name: Name (ID)
               action: Actions
+              locked: Locked
+              hidden: Hidden
+              layout: Layout Type
           actions:
               view: View
               edit: Edit
@@ -28,3 +35,12 @@ contentBlocks:
       flash:
           save: Content Block Saved -
           delete: Content Block deleted -
+      placeholder:
+          title: New Content Block
+          header: New Header Block
+
+      upload_form:
+          title: Upload Images
+          caption_label: Caption
+          no_images: No images uploaded
+          new: New Images
