@@ -88,12 +88,8 @@
   cursor: pointer;
   z-index: 10;
 
-  .toolkit-fixed-drawer & {
-
-    @include breakpoint_desktop() {
-      // left: $admin_menu_width;
-    }
-
+  @include breakpoint_desktop() {
+    position: fixed;
   }
 
 }
@@ -130,7 +126,7 @@
   }
 
   .admin-menu-toggle {
-    // left: 0;
+    position: absolute;
   }
 
 }
@@ -153,7 +149,7 @@
   }
 
   .admin-menu-toggle {
-    // left: $admin_menu_width;
+    position: fixed;
   }
 
 }
