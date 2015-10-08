@@ -67,6 +67,10 @@ class TourSiteController extends Controller
       ));
     }
 
+    //Get all brand stuff
+    $brand = $em->getRepository('BrandBundle:Brand')->findAll();
+    $brand = $brand[0];
+
     if ($securityContext->isGranted('ROLE_BRAND') || in_array('organizer', $permission)){
       $editable = TRUE;
     }
@@ -113,7 +117,8 @@ class TourSiteController extends Controller
       'tabs'        => $tabs,
       'warning'     => $warningMsg,
       'header'      => $headerBlock,
-      'editable'  =>  $editable,
+      'editable'    => $editable,
+      'brand'       => $brand,
     ));
   }
 
