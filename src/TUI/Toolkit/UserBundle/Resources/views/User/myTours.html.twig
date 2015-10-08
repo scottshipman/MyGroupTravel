@@ -10,7 +10,7 @@
             {% for mediaWrapper in tour.headerBlock.mediaWrapper %}
                 {% for media in mediaWrapper.media %}
                     {% if loop.first %}
-                        {% set bgpath = app.request.uriForPath( asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) ) %}
+                        {% set bgpath = app.request.uriForPath( asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) )   %}
                     {% endif %}
                 {% endfor %}
             {% endfor %}
