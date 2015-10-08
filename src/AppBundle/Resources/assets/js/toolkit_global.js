@@ -57,11 +57,11 @@ var contentBlocksUpdate = function (id, classtype) {
 
 var contentBlocksAddTab = function (elem, id, classtype) {
     var newId = new Date().getTime();
-    $("#content-blocks-wrapper").prepend(
-        '<div id="'  + (newId)+ '" class="content-blocks-tab">' +
+    $("#content-blocks-wrapper").append(
+        '<div id="' + (newId) + '" class="content-blocks-tab">' +
             '<span class="content-blocks tab-label">' +
                 '<i class="content-block-tab-handle fa fa-arrows"></i> ' +
-                '<h4 id="tab-label-'  + (newId)+ '" class="editable-tab"> New Tab </h4>' +
+                '<h4 id="tab-label-' + (newId) + '" class="editable-tab"> New Tab </h4>' +
                 '<span class="tab-delete icon-label"><i class="content-block-tab-actions fa fa-trash-o"></i> Delete Tab</span>' +
                 '<span class="tab-new icon-label"><i class="content-block-tab-actions fa fa-plus-circle"></i> Add Content</span>' +
             '</span>' +

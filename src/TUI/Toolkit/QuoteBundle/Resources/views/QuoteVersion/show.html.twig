@@ -349,7 +349,8 @@
                {% endif %}
 
                // Add a new tab to a site
-               $("#add-new-tab").on('click', function(){
+               $("#add-new-tab").on('click', function(e) {
+                   e.preventDefault();
                    contentBlocksAddTab('#content-blocks-wrapper', {{ entity.id }}, 'QuoteVersion');
                });
 
