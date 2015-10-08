@@ -79,7 +79,7 @@ var contentBlocksAddTab = function (elem, id, classtype) {
  * @param id - Quote Version # passed from window.path
  */
 
-var contentBlocksNewTab = function (id, classtype) {
+var contentBlocksNewTab = function (id, classtype, hash) {
     // update server with new data
     var newId = new Date().getTime();
     $("#loader").css("display", "block");
@@ -94,14 +94,14 @@ var contentBlocksNewTab = function (id, classtype) {
         url: '/manage/contentblocks/tab/new/'+ id + '/' + classtype
     });
     //reload the window so changes are redrawn - its lazy non-ajaxy, but...
-    contentBlocksRefresh(id);
+    contentBlocksRefresh(id, hash);
 };
 
 /**
  * Reload the page that shows the content blocks and tabs
  * @param id
  */
-var contentBlocksRefresh = function(id) {
+var contentBlocksRefresh = function(id, hash) {
     $.ajax({
         url: window.location.href,
         headers: {
@@ -110,7 +110,11 @@ var contentBlocksRefresh = function(id) {
             "Cache-Control": "no-cache"
         }
     }).done(function () {
-        window.location.hash = 'site-content';
+        if ( hash === 'mode-edit' ) {
+            window.location.hash == hash;
+        } else {
+            window.location.hash = 'site-content';
+        };
         window.location.reload(true);
     });
 }

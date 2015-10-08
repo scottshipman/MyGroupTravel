@@ -47,9 +47,6 @@ $(document).ready(function () {
     });
     $(".sortable-items").disableSelection();
 
-    // Disable drag-and-drop on page load b/c the default is preview mode
-    $(".sortable-items").sortable("disable");
-
     // Toggle between preview and edit mode for content blocks and tabs
     $('#link-preview-edit').on('click', function (e) {
         e.preventDefault();
@@ -63,13 +60,14 @@ $(document).ready(function () {
                 $(".sortable-items").sortable("enable");
             };
             $('.add-content-block').show() // show ALL Add Block's for all tabs
+            window.location.hash = 'mode-edit';
         } else {
             // Switch to preview mode
             t.addClass('mode-preview').removeClass('mode-edit');
             $(this).html('Switch to Edit Mode');
             $(".sortable-items").sortable("disable");
             $('.add-content-block').hide() // hide ALL Add Block's for all tabs
-
+            window.location.hash = 'mode-preview';
         }
     });
 
@@ -89,7 +87,7 @@ $(document).ready(function () {
     $("#add-new-tab").on('click', function (e) {
         var entityId = $('.site-show').attr('entityId');
         var entityPath = $('.site-show').attr('entityPath');
-        contentBlocksNewTab( entityId, entityPath );
+        contentBlocksNewTab( entityId, entityPath, window.location.hash.substr(1) );
     });
 
     // Edit header slideshow in layout mode
@@ -380,5 +378,15 @@ $(document).ready(function () {
             });
         }
     });
+
+    // Do all things for the loaded page to check various settings
+
+    // Disable drag-and-drop on page load b/c the default is preview mode
+    $(".sortable-items").sortable("disable");
+
+    // Check whether the page should be in edit mode
+    if ( window.location.hash.substr(1) === 'mode-edit' ) {
+        $('#link-preview-edit').trigger('click');
+    };
 
 });
