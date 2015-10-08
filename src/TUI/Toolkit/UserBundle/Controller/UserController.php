@@ -116,9 +116,13 @@ class UserController extends Controller
         );
         $grid->addRowAction($deleteAction);
 
+//        $locale = $this->container->getParameter('locale');
+
+
         //manipulate the Columns
         $column = $grid->getColumn('lastLogin');
         $column->setTitle('Last Login');
+        $column->setFormat('M d, Y');
 
         // Set the default order of the grid
         $grid->setDefaultOrder('id', 'ASC');
@@ -178,6 +182,8 @@ class UserController extends Controller
         //manipulate the Columns
         $column = $grid->getColumn('lastLogin');
         $column->setTitle('Last Login');
+        $column->setFormat('M d, Y');
+
 
         // Set the default order of the grid
         $grid->setDefaultOrder('created', 'DESC');
