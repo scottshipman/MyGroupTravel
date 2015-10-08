@@ -39,12 +39,12 @@
                         {% if (tour.organizer.id == app.user.id) or (tour.salesAgent.id == app.user.id) %}
                             {% if tour.currency %}{{ tour.currency.htmlSymbol | raw}}{% endif %}{% if tour.pricePerson %}{{ tour.pricePerson }}{% endif %}<br /><label>Price</label>
                         {% else %} {# show the Public price for passenger/parents#}
-                       {% if tour.currency %}{{ tour.currency.htmlSymbol | raw}}{% endif %}{% if tour.pricePersonPublic %}{{ tour.pricePersonPublic }}{% endif %}<br /><label>Price</label>
+                       {% if tour.currency %}{{ tour.currency.htmlSymbol | raw}}{% endif %}{% if tour.pricePersonPublic %}{{ tour.pricePersonPublic }}{% endif %}<label>Price</label>
                         {% endif %}
                    </div>
                </li>
                <li>
-                   <div class="profile-list-item item-2">{{ dtgFinal }}<br /><label>Days to go</label> </div>
+                   <div class="profile-list-item item-2">{{ dtgFinal }}<label>Days to go</label> </div>
                </li>
                <li>
                    <div class="profile-list-item item-3">
@@ -58,7 +58,7 @@
                                 <span class="tui-text-avatar mdl-typography--headline">{{ tour.salesAgent.username[:1] }}</span>
 
                             {% endif %}
-                        {{ tour.salesAgent.firstName }} {{ tour.salesAgent.lastName }} <br /> {{ tour.salesAgent.email }}<br /><label>Business Contact</label>
+                        {{ tour.salesAgent.firstName }} {{ tour.salesAgent.lastName }}<br />{{ tour.salesAgent.email }}<label>Business Contact</label>
                         {% else %}
                             {% if tour.organizer.media %}
                                 <span class="tui-image-avatar">
@@ -69,7 +69,7 @@
                                 <span class="tui-text-avatar mdl-typography--headline">{{ tour.organizer.username[:1] }}</span>
 
                             {% endif %}
-                             {{ tour.organizer.firstName }} {{ tour.organizer.lastName }}  <br /> {{ tour.organizer.email }}<br /><label>Organizer</label>
+                            {{ tour.organizer.firstName }} {{ tour.organizer.lastName }}<br />{{ tour.organizer.email }}<label>Organizer</label>
                         {% endif %}
                    </div>
                </li>

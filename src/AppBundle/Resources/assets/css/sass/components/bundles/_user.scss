@@ -80,10 +80,16 @@
     float: left;
     position: relative;
 
+    &.item-1,
+    &.item-2 {
+      font-size: 20px;
+      line-height: 1.5;
+      min-height: 76px;
+    }
+
     &.item-1 {
-      font-size: 1.5em;
       padding-right: 16px;
-      width: 25%;
+      width: 20%;
 
       &:after {
         content: '';
@@ -97,7 +103,6 @@
     }
 
     &.item-2 {
-      font-size: 1.5em;
       padding-right: 17px;
       padding-left: 17px;
       width: 30%;
@@ -124,7 +129,8 @@
 
     &.item-3 {
       padding-left: 16px;
-      width: 45%;
+      width: 50%;
+      line-height: 24px;
 
       &:before {
         content: '';
@@ -135,10 +141,20 @@
         border-left: 1px solid #757575;
       }
 
+      label {
+        padding-top: 4px;
+      }
+
+    }
+
+    .tui-text-avatar {
+      float: left;
+      margin-right: 8px;
     }
 
     label {
       opacity: 0.5;
+      display: block;
     }
 
   }
