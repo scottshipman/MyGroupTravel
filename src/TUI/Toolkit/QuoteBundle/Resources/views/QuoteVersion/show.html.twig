@@ -31,19 +31,36 @@
     <div class="sub-header">
       <div class="sizer">
         <div class="inner">
-          {% if entity.isTemplate == 0 %} {#only if not a template b/c templates have no institutions #}
-              {% if entity.quoteReference.institution.media %}
-                  <div class="institution-logo">
-                      <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.quoteReference.institution.name }}">
-                  </div>
-              {% endif %}
+            {% if entity.isTemplate == 0 %}{# no Institutions on Templates #}
+                {% if app.user %}
+                    {% if entity.quoteReference.institution.media %}
+                        <div class="institution-logo">
+                            <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.quoteReference.institution.name }}">
+                        </div>
+                    {% endif %}
+                {% elseif not app.user %}
+                    {% if entity.quoteReference.institution.media %}
+                        <div class="institution-logo-with-brand">
+                            <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.quoteReference.institution.name }}">
+                        </div>
+                    {% endif %}
+                    {% if brand.media %}
+                        <div class="brand-logo">
+                            <img src="{{ asset( brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ brand.name }}">
+                        </div>
+                    {% endif %}
+                {% endif %}
             {% endif %}
 
-          {% if entity.quoteReference.institution %}<div id="site-quote-name">{{ entity.quoteReference.institution.name }}</div>{% endif %}
+            {% if entity.quoteReference.institution %}
+                <div id="site-quote-name">{{ entity.quoteReference.institution.name }}</div>
+            {% endif %}
 
-          <h2>{{ entity.quoteReference.name }}{% if is_granted("ROLE_BRAND") %}, {{ entity.name }}{% endif %} {% if entity.quoteNumber %}({{ entity.quoteNumber }}){% endif %}</h2>
+            <h2 class="{% if entity.quoteReference.institution.media %}has-school-logo{% endif %} {% if not app.user and brand.media %}has-brand-logo{% endif %}">{{ entity.quoteReference.name }}{% if is_granted("ROLE_BRAND") %}, {{ entity.name }}{% endif %} {% if entity.quoteNumber %}({{ entity.quoteNumber }}){% endif %}</h2>
 
-          {% if entity.quoteReference.destination %}<div>{{ entity.quoteReference.destination }}</div>{% endif %}
+            {% if entity.quoteReference.destination %}
+                <div>{{ entity.quoteReference.destination }}</div>
+            {% endif %}
         </div>
       </div>
     </div>
