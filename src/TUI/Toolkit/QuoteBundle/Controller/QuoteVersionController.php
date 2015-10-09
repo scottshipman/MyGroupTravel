@@ -130,8 +130,21 @@ class QuoteVersionController extends Controller
                 return $action;
             }
         );
+        //Lock Actions are only available to admins
+        $lockAction->setRole('ROLE_ADMIN');
+
         $grid->addRowAction($lockAction);
 
+        // Change Row Color if locked
+        $source->manipulateRow(
+            function($row){
+                if ($row->getField('locked') ==true){
+                    $row->setColor('#ddd');
+                    $row->setClass('locked');
+                }
+                return $row;
+            }
+        );
         //set default filter value
         $usr = $this->get('security.context')->getToken()->getUser();
         $lastName = $usr->getLastName();
