@@ -48,6 +48,17 @@
             'margin-bottom': '1em'
         });
 
+    // Find locked items and remove edit and delete actions
+    if ($(".mdl-data-table").length) {
+        $('.locked').each(function(){
+            console.log(this);
+            var editAction = $(this).find("li a[title='Edit']");
+            editAction.parent().remove();
+            var deleteAction = $(this).find("li a[title='Delete']").parent().remove();
+            deleteAction.parent().remove();
+        });
+    };
+
     // Turn Row Actions into a dropdown menu
     if ($('.grid-row-actions').length) {
         $('.grid-row-actions').each(function (index) {
@@ -94,11 +105,5 @@
         });
     }
     ;
-    //
-    if ($(".mdl-data-table").length) {
-        var tableRow = $("a[title='Unlock']").parent().parent().parent().parent();
-        tableRow.css({"background-color": "#ccc", "opacity": "0.4"});
-        tableRow.append('<i style = "position:absolute; right:55%;"class="fa fa-unlock-alt fa-4x"></i>');
-    }
 
 })(jQuery);
