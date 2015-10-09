@@ -17,14 +17,6 @@ html {
     margin-right: auto;
     width: $page_width;
     max-width: $page_max_width;
-
-    .pdf-layout & {
-      margin-left: 0;
-      margin-right: 0;
-      width: auto;
-      max-width: none;
-    }
-
   }
 
 }
