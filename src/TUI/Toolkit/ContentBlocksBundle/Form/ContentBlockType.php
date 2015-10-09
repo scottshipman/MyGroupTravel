@@ -26,7 +26,9 @@ class ContentBlockType extends AbstractType
       if(strpos($options['action'], '/header/')===false) {
 
         $builder
-          ->add('title')
+          ->add('title', 'text', array(
+            'data' => 'New Content Block'
+          ))
           ->add('body', 'ckeditor', array());
 
       }
