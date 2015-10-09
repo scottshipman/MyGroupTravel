@@ -57,11 +57,11 @@ var contentBlocksUpdate = function (id, classtype) {
 
 var contentBlocksAddTab = function (elem, id, classtype) {
     var newId = new Date().getTime();
-    $("#content-blocks-wrapper").prepend(
-        '<div id="'  + (newId)+ '" class="content-blocks-tab">' +
+    $("#content-blocks-wrapper").append(
+        '<div id="' + (newId) + '" class="content-blocks-tab">' +
             '<span class="content-blocks tab-label">' +
                 '<i class="content-block-tab-handle fa fa-arrows"></i> ' +
-                '<h4 id="tab-label-'  + (newId)+ '" class="editable-tab"> New Tab </h4>' +
+                '<h4 id="tab-label-' + (newId) + '" class="editable-tab"> New Tab </h4>' +
                 '<span class="tab-delete icon-label"><i class="content-block-tab-actions fa fa-trash-o"></i> Delete Tab</span>' +
                 '<span class="tab-new icon-label"><i class="content-block-tab-actions fa fa-plus-circle"></i> Add Content</span>' +
             '</span>' +
@@ -79,7 +79,7 @@ var contentBlocksAddTab = function (elem, id, classtype) {
  * @param id - Quote Version # passed from window.path
  */
 
-var contentBlocksNewTab = function (id, classtype) {
+var contentBlocksNewTab = function (id, classtype, hash) {
     // update server with new data
     var newId = new Date().getTime();
     $("#loader").css("display", "block");
@@ -94,14 +94,14 @@ var contentBlocksNewTab = function (id, classtype) {
         url: '/manage/contentblocks/tab/new/'+ id + '/' + classtype
     });
     //reload the window so changes are redrawn - its lazy non-ajaxy, but...
-    contentBlocksRefresh(id);
+    contentBlocksRefresh(id, hash);
 };
 
 /**
  * Reload the page that shows the content blocks and tabs
  * @param id
  */
-var contentBlocksRefresh = function(id) {
+var contentBlocksRefresh = function(id, hash) {
     $.ajax({
         url: window.location.href,
         headers: {
@@ -110,7 +110,11 @@ var contentBlocksRefresh = function(id) {
             "Cache-Control": "no-cache"
         }
     }).done(function () {
-        window.location.hash = 'site-content';
+        if ( hash === 'mode-edit' ) {
+            window.location.hash == hash;
+        } else {
+            window.location.hash = 'site-content';
+        };
         window.location.reload(true);
     });
 }
