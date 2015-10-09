@@ -107,18 +107,33 @@ class UserController extends Controller
         $deleteAction->setRole('ROLE_ADMIN');
         $deleteAction->setConfirm(true);
         $deleteAction->manipulateRender(
-          function ($action, $row) { // only show if canDeleteUser is true
-            if ($this->canDeleteUser($row->getField('id')) == false) {
-              return null;
+            function ($action, $row) { // only show if canDeleteUser is true
+                if ($this->canDeleteUser($row->getField('id')) == false) {
+                    return null;
+                }
+                return $action;
             }
-            return $action;
-          }
         );
         $grid->addRowAction($deleteAction);
+
+        //Get locale for date time and other purposes
+        $locale = $this->container->getParameter('locale');
+
 
         //manipulate the Columns
         $column = $grid->getColumn('lastLogin');
         $column->setTitle('Last Login');
+        if (strpos($locale, "en_GB") !== false) {
+            $column->setFormat('d-M-Y');
+        }
+
+        $column = $grid->getColumn('created');
+        if (strpos($locale, "en_GB") !== false) {
+            $column->setFormat('d-M-Y');
+        }
+
+
+
 
         // Set the default order of the grid
         $grid->setDefaultOrder('id', 'ASC');
@@ -174,10 +189,21 @@ class UserController extends Controller
         $restoreAction = new RowAction('Restore', 'user_restore');
         $grid->addRowAction($restoreAction);
 
+        //Get locale for date time and other purposes
+        $locale = $this->container->getParameter('locale');
 
         //manipulate the Columns
         $column = $grid->getColumn('lastLogin');
         $column->setTitle('Last Login');
+        if (strpos($locale, "en_GB") !== false) {
+            $column->setFormat('d-M-Y');
+        }
+
+        $column = $grid->getColumn('created');
+        if (strpos($locale, "en_GB") !== false) {
+            $column->setFormat('d-M-Y');
+        }
+
 
         // Set the default order of the grid
         $grid->setDefaultOrder('created', 'DESC');
@@ -236,13 +262,12 @@ class UserController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            if ($em->getRepository('TUIToolkitUserBundle:User')->findByEmail($entity->getEmail()))
-            {
+            if ($em->getRepository('TUIToolkitUserBundle:User')->findByEmail($entity->getEmail())) {
                 $existingUser = $em->getRepository('TUIToolkitUserBundle:User')->findByEmail($entity->getEmail());
                 $existingUser = $existingUser[0];
                 return new Response($existingUser);
 
-            }else {
+            } else {
                 $entity->setPassword('');
                 $entity->setUsername($entity->getEmail());
                 $em->persist($entity);
@@ -369,9 +394,9 @@ class UserController extends Controller
 
         $editForm = $this->createEditForm($entity);
         if ($this->canDeleteUser($id)) {
-          $deleteForm = $this->createDeleteForm($id)->createView();
+            $deleteForm = $this->createDeleteForm($id)->createView();
         } else {
-          $deleteForm =Null;
+            $deleteForm = Null;
         }
 
         return $this->render('TUIToolkitUserBundle:User:show.html.twig', array(
@@ -387,9 +412,9 @@ class UserController extends Controller
      */
     public function editAction($id)
     {
-      // set a session var for referrer to return user back to it
-      $referer = $_SERVER['HTTP_REFERER'] ?  $_SERVER['HTTP_REFERER'] : null;
-      $_SESSION['user_edit_return'] = $referer;
+        // set a session var for referrer to return user back to it
+        $referer = $_SERVER['HTTP_REFERER'] ? $_SERVER['HTTP_REFERER'] : null;
+        $_SESSION['user_edit_return'] = $referer;
 
         $em = $this->getDoctrine()->getManager();
 
@@ -400,25 +425,25 @@ class UserController extends Controller
         }
 
         // only allow brand or higher to edit other users
-      $user = $this->get('security.token_storage')->getToken()->getUser();
-      $securityContext = $this->get('security.context');
-      if ($securityContext->isGranted('ROLE_BRAND') or $user->getID() == $id ) {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $securityContext = $this->get('security.context');
+        if ($securityContext->isGranted('ROLE_BRAND') or $user->getID() == $id) {
 
-        $editForm = $this->createEditForm($entity);
-        if ($this->canDeleteUser($id)) {
-          $deleteForm = $this->createDeleteForm($id)->createView();
+            $editForm = $this->createEditForm($entity);
+            if ($this->canDeleteUser($id)) {
+                $deleteForm = $this->createDeleteForm($id)->createView();
+            } else {
+                $deleteForm = Null;
+            }
+
+            return $this->render('TUIToolkitUserBundle:User:edit.html.twig', array(
+                'entity' => $entity,
+                'edit_form' => $editForm->createView(),
+                'delete_form' => $deleteForm,
+            ));
         } else {
-          $deleteForm = Null;
+            throw new AccessDeniedException('You do not have the ability to edit this User\'s information.');
         }
-
-        return $this->render('TUIToolkitUserBundle:User:edit.html.twig', array(
-          'entity' => $entity,
-          'edit_form' => $editForm->createView(),
-          'delete_form' => $deleteForm,
-        ));
-      } else {
-        throw new AccessDeniedException('You do not have the ability to edit this User\'s information.');
-      }
     }
 
 
@@ -477,20 +502,20 @@ class UserController extends Controller
         }
 
         if ($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
-          $form->add('enabled', 'checkbox', array(
-            'required' => FALSE,
-          ))
-            ->add('roles', 'choice', array(
-              'choices' => array(
-                'ROLE_USER' => 'User',
-                'ROLE_CUSTOMER' => 'CUSTOMER',
-                'ROLE_BRAND' => 'BRAND',
-                'ROLE_ADMIN' => 'ADMIN',
-                'ROLE_SUPER_ADMIN' => 'SUPER_ADMIN',
-              ),
-              'multiple' => TRUE,
-              'expanded' => TRUE,
-            ));
+            $form->add('enabled', 'checkbox', array(
+                'required' => FALSE,
+            ))
+                ->add('roles', 'choice', array(
+                    'choices' => array(
+                        'ROLE_USER' => 'User',
+                        'ROLE_CUSTOMER' => 'CUSTOMER',
+                        'ROLE_BRAND' => 'BRAND',
+                        'ROLE_ADMIN' => 'ADMIN',
+                        'ROLE_SUPER_ADMIN' => 'SUPER_ADMIN',
+                    ),
+                    'multiple' => TRUE,
+                    'expanded' => TRUE,
+                ));
         }
 
         $form->add('submit', 'submit', array('label' => 'Update'));
@@ -556,14 +581,13 @@ class UserController extends Controller
             $em->flush();
             $this->get('session')->getFlashBag()->add('notice', 'User Saved: ' . $entity->getUsername());
 
-          if (null !== $_SESSION['user_edit_return']) {
-            return $this->redirect($_SESSION['user_edit_return']);
-          }
-          elseif (false === $this->get('security.context')->isGranted('ROLE_BRAND')) {
-            return $this->redirect('/profile');
-          } else {
-            return $this->redirect($_SESSION['user_edit_return']);
-          }
+            if (null !== $_SESSION['user_edit_return']) {
+                return $this->redirect($_SESSION['user_edit_return']);
+            } elseif (false === $this->get('security.context')->isGranted('ROLE_BRAND')) {
+                return $this->redirect('/profile');
+            } else {
+                return $this->redirect($_SESSION['user_edit_return']);
+            }
         }
 
         return $this->render('TUIToolkitUserBundle:User:edit.html.twig', array(
@@ -624,13 +648,13 @@ class UserController extends Controller
             }
 
             // get list of quotes related to this user first (cant delete a user if they are attached)
-          //TODO add a check for Tours, and eventually other objects like payments or something.
+            //TODO add a check for Tours, and eventually other objects like payments or something.
             if ($this->canDeleteUser($entity->getId())) {
-              $em->remove($entity);
-              $em->flush();
-              $this->get('session')->getFlashBag()->add('notice', 'User Deleted: ' . $id);
+                $em->remove($entity);
+                $em->flush();
+                $this->get('session')->getFlashBag()->add('notice', 'User Deleted: ' . $id);
             } else {
-              $this->get('session')->getFlashBag()->add('notice', 'Unable to delete this user because they are associated qith Quotes or Tours');
+                $this->get('session')->getFlashBag()->add('notice', 'Unable to delete this user because they are associated qith Quotes or Tours');
             }
 
 
@@ -648,11 +672,11 @@ class UserController extends Controller
      */
     private function createDeleteForm($id)
     {
-      return $this->createFormBuilder()
-          ->setAction($this->generateUrl('user_delete', array('id' => $id)))
-          ->setMethod('DELETE')
-          ->add('submit', 'submit', array('label' => 'Delete'))
-          ->getForm();
+        return $this->createFormBuilder()
+            ->setAction($this->generateUrl('user_delete', array('id' => $id)))
+            ->setMethod('DELETE')
+            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->getForm();
     }
 
     /**
@@ -693,13 +717,13 @@ class UserController extends Controller
             throw $this->createNotFoundException('Unable to find User entity with id:.' . $id);
         }
 
-      if ($this->canDeleteUser($entity->getId())) {
-        $em->remove($entity);
-        $em->flush();
-        $this->get('session')->getFlashBag()->add('notice', 'User Deleted: ' . $entity->getUsername());
-      } else {
-          $this->get('session')->getFlashBag()->add('error', 'Unable to delete the User because they are associated with Quotes');
-          return $this->redirect($this->generateUrl('user'));
+        if ($this->canDeleteUser($entity->getId())) {
+            $em->remove($entity);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add('notice', 'User Deleted: ' . $entity->getUsername());
+        } else {
+            $this->get('session')->getFlashBag()->add('error', 'Unable to delete the User because they are associated with Quotes');
+            return $this->redirect($this->generateUrl('user'));
         }
 
         return $this->redirect($this->generateUrl('user'));
@@ -1022,132 +1046,127 @@ class UserController extends Controller
         return $email;
     }
 
-  /**
-   * getQuotes
-   *
-   * Display a list of Quotes on a User Profile page
-   *
-   * @param id
-   * return twig
-   */
-  public function getQuotesAction($id)
-  {
-    $locale = $this->container->getParameter('locale');
-    switch ($locale) {
-      case 'en_GB.utf8':
-        $format = 'd-m-Y';
-        break;
-      default:
-        $format = 'm-d-Y';
-        break;
-    }
-    // if user is brand or admin, list quotes where they are salesAgent or SecondaryContact
-    // dont show expired or converted quotes for brand/admins either
-    // if user is customer, list quotes by Permission Entity
-    $quotes=array();
-    $securityContext = $this->get('security.context');
-    if ($securityContext->isGranted('ROLE_BRAND'))
+    /**
+     * getQuotes
+     *
+     * Display a list of Quotes on a User Profile page
+     *
+     * @param id
+     * return twig
+     */
+    public function getQuotesAction($id)
     {
-      $today = new \DateTime();
-      $qb= $this->getDoctrine()->getManager()->createQueryBuilder();
-      $qb
-        ->select('qv', 'q')
-        ->from('QuoteBundle:QuoteVersion', 'qv')
-        ->leftJoin('qv.quoteReference', 'q', 'WITH', 'q.id = qv.quoteReference')
-        ->where('q.salesAgent = ?1')
-        ->orWhere('q.secondaryContact = ?2')
-        ->AndWhere('qv.converted = false')
-        ->AndWhere('qv.expiryDate < ?3')
-        ->AndWhere('q.converted = false')
-        ->AndWhere('qv.isTemplate = false')
-      ;
-      $qb->setParameter(1 ,$id);
-      $qb->setParameter(2 ,$id);
-      $qb->setParameter(3, $today->format($format));
-      $query = $qb->getQuery();
-      $quotes = $query->getResult();
-    } else {
-      $em = $this->getDoctrine()->getManager();
-      $permissions = $em->getRepository('PermissionBundle:Permission')->findBy(array('user' => $id, 'class' => 'quote'));
-      // this only returns pointers to quotes, so loop through and build quotes array
-      foreach( $permissions as $permission )
-      {
-        $quotes[] = $em->getRepository('QuoteBundle:Quote')->find($permission->getObject());
-      }
+        $locale = $this->container->getParameter('locale');
+        switch ($locale) {
+            case 'en_GB.utf8':
+                $format = 'd-m-Y';
+                break;
+            default:
+                $format = 'm-d-Y';
+                break;
+        }
+        // if user is brand or admin, list quotes where they are salesAgent or SecondaryContact
+        // dont show expired or converted quotes for brand/admins either
+        // if user is customer, list quotes by Permission Entity
+        $quotes = array();
+        $securityContext = $this->get('security.context');
+        if ($securityContext->isGranted('ROLE_BRAND')) {
+            $today = new \DateTime();
+            $qb = $this->getDoctrine()->getManager()->createQueryBuilder();
+            $qb
+                ->select('qv', 'q')
+                ->from('QuoteBundle:QuoteVersion', 'qv')
+                ->leftJoin('qv.quoteReference', 'q', 'WITH', 'q.id = qv.quoteReference')
+                ->where('q.salesAgent = ?1')
+                ->orWhere('q.secondaryContact = ?2')
+                ->AndWhere('qv.converted = false')
+                ->AndWhere('qv.expiryDate < ?3')
+                ->AndWhere('q.converted = false')
+                ->AndWhere('qv.isTemplate = false');
+            $qb->setParameter(1, $id);
+            $qb->setParameter(2, $id);
+            $qb->setParameter(3, $today->format($format));
+            $query = $qb->getQuery();
+            $quotes = $query->getResult();
+        } else {
+            $em = $this->getDoctrine()->getManager();
+            $permissions = $em->getRepository('PermissionBundle:Permission')->findBy(array('user' => $id, 'class' => 'quote'));
+            // this only returns pointers to quotes, so loop through and build quotes array
+            foreach ($permissions as $permission) {
+                $quotes[] = $em->getRepository('QuoteBundle:Quote')->find($permission->getObject());
+            }
+        }
+
+        return $this->render('TUIToolkitUserBundle:User:myQuotes.html.twig', array(
+            'quotes' => $quotes,
+            'locale' => $locale,
+        ));
     }
 
-    return $this->render('TUIToolkitUserBundle:User:myQuotes.html.twig', array(
-      'quotes' => $quotes,
-      'locale' => $locale,
-    ));
-  }
-
-  /**
-   * getTours
-   *
-   * Display a list of Tours on a User Profile page
-   *
-   * @param id
-   * return twig
-   */
-  public function getToursAction($id)
-  {
-    $locale = $this->container->getParameter('locale');
-    // if user is brand or admin, list quotes where they are salesAgent or SecondaryContact
-    // if user is customer, list quotes by Permission Entity
-    $tours=array();
-    $securityContext = $this->get('security.context');
-    if ($securityContext->isGranted('ROLE_BRAND'))
+    /**
+     * getTours
+     *
+     * Display a list of Tours on a User Profile page
+     *
+     * @param id
+     * return twig
+     */
+    public function getToursAction($id)
     {
-      $qb= $this->getDoctrine()->getManager()->createQueryBuilder();
-      $qb
-      ->select('t')
-      ->from('TourBundle:Tour', 't')
-      ->where('t.salesAgent = ?1')
-      ->orWhere('t.secondaryContact = ?2');
-      $qb->setParameter(1, $id);
-      $qb->setParameter(2, $id);
-      $query = $qb->getQuery();
-      $tours = $query->getResult();
+        $locale = $this->container->getParameter('locale');
+        // if user is brand or admin, list quotes where they are salesAgent or SecondaryContact
+        // if user is customer, list quotes by Permission Entity
+        $tours = array();
+        $securityContext = $this->get('security.context');
+        if ($securityContext->isGranted('ROLE_BRAND')) {
+            $qb = $this->getDoctrine()->getManager()->createQueryBuilder();
+            $qb
+                ->select('t')
+                ->from('TourBundle:Tour', 't')
+                ->where('t.salesAgent = ?1')
+                ->orWhere('t.secondaryContact = ?2');
+            $qb->setParameter(1, $id);
+            $qb->setParameter(2, $id);
+            $query = $qb->getQuery();
+            $tours = $query->getResult();
 
 
-    } else {
-      $em = $this->getDoctrine()->getManager();
-      $permissions = $em->getRepository('PermissionBundle:Permission')->findBy(array('user' => $id, 'class' => 'tour'));
-      // this only returns pointers to tours, so loop through and build tours array
-      foreach( $permissions as $permission )
-      {
-        $tours[] = $em->getRepository('TourBundle:Tour')->find($permission->getObject());
-      }
+        } else {
+            $em = $this->getDoctrine()->getManager();
+            $permissions = $em->getRepository('PermissionBundle:Permission')->findBy(array('user' => $id, 'class' => 'tour'));
+            // this only returns pointers to tours, so loop through and build tours array
+            foreach ($permissions as $permission) {
+                $tours[] = $em->getRepository('TourBundle:Tour')->find($permission->getObject());
+            }
+        }
+
+
+        return $this->render('TUIToolkitUserBundle:User:myTours.html.twig', array(
+            'tours' => $tours,
+            'locale' => $locale,
+        ));
     }
 
+    public function canDeleteUser($id)
+    {
 
-    return $this->render('TUIToolkitUserBundle:User:myTours.html.twig', array(
-      'tours' => $tours,
-      'locale' => $locale,
-    ));
-  }
+        $em = $this->getDoctrine()->getManager();
 
-  public function canDeleteUser($id)
-  {
+        $permissions = $em->getRepository('PermissionBundle:Permission')->findOneBy(array('user' => $id));
+        $primary_organizerq = $em->getRepository('QuoteBundle:Quote')->findOneBy(array('organizer' => $id));
+        $primary_adminq = $em->getRepository('QuoteBundle:Quote')->findOneBy(array('salesAgent' => $id));
+        $secondary_adminq = $em->getRepository('QuoteBundle:Quote')->findOneBy(array('secondaryContact' => $id));
+        $primary_organizert = $em->getRepository('TourBundle:Tour')->findOneBy(array('organizer' => $id));
+        $primary_admint = $em->getRepository('TourBundle:Tour')->findOneBy(array('salesAgent' => $id));
+        $secondary_admint = $em->getRepository('TourBundle:Tour')->findOneBy(array('secondaryContact' => $id));
 
-    $em = $this->getDoctrine()->getManager();
-
-    $permissions = $em->getRepository('PermissionBundle:Permission')->findOneBy(array('user' => $id));
-    $primary_organizerq = $em->getRepository('QuoteBundle:Quote')->findOneBy(array('organizer' => $id));
-    $primary_adminq = $em->getRepository('QuoteBundle:Quote')->findOneBy(array('salesAgent' => $id));
-    $secondary_adminq = $em->getRepository('QuoteBundle:Quote')->findOneBy(array('secondaryContact' => $id));
-    $primary_organizert = $em->getRepository('TourBundle:Tour')->findOneBy(array('organizer' => $id));
-    $primary_admint = $em->getRepository('TourBundle:Tour')->findOneBy(array('salesAgent' => $id));
-    $secondary_admint = $em->getRepository('TourBundle:Tour')->findOneBy(array('secondaryContact' => $id));
-
-    if($primary_organizerq || $primary_adminq || $secondary_adminq || $primary_organizert || $primary_admint || $secondary_admint || $permissions) {
-      //$this->get('session')->getFlashBag()->add('error', 'Unable to delete the User because they are associated with Quotes or Tours');
-      //return $this->redirect($this->generateUrl('user'));
-      return false;
-    } else {
-      return true;
+        if ($primary_organizerq || $primary_adminq || $secondary_adminq || $primary_organizert || $primary_admint || $secondary_admint || $permissions) {
+            //$this->get('session')->getFlashBag()->add('error', 'Unable to delete the User because they are associated with Quotes or Tours');
+            //return $this->redirect($this->generateUrl('user'));
+            return false;
+        } else {
+            return true;
+        }
     }
-  }
 
 }

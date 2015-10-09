@@ -121,7 +121,20 @@ class TourController extends Controller
                 return $action;
             }
         );
+        // Lock actions are only available to admins
+        $lockAction->setRole('ROLE_ADMIN');
         $grid->addRowAction($lockAction);
+
+        // Change Row Color if locked
+        $source->manipulateRow(
+            function($row){
+                if ($row->getField('locked') ==true){
+                    $row->setColor('#ddd');
+                    $row->setClass('locked');
+                }
+                return $row;
+            }
+        );
         $emailAction = new RowAction('Email', 'manage_tour_notify_organizers_form');
         $emailAction->setRole('ROLE_ADMIN');
         $grid->addRowAction($emailAction);
