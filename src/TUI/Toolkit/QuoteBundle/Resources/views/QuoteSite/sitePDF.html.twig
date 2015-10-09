@@ -15,13 +15,16 @@
 
         <div id="site-header-slideshow">
             {% if entity.headerBlock %}
-                {% for media in entity.headerBlock.media %}
+                {% for mediaWrapper in entity.headerBlock.mediaWrapper %}
                     {% if loop.first %}
-                        <img src="{{ app.request.uriForPath( asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) ) }}">
+                        {% for media in mediaWrapper.media %}
+                            <img src="{{ asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) | imagine_filter('slideShow') }}">
+                        {% endfor %}
                     {% endif %}
                 {% endfor %}
             {% endif %}
         </div>
+        
         <div id="site-header-summary">
             <ul id="site-summary-details">
                 {% if entity.departureDate %}<li>Departing: <strong>{{ entity.departureDate|date(format) }}</strong></li>{% endif %}
