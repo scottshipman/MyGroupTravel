@@ -104,6 +104,26 @@
 
 #site-quote-name {}
 
+#site-quote-title {
+
+  .pdf-layout & {
+    padding: 0.5em 132px 0.5em 0;
+  }
+
+}
+
+#site-school-logo {
+
+  .pdf-layout & {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 120px;
+    height: auto;
+  }
+
+}
+
 #site-summary-details {
   list-style: none;
   padding: 0;
@@ -113,18 +133,36 @@
 
     &.right {
       text-align: right;
+
+      .pdf-layout & {
+        text-align: left;
+      }
+
     }
 
   }
 
   .label {
     float: left;
+
+    .pdf-layout & {
+      float: none;
+    }
+
   }
 
   .quote-price {
     font-size: 1.375em;
     font-weight: bold;
     display: block;
+  }
+
+}
+
+#accept-tour {
+
+  .pdf-layout & {
+    display: none;
   }
 
 }
