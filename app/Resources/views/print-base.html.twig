@@ -16,35 +16,25 @@
     <div class="main">
 
         <div class="header">
-          <div class="sizer">
-            <div class="brand_logo">
-                {{ render(controller('BrandBundle:Default:index')) }}
+            <div id="site-quote-name">
+                {% block page_institution %}{% endblock %}
             </div>
 
-            {% block page_institution %}{% endblock %}
-
-            <h1 class="page-title">
+            <h1 id="site-quote-title">
                 {% block page_title %}{% endblock %}
             </h1>
-          </div>
-        </div><!-- header -->
+        </div>
 
         <div class="content">
-          <div class="sizer">
-            <div class="inner">
-                {% block body %}{% endblock %}
-            </div>
-          </div>
+            {% block body %}{% endblock %}
         </div>
 
         <div class="site-footer">
-          <div class="sizer">
             <div class="footer-full-section">
                 {% block footer_left %}{% endblock %}
                 {% block footer_right %}{% endblock %}
                 {{ render(controller('BrandBundle:Default:footer')) }}
             </div>
-          </div>
         </div>
 
     </div>
