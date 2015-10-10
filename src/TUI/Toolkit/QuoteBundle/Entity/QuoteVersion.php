@@ -5,6 +5,7 @@ namespace TUI\Toolkit\QuoteBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Doctrine\Common\Annotations;
 use Gedmo\Mapping\Annotation as Gedmo;
 use APY\DataGridBundle\Grid\Mapping as GRID;
@@ -141,7 +142,7 @@ class QuoteVersion
      * @var \DateTime
      *
      * @ORM\Column(name="expiryDate", type="date", nullable=true)
-     * @GRID\Column(title="Expirary Date", export=true)
+     * @GRID\Column(title="Expiry Date", export=true)
      */
     private $expiryDate;
 
@@ -308,6 +309,18 @@ class QuoteVersion
     $this->views = 0;
     $this->shareViews = 0;
   }
+
+    /**
+     * @Assert\Callback
+     */
+    public function isExpiryBeforeDeparture(ExecutionContextInterface $context)
+    {
+        if ($this->getExpiryDate() >= $this->getDepartureDate()) {
+            $context->buildViolation('The expiry date must be prior to the departure date.')
+                ->atPath('expiryDate')
+                ->addViolation();
+        }
+    }
 
 
     public function getId()
