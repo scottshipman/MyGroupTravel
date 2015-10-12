@@ -66,9 +66,11 @@
                 {% block back_link %}{% endblock %}
 
                 <div class="page-title">
-                    {% block edit_link %}{% endblock %}
+                    <div class="link-preview-edit">{% block edit_link %}{% endblock %}</div>
 
                     <h1>{% block page_title %}{% endblock %}</h1>
+
+                    {% block page_title_menu %}{% endblock %}
                 </div>
               </div>
             </div><!-- header -->
@@ -86,11 +88,11 @@
 
         <footer class="mdl-mini-footer site-footer">
           <div class="sizer">
-            <div class="mdl-mini-footer__left-section footer-left-section">
-                {% block footer_left %}{% endblock %}
-            </div>
             <div class="mdl-mini-footer__right-section footer-right-section">
                 {% block footer_right %}{% endblock %}
+            </div>
+            <div class="mdl-mini-footer__left-section footer-left-section">
+                {% block footer_left %}{% endblock %}
             </div>
             <div class="mdl-mini-footer__left-section footer-full-section">
                 {{ render(controller('BrandBundle:Default:footer')) }}
@@ -102,7 +104,7 @@
 
 </div><!-- toolkit-layout -->
 
-<div id="loader"><img src="{{ asset('bundles/quote/images/loader.gif') }}"></div>
+<div id="loader"><i class="loader-icon fa fa-spinner fa-pulse"></i></div>
 
 {% javascripts '@toolkit' '@AppBundle/Resources/assets/js/dropzone.js' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>

@@ -1,0 +1,74 @@
+#currencyBundle/Resources/translations/messages.en.yml
+
+institution:
+      title:
+          edit: Edit Institution
+          index: Institution Dashboard
+          new: Create New Institution
+          show: Institution
+          deleted: Institution Dashboard - Deleted
+      page_title:
+          edit: Edit Institution
+          index: Institution Dashboard
+          new: Create New Institution
+          show: Institution
+          deleted: Institution Dashboard - Deleted
+
+      actions:
+          back: Back to the list
+          edit: Edit
+          update: Update
+          create: Create
+          delete: Delete
+          create_new: Create a New Institution
+
+
+
+      table:
+          label:
+              name: Name (ID)
+              action: Actions
+              address1: Address 1
+              address2: Address 2
+              city: City
+              county: County
+              state: State
+              postcode: Postcode
+              country: Country
+
+          actions:
+              view: View
+              edit: Edit
+
+      flash:
+          save: Institution Saved -
+          delete: Institution deleted -
+          cant_delete: Unable to delete the Institution because it is associated with Quotes or Tours
+          restore: Institution Restored -
+
+      grid:
+          no_result: There are no Institutions to show. Please check your filter settings and try again.
+          no_result-deleted: There are no Deleted Institutions to show. Please check your filter settings and try again.
+          export: Institutions as CSV
+          export_deleted: Deleted Institutions as CSV
+
+      tabs:
+          deleted: Deleted Institutions
+          current:  Current Institutions
+
+      avatar:
+          label: Company Logo
+
+      media:
+          label: Click to upload
+
+      form:
+          label:
+              name: Name
+              address1: Address 1
+              address2: Address 2
+              city: City
+              state: State
+              county: COunty
+              post_code: ZipCode
+              country: Country

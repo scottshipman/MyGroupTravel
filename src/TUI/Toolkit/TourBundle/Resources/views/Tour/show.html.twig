@@ -9,7 +9,23 @@
         {{ entity.name }}
     {% endif %}
 {% endblock %}
-{% block page_title %}Dashboard{% endblock %}
+
+{% block page_title %}
+    <span>Dashboard</span>
+{% endblock %}
+
+{% block page_title_menu %}
+    <button id="tour-title-drop" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-menu-drop">
+        <i class="material-icons">arrow_drop_down</i>
+    </button>
+    {% embed "TourBundle:Tour:tourMenu.html.twig" %}
+        {% if editable %}
+            {% block tour_dashboard_link %}
+                <li><a href="{{ path('manage_tour_show', { 'id': entity.id }) }}" class="mdl-menu__item">Tour Dashboard</a></li>
+            {% endblock %}
+        {% endif %}
+    {% endembed %}
+{% endblock %}
 
 {% block back_link %}
     {% if is_granted("ROLE_BRAND") %}
@@ -19,45 +35,27 @@
     {% endif %}
 {% endblock %}
 
-{% block sub_header %}
-    <div class="sub-header">
-      <div class="sizer">
-        <div class="inner">
-              {% if entity.institution.media %}
-                  <div class="institution-logo">
-                      <img src="{{ asset( entity.institution.media.getRelativePath ~ "/" ~ entity.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.institution.name }}">
-                  </div>
-              {% endif %}
-
-          {% if entity.institution %}<div id="site-quote-name">{{ entity.institution.name }}</div>{% endif %}
-
-          <h2>{{ entity.name }}{% if entity.quoteNumber %}({{ entity.quoteNumber }}){% endif %}</h2>
-
-          {% if entity.destination %}<div>{{ entity.destination }}</div>{% endif %}
-        </div>
-      </div>
-    </div>
-{% endblock %}
-
 {% block body -%}
 
     {#{{ dump(entity) }}#}
+    <div class="tour-show-wrapper">
+
     <div class="tour-show-left-column">
         <ul class="tour-show-submenu">
             <li><strong>Tour Summary</strong></li>
             <hr>
-            <li><label>Institution</label></br><strong>{{ entity.institution.name }}</strong></li>
+            <li><label>Institution</label><br><strong>{{ entity.institution.name }}</strong></li>
             <hr>
-            <li><label>Departure Date</label></br><strong>{{ entity.departureDate|date(format) }}</strong></li>
+            <li><label>Departure Date</label><br><strong>{{ entity.departureDate|date(format) }}</strong></li>
             <hr>
-            <li><label>Number Of Passengers</label></br><strong>Some number</strong></li>
+            <li><label>Number Of Passengers</label><br><strong>Some number</strong></li>
             <hr>
-            <li><label>Price Per Passenger</label></br><strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePersonPublic }}</strong></li>
+            <li><label>Price Per Passenger</label><br><strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePersonPublic }}</strong></li>
             <hr>
         </ul>
 
         <div class="tour-edit-organizer-left">
-            <label>Organizers</label>
+            <label>Organizers</label><br>
             {% if entity.organizer.media %}
                 <img class="tui-image-avatar" src="{{ asset( entity.organizer.media.getRelativePath ~ "/" ~ entity.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.organizer.username }}">
             {% elseif entity.organizer.firstName and entity.organizer.lastName %}
@@ -65,11 +63,11 @@
             {% else %}
                 <span class="tui-text-avatar mdl-typography--headline">{{ entity.organizer.username[:1] }}</span>
             {% endif %}
-            <a class="add-organizer" href="#"><i class="fa fa-plus-circle fa-3x"></i></a>
+            <a class="add-organizer" href="#"><i class="add-icon fa fa-plus"></i></a>
+            <a class="add-organizer mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">Add/remove organizers</a>
         </div>
     </div>
 
-    </br>
     <div class="tour-show-right-column">
 
     {% if entity.SetupComplete == true and entity.isComplete == true %}
@@ -80,7 +78,6 @@
 
         {{ render(controller('TourBundle:Tour:getTourNotCompletedAndSetup', { 'id': entity.id } )) }}
 
-
     {% elseif entity.SetupComplete == false %}
 
         {{ render(controller('TourBundle:Tour:getTourNotSetup', { 'id': entity.id } )) }}
@@ -88,7 +85,8 @@
     {% endif %}
 
     </div>
-    <div style="clear:both;"></div>
+
+    </div>
 
 <script type="text/javascript"
         src="https://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.js">

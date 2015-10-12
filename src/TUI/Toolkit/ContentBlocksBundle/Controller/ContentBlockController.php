@@ -43,18 +43,32 @@ class ContentBlockController extends Controller
         $form = $this->createCreateForm($entity, $class, $quoteVersion, $tabId);
         $form->handleRequest($request);
 
-        if (NULL != $form->getData()->getMedia()) {
-            $fileIdString = $form->getData()->getMedia();
-            $fileIds = explode(',', $fileIdString);
+        if (NULL != $form->getData()->getMediaWrapper()) {
+            $fileArrays = json_decode($form->getData()->getMediaWrapper());
+            foreach ($fileArrays as $fileArray) {
+                $mediaWrappers = $this->forward('MediaBundle:MediaWrapper:create', array(
+                    'fileArray' => $fileArray,
+                ));
+                $content = $mediaWrappers->getContent();
+                $wrappers[] = $content;
+            }
 
-            foreach ($fileIds as $fileId) {
-                $image = $em->getRepository('MediaBundle:Media')
-                    ->findById($fileId);
-                $medias[] = array_shift($image);
+            $newWrappers = array();
+            foreach ($wrappers as $wrap) {
+                $newContent = json_decode($wrap, true);
+                $newWrappers[] = $newContent;
+            }
+
+            if ($newWrappers != NULL) {
+                foreach ($newWrappers as $newWrapper) {
+                    $wrapper = $em->getRepository('MediaBundle:MediaWrapper')->find($newWrapper['id']);
+                    $medias[] = $wrapper;
+                }
             }
         }
+
         if (!empty($medias)) {
-            $form->getData()->setMedia($medias);
+            $form->getData()->setMediaWrapper($medias);
 
         }
 
@@ -115,7 +129,7 @@ class ContentBlockController extends Controller
             'attr' => array('id' => 'newBlockIdForm')
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('contentBlocks.actions.create')));
 
         return $form;
     }
@@ -156,7 +170,7 @@ class ContentBlockController extends Controller
             throw $this->createNotFoundException('Unable to find ContentBlock entity.');
         }
 
-        $collection = $entity->getMedia()->toArray() ? $entity->getMedia()->toArray() : NULL;
+        $collection = $entity->getMediaWrapper()->toArray() ? $entity->getMediaWrapper()->toArray() : NULL;
 
         return $this->render('ContentBlocksBundle:ContentBlock:show.html.twig', array(
             'entity' => $entity,
@@ -174,7 +188,7 @@ class ContentBlockController extends Controller
 
         $entity = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($id);
 
-        $collection = $entity->getMedia()->toArray();
+        $collection = $entity->getMediaWrapper()->toArray();
         foreach ($collection as $image) {
             $imageIds[] = $image->getId();
         }
@@ -189,7 +203,7 @@ class ContentBlockController extends Controller
             throw $this->createNotFoundException('Unable to find ContentBlock entity.');
         }
 
-        $entity->setMedia($collectionIds);
+        $entity->setMediaWrapper($collectionIds);
         $editForm = $this->createEditForm($entity, $quoteVersion, $class);
 
         // if layout type is Null, set a default
@@ -225,11 +239,12 @@ class ContentBlockController extends Controller
             'action' => $this->generateUrl('manage_contentblocks_update', array('id' => $entity->getId(), 'quoteVersion' => $quoteVersion, 'class' => $class)),
             'method' => 'POST',
             'attr' => array(
-                'id' => 'ajax_contentblocks_form'
+                'id' => 'ajax_contentblocks_form',
+                'class' => 'ajax_contentblocks_form',
             ),
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('contentBlocks.actions.update')));
 
         return $form;
     }
@@ -244,7 +259,7 @@ class ContentBlockController extends Controller
 
         $entity = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($id);
 
-        $collection = $entity->getMedia()->toArray();
+        $collection = $entity->getMediaWrapper()->toArray();
 
 
         if (!$entity) {
@@ -257,18 +272,32 @@ class ContentBlockController extends Controller
 
         $medias = array();
 
-        if (NULL != $editForm->getData()->getMedia()) {
-            $fileIdString = $editForm->getData()->getMedia();
-            $fileIds = explode(',', $fileIdString);
+        if (NULL != $editForm->getData()->getMediaWrapper()) {
+            $fileArrays = json_decode($editForm->getData()->getMediaWrapper());
+            foreach ($fileArrays as $fileArray) {
+                $mediaWrappers = $this->forward('MediaBundle:MediaWrapper:create', array(
+                    'fileArray' => $fileArray,
+                ));
+                $content = $mediaWrappers->getContent();
+                $wrappers[] = $content;
+            }
 
-            foreach ($fileIds as $fileId) {
-                $image = $em->getRepository('MediaBundle:Media')
-                    ->findById($fileId);
-                $medias[] = array_shift($image);
+            $newWrappers = array();
+            foreach ($wrappers as $wrap) {
+                $newContent = json_decode($wrap, true);
+                $newWrappers[] = $newContent;
+            }
+
+            if ($newWrappers != NULL) {
+                foreach ($newWrappers as $newWrapper) {
+                    $wrapper = $em->getRepository('MediaBundle:MediaWrapper')->find($newWrapper['id']);
+                    $medias[] = $wrapper;
+                }
             }
         }
+
         if (!empty($medias)) {
-            $editForm->getData()->setMedia($medias);
+            $editForm->getData()->setMediaWrapper($medias);
 
         }
 
@@ -359,7 +388,7 @@ class ContentBlockController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('manage_contentblocks_delete', array('id' => $id, 'quoteVersion' => $quoteVersion, 'class' => $class)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->add('submit', 'submit', array('label' => $this->get('translator')->trans('contentBlocks.actions.delete')))
             ->getForm();
     }
 
@@ -471,7 +500,7 @@ class ContentBlockController extends Controller
 
     $em = $this->getDoctrine()->getManager();
     $entity = new ContentBlock();
-    $entity->setTitle('New Content Block');
+    $entity->setTitle($this->get('translator')->trans('contentBlocks.placeholder.title'));
 
       $em->persist($entity);
       $em->flush();
@@ -492,7 +521,6 @@ class ContentBlockController extends Controller
    */
   public function newTabAction(Request $request, $id, $class)
   {
-    // TODO QuoteVersion is hardcoded here, must accpet any class type
 
     $em = $this->getDoctrine()->getManager();
       if ($class == "QuoteVersion") {
@@ -543,9 +571,8 @@ class ContentBlockController extends Controller
     public function newSiteTabAction(Request $request, $id, $class)
     {
 
-      // TODO QuoteVersion is hardcoded - must accept any class here
         $em = $this->getDoctrine()->getManager();
-        if ($class == "QuoteVersion") {
+        if ($class == "quoteversion") {
             $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
         }
         elseif($class == "tour"){

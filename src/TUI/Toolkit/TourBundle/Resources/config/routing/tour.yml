@@ -54,5 +54,15 @@ manage_tour_lock_nonajax:
     defaults: { _controller: "TourBundle:Tour:lockNonajax" }
     methods:  [POST, GET]
 
+manage_tour_notify_organizers_form:
+    path:   /notify/organizers/form/{id}
+    defaults:  { _controller: "TourBundle:Tour:newNotifyOrganizer"}
+    methods: [GET]
+
+manage_tour_notify_organizers:
+    path:      /notify/organizers/{id}
+    defaults:  { _controller: "TourBundle:Tour:organizerNotify" }
+
+
 
 

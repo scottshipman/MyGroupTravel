@@ -5,6 +5,7 @@ namespace TUI\Toolkit\QuoteBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Doctrine\Common\Annotations;
 use Gedmo\Mapping\Annotation as Gedmo;
 use APY\DataGridBundle\Grid\Mapping as GRID;
@@ -17,10 +18,11 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
  * @UniqueEntity(fields={"quoteNumber"}, message="This Quote Number already exists on another Quote.", ignoreNull=true)
  *
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
- * @GRID\Source(columns="id, institution_full, quoteReference.institution.name, quoteReference.institution.city, quoteReference.name, name, isTemplate, quoteReference.ts, quoteReference.id, quoteNumber, organizer_full, salesAgent_full, quoteReference.salesAgent.firstName, quoteReference.salesAgent.lastName,  quoteReference.salesAgent.email, quoteReference.organizer.firstName, quoteReference.organizer.lastName, quoteReference.organizer.email, quoteReference.views, quoteReference.shareViews, quoteReference.converted, deleted, locked, quoteReference.setupComplete, quoteReference.destination, created, version, duration, tripStatus.name, expiryDate, transportType.name, boardBasis.name, freePlaces, payingPlaces, departureDate, returnDate, pricePerson,  currency.name, converted, views, shareViews", filterable=false, sortable=true)
- * @GRID\Column(id="organizer_full", type="join", columns = {"quoteReference.organizer.firstName", "quoteReference.organizer.lastName", "quoteReference.organizer.email"}, title="Organizer", export=false, filterable=true, operatorsVisible=false)
- * @GRID\Column(id="salesAgent_full", type="join", columns = {"quoteReference.salesAgent.firstName", "quoteReference.salesAgent.lastName", "quoteReference.salesAgent.email"}, title="Primary Business Admin", export=false, filterable=true, operatorsVisible=false)
- * @GRID\Column(id="institution_full", type="join", columns = {"quoteReference.institution.name", "quoteReference.institution.city"}, title="Institution", export=false, filterable=true, operatorsVisible=false)
+ * @GRID\Source(columns="id, institution_full, quoteReference.institution.name, quoteReference.institution.city, quoteReference.name, name, isTemplate, quoteReference.ts, quoteReference.id, quoteNumber, organizer_full, salesAgent_full, salesAgent_name, quoteReference.salesAgent.firstName, quoteReference.salesAgent.lastName,  quoteReference.salesAgent.email, quoteReference.organizer.firstName, quoteReference.organizer.lastName, quoteReference.organizer.email, quoteReference.views, quoteReference.shareViews, quoteReference.converted, deleted, locked, quoteReference.setupComplete, quoteReference.destination, created, version, duration, tripStatus.name, expiryDate, transportType.name, boardBasis.name, freePlaces, payingPlaces, departureDate, returnDate, pricePerson,  currency.name, converted, views, shareViews", filterable=false, sortable=true)
+ * @GRID\Column(id="organizer_full", type="join", columns = {"quoteReference.organizer.firstName", "quoteReference.organizer.lastName", "quoteReference.organizer.email"}, title="Organizer", export=false, filterable=false, operatorsVisible=false)
+ * @GRID\Column(id="salesAgent_full", type="join", columns = {"quoteReference.salesAgent.firstName", "quoteReference.salesAgent.lastName", "quoteReference.salesAgent.email"}, title="Primary Business Admin", export=false, filterable=false, operatorsVisible=false)
+ * @GRID\Column(id="salesAgent_name", type="join", columns = {"quoteReference.salesAgent.firstName", "quoteReference.salesAgent.lastName"}, title="Primary Business Admin", export=false, filterable=false, operatorsVisible=false)
+ * @GRID\Column(id="institution_full", type="join", columns = {"quoteReference.institution.name", "quoteReference.institution.city"}, title="Institution", export=false, filterable=false, operatorsVisible=false)
  */
 
 // ,uniqueConstraints={@ORM\UniqueConstraint(name="quoteNumber", columns={"quoteNumber"})}
@@ -140,7 +142,7 @@ class QuoteVersion
      * @var \DateTime
      *
      * @ORM\Column(name="expiryDate", type="date", nullable=true)
-     * @GRID\Column(title="Expirary Date", export=true)
+     * @GRID\Column(title="Expiry Date", export=true)
      */
     private $expiryDate;
 
@@ -149,6 +151,7 @@ class QuoteVersion
      *
      * @ORM\Column(name="freePlaces", type="integer", nullable=true)
      * @GRID\Column(title="Free Places", export=true)
+     * @Assert\GreaterThanOrEqual(value = 0)
      */
     private $freePlaces;
 
@@ -157,6 +160,7 @@ class QuoteVersion
      *
      * @ORM\Column(name="payingPlaces", type="integer", nullable=true)
      * @GRID\Column(title="Paying Places", export=true)
+     * @Assert\GreaterThanOrEqual(value = 0)
      */
     private $payingPlaces;
 
@@ -177,16 +181,16 @@ class QuoteVersion
      * @GRID\Column(field = "quoteReference.name", title="Tour Name", export=true, filterable=true, operatorsVisible=false)
      * @GRID\Column(field = "quoteReference.id", title="ID", export=true)
      *
-     * @GRID\Column(field = "quoteReference.salesAgent.firstName", title="BA First", export=false)
-     * @GRID\Column(field = "quoteReference.salesAgent.lastName", title="BA Last", export=false)
-     * @GRID\Column(field = "quoteReference.salesAgent.email", title="BA email", export=false)
+     * @GRID\Column(field = "quoteReference.salesAgent.firstName", title="BA First", export=true)
+     * @GRID\Column(field = "quoteReference.salesAgent.lastName", title="BA Last", export=true)
+     * @GRID\Column(field = "quoteReference.salesAgent.email", title="BA email", export=true)
      * @GRID\Column(field = "quoteReference.converted", title="Converted", export=true)
      * @GRID\Column(field = "quoteReference.setupComplete", title="Setup Complete", export=true)
      * @GRID\Column(field = "quoteReference.institution.name", title="Institution Name", export=true, filterable=false, operatorsVisible=false)
      * @GRID\Column(field = "quoteReference.institution.city", title="Institution City", export=true, filterable=false, operatorsVisible=false)
-     * @GRID\Column(field = "quoteReference.organizer.firstName", title="O first", export=false)
-     * @GRID\Column(field = "quoteReference.organizer.lastName", title="O last", export=false)
-     * @GRID\Column(field = "quoteReference.organizer.email", title="O email", export=false)
+     * @GRID\Column(field = "quoteReference.organizer.firstName", title="Organiser first", export=true)
+     * @GRID\Column(field = "quoteReference.organizer.lastName", title="Organiser last", export=true)
+     * @GRID\Column(field = "quoteReference.organizer.email", title="Organiser email", export=true)
      * @GRID\Column(field = "quoteReference.destination", title="Destination", export=true, filterable=true, operatorsVisible=false)
      */
     private $quoteReference;
@@ -254,6 +258,7 @@ class QuoteVersion
      *
      * @ORM\Column(name="pricePerson", type="float", nullable=true)
      * @GRID\Column(title="Price / Person", export=true)
+     * @Assert\GreaterThanOrEqual(value = 0)
      */
     private $pricePerson;
 
@@ -304,6 +309,18 @@ class QuoteVersion
     $this->views = 0;
     $this->shareViews = 0;
   }
+
+    /**
+     * @Assert\Callback
+     */
+    public function isExpiryBeforeDeparture(ExecutionContextInterface $context)
+    {
+        if ($this->getExpiryDate() >= $this->getDepartureDate()) {
+            $context->buildViolation('The expiry date must be prior to the departure date.')
+                ->atPath('expiryDate')
+                ->addViolation();
+        }
+    }
 
 
     public function getId()

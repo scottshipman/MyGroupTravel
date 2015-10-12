@@ -43,7 +43,7 @@ class TransportController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-          $this->get('session')->getFlashBag()->add('notice', 'Transportation Type Saved: '. $entity->getName());
+          $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('transport.flash.save'). $entity->getName());
 
             return $this->redirect($this->generateUrl('manage_transport_show', array('id' => $entity->getId())));
         }
@@ -68,7 +68,7 @@ class TransportController extends Controller
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('transport.actions.create')));
 
         return $form;
     }
@@ -148,7 +148,7 @@ class TransportController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('transport.actions.update')));
 
         return $form;
     }
@@ -172,7 +172,7 @@ class TransportController extends Controller
 
         if ($editForm->isValid()) {
             $em->flush();
-          $this->get('session')->getFlashBag()->add('notice', 'Transportation Type Saved: '. $entity->getName());
+          $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('transport.flash.save'). $entity->getName());
 
             return $this->redirect($this->generateUrl('manage_transport_edit', array('id' => $id)));
         }
@@ -202,7 +202,7 @@ class TransportController extends Controller
 
             $em->remove($entity);
             $em->flush();
-          $this->get('session')->getFlashBag()->add('notice', 'Transportation Type Deleted: '. $entity->getName());
+          $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('transport.flash.delete'). $entity->getName());
         }
 
         return $this->redirect($this->generateUrl('manage_transport'));
@@ -220,7 +220,7 @@ class TransportController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('manage_transport_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->add('submit', 'submit', array('label' => $this->get('translator')->trans('transport.actions.delete')))
             ->getForm()
         ;
     }

@@ -4,19 +4,26 @@
     $("#username").attr("placeholder", "Email");
     $("#password").attr("placeholder", "Password");
 
-    if ($("form").hasClass("fos_user_resetting_request")) {
-        $("body").addClass("main_login");
-        $('h2').text('Reset Password').show();
-        $("#username").attr("placeholder", "Email Address");
-        $('.login-reset a').attr("href", "/").text("Sign In").css({"color": "#8DC74B"});
 
-    }
-
-    if ($('#fos_user_resetting_form').length) {
+    if ($('#reset-password-form').length) {
         $("#fos_user_resetting_form_plainPassword_first").attr("placeholder", "New Password");
         $("#fos_user_resetting_form_plainPassword_second").attr("placeholder", "Confirm New Password");
         $('h2').text("Reset Password").show();
         $('.login-reset a').attr("href", "/").text("Sign In").css({"color": "#8DC74B"});
+    }
+
+    if($('#activation-form').length) {
+        $('#fos_user_resetting_form_plainPassword_first').attr("placeholder", "Password");
+        $('#fos_user_resetting_form_plainPassword_second').attr("placeholder", "Confirm Password");
+        $('h2').text("Set Password").show();
+        $('.login-reset').css({'display': 'none'});
+        $('input[type="submit"]').css({'margin-bottom': '20px'});
+        $('.login-block .login-form > div').css({'color': 'black'});
+
+    }
+
+    if ($('.profile-content').length) {
+        $('.login-block').removeClass('login-block');
     }
 
 
@@ -38,15 +45,25 @@
     });
 
     $("#dialog").dialog({
-        autoOpen: false,
         modal: true,
-        width: 600,
-        height: 400
-        /*        buttons: {
-         "Close": function() {
-         $(this).dialog("close");
-         }
-         }*/
+        width: '60%',
+        height: 400,
+        draggable: false,
+        resizable: false,
+        title: 'Loading...',
+        autoOpen: false,
+        open: function (e, ui) {
+            if ( !toolkitBreakpointAllowDrag() ) {
+                // Modal to full screen on phone
+                $("#dialog")
+                    .dialog("option", "width", "100%")
+                    .dialog("option", "height", $(window).height() );
+            } else {
+                $("#dialog")
+                    .dialog("option", "width", "60%")
+                    .dialog("option", "height", 400 );
+            };
+        }
     });
 
     $(".modal").on("click", function (e) {
@@ -55,7 +72,7 @@
         var form_type = parts[0].toLowerCase();
         //e.preventDefault();
         $("#dialog").html("");
-        $("#dialog").dialog("option", "title", "Loading...").dialog("open");
+        $("#dialog").dialog("open");
         $("#dialog").load('/ajax/' + form_type + '/new', function () {
             $(this).dialog("option", "title", 'Create New ' + parts[0]);
             doMDLpopup( $(this) );

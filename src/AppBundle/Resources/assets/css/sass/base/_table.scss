@@ -19,6 +19,7 @@ table {
 
   &.mdl-data-table {
     white-space: normal;
+    width: 100%;
 
     .th-mimic {
       position: relative;
@@ -77,4 +78,9 @@ table {
 
 .grid_footer {
   @include clear-fix();
+}
+
+.grid-column-organizer_full, .grid-column-salesAgent_full {
+  overflow-wrap: break-word;
+  box-sizing: border-box;
 }

@@ -3,10 +3,10 @@
   <div class="mdl-tabs-no-swap">
     <div class="mdl-tabs__tab-bar">
       {% block institution_tab %}
-          <a class='mdl-tabs__tab' href="{{ path('manage_institution') }}">Current Institutions</a>
+          <a class='mdl-tabs__tab' href="{{ path('manage_institution') }}">{% trans %}institution.tabs.current{% endtrans %}</a>
       {% endblock %}
       {% block deleted_tab %}
-          <a class='mdl-tabs__tab' href="{{ path('manage_institution_deleted') }}">Deleted Institutions</a>
+          <a class='mdl-tabs__tab' href="{{ path('manage_institution_deleted') }}">{% trans %}institution.tabs.deleted{% endtrans %}</a>
       {% endblock %}
     </div>
   </div>

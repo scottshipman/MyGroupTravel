@@ -1,17 +1,17 @@
 {% extends '::base.html.twig' %}
-{% block title %}Create Media File{% endblock %}
+{% block title %}{% trans %}media.title.new{% endtrans %}{% endblock %}
 
 
 
 {% block body -%}
-    <h1>Create Media File</h1>
+    <h1>{% trans %}media.title.page_title{% endtrans %}</h1>
 
     {{ form(form) }}
 
         <ul class="record_actions">
     <li>
         <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('media') }}">
-            <i class="fa fa-arrow-circle-left"></i> Back to the list
+            <i class="fa fa-arrow-circle-left"></i> {% trans %}media.actions.back{% endtrans %}
         </a>
     </li>
 </ul>

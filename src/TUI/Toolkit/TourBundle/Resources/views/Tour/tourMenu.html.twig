@@ -1,0 +1,10 @@
+{# Only logged-in can see this menu #}
+{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="tour-title-drop">
+    <span>
+        <li><a href="{{ path('_homepage') }}" class="mdl-menu__item">My Tours</a></li>
+        {% block tour_dashboard_link %}{% endblock %}
+        <li><a href="{{ path('tour_site_action_show', { 'id': entity.id }) }}" class="mdl-menu__item">Preview Tour</a></li>
+    </span>
+</ul>
+{% endif %}

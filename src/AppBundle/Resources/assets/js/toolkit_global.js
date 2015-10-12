@@ -1,4 +1,20 @@
-/********* Global Methods Go below here ******************************/
+/********* Global Methods Go below here *********/
+
+var toolkitBreakpoint = function() {
+    var breakpoint = window
+        .getComputedStyle( document.querySelector('body'), ':before' )
+        .getPropertyValue( 'content' )
+        .replace( /['"]+/g, '' );
+    return breakpoint;
+};
+
+var toolkitBreakpointAllowDrag = function() {
+    if ( toolkitBreakpoint() !== 'phone' ) {
+        return true;
+    } else {
+        return false;
+    }
+};
 
 /**
  * Persist Content block data to the database/entity
@@ -39,13 +55,13 @@ var contentBlocksUpdate = function (id, classtype) {
  * @param id The id of the QuoteVersion Object that owns the content blocks
  */
 
-var contentBlocksAddTab= function (elem, id, classtype){
+var contentBlocksAddTab = function (elem, id, classtype) {
     var newId = new Date().getTime();
-    $("#content-blocks-wrapper").prepend(
-        '<div id="'  + (newId)+ '" class="content-blocks-tab">' +
+    $("#content-blocks-wrapper").append(
+        '<div id="' + (newId) + '" class="content-blocks-tab">' +
             '<span class="content-blocks tab-label">' +
                 '<i class="content-block-tab-handle fa fa-arrows"></i> ' +
-                '<h4 id="tab-label-'  + (newId)+ '" class="editable-tab"> New Tab </h4>' +
+                '<h4 id="tab-label-' + (newId) + '" class="editable-tab"> New Tab </h4>' +
                 '<span class="tab-delete icon-label"><i class="content-block-tab-actions fa fa-trash-o"></i> Delete Tab</span>' +
                 '<span class="tab-new icon-label"><i class="content-block-tab-actions fa fa-plus-circle"></i> Add Content</span>' +
             '</span>' +
@@ -63,7 +79,7 @@ var contentBlocksAddTab= function (elem, id, classtype){
  * @param id - Quote Version # passed from window.path
  */
 
-var contentBlocksNewTab = function (id, classtype) {
+var contentBlocksNewTab = function (id, classtype, hash) {
     // update server with new data
     var newId = new Date().getTime();
     $("#loader").css("display", "block");
@@ -78,14 +94,14 @@ var contentBlocksNewTab = function (id, classtype) {
         url: '/manage/contentblocks/tab/new/'+ id + '/' + classtype
     });
     //reload the window so changes are redrawn - its lazy non-ajaxy, but...
-    contentBlocksRefresh(id);
+    contentBlocksRefresh(id, hash);
 };
 
 /**
  * Reload the page that shows the content blocks and tabs
  * @param id
  */
-var contentBlocksRefresh = function(id){
+var contentBlocksRefresh = function(id, hash) {
     $.ajax({
         url: window.location.href,
         headers: {
@@ -94,7 +110,11 @@ var contentBlocksRefresh = function(id){
             "Cache-Control": "no-cache"
         }
     }).done(function () {
-        window.location.hash = 'site-content';
+        if ( hash === 'mode-edit' ) {
+            window.location.hash == hash;
+        } else {
+            window.location.hash = 'site-content';
+        };
         window.location.reload(true);
     });
 }
@@ -130,6 +150,21 @@ var doMDLpopup = function(t) {
         }
     });
 };
+
+//Update Content Block Image arrays for title field and weight
+var updateMediaWrapper = function(e) {
+    var items = [];
+    var weight = 1;
+    e.find('.existing-media-item').each( function(){
+        var id = $(this).find('img').attr('id');
+        var caption = $(this).find(".caption").val();
+        items.push([id, caption, weight]);
+        weight++;
+    });
+    var processed_items = JSON.stringify(items);
+    $(".media-placeholder").val(processed_items);
+
+}
 
 // Do lots of MDL stuff within a jQuery modal window
 $(document).on('focus', '.mdl-form-mimic .mdl-textfield__input', function () {

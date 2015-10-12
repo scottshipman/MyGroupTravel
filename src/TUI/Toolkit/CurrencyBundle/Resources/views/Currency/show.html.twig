@@ -1,21 +1,21 @@
 {% extends '::base.html.twig' %}
-{% block title %}Currency {{ entity.name }}{% endblock %}
-{% block page_title %}Currency {{ entity.name }}{% endblock %}
+{% block title %}{% trans %}currency.title.show{% endtrans %}{{ entity.name }}{% endblock %}
+{% block page_title %}{% trans %}currency.page_title.show{% endtrans %}{{ entity.name }}{% endblock %}
 
 {% block body -%}
 
     <table class="mdl-data-table mdl-js-data-table">
         <tbody>
             <tr>
-                <td class="mdl-data-table__cell--non-numeric th-mimic">Code (ID)</td>
+                <td class="mdl-data-table__cell--non-numeric th-mimic">{% trans %}currency.table.label.code{% endtrans %}</td>
                 <td class="mdl-data-table__cell--non-numeric">{{ entity.code }} ({{ entity.id }})</td>
             </tr>
             <tr>
-                <td class="mdl-data-table__cell--non-numeric th-mimic">HTML Symbol</td>
+                <td class="mdl-data-table__cell--non-numeric th-mimic">{% trans %}currency.table.label.symbol{% endtrans %}</td>
                 <td class="mdl-data-table__cell--non-numeric">{{ entity.htmlSymbol }}</td>
             </tr>
             <tr>
-                <td class="mdl-data-table__cell--non-numeric th-mimic">Name</td>
+                <td class="mdl-data-table__cell--non-numeric th-mimic">{% trans %}currency.table.label.name{% endtrans %}</td>
                 <td class="mdl-data-table__cell--non-numeric">{{ entity.name }}</td>
             </tr>
         </tbody>
@@ -24,12 +24,12 @@
         <ul class="record_actions">
     <li>
         <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_currency') }}">
-            <i class="fa fa-arrow-circle-left"></i> Back to the list
+            <i class="fa fa-arrow-circle-left"></i> {% trans %}currency.actions.back{% endtrans %}
         </a>
     </li>
     <li>
         <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_currency_edit', { 'id': entity.id }) }}">
-            <i class="fa fa-pencil-square-o"></i> Edit
+            <i class="fa fa-pencil-square-o"></i> {% trans %}currency.actions.edit{% endtrans %}
         </a>
     </li>
     <li>{{ form(delete_form) }}</li>

@@ -1,0 +1,46 @@
+#contentBlocksBundle/Resources/translations/messages.en.yml
+
+contentBlocks:
+      title:
+          edit: Edit Content Block
+          index: Manage Content Block
+          new: Create New Content Block
+          show: Content Block
+      page_title:
+          edit: Edit Content Block
+          index: Manage Content Block
+          new: Create New Content Block
+          show: Content Block
+
+      actions:
+          back: Back to the list
+          edit: Edit
+          create: Create
+          update: Update
+          upload: Click to upload
+          cancel: Cancel
+
+
+      table:
+          label:
+              name: Name (ID)
+              action: Actions
+              locked: Locked
+              hidden: Hidden
+              layout: Layout Type
+          actions:
+              view: View
+              edit: Edit
+
+      flash:
+          save: Content Block Saved -
+          delete: Content Block deleted -
+      placeholder:
+          title: New Content Block
+          header: New Header Block
+
+      upload_form:
+          title: Upload Images
+          caption_label: Caption
+          no_images: No images uploaded
+          new: New Images

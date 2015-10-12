@@ -1,0 +1,23 @@
+@mixin breakpoint_desktop() {
+
+  @media screen and (min-width: 1024px) {
+    @content;
+  }
+
+}
+
+@mixin breakpoint_tablet() {
+
+  @media screen and (min-width: 840px) {
+    @content;
+  }
+
+}
+
+@mixin breakpoint_phone() {
+
+  @media screen and (min-width: 480px) {
+    @content;
+  }
+
+}

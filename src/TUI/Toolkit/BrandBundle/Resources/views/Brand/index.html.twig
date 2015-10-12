@@ -17,7 +17,7 @@
                 <th class="mdl-data-table__cell--non-numeric">Division</th>
                 <th class="mdl-data-table__cell--non-numeric">Primary color</th>
                 <th class="mdl-data-table__cell--non-numeric">Secondary color</th>
-                <th class="mdl-data-table__cell--non-numeric">Special color</th>
+                {# <th class="mdl-data-table__cell--non-numeric">Special color</th> #}
                 <th class="mdl-data-table__cell--non-numeric center">Logo</th>
                 <th class="mdl-data-table__cell--non-numeric cell-actions">Actions</th>
             </tr>
@@ -30,8 +30,8 @@
                 </td>
                 <td class="mdl-data-table__cell--non-numeric">{{ entity.division }}</td>
                 <td class="mdl-data-table__cell--non-numeric center" style="background-color: {{ entity.primaryColor }}"></td>
-                <td class="mdl-data-table__cell--non-numeric center" style="background-color: {{ entity.buttonColor }}"></td>
-                <td class="mdl-data-table__cell--non-numeric center" style="background-color: {{ entity.hoverColor }}"></td>
+                <td class="mdl-data-table__cell--non-numeric center" style="background-color: {{ entity.secondaryColor }}"></td>
+                {# <td class="mdl-data-table__cell--non-numeric center" style="background-color: {{ entity.hoverColor }}"></td> #}
                 <td class="mdl-data-table__cell--non-numeric center logo">
                     {% if entity.media %}
                         <img src="{{ asset(".." ~ entity.media.getRelativePath ~ "/" ~ entity.media.getHashedFilename ) }}" alt="{{ entity.name }}">

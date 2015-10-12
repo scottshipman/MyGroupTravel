@@ -67,6 +67,10 @@
 
                 <div class="page-title">
                     <h1>{% block page_title %}{% endblock %}</h1>
+
+                    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                        {% block page_title_menu %}{% endblock %}
+                    {% endif %}
                 </div>
               </div>
             </div><!-- header -->
@@ -98,7 +102,7 @@
 
 </div><!-- toolkit-layout -->
 
-<div id="loader"><img src="{{ asset('bundles/quote/images/loader.gif') }}"></div>
+<div id="loader"><i class="loader-icon fa fa-spinner fa-pulse"></i></div>
 
 {% javascripts '@AppBundle/Resources/assets/js/dropzone.js' '@ckeditorcustomsettings' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>

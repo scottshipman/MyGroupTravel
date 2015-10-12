@@ -27,12 +27,12 @@ class InstitutionType extends AbstractType
     {
       switch ($this->locale){
         case 'en_GB.utf8':
-          $city_label = 'Town';
+          $regional_label = 'institution.form.label.county';
           $regional_field = 'county';
           $zip_label = "Post code";
           break;
         default:
-          $city_label = 'City';
+          $regional_label = 'institution.form.label.state';
           $regional_field = 'state';
           $zip_label = "Zipcode";
           break;
@@ -40,26 +40,38 @@ class InstitutionType extends AbstractType
 
 
         $builder
-            ->add('name')
+            ->add('name', 'text', array(
+              'label' => 'institution.form.label.name',
+              'translation_domain'  => 'messages',
+            ))
             ->add('address1','text', array(
               'required' => false,
+              'label' => 'institution.form.label.address1',
+              'translation_domain'  => 'messages',
             ))
             ->add('address2', 'text', array(
               'required' => false,
+              'label' => 'institution.form.label.address2',
+              'translation_domain'  => 'messages',
             ))
             ->add('city', 'text', array(
               'required' => true,
-              'label' => $city_label
+              'label' => 'institution.form.label.city',
+              'translation_domain'  => 'messages',
             ))
             ->add($regional_field, 'text', array(
               'required' => false,
+              'label' => $regional_label,
             ))
             ->add('postCode', 'text', array(
               'required' => true,
-              'label' => $zip_label
+              'label' => 'institution.form.label.post_code',
+              'translation_domain'  => 'messages',
             ))
             ->add('country', 'text', array(
               'required' => false,
+              'label' => 'institution.form.label.country',
+              'translation_domain'  => 'messages',
             ))
             ->add('media', 'hidden', array(
                 'required' => false,

@@ -76,7 +76,7 @@ class BoardBasisController extends Controller
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('boardBasis.actions.create')));
 
         return $form;
     }
@@ -165,7 +165,7 @@ class BoardBasisController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('boardBasis.actions.update')));
 
         return $form;
     }
@@ -240,7 +240,7 @@ class BoardBasisController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('_manage_boardbasis_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->add('submit', 'submit', array('label' => $this->get('translator')->trans('boardBasis.actions.delete')))
             ->getForm()
         ;
     }

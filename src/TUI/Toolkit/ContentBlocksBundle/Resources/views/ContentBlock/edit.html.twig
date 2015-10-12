@@ -1,27 +1,32 @@
-
+{# No base! #}
 
 <h2 id="edit-title-{{ entity.id }}">{{ entity.title }}</h2>
 
 <div class="media-wrapper">
 
-    <div class="existing-media-wrapper">
-        <div class="mdl-label-mimic"><label>Uploaded Images</label></div>
-        {% if entity.media %}
-            {% for media in collection %}
+    <div class="existing-media-wrapper sortable-images">
+        <div class="mdl-label-mimic"><label>{% trans %}contentBlocks.upload_form.title{% endtrans %}</label></div>
+        {% if entity.mediaWrapper %}
+            {% for mediaWrapper in collection %}
+                {% for media in mediaWrapper.media %}
                 <div class="existing-media-item">
-                    <img id="{{ media.id }}"
-                         src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">
-                    <a id="media-existing-delete" class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a>
+                    <img id="{{ media.id }}" src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}" title="{{ mediaWrapper.title }}" alt="{{ mediaWrapper.title }}">
+                    <a class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a>
+                    <div style="display: none" class="caption-textfield mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="caption mdl-textfield__input" type="text" data="{{ mediaWrapper.id }}" value="{{ mediaWrapper.title }}" name="caption" id="{{ mediaWrapper.id }}-caption">
+                        <label class="mdl-textfield__label" for="{{ mediaWrapper.id }}">{% trans %}contentBlocks.upload_form.caption_label{% endtrans %}</label></div>
+                    <div id="{{ mediaWrapper.id }}-label" style="display: none" class="caption-label mdl-textfield mdl-js-textfield mdl-textfield--floating-label"></div>
                 </div>
+                {% endfor %}
             {% endfor %}
         {% else %}
-            <p class="none">No images uploaded.</p>
+            <p class="none">{% trans %}contentBlocks.upload_form.no_images{% endtrans %}</p>
         {% endif %}
     </div>
 
     <div class="new-media-wrapper">
 
-        <div class="mdl-label-mimic"><label>New Images</label></div>
+        <div class="mdl-label-mimic"><label>{% trans %}contentBlocks.upload_form.new{% endtrans %}</label></div>
 
         <div id="avatar-label">
             <div style="display: none;" id="dropzone-form-close"><i class="fa fa-times-circle"></i></div>
@@ -32,7 +37,7 @@
         <div id="user_media">
             <span class="media-placeholder-image new">
                 <i class="fa fa-picture-o fa-3x"></i>
-                <span>Click to upload</span>
+                <span>{% trans %}contentBlocks.actions.upload{% endtrans %}</span>
             </span>
         </div>
 
@@ -48,7 +53,7 @@
     // Wait for the DOM to be loaded
     $(document).ready(function() {
         // Add a cancel button
-        $('.button-row').append('<a href="#" id="cancel-reload" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Cancel</a>');
+        $('.ajax_contentblocks_form').find('.button-row').append('<a href="#" id="cancel-reload" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">{% trans %}contentBlocks.actions.cancel{% endtrans %}</a>');
 
         // Change the h2's title when editing the title
         $('#tui_toolkit_contentblocksbundle_contentblock_title').on( 'blur change paste keyup input', function() {
@@ -115,28 +120,21 @@
             },
             success: function(response) {
                 if ( $('.mode-toggle').hasClass('mode-edit') ) { // If on preview page
-                    var blockID = {{ entity.id }};
-                    var objectID = $('.mode-toggle').attr('id').substring(14);
-                    var editBlock = $("#editable-content-blocks-" + blockID);
-                    var previewBlock = $("#previewable-content-blocks-" + blockID);
-                    if ($("main").hasClass("Tour"))
-                    {
-                        var classtype = "Tour";
-                    }
-                    else {
-                        var classtype = "QuoteVersion";
-                    }
+                    var blockId = {{ entity.id }};
+                    var entityId = $('.site-show').attr('entityId');
+                    var entityClass = $('.site-show').attr('entityClass');
+                    var editBlock = $("#editable-content-blocks-" + blockId);
+                    var previewBlock = $("#previewable-content-blocks-" + blockId);
                     // Match routing path "/manage/contentblocks/{id}/show/{quoteVersion}/{class}"
-                    // TODO must not hardcode QuoteVersion in path below - need to accept any class type
-                    previewBlock.load('/manage/contentblocks/' + blockID + '/show/' + objectID + '/' + classtype, function() {
+                    previewBlock.load('/manage/contentblocks/' + blockId + '/show/' + entityId + '/' + entityClass, function() {
                         $("#loader").css("display", "none");
                         $('.item-edit').show(); // re-show ALL edit buttons for all content blocks
                         $('.add-content-block').show() // re-show ALL Add Block's for all tabs
-                        $('#content-blocks-' + blockID).removeClass('site-content-blocks-size-full site-content-blocks-size-half');
+                        $('#content-blocks-' + blockId).removeClass('site-content-blocks-size-full site-content-blocks-size-half');
                         if ( $('#tui_toolkit_contentblocksbundle_contentblock_doubleWidth').is(':checked') ) {
-                            $('#content-blocks-' + blockID).addClass('site-content-blocks-size-full');
+                            $('#content-blocks-' + blockId).addClass('site-content-blocks-size-full');
                         } else {
-                            $('#content-blocks-' + blockID).addClass('site-content-blocks-size-half');
+                            $('#content-blocks-' + blockId).addClass('site-content-blocks-size-half');
                         };
                         editBlock.html('');
                     });
@@ -150,7 +148,7 @@
 </script>
 
 <script>
-    $(document).on('click', '#media-existing-delete', function (e) {
+    $(document).on('click', '.existing-delete', function (e) {
         e.preventDefault();
         var remove = $(this).parent().find('img').attr('id');
         var value = $(".media-placeholder").val();
@@ -166,7 +164,35 @@
         $(this).parent().remove();
     });
 
-    {# Dropzone.autoDiscover = false; #}
+    //Get the caption and weight fields and push them to the associative array
+    $(document).on('change', 'input', function() {
+        updateMediaWrapper($(".existing-media-wrapper"));
+    });
+
+
+    //Sortable images for content blocks
+    $(".sortable-images").sortable({
+        containment: "parent",
+        items: "> div.existing-media-item",
+        // handle: ".move",
+        tolerance: "pointer",
+        cursor: "move",
+        opacity: 0.7,
+        revert: 300,
+        delay: 150,
+        dropOnEmpty: true,
+//        placeholder: "tabs-placeholder",
+        start: function (e, ui) {
+            ui.placeholder.height(ui.helper.outerHeight());
+        },
+        stop: function (e, ui) {
+            updateMediaWrapper($(".existing-media-wrapper"));
+        },
+        axis: 'x,y'
+
+    });
+
+    // Dropzone.autoDiscover = false;
 
     $('#dropzone_form').dropzone({
         maxFiles: 1,
@@ -176,28 +202,25 @@
             var value = $(".media-placeholder").val();
             var values = [];
             if ( value != 0 ) {
-                values = value.split(',').map(Number);
+                $(".caption-textfield").css({"display":"block"});
+                $(".caption-label").css({"display":"block"});
+                $(".sortable-images").sortable("enable");
+                updateMediaWrapper($(".existing-media-wrapper"));
                 if (values.length >= 15) {
                     $(".new-media-wrapper").css({"display": "none"});
                 }
             }
             this.on("success", function (file, response) {
-                if ($(".media-placeholder").val().length > 0) {
-                    var value = $(".media-placeholder").val();
-                    var values = [];
-                    if ( value != 0 ) {
-                        values = value.split(',').map(Number);
-                        values.push(response.id);
-                        if (values.length >= 15) {
-                            $(".new-media-wrapper").css({"display": "none"});
-                        }
-                    }
-                    $(".media-placeholder").val(values);
-                } else {
-                    $(".media-placeholder").val(response.id);
-                }
                 $('.existing-media-wrapper').find('.none').hide();
-                $('.existing-media-wrapper').append('<div class="existing-media-item"><img id="' + response.id + '" src="' + response.relativepath + '/' + response.filename + '"><a class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a></div>');
+                $('.existing-media-wrapper').append('<div class="existing-media-item"><img id="' + response.id + '" src="' + response.relativepath + '/' + response.filename + '">' +
+                '<a class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a>' +
+                '<div id="'+ response.id +'"class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">' +
+                '<input class="caption mdl-textfield__input" type="text" data="'+ response.id +'" name="caption" id="'+ response.id + '-caption">' +
+                '<label class="mdl-textfield__label" for="'+ response.id + '">{% trans %}contentBlocks.upload_form.caption{% endtrans %}</label></div>' +
+                '<div id="'+ response.id +'"class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">' +
+                '</div></div>');
+                $('.mdl-textfield').css({'display': 'block'});
+                updateMediaWrapper($(".existing-media-wrapper"));
             });
             this.on("complete", function (file, response) {
                 this.removeFile(file);

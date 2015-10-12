@@ -8,6 +8,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use TUI\Toolkit\TourBundle\Entity\Tour;
 use TUI\Toolkit\QuoteBundle\Entity\QuoteVersion;
+use TUI\Toolkit\TourBundle\Form\ContactOrganizerType;
+use TUI\Toolkit\UserBundle\Controller\UserController;
 use TUI\Toolkit\TourBundle\Form\TourType;
 use TUI\Toolkit\PermissionBundle\Entity\Permission;
 use TUI\Toolkit\PermissionBundle\Controller\PermissionService;
@@ -38,7 +40,7 @@ class TourController extends Controller
      * Lists all Tour entities.
      *
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         // hide columns from the screen display
         $hidden = array(
@@ -49,6 +51,7 @@ class TourController extends Controller
             'organizer.firstName',
             'organizer.lastName',
             'organizer.email',
+            'salesAgent_full',
             'salesAgent.firstName',
             'salesAgent.lastName',
             'salesAgent.email',
@@ -118,7 +121,35 @@ class TourController extends Controller
                 return $action;
             }
         );
+        // Lock actions are only available to admins
+        $lockAction->setRole('ROLE_ADMIN');
         $grid->addRowAction($lockAction);
+
+        // Change Row Color if locked
+        $source->manipulateRow(
+            function($row){
+                if ($row->getField('locked') ==true){
+                    $row->setColor('#ddd');
+                    $row->setClass('locked');
+                }
+                return $row;
+            }
+        );
+        $emailAction = new RowAction('Email', 'manage_tour_notify_organizers_form');
+        $emailAction->setRole('ROLE_ADMIN');
+        $grid->addRowAction($emailAction);
+
+        // add business admin last name filter
+        $column = $grid->getColumn('salesAgent.lastName');
+        $column->setFilterable(true);
+        $column->setTitle('Primary Business Admin (Last Name)');
+        $column->setOperatorsVisible(false);
+
+        // add organizer last name filter
+        $column = $grid->getColumn('organizer.lastName');
+        $column->setFilterable(true);
+        $column->setTitle('Organizer (Last Name)');
+        $column->setOperatorsVisible(false);
 
         // Set the default order of the grid
         $grid->setDefaultOrder('created', 'DESC');
@@ -129,6 +160,20 @@ class TourController extends Controller
         //set no data message
         $grid->setNoDataMessage("There are no tours to show. Please check your filter settings and try again.");
 
+        //set default filter value
+        $match_route = $this->generateUrl('manage_tour');
+        $referer = $request->headers->get('referer');
+        if (strpos($referer, $match_route) === false ) { // only set default filter if referer is not itself, ie reset button
+          $usr = $this->get('security.context')->getToken()->getUser();
+          $lastName = $usr->getLastName();
+          $filters = array(
+            'salesAgent.lastName' => array(
+              'operator' => 'like',
+              'from' => $lastName
+            )
+          );
+          $grid->setDefaultFilters($filters);
+        }
 
         // Export of the grid
         $grid->addExport(new CSVExport("Tours as CSV", "activeTours", array('delimiter' => ','), "UTF-8", "ROLE_BRAND"));
@@ -144,7 +189,7 @@ class TourController extends Controller
      * Lists all Deleted Tours
      *
      */
-    public function deletedAction()
+    public function deletedAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $filters = $em->getFilters();
@@ -159,6 +204,7 @@ class TourController extends Controller
           'organizer.firstName',
           'organizer.lastName',
           'organizer.email',
+          'salesAgent_full',
           'salesAgent.firstName',
           'salesAgent.lastName',
           'salesAgent.email',
@@ -212,6 +258,17 @@ class TourController extends Controller
         $restoreAction = new RowAction('Restore', 'manage_tour_restore');
         $grid->addRowAction($restoreAction);
 
+        // add business admin last name filter
+        $column = $grid->getColumn('salesAgent.lastName');
+        $column->setFilterable(true);
+        $column->setTitle('Primary Business Admin (Last Name)');
+        $column->setOperatorsVisible(false);
+
+        // add organizer last name filter
+        $column = $grid->getColumn('organizer.lastName');
+        $column->setFilterable(true);
+        $column->setTitle('Organizer (Last Name)');
+        $column->setOperatorsVisible(false);
 
         // Set the default order of the grid
         $grid->setDefaultOrder('created', 'DESC');
@@ -222,6 +279,21 @@ class TourController extends Controller
         //set no data message
         $grid->setNoDataMessage("There are no deleted tours to show. Please check your filter settings and try again.");
 
+        //set default filter value
+        $match_route = $this->generateUrl('manage_tour_deleted');
+        $referer = $request->headers->get('referer');
+        if (strpos($referer, $match_route) === false ) { // only set default filter if referer is not itself, ie reset button
+
+          $usr = $this->get('security.context')->getToken()->getUser();
+          $lastName = $usr->getLastName();
+          $filters = array(
+            'salesAgent.lastName' => array(
+              'operator' => 'like',
+              'from' => $lastName
+            )
+          );
+          $grid->setDefaultFilters($filters);
+        }
 
         // Export of the grid
         $grid->addExport(new CSVExport("Deleted Tours as CSV", "deletedTours", array('delimiter' => ','), "UTF-8", "ROLE_BRAND"));
@@ -361,6 +433,19 @@ class TourController extends Controller
      */
     public function showAction($id)
     {
+        $editable = FALSE;
+        $permission = array();
+
+        $securityContext = $this->get('security.context');
+        $user = $securityContext->getToken()->getUser();
+        if ($user != 'anon.') {
+            $permission = $this->get("permission.set_permission")->getPermission($id, 'tour', $user->getId());
+        }
+
+        if ($securityContext->isGranted('ROLE_BRAND') || in_array('organizer', $permission)) {
+          $editable = TRUE;
+        }
+
         $em = $this->getDoctrine()->getManager();
 
         $locale = $this->container->getParameter('locale');
@@ -409,6 +494,7 @@ class TourController extends Controller
             'collection' => $collection,
             'items' => $items,
             'tabs' => $tabs,
+            'editable' => $editable,
         ));
     }
 
@@ -960,6 +1046,130 @@ class TourController extends Controller
         return $this->render('TourBundle:Tour:notSetup.html.twig', array(
             'entity' => $entity,
         ));
+
+    }
+
+    /**
+     * Creates a form to make a change request to a QuoteVersion entity.
+     *
+     * @param QuoteVersion $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+
+    public function createNotifyOrganizerFormAction($id)
+    {
+        $locale = $this->container->getParameter('locale');
+        $notifyForm = $this->createForm(new ContactOrganizerType($locale), array(), array(
+            'action' => $this->generateUrl('manage_tour_notify_organizers', array('id' => $id)),
+            'method' => 'POST',
+        ));
+
+        $notifyForm->add('submit', 'submit', array('label' => 'Send'));
+
+        return $notifyForm;
+
+    }
+
+    public function newNotifyOrganizerAction($id)
+    {
+        $notifyForm = $this->createNotifyOrganizerFormAction($id);
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('TourBundle:Tour')->find($id);
+        $locale = $this->container->getParameter('locale');
+        $date_format = $this->container->getParameter('date_format');
+
+
+        return $this->render('TourBundle:Tour:contactorganizer.html.twig', array(
+            'notify_form' => $notifyForm->createView(),
+            'entity' => $entity,
+            'locale' => $locale,
+            'date_format' => $date_format,
+        ));
+    }
+
+    public function organizerNotifyAction(Request $request, $id)
+    {
+
+        $locale = $this->container->getParameter('locale');
+        $date_format = $this->container->getParameter('date_format');
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('TourBundle:Tour')->find($id);
+
+        $notifyForm = $this->createNotifyOrganizerFormAction($id);
+        $notifyForm->handleRequest($request);
+        $additional = $notifyForm->get('message')->getData();
+
+        $organizerEmail = $entity->getOrganizer()->getEmail();
+        $BusinessPersonId = $entity->getSalesAgent()->getId();
+
+        $agent = $em->getRepository('TUIToolkitUserBundle:User')->find($BusinessPersonId);
+
+        //get brand stuff
+        $brand = $em->getRepository('BrandBundle:Brand')->findAll();
+        $brand = $brand[0];
+
+        $departure = $entity->getDepartureDate();
+        $tourName = $entity->getName();
+
+        if ($entity->getOrganizer()->isEnabled() == true) {
+
+            $message = \Swift_Message::newInstance()
+                ->setSubject('Set Up Your Tour')
+                ->setFrom('Notify@Toolkit.com')
+                ->setTo($organizerEmail)
+                ->setBody(
+                    $this->renderView(
+                        'TourBundle:Emails:organizermessage.html.twig',
+                        array(
+                            'brand' => $brand,
+                            'entity' => $entity,
+                            'departure' => $departure,
+                            'tour_name' => $tourName,
+                            'additional' => $additional,
+                            'locale' => $locale,
+                            'date_format' => $date_format,
+                            'agent' => $agent,
+                        )
+                    ), 'text/html');
+        }
+
+        elseif($entity->getOrganizer()->isEnabled() == false){
+            $user = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
+            // Create token
+            $tokenGenerator = $this->container->get('fos_user.util.token_generator');
+
+            //Get some user info
+            $user->setConfirmationToken($tokenGenerator->generateToken());
+
+            $message = \Swift_Message::newInstance()
+                ->setSubject('Set Up Your Tour')
+                ->setFrom('Notify@Toolkit.com')
+                ->setTo($organizerEmail)
+                ->setBody(
+                    $this->renderView(
+                        'TourBundle:Emails:organizersetupmessage.html.twig',
+                        array(
+                            'brand' => $brand,
+                            'entity' => $entity,
+                            'user' => $user,
+                            'additional' => $additional,
+                            'agent' => $agent,
+                            'locale' => $locale,
+                            'date_format' => $date_format,
+
+                        )
+                    ), 'text/html');
+        }
+
+        $em->persist($entity);
+        $em->flush();
+        $this->get('mailer')->send($message);
+        $this->get('session')->getFlashBag()->add('notice', 'Your Message has been sent to '. $organizerEmail);
+
+
+        return $this->redirect($this->generateUrl('_manage_tour_home', array('id' => $id)));
 
     }
 }

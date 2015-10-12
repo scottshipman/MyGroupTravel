@@ -26,7 +26,9 @@ class ContentBlockType extends AbstractType
       if(strpos($options['action'], '/header/')===false) {
 
         $builder
-          ->add('title')
+          ->add('title', 'text', array(
+            'data' => 'New Content Block'
+          ))
           ->add('body', 'ckeditor', array());
 
       }
@@ -64,7 +66,7 @@ class ContentBlockType extends AbstractType
                 ));
               }
             $builder
-              ->add('media', 'hidden', array(
+              ->add('mediaWrapper', 'hidden', array(
                 'required' => false,
 //                'data_class' => 'TUI\Toolkit\MediaBundle\Entity\Media',
                 'attr' => array(

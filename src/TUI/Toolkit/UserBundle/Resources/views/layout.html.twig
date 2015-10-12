@@ -3,16 +3,16 @@
 {% block title %}
     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
        {#  Welcome {{ app.user.username }} #}
-        My Tours
+        {% trans %}user.title.layout_auth{% endtrans %}
     {% else %}
-        User Login
+        {% trans %}user.title.layout_anon{% endtrans %}
     {% endif %}
 {% endblock %}
 {% block page_title %}
     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-        My Tours {# Put menu item here #}
+        {% trans %}user.title.layout_auth{% endtrans %} {# Put menu item here #}
     {% else %}
-        User Login
+        {% trans %}user.title.layout_anon{% endtrans %}
     {% endif %}
 {% endblock %}
 
@@ -20,9 +20,9 @@
     <div class="login-block">
 
         {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-            {%  if 'resetting/' in app.request.pathinfo  %} <h2>Reset Password</h2>
+            {%  if 'resetting/' in app.request.pathinfo  %} <h2>{% trans %}user.profile.login.reset{% endtrans %}</h2>
                 {% else %}
-                <h2>Sign In</h2>
+                <h2>{% trans %}user.profile.login.sign_in{% endtrans %}</h2>
             {% endif %}
         {% endif %}
 
@@ -43,7 +43,7 @@
 
         {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
             <div class="login-reset">
-             {%  if not ('resetting/' in app.request.pathinfo)  %}   <a href="{{ path('fos_user_resetting_request') }}">Forgot password?</a>{% endif %}
+             {%  if not ('resetting/' in app.request.pathinfo)  %}   <a href="{{ path('fos_user_resetting_request') }}">{% trans %}user.profile.login.forgot{% endtrans %}</a>{% endif %}
             </div>
           {% endif %}
 

@@ -7,16 +7,15 @@
 
 {% block body -%}
 
-
     {{ form_start(edit_form) }}
 
-    {{ form_row(edit_form.quoteReference.institution) }}
+   {% if template is null%} {{ form_row(edit_form.quoteReference.institution) }} {% endif %}
     {{ form_row(edit_form.quoteReference.name) }}
     {{ form_row(edit_form.quoteNumber) }}
     {{ form_row(edit_form.name) }}
-    {{ form_row(edit_form.quoteReference.organizer) }}
-    {{ form_row(edit_form.quoteReference.salesAgent) }}
-    {{ form_row(edit_form.quoteReference.secondaryContact) }}
+   {% if template is null %} {{ form_row(edit_form.quoteReference.organizer) }} {% endif %}
+     {{ form_row(edit_form.quoteReference.salesAgent) }}
+   {% if template is null%}  {{ form_row(edit_form.quoteReference.secondaryContact) }}{% endif %}
     {{ form_rest(edit_form) }}
 
     {{ form_end(edit_form) }}

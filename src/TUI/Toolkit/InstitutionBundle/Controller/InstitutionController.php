@@ -61,10 +61,10 @@ class InstitutionController extends Controller
         $grid->setLimits(array(10, 25, 50, 100));
 
         //set no data message
-        $grid->setNoDataMessage("There are no Institutions to show. Please check your filter settings and try again.");
+        $grid->setNoDataMessage($this->get('translator')->trans('institution.grid.no_result'));
 
         // Export of the grid
-        $grid->addExport(new CSVExport("Institutions as CSV", "currentInstitutions", array('delimiter' => ','), "UTF-8", "ROLE_BRAND"));
+        $grid->addExport(new CSVExport($this->get('translator')->trans('institution.grid.export'), "currentInstitutions", array('delimiter' => ','), "UTF-8", "ROLE_BRAND"));
 
         // Manage the grid redirection, exports and the response of the controller
         return $grid->getGridResponse('InstitutionBundle:Institution:index.html.twig');
@@ -118,10 +118,10 @@ class InstitutionController extends Controller
         $grid->setLimits(array(10, 25, 50, 100));
 
         //set no data message
-        $grid->setNoDataMessage("There are no Deleted Institutions to show. Please check your filter settings and try again.");
+        $grid->setNoDataMessage($this->get('translator')->trans('institution.grid.no_result_deleted'));
 
         // Export of the grid
-        $grid->addExport(new CSVExport("Deleted Institutions as CSV", "deletedInstitutions", array('delimiter' => ','), "UTF-8", "ROLE_BRAND"));
+        $grid->addExport(new CSVExport($this->get('translator')->trans('institution.grid.export_deleted'), "deletedInstitutions", array('delimiter' => ','), "UTF-8", "ROLE_BRAND"));
 
         // Manage the grid redirection, exports and the response of the controller
         return $grid->getGridResponse('InstitutionBundle:Institution:deleted.html.twig');
@@ -155,7 +155,7 @@ class InstitutionController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-            $this->get('session')->getFlashBag()->add('notice', 'Institution Saved: ' . $entity->getName());
+            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('institution.flash.save') . $entity->getName());
 
             return $this->redirect($this->generateUrl('manage_institution_show', array('id' => $entity->getId())));
         }
@@ -210,7 +210,7 @@ class InstitutionController extends Controller
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('institution.actions.create')));
 
         return $form;
     }
@@ -234,7 +234,7 @@ class InstitutionController extends Controller
           ),
     ));
 
-    $form->add('submit', 'submit', array('label' => 'Create'));
+    $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('institution.actions.create')));
 
     return $form;
   }
@@ -331,7 +331,7 @@ class InstitutionController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('institution.actions.update')));
 
         return $form;
     }
@@ -369,7 +369,7 @@ class InstitutionController extends Controller
 
         if ($editForm->isValid()) {
             $em->flush();
-            $this->get('session')->getFlashBag()->add('notice', 'Institution Saved: ' . $entity->getName());
+            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('institution.flash.save') . $entity->getName());
 
             return $this->redirect($this->generateUrl('manage_institution'));
         }
@@ -402,13 +402,13 @@ class InstitutionController extends Controller
             // todo check for tours or other objects that might apply
             $quotes = $em->getRepository('QuoteBundle:Quote')->findOneBy(array('institution' => $entity->getId()));
             if($quotes){
-              $this->get('session')->getFlashBag()->add('error', 'Unable to delete the Institution because it is associated with Quotes');
+              $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('institution.flash.cant_delete'));
               return $this->redirect($this->generateUrl('manage_institution'));
             }
 
             $em->remove($entity);
             $em->flush();
-            $this->get('session')->getFlashBag()->add('notice', 'Institution Deleted: ' . $entity->getName());
+            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('institution.flash.delete') . $entity->getName());
         }
 
         return $this->redirect($this->generateUrl('manage_institution'));
@@ -426,7 +426,7 @@ class InstitutionController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('manage_institution_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->add('submit', 'submit', array('label' => $this->get('translator')->trans('institution.actions.delete')))
             ->getForm();
     }
 
@@ -448,13 +448,13 @@ class InstitutionController extends Controller
         // todo check for tours or other objects that might apply
         $quotes = $em->getRepository('QuoteBundle:Quote')->findOneBy(array('institution' => $entity->getId()));
         if($quotes){
-          $this->get('session')->getFlashBag()->add('error', 'Unable to delete the Institution because it is associated with Quotes');
+          $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('institution.flash.cant_delete'));
           return $this->redirect($this->generateUrl('manage_institution'));
         }
 
         $em->remove($entity);
         $em->flush();
-        $this->get('session')->getFlashBag()->add('notice', 'Institution Deleted: ' . $entity->getname());
+        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('institution.flash.delete') . $entity->getname());
 
         return $this->redirect($this->generateUrl('manage_institution'));
     }
@@ -478,7 +478,7 @@ class InstitutionController extends Controller
         $entity->setDeleted(NULL);
         $em->persist($entity);
         $em->flush();
-        $this->get('session')->getFlashBag()->add('notice', 'Institution Restored: ' . $entity->getname());
+        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('institution.flash.restore') . $entity->getname());
 
         return $this->redirect($this->generateUrl('manage_institution'));
     }

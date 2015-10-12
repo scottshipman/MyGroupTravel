@@ -20,16 +20,13 @@
   .tui-image-avatar,
   .tui-text-avatar {
     float: left;
-    margin: 0 0.5em 0.25em 0;
-
-    .pdf-layout & {
-      display: none;
-    }
-
+    margin: 0 0.5em 0 0;
   }
 
   .agent {
     display: block;
+    min-height: 48px;
+    padding: 4px 0; // To make it the same height as avatar @ 2 lines
   }
 
   .quote-info {
@@ -73,6 +70,11 @@
   @include span-all();
   width: 100%;
 
+  .pdf-layout & {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
   .footer-left-section ~ &,
   .footer-right-section ~ & {
     margin-top: 1em;
@@ -80,14 +82,25 @@
 
 }
 
+.footer-left-section,
+.footer-right-section {
+  @include span-all();
+}
+
 .footer-left-section {
-  float: left;
-  width: $column_total_width * 3;
-  padding: 0 $column_gutter_width;
+
+  @include breakpoint_tablet() {
+    float: left;
+    width: $column_total_width * 3;
+  }
+
 }
 
 .footer-right-section {
-  float: right;
-  width: $column_total_width;
-  padding: 0 $column_gutter_width;
+
+  @include breakpoint_tablet() {
+    float: right;
+    width: $column_total_width;
+  }
+
 }

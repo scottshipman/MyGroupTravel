@@ -9,7 +9,7 @@ if ( typeof CKEDITOR != 'undefined' ) {
         // Define changes to default configuration here. For example:
 
         config.stylesSet = [
-            {"name": "Normal Text", "element": "p", "styles": {"class": " "}},
+            {"name": "Normal Text", "element": "p", "styles": {"color": "rgba(0, 0, 0, 0.87)"}},
             {"name": "Blue Text", "element": "p", "styles": {"color": "#26a"}},
             {"name": "Orange Text", "element": "p", "styles": {"color": "#ea7200"}},
             {'name': "Green Text", "element": "p", "styles": {"color": "#92b73e"}},

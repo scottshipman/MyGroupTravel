@@ -1,19 +1,31 @@
 .tour-edit {
-  margin-bottom: 2em;
-  max-width: 525px;
   width: auto;
+  margin-bottom: $element-bottom;
+
+  .mdl-card__supporting-text {
+    width: auto;
+  }
+
+  .mdl-card__supporting-text.mdl-card--border {
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
 }
 
 .payment_task {
   list-style-type: none;
   margin: 0;
   padding: 0;
+
   li {
     display: inline;
+
     .mdl-textfield {
       width: 135px;
     }
+
   }
+
 }
 
 .new_payment_task {
@@ -29,33 +41,38 @@
   }
 }
 
+.tour-show-wrapper {
+  @include clear-fix();
+
+  @include breakpoint_tablet() {
+    margin-left: -$column_gutter_width_reset;
+    width: $column_total_width_reset;
+  }
+
+}
+
 .tour-show-left-column {
-  float: left;
-  min-width: 300px;
-  padding-right: 30px;
-  margin-top: 20px;
-  margin-bottom: 40px;
+  margin-top: $element-bottom;
   position: relative;
-  z-index: 5;
+
+  @include breakpoint_tablet() {
+    padding: 0 $column_gutter_width;
+    float: left;
+    width: $column_total_width * 2;
+  }
 
   .tour-show-submenu {
     list-style: none;
-
+    padding-left: 0;
   }
 
   .tour-edit-organizer-left {
-    float: left;
-
-    label {
-      font-size: 11px;
-      color: #ccc;
-      float: left;
-    }
 
     .tui-text-avatar,
     .tui-image-avatar {
-      float: left;
+      @include inline-block-vertical();
     }
+
   }
 
   label {
@@ -64,42 +81,44 @@
   }
 
   .add-organizer {
-    color: #ccc;
-    display: inline;
-    float: left;
 
-    &:after {
-      content: 'Add/remove organizers';
-      display: inline-block;
-      border: 1px solid #ccc;
-      padding: 5px;
-      margin-left: 10px;
+    .add-icon {
+      font-size: 36px;
+      line-height: 48px;
+      width: 48px;
+      color: #fff;
+      background: #ccc;
+      border-radius: 24px;
+      text-align: center;
     }
+
+    &.mdl-button {
+      vertical-align: top;
+      position: relative;
+      top: 6px;
+    }
+
   }
+
 }
 
 .tour-show-right-column {
-  margin-top: -50px;
+  margin-top: $element-bottom;
   position: relative;
-  float: right;
   z-index: 5;
 
-  .tour-task {
-    color: #ccc;
+  @include breakpoint_tablet() {
+    margin-top: -50px;
+    float: right;
+    width: $column_total_width * 2;
   }
 
-  i {
-    display: inline;
-  }
-
-  p {
-    margin-left: 10px;
-    display: inline;
+  @include breakpoint_desktop() {
+    width: $column_total_width;
   }
 
   a {
-    margin-left: 10px;
-    display: inline;
     text-decoration: none;
   }
+
 }

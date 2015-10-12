@@ -99,3 +99,36 @@
   }
 
 }
+
+.notify-organizer{
+  width: 85%;
+  position: relative;
+  margin: 0 auto;
+
+  .left-column{
+    position: relative;
+    float: left;
+    width: 50%;
+  }
+
+  .right-column{
+    position: relative;
+    float: right;
+    width: 50%;
+  }
+
+  .message {
+    float: left;
+    width: 100%;
+
+    .mdl-textfield {
+      position: relative;
+      font-size: 16px;
+      display: inline-block;
+      box-sizing: border-box;
+      width: 100%;
+      margin: 0;
+      padding: 20px 0;
+    }
+  }
+}

@@ -59,6 +59,14 @@ tui_toolkit_tour:
     resource: "@TourBundle/Resources/config/routing.yml"
     prefix:   /
 
+tui_toolkit_media:
+    resource: "@MediaBundle/Resources/config/routing/media.yml"
+    prefix:   /manage/media
+
+tui_toolkit_mediawrapper:
+    resource: "@MediaBundle/Resources/config/routing/mediawrapper.yml"
+    prefix:   /manage/mediawrapper
+
 # temporary routes until real ones are implemented
 # @todo REMOVE THESE WITH REAL FUNCTIONALITY LATER
 
@@ -71,15 +79,9 @@ _tui_toolkit_reports_opportunity:
 _tui_toolkit_manage_company_currency:
   path: /
 
-
-## This is for Sonata Media Bundle
-#gallery:
-#    resource: '@SonataMediaBundle/Resources/config/routing/gallery.xml'
-#    prefix: uploads/static/media/gallery
-#
-#media:
-#    resource: '@SonataMediaBundle/Resources/config/routing/media.xml'
-#    prefix: uploads/static/media
+_ckeditor_upload:
+   path:     /_ckeditor/upload
+   defaults: { _controller: "AppBundle:Default:ckeditorUpload" }
 
 oneup_uploader:
     resource: /static
@@ -88,10 +90,8 @@ oneup_uploader:
 genemu_image:
     resource: "@GenemuFormBundle/Resources/config/routing/image.xml"
 
-
-tui_toolkit_media:
-    resource: "@MediaBundle/Resources/config/routing/media.yml"
-    prefix:   /manage/media
-
 _liip_imagine:
     resource: "@LiipImagineBundle/Resources/config/routing.xml"
+
+elfinder:
+     resource: "@FMElfinderBundle/Resources/config/routing.yml"

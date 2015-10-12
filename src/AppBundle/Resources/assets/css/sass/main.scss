@@ -5,6 +5,7 @@
 @import "variables/_layout";
 @import "variables/_typography";
 
+@import "abstractions/_breakpoints";
 @import "abstractions/_browser";
 @import "abstractions/_colors";
 @import "abstractions/_layout";
@@ -18,6 +19,7 @@
 @import "base/_typography";
 @import "base/_fa";
 @import "base/_flexslider";
+@import "base/_page";
 
 @import "components/_page-mdl";
 @import "components/_page";

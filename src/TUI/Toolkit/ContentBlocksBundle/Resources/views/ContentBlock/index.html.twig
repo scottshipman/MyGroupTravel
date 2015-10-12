@@ -1,16 +1,16 @@
 {% extends '::base.html.twig' %}
-{% block title %}Manage Content Blocks{% endblock %}
-{% block page_title %}Manage Content Blocks{% endblock %}
+{% block title %}{% trans %}contentBlocks.title.index{% endtrans %}{% endblock %}
+{% block page_title %}{% trans %}contentBlocks.page_title.index{% endtrans %}{% endblock %}
 
 {% block body -%}
 
     <table class="mdl-data-table mdl-js-data-table">
         <thead>
             <tr>
-                <th class="mdl-data-table__cell--non-numeric">Title (ID)</th>
-                <th class="mdl-data-table__cell--non-numeric">Locked</th>
-                <th class="mdl-data-table__cell--non-numeric">Hidden</th>
-                <th class="mdl-data-table__cell--non-numeric">Layout Type</th>
+                <th class="mdl-data-table__cell--non-numeric">{% trans %}contentBlocks.table.name{% endtrans %}</th>
+                <th class="mdl-data-table__cell--non-numeric">{% trans %}contentBlocks.table.locked{% endtrans %}</th>
+                <th class="mdl-data-table__cell--non-numeric">{% trans %}contentBlocks.table.hidden{% endtrans %}</th>
+                <th class="mdl-data-table__cell--non-numeric">{% trans %}contentBlocks.table.layout{% endtrans %}</th>
                 <th>Sort Order</th>
             </tr>
         </thead>

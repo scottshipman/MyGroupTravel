@@ -31,19 +31,36 @@
     <div class="sub-header">
       <div class="sizer">
         <div class="inner">
-          {% if entity.isTemplate == 0 %} {#only if not a template b/c templates have no institutions #}
-              {% if entity.quoteReference.institution.media %}
-                  <div class="institution-logo">
-                      <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.quoteReference.institution.name }}">
-                  </div>
-              {% endif %}
+            {% if entity.isTemplate == 0 %}{# no Institutions on Templates #}
+                {% if app.user %}
+                    {% if entity.quoteReference.institution.media %}
+                        <div class="institution-logo">
+                            <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.quoteReference.institution.name }}">
+                        </div>
+                    {% endif %}
+                {% elseif not app.user %}
+                    {% if entity.quoteReference.institution.media %}
+                        <div class="institution-logo-with-brand">
+                            <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.quoteReference.institution.name }}">
+                        </div>
+                    {% endif %}
+                    {% if brand.media %}
+                        <div class="brand-logo">
+                            <img src="{{ asset( brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ brand.name }}">
+                        </div>
+                    {% endif %}
+                {% endif %}
             {% endif %}
 
-          {% if entity.quoteReference.institution %}<div id="site-quote-name">{{ entity.quoteReference.institution.name }}</div>{% endif %}
+            {% if entity.quoteReference.institution %}
+                <div id="site-quote-name">{{ entity.quoteReference.institution.name }}</div>
+            {% endif %}
 
-          <h2>{{ entity.quoteReference.name }}{% if is_granted("ROLE_BRAND") %}, {{ entity.name }}{% endif %} {% if entity.quoteNumber %}({{ entity.quoteNumber }}){% endif %}</h2>
+            <h2 class="{% if entity.quoteReference.institution.media %}has-school-logo{% endif %} {% if not app.user and brand.media %}has-brand-logo{% endif %}">{{ entity.quoteReference.name }}{% if is_granted("ROLE_BRAND") %}, {{ entity.name }}{% endif %} {% if entity.quoteNumber %}({{ entity.quoteNumber }}){% endif %}</h2>
 
-          {% if entity.quoteReference.destination %}<div>{{ entity.quoteReference.destination }}</div>{% endif %}
+            {% if entity.quoteReference.destination %}
+                <div>{{ entity.quoteReference.destination }}</div>
+            {% endif %}
         </div>
       </div>
     </div>
@@ -260,7 +277,7 @@
 
                    $(".sortable-tabs").sortable({
                        containment: "parent",
-                       items: "> div",
+                       items: "> div.content-blocks-tab",
                        // handle: ".move",
                        tolerance: "pointer",
                        cursor: "move",
@@ -270,15 +287,15 @@
                        dropOnEmpty: true,
                        placeholder: "tabs-placeholder",
                        start: function (e, ui) {
-                           $('.editable-tab').editable("disable");
-                           $('.editable-tab')[0].reset();
                            ui.placeholder.height(ui.helper.outerHeight());
+                           $('.editable-tab').editable("disable");
                        },
                        stop: function (e, ui) {
                            $('.editable-tab').editable("enable");
                        },
                        axis: 'y',
                        update: function(e, ui) {
+                           console.log(ui);
                            var pathArray = window.location.pathname.split( '/' );
                            contentBlocksUpdate(pathArray[3], 'QuoteVersion'); // fourth [3] part in the path should be quote ID to pass in
                        }
@@ -286,8 +303,8 @@
 
 
                    $( ".sortable-items" ).sortable({
-                       containment: "document",
-                       items: "> div",
+                       containment: "#content-blocks-wrapper",
+                       items: "> div.content-blocks",
                        cancel: '.content-block-locked',
                        tolerance: "pointer",
                        connectWith: '.sortable-items',
@@ -329,8 +346,8 @@
                // Add a headerBlock to a site
                $("#add-headerBlock").on('click', function(){
                    $("#dialog").html("");
-                   $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
-                   $("#dialog").load('/manage/headerblock/new/header/' + {{ entity.id}} +'/QuoteVersion', function() {
+                   $("#dialog").dialog("open");
+                   $("#dialog").load('/manage/headerblock/header/new/' + {{ entity.id}} +'/QuoteVersion', function() {
                        $(this).dialog("option", "title", 'Add Header Content');
                        doMDLpopup( $(this) );
                    });
@@ -340,7 +357,7 @@
                    // Edit the headerBlock for a site
                    $("#edit-headerBlock").on('click', function(){
                        $("#dialog").html("");
-                       $("#dialog").dialog({width:'60%'}).dialog("option", "title", "Loading...").dialog("open");
+                       $("#dialog").dialog("open");
                        $("#dialog").load('/manage/headerblock/'+ {{ entity.headerBlock.id }} + '/header/edit/' + {{ entity.id}} +'/QuoteVersion', function() {
                            $(this).dialog("option", "title", 'Edit Header Content');
                            doMDLpopup( $(this) );
@@ -349,7 +366,8 @@
                {% endif %}
 
                // Add a new tab to a site
-               $("#add-new-tab").on('click', function(){
+               $("#add-new-tab").on('click', function(e) {
+                   e.preventDefault();
                    contentBlocksAddTab('#content-blocks-wrapper', {{ entity.id }}, 'QuoteVersion');
                });
 
@@ -414,7 +432,7 @@
                 var block = actionParent.substring(22);
                 //e.preventDefault();
                 $("#dialog").html("");
-                $("#dialog").dialog({width: '60%', modal: false}).dialog("option", "title", "Loading...").dialog("open");
+                $("#dialog").dialog("open");
                 $("#dialog").load( '/ajax/contentblocks/' + block + '/edit/' + {{ entity.id}} + '/QuoteVersion', function() {
                     $(this).dialog("option", "title", 'Edit Content Block');
                     doMDLpopup( $(this) );
@@ -474,18 +492,26 @@
                 }
             });
 
-             {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
-                // change a tab's name
-                $('.editable-tab').editable(function(value, settings) {
-                    return(value);
-                }, {
-                    width: '20em',
-                    tooltip: 'Click to edit',
-                    callback : function(value, settings) {
-                        contentBlocksUpdate({{ entity.id }}, 'QuoteVersion'); //value
-                    }
-                });
-             {% endif %}
+            {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
+              // change a tab's name
+              var enableTabSortable = function(settings, self) {
+                  $(".sortable-tabs").sortable("enable");
+              };
+              var disableTabSortable = function(settings, self) {
+                  $(".sortable-tabs").sortable("disable");
+              };
+              $(".editable-tab").editable(function(value, settings) {
+                  return(value);
+              }, {
+                  width: '20em',
+                  tooltip: 'Click to edit...',
+                  onedit: disableTabSortable,
+                  onreset: enableTabSortable,
+                  callback : function(value, settings) {
+                      contentBlocksUpdate({{ entity.id }}, 'QuoteVersion');
+                  }
+              });
+            {% endif %}
         });
     </script>
 
@@ -517,14 +543,10 @@
             <a class="expired-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
                 <i class="fa fa-calendar-times-o"></i> Expired
             </a>
-        {% else %}
-            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('quote_site_quote_accepted', { 'id': entity.id }) }}">
-                <i class="fa fa-thumbs-o-up"> </i> Like Quote
-            </a>
         {% endif %}
     {% elseif (entity.converted is sameas(true)) and (entity.quoteReference.converted is sameas(true))%}
         <a class="accepted-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-            <i class="fa fa-thumbs-up"> </i> Liked
+            <i class="fa fa-thumbs-up"> </i> Converted to Tour
         </a>
     {% endif %}
 {% endblock %}

@@ -1,6 +1,8 @@
+<i id="admin-menu-toggle" class="admin-menu-toggle fa fa-bars mdl-color-text--primary-contrast"></i>
+
 <div class="toolkit-drawer mdl-layout__drawer">
 
-    <header class="tui-drawer-header">
+    <header id="tui-drawer-header" class="tui-drawer-header">
         {% if app.user.media %}
             <span class="tui-image-avatar"><img src="{{ asset( app.user.media.getRelativePath ~ "/" ~ app.user.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ app.user.username }}"></span>
         {% elseif app.user.firstName and app.user.lastName %}
@@ -15,9 +17,9 @@
                 <i class="material-icons">arrow_drop_down</i>
             </button>
             <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="accbtn">
-                <li><a class="mdl-menu__item" href="/profile">View</a>
+                <li><a class="mdl-menu__item" href="/profile">{% trans %}app.tui_drawer.actions.view{% endtrans %}</a>
                 </li>
-                <li><a class="mdl-menu__item" href="/user/{{ app.user.id }}/edit">Edit</a>
+                <li><a class="mdl-menu__item" href="/user/{{ app.user.id }}/edit">{% trans %}app.tui_drawer.actions.edit{% endtrans %}</a>
                 </li>
                 <li><a class="mdl-menu__item" href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a></li>
             </ul>
@@ -31,3 +33,31 @@
     </nav>
 
 </div><!-- mdl-layout__drawer -->
+
+<script>
+    $(document).ready(function() {
+        $('.toolkit-layout').after('<div id="admin-menu-obfuscator" class="admin-menu-obfuscator" />');
+
+        // On page load, not on browser window change
+        if ( toolkitBreakpoint() === 'desktop' ) {
+            $('.toolkit-fixed-drawer').addClass('expand-admin-menu');
+            $('#admin-menu-obfuscator').show();
+        } else {
+            $('.toolkit-fixed-drawer').addClass('collapse-admin-menu');
+            $('#admin-menu-obfuscator').hide();
+        };
+
+        $('#admin-menu-toggle').click( function() {
+            $(this).parent().toggleClass('collapse-admin-menu').toggleClass('expand-admin-menu');
+            if ( $(this).parent().hasClass('collapse-admin-menu') ) {
+                $('#admin-menu-obfuscator').hide();
+            } else {
+                $('#admin-menu-obfuscator').show();
+            }
+        });
+
+        $(document).on('click', '#admin-menu-obfuscator', function() {
+            $('#admin-menu-toggle').trigger('click');
+        });
+    });
+</script>

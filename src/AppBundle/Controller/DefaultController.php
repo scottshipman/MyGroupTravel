@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
 {
@@ -39,5 +40,46 @@ class DefaultController extends Controller
 
     //  user is anonymous, show login form only
       return $this->render('default/index.html.twig');
+    }
+
+    public function ckeditorUploadAction(){
+// http://www.paulfp.net/blog/2010/10/how-to-add-and-upload-an-image-using-ckeditor/
+      $upload_dir = "static/uploads/media/ckeditor/";
+      if (!is_dir($upload_dir)) {
+        mkdir($upload_dir);
+      }
+
+      $url = $upload_dir . time()."_".$_FILES['upload']['name'];
+
+       //extensive suitability check before doing anything with the file…
+          if (($_FILES['upload'] == "none") OR (empty($_FILES['upload']['name'])) )
+          {
+            $message = $this->get('translator')->trans('app.ckeditor-upload.empty-file');;
+          }
+          else if ($_FILES['upload']["size"] == 0)
+          {
+            $message = $this->get('translator')->trans('app.ckeditor-upload.zero-file');
+          }
+          else if (($_FILES['upload']["type"] != "image/gif") AND ($_FILES['upload']["type"] != "image/pjpeg") AND ($_FILES['upload']["type"] != "image/jpeg") AND ($_FILES['upload']["type"] != "image/png"))
+          {
+            $message = $this->get('translator')->trans('app.ckeditor-upload.wrong-file');
+          }
+          else if (!is_uploaded_file($_FILES['upload']["tmp_name"]))
+          {
+            $message = $this->get('translator')->trans('no-file');
+          }
+          else {
+        $message = "";
+            $move = @ move_uploaded_file($_FILES['upload']['tmp_name'], $url);
+            if(!$move)
+            {
+              $message = $this->get('translator')->trans('app.ckeditor-upload.move-error');
+            }
+            $url = "/" . $url;
+          }
+      $funcNum = $_GET['CKEditorFuncNum'] ;
+
+      $response = new Response("<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction($funcNum, '$url', '$message');</script>");
+      return $response;
     }
 }

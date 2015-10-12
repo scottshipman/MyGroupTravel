@@ -19,9 +19,15 @@ class BrandType extends AbstractType
         $builder
             ->add('name')
             ->add('division')
-            ->add('primaryColor')
-            ->add('buttonColor')
-            ->add('hoverColor')
+            ->add('primaryColor','text', array(
+              'label' => 'brand.form.label.p_color',
+                'translation_domain'  => 'messages',
+            ))
+            ->add('secondaryColor','text', array(
+              'label' => 'brand.form.label.s_color',
+              'translation_domain'  => 'messages',
+            ))
+            // ->add('hoverColor')
             ->add('footerBody', 'ckeditor', array())
             ->add('media', 'hidden', array(
                 'required' => false,

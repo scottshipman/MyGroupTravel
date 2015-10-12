@@ -8,22 +8,33 @@
   background: $text_grey_t1;
   z-index: 9999;
 
-  img {
+  .loader-icon {
+    font-size: 72px;
+    line-height: 1;
+    width: 72px;
+    height: 72px;
     position: absolute;
     top: 50%;
     left: 50%;
-    margin: -39px 0 0 -40px;
+    margin: -36px 0 0 -36px;
   }
 
 }
 
 .back-link {
+  line-height: 2;
   color: inherit;
   text-decoration: none;
-  padding-top: 8px;
-  padding-bottom: 8px;
   float: left;
-  @include span-all();
+  margin: 1em 0 1em (-$page_gutter_reset);
+  position: relative;
+  left: 28px + (16px * 2);
+
+  @include breakpoint_desktop() {
+    left: 0;
+    margin-left: $column_gutter_width;
+  }
+
 }
 
 .sub-header {
@@ -39,44 +50,52 @@
 
   h2 {
     margin: 0.25em 0;
-    padding: 0 120px 0 0;
+    padding: 0;
+
+    &.has-school-logo,
+    &.has-brand-logo {
+
+      @include breakpoint_phone() {
+        padding-right: 120px + 12px;
+      }
+
+    }
+
+    &.has-school-logo.has-brand-logo {
+
+      @include breakpoint_phone() {
+        padding-right: (120px + 12px) * 2;
+      }
+
+    }
+
   }
 
-  .institution-logo {
-    position: absolute;
-    top: 0;
-    right: $column_gutter_width;
+  .institution-logo,
+  .institution-logo-with-brand,
+  .brand-logo {
     width: 120px;
     height: 100%;
+    @include inline-block-vertical();
 
-    img {
-      @include vertical-align();
+    @include breakpoint_phone() {
+      display: block;
+      position: absolute;
+      top: 0;
+      right: $column_gutter_width;
+
+      img {
+        @include vertical-align();
+      }
+
     }
 
   }
 
   .institution-logo-with-brand {
-    position: absolute;
-    top: 0;
-    right: $column_gutter_width * 5;
-    width: 120px;
-    height: 100%;
 
-    img {
-      @include vertical-align();
-    }
-
-  }
-
-  .brand-logo {
-    position: absolute;
-    top: 0;
-    right: $column_gutter_width;
-    width: 120px;
-    height: 100%;
-
-    img {
-      @include vertical-align();
+    @include breakpoint_phone() {
+      margin-right: 120px + 12px;
     }
 
   }
@@ -84,6 +103,26 @@
 }
 
 #site-quote-name {}
+
+#site-quote-title {
+
+  .pdf-layout & {
+    padding: 0.5em 132px 0.5em 0;
+  }
+
+}
+
+#site-school-logo {
+
+  .pdf-layout & {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 120px;
+    height: auto;
+  }
+
+}
 
 #site-summary-details {
   list-style: none;
@@ -94,18 +133,36 @@
 
     &.right {
       text-align: right;
+
+      .pdf-layout & {
+        text-align: left;
+      }
+
     }
 
   }
 
   .label {
     float: left;
+
+    .pdf-layout & {
+      float: none;
+    }
+
   }
 
   .quote-price {
     font-size: 1.375em;
     font-weight: bold;
     display: block;
+  }
+
+}
+
+#accept-tour {
+
+  .pdf-layout & {
+    display: none;
   }
 
 }
@@ -165,7 +222,8 @@
 
 }
 
-.expired-quote, .accepted-quote {
+.expired-quote,
+.accepted-quote {
   -khtml-opacity: 0.70;
   -moz-opacity: 0.70;
   -ms-filter: ”alpha(opacity=70)”;
@@ -197,9 +255,16 @@
 
 #site-header-slideshow,
 #site-header-editForm {
-  float: left;
-  width: $column_total_width * 3;
-  padding: 0 $column_gutter_width;
+  @include span-all();
+
+  @include breakpoint_tablet() {
+    float: left;
+    width: $column_total_width * 2;
+  }
+
+  @include breakpoint_desktop() {
+    width: $column_total_width * 3;
+  }
 
   .pdf-layout & {
     width: 60%;
@@ -214,10 +279,27 @@
 
 }
 
+#site-header-summary,
+#site-header-summary-form {
+  margin-top: $element-bottom;
+
+  @include breakpoint_tablet() {
+    margin-top: 0;
+  }
+
+}
+
 #site-header-summary {
-  float: right;
-  width: $column_total_width;
-  padding: 0 $column_gutter_width;
+  @include span-all();
+
+  @include breakpoint_tablet() {
+    float: right;
+    width: $column_total_width * 2;
+  }
+
+  @include breakpoint_desktop() {
+    width: $column_total_width;
+  }
 
   .pdf-layout & {
     width: 35%;
@@ -235,8 +317,12 @@
 }
 
 .content-blocks-drawer.mdl-tabs__panel {
-  margin-left: -$column_gutter_width_reset;
-  width: $column_total_width_reset;
+
+  @include breakpoint_tablet() {
+    margin-left: -$column_gutter_width_reset;
+    width: $column_total_width_reset;
+  }
+
 }
 
 .alt-quote {
@@ -263,15 +349,22 @@
 
 
 .content-block-tabs-bar {
+  display: block;
   align-items: flex-end;
-  height: 48px;
+  height: auto;
   margin-top: 48px;
+
+  @include breakpoint_tablet() {
+    display: flex;
+    height: 48px;
+  }
+
 }
 
 .site-content-blocks-tab {
   cursor: pointer;
   padding: 12px 24px;
-  float: left;
+  float: none;
   position: relative;
   top: 1px;
   height: auto;
@@ -282,7 +375,19 @@
   text-transform: uppercase;
   color: rgba(0,0,0,0.54);
   overflow: visible;
-  max-width: (1/8) * 100%;
+  width: 100%;
+
+  @include breakpoint_tablet() {
+    padding: 12px 16px;
+    float: left;
+    width: auto;
+    max-width: (1/8) * 100%;
+  }
+
+  @include breakpoint_desktop() {
+    padding: 12px 24px;
+  }
+
 }
 
 
@@ -306,9 +411,12 @@
 // Preview/Edit toggling
 
 .site-content-blocks-size-half {
-  float: left;
-  width: $column_total_width * 2;
-  padding: 0 $column_gutter_width;
+
+  @include breakpoint_tablet() {
+    float: left;
+    width: $column_total_width * 2;
+    padding: 0 $column_gutter_width;
+  }
 
   .pdf-layout & {
     clear: both;
@@ -317,16 +425,23 @@
   }
 
   .content-block-size-half {
-    float: none;
-    width: auto;
-    padding: 0;
+
+    @include breakpoint_tablet() {
+      float: none;
+      width: auto;
+      padding: 0;
+    }
+
   }
 
 }
 
 .site-content-blocks-size-full {
   clear: both;
-  padding: 0 $column_gutter_width;
+
+  @include breakpoint_tablet() {
+    padding: 0 $column_gutter_width;
+  }
 
   .content-block-size-full {
     clear: none;
@@ -337,7 +452,7 @@
 
 .link-preview-edit {
   float: right;
-  //clear: both;
+  padding: (((56px * 1.35) - 36px) / 2) 0;
 }
 
 .content-blocks-drawer {
@@ -346,6 +461,33 @@
     min-height: none;
     float: left;
     width: 100%;
+  }
+
+}
+
+.site-content-block-actions {
+  height: 32px;
+  @include mdl-primary-color(background, 6);
+
+  .move-icon {
+    cursor: move;
+    position: absolute;
+    top: 6px;
+    left: 1em;
+
+    .ui-sortable-disabled & {
+      display: none;
+    }
+
+  }
+
+}
+
+.move-cursor {
+  cursor: move;
+
+  .ui-sortable-disabled & {
+    cursor: default;
   }
 
 }
@@ -387,26 +529,10 @@
     position: relative;
   }
 
-  .site-content-block-actions {
-    height: 32px;
-    @include mdl-primary-color(background, 6);
-  }
-
   .edit-icons {
     position: absolute;
     top: 6px;
     right: 1em;
-  }
-
-  .move-icon {
-    cursor: move;
-    position: absolute;
-    top: 6px;
-    left: 1em;
-  }
-
-  .move-cursor {
-    cursor: move;
   }
 
   .pointer-cursor {

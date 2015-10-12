@@ -2,21 +2,15 @@
 <div class="profile-content">
 
 <div class="fos_user_user_show">
-    <div class = "profile-details">
+    <div class="profile-details">
         {# user details here #}
-        <p>Name:
-        {{ user.firstName }} {{ user.lastName }}
-        </p>
-        <p>Email:  {{ user.email }}
-        </p>
-        <p>Created:  {{ user.created |date (format) }}
-        </p>
-        <p><a href="/user/{{ user.id }}/edit" ><i class="fa fa-pencil">Edit My Profile</i></a>
-
-        </p>
-
+        <p>{% trans %}user.profile.label.name{% endtrans %}: {{ user.firstName }} {{ user.lastName }}</p>
+        <p>{% trans %}user.profile.label.email{% endtrans %}: {{ user.email }}</p>
+        <p>{% trans %}user.profile.label.created{% endtrans %}: {{ user.created |date (format) }}</p>
+        <p><a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="/user/{{ user.id }}/edit"><i class="fa fa-pencil"></i> {% trans %}user.actions.edit_profile{% endtrans %}</a></p>
     </div>
-    <div class = "profile-permissions">
+
+    <div class="profile-permissions">
         {# list tours and quotes here #}
         {% if is_granted("ROLE_BRAND") %}
             {{ render(controller('TUIToolkitUserBundle:User:getQuotes', {'id' : user.id })) }}
@@ -24,7 +18,8 @@
 
         {{ render(controller('TUIToolkitUserBundle:User:getTours', {'id' : user.id })) }}
     </div>
-    <div style="clear:both;"></div>
 
+    <div style="clear:both;"></div>
 </div>
+
 </div>

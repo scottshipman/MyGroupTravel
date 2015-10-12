@@ -29,18 +29,31 @@ class HeaderBlockController extends Controller
         $form = $this->createCreateForm($entity, $quoteVersion, $class);
         $form->handleRequest($request);
 
-        if (NULL != $form->getData()->getMedia()) {
-            $fileIdString = $form->getData()->getMedia();
-            $fileIds = explode(',', $fileIdString);
+        if (NULL != $form->getData()->getMediaWrapper()) {
+            $fileArrays = json_decode($form->getData()->getMediaWrapper());
+            foreach ($fileArrays as $fileArray) {
+                $mediaWrappers = $this->forward('MediaBundle:MediaWrapper:create', array(
+                    'fileArray' => $fileArray,
+                ));
+                $content = $mediaWrappers->getContent();
+                $wrappers[] = $content;
+            }
 
-            foreach ($fileIds as $fileId) {
-                $image = $em->getRepository('MediaBundle:Media')
-                    ->findById($fileId);
-                $medias[] = array_shift($image);
+            $newWrappers = array();
+            foreach ($wrappers as $wrap) {
+                $newContent = json_decode($wrap, true);
+                $newWrappers[] = $newContent;
+            }
+
+            if ($newWrappers != NULL) {
+                foreach ($newWrappers as $newWrapper) {
+                    $wrapper = $em->getRepository('MediaBundle:MediaWrapper')->find($newWrapper['id']);
+                    $medias[] = $wrapper;
+                }
             }
         }
         if (!empty($medias)) {
-            $form->getData()->setMedia($medias);
+            $form->getData()->setMediaWrapper($medias);
 
         }
 
@@ -50,7 +63,6 @@ class HeaderBlockController extends Controller
             $em->flush($entity);
 
             // add block to quoteVersion headerBlock field
-            // TODO QuoteVersion is hardcoded here and needs to accept any class
             if ($class == "tour") {
                 $quoteVersionEntity = $em->getRepository('TourBundle:Tour')->find($quoteVersion);
             } elseif ($class == "QuoteVersion") {
@@ -102,7 +114,7 @@ class HeaderBlockController extends Controller
             ),
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('contentBlocks.actions.create')));
 
         return $form;
     }
@@ -134,7 +146,7 @@ class HeaderBlockController extends Controller
 
         $entity = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($id);
 
-        $collection = $entity->getMedia()->toArray();
+        $collection = $entity->getMediaWrapper()->toArray();
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Header Block entity.');
@@ -156,7 +168,7 @@ class HeaderBlockController extends Controller
 
         $entity = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($id);
 
-        $collection = $entity->getMedia()->toArray();
+        $collection = $entity->getMediaWrapper()->toArray();
         foreach ($collection as $image) {
             $imageIds[] = $image->getId();
         }
@@ -171,7 +183,7 @@ class HeaderBlockController extends Controller
             throw $this->createNotFoundException('Unable to find ContentBlock entity.');
         }
 
-        $entity->setMedia($collectionIds);
+        $entity->setMediaWrapper($collectionIds);
         $editForm = $this->createEditForm($entity, $quoteVersion, $class);
 
         return $this->render('ContentBlocksBundle:ContentBlock:edit.html.twig', array(
@@ -194,7 +206,7 @@ class HeaderBlockController extends Controller
 
         $entity = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($id);
 
-        $collection = $entity->getMedia()->toArray();
+        $collection = $entity->getMediaWrapper()->toArray();
         foreach ($collection as $image) {
             $imageIds[] = $image->getId();
         }
@@ -209,7 +221,7 @@ class HeaderBlockController extends Controller
             throw $this->createNotFoundException('Unable to find ContentBlock entity.');
         }
 
-        $entity->setMedia($collectionIds);
+        $entity->setMediaWrapper($collectionIds);
         $editForm = $this->createEditLayoutForm($entity);
 
         return $this->render('ContentBlocksBundle:ContentBlock:edit.html.twig', array(
@@ -240,7 +252,7 @@ class HeaderBlockController extends Controller
             ),
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('contentBlocks.actions.update')));
 
         return $form;
     }
@@ -262,7 +274,7 @@ class HeaderBlockController extends Controller
             ),
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('contentBlocks.actions.update')));
 
         return $form;
     }
@@ -278,7 +290,7 @@ class HeaderBlockController extends Controller
 
         $entity = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($id);
 
-        $collection = $entity->getMedia()->toArray();
+        $collection = $entity->getMediaWrapper()->toArray();
 
 
         if (!$entity) {
@@ -290,18 +302,45 @@ class HeaderBlockController extends Controller
 
         $medias = array();
 
-        if (NULL != $editForm->getData()->getMedia()) {
-            $fileIdString = $editForm->getData()->getMedia();
-            $fileIds = explode(',', $fileIdString);
+        if (NULL != $editForm->getData()->getMediaWrapper()) {
+            $wrappers = array();
+            $fileArrays = json_decode($editForm->getData()->getMediaWrapper());
+            foreach ($fileArrays as $fileArray) {
+                $id = $fileArray[0];
+                $mediaItem = $em->getRepository('MediaBundle:Media')->find($id);
+                $existingWrapper = $mediaItem->getMediaWrappers()->toArray();
+                if ($existingWrapper) {
+                    $existingWrapper = $existingWrapper[0];
+                    $id = $existingWrapper->getId();
+                    $mediaWrappers = $this->forward('MediaBundle:MediaWrapper:update', array(
+                        'id' => $id,
+                        'fileArray' => $fileArray,
+                    ));
+                } else {
+                    $mediaWrappers = $this->forward('MediaBundle:MediaWrapper:create', array(
+                        'fileArray' => $fileArray,
+                    ));
+                }
+                $content = $mediaWrappers->getContent();
+                $wrappers[] = $content;
+            }
 
-            foreach ($fileIds as $fileId) {
-                $image = $em->getRepository('MediaBundle:Media')
-                    ->findById($fileId);
-                $medias[] = array_shift($image);
+            $newWrappers = array();
+            foreach ($wrappers as $wrap) {
+                $newContent = json_decode($wrap, true);
+                $newWrappers[] = $newContent;
+            }
+
+            if ($newWrappers != NULL) {
+                foreach ($newWrappers as $newWrapper) {
+                    $wrapper = $em->getRepository('MediaBundle:MediaWrapper')->find($newWrapper['id']);
+                    $medias[] = $wrapper;
+                }
             }
         }
+
         if (!empty($medias)) {
-            $editForm->getData()->setMedia($medias);
+            $editForm->getData()->setMediaWrapper($medias);
 
         }
 
@@ -352,18 +391,44 @@ class HeaderBlockController extends Controller
 
         $medias = array();
 
-        if (NULL != $editForm->getData()->getMedia()) {
-            $fileIdString = $editForm->getData()->getMedia();
-            $fileIds = explode(',', $fileIdString);
+        if (NULL != $editForm->getData()->getMediaWrapper()) {
+            $wrappers = array();
+            $fileArrays = json_decode($editForm->getData()->getMediaWrapper());
+            foreach ($fileArrays as $fileArray) {
+                $id = $fileArray[0];
+                $mediaItem = $em->getRepository('MediaBundle:Media')->find($id);
+                $existingWrapper = $mediaItem->getMediaWrappers()->toArray();
+                if ($existingWrapper) {
+                    $existingWrapper = $existingWrapper[0];
+                    $id = $existingWrapper->getId();
+                    $mediaWrappers = $this->forward('MediaBundle:MediaWrapper:update', array(
+                        'id' => $id,
+                        'fileArray' => $fileArray,
+                    ));
+                } else {
+                    $mediaWrappers = $this->forward('MediaBundle:MediaWrapper:create', array(
+                        'fileArray' => $fileArray,
+                    ));
+                }
+                $content = $mediaWrappers->getContent();
+                $wrappers[] = $content;
+            }
 
-            foreach ($fileIds as $fileId) {
-                $image = $em->getRepository('MediaBundle:Media')
-                    ->findById($fileId);
-                $medias[] = array_shift($image);
+            $newWrappers = array();
+            foreach ($wrappers as $wrap) {
+                $newContent = json_decode($wrap, true);
+                $newWrappers[] = $newContent;
+            }
+
+            if ($newWrappers != NULL) {
+                foreach ($newWrappers as $newWrapper) {
+                    $wrapper = $em->getRepository('MediaBundle:MediaWrapper')->find($newWrapper['id']);
+                    $medias[] = $wrapper;
+                }
             }
         }
         if (!empty($medias)) {
-            $editForm->getData()->setMedia($medias);
+            $editForm->getData()->setMediaWrapper($medias);
 
         }
 
@@ -395,7 +460,7 @@ class HeaderBlockController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $entity = new ContentBlock();
-        $entity->setTitle('New Header Block');
+        $entity->setTitle($this->get('translator')->trans('contentBlocks.placeholder.header'));
 
         $em->persist($entity);
         $em->flush();

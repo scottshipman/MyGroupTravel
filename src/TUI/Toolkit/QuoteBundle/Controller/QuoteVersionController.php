@@ -38,7 +38,7 @@ class QuoteVersionController extends Controller
      * Lists all QuoteVersion ( IE Quotes) entities.
      *
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         // hide columns from the screen display
         $hidden = array(
@@ -70,7 +70,8 @@ class QuoteVersionController extends Controller
             'departureDate',
             'returnDate',
             'pricePerson',
-            'currency.name'
+            'currency.name',
+            'salesAgent_full'
         );
 
         // Creates simple grid based on your entity (ORM)
@@ -114,7 +115,7 @@ class QuoteVersionController extends Controller
         $grid->addRowAction($showAction);
         $previewAction = new RowAction('Preview', 'quote_site_action_show');
         $grid->addRowAction($previewAction);
-        $cloneAction = new RowAction('Clone', 'manage_quote_clone');
+        $cloneAction = new RowAction('Clone to new Quote', 'manage_quote_clone');
         $grid->addRowAction($cloneAction);
         $deleteAction = new RowAction('Delete', 'manage_quote_quick_delete');
         $deleteAction->setRole('ROLE_ADMIN');
@@ -129,7 +130,56 @@ class QuoteVersionController extends Controller
                 return $action;
             }
         );
+        //Lock Actions are only available to admins
+        $lockAction->setRole('ROLE_ADMIN');
+
         $grid->addRowAction($lockAction);
+
+        // Change Row Color if locked
+        $source->manipulateRow(
+            function($row){
+                if ($row->getField('locked') ==true){
+                    $row->setColor('#ddd');
+                    $row->setClass('locked');
+                }
+                return $row;
+            }
+        );
+        //set default filter value
+        $match_route = $this->generateUrl('manage_quote');
+        $referer = $request->headers->get('referer');
+        if (strpos($referer, $match_route) === false ) { // only set default filter if referer is not itself, ie reset button
+          $usr = $this->get('security.context')->getToken()->getUser();
+          $lastName = $usr->getLastName();
+          $filters = array(
+            'quoteReference.salesAgent.lastName' => array(
+              'operator' => 'like',
+              'from' => $lastName
+            )
+          );
+          $grid->setDefaultFilters($filters);
+        }
+
+        // add business admin last name filter
+        $column = $grid->getColumn('quoteReference.salesAgent.lastName');
+        $column->setFilterable(true);
+        $column->setTitle('Primary Business Admin (Last Name)');
+        $column->setOperatorsVisible(false);
+
+        // add organizer last name filter
+        $column = $grid->getColumn('quoteReference.organizer.lastName');
+        $column->setFilterable(true);
+        $column->setTitle('Organizer (Last Name)');
+        $column->setOperatorsVisible(false);
+
+        // Get locale for stuff
+        $locale = $this->container->getParameter('locale');
+
+        // Change date format for british folks. Merica
+        $column = $grid->getColumn('created');
+        if (strpos($locale, "en_GB") !== false) {
+            $column->setFormat('d-M-Y');
+        }
 
         // Set the default order of the grid
         $grid->setDefaultOrder('created', 'DESC');
@@ -153,7 +203,7 @@ class QuoteVersionController extends Controller
      * Lists all Converted QuoteVersion ( IE Quotes) entities.
      *
      */
-    public function convertedAction()
+    public function convertedAction(Request $request)
     {
         // hide columns from the screen display
         $hidden = array(
@@ -185,7 +235,8 @@ class QuoteVersionController extends Controller
             'departureDate',
             'returnDate',
             'pricePerson',
-            'currency.name'
+            'currency.name',
+            'salesAgent_full'
         );
 
         // Creates simple grid based on your entity (ORM)
@@ -221,6 +272,27 @@ class QuoteVersionController extends Controller
         $deleteAction->setConfirm(true);
         $grid->addRowAction($deleteAction);
 
+        // add business admin last name filter
+        $column = $grid->getColumn('quoteReference.salesAgent.lastName');
+        $column->setFilterable(true);
+        $column->setTitle('Primary Business Admin (Last Name)');
+        $column->setOperatorsVisible(false);
+
+        // add organizer last name filter
+        $column = $grid->getColumn('quoteReference.organizer.lastName');
+        $column->setFilterable(true);
+        $column->setTitle('Organizer (Last Name)');
+        $column->setOperatorsVisible(false);
+
+        // Get locale for stuff
+        $locale = $this->container->getParameter('locale');
+
+        // Change date format for british folks. Merica
+        $column = $grid->getColumn('created');
+        if (strpos($locale, "en_GB") !== false) {
+            $column->setFormat('d-M-Y');
+        }
+
         // Set the default order of the grid
         $grid->setDefaultOrder('created', 'DESC');
 
@@ -230,6 +302,20 @@ class QuoteVersionController extends Controller
         //set no data message
         $grid->setNoDataMessage("There are no converted quotes to show. Please check your filter settings and try again.");
 
+        //set default filter value
+        $match_route = $this->generateUrl('manage_quote_converted');
+        $referer = $request->headers->get('referer');
+        if (strpos($referer, $match_route) === false ) { // only set default filter if referer is not itself, ie reset button
+          $usr = $this->get('security.context')->getToken()->getUser();
+          $lastName = $usr->getLastName();
+          $filters = array(
+            'quoteReference.salesAgent.lastName' => array(
+              'operator' => 'like',
+              'from' => $lastName
+            )
+          );
+          $grid->setDefaultFilters($filters);
+        }
 
         // Export of the grid
         $grid->addExport(new CSVExport("Converted Quotes as CSV", "convertedQuotes", array('delimiter' => ','), "UTF-8", "ROLE_BRAND"));
@@ -243,7 +329,7 @@ class QuoteVersionController extends Controller
      * Lists all Deleted QuoteVersion ( IE Quotes) entities.
      *
      */
-    public function deletedAction()
+    public function deletedAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $filters = $em->getFilters();
@@ -279,7 +365,8 @@ class QuoteVersionController extends Controller
             'departureDate',
             'returnDate',
             'pricePerson',
-            'currency.name'
+            'currency.name',
+            'salesAgent_full'
         );
 
         // Creates simple grid based on your entity (ORM)
@@ -310,6 +397,26 @@ class QuoteVersionController extends Controller
         $restoreAction = new RowAction('Restore', 'manage_quote_restore');
         $grid->addRowAction($restoreAction);
 
+        // add business admin last name filter
+        $column = $grid->getColumn('quoteReference.salesAgent.lastName');
+        $column->setFilterable(true);
+        $column->setTitle('Primary Business Admin (Last Name)');
+        $column->setOperatorsVisible(false);
+
+        // add organizer last name filter
+        $column = $grid->getColumn('quoteReference.organizer.lastName');
+        $column->setFilterable(true);
+        $column->setTitle('Organizer (Last Name)');
+        $column->setOperatorsVisible(false);
+
+        // Get locale for stuff
+        $locale = $this->container->getParameter('locale');
+
+        // Change date format for british folks. Merica
+        $column = $grid->getColumn('created');
+        if (strpos($locale, "en_GB") !== false) {
+            $column->setFormat('d-M-Y');
+        }
 
         // Set the default order of the grid
         $grid->setDefaultOrder('created', 'DESC');
@@ -320,6 +427,21 @@ class QuoteVersionController extends Controller
         //set no data message
         $grid->setNoDataMessage("There are no deleted quotes to show. Please check your filter settings and try again.");
 
+        //set default filter value
+        $match_route = $this->generateUrl('manage_quote_deleted');
+        $referer = $request->headers->get('referer');
+        if (strpos($referer, $match_route) === false ) { // only set default filter if referer is not itself, ie reset button
+
+          $usr = $this->get('security.context')->getToken()->getUser();
+          $lastName = $usr->getLastName();
+          $filters = array(
+            'quoteReference.salesAgent.lastName' => array(
+              'operator' => 'like',
+              'from' => $lastName
+            )
+          );
+          $grid->setDefaultFilters($filters);
+        }
 
         // Export of the grid
         $grid->addExport(new CSVExport("Deleted Quotes as CSV", "deletedQuotes", array('delimiter' => ','), "UTF-8", "ROLE_BRAND"));
@@ -370,7 +492,8 @@ class QuoteVersionController extends Controller
             'shareViews',
             'organizer_full',
             'institution_full',
-            'quoteNumber'
+            'quoteNumber',
+            'salesAgent_full'
         );
 
         // Creates simple grid based on your entity (ORM)
@@ -410,8 +533,10 @@ class QuoteVersionController extends Controller
         $grid->addRowAction($editAction);
         $showAction = new RowAction('View', 'manage_quote_show');
         $grid->addRowAction($showAction);
-        $cloneAction = new RowAction('Clone', 'manage_quote_clone');
+        $cloneAction = new RowAction('Clone Quote from Template', 'manage_quote_clone');
         $grid->addRowAction($cloneAction);
+        $convertAction = new RowAction('Duplicate Template', 'manage_quote_clonetemplate');
+        $grid->addRowAction($convertAction);
         $deleteAction = new RowAction('Delete', 'manage_quote_quick_delete');
         $deleteAction->setRole('ROLE_ADMIN');
         $deleteAction->setConfirm(true);
@@ -431,6 +556,15 @@ class QuoteVersionController extends Controller
         // rename Primary sales AGent to Created By
         $organizer = $grid->getColumn('salesAgent_full');
         $organizer->setTitle('Created By');
+
+        // Get locale for stuff
+        $locale = $this->container->getParameter('locale');
+
+        // Change date format for british folks. Merica
+        $column = $grid->getColumn('created');
+        if (strpos($locale, "en_GB") !== false) {
+            $column->setFormat('d-M-Y');
+        }
 
         // Set the default order of the grid
         $grid->setDefaultOrder('created', 'DESC');
@@ -504,7 +638,7 @@ class QuoteVersionController extends Controller
         //Handling the request for institution a little different than we did for the other 2.
         $institutionParts = explode(' - ', $form->getData()->getQuoteReference()->getInstitution());
         $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findBy(
-          array('name' => $institutionParts[0], 'city' => $institutionParts[1])
+            array('name' => $institutionParts[0], 'city' => $institutionParts[1])
         );
         if (null !== $institutionEntities) {
             $institution = array_shift($institutionEntities);
@@ -851,6 +985,52 @@ class QuoteVersionController extends Controller
         ));
     }
 
+
+    /**
+     * Displays a form to clone a template to another template.
+     * @param $id id of the parent Quote (template) object
+     */
+    public function cloneTemplateAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $template = null;
+
+        // Get all Quote versions referencing Parent Quote object
+        $original_entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+
+        if (!$original_entity) {
+            throw $this->createNotFoundException('Unable to find QuoteVersion entity.' . $id);
+        }
+
+        $deepCopy = new DeepCopy();
+        $deepCopy->addFilter(new SetNullFilter(), new PropertyNameMatcher('id'));
+        $deepCopy->addFilter(new KeepFilter(), new PropertyMatcher('QuoteVersion', 'currency'));
+        $deepCopy->addFilter(new KeepFilter(), new PropertyMatcher('QuoteVersion', 'tripStatus'));
+        $deepCopy->addFilter(new KeepFilter(), new PropertyMatcher('QuoteVersion', 'transportType'));
+        $deepCopy->addFilter(new KeepFilter(), new PropertyMatcher('QuoteVersion', 'boardBasis'));
+        $deepCopy->addFilter(new DoctrineCollectionFilter(), new PropertyTypeMatcher('Doctrine\Common\Collections\Collection'));
+        $new_entity = $deepCopy->copy($original_entity);
+
+
+        if ($original_entity->getIsTemplate()) {
+            $new_entity->setIsTemplate(true);
+            $template = 'Template';
+        }
+
+        $em->persist($new_entity);
+
+        $cloneForm = $this->createCloneForm($new_entity);
+        $date_format = $this->container->getParameter('date_format');
+
+        return $this->render('QuoteBundle:QuoteVersion:edit.html.twig', array(
+            'entity' => $new_entity,
+            'edit_form' => $cloneForm->createView(),
+            'clone' => 'Clone',
+            'template' => $template,
+            'date_format' => $date_format,
+        ));
+    }
+
     /**
      * Creates a form to edit a QuoteVersion entity.
      *
@@ -915,17 +1095,8 @@ class QuoteVersionController extends Controller
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
-        //handling ajax request for organizer
-        $o_data = $editForm->getData()->getQuoteReference()->getOrganizer();
-        if (preg_match('/<+(.*?)>/', $o_data, $o_matches)) {
-            $email = $o_matches[1];
-            $entities = $em->getRepository('TUIToolkitUserBundle:User')
-                ->findByEmail($email);
-            if (NULL !== $entities) {
-                $organizer = array_shift($entities);
-                $editForm->getData()->getQuoteReference()->setOrganizer($organizer);
-            }
-        }
+
+
         //handling ajax request for SalesAgent same as we did with organizer
         $a_data = $editForm->getData()->getQuoteReference()->getSalesAgent();
         if (preg_match('/<+(.*?)>/', $a_data, $a_matches)) {
@@ -940,28 +1111,54 @@ class QuoteVersionController extends Controller
             }
         }
 
-        //handling ajax request for SecondaryContact same as we did with organizer
-        $s_data = $editForm->getData()->getQuoteReference()->getSecondaryContact();
-        if (preg_match('/<+(.*?)>/', $s_data, $s_matches)) {
-            $secondEmail = $s_matches[1];
-            $secondEntities = $em->getRepository('TUIToolkitUserBundle:User')
-                ->findByEmail($secondEmail);
-            if (NULL !== $secondEntities) {
-                $secondAgent = array_shift($secondEntities);
+        //Dont handle ajax request on template
+        if ($entity->getIsTemplate() == false) {
+
+            //handling ajax request for organizer
+            $o_data = $editForm->getData()->getQuoteReference()->getOrganizer();
+            if (preg_match('/<+(.*?)>/', $o_data, $o_matches)) {
+                $email = $o_matches[1];
+                $entities = $em->getRepository('TUIToolkitUserBundle:User')
+                    ->findByEmail($email);
+                if (NULL !== $entities) {
+                    $organizer = array_shift($entities);
+                    $editForm->getData()->getQuoteReference()->setOrganizer($organizer);
+                }
+            }
+
+            //handling ajax request for SecondaryContact same as we did with organizer
+            $s_data = $editForm->getData()
+                ->getQuoteReference()
+                ->getSecondaryContact();
+            if (preg_match('/<+(.*?)>/', $s_data, $s_matches)) {
+                $secondEmail = $s_matches[1];
+                $secondEntities = $em->getRepository('TUIToolkitUserBundle:User')
+                    ->findByEmail($secondEmail);
+                if (NULL !== $secondEntities) {
+                    $secondAgent = array_shift($secondEntities);
+                    $editForm->getData()
+                        ->getQuoteReference()
+                        ->setSecondaryContact($secondAgent);
+                }
+            }
+
+            //Handling the request for institution a little different than we did for the other 2.
+            $institutionParts = explode(' - ', $editForm->getData()
+                ->getQuoteReference()
+                ->getInstitution());
+            $institutionEntities = $em->getRepository('InstitutionBundle:Institution')
+                ->findBy(
+                    array(
+                        'name' => $institutionParts[0],
+                        'city' => $institutionParts[1]
+                    )
+                );
+            if (NULL !== $institutionEntities) {
+                $institution = array_shift($institutionEntities);
                 $editForm->getData()
                     ->getQuoteReference()
-                    ->setSecondaryContact($secondAgent);
+                    ->setInstitution($institution);
             }
-        }
-
-        //Handling the request for institution a little different than we did for the other 2.
-        $institutionParts = explode(' - ', $editForm->getData()->getQuoteReference()->getInstitution());
-        $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findBy(
-            array('name' => $institutionParts[0], 'city' => $institutionParts[1])
-        );
-        if (null !== $institutionEntities) {
-            $institution = array_shift($institutionEntities);
-            $editForm->getData()->getQuoteReference()->setInstitution($institution);
         }
 
         // Handling if the Save as New Revision button was clicked
@@ -978,16 +1175,16 @@ class QuoteVersionController extends Controller
                 $new_entity,
                 $uniqueEntity
             );
-            if (count($errors)==0) {
+            if (count($errors) == 0) {
 
                 // clone the content blocks
                 $new_entity->setContent($this->cloneContentBlocks($entity->getContent()));
 
-                    // And clone the Header block if it has one
-                    if ($entity->getHeaderBlock()) {
-                        $headerBlock = $entity->getHeaderBlock()->getId();
-                        $new_entity->setHeaderBlock($this->cloneHeaderBlock($headerBlock));
-                    }
+                // And clone the Header block if it has one
+                if ($entity->getHeaderBlock()) {
+                    $headerBlock = $entity->getHeaderBlock()->getId();
+                    $new_entity->setHeaderBlock($this->cloneHeaderBlock($headerBlock));
+                }
 
 
                 $new_entity->setId(null);
@@ -1037,8 +1234,11 @@ class QuoteVersionController extends Controller
         $entity = new QuoteVersion();
         $cloneform = $this->createCloneForm($entity);
         $cloneform->handleRequest($request);
+        // why isnt isTemplate getting handled?
+        $req_params = $request->request->get('tui_toolkit_quotebundle_quoteversion');
+        $req_param_templ = isset($req_params['isTemplate']) ? $req_params['isTemplate'] : 0;
 
-        if ($entity->getIsTemplate()) {
+        if ($entity->getIsTemplate() || $req_param_templ == "1") {
             $template = 'Template';
             $route = '_templates';
         } else {
@@ -1046,18 +1246,6 @@ class QuoteVersionController extends Controller
             $route = '';
         }
 
-
-        //handling ajax request for organizer
-        $o_data = $cloneform->getData()->getQuoteReference()->getOrganizer();
-        if (preg_match('/<+(.*?)>/', $o_data, $o_matches)) {
-            $email = $o_matches[1];
-            $entities = $em->getRepository('TUIToolkitUserBundle:User')
-                ->findByEmail($email);
-            if (NULL !== $entities) {
-                $organizer = array_shift($entities);
-                $cloneform->getData()->getQuoteReference()->setOrganizer($organizer);
-            }
-        }
         //handling ajax request for SalesAgent same as we did with organizer
         $a_data = $cloneform->getData()->getQuoteReference()->getSalesAgent();
         if (preg_match('/<+(.*?)>/', $a_data, $a_matches)) {
@@ -1072,8 +1260,27 @@ class QuoteVersionController extends Controller
             }
         }
 
+        //Dont handle ajax request on template
+        //if ($template != 'Template') {
+
+        //handling ajax request for organizer
+        $o_data = $cloneform->getData()->getQuoteReference()->getOrganizer();
+        if (preg_match('/<+(.*?)>/', $o_data, $o_matches)) {
+            $email = $o_matches[1];
+            $entities = $em->getRepository('TUIToolkitUserBundle:User')
+                ->findByEmail($email);
+            if (NULL !== $entities) {
+                $organizer = array_shift($entities);
+                $cloneform->getData()
+                    ->getQuoteReference()
+                    ->setOrganizer($organizer);
+            }
+        }
+
         //handling ajax request for SecondaryContact same as we did with organizer
-        $s_data = $cloneform->getData()->getQuoteReference()->getSecondaryContact();
+        $s_data = $cloneform->getData()
+            ->getQuoteReference()
+            ->getSecondaryContact();
         if (preg_match('/<+(.*?)>/', $s_data, $s_matches)) {
             $secondEmail = $s_matches[1];
             $secondEntities = $em->getRepository('TUIToolkitUserBundle:User')
@@ -1087,14 +1294,23 @@ class QuoteVersionController extends Controller
         }
 
         //Handling the request for institution a little different than we did for the other 2.
-        $institutionParts = explode(' - ', $cloneform->getData()->getQuoteReference()->getInstitution());
-        $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findBy(
-          array('name' => $institutionParts[0], 'city' => $institutionParts[1])
-        );
-        if (null !== $institutionEntities) {
+        $institutionParts = explode(' - ', $cloneform->getData()
+            ->getQuoteReference()
+            ->getInstitution());
+        $institutionEntities = $em->getRepository('InstitutionBundle:Institution')
+            ->findBy(
+                array(
+                    'name' => $institutionParts[0],
+                    'city' => isset($institutionParts[1]) ? $institutionParts[1] : ''
+                )
+            );
+        if (NULL !== $institutionEntities) {
             $institution = array_shift($institutionEntities);
-            $cloneform->getData()->getQuoteReference()->setInstitution($institution);
+            $cloneform->getData()
+                ->getQuoteReference()
+                ->setInstitution($institution);
         }
+        //}
 
         // clone the content blocks, but first load the original entity since we never did that - only used form values
         $pathArr = explode('/', $_SERVER['HTTP_REFERER']);
@@ -1264,7 +1480,7 @@ class QuoteVersionController extends Controller
         $quoteVersion->setLocked($status);
         $em->persist($quoteVersion);
         $em->flush();
-       // $this->get('session')->getFlashBag()->add('notice', 'Quote Lock has been toggled ');
+        // $this->get('session')->getFlashBag()->add('notice', 'Quote Lock has been toggled ');
 
         return new Response(json_encode((array)$quoteVersion));
 

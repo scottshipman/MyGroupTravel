@@ -1,21 +1,21 @@
 {% extends '::base.html.twig' %}
-{% block title %}Manage Trip Status{% endblock %}
-{% block page_title %}Manage Trip Status{% endblock %}
+{% block title %}{% trans %}tripstatus.title.index{% endtrans %}{% endblock %}
+{% block page_title %}{% trans %}tripstatus.page_title.index{% endtrans %}{% endblock %}
 
 {% block body -%}
 
     <ul class="record_actions">
         <li>
-            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_tripstatus_new') }}"><i class="fa fa-plus-circle"></i> Create a new Trip Status</a>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_tripstatus_new') }}"><i class="fa fa-plus-circle"></i> {% trans %}tripstatus.actions.create_new{% endtrans %}</a>
         </li>
     </ul>
 
     <table class="mdl-data-table mdl-js-data-table">
         <thead>
             <tr>
-                <th class="mdl-data-table__cell--non-numeric">Name (ID)</th>
-                <th class="mdl-data-table__cell--non-numeric">Visible</th>
-                <th class="mdl-data-table__cell--non-numeric cell-actions">Actions</th>
+                <th class="mdl-data-table__cell--non-numeric">{% trans %}tripstatus.table.label.name{% endtrans %}</th>
+                <th class="mdl-data-table__cell--non-numeric">{% trans %}tripstatus.table.label.visible{% endtrans %}</th>
+                <th class="mdl-data-table__cell--non-numeric cell-actions">{% trans %}tripstatus.table.label.action{% endtrans %}</th>
             </tr>
         </thead>
         <tbody>
@@ -34,10 +34,10 @@
                 <td class="mdl-data-table__cell--non-numeric cell-actions">
                     <ul class="table-actions">
                         <li>
-                            <a href="{{ path('manage_tripstatus_show', { 'id': entity.id }) }}" title="View"><i class="fa fam-view"></i></a>
+                            <a href="{{ path('manage_tripstatus_show', { 'id': entity.id }) }}" title="{% trans %}tripstatus.table.actions.view{% endtrans %}"><i class="fa fam-view"></i></a>
                         </li>
                         <li>
-                            <a href="{{ path('manage_tripstatus_edit', { 'id': entity.id }) }}" title="Edit"><i class="fa fam-edit"></i></a>
+                            <a href="{{ path('manage_tripstatus_edit', { 'id': entity.id }) }}" title="{% trans %}tripstatus.table.actions.edit{% endtrans %}"><i class="fa fam-edit"></i></a>
                         </li>
                     </ul>
                 </td>

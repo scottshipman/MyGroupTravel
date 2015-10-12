@@ -581,6 +581,7 @@ class QuoteSiteController extends Controller
       'method' => 'POST',
       'attr'   => array(
         'id'    => 'form-summary-edit-form',
+        'class' => 'form-summary-edit-form',
       )
     ));
 

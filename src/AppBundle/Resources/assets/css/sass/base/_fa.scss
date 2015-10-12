@@ -25,6 +25,14 @@
 .fam-clone {
 
   &:before {
+    content: '\f0fe';
+  }
+
+}
+
+.fam-duplicate {
+
+  &:before {
     content: '\f24d';
   }
 
@@ -71,4 +79,9 @@
   }
 }
 
+.fam-email {
+  &:before {
+    content: '\f0e0';
+  }
+}
 

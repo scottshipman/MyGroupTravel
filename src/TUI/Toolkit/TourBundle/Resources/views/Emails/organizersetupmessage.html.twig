@@ -1,0 +1,76 @@
+{% block body_html %}
+    {% autoescape false %}
+        {{ dump() }}
+    <div style="color:#fff; font-size: 1px; text-align: center;">Ensure receiving emails from {{ brand.name }}, please
+        add us to
+        your contact list.
+    </div>
+    <div style="height: 150px; background-color:{{ brand.primaryColor }}; color:{{ brand.primaryColor }}; : width: 100%;"><p style="text-align: center; color: white; margin-top: 0; padding-top: 20px;">Full deposit due by [deposit due date] for {{ entity.name }}</p></div>
+    <div class="outer" style="background:#E5E8EA; margin-top: -20px; "></br>
+        <table width="100%" table-align="center" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td style="text-align: center;">
+                    <center>
+                        <div class="inner"
+                             style="width:80%; margin: 0 auto; background-color: #fff; text-align: center; padding-bottom: 25px; margin-top: -90px;">
+                            <center>
+                                <div class="content"
+                                     style="position: relative; width: 80%; margin: 0 auto; text-align: center; padding-top: 30px; ">
+                                    <center>
+                                        {% if brand.media %}
+                                            <img style="margin: 0 auto; position: relative; display: block; max-width: 250px;"
+                                                 src="{{ absolute_url(asset(".." ~ brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename )) }}"
+                                                 alt="{{ brand.name }}">
+                                        {% else %}
+                                            <p style="text-align: center; text-transform: uppercase; color: #283F5F;">{{ brand.name }}</p>
+                                        {% endif %}
+                                    </center>
+                                    <h2 style="text-align: center; font-weight: 100; color: #283F5F;">Activate your account and set up your tour</h2>
+
+                                    <p style="text-align: center; color: #717D82;">
+                                        Hi {{ user.firstName|capitalize }}, thanks for accepting out quote for {{ entity.name }}.  We've created a set of tools to help you manage your tour online and you need to activate your account to start using them.  Here are some of the things you'll be able to do with your account.</p>
+                                    <hr style="color: #C7C3C5;"/>
+                                    <ul style="color: #C7C3C5; text-align: left">
+                                        <li>Personalise your tour website and easily promote the tour to pupils and parents</li>
+                                        <li>Manage passenger sign ups, deposits and payments to keep track of progress as your go</li>
+                                        <li>Invite parents and passengers to sign up to add their own info</li>
+                                    </ul>
+                                    <center>
+                                        <a style="text-decoration: none; color:#fff; display: block; width: 40%; text-align: center; padding: 20px; margin: 20px auto; background-color:{{ brand.primaryColor }};"
+                                           href="{{ absolute_url("/register/confirm/" ~ user.confirmationToken) }}">Activate your account</a>
+                                    </center>
+                                    <hr style="color: #C7C3C5;"/>
+                                    <p style="text-align: center; color: #C7C3C5;">
+                                        You can also paste the link below straight into your browser window:
+                                    </p></br>
+                                    <a style="text-decoration: none; color:{{ brand.primaryColor }}; text-align: center; display: block; width: auto;"
+                                       href="{{ absolute_url("/register/confirm/" ~ user.confirmationToken) }}">{{ absolute_url("/register/confirm/" ~ user.confirmationToken) }}</a></br>
+                                    <hr style="color: #C7C3C5;"/>
+                                    {% if additional %}
+                                        <h2 style="text-align: center; font-weight: 100; color: #283F5F;">Message from {{ agent.firstName }} {{ agent.lastName }} at {{ brand.name }}</h2>
+                                        <p style="text-align: center; color: #717D82;">{{ additional }}</p>
+                                        <hr>
+                                    {% endif %}
+                                    <h2 style="text-align: center; font-weight: 100; color: #283F5F;">Contact</h2>
+                                    <div style="text-align: center; color: #717D82;">
+                                        <p style="display: inline">{{ agent.firstName }} {{ agent.lastName }}</p>
+                                        <p style="display: inline">{{ agent.email }}</p>
+                                        <p style="display: inline">{{ agent.phoneNumber }}</p>
+                                    </div>
+                                </div>
+                            </center>
+                        </div>
+                        <footer style="background-color:#E5E8EA; padding-bottom: 25px; padding-top: 25px">
+                            <div class="footer-middle" style="width: 60%; margin: 0 auto; position: relative;">
+                                <p style="text-align: center; color:#9DA6AA;">Copyright
+                                    © {{ "now"|date("Y") }} {{ brand.name }}, All rights reserved</p>
+                            </div>
+                        </footer>
+                    </center>
+                </td>
+            </tr>
+        </table>
+    </div>
+    {% endautoescape %}
+{% endblock %}
+
