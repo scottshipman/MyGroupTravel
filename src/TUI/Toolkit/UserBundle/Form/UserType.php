@@ -43,7 +43,8 @@ class UserType extends AbstractType
           ->add('honorific', 'choice', array(
             'required' => false,
             'placeholder' => 'Select',
-            'label' => 'Title',
+            'label' => 'user.form.honorific',
+            'translation_domain'  => 'messages',
               'choices' => array(
                 'Mr.' => 'Mr.',
                 'Mrs.' => 'Mrs.',
@@ -53,21 +54,25 @@ class UserType extends AbstractType
                 )
               ))
           ->add('firstName', 'text', array(
-            'label' => 'First Name',
+            'label' => 'user.form.fname',
+            'translation_domain'  => 'messages',
             'required' => true,
 
               ))
           ->add('lastName', 'text', array(
-            'label' => 'Last Name',
+            'label' => 'user.form.lname',
+            'translation_domain'  => 'messages',
             'required' => true,
               ))
           ->add('email', 'email', array(
-            'label' => 'Email Address',
+            'label' => 'user.form.email',
+            'translation_domain'  => 'messages',
             'required'  => true,
 
           ))
           ->add('phoneNumber', 'tel', array(
-            'label' => 'Phone Number',
+            'label' => 'user.form.phone',
+            'translation_domain'  => 'messages',
             'required' => false,
             'default_region' => $defaultRegion,
             'format' => $phoneFormat

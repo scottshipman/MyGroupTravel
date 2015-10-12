@@ -1,13 +1,13 @@
 {% extends '::base.html.twig' %}
-{% block title %}Institution Dashboard - Deleted{% endblock %}
-{% block page_title %}Institution Dashboard - Deleted{% endblock %}
+{% block title %}{% trans %}institution.title.deleted{% endtrans %}{% endblock %}
+{% block page_title %}{% trans %}institution.page_title.deleted{% endtrans %}{% endblock %}
 
 {% block body -%}
 
     <ul class="record_actions">
         <li>
             <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_institution_new') }}">
-                Create a new Institution
+                {% trans %}institution.actions.create_new{% endtrans %}
             </a>
         </li>
     </ul>
@@ -16,7 +16,7 @@
         {# Only show this tab if is_granted ROLE_ADMIN #}
         {% if is_granted("ROLE_ADMIN") %}
             {% block deleted_tab %}
-                <a class="mdl-tabs__tab is-active" href="{{ path('manage_institution_deleted') }}">Deleted Institutions</a>
+                <a class="mdl-tabs__tab is-active" href="{{ path('manage_institution_deleted') }}">{% trans %}institution.tabs.deleted{% endtrans %}</a>
             {% endblock %}
         {% endif %}
     {% endembed %}

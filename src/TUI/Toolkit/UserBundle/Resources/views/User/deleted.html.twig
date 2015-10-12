@@ -1,18 +1,18 @@
 {% extends '::base.html.twig' %}
-{% block title %}User Dashboard - Deleted{% endblock %}
-{% block page_title %}User Dashboard - Deleted{% endblock %}
+{% block title %}{% trans %}user.title.deleted{% endtrans %}{% endblock %}
+{% block page_title %}{% trans %}user.page_title.deleted{% endtrans %}{% endblock %}
 
 {% block body -%}
 
     <ul class="record_actions">
         <li>
-            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('user_new') }}">Create a new User</a>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('user_new') }}">{% trans %}user.actions.create_new{% endtrans %}</a>
         </li>
     </ul>
 
     {% embed "TUIToolkitUserBundle:User:user_tabs.html.twig" %}
         {% block deleted_tab %}
-            <a class="mdl-tabs__tab is-active" href="{{ path('user_deleted') }}">Deleted Users</a>
+            <a class="mdl-tabs__tab is-active" href="{{ path('user_deleted') }}">{% trans %}user.tabs.deleted{% endtrans %}</a>
         {% endblock %}
     {% endembed %}
 

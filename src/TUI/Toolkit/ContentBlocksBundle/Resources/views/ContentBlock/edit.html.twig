@@ -5,7 +5,7 @@
 <div class="media-wrapper">
 
     <div class="existing-media-wrapper sortable-images">
-        <div class="mdl-label-mimic"><label>Uploaded Images</label></div>
+        <div class="mdl-label-mimic"><label>{% trans %}contentBlocks.upload_form.title{% endtrans %}</label></div>
         {% if entity.mediaWrapper %}
             {% for mediaWrapper in collection %}
                 {% for media in mediaWrapper.media %}
@@ -14,19 +14,19 @@
                     <a class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a>
                     <div style="display: none" class="caption-textfield mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                         <input class="caption mdl-textfield__input" type="text" data="{{ mediaWrapper.id }}" value="{{ mediaWrapper.title }}" name="caption" id="{{ mediaWrapper.id }}-caption">
-                        <label class="mdl-textfield__label" for="{{ mediaWrapper.id }}">Caption</label></div>
+                        <label class="mdl-textfield__label" for="{{ mediaWrapper.id }}">{% trans %}contentBlocks.upload_form.caption_label{% endtrans %}</label></div>
                     <div id="{{ mediaWrapper.id }}-label" style="display: none" class="caption-label mdl-textfield mdl-js-textfield mdl-textfield--floating-label"></div>
                 </div>
                 {% endfor %}
             {% endfor %}
         {% else %}
-            <p class="none">No images uploaded.</p>
+            <p class="none">{% trans %}contentBlocks.upload_form.no_images{% endtrans %}</p>
         {% endif %}
     </div>
 
     <div class="new-media-wrapper">
 
-        <div class="mdl-label-mimic"><label>New Images</label></div>
+        <div class="mdl-label-mimic"><label>{% trans %}contentBlocks.upload_form.new{% endtrans %}</label></div>
 
         <div id="avatar-label">
             <div style="display: none;" id="dropzone-form-close"><i class="fa fa-times-circle"></i></div>
@@ -37,7 +37,7 @@
         <div id="user_media">
             <span class="media-placeholder-image new">
                 <i class="fa fa-picture-o fa-3x"></i>
-                <span>Click to upload</span>
+                <span>{% trans %}contentBlocks.actions.upload{% endtrans %}</span>
             </span>
         </div>
 
@@ -53,7 +53,7 @@
     // Wait for the DOM to be loaded
     $(document).ready(function() {
         // Add a cancel button
-        $('.ajax_contentblocks_form').find('.button-row').append('<a href="#" id="cancel-reload" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Cancel</a>');
+        $('.ajax_contentblocks_form').find('.button-row').append('<a href="#" id="cancel-reload" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">{% trans %}contentBlocks.actions.cancel{% endtrans %}</a>');
 
         // Change the h2's title when editing the title
         $('#tui_toolkit_contentblocksbundle_contentblock_title').on( 'blur change paste keyup input', function() {
@@ -216,7 +216,7 @@
                 '<a class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a>' +
                 '<div id="'+ response.id +'"class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">' +
                 '<input class="caption mdl-textfield__input" type="text" data="'+ response.id +'" name="caption" id="'+ response.id + '-caption">' +
-                '<label class="mdl-textfield__label" for="'+ response.id + '">Caption</label></div>' +
+                '<label class="mdl-textfield__label" for="'+ response.id + '">{% trans %}contentBlocks.upload_form.caption{% endtrans %}</label></div>' +
                 '<div id="'+ response.id +'"class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">' +
                 '</div></div>');
                 $('.mdl-textfield').css({'display': 'block'});

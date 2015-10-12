@@ -68,7 +68,7 @@ class BrandController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-            $this->get('session')->getFlashBag()->add('notice', 'Brand Saved: ' . $entity->getName());
+            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('brand.flash.save') . $entity->getName());
 
 
             return $this->redirect($this->generateUrl('_manage_brand_show', array('id' => $entity->getId())));
@@ -95,7 +95,7 @@ class BrandController extends Controller
         ));
 
         $form
-            ->add('submit', 'submit', array('label' => 'Create'));
+            ->add('submit', 'submit', array('label' => $this->get('translator')->trans('brand.actions.create')));
 
         return $form;
     }
@@ -184,7 +184,7 @@ class BrandController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('brand.actions.update')));
 
         return $form;
     }
@@ -226,7 +226,7 @@ class BrandController extends Controller
 
         if ($editForm->isValid()) {
             $em->flush();
-            $this->get('session')->getFlashBag()->add('notice', 'Brand Saved: ' . $entity->getName());
+            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('brand.flash.save') . $entity->getName());
             return $this->redirect($this->generateUrl('_manage_brand_edit', array('id' => $id)));
         }
 
@@ -258,7 +258,7 @@ class BrandController extends Controller
 
             $em->remove($entity);
             $em->flush();
-            $this->get('session')->getFlashBag()->add('notice', 'Brand Deleted: ' . $entity->getName());
+            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('brand.flash.delete') . $entity->getName());
 
         }
 
@@ -277,7 +277,7 @@ class BrandController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('_manage_brand_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->add('submit', 'submit', array('label' => $this->get('translator')->trans('brand.actions.delete')))
             ->getForm();
     }
 

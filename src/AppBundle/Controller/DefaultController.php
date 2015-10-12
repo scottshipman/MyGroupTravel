@@ -54,26 +54,26 @@ class DefaultController extends Controller
        //extensive suitability check before doing anything with the file…
           if (($_FILES['upload'] == "none") OR (empty($_FILES['upload']['name'])) )
           {
-            $message = "No file uploaded.";
+            $message = $this->get('translator')->trans('app.ckeditor-upload.empty-file');;
           }
           else if ($_FILES['upload']["size"] == 0)
           {
-            $message = "The file is of zero length.";
+            $message = $this->get('translator')->trans('app.ckeditor-upload.zero-file');
           }
           else if (($_FILES['upload']["type"] != "image/gif") AND ($_FILES['upload']["type"] != "image/pjpeg") AND ($_FILES['upload']["type"] != "image/jpeg") AND ($_FILES['upload']["type"] != "image/png"))
           {
-            $message = "The image must be in either JPG, GIF or PNG format. Please upload a JPG or PNG instead.";
+            $message = $this->get('translator')->trans('app.ckeditor-upload.wrong-file');
           }
           else if (!is_uploaded_file($_FILES['upload']["tmp_name"]))
           {
-            $message = "You may be attempting to hack our server. We're on to you; expect a knock on the door sometime soon.";
+            $message = $this->get('translator')->trans('no-file');
           }
           else {
         $message = "";
             $move = @ move_uploaded_file($_FILES['upload']['tmp_name'], $url);
             if(!$move)
             {
-              $message = "Unable to upload the file. Please check the server permissions for the file storage location.";
+              $message = $this->get('translator')->trans('app.ckeditor-upload.move-error');
             }
             $url = "/" . $url;
           }

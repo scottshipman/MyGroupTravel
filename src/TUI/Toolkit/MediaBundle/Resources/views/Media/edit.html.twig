@@ -1,5 +1,5 @@
 {% extends '::base.html.twig' %}
-{% block title %}Edit {{ entity.filename }}{% endblock %}
+{% block title %}{% trans %}media.title.edit{% endtrans %} {{ entity.filename }}{% endblock %}
 
 {% block body -%}
     <h1>Edit {{ entity.filename }}</h1>
@@ -10,7 +10,7 @@
 
     <ul class="record_actions">
         <li>
-            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('media') }}"><i class="fa fa-arrow-circle-left"></i> Back to the list</a>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('media') }}"><i class="fa fa-arrow-circle-left"></i> {% trans %}media.actions.back{% endtrans %}</a>
         </li>
     </ul>
     {#{{ form_javascript(form) }}#}

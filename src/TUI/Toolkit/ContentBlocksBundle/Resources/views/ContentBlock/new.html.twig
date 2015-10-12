@@ -3,13 +3,13 @@
     <div class="media-wrapper">
 
         <div class="existing-media-wrapper sortable-images">
-            <div class="mdl-label-mimic"><label>Uploaded Images</label></div>
-            <p class="none">No images uploaded.</p>
+            <div class="mdl-label-mimic"><label>{% trans %}contentBlocks.upload_form.title{% endtrans %}</label></div>
+            <p class="none">{% trans %}contentBlocks.upload_form.no_images{% endtrans %}</p>
         </div>
 
         <div class="new-media-wrapper">
 
-            <div class="mdl-label-mimic"><label>New Images</label></div>
+            <div class="mdl-label-mimic"><label>{% trans %}contentBlocks.upload_form.new{% endtrans %}</label></div>
 
             <div id="avatar-label">
                 <div style="display: none;" id="dropzone-form-close"><i class="fa fa-times-circle"></i></div>
@@ -20,7 +20,7 @@
             <div id="user_media">
                 <span class="media-placeholder-image new">
                     <i class="fa fa-picture-o fa-3x"></i>
-                    <span>Click to upload</span>
+                    <span>{% trans %}contentBlocks.actions.upload{% endtrans %}</span>
                 </span>
             </div>
 
@@ -118,7 +118,7 @@
                         '<a class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a>' +
                         '<div id="'+ response.id +'"class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">' +
                         '<input class="caption mdl-textfield__input" type="text" data="'+ response.id +'" name="caption" id="'+ response.id + '-caption">' +
-                        '<label class="mdl-textfield__label" for="'+ response.id + '">Caption</label></div>' +
+                        '<label class="mdl-textfield__label" for="'+ response.id + '">{% trans %}contentBlocks.upload_form.caption_label{% endtrans %}</label></div>' +
                         '<div id="'+ response.id +'"class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">' +
                         '</div></div>');
                         $('.mdl-textfield').css({'display': 'block'});

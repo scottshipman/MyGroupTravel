@@ -24,3 +24,5 @@ parameters:
     locale: en_GB.utf8
     currency: GBP
     date_format:    dd-mm-yy
+    user_system_email: noreply@toolkit.com
+    user_system_name: TUI Toolkit System

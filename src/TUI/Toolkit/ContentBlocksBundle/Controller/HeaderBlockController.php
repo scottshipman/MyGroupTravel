@@ -114,7 +114,7 @@ class HeaderBlockController extends Controller
             ),
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('contentBlocks.actions.create')));
 
         return $form;
     }
@@ -252,7 +252,7 @@ class HeaderBlockController extends Controller
             ),
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('contentBlocks.actions.update')));
 
         return $form;
     }
@@ -274,7 +274,7 @@ class HeaderBlockController extends Controller
             ),
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('contentBlocks.actions.update')));
 
         return $form;
     }
@@ -460,7 +460,7 @@ class HeaderBlockController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $entity = new ContentBlock();
-        $entity->setTitle('New Header Block');
+        $entity->setTitle($this->get('translator')->trans('contentBlocks.placeholder.header'));
 
         $em->persist($entity);
         $em->flush();

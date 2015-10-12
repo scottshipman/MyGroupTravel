@@ -9,9 +9,9 @@
     {% endif %}
     <div class="tui-avatar-dropdown">
         <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="accbtn">
-            <li><a class="mdl-menu__item" href="/profile">View</a>
+            <li><a class="mdl-menu__item" href="/profile">{% trans %}app.tui_drawer.actions.view{% endtrans %}</a>
             </li>
-            <li><a class="mdl-menu__item" href="/user/{{ app.user.id }}/edit">Edit</a>
+            <li><a class="mdl-menu__item" href="/user/{{ app.user.id }}/edit">{% trans %}app.tui_drawer.actions.view{% endtrans %}</a>
             </li>
             <li><a class="mdl-menu__item" href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a></li>
         </ul>

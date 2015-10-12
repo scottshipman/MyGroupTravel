@@ -1,19 +1,19 @@
 {% extends '::base.html.twig' %}
-{% block title %}Institution Dashboard{% endblock %}
-{% block page_title %}Institution Dashboard{% endblock %}
+{% block title %}{% trans %}institution.title.index{% endtrans %}{% endblock %}
+{% block page_title %}{% trans %}institution.page_title.index{% endtrans %}{% endblock %}
 
 {% block body -%}
 
     <ul class="record_actions">
         <li>
-            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_institution_new') }}"><i class="fa fa-plus-circle"></i> Create a new Institution</a>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_institution_new') }}"><i class="fa fa-plus-circle"></i> {% trans %}institution.actions.create_new{% endtrans %}</a>
         </li>
     </ul>
 
     {% embed "InstitutionBundle:Institution:institution_tabs.html.twig" %}
         {% if is_granted("ROLE_ADMIN") %}
             {% block institution_tab %}
-                <a class="mdl-tabs__tab is-active" href="{{ path('manage_institution') }}">Current Institutions</a>
+                <a class="mdl-tabs__tab is-active" href="{{ path('manage_institution') }}">{% trans %}institution.tabs.current{% endtrans %}</a>
             {% endblock %}
         {% endif %}
     {% endembed %}

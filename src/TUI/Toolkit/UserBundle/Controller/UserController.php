@@ -60,28 +60,28 @@ class UserController extends Controller
         // add roles filter
         $column = $grid->getColumn('roles');
         $column->setFilterable(true);
-        $column->setTitle('Role');
+        $column->setTitle($this->get('translator')->trans('user.grid.filter.title.role'));
         $column->setFilterType('select');
         $column->setOperatorsVisible(false);
 
         // add email filter
         $column = $grid->getColumn('email');
         $column->setFilterable(true);
-        $column->setTitle('Email');
+        $column->setTitle($this->get('translator')->trans('user.grid.filter.title.email'));
         //$column->setFilterType('select');
         $column->setOperatorsVisible(false);
 
         // add enabled filter
         $column = $grid->getColumn('enabled');
         $column->setFilterable(true);
-        $column->setTitle('Enabled');
+        $column->setTitle($this->get('translator')->trans('user.grid.filter.title.enabled'));
         //$column->setFilterType('select');
         $column->setOperatorsVisible(false);
 
         // add last name filter
         $column = $grid->getColumn('lastName');
         $column->setFilterable(true);
-        $column->setTitle('Last Name');
+        $column->setTitle($this->get('translator')->trans('user.grid.filter.title.lname'));
         $column->setOperatorsVisible(false);
 
         // Add action column
@@ -122,7 +122,7 @@ class UserController extends Controller
 
         //manipulate the Columns
         $column = $grid->getColumn('lastLogin');
-        $column->setTitle('Last Login');
+        $column->setTitle($this->get('translator')->trans('user.grid.column.title.last_login'));
         if (strpos($locale, "en_GB") !== false) {
             $column->setFormat('d-M-Y');
         }
@@ -143,10 +143,10 @@ class UserController extends Controller
         $grid->setLimits(array(10, 25, 50, 100));
 
         //set no data message
-        $grid->setNoDataMessage("There are no Users to show. Please check your filter settings and try again.");
+        $grid->setNoDataMessage($this->get('translator')->trans('user.grid.no_result'));
 
         // Export of the grid
-        $grid->addExport(new CSVExport("Users as CSV", "currentUsers", array('delimiter' => ','), "UTF-8", "ROLE_BRAND"));
+        $grid->addExport(new CSVExport($this->get('translator')->trans('user.grid.export'), "currentUsers", array('delimiter' => ','), "UTF-8", "ROLE_BRAND"));
 
         // Manage the grid redirection, exports and the response of the controller
         return $grid->getGridResponse('TUIToolkitUserBundle:User:index.html.twig');
@@ -194,7 +194,7 @@ class UserController extends Controller
 
         //manipulate the Columns
         $column = $grid->getColumn('lastLogin');
-        $column->setTitle('Last Login');
+        $column->setTitle($this->get('translator')->trans('user.grid.column.title.last_login'));
         if (strpos($locale, "en_GB") !== false) {
             $column->setFormat('d-M-Y');
         }
@@ -213,10 +213,10 @@ class UserController extends Controller
         $grid->setLimits(array(10, 25, 50, 100));
 
         //set no data message
-        $grid->setNoDataMessage("There are no Deleted Users to show. Please check your filter settings and try again.");
+        $grid->setNoDataMessage($this->get('translator')->trans('user.grid.no_results-deleted'));
 
         // Export of the grid
-        $grid->addExport(new CSVExport("Deleted Users as CSV", "deletedUsers", array('delimiter' => ','), "UTF-8", "ROLE_ADMIN"));
+        $grid->addExport(new CSVExport($this->get('translator')->trans('user.grid.export_deleted'), "deletedUsers", array('delimiter' => ','), "UTF-8", "ROLE_ADMIN"));
 
         // Manage the grid redirection, exports and the response of the controller
         return $grid->getGridResponse('TUIToolkitUserBundle:User:deleted.html.twig');
@@ -239,7 +239,7 @@ class UserController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-            $this->get('session')->getFlashBag()->add('notice', 'User Saved: ' . $entity->getUsername());
+            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.save') . $entity->getUsername());
 
             return $this->redirect($this->generateUrl('user_show', array('id' => $entity->getId())));
         }
@@ -317,7 +317,7 @@ class UserController extends Controller
         }
 
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('user.actions.create')));
 
         return $form;
     }
@@ -341,7 +341,7 @@ class UserController extends Controller
             ),
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('user.actions.create')));
 
         return $form;
     }
@@ -442,7 +442,7 @@ class UserController extends Controller
                 'delete_form' => $deleteForm,
             ));
         } else {
-            throw new AccessDeniedException('You do not have the ability to edit this User\'s information.');
+            throw new AccessDeniedException($this->get('translator')->trans('user.exception.access'));
         }
     }
 
@@ -518,7 +518,7 @@ class UserController extends Controller
                 ));
         }
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('user.actions.update')));
 
         return $form;
     }
@@ -540,7 +540,7 @@ class UserController extends Controller
         // get current user's roles and add form elements
 
 
-        $form->add('submit', 'submit', array('label' => 'Set Password'));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('user.actions.password')));
 
         return $form;
     }
@@ -579,7 +579,7 @@ class UserController extends Controller
         if ($editForm->isValid()) {
             $entity->setUsername($editForm->getData()->getEmail());
             $em->flush();
-            $this->get('session')->getFlashBag()->add('notice', 'User Saved: ' . $entity->getUsername());
+            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.save') . $entity->getUsername());
 
             if (null !== $_SESSION['user_edit_return']) {
                 return $this->redirect($_SESSION['user_edit_return']);
@@ -618,7 +618,7 @@ class UserController extends Controller
             $entity->setPassword($setForm->getData()->getPlainPassword());
             $em->persist($entity);
             $em->flush();
-            $this->get('session')->getFlashBag()->add('notice', 'Password Updated for: ' . $entity->getUsername());
+            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.password') . ' ' . $entity->getUsername());
 
             return $this->redirect($this->generateUrl('fos_user_profile_show'));
         }
@@ -650,11 +650,11 @@ class UserController extends Controller
             // get list of quotes related to this user first (cant delete a user if they are attached)
             //TODO add a check for Tours, and eventually other objects like payments or something.
             if ($this->canDeleteUser($entity->getId())) {
-                $em->remove($entity);
-                $em->flush();
-                $this->get('session')->getFlashBag()->add('notice', 'User Deleted: ' . $id);
+              $em->remove($entity);
+              $em->flush();
+              $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.delete') . $id);
             } else {
-                $this->get('session')->getFlashBag()->add('notice', 'Unable to delete this user because they are associated qith Quotes or Tours');
+              $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.cant_delete'));
             }
 
 
@@ -672,11 +672,11 @@ class UserController extends Controller
      */
     private function createDeleteForm($id)
     {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('user_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm();
+      return $this->createFormBuilder()
+          ->setAction($this->generateUrl('user_delete', array('id' => $id)))
+          ->setMethod('DELETE')
+          ->add('submit', 'submit', array('label' => $this->get('translator')->trans('user.flash.delete')))
+          ->getForm();
     }
 
     /**
@@ -698,7 +698,7 @@ class UserController extends Controller
         $entity->setDeleted(NULL);
         $em->persist($entity);
         $em->flush();
-        $this->get('session')->getFlashBag()->add('notice', 'User Restored: ' . $entity->getUsername());
+        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.restore') . $entity->getUsername());
 
         return $this->redirect($this->generateUrl('user'));
     }
@@ -717,13 +717,13 @@ class UserController extends Controller
             throw $this->createNotFoundException('Unable to find User entity with id:.' . $id);
         }
 
-        if ($this->canDeleteUser($entity->getId())) {
-            $em->remove($entity);
-            $em->flush();
-            $this->get('session')->getFlashBag()->add('notice', 'User Deleted: ' . $entity->getUsername());
-        } else {
-            $this->get('session')->getFlashBag()->add('error', 'Unable to delete the User because they are associated with Quotes');
-            return $this->redirect($this->generateUrl('user'));
+      if ($this->canDeleteUser($entity->getId())) {
+        $em->remove($entity);
+        $em->flush();
+        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.delete') . $entity->getUsername());
+      } else {
+          $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('user.flash.cant_delete'));
+          return $this->redirect($this->generateUrl('user'));
         }
 
         return $this->redirect($this->generateUrl('user'));
@@ -767,8 +767,8 @@ class UserController extends Controller
         $brand = $brand[0];
 
         $message = \Swift_Message::newInstance()
-            ->setSubject('Toolkit Registration Confirmation')
-            ->setFrom('registration@Toolkit.com')
+            ->setSubject($this->get('translator')->trans('user.email.registration.subject'))
+            ->setFrom($this->container->getParameter('user_system_email'))
             ->setTo($userEmail)
             ->setBody(
                 $this->renderView(
@@ -784,7 +784,7 @@ class UserController extends Controller
 
         $mailer->send($message);;
 
-        $this->get('session')->getFlashBag()->add('notice', 'A Notification was sent to ' . $user->getEmail());
+        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.registration_notification') . ' ' .$user->getEmail());
 
         return $this->redirect($this->generateUrl('user'));
 
@@ -823,8 +823,8 @@ class UserController extends Controller
         $brand = $brand[0];
 
         $message = \Swift_Message::newInstance()
-            ->setSubject('Toolkit Password Reset')
-            ->setFrom('reset@Toolkit.com')
+            ->setSubject($this->get('translator')->trans('user.email.password_reset.subject'))
+            ->setFrom($this->container->getParameter('user_system_email'))
             ->setTo($userEmail)
             ->setBody(
                 $this->renderView(
@@ -843,7 +843,7 @@ class UserController extends Controller
         $user->setPasswordRequestedAt(new \DateTime());
         $this->get('fos_user.user_manager')->updateUser($user);
 
-        $this->get('session')->getFlashBag()->add('notice', 'A Notification was sent to ' . $user->getEmail());
+        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.registration_notification') . ' ' . $user->getEmail());
 
         return $this->redirect($this->generateUrl('user'));
 
@@ -936,8 +936,8 @@ class UserController extends Controller
 
 
         $message = \Swift_Message::newInstance()
-            ->setSubject('Toolkit Password Reset')
-            ->setFrom('reset@Toolkit.com')
+            ->setSubject($this->get('translator')->trans('user.email.password_reset.subject'))
+            ->setFrom($this->container->getParameter('user_system_email'))
             ->setTo($username)
             ->setBody(
                 $this->renderView(

@@ -1,11 +1,11 @@
 {% extends '::base.html.twig' %}
-{% block title %}Edit '{{ entity.username }}'{% endblock %}
-{% block page_title %}Edit '{{ entity.username }}'{% endblock %}
+{% block title %}{% trans %}user.title.edit{% endtrans %} '{{ entity.username }}'{% endblock %}
+{% block page_title %}{% trans %}user.page_title.edit{% endtrans %} '{{ entity.username }}'{% endblock %}
 
 
 
 {% block body -%}
-    <div id="avatar-label" class="mdl-label-mimic">Profile Image
+    <div id="avatar-label" class="mdl-label-mimic">{% trans %}user.avatar.label{% endtrans %}
         <div style="display:none;" id="dropzone-form-close"><i class="fa fa-times-circle"></i></div>
     </div>
     {{ render(controller('MediaBundle:Media:createDropzoneForm', {'context':'user'})) }}
@@ -39,7 +39,7 @@
         {% else %}
             <span class="media-placeholder-image new">
                 <i class="fa fa-picture-o fa-3x"></i>
-                <span>Click to upload</span>
+                <span>{% trans %}user.media.label{% endtrans %}</span>
             </span>
         {% endif %}
     </div>
@@ -50,7 +50,7 @@
         <ul class="record_actions">
             <li>
                 <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('user') }}">
-                    <i class="fa fa-arrow-circle-left"></i> Back to the list</a>
+                    <i class="fa fa-arrow-circle-left"></i> {% trans %}user.actions.back{% endtrans %}</a>
             </li>
             {% if delete_form %}<li>{{ form(delete_form) }}</li>{% endif %}
         </ul>

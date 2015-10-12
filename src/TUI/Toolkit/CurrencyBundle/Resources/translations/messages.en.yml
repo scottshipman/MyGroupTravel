@@ -1,0 +1,37 @@
+#currencyBundle/Resources/translations/messages.en.yml
+
+currency:
+      title:
+          edit: Edit Currency
+          index: Manage Currency
+          new: Create New Currency
+          show: Board
+      page_title:
+          edit: Edit Currency
+          index: Manage Currency
+          new: Create New Currency
+          show: Currency
+
+      actions:
+          back: Back to the list
+          edit: Edit
+          update: Update
+          create: Create
+          delete: Delete
+          create_new: Create a New Currency Item
+
+
+
+      table:
+          label:
+              name: Name
+              action: Actions
+              code: Code (ID)
+              symbol: HTML Symbol
+          actions:
+              view: View
+              edit: Edit
+
+      flash:
+          save: Currency Saved -
+          delete: Currency deleted -
