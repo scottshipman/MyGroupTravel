@@ -40,7 +40,7 @@ class TourController extends Controller
      * Lists all Tour entities.
      *
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         // hide columns from the screen display
         $hidden = array(
@@ -189,7 +189,7 @@ class TourController extends Controller
      * Lists all Deleted Tours
      *
      */
-    public function deletedAction()
+    public function deletedAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $filters = $em->getFilters();
