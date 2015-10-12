@@ -49,8 +49,9 @@ class MediaWrapperController extends Controller
                 ->find($fileArray[0]);
             $images[] = $image;
             $form->getData()->setMedia($images);
-            $form->getData()->setTitle($fileArray[1]);
-            $form->getData()->setWeight($fileArray[2]);
+
+            $form->getData()->setTitle(strip_tags($fileArray[1]));
+            $form->getData()->setWeight(strip_tags($fileArray[2]));
             $em->persist($entity);
             $em->flush($entity);
 
@@ -188,27 +189,17 @@ class MediaWrapperController extends Controller
         $media = $entity->getMedia()->toArray();
 
         $editForm->getData()->setMedia($media);
-        $editForm->getData()->setTitle($fileArray[1]);
-        $editForm->getData()->setWeight($fileArray[2]);
+        $editForm->getData()->setTitle(strip_tags($fileArray[1]));
+        $editForm->getData()->setWeight(strip_tags($fileArray[2]));
 
         $em->persist($entity);
         $em->flush($entity);
-//        $em->clear();
 
         $serializer = $this->container->get('serializer');
         $imageWrapper = $serializer->serialize($entity, 'json');
 
         return new Response($imageWrapper);
 
-//        if ($editForm->isValid()) {
-
-//            return $this->redirect($this->generateUrl('manage_mediawrapper_edit', array('id' => $id)));
-
-
-//        return $this->render('MediaBundle:MediaWrapper:edit.html.twig', array(
-//            'entity' => $entity,
-//            'edit_form' => $editForm->createView(),
-//        ));
     }
 
     /**

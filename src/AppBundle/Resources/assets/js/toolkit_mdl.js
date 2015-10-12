@@ -48,6 +48,17 @@
             'margin-bottom': '1em'
         });
 
+    // Find locked items and remove edit and delete actions
+    if ($(".mdl-data-table").length) {
+        $('.locked').each(function(){
+            console.log(this);
+            var editAction = $(this).find("li a[title='Edit']");
+            editAction.parent().remove();
+            var deleteAction = $(this).find("li a[title='Delete']").parent().remove();
+            deleteAction.parent().remove();
+        });
+    };
+
     // Turn Row Actions into a dropdown menu
     if ($('.grid-row-actions').length) {
         $('.grid-row-actions').each(function (index) {
@@ -56,7 +67,7 @@
             $(this).parent().prepend('<a id="'+ btn +'" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"><i class="fa fa-ellipsis-v"></i></a>');
             $(this).addClass('mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect');
             $(this).attr('for', btn);
-            var pixels = (50 * size) + 30;
+            var pixels = (50 * size) + 34;
             $(this).parent().find('.mdl-menu').css({'min-width': pixels + 'px'});
 
             $(this).find('a').each(function () {
@@ -92,6 +103,7 @@
             '-ms-transform': 'translateY(-50%)',
             '-webkit-transform': 'translateY(-50%)'
         });
-    };
+    }
+    ;
 
 })(jQuery);

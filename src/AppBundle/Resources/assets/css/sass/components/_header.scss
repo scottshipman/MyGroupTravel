@@ -8,10 +8,6 @@
   position: relative;
   display: block;
 
-  .pdf-layout & {
-    padding: 1em;
-  }
-
   .page-title {
     position: relative;
     padding-top: 1em;
@@ -46,10 +42,6 @@
   padding-bottom: 8px;
   color: $text_white;
   float: right;
-
-  .pdf-layout & {
-    text-align: right;
-  }
 
   img {
     max-width: 120px;

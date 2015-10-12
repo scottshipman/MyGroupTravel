@@ -130,10 +130,23 @@ class QuoteVersionController extends Controller
                 return $action;
             }
         );
+        //Lock Actions are only available to admins
+        $lockAction->setRole('ROLE_ADMIN');
+
         $grid->addRowAction($lockAction);
 
+        // Change Row Color if locked
+        $source->manipulateRow(
+            function($row){
+                if ($row->getField('locked') ==true){
+                    $row->setColor('#ddd');
+                    $row->setClass('locked');
+                }
+                return $row;
+            }
+        );
         //set default filter value
-        $usr= $this->get('security.context')->getToken()->getUser();
+        $usr = $this->get('security.context')->getToken()->getUser();
         $lastName = $usr->getLastName();
         $filters = array('quoteReference.salesAgent.lastName' => array('operator' => 'like', 'from' => $lastName));
         $grid->setDefaultFilters($filters);
@@ -149,6 +162,15 @@ class QuoteVersionController extends Controller
         $column->setFilterable(true);
         $column->setTitle('Organizer (Last Name)');
         $column->setOperatorsVisible(false);
+
+        // Get locale for stuff
+        $locale = $this->container->getParameter('locale');
+
+        // Change date format for british folks. Merica
+        $column = $grid->getColumn('created');
+        if (strpos($locale, "en_GB") !== false) {
+            $column->setFormat('d-M-Y');
+        }
 
         // Set the default order of the grid
         $grid->setDefaultOrder('created', 'DESC');
@@ -253,6 +275,15 @@ class QuoteVersionController extends Controller
         $column->setTitle('Organizer (Last Name)');
         $column->setOperatorsVisible(false);
 
+        // Get locale for stuff
+        $locale = $this->container->getParameter('locale');
+
+        // Change date format for british folks. Merica
+        $column = $grid->getColumn('created');
+        if (strpos($locale, "en_GB") !== false) {
+            $column->setFormat('d-M-Y');
+        }
+
         // Set the default order of the grid
         $grid->setDefaultOrder('created', 'DESC');
 
@@ -263,7 +294,7 @@ class QuoteVersionController extends Controller
         $grid->setNoDataMessage("There are no converted quotes to show. Please check your filter settings and try again.");
 
         //set default filter value
-        $usr= $this->get('security.context')->getToken()->getUser();
+        $usr = $this->get('security.context')->getToken()->getUser();
         $lastName = $usr->getLastName();
         $filters = array('quoteReference.salesAgent.lastName' => array('operator' => 'like', 'from' => $lastName));
         $grid->setDefaultFilters($filters);
@@ -360,6 +391,15 @@ class QuoteVersionController extends Controller
         $column->setTitle('Organizer (Last Name)');
         $column->setOperatorsVisible(false);
 
+        // Get locale for stuff
+        $locale = $this->container->getParameter('locale');
+
+        // Change date format for british folks. Merica
+        $column = $grid->getColumn('created');
+        if (strpos($locale, "en_GB") !== false) {
+            $column->setFormat('d-M-Y');
+        }
+
         // Set the default order of the grid
         $grid->setDefaultOrder('created', 'DESC');
 
@@ -370,7 +410,7 @@ class QuoteVersionController extends Controller
         $grid->setNoDataMessage("There are no deleted quotes to show. Please check your filter settings and try again.");
 
         //set default filter value
-        $usr= $this->get('security.context')->getToken()->getUser();
+        $usr = $this->get('security.context')->getToken()->getUser();
         $lastName = $usr->getLastName();
         $filters = array('quoteReference.salesAgent.lastName' => array('operator' => 'like', 'from' => $lastName));
         $grid->setDefaultFilters($filters);
@@ -489,6 +529,15 @@ class QuoteVersionController extends Controller
         $organizer = $grid->getColumn('salesAgent_full');
         $organizer->setTitle('Created By');
 
+        // Get locale for stuff
+        $locale = $this->container->getParameter('locale');
+
+        // Change date format for british folks. Merica
+        $column = $grid->getColumn('created');
+        if (strpos($locale, "en_GB") !== false) {
+            $column->setFormat('d-M-Y');
+        }
+
         // Set the default order of the grid
         $grid->setDefaultOrder('created', 'DESC');
 
@@ -561,7 +610,7 @@ class QuoteVersionController extends Controller
         //Handling the request for institution a little different than we did for the other 2.
         $institutionParts = explode(' - ', $form->getData()->getQuoteReference()->getInstitution());
         $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findBy(
-          array('name' => $institutionParts[0], 'city' => $institutionParts[1])
+            array('name' => $institutionParts[0], 'city' => $institutionParts[1])
         );
         if (null !== $institutionEntities) {
             $institution = array_shift($institutionEntities);
@@ -909,50 +958,50 @@ class QuoteVersionController extends Controller
     }
 
 
-  /**
-   * Displays a form to clone a template to another template.
-   * @param $id id of the parent Quote (template) object
-   */
-  public function cloneTemplateAction($id)
-  {
-    $em = $this->getDoctrine()->getManager();
-    $template = null;
+    /**
+     * Displays a form to clone a template to another template.
+     * @param $id id of the parent Quote (template) object
+     */
+    public function cloneTemplateAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $template = null;
 
-    // Get all Quote versions referencing Parent Quote object
-    $original_entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+        // Get all Quote versions referencing Parent Quote object
+        $original_entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
 
-    if (!$original_entity) {
-      throw $this->createNotFoundException('Unable to find QuoteVersion entity.' . $id);
+        if (!$original_entity) {
+            throw $this->createNotFoundException('Unable to find QuoteVersion entity.' . $id);
+        }
+
+        $deepCopy = new DeepCopy();
+        $deepCopy->addFilter(new SetNullFilter(), new PropertyNameMatcher('id'));
+        $deepCopy->addFilter(new KeepFilter(), new PropertyMatcher('QuoteVersion', 'currency'));
+        $deepCopy->addFilter(new KeepFilter(), new PropertyMatcher('QuoteVersion', 'tripStatus'));
+        $deepCopy->addFilter(new KeepFilter(), new PropertyMatcher('QuoteVersion', 'transportType'));
+        $deepCopy->addFilter(new KeepFilter(), new PropertyMatcher('QuoteVersion', 'boardBasis'));
+        $deepCopy->addFilter(new DoctrineCollectionFilter(), new PropertyTypeMatcher('Doctrine\Common\Collections\Collection'));
+        $new_entity = $deepCopy->copy($original_entity);
+
+
+        if ($original_entity->getIsTemplate()) {
+            $new_entity->setIsTemplate(true);
+            $template = 'Template';
+        }
+
+        $em->persist($new_entity);
+
+        $cloneForm = $this->createCloneForm($new_entity);
+        $date_format = $this->container->getParameter('date_format');
+
+        return $this->render('QuoteBundle:QuoteVersion:edit.html.twig', array(
+            'entity' => $new_entity,
+            'edit_form' => $cloneForm->createView(),
+            'clone' => 'Clone',
+            'template' => $template,
+            'date_format' => $date_format,
+        ));
     }
-
-    $deepCopy = new DeepCopy();
-    $deepCopy->addFilter(new SetNullFilter(), new PropertyNameMatcher('id'));
-    $deepCopy->addFilter(new KeepFilter(), new PropertyMatcher('QuoteVersion', 'currency'));
-    $deepCopy->addFilter(new KeepFilter(), new PropertyMatcher('QuoteVersion', 'tripStatus'));
-    $deepCopy->addFilter(new KeepFilter(), new PropertyMatcher('QuoteVersion', 'transportType'));
-    $deepCopy->addFilter(new KeepFilter(), new PropertyMatcher('QuoteVersion', 'boardBasis'));
-    $deepCopy->addFilter(new DoctrineCollectionFilter(), new PropertyTypeMatcher('Doctrine\Common\Collections\Collection'));
-    $new_entity = $deepCopy->copy($original_entity);
-
-
-    if ($original_entity->getIsTemplate()) {
-      $new_entity->setIsTemplate(true);
-      $template = 'Template';
-    }
-
-    $em->persist($new_entity);
-
-    $cloneForm = $this->createCloneForm($new_entity);
-    $date_format = $this->container->getParameter('date_format');
-
-    return $this->render('QuoteBundle:QuoteVersion:edit.html.twig', array(
-      'entity' => $new_entity,
-      'edit_form' => $cloneForm->createView(),
-      'clone' => 'Clone',
-      'template' => $template,
-      'date_format' => $date_format,
-    ));
-  }
 
     /**
      * Creates a form to edit a QuoteVersion entity.
@@ -1020,68 +1069,68 @@ class QuoteVersionController extends Controller
         $editForm->handleRequest($request);
 
 
-      //handling ajax request for SalesAgent same as we did with organizer
-      $a_data = $editForm->getData()->getQuoteReference()->getSalesAgent();
-      if (preg_match('/<+(.*?)>/', $a_data, $a_matches)) {
-        $agentEmail = $a_matches[1];
-        $agentEntities = $em->getRepository('TUIToolkitUserBundle:User')
-          ->findByEmail($agentEmail);
-        if (NULL !== $agentEntities) {
-          $salesAgent = array_shift($agentEntities);
-          $editForm->getData()
-            ->getQuoteReference()
-            ->setSalesAgent($salesAgent);
+        //handling ajax request for SalesAgent same as we did with organizer
+        $a_data = $editForm->getData()->getQuoteReference()->getSalesAgent();
+        if (preg_match('/<+(.*?)>/', $a_data, $a_matches)) {
+            $agentEmail = $a_matches[1];
+            $agentEntities = $em->getRepository('TUIToolkitUserBundle:User')
+                ->findByEmail($agentEmail);
+            if (NULL !== $agentEntities) {
+                $salesAgent = array_shift($agentEntities);
+                $editForm->getData()
+                    ->getQuoteReference()
+                    ->setSalesAgent($salesAgent);
+            }
         }
-      }
 
-      //Dont handle ajax request on template
+        //Dont handle ajax request on template
         if ($entity->getIsTemplate() == false) {
 
-          //handling ajax request for organizer
-          $o_data = $editForm->getData()->getQuoteReference()->getOrganizer();
-          if (preg_match('/<+(.*?)>/', $o_data, $o_matches)) {
-            $email = $o_matches[1];
-            $entities = $em->getRepository('TUIToolkitUserBundle:User')
-              ->findByEmail($email);
-            if (NULL !== $entities) {
-              $organizer = array_shift($entities);
-              $editForm->getData()->getQuoteReference()->setOrganizer($organizer);
+            //handling ajax request for organizer
+            $o_data = $editForm->getData()->getQuoteReference()->getOrganizer();
+            if (preg_match('/<+(.*?)>/', $o_data, $o_matches)) {
+                $email = $o_matches[1];
+                $entities = $em->getRepository('TUIToolkitUserBundle:User')
+                    ->findByEmail($email);
+                if (NULL !== $entities) {
+                    $organizer = array_shift($entities);
+                    $editForm->getData()->getQuoteReference()->setOrganizer($organizer);
+                }
             }
-          }
 
-          //handling ajax request for SecondaryContact same as we did with organizer
-          $s_data = $editForm->getData()
-            ->getQuoteReference()
-            ->getSecondaryContact();
-          if (preg_match('/<+(.*?)>/', $s_data, $s_matches)) {
-            $secondEmail = $s_matches[1];
-            $secondEntities = $em->getRepository('TUIToolkitUserBundle:User')
-              ->findByEmail($secondEmail);
-            if (NULL !== $secondEntities) {
-              $secondAgent = array_shift($secondEntities);
-              $editForm->getData()
+            //handling ajax request for SecondaryContact same as we did with organizer
+            $s_data = $editForm->getData()
                 ->getQuoteReference()
-                ->setSecondaryContact($secondAgent);
+                ->getSecondaryContact();
+            if (preg_match('/<+(.*?)>/', $s_data, $s_matches)) {
+                $secondEmail = $s_matches[1];
+                $secondEntities = $em->getRepository('TUIToolkitUserBundle:User')
+                    ->findByEmail($secondEmail);
+                if (NULL !== $secondEntities) {
+                    $secondAgent = array_shift($secondEntities);
+                    $editForm->getData()
+                        ->getQuoteReference()
+                        ->setSecondaryContact($secondAgent);
+                }
             }
-          }
 
-          //Handling the request for institution a little different than we did for the other 2.
-          $institutionParts = explode(' - ', $editForm->getData()
-            ->getQuoteReference()
-            ->getInstitution());
-          $institutionEntities = $em->getRepository('InstitutionBundle:Institution')
-            ->findBy(
-              array(
-                'name' => $institutionParts[0],
-                'city' => $institutionParts[1]
-              )
-            );
-          if (NULL !== $institutionEntities) {
-            $institution = array_shift($institutionEntities);
-            $editForm->getData()
-              ->getQuoteReference()
-              ->setInstitution($institution);
-          }
+            //Handling the request for institution a little different than we did for the other 2.
+            $institutionParts = explode(' - ', $editForm->getData()
+                ->getQuoteReference()
+                ->getInstitution());
+            $institutionEntities = $em->getRepository('InstitutionBundle:Institution')
+                ->findBy(
+                    array(
+                        'name' => $institutionParts[0],
+                        'city' => $institutionParts[1]
+                    )
+                );
+            if (NULL !== $institutionEntities) {
+                $institution = array_shift($institutionEntities);
+                $editForm->getData()
+                    ->getQuoteReference()
+                    ->setInstitution($institution);
+            }
         }
 
         // Handling if the Save as New Revision button was clicked
@@ -1098,16 +1147,16 @@ class QuoteVersionController extends Controller
                 $new_entity,
                 $uniqueEntity
             );
-            if (count($errors)==0) {
+            if (count($errors) == 0) {
 
                 // clone the content blocks
                 $new_entity->setContent($this->cloneContentBlocks($entity->getContent()));
 
-                    // And clone the Header block if it has one
-                    if ($entity->getHeaderBlock()) {
-                        $headerBlock = $entity->getHeaderBlock()->getId();
-                        $new_entity->setHeaderBlock($this->cloneHeaderBlock($headerBlock));
-                    }
+                // And clone the Header block if it has one
+                if ($entity->getHeaderBlock()) {
+                    $headerBlock = $entity->getHeaderBlock()->getId();
+                    $new_entity->setHeaderBlock($this->cloneHeaderBlock($headerBlock));
+                }
 
 
                 $new_entity->setId(null);
@@ -1161,7 +1210,7 @@ class QuoteVersionController extends Controller
         $req_params = $request->request->get('tui_toolkit_quotebundle_quoteversion');
         $req_param_templ = isset($req_params['isTemplate']) ? $req_params['isTemplate'] : 0;
 
-        if ($entity->getIsTemplate() || $req_param_templ=="1") {
+        if ($entity->getIsTemplate() || $req_param_templ == "1") {
             $template = 'Template';
             $route = '_templates';
         } else {
@@ -1172,68 +1221,68 @@ class QuoteVersionController extends Controller
         //handling ajax request for SalesAgent same as we did with organizer
         $a_data = $cloneform->getData()->getQuoteReference()->getSalesAgent();
         if (preg_match('/<+(.*?)>/', $a_data, $a_matches)) {
-          $agentEmail = $a_matches[1];
-          $agentEntities = $em->getRepository('TUIToolkitUserBundle:User')
-            ->findByEmail($agentEmail);
-          if (NULL !== $agentEntities) {
-            $salesAgent = array_shift($agentEntities);
-            $cloneform->getData()
-              ->getQuoteReference()
-              ->setSalesAgent($salesAgent);
-          }
+            $agentEmail = $a_matches[1];
+            $agentEntities = $em->getRepository('TUIToolkitUserBundle:User')
+                ->findByEmail($agentEmail);
+            if (NULL !== $agentEntities) {
+                $salesAgent = array_shift($agentEntities);
+                $cloneform->getData()
+                    ->getQuoteReference()
+                    ->setSalesAgent($salesAgent);
+            }
         }
 
-      //Dont handle ajax request on template
-      //if ($template != 'Template') {
+        //Dont handle ajax request on template
+        //if ($template != 'Template') {
 
         //handling ajax request for organizer
         $o_data = $cloneform->getData()->getQuoteReference()->getOrganizer();
         if (preg_match('/<+(.*?)>/', $o_data, $o_matches)) {
-          $email = $o_matches[1];
-          $entities = $em->getRepository('TUIToolkitUserBundle:User')
-            ->findByEmail($email);
-          if (NULL !== $entities) {
-            $organizer = array_shift($entities);
-            $cloneform->getData()
-              ->getQuoteReference()
-              ->setOrganizer($organizer);
-          }
+            $email = $o_matches[1];
+            $entities = $em->getRepository('TUIToolkitUserBundle:User')
+                ->findByEmail($email);
+            if (NULL !== $entities) {
+                $organizer = array_shift($entities);
+                $cloneform->getData()
+                    ->getQuoteReference()
+                    ->setOrganizer($organizer);
+            }
         }
 
         //handling ajax request for SecondaryContact same as we did with organizer
         $s_data = $cloneform->getData()
-          ->getQuoteReference()
-          ->getSecondaryContact();
+            ->getQuoteReference()
+            ->getSecondaryContact();
         if (preg_match('/<+(.*?)>/', $s_data, $s_matches)) {
-          $secondEmail = $s_matches[1];
-          $secondEntities = $em->getRepository('TUIToolkitUserBundle:User')
-            ->findByEmail($secondEmail);
-          if (NULL !== $secondEntities) {
-            $secondAgent = array_shift($secondEntities);
-            $cloneform->getData()
-              ->getQuoteReference()
-              ->setSecondaryContact($secondAgent);
-          }
+            $secondEmail = $s_matches[1];
+            $secondEntities = $em->getRepository('TUIToolkitUserBundle:User')
+                ->findByEmail($secondEmail);
+            if (NULL !== $secondEntities) {
+                $secondAgent = array_shift($secondEntities);
+                $cloneform->getData()
+                    ->getQuoteReference()
+                    ->setSecondaryContact($secondAgent);
+            }
         }
 
         //Handling the request for institution a little different than we did for the other 2.
         $institutionParts = explode(' - ', $cloneform->getData()
-          ->getQuoteReference()
-          ->getInstitution());
-        $institutionEntities = $em->getRepository('InstitutionBundle:Institution')
-          ->findBy(
-            array(
-              'name' => $institutionParts[0],
-              'city' => isset($institutionParts[1])? $institutionParts[1] : ''
-            )
-          );
-        if (NULL !== $institutionEntities) {
-          $institution = array_shift($institutionEntities);
-          $cloneform->getData()
             ->getQuoteReference()
-            ->setInstitution($institution);
+            ->getInstitution());
+        $institutionEntities = $em->getRepository('InstitutionBundle:Institution')
+            ->findBy(
+                array(
+                    'name' => $institutionParts[0],
+                    'city' => isset($institutionParts[1]) ? $institutionParts[1] : ''
+                )
+            );
+        if (NULL !== $institutionEntities) {
+            $institution = array_shift($institutionEntities);
+            $cloneform->getData()
+                ->getQuoteReference()
+                ->setInstitution($institution);
         }
-      //}
+        //}
 
         // clone the content blocks, but first load the original entity since we never did that - only used form values
         $pathArr = explode('/', $_SERVER['HTTP_REFERER']);
@@ -1403,7 +1452,7 @@ class QuoteVersionController extends Controller
         $quoteVersion->setLocked($status);
         $em->persist($quoteVersion);
         $em->flush();
-       // $this->get('session')->getFlashBag()->add('notice', 'Quote Lock has been toggled ');
+        // $this->get('session')->getFlashBag()->add('notice', 'Quote Lock has been toggled ');
 
         return new Response(json_encode((array)$quoteVersion));
 

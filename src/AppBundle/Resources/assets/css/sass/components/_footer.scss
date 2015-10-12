@@ -21,11 +21,6 @@
   .tui-text-avatar {
     float: left;
     margin: 0 0.5em 0 0;
-
-    .pdf-layout & {
-      display: none;
-    }
-
   }
 
   .agent {
@@ -74,6 +69,11 @@
   clear: both;
   @include span-all();
   width: 100%;
+
+  .pdf-layout & {
+    padding-left: 0;
+    padding-right: 0;
+  }
 
   .footer-left-section ~ &,
   .footer-right-section ~ & {

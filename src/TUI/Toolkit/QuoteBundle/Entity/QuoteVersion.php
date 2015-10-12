@@ -5,6 +5,7 @@ namespace TUI\Toolkit\QuoteBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Doctrine\Common\Annotations;
 use Gedmo\Mapping\Annotation as Gedmo;
 use APY\DataGridBundle\Grid\Mapping as GRID;
@@ -141,7 +142,7 @@ class QuoteVersion
      * @var \DateTime
      *
      * @ORM\Column(name="expiryDate", type="date", nullable=true)
-     * @GRID\Column(title="Expirary Date", export=true)
+     * @GRID\Column(title="Expiry Date", export=true)
      */
     private $expiryDate;
 
@@ -180,16 +181,16 @@ class QuoteVersion
      * @GRID\Column(field = "quoteReference.name", title="Tour Name", export=true, filterable=true, operatorsVisible=false)
      * @GRID\Column(field = "quoteReference.id", title="ID", export=true)
      *
-     * @GRID\Column(field = "quoteReference.salesAgent.firstName", title="BA First", export=false)
-     * @GRID\Column(field = "quoteReference.salesAgent.lastName", title="BA Last", export=false)
-     * @GRID\Column(field = "quoteReference.salesAgent.email", title="BA email", export=false)
+     * @GRID\Column(field = "quoteReference.salesAgent.firstName", title="BA First", export=true)
+     * @GRID\Column(field = "quoteReference.salesAgent.lastName", title="BA Last", export=true)
+     * @GRID\Column(field = "quoteReference.salesAgent.email", title="BA email", export=true)
      * @GRID\Column(field = "quoteReference.converted", title="Converted", export=true)
      * @GRID\Column(field = "quoteReference.setupComplete", title="Setup Complete", export=true)
      * @GRID\Column(field = "quoteReference.institution.name", title="Institution Name", export=true, filterable=false, operatorsVisible=false)
      * @GRID\Column(field = "quoteReference.institution.city", title="Institution City", export=true, filterable=false, operatorsVisible=false)
-     * @GRID\Column(field = "quoteReference.organizer.firstName", title="O first", export=false)
-     * @GRID\Column(field = "quoteReference.organizer.lastName", title="O last", export=false)
-     * @GRID\Column(field = "quoteReference.organizer.email", title="O email", export=false)
+     * @GRID\Column(field = "quoteReference.organizer.firstName", title="Organiser first", export=true)
+     * @GRID\Column(field = "quoteReference.organizer.lastName", title="Organiser last", export=true)
+     * @GRID\Column(field = "quoteReference.organizer.email", title="Organiser email", export=true)
      * @GRID\Column(field = "quoteReference.destination", title="Destination", export=true, filterable=true, operatorsVisible=false)
      */
     private $quoteReference;
@@ -308,6 +309,18 @@ class QuoteVersion
     $this->views = 0;
     $this->shareViews = 0;
   }
+
+    /**
+     * @Assert\Callback
+     */
+    public function isExpiryBeforeDeparture(ExecutionContextInterface $context)
+    {
+        if ($this->getExpiryDate() >= $this->getDepartureDate()) {
+            $context->buildViolation('The expiry date must be prior to the departure date.')
+                ->atPath('expiryDate')
+                ->addViolation();
+        }
+    }
 
 
     public function getId()
