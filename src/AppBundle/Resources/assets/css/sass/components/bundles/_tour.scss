@@ -114,7 +114,7 @@
   }
 
   @include breakpoint_desktop() {
-    width: $column_total_width;
+    width: $column_total_width * 2;
   }
 
   a {
