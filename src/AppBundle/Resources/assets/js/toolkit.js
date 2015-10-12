@@ -136,4 +136,24 @@
         };
     });
 
+    $(document).on('change', '#tui_toolkit_tourbundle_toursetup_pricePersonPublic', function(e) {
+
+        var price = $(this).val();
+        var passengers = $("#passengers").text();
+        var newTotal = Number(price) * Number(passengers);
+        var adjusted =  $('#adjusted-price');
+        var currency = $("#currency").text();
+
+        adjusted.text(currency + newTotal);
+        var total = $("#total").text();
+        console.log(price);
+        console.log(total);
+        if (Number(newTotal) < Number(total)){
+            adjusted.css({"color":"red"});
+        }
+        else if (Number(newTotal) >= Number(total)){
+            adjusted.css({"color":"green"});
+        }
+    });
+
 })(jQuery);
