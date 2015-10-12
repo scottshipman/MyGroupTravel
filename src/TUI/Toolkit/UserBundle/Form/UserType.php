@@ -33,8 +33,8 @@ class UserType extends AbstractType
           $defaultRegion = 'GB';
           break;
         default:
-          $date_label = PhoneNumberFormat::NATIONAL;
-          $date_format = 'US';
+          $phoneFormat = PhoneNumberFormat::NATIONAL;
+          $defaultRegion = 'US';
           break;
       }
 
