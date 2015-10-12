@@ -38,7 +38,7 @@ class QuoteVersionController extends Controller
      * Lists all QuoteVersion ( IE Quotes) entities.
      *
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         // hide columns from the screen display
         $hidden = array(
@@ -146,10 +146,19 @@ class QuoteVersionController extends Controller
             }
         );
         //set default filter value
-        $usr = $this->get('security.context')->getToken()->getUser();
-        $lastName = $usr->getLastName();
-        $filters = array('quoteReference.salesAgent.lastName' => array('operator' => 'like', 'from' => $lastName));
-        $grid->setDefaultFilters($filters);
+        $match_route = $this->generateUrl('manage_quote');
+        $referer = $request->headers->get('referer');
+        if (strpos($referer, $match_route) === false ) { // only set default filter if referer is not itself, ie reset button
+          $usr = $this->get('security.context')->getToken()->getUser();
+          $lastName = $usr->getLastName();
+          $filters = array(
+            'quoteReference.salesAgent.lastName' => array(
+              'operator' => 'like',
+              'from' => $lastName
+            )
+          );
+          $grid->setDefaultFilters($filters);
+        }
 
         // add business admin last name filter
         $column = $grid->getColumn('quoteReference.salesAgent.lastName');
@@ -294,10 +303,19 @@ class QuoteVersionController extends Controller
         $grid->setNoDataMessage("There are no converted quotes to show. Please check your filter settings and try again.");
 
         //set default filter value
-        $usr = $this->get('security.context')->getToken()->getUser();
-        $lastName = $usr->getLastName();
-        $filters = array('quoteReference.salesAgent.lastName' => array('operator' => 'like', 'from' => $lastName));
-        $grid->setDefaultFilters($filters);
+        $match_route = $this->generateUrl('manage_quote_converted');
+        $referer = $request->headers->get('referer');
+        if (strpos($referer, $match_route) === false ) { // only set default filter if referer is not itself, ie reset button
+          $usr = $this->get('security.context')->getToken()->getUser();
+          $lastName = $usr->getLastName();
+          $filters = array(
+            'quoteReference.salesAgent.lastName' => array(
+              'operator' => 'like',
+              'from' => $lastName
+            )
+          );
+          $grid->setDefaultFilters($filters);
+        }
 
         // Export of the grid
         $grid->addExport(new CSVExport("Converted Quotes as CSV", "convertedQuotes", array('delimiter' => ','), "UTF-8", "ROLE_BRAND"));
@@ -410,10 +428,20 @@ class QuoteVersionController extends Controller
         $grid->setNoDataMessage("There are no deleted quotes to show. Please check your filter settings and try again.");
 
         //set default filter value
-        $usr = $this->get('security.context')->getToken()->getUser();
-        $lastName = $usr->getLastName();
-        $filters = array('quoteReference.salesAgent.lastName' => array('operator' => 'like', 'from' => $lastName));
-        $grid->setDefaultFilters($filters);
+        $match_route = $this->generateUrl('manage_quote_deleted');
+        $referer = $request->headers->get('referer');
+        if (strpos($referer, $match_route) === false ) { // only set default filter if referer is not itself, ie reset button
+
+          $usr = $this->get('security.context')->getToken()->getUser();
+          $lastName = $usr->getLastName();
+          $filters = array(
+            'quoteReference.salesAgent.lastName' => array(
+              'operator' => 'like',
+              'from' => $lastName
+            )
+          );
+          $grid->setDefaultFilters($filters);
+        }
 
         // Export of the grid
         $grid->addExport(new CSVExport("Deleted Quotes as CSV", "deletedQuotes", array('delimiter' => ','), "UTF-8", "ROLE_BRAND"));

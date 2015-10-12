@@ -161,10 +161,19 @@ class TourController extends Controller
         $grid->setNoDataMessage("There are no tours to show. Please check your filter settings and try again.");
 
         //set default filter value
-        $usr= $this->get('security.context')->getToken()->getUser();
-        $lastName = $usr->getLastName();
-        $filters = array('salesAgent.lastName' => array('operator' => 'like', 'from' => $lastName));
-        $grid->setDefaultFilters($filters);
+        $match_route = $this->generateUrl('manage_tour');
+        $referer = $request->headers->get('referer');
+        if (strpos($referer, $match_route) === false ) { // only set default filter if referer is not itself, ie reset button
+          $usr = $this->get('security.context')->getToken()->getUser();
+          $lastName = $usr->getLastName();
+          $filters = array(
+            'salesAgent.lastName' => array(
+              'operator' => 'like',
+              'from' => $lastName
+            )
+          );
+          $grid->setDefaultFilters($filters);
+        }
 
         // Export of the grid
         $grid->addExport(new CSVExport("Tours as CSV", "activeTours", array('delimiter' => ','), "UTF-8", "ROLE_BRAND"));
@@ -271,10 +280,20 @@ class TourController extends Controller
         $grid->setNoDataMessage("There are no deleted tours to show. Please check your filter settings and try again.");
 
         //set default filter value
-        $usr= $this->get('security.context')->getToken()->getUser();
-        $lastName = $usr->getLastName();
-        $filters = array('salesAgent.lastName' => array('operator' => 'like', 'from' => $lastName));
-        $grid->setDefaultFilters($filters);
+        $match_route = $this->generateUrl('manage_tour_deleted');
+        $referer = $request->headers->get('referer');
+        if (strpos($referer, $match_route) === false ) { // only set default filter if referer is not itself, ie reset button
+
+          $usr = $this->get('security.context')->getToken()->getUser();
+          $lastName = $usr->getLastName();
+          $filters = array(
+            'salesAgent.lastName' => array(
+              'operator' => 'like',
+              'from' => $lastName
+            )
+          );
+          $grid->setDefaultFilters($filters);
+        }
 
         // Export of the grid
         $grid->addExport(new CSVExport("Deleted Tours as CSV", "deletedTours", array('delimiter' => ','), "UTF-8", "ROLE_BRAND"));
