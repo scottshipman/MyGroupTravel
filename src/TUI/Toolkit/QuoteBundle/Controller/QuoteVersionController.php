@@ -203,7 +203,7 @@ class QuoteVersionController extends Controller
      * Lists all Converted QuoteVersion ( IE Quotes) entities.
      *
      */
-    public function convertedAction()
+    public function convertedAction(Request $request)
     {
         // hide columns from the screen display
         $hidden = array(
@@ -329,7 +329,7 @@ class QuoteVersionController extends Controller
      * Lists all Deleted QuoteVersion ( IE Quotes) entities.
      *
      */
-    public function deletedAction()
+    public function deletedAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $filters = $em->getFilters();
