@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use TUI\Toolkit\TourBundle\Entity\Tour;
 use TUI\Toolkit\QuoteBundle\Entity\QuoteVersion;
 use TUI\Toolkit\TourBundle\Form\ContactOrganizerType;
+use TUI\Toolkit\TourBundle\Form\TourSetupType;
 use TUI\Toolkit\UserBundle\Controller\UserController;
 use TUI\Toolkit\TourBundle\Form\TourType;
 use TUI\Toolkit\PermissionBundle\Entity\Permission;
@@ -1008,9 +1009,12 @@ class TourController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('TourBundle:Tour')->find($id);
+        $editForm = $this->createEditForm($entity);
+
 
         return $this->render('TourBundle:Tour:completedandsetup.html.twig', array(
             'entity' => $entity,
+            'edit_form' => $editForm->createView(),
         ));
 
     }
@@ -1043,11 +1047,78 @@ class TourController extends Controller
 
         $entity = $em->getRepository('TourBundle:Tour')->find($id);
 
+
+        $editForm = $this->createEditForm($entity);
+
+        $setupForm = $this->createTourSetupFormAction($id);
+
+
+
         return $this->render('TourBundle:Tour:notSetup.html.twig', array(
             'entity' => $entity,
+            'edit_form' => $editForm->createView(),
+            'setup_form' => $setupForm->createView(),
+
+
+
         ));
 
     }
+
+    /**
+     * @param $id
+     * @return \Symfony\Component\Form\Form
+     *
+     */
+
+    public function createTourSetupFormAction($id)
+    {
+        $locale = $this->container->getParameter('locale');
+        $setupForm = $this->createForm(new TourSetupType($locale), array(), array(
+            'action' => $this->generateUrl('manage_tour_setup', array('id' => $id)),
+            'method' => 'POST',
+        ));
+
+        $setupForm->add('submit', 'submit', array('label' => 'Save'));
+
+        return $setupForm;
+    }
+
+    /**
+     * @param $id
+     * @return Response
+     *
+     */
+
+    public function newTourSetupAction($id)
+    {
+        $setupForm = $this->createTourSetupFormAction($id);
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('TourBundle:Tour')->find($id);
+        $locale = $this->container->getParameter('locale');
+        $date_format = $this->container->getParameter('date_format');
+
+
+        return $this->render('TourBundle:Tour:notSetup.html.twig', array(
+            'setup_form' => $setupForm->createView(),
+            'entity' => $entity,
+            'locale' => $locale,
+            'date_format' => $date_format,
+        ));
+    }
+
+    public function TourSetupAction(Request $request, $id)
+    {
+        $locale = $this->container->getParameter('locale');
+        $date_format = $this->container->getParameter('date_format');
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('TourBundle:Tour')->find($id);
+
+        $setupForm = $this->createTourSetupFormAction($id);
+        $setupForm->handleRequest($request);
+    }
+
 
     /**
      * Creates a form to make a change request to a QuoteVersion entity.
