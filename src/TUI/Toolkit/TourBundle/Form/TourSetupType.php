@@ -47,16 +47,17 @@ class TourSetupType extends AbstractType
                 'by_reference' => false,
                 'allow_delete' => true,
             ))
-            ->add('paymentType', 'choice', array(
-                'choices' => array(
-                    'Cash/Cheque' => 'Cash/Cheque',
-                    'Bank transfer' => 'Bank transfer',
-                    'Online payment' => 'Online payment',
-                    'Other' => 'Other'
-                ),
-                'multiple' => true,
-                'expanded' => true
-            ))
+//            ->add('preferredPaymentTypes', 'choice', array(
+//                'choices' => array(
+//                    'Cash/Cheque' => 'Cash/Cheque',
+//                    'Bank transfer' => 'Bank transfer',
+//                    'Online payment' => 'Online payment',
+//                    'Other' => 'Other'
+//                ),
+//                'multiple' => true,
+//                'expanded' => true,
+//                'required' => true
+//            ))
 
         ;
     }
@@ -67,8 +68,8 @@ class TourSetupType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-//            'data_class' => 'TUI\Toolkit\TourBundle\Entity\Tour',
-//            'cascade_validation' => true,
+            'data_class' => 'TUI\Toolkit\TourBundle\Entity\Tour',
+            'cascade_validation' => true,
         ));
     }
 
