@@ -137,8 +137,16 @@
     {% spaceless %}
         {% set gridColumns %}
             {% for column in grid.columns %}
+                {% if column.usePrefixTitle == true %}
+                    {% set columnTitle = grid.prefixTitle ~ column.title ~ '__abbr' %}
+                    {% if columnTitle|trans == columnTitle %}
+                        {% set columnTitle = grid.prefixTitle ~ column.title %}
+                    {% endif %}
+                {% else %}
+                    {% set columnTitle = column.title %}
+                {% endif %}
                 {% if column.visible(grid.isReadyForExport) %}
-                    <td class="grid-column-{{ column.renderBlockId }}{% if column.class %} {{ column.class }}{% endif %}{% if column.align == 'left'%} mdl-data-table__cell--non-numeric{% endif %}{% if loop.last %} last-column{% endif %}{% if last_row %} last-row{% endif %}">{{ grid_cell(column, row, grid)|raw }}</td>
+                    <td class="grid-column-{{ column.renderBlockId }}{% if column.class %} {{ column.class }}{% endif %}{% if column.align == 'left'%} mdl-data-table__cell--non-numeric{% endif %}{% if loop.last %} last-column{% endif %}{% if last_row %} last-row{% endif %}" data-th="{{ columnTitle|trans }}">{{ grid_cell(column, row, grid)|raw }}</td>
                 {% endif %}
             {% endfor %}
         {% endset %}
