@@ -67,3 +67,15 @@ form > .form-row > ul > li
   color: red;
   list-style: none;
 }
+
+.setup-form-list {
+  margin: 1em 0 1em;
+}
+
+.mdl-card__supporting-text {
+  font-size: 16px;
+
+  i {
+    margin-right: 15px;
+  }
+}

@@ -142,9 +142,8 @@
         var passengers = $("#passengers").text();
         var newTotal = Number(price) * Number(passengers);
         var adjusted =  $('#adjusted-price');
-        var currency = $("#currency").text();
 
-        adjusted.text(currency + newTotal);
+        adjusted.text(newTotal);
         var total = $("#total").text();
         console.log(price);
         console.log(total);
