@@ -6,36 +6,25 @@
         <h3 class="mdl-card__title-text">Get Started</h3>
     </div>
 
-    <div class="mdl-card__supporting-text mdl-card--border">
+    <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
         <i class="fa fa-check"></i> Sign up to EToolkit
     </div>
 
-    {#<div class="paymenttasks" data-prototype="{{ form_widget(edit_form.paymentTasks.vars.prototype)|e }}">#}
-        {#&#123;&#35; iterate over each existing paymenttask and render its  fields:  &#35;&#125;#}
-        {#{% for paymentTask in edit_form.paymentTasks %}#}
-            {#<ul class="payment_task">#}
-                {#<li>{{ form_widget(paymentTask.name) }}</li>#}
-                {#<li>{{ form_widget(paymentTask.value) }}</li>#}
-                {#<li>{{ form_widget(paymentTask.dueDate) }}</li>#}
-            {#</ul>#}
-        {#{% endfor %}#}
-    {#</div>#}
-
     <div class="mdl-card__supporting-text mdl-card--border">
-        <i class="fa fa-check"></i> Set up your payment settings
-        <ol>
+        <i class="fa fa-credit-card "></i> Set up your payment settings
+        <ol class="setup-form-list">
             <li>
                 <strong>How much do you want ot charge each passenger</strong>
                 <p>This will be the per passenger price shown on the tour prmotional website.  You can increase the price or reduce it if you are fundraising</p>
                 {{ form_start(setup_form) }}
-                {{ form_widget(setup_form.pricePersonPublic) }}<p style="display: inline"> x </p><p style="display:inline" id="passengers">{{ entity.payingPlaces }}</p><p style="display: inline"> = </p>
-                <p style="display: inline" id="adjusted-price"></p>
-                <p style="display:none" id="total">{{ entity.payingPlaces * entity.pricePerson }}</p>
+                {{ form_widget(setup_form.pricePersonPublic) }}<p style="display: inline; font-size: 16px;"> x </p><p style="display:inline; font-size: 16px;" id="passengers">{{ entity.payingPlaces }}</p><p style="display: inline; font-size: 16px;"> = </p>
+                {% if entity.currency %}<p id="currency" style="display: inline; font-size: inherit;">{{ entity.currency.htmlSymbol | raw }}</p>{% endif %}<p style="display: inline; font-size: 16px; color: green;" id="adjusted-price">{{ entity.payingPlaces * entity.pricePerson }}</p>
+                <p style="display:none; font-size: 16px;" id="total">{{ entity.payingPlaces * entity.pricePerson }}</p>
                 {% if entity.currency %}<p id="currency" style="display: none">{{ entity.currency.htmlSymbol | raw }}</p>{% endif %}
             </li>
 
             <li>
-                <strong>Set a deposit amount and due date</strong>
+                <strong>Set first payment amount and due date</strong>
                 <p>This is the suggested per passenger deposit price.  You can increase the price or reduce it if you are fundraising.</p>
                 {#{{ form_widget(setup_form.paymentTasks) }}#}
                 <div class="paymenttasks" data-prototype="{{ form_widget(setup_form.paymentTasks.vars.prototype)|e }}">
@@ -49,26 +38,27 @@
                     {% endfor %}
                 </div>
             </li>
-            <li>
-                <strong>How do you want passengers to pay?</strong>
-                <p>Select your preferred payment methods</p>
-                {{ form_widget(setup_form.paymentType) }}
-            </li>
-        {#{{ dump(entity) }}#}
-        {% for task in entity.paymentTasks %}
-            {#{{ render(controller('TourBundle:PaymentTask:edit', { 'id': task.id })) }}#}
-        {% endfor %}
+            {#<li>#}
+                {#<strong>How do you want passengers to pay?</strong>#}
+                {#<p>Select your preferred payment methods</p>#}
+                {#<p>nothing here until we figure out how things go.</p>#}
+                {#&#123;&#35;{{ form_widget(setup_form.preferredPaymentTypes) }}&#35;&#125;#}
+            {#</li>#}
             {{ form_widget(setup_form.submit) }}
             {{ form_end(setup_form) }}
         </ol>
     </div>
 
-    <div class="mdl-card__supporting-text mdl-card--border">
-        <i class="fa fa-clone"></i> <a href="{{ path('tour_site_action_show', { 'id': entity.id }) }}">Personalize your website</a>
+    <div class="mdl-card__supporting-text mdl-card--border" style="color: grey;">
+        <p style="margin: 0; font-size: inherit;">Next</p>
     </div>
 
-    <div class="mdl-card__supporting-text mdl-card--border">
-        <i class="fa fa-share"></i> Promote your website
+    <div class="mdl-card__supporting-text mdl-card--border" style="color: grey;">
+        <i class="fa fa-clone"></i> <a style="color: grey;" href="{{ path('tour_site_action_show', { 'id': entity.id }) }}">Personalize your website</a>
+    </div>
+
+    <div class="mdl-card__supporting-text mdl-card--border" style="color: grey;">
+        <i class="fa fa-share"></i> Promote your tour
     </div>
 
 </div>
