@@ -128,8 +128,8 @@ class TourController extends Controller
 
         // Change Row Color if locked
         $source->manipulateRow(
-            function($row){
-                if ($row->getField('locked') ==true){
+            function ($row) {
+                if ($row->getField('locked') == true) {
                     $row->setColor('#ddd');
                     $row->setClass('locked');
                 }
@@ -164,16 +164,16 @@ class TourController extends Controller
         //set default filter value
         $match_route = $this->generateUrl('manage_tour');
         $referer = $request->headers->get('referer');
-        if (strpos($referer, $match_route) === false ) { // only set default filter if referer is not itself, ie reset button
-          $usr = $this->get('security.context')->getToken()->getUser();
-          $lastName = $usr->getLastName();
-          $filters = array(
-            'salesAgent.lastName' => array(
-              'operator' => 'like',
-              'from' => $lastName
-            )
-          );
-          $grid->setDefaultFilters($filters);
+        if (strpos($referer, $match_route) === false) { // only set default filter if referer is not itself, ie reset button
+            $usr = $this->get('security.context')->getToken()->getUser();
+            $lastName = $usr->getLastName();
+            $filters = array(
+                'salesAgent.lastName' => array(
+                    'operator' => 'like',
+                    'from' => $lastName
+                )
+            );
+            $grid->setDefaultFilters($filters);
         }
 
         // Export of the grid
@@ -183,7 +183,6 @@ class TourController extends Controller
         // Manage the grid redirection, exports and the response of the controller
         return $grid->getGridResponse('TourBundle:Tour:index.html.twig');
     }
-
 
 
     /**
@@ -198,37 +197,37 @@ class TourController extends Controller
 
         // hide columns from the screen display
         $hidden = array(
-          'quoteReference.id',
-          'institution.name',
-          'deleted',
-          'locked',
-          'organizer.firstName',
-          'organizer.lastName',
-          'organizer.email',
-          'salesAgent_full',
-          'salesAgent.firstName',
-          'salesAgent.lastName',
-          'salesAgent.email',
-          'destination',
-          'created',
-          'version',
-          'id',
-          'duration',
-          'tripStatus.name',
-          'expiryDate',
-          'transportType.name',
-          'boardBasis.name',
-          'freePlaces',
-          'payingPlaces',
-          'departureDate',
-          'returnDate',
-          'pricePerson',
-          'pricePersonPublic',
-          'currency.name',
-          'passengerDate',
-          'passportDate',
-          'medicalDate',
-          'dietaryDate',
+            'quoteReference.id',
+            'institution.name',
+            'deleted',
+            'locked',
+            'organizer.firstName',
+            'organizer.lastName',
+            'organizer.email',
+            'salesAgent_full',
+            'salesAgent.firstName',
+            'salesAgent.lastName',
+            'salesAgent.email',
+            'destination',
+            'created',
+            'version',
+            'id',
+            'duration',
+            'tripStatus.name',
+            'expiryDate',
+            'transportType.name',
+            'boardBasis.name',
+            'freePlaces',
+            'payingPlaces',
+            'departureDate',
+            'returnDate',
+            'pricePerson',
+            'pricePersonPublic',
+            'currency.name',
+            'passengerDate',
+            'passportDate',
+            'medicalDate',
+            'dietaryDate',
         );
 
         // Creates simple grid based on your entity (ORM)
@@ -283,17 +282,17 @@ class TourController extends Controller
         //set default filter value
         $match_route = $this->generateUrl('manage_tour_deleted');
         $referer = $request->headers->get('referer');
-        if (strpos($referer, $match_route) === false ) { // only set default filter if referer is not itself, ie reset button
+        if (strpos($referer, $match_route) === false) { // only set default filter if referer is not itself, ie reset button
 
-          $usr = $this->get('security.context')->getToken()->getUser();
-          $lastName = $usr->getLastName();
-          $filters = array(
-            'salesAgent.lastName' => array(
-              'operator' => 'like',
-              'from' => $lastName
-            )
-          );
-          $grid->setDefaultFilters($filters);
+            $usr = $this->get('security.context')->getToken()->getUser();
+            $lastName = $usr->getLastName();
+            $filters = array(
+                'salesAgent.lastName' => array(
+                    'operator' => 'like',
+                    'from' => $lastName
+                )
+            );
+            $grid->setDefaultFilters($filters);
         }
 
         // Export of the grid
@@ -357,7 +356,7 @@ class TourController extends Controller
         //Handling the request for institution a little different than we did for the other 2.
         $institutionParts = explode(' - ', $form->getData()->getQuoteReference()->getInstitution());
         $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findBy(
-          array('name' => $institutionParts[0], 'city' => $institutionParts[1])
+            array('name' => $institutionParts[0], 'city' => $institutionParts[1])
         );
         if (null !== $institutionEntities) {
             $institution = array_shift($institutionEntities);
@@ -383,7 +382,7 @@ class TourController extends Controller
 
     /**
      *
-    /**
+     * /**
      * Creates a form to create a Tour entity.
      *
      * @param Tour $entity The entity
@@ -403,7 +402,7 @@ class TourController extends Controller
         ));
         $form->get('quoteReference')->get('salesAgent')->setData($this->get('security.token_storage')->getToken()->getUser());
         $form->get('currency')->setdata($currency);
-       // $form->get('expiryDate')->setdata(new \DateTime('now + 30 days'));
+        // $form->get('expiryDate')->setdata(new \DateTime('now + 30 days'));
         $form->add('submit', 'submit', array('label' => 'Create'));
 
         return $form;
@@ -444,7 +443,7 @@ class TourController extends Controller
         }
 
         if ($securityContext->isGranted('ROLE_BRAND') || in_array('organizer', $permission)) {
-          $editable = TRUE;
+            $editable = TRUE;
         }
 
         $em = $this->getDoctrine()->getManager();
@@ -587,7 +586,7 @@ class TourController extends Controller
         $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($entity->getId());
         $date_format = $this->container->getParameter('date_format');
-        $locale =  $this->container->getParameter('locale');
+        $locale = $this->container->getParameter('locale');
 
         return $this->render('TourBundle:Tour:edit.html.twig', array(
             'entity' => $entity,
@@ -677,7 +676,7 @@ class TourController extends Controller
         //Handling the request for institution a little different than we did for the other 2.
         $institutionParts = explode(' - ', $editForm->getData()->getQuoteReference()->getInstitution());
         $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findBy(
-          array('name' => $institutionParts[0], 'city' => $institutionParts[1])
+            array('name' => $institutionParts[0], 'city' => $institutionParts[1])
         );
         if (null !== $institutionEntities) {
             $institution = array_shift($institutionEntities);
@@ -967,20 +966,20 @@ class TourController extends Controller
         }
 
         $web_dir = $_SERVER['DOCUMENT_ROOT'];
-        $exportsDir = $web_dir."/static/exports/";
+        $exportsDir = $web_dir . "/static/exports/";
 
-        if (!file_exists($exportsDir) && !is_dir($exportsDir)){
+        if (!file_exists($exportsDir) && !is_dir($exportsDir)) {
             mkdir($exportsDir, 0755);
         }
 
         $collection = $entity->getMedia()->toArray() ? $entity->getMedia()->toArray() : NULL;
 
         $zip = new \ZipArchive();
-        $fileName = $entity->getquoteNumber().".zip";
-        $zip->open("static/exports/".$fileName,  \ZipArchive::OVERWRITE);
+        $fileName = $entity->getquoteNumber() . ".zip";
+        $zip->open("static/exports/" . $fileName, \ZipArchive::OVERWRITE);
 
-        foreach ($collection as $c){
-            $zip->addFromString($c->gethashedFilename(), file_get_contents($c->getfilepath()."/".$c->gethashedFilename()));
+        foreach ($collection as $c) {
+            $zip->addFromString($c->gethashedFilename(), file_get_contents($c->getfilepath() . "/" . $c->gethashedFilename()));
         }
 
 
@@ -989,12 +988,11 @@ class TourController extends Controller
         $response = new Response();
         $response->headers->set('Content-Type', 'application/zip');
         $response->headers->set('Cache-Control', 'private');
-        $response->headers->set('Content-Disposition', 'attachment; filename="'.$fileName.'"');
-        $response->headers->set('Content-Length' , filesize("static/exports/".$fileName));
-        $response->setContent(file_get_contents($web_dir.'/static/exports/'.$fileName));
+        $response->headers->set('Content-Disposition', 'attachment; filename="' . $fileName . '"');
+        $response->headers->set('Content-Length', filesize("static/exports/" . $fileName));
+        $response->setContent(file_get_contents($web_dir . '/static/exports/' . $fileName));
 
         return $response;
-
 
 
     }
@@ -1050,8 +1048,7 @@ class TourController extends Controller
 
         $editForm = $this->createEditForm($entity);
 
-        $setupForm = $this->createTourSetupFormAction($id);
-
+        $setupForm = $this->createTourSetupFormAction($entity);
 
 
         return $this->render('TourBundle:Tour:notSetup.html.twig', array(
@@ -1060,28 +1057,8 @@ class TourController extends Controller
             'setup_form' => $setupForm->createView(),
 
 
-
         ));
 
-    }
-
-    /**
-     * @param $id
-     * @return \Symfony\Component\Form\Form
-     *
-     */
-
-    public function createTourSetupFormAction($id)
-    {
-        $locale = $this->container->getParameter('locale');
-        $setupForm = $this->createForm(new TourSetupType($locale), array(), array(
-            'action' => $this->generateUrl('manage_tour_setup', array('id' => $id)),
-            'method' => 'POST',
-        ));
-
-        $setupForm->add('submit', 'submit', array('label' => 'Save'));
-
-        return $setupForm;
     }
 
     /**
@@ -1092,11 +1069,16 @@ class TourController extends Controller
 
     public function newTourSetupAction($id)
     {
-        $setupForm = $this->createTourSetupFormAction($id);
+
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('TourBundle:Tour')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Tour entity.' . $id);
+        }
         $locale = $this->container->getParameter('locale');
         $date_format = $this->container->getParameter('date_format');
+        $setupForm = $this->createTourSetupFormAction($entity);
 
 
         return $this->render('TourBundle:Tour:notSetup.html.twig', array(
@@ -1107,16 +1089,77 @@ class TourController extends Controller
         ));
     }
 
-    public function TourSetupAction(Request $request, $id)
+    /**
+     * @param $id
+     * @return \Symfony\Component\Form\Form
+     *
+     */
+
+    public
+    function createTourSetupFormAction($entity)
+    {
+        $locale = $this->container->getParameter('locale');
+        $setupForm = $this->createForm(new TourSetupType($locale), $entity, array(
+            'action' => $this->generateUrl('manage_tour_setup', array('id' => $entity->getId())),
+            'method' => 'POST',
+        ));
+
+        $setupForm->add('submit', 'submit', array('label' => 'Save'));
+
+        return $setupForm;
+    }
+
+
+    public
+    function TourSetupAction(Request $request, $id)
     {
         $locale = $this->container->getParameter('locale');
         $date_format = $this->container->getParameter('date_format');
 
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('TourBundle:Tour')->find($id);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Tour entity.');
+        }
 
-        $setupForm = $this->createTourSetupFormAction($id);
+        $setupForm = $this->createTourSetupFormAction($entity);
         $setupForm->handleRequest($request);
+
+        $publicPrice = $setupForm->getData()->getPricePersonPublic();
+        $setupForm->getData()->setPricePersonPublic($publicPrice);
+
+        $entity->setSetupComplete(true);
+
+        if ($setupForm->isValid()) {
+            $em->flush();
+            $permission = $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
+            $this->get('session')->getFlashBag()->add('notice', 'Tour Saved: ' . $entity->getName());
+            return $this->redirect($this->generateUrl('manage_tour_show', array('id' => $id)));
+        }
+
+        $this->get('session')->getFlashBag()->add('notice', 'Tour Not Saved: ' . $entity->getName());
+        return $this->redirect($this->generateUrl('manage_tour_show', array('id' => $id)));
+
+
+    }
+
+    public function setupCompleteAction($id, $quoteNumber)
+    {
+        $locale = $this->container->getParameter('locale');
+        $date_format = $this->container->getParameter('date_format');
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('TourBundle:Tour')->find($id);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Tour entity.');
+        }
+        $entity->setIsComplete(true);
+
+        $em->persist($entity);
+        $em->flush();
+
+        return $this->redirect($this->generateUrl('tour_site_show', array('id' => $id, "quoteNumber" => $quoteNumber)));
+
     }
 
 
@@ -1128,7 +1171,8 @@ class TourController extends Controller
      * @return \Symfony\Component\Form\Form The form
      */
 
-    public function createNotifyOrganizerFormAction($id)
+    public
+    function createNotifyOrganizerFormAction($id)
     {
         $locale = $this->container->getParameter('locale');
         $notifyForm = $this->createForm(new ContactOrganizerType($locale), array(), array(
@@ -1142,7 +1186,8 @@ class TourController extends Controller
 
     }
 
-    public function newNotifyOrganizerAction($id)
+    public
+    function newNotifyOrganizerAction($id)
     {
         $notifyForm = $this->createNotifyOrganizerFormAction($id);
         $em = $this->getDoctrine()->getManager();
@@ -1159,7 +1204,8 @@ class TourController extends Controller
         ));
     }
 
-    public function organizerNotifyAction(Request $request, $id)
+    public
+    function organizerNotifyAction(Request $request, $id)
     {
 
         $locale = $this->container->getParameter('locale');
@@ -1204,9 +1250,7 @@ class TourController extends Controller
                             'agent' => $agent,
                         )
                     ), 'text/html');
-        }
-
-        elseif($entity->getOrganizer()->isEnabled() == false){
+        } elseif ($entity->getOrganizer()->isEnabled() == false) {
             $user = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
             // Create token
             $tokenGenerator = $this->container->get('fos_user.util.token_generator');
@@ -1237,7 +1281,7 @@ class TourController extends Controller
         $em->persist($entity);
         $em->flush();
         $this->get('mailer')->send($message);
-        $this->get('session')->getFlashBag()->add('notice', 'Your Message has been sent to '. $organizerEmail);
+        $this->get('session')->getFlashBag()->add('notice', 'Your Message has been sent to ' . $organizerEmail);
 
 
         return $this->redirect($this->generateUrl('_manage_tour_home', array('id' => $id)));

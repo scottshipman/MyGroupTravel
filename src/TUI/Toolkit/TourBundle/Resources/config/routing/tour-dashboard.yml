@@ -26,3 +26,7 @@ manage_tour_create_setup_form:
 manage_tour_setup:
     path:      /setup/{id}
     defaults:  { _controller: "TourBundle:Tour:TourSetup" }
+
+manage_tour_setup_complete:
+    path:     /setup/complete/{id}/{quoteNumber}
+    defaults: { _controller: "TourBundle:Tour:setupComplete" }
