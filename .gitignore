@@ -54,3 +54,7 @@
 # SASS
 .sass-cache
 .sass-cache/*
+
+#scripts
+/scripts/image-urls.txt
+

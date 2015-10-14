@@ -41,12 +41,9 @@
     });
 
     // Work on table scrolling
-    $('.mdl-data-table').wrap('<div class="mld-data-table__wrapper" />')
-        .css('margin-bottom', 0)
-        .parent().css({
-            'overflow': 'auto',
-            'margin-bottom': '1em'
-        });
+    $('.mdl-data-table')
+        .addClass('rwd-table')
+        .wrap('<div class="mld-data-table__wrapper" />');
 
     // Find locked items and remove edit and delete actions
     if ($(".mdl-data-table").length) {
@@ -103,7 +100,6 @@
             '-ms-transform': 'translateY(-50%)',
             '-webkit-transform': 'translateY(-50%)'
         });
-    }
-    ;
+    };
 
 })(jQuery);
