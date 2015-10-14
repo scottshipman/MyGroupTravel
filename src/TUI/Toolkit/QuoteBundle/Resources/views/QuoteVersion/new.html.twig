@@ -6,13 +6,13 @@
 
     {{ form_start(form) }}
 
-    {{ form_row(form.quoteReference.institution) }}
+   {% if template != 'Template' %} {{ form_row(form.quoteReference.institution) }} {% endif %}
     {{ form_row(form.quoteReference.name) }}
     {{ form_row(form.quoteNumber) }}
     {{ form_row(form.name) }}
-    {{ form_row(form.quoteReference.organizer) }}
+    {% if template != 'Template' %}{{ form_row(form.quoteReference.organizer) }}{% endif %}
     {{ form_row(form.quoteReference.salesAgent) }}
-    {{ form_row(form.quoteReference.secondaryContact) }}
+    {% if template != 'Template' %}{{ form_row(form.quoteReference.secondaryContact) }}{% endif %}
     {{ form_rest(form) }}
 
     {{ form_end(form) }}
