@@ -29,13 +29,15 @@
                 {#{{ form_widget(setup_form.paymentTasks) }}#}
                 <div class="paymenttasks" data-prototype="{{ form_widget(setup_form.paymentTasks.vars.prototype)|e }}">
                 {# iterate over each existing paymenttask and render its  fields:  #}
-                    {% for paymentTask in setup_form.paymentTasks %}
-                        <ul class="payment_task">
-                            <li>{{ form_widget(paymentTask.name) }}</li>
-                            <li>{{ form_widget(paymentTask.value) }}</li>
-                            <li>{{ form_widget(paymentTask.dueDate) }}</li>
-                        </ul>
-                    {% endfor %}
+                    {% if setup_form.paymentTasks %}
+                        {#{% for paymentTask in setup_form.paymentTasks %}#}
+                            <ul class="payment_task">
+                                <li>{{ form_widget(setup_form.paymentTasks[0].name) }}</li>
+                                <li>{{ form_widget(setup_form.paymentTasks[0].value) }}</li>
+                                <li>{{ form_widget(setup_form.paymentTasks[0].dueDate) }}</li>
+                            </ul>
+                        {#{% endfor %}#}
+                    {% endif %}
                 </div>
             </li>
             {#<li>#}
