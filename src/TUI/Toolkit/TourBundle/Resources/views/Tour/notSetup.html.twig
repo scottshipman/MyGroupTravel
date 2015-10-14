@@ -24,20 +24,18 @@
             </li>
 
             <li>
-                <strong>Set first payment amount and due date</strong>
+                <strong>Set payment amounts and due dates</strong>
                 <p>This is the suggested per passenger deposit price.  You can increase the price or reduce it if you are fundraising.</p>
                 {#{{ form_widget(setup_form.paymentTasks) }}#}
                 <div class="paymenttasks" data-prototype="{{ form_widget(setup_form.paymentTasks.vars.prototype)|e }}">
                 {# iterate over each existing paymenttask and render its  fields:  #}
-                    {% if setup_form.paymentTasks %}
-                        {#{% for paymentTask in setup_form.paymentTasks %}#}
-                            <ul class="payment_task">
-                                <li>{{ form_widget(setup_form.paymentTasks[0].name) }}</li>
-                                <li>{{ form_widget(setup_form.paymentTasks[0].value) }}</li>
-                                <li>{{ form_widget(setup_form.paymentTasks[0].dueDate) }}</li>
-                            </ul>
-                        {#{% endfor %}#}
-                    {% endif %}
+                    {% for paymentTask in setup_form.paymentTasks %}
+                        <ul class="payment_task">
+                            <li>{{ form_widget(paymentTask.name) }}</li>
+                            <li>{{ form_widget(paymentTask.value) }}</li>
+                            <li>{{ form_widget(paymentTask.dueDate) }}</li>
+                        </ul>
+                    {% endfor %}
                 </div>
             </li>
             {#<li>#}
@@ -56,7 +54,7 @@
     </div>
 
     <div class="mdl-card__supporting-text mdl-card--border" style="color: grey;">
-        <i class="fa fa-clone"></i> <a style="color: grey;" href="{{ path('tour_site_action_show', { 'id': entity.id }) }}">Personalize your website</a>
+        <i class="fa fa-clone"></i>Personalize your website
     </div>
 
     <div class="mdl-card__supporting-text mdl-card--border" style="color: grey;">
