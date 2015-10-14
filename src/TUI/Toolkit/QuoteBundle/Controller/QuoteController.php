@@ -232,7 +232,7 @@ class QuoteController extends Controller
         $tour->setQuoteReference($quote);
         $tour->setQuoteVersionReference($quoteVersion);
 
-       // $tour->setBoardBasis($quoteVersion->getBoardBasis());
+        $tour->setBoardBasis($quoteVersion->getBoardBasis());
         $tour->getCreated(new \DateTime());
         $tour->setCurrency($quoteVersion->getCurrency());
         $tour->setDepartureDate($quoteVersion->getDepartureDate());
@@ -259,8 +259,9 @@ class QuoteController extends Controller
 
       //  $tour->setContent()
       //  $tour->setHeaderBlock();
-      $blockId = $quoteVersion->getHeaderBlock()->getId();
-      if($blockId) {
+      $headerBlock = $quoteVersion->getHeaderBlock();
+      if($headerBlock !== NULL){ $blockId = $headerBlock->getId();}
+      if(isset($blockId)) {
         $headerBlock = $this->cloneHeaderBlock($blockId);
         $tour->setHeaderBlock($headerBlock);
       }
