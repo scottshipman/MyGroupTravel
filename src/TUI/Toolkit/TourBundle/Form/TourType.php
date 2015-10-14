@@ -41,6 +41,18 @@ class TourType extends AbstractType
           ->add('name', 'text', array(
             'label' => 'Tour Name',
           ))
+
+          ->add('tripStatus', 'entity', array(
+            'required' => false,
+            'placeholder' => 'Select',
+            'class' => 'TripStatusBundle:TripStatus',
+            'property' => 'name',
+            'query_builder' => function (EntityRepository $er) {
+              return $er->createQueryBuilder('t')
+                ->where('t.visible = TRUE' )
+                ->orderBy('t.id', 'ASC');
+            },
+          ))
           ->add('quoteNumber')
           ->add('version', 'text', array(
             'read_only'  => true,

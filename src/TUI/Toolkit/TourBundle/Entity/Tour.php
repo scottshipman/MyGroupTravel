@@ -342,7 +342,7 @@ class Tour
      * @var integer
      *
      * @ORM\ManyToMany(targetEntity="TUI\Toolkit\TourBundle\Entity\PaymentTask", cascade={"persist"}, fetch="LAZY")
-     * @ORM\JoinColumn(name="paymenttasks", referencedColumnName="id")
+     * @ORM\JoinColumn(name="paymenttasks", referencedColumnName="id", onDelete="CASCADE")
      */
     public $paymentTasks;
 
