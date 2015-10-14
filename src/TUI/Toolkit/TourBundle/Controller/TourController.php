@@ -702,7 +702,29 @@ class TourController extends Controller
 
 
         if ($editForm->isValid()) {
-            $em->flush();
+
+            if (NULL != $editForm->getData()->getMedia()) {
+                $web_dir = $_SERVER['DOCUMENT_ROOT'];
+                $exportsDir = $web_dir . "/static/exports/";
+
+                if (!file_exists($exportsDir) && !is_dir($exportsDir)) {
+                    mkdir($exportsDir, 0755);
+                }
+
+                $collection = $editForm->getData()->getMedia();
+
+                $zip = new \ZipArchive();
+                $fileName = $entity->getquoteNumber() . ".zip";
+                $zip->open("static/exports/" . $fileName, \ZipArchive::OVERWRITE);
+
+                foreach ($collection as $c) {
+                    $zip->addFromString($c->gethashedFilename(), file_get_contents($c->getfilepath() . "/" . $c->gethashedFilename()));
+                }
+
+
+                $zip->close();
+                $em->flush();
+            }
             $permission = $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
             $this->get('session')->getFlashBag()->add('notice', 'Tour Saved: ' . $entity->getName());
             return $this->redirect($this->generateUrl('manage_tour'));
@@ -964,26 +986,7 @@ class TourController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Tour entity.');
         }
-
         $web_dir = $_SERVER['DOCUMENT_ROOT'];
-        $exportsDir = $web_dir . "/static/exports/";
-
-        if (!file_exists($exportsDir) && !is_dir($exportsDir)) {
-            mkdir($exportsDir, 0755);
-        }
-
-        $collection = $entity->getMedia()->toArray() ? $entity->getMedia()->toArray() : NULL;
-
-        $zip = new \ZipArchive();
-        $fileName = $entity->getquoteNumber() . ".zip";
-        $zip->open("static/exports/" . $fileName, \ZipArchive::OVERWRITE);
-
-        foreach ($collection as $c) {
-            $zip->addFromString($c->gethashedFilename(), file_get_contents($c->getfilepath() . "/" . $c->gethashedFilename()));
-        }
-
-
-        $zip->close();
 
         $response = new Response();
         $response->headers->set('Content-Type', 'application/zip');
