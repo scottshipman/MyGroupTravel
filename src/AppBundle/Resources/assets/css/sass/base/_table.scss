@@ -84,3 +84,101 @@ table {
   overflow-wrap: break-word;
   box-sizing: border-box;
 }
+
+.mld-data-table__wrapper {
+
+  .rwd-table {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    margin-bottom: 0;
+
+    @include breakpoint_tablet() {
+      border: 1px solid $border_grey_l;
+      background: $bg_white;
+      margin-bottom: 1em;
+    }
+
+    tr {
+      display: block;
+      height: auto;
+      margin-bottom: 1em;
+      border: 1px solid $border_grey_l;
+      background: $bg_white;
+
+      @include breakpoint_tablet() {
+        display: table-row;
+        height: inherit;
+        margin-bottom: 0;
+        border: 0;
+        background: transparent;
+      }
+
+    }
+
+    th {
+      display: none;
+    }
+
+    td {
+      display: block;
+      padding-left: 18px; // Match MDL
+      padding-right: 18px; // Match MDL
+      text-align: right;
+      border: 0;
+
+      @include breakpoint_tablet() {
+        border-top: 1px solid $border_grey_l;
+        border-bottom: 1px solid $border_grey_l;
+
+        &.mdl-data-table__cell--non-numeric {
+          text-align: left;
+        }
+
+        &:first-of-type {
+          padding-left: 24px;
+        }
+
+        &:last-of-type {
+          padding-right: 24px;
+        }
+
+      }
+
+      &:before {
+        content: attr(data-th)":";
+        font-weight: bold;
+        display: inline-block;
+        margin-right: 0.25em;
+        float: left;
+        max-width: 50%;
+        text-align: left;
+
+        @include breakpoint_tablet() {
+          display: none;
+        }
+
+      }
+
+    }
+
+    th, td {
+
+      @include breakpoint_tablet() {
+        display: table-cell;
+      }
+
+    }
+
+    .grid-row-titles {
+      display: none;
+
+      @include breakpoint_tablet() {
+        display: table-row;
+      }
+
+    }
+
+  }
+
+}
