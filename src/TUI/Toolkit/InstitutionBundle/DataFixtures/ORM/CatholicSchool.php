@@ -10,7 +10,7 @@ use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use TUI\Toolkit\institutionBundle\Entity\Institution;
+use TUI\Toolkit\InstitutionBundle\Entity\Institution;
 
 class CatholicSchool implements FixtureInterface, ContainerAwareInterface
 {
