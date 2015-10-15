@@ -237,8 +237,8 @@ class PaymentTaskController extends Controller
           throw $this->createNotFoundException('Unable to Delete PaymentTask entity via ajax.');
         }
 
-       // $em->remove($entity);
-       // $em->flush();
+        $em->remove($entity);
+        $em->flush();
 
 
         return new Response('payment task ' . $id . ' removed.');

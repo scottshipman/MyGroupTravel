@@ -341,7 +341,7 @@ class Tour
     /**
      * @var integer
      *
-     * @ORM\ManyToMany(targetEntity="TUI\Toolkit\TourBundle\Entity\PaymentTask", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="TUI\Toolkit\TourBundle\Entity\PaymentTask", cascade={"persist", "remove"}, orphanRemoval = true)
      * @ORM\JoinColumn(name="paymenttasks", referencedColumnName="id")
      */
     public $paymentTasks;

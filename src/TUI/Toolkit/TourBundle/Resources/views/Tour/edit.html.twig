@@ -11,6 +11,7 @@
     <div class = "tour-edit mdl-card mdl-shadow--2dp">
         <div class="mdl-card__supporting-text">
             <h3 class="mdl-card__title">Summary</h3>
+            {{ form_row(edit_form.tripStatus) }}
             {{ form_row(edit_form.name) }}
             {{ form_row(edit_form.quoteNumber) }}
             {{ form_row(edit_form.version) }}
@@ -48,15 +49,13 @@
         <div class="mdl-card__supporting-text">
             <h3 class="mdl-card__title">Payment Schedule</h3>
             <div class="paymenttasks" data-prototype="{{ form_widget(edit_form.paymentTasks.vars.prototype)|e }}">
-                {# iterate over each existing paymenttask and render its  fields:  #}
+                {# iterate over each existing paymenttask and render its fields:  #}
                 {% for paymentTask in edit_form.paymentTasks %}
-                    {% if paymentTask.vars.value.type == "institution" %}
-                        <ul class="payment_task">
-                            <li>{{ form_widget(paymentTask.name) }}</li>
-                            <li>{{ form_widget(paymentTask.value) }}</li>
-                            <li>{{ form_widget(paymentTask.dueDate) }}</li>
-                        </ul>
-                    {% endif %}
+                    <ul class="payment_task" taskid = "{{ paymentTask.vars.value.id }}">
+                        <li>{{ form_widget(paymentTask.name) }}</li>
+                        <li>{{ form_widget(paymentTask.value) }}</li>
+                        <li>{{ form_widget(paymentTask.dueDate) }}</li>
+                    </ul>
                 {% endfor %}
             </div>
         </div>
@@ -135,21 +134,21 @@
 
         $( document ).ready(function() {
             // set the total value
-//            var price = $('#tui_toolkit_tourbundle_tour_pricePerson').val();
-//            var paying = $('#tui_toolkit_tourbundle_tour_payingPlaces').val();
-//            $('#tui_toolkit_tourbundle_tour_total').val(price * paying);
+            var price = $('#tui_toolkit_tourbundle_tour_pricePerson').val();
+            var paying = $('#tui_toolkit_tourbundle_tour_payingPlaces').val();
+            $('#tui_toolkit_tourbundle_tour_total').val(price * paying);
 
             $( ".hasDatepicker" ).datepicker( "option", "dateFormat", "{{ date_format }}" );
             $( ".hasDatepicker" ).change(function(){
                 $(this).parent().addClass('is-dirty');
             });
 
-//            // update total when price or paying changes
-//            $('#tui_toolkit_tourbundle_tour_pricePerson, #tui_toolkit_tourbundle_tour_payingPlaces').change(function(){
-//                var price = $('#tui_toolkit_tourbundle_tour_pricePerson').val();
-//                var paying = $('#tui_toolkit_tourbundle_tour_payingPlaces').val();
-//                $('#tui_toolkit_tourbundle_tour_total').val(price * paying);
-//            });
+            // update total when price or paying changes
+            $('#tui_toolkit_tourbundle_tour_pricePerson, #tui_toolkit_tourbundle_tour_payingPlaces').change(function(){
+                var price = $('#tui_toolkit_tourbundle_tour_pricePerson').val();
+                var paying = $('#tui_toolkit_tourbundle_tour_payingPlaces').val();
+                $('#tui_toolkit_tourbundle_tour_total').val(price * paying);
+            });
 
             // Get the div that holds the collection of payments
             $collectionHolder = $('div.paymenttasks');
@@ -289,7 +288,6 @@
             } else {
                 $removeFormA = $('<div class="form-row"><a href="#" title="Delete this Payment"><i class="fa fam-delete"></i></a></div>');
                 var hidden = $paymentFormDiv.find('input[type="hidden"]');
-                console.log(hidden);
                 hidden.before($removeFormA);
             }
 
@@ -299,7 +297,9 @@
                 e.preventDefault();
 
                 // remove the li for the tag form
-                $paymentFormDiv.remove();
+                if (confirm('Are you sure you want to remove this payment? You must click Update for changes to be saved.')) {
+                        $paymentFormDiv.remove();
+                }
             });
         }
     </script>
