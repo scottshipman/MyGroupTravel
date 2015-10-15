@@ -49,9 +49,9 @@
         <div class="mdl-card__supporting-text">
             <h3 class="mdl-card__title">Payment Schedule</h3>
             <div class="paymenttasks" data-prototype="{{ form_widget(edit_form.paymentTasks.vars.prototype)|e }}">
-                {# iterate over each existing paymenttask and render its  fields:  #}
+                {# iterate over each existing paymenttask and render its fields:  #}
                 {% for paymentTask in edit_form.paymentTasks %}
-                    <ul class="payment_task">
+                    <ul class="payment_task" taskid = "{{ paymentTask.vars.value.id }}">
                         <li>{{ form_widget(paymentTask.name) }}</li>
                         <li>{{ form_widget(paymentTask.value) }}</li>
                         <li>{{ form_widget(paymentTask.dueDate) }}</li>
@@ -174,6 +174,7 @@
                 addPaymentTaskForm($collectionHolder, $newLinkDiv);
             });
 
+            Dropzone.autoDiscover = false;
             $("#dropzone_form").dropzone({
                 maxFiles: 1,
                 acceptedMimeTypes: 'application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation, application/pdf',
@@ -286,7 +287,6 @@
             } else {
                 $removeFormA = $('<div class="form-row"><a href="#" title="Delete this Payment"><i class="fa fam-delete"></i></a></div>');
                 var hidden = $paymentFormDiv.find('input[type="hidden"]');
-                console.log(hidden);
                 hidden.before($removeFormA);
             }
 
@@ -294,9 +294,19 @@
             $removeFormA.on('click', function(e) {
                 // prevent the link from creating a "#" on the URL
                 e.preventDefault();
+                var taskId = $paymentFormDiv.attr('taskid');
 
-                // remove the li for the tag form
-                $paymentFormDiv.remove();
+                if (confirm('Are you sure you want to remove this payment? You must click Update for changes to be saved.')) {
+                    // POST to server using $.ajax
+                    $.ajax({
+                        data: taskId,
+                        type: 'POST',
+                        url: '/paymenttask/' + taskId + '/delete'
+                    }).done(function (response) {
+                        // remove the li for the tag form
+                        $paymentFormDiv.remove();
+                    });
+                };
             });
         }
     </script>

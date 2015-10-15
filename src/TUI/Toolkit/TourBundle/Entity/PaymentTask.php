@@ -52,7 +52,7 @@ class PaymentTask
     /**
      * @var string
      *
-     * @ORM\Column(name="type", type="string", length=255)
+     * @ORM\Column(name="type", type="string", length=255,nullable=true)
      */
     private $type;
 

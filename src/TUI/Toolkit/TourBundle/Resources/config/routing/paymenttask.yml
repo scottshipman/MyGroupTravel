@@ -26,5 +26,5 @@ paymenttask_update:
 
 paymenttask_delete:
     path:     /{id}/delete
-    defaults: { _controller: "TourBundle:PaymentTask:delete" }
+    defaults: { _controller: "TourBundle:PaymentTask:ajaxDelete" }
     methods:  [POST, DELETE]

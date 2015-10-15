@@ -149,10 +149,10 @@ class TourType extends AbstractType
           ->add('freePlaces')
           ->add('pricePerson')
           ->add('paymentTasks', 'collection', array(
-            'type' => new PaymentTaskType('institution', $this->locale),
+            'type' => new PaymentTaskType($this->locale),
             'allow_add'    => true,
-            'by_reference' => false,
             'allow_delete' => true,
+            'by_reference' => false,
           ))
 
           ->add('passengerDate', 'genemu_jquerydate', array(
