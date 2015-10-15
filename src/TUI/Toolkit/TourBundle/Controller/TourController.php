@@ -6,7 +6,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Doctrine\Common\Collections\ArrayCollection;
 
 
 use TUI\Toolkit\TourBundle\Entity\Tour;
