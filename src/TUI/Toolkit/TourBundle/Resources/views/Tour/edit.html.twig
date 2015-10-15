@@ -294,19 +294,9 @@
             $removeFormA.on('click', function(e) {
                 // prevent the link from creating a "#" on the URL
                 e.preventDefault();
-                var taskId = $paymentFormDiv.attr('taskid');
-
                 if (confirm('Are you sure you want to remove this payment? You must click Update for changes to be saved.')) {
-                    // POST to server using $.ajax
-                    $.ajax({
-                        data: taskId,
-                        type: 'POST',
-                        url: '/paymenttask/' + taskId + '/delete'
-                    }).done(function (response) {
-                        // remove the li for the tag form
                         $paymentFormDiv.remove();
-                    });
-                };
+                }
             });
         }
     </script>
