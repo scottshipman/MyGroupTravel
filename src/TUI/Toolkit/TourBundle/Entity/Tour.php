@@ -24,7 +24,6 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @GRID\Column(id="salesAgent_name",  type="join", columns = {"salesAgent.firstName", "salesAgent.lastName"}, title="Primary Business Admin", export=false, filterable=false, operatorsVisible=false)
  * @GRID\Column(id="institution_full", type="join", columns = {"institution.name", "institution.city"}, title="Institution", export=false, filterable=false, operatorsVisible=false)
  */
-
 class Tour
 {
     /**
@@ -182,7 +181,7 @@ class Tour
      *
      * @ORM\Column(name="content", type="array", nullable=true)
      */
-    private $content=array();
+    private $content = array();
 
     /**
      * @var \DateTime
@@ -220,7 +219,6 @@ class Tour
 
     /**
      * @var integer
-
      * @ORM\ManyToOne(targetEntity="TUI\Toolkit\QuoteBundle\Entity\Quote", cascade={"persist"})
      * @ORM\JoinColumn(name="quoteReference", referencedColumnName="id")
      *
@@ -379,12 +377,73 @@ class Tour
      */
     private $dietaryDate;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="cash_payment", type="boolean")
+     * @GRID\Column(visible=false, filterable=false, export=true)
+     */
+    private $cashPayment;
+
+    /**
+     * @var longtext
+     *
+     * @ORM\Column(name="cash_payment_description", type="text", length=4294967295, nullable=true)
+     */
+    private $cashPaymentDescription;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="bank_transfer_payment", type="boolean")
+     * @GRID\Column(visible=false, filterable=false, export=true)
+     */
+    private $bankTransferPayment;
+
+    /**
+     * @var longtext
+     *
+     * @ORM\Column(name="bank_transfer_payment_description", type="text", length=4294967295, nullable=true)
+     */
+    private $bankTransferPaymentDescription;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="online_payment", type="boolean")
+     * @GRID\Column(visible=false, filterable=false, export=true)
+     */
+    private $onlinePayment;
+
+    /**
+     * @var longtext
+     *
+     * @ORM\Column(name="online_payment_description", type="text", length=4294967295, nullable=true)
+     */
+    private $onlinePaymentDescription;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="other_payment", type="boolean")
+     * @GRID\Column(visible=false, filterable=false, export=true)
+     */
+    private $otherPayment;
+
+    /**
+     * @var longtext
+     *
+     * @ORM\Column(name="other_payment_description", type="text", length=4294967295, nullable=true)
+     */
+    private $otherPaymentDescription;
+
+
     public function __construct()
     {
-      $this->created = new \DateTime();
-      $this->views = 0;
-      $this->shareViews = 0;
-      $this->paymentTasks = new ArrayCollection();
+        $this->created = new \DateTime();
+        $this->views = 0;
+        $this->shareViews = 0;
+        $this->paymentTasks = new ArrayCollection();
     }
 
     /**
@@ -392,10 +451,10 @@ class Tour
      *
      * @return integer
      */
-      public function getId()
-      {
-          return $this->id;
-      }
+    public function getId()
+    {
+        return $this->id;
+    }
 
 
     /**
@@ -406,9 +465,9 @@ class Tour
      */
     public function setId($id)
     {
-      $this->id = $id;
+        $this->id = $id;
 
-      return $this;
+        return $this;
     }
 
     /**
@@ -419,9 +478,9 @@ class Tour
      */
     public function setName($name)
     {
-      $this->name = $name;
+        $this->name = $name;
 
-      return $this;
+        return $this;
     }
 
     /**
@@ -431,7 +490,7 @@ class Tour
      */
     public function getName()
     {
-      return $this->name;
+        return $this->name;
     }
 
     /**
@@ -568,7 +627,7 @@ class Tour
     /**
      * Get boardBasis
      *
-     * @return integer 
+     * @return integer
      */
     public function getBoardBasis()
     {
@@ -583,9 +642,9 @@ class Tour
      */
     public function setHeaderBlock($headerBlock)
     {
-      $this->headerBlock = $headerBlock;
+        $this->headerBlock = $headerBlock;
 
-      return $this;
+        return $this;
     }
 
     /**
@@ -595,32 +654,32 @@ class Tour
      */
     public function getHeaderBlock()
     {
-      return $this->headerBlock;
+        return $this->headerBlock;
     }
 
 
     /**
-       * Set content
-       *
-       * @param array $content
-       * @return Tour
-       */
-      public function setContent($content)
-      {
-          $this->content = $content;
+     * Set content
+     *
+     * @param array $content
+     * @return Tour
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
 
-          return $this;
-      }
+        return $this;
+    }
 
-      /**
-       * Get content
-       *
-       * @return array
-       */
-      public function getContent()
-      {
-          return $this->content;
-      }
+    /**
+     * Get content
+     *
+     * @return array
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
 
     /**
      * Set expiryDate
@@ -638,7 +697,7 @@ class Tour
     /**
      * Get expiryDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getExpiryDate()
     {
@@ -661,7 +720,7 @@ class Tour
     /**
      * Get freePlaces
      *
-     * @return integer 
+     * @return integer
      */
     public function getFreePlaces()
     {
@@ -684,7 +743,7 @@ class Tour
     /**
      * Get payingPlaces
      *
-     * @return integer 
+     * @return integer
      */
     public function getPayingPlaces()
     {
@@ -707,7 +766,7 @@ class Tour
     /**
      * Get departureDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDepartureDate()
     {
@@ -730,7 +789,7 @@ class Tour
     /**
      * Get quoteReference
      *
-     * @return integer 
+     * @return integer
      */
     public function getQuoteReference()
     {
@@ -745,9 +804,9 @@ class Tour
      */
     public function setQuoteVersionReference($quoteVersionReference)
     {
-      $this->quoteVersionReference = $quoteVersionReference;
+        $this->quoteVersionReference = $quoteVersionReference;
 
-      return $this;
+        return $this;
     }
 
     /**
@@ -757,7 +816,7 @@ class Tour
      */
     public function getQuoteVersionReference()
     {
-      return $this->quoteVersionReference;
+        return $this->quoteVersionReference;
     }
 
     /**
@@ -776,7 +835,7 @@ class Tour
     /**
      * Get totalPrice
      *
-     * @return float 
+     * @return float
      */
     public function getTotalPrice()
     {
@@ -799,7 +858,7 @@ class Tour
     /**
      * Get tripStatus
      *
-     * @return string 
+     * @return string
      */
     public function getTripStatus()
     {
@@ -822,7 +881,7 @@ class Tour
     /**
      * Get transportType
      *
-     * @return integer 
+     * @return integer
      */
     public function getTransportType()
     {
@@ -845,7 +904,7 @@ class Tour
     /**
      * Get welcomeMsg
      *
-     * @return string 
+     * @return string
      */
     public function getWelcomeMsg()
     {
@@ -860,9 +919,9 @@ class Tour
      */
     public function setDuration($duration)
     {
-      $this->duration = $duration;
+        $this->duration = $duration;
 
-      return $this;
+        return $this;
     }
 
     /**
@@ -872,7 +931,7 @@ class Tour
      */
     public function getDuration()
     {
-      return $this->duration;
+        return $this->duration;
     }
 
     /**
@@ -883,9 +942,9 @@ class Tour
      */
     public function setPricePerson($pricePerson)
     {
-      $this->pricePerson = $pricePerson;
+        $this->pricePerson = $pricePerson;
 
-      return $this;
+        return $this;
     }
 
     /**
@@ -895,8 +954,9 @@ class Tour
      */
     public function getPricePerson()
     {
-      return $this->pricePerson;
+        return $this->pricePerson;
     }
+
     /**
      * Set pricePersonPublic
      *
@@ -929,9 +989,9 @@ class Tour
      */
     public function setReturnDate($returnDate)
     {
-      $this->returnDate = $returnDate;
+        $this->returnDate = $returnDate;
 
-      return $this;
+        return $this;
     }
 
     /**
@@ -941,7 +1001,7 @@ class Tour
      */
     public function getReturnDate()
     {
-      return $this->returnDate;
+        return $this->returnDate;
     }
 
     /**
@@ -952,9 +1012,9 @@ class Tour
      */
     public function setCurrency($currency)
     {
-      $this->currency = $currency;
+        $this->currency = $currency;
 
-      return $this;
+        return $this;
     }
 
     /**
@@ -964,7 +1024,7 @@ class Tour
      */
     public function getCurrency()
     {
-      return $this->currency;
+        return $this->currency;
     }
 
     /**
@@ -975,9 +1035,9 @@ class Tour
      */
     public function setVersion($version)
     {
-      $this->version = $version;
+        $this->version = $version;
 
-      return $this;
+        return $this;
     }
 
     /**
@@ -987,7 +1047,7 @@ class Tour
      */
     public function getVersion()
     {
-      return $this->version;
+        return $this->version;
     }
 
     /**
@@ -998,9 +1058,9 @@ class Tour
      */
     public function setTs($ts)
     {
-      $this->ts = $ts;
+        $this->ts = $ts;
 
-      return $this;
+        return $this;
     }
 
     /**
@@ -1010,7 +1070,7 @@ class Tour
      */
     public function getTs()
     {
-      return $this->ts;
+        return $this->ts;
     }
 
 
@@ -1022,9 +1082,9 @@ class Tour
      */
     public function setQuoteNumber($quoteNumber)
     {
-      $this->quoteNumber = $quoteNumber;
+        $this->quoteNumber = $quoteNumber;
 
-      return $this;
+        return $this;
     }
 
     /**
@@ -1034,10 +1094,10 @@ class Tour
      */
     public function getQuoteNumber()
     {
-      return $this->quoteNumber;
+        return $this->quoteNumber;
     }
 
-   /**
+    /**
      * Set deleted
      *
      * @param boolean $deleted
@@ -1045,9 +1105,9 @@ class Tour
      */
     public function setDeleted($deleted)
     {
-      $this->deleted = $deleted;
+        $this->deleted = $deleted;
 
-      return $this;
+        return $this;
     }
 
     /**
@@ -1057,7 +1117,7 @@ class Tour
      */
     public function getDeleted()
     {
-      return $this->deleted;
+        return $this->deleted;
     }
 
     /**
@@ -1068,9 +1128,9 @@ class Tour
      */
     public function setLocked($locked)
     {
-      $this->locked = $locked;
+        $this->locked = $locked;
 
-      return $this;
+        return $this;
     }
 
     /**
@@ -1080,7 +1140,7 @@ class Tour
      */
     public function getLocked()
     {
-      return $this->locked;
+        return $this->locked;
     }
 
     /**
@@ -1112,9 +1172,9 @@ class Tour
      */
     public function setViews($views)
     {
-      $this->views = $views;
+        $this->views = $views;
 
-      return $this;
+        return $this;
     }
 
     /**
@@ -1124,7 +1184,7 @@ class Tour
      */
     public function getViews()
     {
-      return $this->views;
+        return $this->views;
     }
 
     /**
@@ -1135,12 +1195,12 @@ class Tour
      */
     public function setCreated($created)
     {
-      if (!$created) {
-        $created = new \DateTime();
-      }
-      $this->created = $created;
+        if (!$created) {
+            $created = new \DateTime();
+        }
+        $this->created = $created;
 
-      return $this;
+        return $this;
     }
 
     /**
@@ -1150,7 +1210,7 @@ class Tour
      */
     public function getCreated()
     {
-      return $this->created;
+        return $this->created;
     }
 
 
@@ -1162,9 +1222,9 @@ class Tour
      */
     public function setPassengerDate($passengerDate)
     {
-      $this->passengerDate = $passengerDate;
+        $this->passengerDate = $passengerDate;
 
-      return $this;
+        return $this;
     }
 
     /**
@@ -1174,7 +1234,7 @@ class Tour
      */
     public function getPassengerDate()
     {
-      return $this->passengerDate;
+        return $this->passengerDate;
     }
 
     /**
@@ -1185,9 +1245,9 @@ class Tour
      */
     public function setPassportDate($passportDate)
     {
-      $this->passportDate = $passportDate;
+        $this->passportDate = $passportDate;
 
-      return $this;
+        return $this;
     }
 
     /**
@@ -1197,7 +1257,7 @@ class Tour
      */
     public function getPassportDate()
     {
-      return $this->passportDate;
+        return $this->passportDate;
     }
 
     /**
@@ -1208,9 +1268,9 @@ class Tour
      */
     public function setMedicalDate($medicalDate)
     {
-      $this->medicalDate = $medicalDate;
+        $this->medicalDate = $medicalDate;
 
-      return $this;
+        return $this;
     }
 
     /**
@@ -1220,7 +1280,7 @@ class Tour
      */
     public function getMedicalDate()
     {
-      return $this->medicalDate;
+        return $this->medicalDate;
     }
 
     /**
@@ -1231,9 +1291,9 @@ class Tour
      */
     public function setDietaryDate($dietaryDate)
     {
-      $this->dietaryDate = $dietaryDate;
+        $this->dietaryDate = $dietaryDate;
 
-      return $this;
+        return $this;
     }
 
     /**
@@ -1243,23 +1303,24 @@ class Tour
      */
     public function getDietaryDate()
     {
-      return $this->dietaryDate;
+        return $this->dietaryDate;
     }
 
-/****** Helper functions *********/
+    /****** Helper functions *********/
 
     /*
      * add and remove paymentTasks in forms using js/prototype
      */
     public function addPaymentTask(PaymentTask $paymentTask)
-      {
+    {
         $this->paymentTasks->add($paymentTask);
-      }
+    }
 
     public function removePaymentTask(PaymentTask $paymentTask)
-      {
+    {
         $this->paymentTasks->removeElement($paymentTask);
-      }
+    }
+    
 
 
     /**
@@ -1321,4 +1382,181 @@ class Tour
     {
         return $this->setupComplete;
     }
+
+    /**
+     * @return bool
+     *
+     */
+    public function getCashPayment()
+    {
+        return $this->cashPayment;
+    }
+
+    /**
+     * @param $cashPayment
+     * @return $this
+     *
+     */
+    public function setCashPayment($cashPayment)
+    {
+        $this->cashPayment = $cashPayment;
+
+        return $this;
+    }
+
+    /**
+     * @return longtext
+     */
+
+    public function getCashPaymentDescription()
+    {
+        return $this->cashPaymentDescription;
+    }
+
+    /**
+     * @param $cashPaymentDescription
+     * @return $this
+     */
+
+    public function setCashPaymentDescription($cashPaymentDescription)
+    {
+        $this->cashPaymentDescription = $cashPaymentDescription;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     *
+     */
+
+    public function getBankTransferPayment()
+    {
+        return $this->bankTransferPayment;
+    }
+
+    /**
+     * @param $bankTransferPayment
+     * @return $this
+     */
+
+    public function setBankTransferPayment($bankTransferPayment)
+    {
+        $this->bankTransferPayment = $bankTransferPayment;
+
+        return $this;
+    }
+
+    /**
+     * @return longtext
+     *
+     */
+
+    public function getBankTransferPaymentDescription()
+    {
+        return $this->bankTransferPaymentDescription;
+    }
+
+    /**
+     * @param $bankTransferDescription
+     * @return $this
+     *
+     */
+
+    public function setBankTransferPaymentDescription($bankTransferDescription)
+    {
+        $this->bankTransferPaymentDescription = $bankTransferDescription;
+
+        return $this;
+
+    }
+
+    /**
+     * @return bool
+     *
+     */
+
+    public function getOnlinePayment()
+    {
+        return $this->onlinePayment;
+    }
+
+    /**
+     * @param $onlinePayment
+     * @return $this
+     */
+
+    public function setOnlinePayment($onlinePayment)
+    {
+        $this->onlinePayment = $onlinePayment;
+
+        return $this;
+    }
+
+    /**
+     * @return longtext
+     */
+
+    public function getOnlinePaymentDescription()
+    {
+        return $this->onlinePaymentDescription;
+    }
+
+    /**
+     * @param $onlinePaymentDescription
+     * @return $this
+     */
+
+    public function setOnlinePaymentDescription($onlinePaymentDescription)
+    {
+        $this->onlinePaymentDescription = $onlinePaymentDescription;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     *
+     */
+
+    public function getOtherPayment()
+    {
+        return $this->otherPayment;
+    }
+
+    /**
+     * @param $otherPayment
+     * @return $this
+     *
+     */
+
+    public function setOtherPayment($otherPayment)
+    {
+        $this->otherPayment = $otherPayment;
+
+        return $this;
+    }
+
+    /**
+     * @return longtext
+     */
+
+    public function getOtherPaymentDescription()
+    {
+        return $this->otherPaymentDescription;
+    }
+
+    /**
+     * @param $otherPaymentDescription
+     * @return $this
+     *
+     */
+
+    public function setOtherPaymentDescription($otherPaymentDescription)
+    {
+        $this->otherPaymentDescription = $otherPaymentDescription;
+
+        return $this;
+    }
+
 }
