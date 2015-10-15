@@ -341,7 +341,7 @@ class Tour
     /**
      * @var integer
      *
-     * @ORM\ManyToMany(targetEntity="TUI\Toolkit\TourBundle\Entity\PaymentTask", cascade={"persist"}, fetch="LAZY")
+     * @ORM\ManyToMany(targetEntity="TUI\Toolkit\TourBundle\Entity\PaymentTask", cascade={"persist"})
      * @ORM\JoinColumn(name="paymenttasks", referencedColumnName="id")
      */
     public $paymentTasks;
@@ -1248,18 +1248,42 @@ class Tour
 
 /****** Helper functions *********/
 
-    /*
-     * add and remove paymentTasks in forms using js/prototype
-     */
-    public function addPaymentTask(PaymentTask $paymentTask)
-      {
-        $this->paymentTasks->add($paymentTask);
-      }
+  /*
+   * add paymentTasks in forms using js/prototype
+   */
+  public function addPaymentTask(PaymentTask $paymentTask)
+    {
+      $this->paymentTasks->add($paymentTask);
+    }
 
-    public function removePaymentTask(PaymentTask $paymentTask)
+  /*
+   * remove paymentTasks in forms using js/prototype
+   */
+  public function removePaymentTask(PaymentTask $paymentTask)
       {
         $this->paymentTasks->removeElement($paymentTask);
       }
+
+  /**
+   * Get paymentTasks
+   *
+   * @return paymentTasks
+   */
+  public function getPaymentTasks()
+  {
+    return $this->paymentTasks;
+  }
+
+  /**
+   * Set paymentTasks
+   *
+   * @return entity Tour
+   */
+  public function setPaymentTasks($paymentTasks)
+  {
+     $this->paymentTasks = $paymentTasks;
+      return $this;
+  }
 
 
     /**

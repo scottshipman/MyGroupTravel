@@ -3,6 +3,7 @@
 namespace TUI\Toolkit\TourBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use TUI\Toolkit\TourBundle\Entity\PaymentTask;
@@ -220,5 +221,26 @@ class PaymentTaskController extends Controller
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
+    }
+
+    /**
+     * Deletes a PaymentTask entity via ajax.
+     *
+     */
+    public function ajaxDeleteAction(Request $request, $id)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('TourBundle:PaymentTask')->find($id);
+
+        if (!$entity) {
+          throw $this->createNotFoundException('Unable to Delete PaymentTask entity via ajax.');
+        }
+
+       // $em->remove($entity);
+       // $em->flush();
+
+
+        return new Response('payment task ' . $id . ' removed.');
     }
 }

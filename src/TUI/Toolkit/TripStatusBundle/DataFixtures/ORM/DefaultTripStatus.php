@@ -20,8 +20,8 @@ class DefaultTripStatus implements FixtureInterface
   public function load(ObjectManager $manager)
   {
     // load default Transport Types in the database.
-    $typesvisible=array('Accepted', 'Open');
-    $typeshidden=array('Rejected - other operator', 'Rejected - too expensive', 'Superceded');
+    $typesvisible=array('Provisional', 'Confirmed', 'Cancelled');
+    $typeshidden=array();
 
     foreach ($typesvisible as $type) {
       $status = new TripStatus();

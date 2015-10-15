@@ -5,6 +5,7 @@ namespace TUI\Toolkit\TourBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Doctrine\Common\Collections\ArrayCollection;
 
 use TUI\Toolkit\TourBundle\Entity\Tour;
 use TUI\Toolkit\QuoteBundle\Entity\QuoteVersion;
@@ -632,7 +633,6 @@ class TourController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Tour entity.');
         }
-
         $collection = $entity->getMedia()->toArray();
 
         $deleteForm = $this->createDeleteForm($id);
@@ -702,6 +702,11 @@ class TourController extends Controller
 
 
         if ($editForm->isValid()) {
+          // loop through payment tasks and set type to institution
+            foreach($editForm->getData()->getPaymentTasks() as $paymentTask){
+              $paymentTask->setType('institution');
+            }
+
             $em->flush();
             $permission = $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
             $this->get('session')->getFlashBag()->add('notice', 'Tour Saved: ' . $entity->getName());
