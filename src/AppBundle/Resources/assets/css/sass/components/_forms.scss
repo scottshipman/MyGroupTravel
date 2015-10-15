@@ -62,8 +62,7 @@ form {
   width: 100%;
 }
 
-form > .form-row > ul > li
-{
+form > .form-row > ul > li {
   color: red;
   list-style: none;
 }
@@ -86,9 +85,16 @@ form > .form-row > ul > li
 .mdl-card__supporting-text {
   font-size: 16px;
 
-
-
   i {
     margin-right: 15px;
+  }
+}
+
+.payment-types {
+  margin-bottom: 20px;
+
+  .mdl-textfield {
+
+    display: none;
   }
 }

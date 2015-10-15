@@ -2,10 +2,12 @@
 
 namespace TUI\Toolkit\TourBundle\Controller;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\Common\Collections\ArrayCollection;
+
 
 use TUI\Toolkit\TourBundle\Entity\Tour;
 use TUI\Toolkit\QuoteBundle\Entity\QuoteVersion;
@@ -1018,11 +1020,17 @@ class TourController extends Controller
 
         $entity = $em->getRepository('TourBundle:Tour')->find($id);
         $editForm = $this->createEditForm($entity);
+        $date_format = $this->container->getParameter('date_format');
+        $locale = $this->container->getParameter('locale');
+
+
 
 
         return $this->render('TourBundle:Tour:completedandsetup.html.twig', array(
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
+            'date_format' => $date_format,
+            'locale' => $locale
         ));
 
     }
@@ -1038,8 +1046,16 @@ class TourController extends Controller
 
         $entity = $em->getRepository('TourBundle:Tour')->find($id);
 
+        $date_format = $this->container->getParameter('date_format');
+
+        $locale = $this->container->getParameter('locale');
+
+
+
         return $this->render('TourBundle:Tour:notCompletedAndSetup.html.twig', array(
             'entity' => $entity,
+            'date_format' => $date_format,
+            'locale' => $locale
         ));
 
     }
@@ -1055,49 +1071,53 @@ class TourController extends Controller
 
         $entity = $em->getRepository('TourBundle:Tour')->find($id);
 
-
-        $editForm = $this->createEditForm($entity);
-
-        $setupForm = $this->createTourSetupFormAction($entity);
-
-
-        return $this->render('TourBundle:Tour:notSetup.html.twig', array(
-            'entity' => $entity,
-            'edit_form' => $editForm->createView(),
-            'setup_form' => $setupForm->createView(),
-
-
-        ));
-
-    }
-
-    /**
-     * @param $id
-     * @return Response
-     *
-     */
-
-    public function newTourSetupAction($id)
-    {
-
-        $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('TourBundle:Tour')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Tour entity.' . $id);
-        }
-        $locale = $this->container->getParameter('locale');
         $date_format = $this->container->getParameter('date_format');
+
+        $locale = $this->container->getParameter('locale');
+
         $setupForm = $this->createTourSetupFormAction($entity);
 
+        $paymentCollection = $setupForm->getData()->getPaymentTasks()->toArray();
+
+        $newPaymentCollection = new ArrayCollection();
+        foreach ($paymentCollection as $payment ) {
+            if ($payment ->getType() == 'passenger' )
+            {
+                $newPaymentCollection[] = $payment;
+            }
+        }
+        $setupForm->get('paymentTasks')->setData($newPaymentCollection);
 
         return $this->render('TourBundle:Tour:notSetup.html.twig', array(
-            'setup_form' => $setupForm->createView(),
             'entity' => $entity,
-            'locale' => $locale,
+            'setup_form' => $setupForm->createView(),
             'date_format' => $date_format,
+            'locale' => $locale
         ));
+
     }
+
+
+//    public function newTourSetupAction($id)
+//    {
+//
+//        $em = $this->getDoctrine()->getManager();
+//        $entity = $em->getRepository('TourBundle:Tour')->find($id);
+//
+//        if (!$entity) {
+//            throw $this->createNotFoundException('Unable to find Tour entity.' . $id);
+//        }
+//        $locale = $this->container->getParameter('locale');
+//        $date_format = $this->container->getParameter('date_format');
+//        $setupForm = $this->createTourSetupFormAction($entity);
+//
+//        return $this->render('TourBundle:Tour:notSetup.html.twig', array(
+//            'setup_form' => $setupForm->createView(),
+//            'entity' => $entity,
+//            'locale' => $locale,
+//            'date_format' => $date_format,
+//        ));
+//    }
 
     /**
      * @param $id
@@ -1137,6 +1157,15 @@ class TourController extends Controller
 
         $publicPrice = $setupForm->getData()->getPricePersonPublic();
         $setupForm->getData()->setPricePersonPublic($publicPrice);
+
+        $paymentCollection = $setupForm->getData()->getPaymentTasks();
+
+        foreach ($paymentCollection as $payment){
+            $setupForm->getData()->addPaymentTask($payment);
+        }
+
+        $setupForm->getData()->setPaymentTasks($paymentCollection);
+
 
         $entity->setSetupComplete(true);
 

@@ -37,28 +37,49 @@ class TourSetupType extends AbstractType
                 break;
         }
 
+
         $builder
             ->add('pricePersonPublic', 'number', array(
                 'label' => 'Price Per Person'
             ))
             ->add('paymentTasks', 'collection', array(
-                'type' => new PaymentTaskType('institution', $this->locale),
+                'type' => new PaymentTaskType($this->locale),
                 'allow_add'    => true,
                 'by_reference' => false,
                 'allow_delete' => true,
             ))
-//            ->add('preferredPaymentTypes', 'choice', array(
-//                'choices' => array(
-//                    'Cash/Cheque' => 'Cash/Cheque',
-//                    'Bank transfer' => 'Bank transfer',
-//                    'Online payment' => 'Online payment',
-//                    'Other' => 'Other'
-//                ),
-//                'multiple' => true,
-//                'expanded' => true,
-//                'required' => true
-//            ))
-
+            ->add('cashPayment', 'checkbox', array(
+                'required' => false,
+                'label' => 'Cash / Cheque',
+            ))
+            ->add('cashPaymentDescription', 'textarea', array(
+                'required' => false,
+                'label' => 'Optional payment instructions',
+            ))
+            ->add('bankTransferPayment', 'checkbox', array(
+                'required' => false,
+                'label' => 'Bank Transfer',
+            ))
+            ->add('bankTransferPaymentDescription', 'textarea', array(
+                'required' => false,
+                'label' => 'Optional payment instructions',
+            ))
+            ->add('onlinePayment', 'checkbox', array(
+                'required' => false,
+                'label' => 'Online Payment',
+            ))
+            ->add('onlinePaymentDescription', 'textarea', array(
+                'required' => false,
+                'label' => 'Optional payment instructions',
+            ))
+            ->add('otherPayment', 'checkbox', array(
+                'required' => false,
+                'label' => 'Other',
+            ))
+            ->add('otherPaymentDescription', 'textarea', array(
+                'required' => false,
+                'label' => 'Optional payment instructions'
+            ))
         ;
     }
 

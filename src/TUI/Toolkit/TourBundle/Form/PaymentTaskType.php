@@ -13,8 +13,11 @@ use Symfony\Component\Form\FormEvents;
 class PaymentTaskType extends AbstractType
 {
 
-  public function __construct ($locale = null)
+  protected $paymentType;
+
+  public function __construct ($paymentType = null, $locale = null)
   {
+    $this->paymentType = $paymentType;
     $this->locale = $locale;
   }
     /**
@@ -36,9 +39,8 @@ class PaymentTaskType extends AbstractType
 
         $builder
             ->add('name')
-            ->add('value', 'integer', array(
+            ->add('value', 'text', array(
               'label' =>  'Amount',
-              'scale' => 2,
             ))
 
             ->add('dueDate', 'genemu_jquerydate', array(
@@ -47,6 +49,11 @@ class PaymentTaskType extends AbstractType
               'label' => 'Due Date ' . $date_label,
               'format' => $date_format,
             ))
+
+
+//            ->add('type', 'hidden', array( //make this hidden eventually
+//                  'data' => $this->paymentType,
+//            ))
         ;
     }
     
