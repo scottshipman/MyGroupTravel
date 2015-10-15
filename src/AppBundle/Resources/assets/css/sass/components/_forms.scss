@@ -98,3 +98,35 @@ form > .form-row > ul > li {
     display: none;
   }
 }
+
+.setup-form-list {
+  margin: 1em 0 1em;
+
+  li {
+
+    form[name=tui_toolkit_tourbundle_toursetup] {
+
+      .mdl-textfield {
+        width: auto;
+        min-width: 150px;
+      }
+    }
+  }
+}
+
+.mdl-card__supporting-text {
+  font-size: 16px;
+
+  i {
+    margin-right: 15px;
+  }
+}
+
+.payment-types {
+  margin-bottom: 20px;
+
+  .mdl-textfield {
+
+    display: none;
+  }
+}
