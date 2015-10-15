@@ -1,26 +1,162 @@
-<div class="tour-edit mdl-card mdl-shadow--2dp">
+{% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
+{% if 'en_GB' in locale %} {% set shortFormat = 'd M' %} {% else %} {% set format = 'M d' %} {% endif %}
 
-    <div class="mdl-card__title">
-        <h3 class="mdl-card__title-text">Get Started</h3>
+{% if entity.passportDate != null %}
+    {% set passDtg  = date(entity.passPortDate).diff(date("now")) %}
+    {% if passDtg.days < 1 %} {%  set passDtgFinal = 0  %} {% else %} {% set passDtgFinal = passDtg.days %}{% endif %}
+{% endif %}
+
+{% if entity.medicalDate != null%}
+    {% set medDtg  = date(entity.medicalDate).diff(date("now")) %}
+    {% if medDtg.days < 1 %} {%  set medDtgFinal = 0  %} {% else %} {% set medDtgFinal = medDtg.days %}{% endif %}
+{% endif %}
+
+{% if entity.dietaryDate != null%}
+    {% set dietDtg  = date(entity.dietaryDate).diff(date("now")) %}
+    {% if dietDtg.days < 1 %} {%  set dietDtgFinal = 0  %} {% else %} {% set dietDtgFinal = dietDtg.days %}{% endif %}
+{% endif %}
+
+
+{% set dtg  = date(entity.departureDate).diff(date("now")) %}
+{% if dtg.days < 1 %} {%  set dtgFinal = 0  %} {% else %} {% set dtgFinal = dtg.days %}{% endif %}
+
+{#{{ dump(entity) }}#}
+{% if is_granted("ROLE_BRAND") or app.user.email == entity.organizer.email %}
+    <div class="tour-edit mdl-card mdl-shadow--2dp">
+
+            <div class="mdl-card__title">
+                <h3 class="mdl-card__title-text">Status</h3>
+                <a><i class="fa fa-ellipsis-v"></i></a>
+            </div>
+            <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
+                <ul>
+                    <li>
+                        <div class="profile-list-item item-1">
+                            <span class="date-span">$1000</span>
+                            <label>Rasied of $10000</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="profile-list-item item-2">
+                            <span class="date-span">0/4</span>
+                            <label>Task Complete</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="profile-list-item item-3">
+                            <label>0 days</label>
+                            <span class="date-span">{{ dtgFinal }} Days To Go</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
     </div>
 
-    <div class="mdl-card__supporting-text mdl-card--border" style="color: grey;">
-        <i class="fa fa-check"></i> Sign up to EToolkit
-    </div>
+    <h5>ToDo</h5>
+    {% if entity.passportDate != null%}
+        <div class="tour-edit mdl-card mdl-shadow--2dp">
+            <a href="#">
+                <div class="mdl-card__title">
+                    <h3 class="mdl-card__title-text">Collect Passport Data By {{ entity.passPortDate|date(shortFormat) }}</h3>
+                    <i class="fa fa-arrow-right"></i>
+                </div>
+            </a>
+            <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
+                <ul>
+                    <li>
+                        <div class="profile-list-item item-1">
+                            <span class="date-span">0</span>
+                            <label>Collecting</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="profile-list-item item-2">
+                            <span class="date-span">60</span>
+                            <label>Outstanding</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="profile-list-item item-3">
+                            <span class="date-span">{{ passDtgFinal }}</span>
+                            <label>Days To Go</label>
+                        </div>
+                    </li>
+                    <li>
+                </ul>
+            </div>
+        </div>
+    {% endif %}
 
-    <div class="mdl-card__supporting-text mdl-card--border" style="color: grey;">
-        <i class="fa fa-check"></i> Set up your payment settings
-    </div>
+    {% if entity.medicalDate != null%}
+        <div class="tour-edit mdl-card mdl-shadow--2dp">
 
-    <div class="mdl-card__supporting-text mdl-card--border" style="color: grey;">
-        <i class="fa fa-clone"></i> <a href="{{ path('tour_site_action_show', { 'id': entity.id }) }}" style="color: grey;">Personalize your website</a>
-    </div>
+            <a href="#">
+                <div class="mdl-card__title">
+                    <h3 class="mdl-card__title-text">Collect Medical Data By {{ entity.passPortDate|date(shortFormat) }}</h3>
+                    <i class="fa fa-arrow-right"></i>
+                </div>
+            </a>
+            <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
+                <ul>
+                    <li>
+                        <div class="profile-list-item item-1">
+                            <span class="date-span">0</span>
+                            <label>Collecting</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="profile-list-item item-2">
+                            <span class="date-span">60</span>
+                            <label>Outstanding</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="profile-list-item item-3">
+                            <span class="date-span">{{ medDtgFinal }}</span>
+                            <label>Days To Go</label>
+                        </div>
+                    </li>
+                    <li>
+                </ul>
+            </div>
+        </div>
+    {% endif %}
 
-    <div class="mdl-card__supporting-text mdl-card--border">
-        <i class="fa fa-share"></i><a id="promote-tour" href="#">Promote your tour</a>
-    </div>
+    {% if entity.dietaryDate != null%}
+        <div class="tour-edit mdl-card mdl-shadow--2dp">
 
-</div>
+            <a href="#">
+                <div class="mdl-card__title">
+                    <h3 class="mdl-card__title-text">Collect Dietary Data By {{ entity.passPortDate|date(shortFormat) }}</h3>
+                    <i class="fa fa-arrow-right"></i>
+                </div>
+            </a>
+            <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
+                <ul>
+                    <li>
+                        <div class="profile-list-item item-1">
+                            <span class="date-span">0</span>
+                            <label>Collecting</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="profile-list-item item-2">
+                            <span class="date-span">60</span>
+                            <label>Outstanding</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="profile-list-item item-3">
+                            <span class="date-span">{{ dietDtgFinal }}</span>
+                            <label>Days To Go</label>
+                        </div>
+                    </li>
+                    <li>
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+{% endif %}
 
 <script>
     {% if entity.media != NULL %}
