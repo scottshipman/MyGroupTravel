@@ -227,7 +227,18 @@ class QuoteController extends Controller
         $em->persist($quote);
         $em->persist($quoteVersion);
 
+        // get first trip status from doctrine
+        $tripStatus = $em->createQueryBuilder()
+          ->select('e')
+          ->from('TripStatusBundle:TripStatus', 'e')
+          ->orderBy('e.id', 'ASC')
+          ->where('e.visible = TRUE')
+          ->setMaxResults(1)
+          ->getQuery()
+          ->getOneOrNullResult();
+
         $tour = new Tour();
+        $tour->setTripStatus($tripStatus);
         $tour->setQuoteNumber($quoteVersion->getQuoteNumber());
         $tour->setQuoteReference($quote);
         $tour->setQuoteVersionReference($quoteVersion);

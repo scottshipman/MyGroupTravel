@@ -5,6 +5,7 @@ namespace TUI\Toolkit\TourBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Doctrine\Common\Collections\ArrayCollection;
 
 use TUI\Toolkit\TourBundle\Entity\Tour;
 use TUI\Toolkit\QuoteBundle\Entity\QuoteVersion;
@@ -128,8 +129,8 @@ class TourController extends Controller
 
         // Change Row Color if locked
         $source->manipulateRow(
-            function ($row) {
-                if ($row->getField('locked') == true) {
+            function($row){
+                if ($row->getField('locked') ==true){
                     $row->setColor('#ddd');
                     $row->setClass('locked');
                 }
@@ -164,16 +165,16 @@ class TourController extends Controller
         //set default filter value
         $match_route = $this->generateUrl('manage_tour');
         $referer = $request->headers->get('referer');
-        if (strpos($referer, $match_route) === false) { // only set default filter if referer is not itself, ie reset button
-            $usr = $this->get('security.context')->getToken()->getUser();
-            $lastName = $usr->getLastName();
-            $filters = array(
-                'salesAgent.lastName' => array(
-                    'operator' => 'like',
-                    'from' => $lastName
-                )
-            );
-            $grid->setDefaultFilters($filters);
+        if (strpos($referer, $match_route) === false ) { // only set default filter if referer is not itself, ie reset button
+          $usr = $this->get('security.context')->getToken()->getUser();
+          $lastName = $usr->getLastName();
+          $filters = array(
+            'salesAgent.lastName' => array(
+              'operator' => 'like',
+              'from' => $lastName
+            )
+          );
+          $grid->setDefaultFilters($filters);
         }
 
         // Export of the grid
@@ -183,6 +184,7 @@ class TourController extends Controller
         // Manage the grid redirection, exports and the response of the controller
         return $grid->getGridResponse('TourBundle:Tour:index.html.twig');
     }
+
 
 
     /**
@@ -197,37 +199,37 @@ class TourController extends Controller
 
         // hide columns from the screen display
         $hidden = array(
-            'quoteReference.id',
-            'institution.name',
-            'deleted',
-            'locked',
-            'organizer.firstName',
-            'organizer.lastName',
-            'organizer.email',
-            'salesAgent_full',
-            'salesAgent.firstName',
-            'salesAgent.lastName',
-            'salesAgent.email',
-            'destination',
-            'created',
-            'version',
-            'id',
-            'duration',
-            'tripStatus.name',
-            'expiryDate',
-            'transportType.name',
-            'boardBasis.name',
-            'freePlaces',
-            'payingPlaces',
-            'departureDate',
-            'returnDate',
-            'pricePerson',
-            'pricePersonPublic',
-            'currency.name',
-            'passengerDate',
-            'passportDate',
-            'medicalDate',
-            'dietaryDate',
+          'quoteReference.id',
+          'institution.name',
+          'deleted',
+          'locked',
+          'organizer.firstName',
+          'organizer.lastName',
+          'organizer.email',
+          'salesAgent_full',
+          'salesAgent.firstName',
+          'salesAgent.lastName',
+          'salesAgent.email',
+          'destination',
+          'created',
+          'version',
+          'id',
+          'duration',
+          'tripStatus.name',
+          'expiryDate',
+          'transportType.name',
+          'boardBasis.name',
+          'freePlaces',
+          'payingPlaces',
+          'departureDate',
+          'returnDate',
+          'pricePerson',
+          'pricePersonPublic',
+          'currency.name',
+          'passengerDate',
+          'passportDate',
+          'medicalDate',
+          'dietaryDate',
         );
 
         // Creates simple grid based on your entity (ORM)
@@ -282,17 +284,17 @@ class TourController extends Controller
         //set default filter value
         $match_route = $this->generateUrl('manage_tour_deleted');
         $referer = $request->headers->get('referer');
-        if (strpos($referer, $match_route) === false) { // only set default filter if referer is not itself, ie reset button
+        if (strpos($referer, $match_route) === false ) { // only set default filter if referer is not itself, ie reset button
 
-            $usr = $this->get('security.context')->getToken()->getUser();
-            $lastName = $usr->getLastName();
-            $filters = array(
-                'salesAgent.lastName' => array(
-                    'operator' => 'like',
-                    'from' => $lastName
-                )
-            );
-            $grid->setDefaultFilters($filters);
+          $usr = $this->get('security.context')->getToken()->getUser();
+          $lastName = $usr->getLastName();
+          $filters = array(
+            'salesAgent.lastName' => array(
+              'operator' => 'like',
+              'from' => $lastName
+            )
+          );
+          $grid->setDefaultFilters($filters);
         }
 
         // Export of the grid
@@ -356,7 +358,7 @@ class TourController extends Controller
         //Handling the request for institution a little different than we did for the other 2.
         $institutionParts = explode(' - ', $form->getData()->getQuoteReference()->getInstitution());
         $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findBy(
-            array('name' => $institutionParts[0], 'city' => $institutionParts[1])
+          array('name' => $institutionParts[0], 'city' => $institutionParts[1])
         );
         if (null !== $institutionEntities) {
             $institution = array_shift($institutionEntities);
@@ -382,7 +384,7 @@ class TourController extends Controller
 
     /**
      *
-     * /**
+    /**
      * Creates a form to create a Tour entity.
      *
      * @param Tour $entity The entity
@@ -402,7 +404,7 @@ class TourController extends Controller
         ));
         $form->get('quoteReference')->get('salesAgent')->setData($this->get('security.token_storage')->getToken()->getUser());
         $form->get('currency')->setdata($currency);
-        // $form->get('expiryDate')->setdata(new \DateTime('now + 30 days'));
+       // $form->get('expiryDate')->setdata(new \DateTime('now + 30 days'));
         $form->add('submit', 'submit', array('label' => 'Create'));
 
         return $form;
@@ -443,7 +445,7 @@ class TourController extends Controller
         }
 
         if ($securityContext->isGranted('ROLE_BRAND') || in_array('organizer', $permission)) {
-            $editable = TRUE;
+          $editable = TRUE;
         }
 
         $em = $this->getDoctrine()->getManager();
@@ -586,7 +588,7 @@ class TourController extends Controller
         $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($entity->getId());
         $date_format = $this->container->getParameter('date_format');
-        $locale = $this->container->getParameter('locale');
+        $locale =  $this->container->getParameter('locale');
 
         return $this->render('TourBundle:Tour:edit.html.twig', array(
             'entity' => $entity,
@@ -632,7 +634,6 @@ class TourController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Tour entity.');
         }
-
         $collection = $entity->getMedia()->toArray();
 
         $deleteForm = $this->createDeleteForm($id);
@@ -676,7 +677,7 @@ class TourController extends Controller
         //Handling the request for institution a little different than we did for the other 2.
         $institutionParts = explode(' - ', $editForm->getData()->getQuoteReference()->getInstitution());
         $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findBy(
-            array('name' => $institutionParts[0], 'city' => $institutionParts[1])
+          array('name' => $institutionParts[0], 'city' => $institutionParts[1])
         );
         if (null !== $institutionEntities) {
             $institution = array_shift($institutionEntities);
@@ -725,6 +726,12 @@ class TourController extends Controller
                 $zip->close();
                 $em->flush();
             }
+          // loop through payment tasks and set type to institution
+            foreach($editForm->getData()->getPaymentTasks() as $paymentTask){
+              $paymentTask->setType('institution');
+            }
+
+            $em->flush();
             $permission = $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
             $this->get('session')->getFlashBag()->add('notice', 'Tour Saved: ' . $entity->getName());
             return $this->redirect($this->generateUrl('manage_tour'));
@@ -1174,8 +1181,7 @@ class TourController extends Controller
      * @return \Symfony\Component\Form\Form The form
      */
 
-    public
-    function createNotifyOrganizerFormAction($id)
+    public function createNotifyOrganizerFormAction($id)
     {
         $locale = $this->container->getParameter('locale');
         $notifyForm = $this->createForm(new ContactOrganizerType($locale), array(), array(
@@ -1189,8 +1195,7 @@ class TourController extends Controller
 
     }
 
-    public
-    function newNotifyOrganizerAction($id)
+    public function newNotifyOrganizerAction($id)
     {
         $notifyForm = $this->createNotifyOrganizerFormAction($id);
         $em = $this->getDoctrine()->getManager();
@@ -1207,8 +1212,7 @@ class TourController extends Controller
         ));
     }
 
-    public
-    function organizerNotifyAction(Request $request, $id)
+    public function organizerNotifyAction(Request $request, $id)
     {
 
         $locale = $this->container->getParameter('locale');
@@ -1284,7 +1288,7 @@ class TourController extends Controller
         $em->persist($entity);
         $em->flush();
         $this->get('mailer')->send($message);
-        $this->get('session')->getFlashBag()->add('notice', 'Your Message has been sent to ' . $organizerEmail);
+        $this->get('session')->getFlashBag()->add('notice', 'Your Message has been sent to '. $organizerEmail);
 
 
         return $this->redirect($this->generateUrl('_manage_tour_home', array('id' => $id)));
