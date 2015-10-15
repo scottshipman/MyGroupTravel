@@ -286,16 +286,19 @@
                 $paymentFormDiv.append($removeFormA);
             } else {
                 $removeFormA = $('<div class="form-row"><a href="#" title="Delete this Payment"><i class="fa fam-delete"></i></a></div>');
-                var hidden = $paymentFormDiv.find('input[type="hidden"]');
-                hidden.before($removeFormA);
+                $paymentFormDiv.children().first().append($removeFormA);
             }
 
 
             $removeFormA.on('click', function(e) {
                 // prevent the link from creating a "#" on the URL
                 e.preventDefault();
-                if (confirm('Are you sure you want to remove this payment? You must click Update for changes to be saved.')) {
-                        $paymentFormDiv.remove();
+                if ($paymentFormDiv.get(0).tagName =='UL') {
+                    if (confirm('Are you sure you want to remove this payment? You must click Update for changes to be saved.')) {
+
+                    }
+                } else {
+                    $paymentFormDiv.remove();
                 }
             });
         }
