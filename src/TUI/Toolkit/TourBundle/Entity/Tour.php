@@ -1322,6 +1322,27 @@ class Tour
     {
         $this->paymentTasks->removeElement($paymentTask);
     }
+
+  /**
+   * Get paymentTasks
+   *
+   * @return paymentTasks
+   */
+  public function getPaymentTasks()
+  {
+    return $this->paymentTasks;
+  }
+
+  /**
+   * Set paymentTasks
+   *
+   * @return entity Tour
+   */
+  public function setPaymentTasks($paymentTasks)
+  {
+         $this->paymentTasks = $paymentTasks;
+          return $this;
+  }
     
 
 
