@@ -42,11 +42,11 @@ class TourSetupType extends AbstractType
             ->add('pricePersonPublic', 'number', array(
                 'label' => 'Price Per Person'
             ))
-            ->add('paymentTasks', 'collection', array(
+            ->add('paymentTasksPassenger', 'collection', array(
                 'type' => new PaymentTaskType($this->locale),
                 'allow_add'    => true,
-                'by_reference' => false,
                 'allow_delete' => true,
+                'by_reference' => false,
             ))
             ->add('cashPayment', 'checkbox', array(
                 'required' => false,

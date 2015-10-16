@@ -1022,9 +1022,6 @@ class TourController extends Controller
         $date_format = $this->container->getParameter('date_format');
         $locale = $this->container->getParameter('locale');
 
-
-
-
         return $this->render('TourBundle:Tour:completedandsetup.html.twig', array(
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
@@ -1049,8 +1046,6 @@ class TourController extends Controller
 
         $locale = $this->container->getParameter('locale');
 
-
-
         return $this->render('TourBundle:Tour:notCompletedAndSetup.html.twig', array(
             'entity' => $entity,
             'date_format' => $date_format,
@@ -1067,25 +1062,21 @@ class TourController extends Controller
     public function getTourNotSetupAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-
         $entity = $em->getRepository('TourBundle:Tour')->find($id);
-
         $date_format = $this->container->getParameter('date_format');
-
         $locale = $this->container->getParameter('locale');
+        $setupForm = $this->createTourSetupForm($entity);
 
-        $setupForm = $this->createTourSetupFormAction($entity);
-
-        $paymentCollection = $setupForm->getData()->getPaymentTasks()->toArray();
-
-        $newPaymentCollection = new ArrayCollection();
-        foreach ($paymentCollection as $payment ) {
-            if ($payment ->getType() == 'passenger' )
-            {
-                $newPaymentCollection[] = $payment;
-            }
-        }
-        $setupForm->get('paymentTasks')->setData($newPaymentCollection);
+//        $paymentCollection = $setupForm->getData()->getPaymentTasks()->toArray();
+//
+//        $newPaymentCollection = new ArrayCollection();
+//        foreach ($paymentCollection as $payment ) {
+//            if ($payment ->getType() == 'passenger' )
+//            {
+//                $newPaymentCollection[] = $payment;
+//            }
+//        }
+//        $setupForm->get('paymentTasks')->setData($newPaymentCollection);
 
         return $this->render('TourBundle:Tour:notSetup.html.twig', array(
             'entity' => $entity,
@@ -1096,36 +1087,16 @@ class TourController extends Controller
 
     }
 
-
-//    public function newTourSetupAction($id)
-//    {
-//
-//        $em = $this->getDoctrine()->getManager();
-//        $entity = $em->getRepository('TourBundle:Tour')->find($id);
-//
-//        if (!$entity) {
-//            throw $this->createNotFoundException('Unable to find Tour entity.' . $id);
-//        }
-//        $locale = $this->container->getParameter('locale');
-//        $date_format = $this->container->getParameter('date_format');
-//        $setupForm = $this->createTourSetupFormAction($entity);
-//
-//        return $this->render('TourBundle:Tour:notSetup.html.twig', array(
-//            'setup_form' => $setupForm->createView(),
-//            'entity' => $entity,
-//            'locale' => $locale,
-//            'date_format' => $date_format,
-//        ));
-//    }
-
     /**
-     * @param $id
-     * @return \Symfony\Component\Form\Form
+     * Creates a form to edit a Tour entity on first setup.
      *
+     * @param Tour $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
      */
 
     public
-    function createTourSetupFormAction($entity)
+    function createTourSetupForm(Tour $entity)
     {
         $locale = $this->container->getParameter('locale');
         $setupForm = $this->createForm(new TourSetupType($locale), $entity, array(
@@ -1142,16 +1113,14 @@ class TourController extends Controller
     public
     function TourSetupAction(Request $request, $id)
     {
-        $locale = $this->container->getParameter('locale');
         $date_format = $this->container->getParameter('date_format');
-
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('TourBundle:Tour')->find($id);
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Tour entity.');
         }
 
-        $setupForm = $this->createTourSetupFormAction($entity);
+        $setupForm = $this->createTourSetupForm($entity);
         $setupForm->handleRequest($request);
 
         $publicPrice = $setupForm->getData()->getPricePersonPublic();
@@ -1159,14 +1128,14 @@ class TourController extends Controller
 
         $paymentCollection = $setupForm->getData()->getPaymentTasks();
 
-        foreach ($paymentCollection as $payment){
-            $setupForm->getData()->addPaymentTask($payment);
-        }
+//        foreach ($paymentCollection as $payment){
+//            $setupForm->getData()->addPaymentTask($payment);
+//        }
+//
+//        $setupForm->getData()->setPaymentTasks($paymentCollection);
 
-        $setupForm->getData()->setPaymentTasks($paymentCollection);
 
-
-        $entity->setSetupComplete(true);
+//        $entity->setSetupComplete(true);
 
         if ($setupForm->isValid()) {
             $em->flush();
