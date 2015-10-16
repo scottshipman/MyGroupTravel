@@ -1067,17 +1067,6 @@ class TourController extends Controller
         $locale = $this->container->getParameter('locale');
         $setupForm = $this->createTourSetupForm($entity);
 
-//        $paymentCollection = $setupForm->getData()->getPaymentTasks()->toArray();
-//
-//        $newPaymentCollection = new ArrayCollection();
-//        foreach ($paymentCollection as $payment ) {
-//            if ($payment ->getType() == 'passenger' )
-//            {
-//                $newPaymentCollection[] = $payment;
-//            }
-//        }
-//        $setupForm->get('paymentTasks')->setData($newPaymentCollection);
-
         return $this->render('TourBundle:Tour:notSetup.html.twig', array(
             'entity' => $entity,
             'setup_form' => $setupForm->createView(),
@@ -1101,7 +1090,7 @@ class TourController extends Controller
         $locale = $this->container->getParameter('locale');
         $setupForm = $this->createForm(new TourSetupType($locale), $entity, array(
             'action' => $this->generateUrl('manage_tour_setup', array('id' => $entity->getId())),
-            'method' => 'POST',
+            'method' => 'PUT',
         ));
 
         $setupForm->add('submit', 'submit', array('label' => 'Save'));
@@ -1110,8 +1099,7 @@ class TourController extends Controller
     }
 
 
-    public
-    function TourSetupAction(Request $request, $id)
+    public function TourSetupAction(Request $request, $id)
     {
         $date_format = $this->container->getParameter('date_format');
         $em = $this->getDoctrine()->getManager();
@@ -1123,19 +1111,7 @@ class TourController extends Controller
         $setupForm = $this->createTourSetupForm($entity);
         $setupForm->handleRequest($request);
 
-        $publicPrice = $setupForm->getData()->getPricePersonPublic();
-        $setupForm->getData()->setPricePersonPublic($publicPrice);
-
-        $paymentCollection = $setupForm->getData()->getPaymentTasks();
-
-//        foreach ($paymentCollection as $payment){
-//            $setupForm->getData()->addPaymentTask($payment);
-//        }
-//
-//        $setupForm->getData()->setPaymentTasks($paymentCollection);
-
-
-//        $entity->setSetupComplete(true);
+        $entity->setSetupComplete(true);
 
         if ($setupForm->isValid()) {
             $em->flush();

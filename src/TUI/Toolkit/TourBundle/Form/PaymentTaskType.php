@@ -13,11 +13,8 @@ use Symfony\Component\Form\FormEvents;
 class PaymentTaskType extends AbstractType
 {
 
-  protected $paymentType;
-
-  public function __construct ($paymentType = null, $locale = null)
+  public function __construct ($locale = null)
   {
-    $this->paymentType = $paymentType;
     $this->locale = $locale;
   }
     /**
