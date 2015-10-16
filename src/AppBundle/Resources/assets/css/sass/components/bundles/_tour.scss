@@ -121,4 +121,16 @@
     text-decoration: none;
   }
 
+  .tour-dashboard-cta {
+    position: relative;
+    display: inline;
+  }
+
+  .completed-task {
+    min-height: 0;
+    opacity: 0.5;
+    cursor: default;
+  }
+
 }
+
