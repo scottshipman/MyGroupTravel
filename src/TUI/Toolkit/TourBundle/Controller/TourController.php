@@ -1022,11 +1022,16 @@ class TourController extends Controller
         $date_format = $this->container->getParameter('date_format');
         $locale = $this->container->getParameter('locale');
 
+        //brand stuff
+        $brand = $em->getRepository('BrandBundle:Brand')->findAll();
+        $brand = $brand[0];
+
         return $this->render('TourBundle:Tour:completedandsetup.html.twig', array(
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'date_format' => $date_format,
-            'locale' => $locale
+            'locale' => $locale,
+            'brand' => $brand
         ));
 
     }
@@ -1071,7 +1076,7 @@ class TourController extends Controller
             'entity' => $entity,
             'setup_form' => $setupForm->createView(),
             'date_format' => $date_format,
-            'locale' => $locale
+            'locale' => $locale,
         ));
 
     }
