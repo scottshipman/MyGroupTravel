@@ -22,6 +22,8 @@
 
 {#{{ dump(entity) }}#}
 {% if is_granted("ROLE_BRAND") or app.user.email == entity.organizer.email %}
+
+    {#{{ dump(entity) }}#}
     <div class="tour-edit mdl-card mdl-shadow--2dp">
 
             <div class="mdl-card__title">
@@ -32,8 +34,8 @@
                 <ul>
                     <li>
                         <div class="profile-list-item item-1 tour-dashboard">
-                            <span class="date-span">$1000</span>
-                            <label>Rasied of $10000</label>
+                            <span class="date-span">{% if entity.currency %}<p id="currency" style="display: inline; font-size: inherit;">{{ entity.currency.htmlSymbol | raw }}</p>{% endif %}1000</span>
+                            <label>Rasied of {% if entity.currency %}<p id="currency" style="display: inline; font-size: inherit">{{ entity.currency.htmlSymbol | raw }}</p>{% endif %}10000</label>
                         </div>
                     </li>
                     <li>
@@ -155,7 +157,52 @@
                 </ul>
             </div>
         </div>
+
+    {% if entity.paymentTasks != null %}
+        {% set depositdtg  = date(entity.paymentTasks[0].dueDate).diff(date("now")) %}
+        {% if depositdtg.days < 1 %} {%  set depositDtgFinal = 0  %} {% else %} {% set depositDtgFinal = depositdtg.days %}{% endif %}
+        <div class="tour-edit mdl-card mdl-shadow--2dp">
+            <a href="#">
+                <div class="mdl-card__title">
+                    <h3 class="mdl-card__title-text">Pay Deposit To {{ brand.name }} {{ entity.paymentTasks[0].dueDate|date(shortFormat) }}</h3>
+                    <span class="tour-dashboard-cta"><i class="fa fa-arrow-right"></i></span>
+                </div>
+            </a>
+            <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
+                <ul>
+                    <li>
+                        <div class="profile-list-item item-1 tour-dashboard">
+                            <span class="date-span">{% if entity.currency %}<p id="currency" style="display: inline; font-size: inherit;">{{ entity.currency.htmlSymbol | raw }}</p>{% endif %}{{ entity.paymentTasks[0].value }}</span>
+                            <label>Due</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="profile-list-item item-2 tour-dashboard">
+                            <span class="date-span">{{ depositDtgFinal }}</span>
+                            <label>Days to Go</label>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
     {% endif %}
+
+        <div class="tour-edit mdl-card mdl-shadow--2dp">
+
+            <a href="#">
+                <div class="mdl-card__title">
+                    <h3 class="mdl-card__title-text">Download Booking Form</h3>
+                </div>
+            </a>
+            <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
+                <div class="mdl-card__supporting-text">
+                    <p style="font-size: inherit;">Download the booking form, complete it, and send it in with the correct deposit</p>
+                    <a class="add-organizer mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#"><i class="fa fa-download"></i>Download</a>
+                </div>
+            </div>
+        </div>
+
+{% endif %}
     <h5>Completed</h5>
 
     <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
@@ -175,6 +222,13 @@
     <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
         <div class="mdl-card__title">
             <h3 class="mdl-card__title-text">Collect Dietary Data</h3>
+            <span class="tour-dashboard-cta"><i class="fa fa-check"></i></span>
+        </div>
+    </div>
+
+    <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
+        <div class="mdl-card__title">
+            <h3 class="mdl-card__title-text">Pay Deposit To {{ brand.name }}</h3>
             <span class="tour-dashboard-cta"><i class="fa fa-check"></i></span>
         </div>
     </div>
