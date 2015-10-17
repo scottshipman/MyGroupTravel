@@ -171,13 +171,13 @@
             <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
                 <ul>
                     <li>
-                        <div class="profile-list-item item-1 tour-dashboard">
+                        <div class="profile-list-item item-1 tour-dashboard two-column">
                             <span class="date-span">{% if entity.currency %}<p id="currency" style="display: inline; font-size: inherit;">{{ entity.currency.htmlSymbol | raw }}</p>{% endif %}{{ entity.paymentTasks[0].value }}</span>
                             <label>Due</label>
                         </div>
                     </li>
                     <li>
-                        <div class="profile-list-item item-2 tour-dashboard">
+                        <div class="profile-list-item item-2 tour-dashboard two-column">
                             <span class="date-span">{{ depositDtgFinal }}</span>
                             <label>Days to Go</label>
                         </div>
