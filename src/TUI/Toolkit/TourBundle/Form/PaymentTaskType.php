@@ -37,8 +37,8 @@ class PaymentTaskType extends AbstractType
         $builder
             ->add('name')
             ->add('value', 'integer', array(
-              'label' =>  'Amount',
-              'scale' => 2,
+                'label' =>  'Amount',
+                'scale' => 2,
             ))
 
             ->add('dueDate', 'genemu_jquerydate', array(
@@ -47,6 +47,11 @@ class PaymentTaskType extends AbstractType
               'label' => 'Due Date ' . $date_label,
               'format' => $date_format,
             ))
+
+
+//            ->add('type', 'hidden', array( //make this hidden eventually
+//                  'data' => $this->paymentType,
+//            ))
         ;
     }
     

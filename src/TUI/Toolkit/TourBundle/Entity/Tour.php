@@ -18,7 +18,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @UniqueEntity(fields={"quoteNumber"}, message="This Quote Number already exists on another Tour.", ignoreNull=true)
  *
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
- * @GRID\Source(columns="id, institution_full, institution.name, institution.city, name, quoteNumber, tripStatus.name, created, destination, quoteReference.id, organizer_full, salesAgent_full, salesAgent_name, salesAgent.firstName, salesAgent.lastName,  salesAgent.email, organizer.firstName, organizer.lastName, organizer.email, views, deleted, locked,  version, duration, expiryDate, transportType.name, boardBasis.name, freePlaces, payingPlaces, departureDate, returnDate, pricePerson,  pricePersonPublic, currency.name, status, passengerDate, passportDate, medicalDate, dietaryDate", filterable=false, sortable=true)
+ * @GRID\Source(columns="id, institution_full, institution.name, institution.city, name, quoteNumber, tripStatus.name, created, destination, quoteReference.id, organizer_full, salesAgent_full, salesAgent_name, salesAgent.firstName, salesAgent.lastName,  salesAgent.email, organizer.firstName, organizer.lastName, organizer.email, views, deleted, locked,  version, duration, expiryDate, transportType.name, boardBasis.name, freePlaces, payingPlaces, departureDate, returnDate, pricePerson,  pricePersonPublic, currency.name, status, passengerDate, passportDate, medicalDate, dietaryDate, cashPayment, cashPaymentDescription, bankTransferPayment, bankTransferPaymentDescription, onlinePayment, onlinePaymentDescription, otherPayment, otherPaymentDescription", filterable=false, sortable=true)
  * @GRID\Column(id="organizer_full", type="join", columns = {"organizer.firstName", "organizer.lastName", "organizer.email"}, title="Organizer", export=false, filterable=false, operatorsVisible=false)
  * @GRID\Column(id="salesAgent_full",  type="join", columns = {"salesAgent.firstName", "salesAgent.lastName", "salesAgent.email"}, title="Primary Business Admin", export=false, filterable=false, operatorsVisible=false)
  * @GRID\Column(id="salesAgent_name",  type="join", columns = {"salesAgent.firstName", "salesAgent.lastName"}, title="Primary Business Admin", export=false, filterable=false, operatorsVisible=false)
@@ -346,6 +346,15 @@ class Tour
      */
     public $paymentTasks;
 
+    /**
+     * @var integer
+     *
+     * @ORM\ManyToMany(targetEntity="TUI\Toolkit\TourBundle\Entity\PaymentTask", cascade={"persist", "remove"}, orphanRemoval = true)
+     * @ORM\JoinTable(name="tour_payment_task_passenger")
+     */
+    public $paymentTasksPassenger;
+
+
 
     /**
      * @var DateTime
@@ -379,12 +388,78 @@ class Tour
      */
     private $dietaryDate;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="cash_payment", type="boolean")
+     * @GRID\Column(visible=false, filterable=false, export=true)
+     */
+    private $cashPayment;
+
+    /**
+     * @var longtext
+     *
+     * @ORM\Column(name="cash_payment_description", type="text", length=4294967295, nullable=true)
+     * @GRID\Column(visible=false, filterable=false, export=true)
+     */
+    private $cashPaymentDescription;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="bank_transfer_payment", type="boolean")
+     * @GRID\Column(visible=false, filterable=false, export=true)
+     */
+    private $bankTransferPayment;
+
+    /**
+     * @var longtext
+     *
+     * @ORM\Column(name="bank_transfer_payment_description", type="text", length=4294967295, nullable=true)
+     * @GRID\Column(visible=false, filterable=false, export=true)
+     */
+    private $bankTransferPaymentDescription;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="online_payment", type="boolean")
+     * @GRID\Column(visible=false, filterable=false, export=true)
+     */
+    private $onlinePayment;
+
+    /**
+     * @var longtext
+     *
+     * @ORM\Column(name="online_payment_description", type="text", length=4294967295, nullable=true)
+     * @GRID\Column(visible=false, filterable=false, export=true)
+     */
+    private $onlinePaymentDescription;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="other_payment", type="boolean")
+     * @GRID\Column(visible=false, filterable=false, export=true)
+     */
+    private $otherPayment;
+
+    /**
+     * @var longtext
+     *
+     * @ORM\Column(name="other_payment_description", type="text", length=4294967295, nullable=true)
+     * @GRID\Column(visible=false, filterable=false, export=true)
+     */
+    private $otherPaymentDescription;
+
+
     public function __construct()
     {
       $this->created = new \DateTime();
       $this->views = 0;
       $this->shareViews = 0;
       $this->paymentTasks = new ArrayCollection();
+      $this->paymentTasksPassenger = new ArrayCollection();
     }
 
     /**
@@ -897,6 +972,7 @@ class Tour
     {
       return $this->pricePerson;
     }
+
     /**
      * Set pricePersonPublic
      *
@@ -1248,23 +1324,18 @@ class Tour
 
 /****** Helper functions *********/
 
-  /*
-   * add paymentTasks in forms using js/prototype
-   */
-  public function addPaymentTask(PaymentTask $paymentTask)
+    /*
+     * add and remove paymentTasks in forms using js/prototype
+     */
+    public function addPaymentTask(PaymentTask $paymentTask)
     {
-      $this->paymentTasks->add($paymentTask);
+        $this->paymentTasks->add($paymentTask);
     }
 
-  /*
-   * remove paymentTasks in forms using js/prototype
-   */
-  public function removePaymentTask(PaymentTask $paymentTask)
-      {
+    public function removePaymentTask(PaymentTask $paymentTask)
+    {
         $this->paymentTasks->removeElement($paymentTask);
-
-
-      }
+    }
 
   /**
    * Get paymentTasks
@@ -1283,9 +1354,45 @@ class Tour
    */
   public function setPaymentTasks($paymentTasks)
   {
-     $this->paymentTasks = $paymentTasks;
-      return $this;
+         $this->paymentTasks = $paymentTasks;
+          return $this;
   }
+
+
+    /*
+ * add and remove paymentTasks in forms using js/prototype
+ */
+    public function addPaymentTaskPassenger(PaymentTask $paymentTask)
+    {
+        $this->paymentTasksPassenger->add($paymentTask);
+    }
+
+    public function removePaymentTaskPassenger(PaymentTask $paymentTask)
+    {
+        $this->paymentTasksPassenger->removeElement($paymentTask);
+    }
+
+    /**
+     * Get paymentTasks
+     *
+     * @return paymentTasks
+     */
+    public function getPaymentTasksPassenger()
+    {
+        return $this->paymentTasksPassenger;
+    }
+
+    /**
+     * Set paymentTasks
+     *
+     * @return entity Tour
+     */
+    public function setPaymentTasksPassenger($paymentTasks)
+    {
+        $this->paymentTasksPassenger = $paymentTasks;
+        return $this;
+    }
+    
 
 
     /**
@@ -1347,4 +1454,181 @@ class Tour
     {
         return $this->setupComplete;
     }
+
+    /**
+     * @return bool
+     *
+     */
+    public function getCashPayment()
+    {
+        return $this->cashPayment;
+    }
+
+    /**
+     * @param $cashPayment
+     * @return $this
+     *
+     */
+    public function setCashPayment($cashPayment)
+    {
+        $this->cashPayment = $cashPayment;
+
+        return $this;
+    }
+
+    /**
+     * @return longtext
+     */
+
+    public function getCashPaymentDescription()
+    {
+        return $this->cashPaymentDescription;
+    }
+
+    /**
+     * @param $cashPaymentDescription
+     * @return $this
+     */
+
+    public function setCashPaymentDescription($cashPaymentDescription)
+    {
+        $this->cashPaymentDescription = $cashPaymentDescription;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     *
+     */
+
+    public function getBankTransferPayment()
+    {
+        return $this->bankTransferPayment;
+    }
+
+    /**
+     * @param $bankTransferPayment
+     * @return $this
+     */
+
+    public function setBankTransferPayment($bankTransferPayment)
+    {
+        $this->bankTransferPayment = $bankTransferPayment;
+
+        return $this;
+    }
+
+    /**
+     * @return longtext
+     *
+     */
+
+    public function getBankTransferPaymentDescription()
+    {
+        return $this->bankTransferPaymentDescription;
+    }
+
+    /**
+     * @param $bankTransferDescription
+     * @return $this
+     *
+     */
+
+    public function setBankTransferPaymentDescription($bankTransferDescription)
+    {
+        $this->bankTransferPaymentDescription = $bankTransferDescription;
+
+        return $this;
+
+    }
+
+    /**
+     * @return bool
+     *
+     */
+
+    public function getOnlinePayment()
+    {
+        return $this->onlinePayment;
+    }
+
+    /**
+     * @param $onlinePayment
+     * @return $this
+     */
+
+    public function setOnlinePayment($onlinePayment)
+    {
+        $this->onlinePayment = $onlinePayment;
+
+        return $this;
+    }
+
+    /**
+     * @return longtext
+     */
+
+    public function getOnlinePaymentDescription()
+    {
+        return $this->onlinePaymentDescription;
+    }
+
+    /**
+     * @param $onlinePaymentDescription
+     * @return $this
+     */
+
+    public function setOnlinePaymentDescription($onlinePaymentDescription)
+    {
+        $this->onlinePaymentDescription = $onlinePaymentDescription;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     *
+     */
+
+    public function getOtherPayment()
+    {
+        return $this->otherPayment;
+    }
+
+    /**
+     * @param $otherPayment
+     * @return $this
+     *
+     */
+
+    public function setOtherPayment($otherPayment)
+    {
+        $this->otherPayment = $otherPayment;
+
+        return $this;
+    }
+
+    /**
+     * @return longtext
+     */
+
+    public function getOtherPaymentDescription()
+    {
+        return $this->otherPaymentDescription;
+    }
+
+    /**
+     * @param $otherPaymentDescription
+     * @return $this
+     *
+     */
+
+    public function setOtherPaymentDescription($otherPaymentDescription)
+    {
+        $this->otherPaymentDescription = $otherPaymentDescription;
+
+        return $this;
+    }
+
 }

@@ -88,9 +88,16 @@
             <i class="fa fa-file-pdf-o"></i> PDF
         </a>
 
+        {% if collection != NULL %}
         <a href="/tour/view/export/{{ entity.id }}/{{ entity.quoteNumber }}.zip" target="_blank" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
             <i class="fa fa-download"></i> Download Promo Materials
         </a>
+        {% else %}
+        <a class="expired-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+           href="#">
+            <i class="fa fa-download"></i> Download Promo Materials
+        </a>
+        {% endif %}
 
         {% if warning | length >0 %}
             <div id="site-warning">

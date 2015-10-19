@@ -266,6 +266,10 @@ class QuoteController extends Controller
         $tour->setTransportType($quoteVersion->getTransportType());
         //$tour->setTripStatus();
         $tour->setWelcomeMsg($quoteVersion->getWelcomeMsg());
+        $tour->setCashPayment(false);
+        $tour->setBankTransferPayment(false);
+        $tour->setOnlinePayment(false);
+        $tour->setOtherPayment(false);
 
 
       //  $tour->setContent()
