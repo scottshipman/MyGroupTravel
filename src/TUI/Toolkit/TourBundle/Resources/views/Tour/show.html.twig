@@ -48,9 +48,9 @@
             <hr>
             <li><label>Departure Date</label><br><strong>{{ entity.departureDate|date(format) }}</strong></li>
             <hr>
-            <li><label>Number Of Passengers</label><br><strong>Some number</strong></li>
+            <li><label>Number Of Passengers</label><br><strong>{{ entity.payingPlaces }} paying passengers {% if entity.freePlaces > 0 %} and {{ entity.freePlaces }} free passengers{% endif %}</strong></li>
             <hr>
-            <li><label>Price Per Passenger</label><br><strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePersonPublic }}</strong></li>
+            <li><label>Price Per Passenger</label><br><strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong></li>
             <hr>
         </ul>
 
