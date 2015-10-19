@@ -78,6 +78,14 @@ class TourController extends Controller
             'passportDate',
             'medicalDate',
             'dietaryDate',
+            'cashPayment',
+            'cashPaymentDescription',
+            'bankTransferPayment',
+            'bankTransferPaymentDescription',
+            'onlinePayment',
+            'onlinePaymentDescription',
+            'otherPayment',
+            'otherPaymentDescription',
         );
 
         // Creates simple grid based on your entity (ORM)
@@ -231,6 +239,14 @@ class TourController extends Controller
           'passportDate',
           'medicalDate',
           'dietaryDate',
+          'cashPayment',
+          'cashPaymentDescription',
+          'bankTransferPayment',
+          'bankTransferPaymentDescription',
+          'onlinePayment',
+          'onlinePaymentDescription',
+          'otherPayment',
+          'otherPaymentDescription',
         );
 
         // Creates simple grid based on your entity (ORM)
