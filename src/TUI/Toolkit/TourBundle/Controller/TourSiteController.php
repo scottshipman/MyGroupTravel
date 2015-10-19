@@ -61,14 +61,6 @@ class TourSiteController extends Controller
         ->getPermission($id, 'tour', $user->getId());
     }
 
-    if($quoteNumber===NULL && FALSE === $securityContext->isGranted('ROLE_BRAND')){
-
-      $promptForm = $this->createPromptTypeForm($id);
-      return $this->render('TourBundle:TourSite:sitePrompt.html.twig', array(
-        'entity'      => $entity,
-        'form'        => $promptForm->createView(),
-      ));
-    }
 
     //Get all brand stuff
     $brand = $em->getRepository('BrandBundle:Brand')->findAll();
