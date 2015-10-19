@@ -124,12 +124,28 @@
   .tour-dashboard-cta {
     position: relative;
     display: inline;
-  }
+
+    @include breakpoint_tablet() {
+      position: absolute;
+      right: 20px;
+      top: 11%;
+    }
+    &.status-block {
+      position: absolute;
+      right: 20px;
+      top: 10%;
+    }
+
+    }
 
   .completed-task {
     min-height: 0;
     opacity: 0.5;
     cursor: default;
+  }
+
+  .dashboard-titles:hover {
+    background-color: #eee;
   }
 
 }
