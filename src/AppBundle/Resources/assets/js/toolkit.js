@@ -145,8 +145,6 @@
 
         adjusted.text(newTotal);
         var total = $("#total").text();
-        console.log(price);
-        console.log(total);
         if (Number(newTotal) < Number(total)){
             adjusted.css({"color":"red"});
         }
