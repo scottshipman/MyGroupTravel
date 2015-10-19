@@ -2,13 +2,16 @@
 
 namespace TUI\Toolkit\TourBundle\Controller;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
+
 use TUI\Toolkit\TourBundle\Entity\Tour;
 use TUI\Toolkit\QuoteBundle\Entity\QuoteVersion;
 use TUI\Toolkit\TourBundle\Form\ContactOrganizerType;
+use TUI\Toolkit\TourBundle\Form\TourSetupType;
 use TUI\Toolkit\UserBundle\Controller\UserController;
 use TUI\Toolkit\TourBundle\Form\TourType;
 use TUI\Toolkit\PermissionBundle\Entity\Permission;
@@ -75,6 +78,14 @@ class TourController extends Controller
             'passportDate',
             'medicalDate',
             'dietaryDate',
+            'cashPayment',
+            'cashPaymentDescription',
+            'bankTransferPayment',
+            'bankTransferPaymentDescription',
+            'onlinePayment',
+            'onlinePaymentDescription',
+            'otherPayment',
+            'otherPaymentDescription',
         );
 
         // Creates simple grid based on your entity (ORM)
@@ -228,6 +239,14 @@ class TourController extends Controller
           'passportDate',
           'medicalDate',
           'dietaryDate',
+          'cashPayment',
+          'cashPaymentDescription',
+          'bankTransferPayment',
+          'bankTransferPaymentDescription',
+          'onlinePayment',
+          'onlinePaymentDescription',
+          'otherPayment',
+          'otherPaymentDescription',
         );
 
         // Creates simple grid based on your entity (ORM)
@@ -632,7 +651,6 @@ class TourController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Tour entity.');
         }
-
         $collection = $entity->getMedia()->toArray();
 
         $deleteForm = $this->createDeleteForm($id);
@@ -702,6 +720,34 @@ class TourController extends Controller
 
 
         if ($editForm->isValid()) {
+
+            if (NULL != $editForm->getData()->getMedia()) {
+                $web_dir = $_SERVER['DOCUMENT_ROOT'];
+                $exportsDir = $web_dir . "/static/exports/";
+
+                if (!file_exists($exportsDir) && !is_dir($exportsDir)) {
+                    mkdir($exportsDir, 0755);
+                }
+
+                $collection = $editForm->getData()->getMedia();
+
+                $zip = new \ZipArchive();
+                $fileName = $entity->getquoteNumber() . ".zip";
+                $zip->open("static/exports/" . $fileName, \ZipArchive::OVERWRITE);
+
+                foreach ($collection as $c) {
+                    $zip->addFromString($c->gethashedFilename(), file_get_contents($c->getfilepath() . "/" . $c->gethashedFilename()));
+                }
+
+
+                $zip->close();
+                $em->flush();
+            }
+          // loop through payment tasks and set type to institution
+            foreach($editForm->getData()->getPaymentTasks() as $paymentTask){
+              $paymentTask->setType('institution');
+            }
+
             $em->flush();
             $permission = $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
             $this->get('session')->getFlashBag()->add('notice', 'Tour Saved: ' . $entity->getName());
@@ -964,36 +1010,16 @@ class TourController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Tour entity.');
         }
-
         $web_dir = $_SERVER['DOCUMENT_ROOT'];
-        $exportsDir = $web_dir."/static/exports/";
-
-        if (!file_exists($exportsDir) && !is_dir($exportsDir)){
-            mkdir($exportsDir, 0755);
-        }
-
-        $collection = $entity->getMedia()->toArray() ? $entity->getMedia()->toArray() : NULL;
-
-        $zip = new \ZipArchive();
-        $fileName = $entity->getquoteNumber().".zip";
-        $zip->open("static/exports/".$fileName,  \ZipArchive::OVERWRITE);
-
-        foreach ($collection as $c){
-            $zip->addFromString($c->gethashedFilename(), file_get_contents($c->getfilepath()."/".$c->gethashedFilename()));
-        }
-
-
-        $zip->close();
 
         $response = new Response();
         $response->headers->set('Content-Type', 'application/zip');
         $response->headers->set('Cache-Control', 'private');
-        $response->headers->set('Content-Disposition', 'attachment; filename="'.$fileName.'"');
-        $response->headers->set('Content-Length' , filesize("static/exports/".$fileName));
-        $response->setContent(file_get_contents($web_dir.'/static/exports/'.$fileName));
+        $response->headers->set('Content-Disposition', 'attachment; filename="' . $fileName . '"');
+        $response->headers->set('Content-Length', filesize("static/exports/" . $fileName));
+        $response->setContent(file_get_contents($web_dir . '/static/exports/' . $fileName));
 
         return $response;
-
 
 
     }
@@ -1008,9 +1034,20 @@ class TourController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('TourBundle:Tour')->find($id);
+        $editForm = $this->createEditForm($entity);
+        $date_format = $this->container->getParameter('date_format');
+        $locale = $this->container->getParameter('locale');
+
+        //brand stuff
+        $brand = $em->getRepository('BrandBundle:Brand')->findAll();
+        $brand = $brand[0];
 
         return $this->render('TourBundle:Tour:completedandsetup.html.twig', array(
             'entity' => $entity,
+            'edit_form' => $editForm->createView(),
+            'date_format' => $date_format,
+            'locale' => $locale,
+            'brand' => $brand
         ));
 
     }
@@ -1026,8 +1063,14 @@ class TourController extends Controller
 
         $entity = $em->getRepository('TourBundle:Tour')->find($id);
 
+        $date_format = $this->container->getParameter('date_format');
+
+        $locale = $this->container->getParameter('locale');
+
         return $this->render('TourBundle:Tour:notCompletedAndSetup.html.twig', array(
             'entity' => $entity,
+            'date_format' => $date_format,
+            'locale' => $locale
         ));
 
     }
@@ -1040,14 +1083,89 @@ class TourController extends Controller
     public function getTourNotSetupAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-
         $entity = $em->getRepository('TourBundle:Tour')->find($id);
+        $date_format = $this->container->getParameter('date_format');
+        $locale = $this->container->getParameter('locale');
+        $setupForm = $this->createTourSetupForm($entity);
 
         return $this->render('TourBundle:Tour:notSetup.html.twig', array(
             'entity' => $entity,
+            'setup_form' => $setupForm->createView(),
+            'date_format' => $date_format,
+            'locale' => $locale,
         ));
 
     }
+
+    /**
+     * Creates a form to edit a Tour entity on first setup.
+     *
+     * @param Tour $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+
+    public
+    function createTourSetupForm(Tour $entity)
+    {
+        $locale = $this->container->getParameter('locale');
+        $setupForm = $this->createForm(new TourSetupType($locale), $entity, array(
+            'action' => $this->generateUrl('manage_tour_setup', array('id' => $entity->getId())),
+            'method' => 'PUT',
+        ));
+
+        $setupForm->add('submit', 'submit', array('label' => 'Save'));
+
+        return $setupForm;
+    }
+
+
+    public function TourSetupAction(Request $request, $id)
+    {
+        $date_format = $this->container->getParameter('date_format');
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('TourBundle:Tour')->find($id);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Tour entity.');
+        }
+
+        $setupForm = $this->createTourSetupForm($entity);
+        $setupForm->handleRequest($request);
+
+        $entity->setSetupComplete(true);
+
+        if ($setupForm->isValid()) {
+            $em->flush();
+            $permission = $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
+            $this->get('session')->getFlashBag()->add('notice', 'Tour Saved: ' . $entity->getName());
+            return $this->redirect($this->generateUrl('manage_tour_show', array('id' => $id)));
+        }
+
+        $this->get('session')->getFlashBag()->add('notice', 'Tour Not Saved: ' . $entity->getName());
+        return $this->redirect($this->generateUrl('manage_tour_show', array('id' => $id)));
+
+
+    }
+
+    public function setupCompleteAction($id, $quoteNumber)
+    {
+        $locale = $this->container->getParameter('locale');
+        $date_format = $this->container->getParameter('date_format');
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('TourBundle:Tour')->find($id);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Tour entity.');
+        }
+        $entity->setIsComplete(true);
+
+        $em->persist($entity);
+        $em->flush();
+
+        return $this->redirect($this->generateUrl('tour_site_show', array('id' => $id, "quoteNumber" => $quoteNumber)));
+
+    }
+
 
     /**
      * Creates a form to make a change request to a QuoteVersion entity.
@@ -1133,9 +1251,7 @@ class TourController extends Controller
                             'agent' => $agent,
                         )
                     ), 'text/html');
-        }
-
-        elseif($entity->getOrganizer()->isEnabled() == false){
+        } elseif ($entity->getOrganizer()->isEnabled() == false) {
             $user = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
             // Create token
             $tokenGenerator = $this->container->get('fos_user.util.token_generator');

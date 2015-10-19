@@ -41,6 +41,18 @@ class TourType extends AbstractType
           ->add('name', 'text', array(
             'label' => 'Tour Name',
           ))
+
+          ->add('tripStatus', 'entity', array(
+            'required' => false,
+            'placeholder' => 'Select',
+            'class' => 'TripStatusBundle:TripStatus',
+            'property' => 'name',
+            'query_builder' => function (EntityRepository $er) {
+              return $er->createQueryBuilder('t')
+                ->where('t.visible = TRUE' )
+                ->orderBy('t.id', 'ASC');
+            },
+          ))
           ->add('quoteNumber')
           ->add('version', 'text', array(
             'read_only'  => true,
@@ -137,10 +149,10 @@ class TourType extends AbstractType
           ->add('freePlaces')
           ->add('pricePerson')
           ->add('paymentTasks', 'collection', array(
-            'type' => new PaymentTaskType('institution', $this->locale),
+            'type' => new PaymentTaskType($this->locale),
             'allow_add'    => true,
-            'by_reference' => false,
             'allow_delete' => true,
+            'by_reference' => false,
           ))
 
           ->add('passengerDate', 'genemu_jquerydate', array(

@@ -1,26 +1,199 @@
+{#{% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}#}
+
 <div class="tour-edit mdl-card mdl-shadow--2dp">
 
     <div class="mdl-card__title">
         <h3 class="mdl-card__title-text">Get Started</h3>
     </div>
 
-    <div class="mdl-card__supporting-text mdl-card--border">
+    <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
         <i class="fa fa-check"></i> Sign up to EToolkit
     </div>
 
     <div class="mdl-card__supporting-text mdl-card--border">
-        <i class="fa fa-check"></i> Set up your payment settings
-        {% for task in entity.paymentTasks %}
-            {#{{ render(controller('TourBundle:PaymentTask:edit', { 'id': task.id })) }}#}
-        {% endfor %}
+        {{ form_start(setup_form) }}
+        <i class="fa fa-credit-card "></i> Set up your payment settings
+        <ol class="setup-form-list">
+            <li>
+                <strong>How much do you want ot charge each passenger</strong>
+                <p>This will be the per passenger price shown on the tour prmotional website.  You can increase the price or reduce it if you are fundraising</p>
+                {{ form_widget(setup_form.pricePersonPublic) }}<p style="display: inline; font-size: 16px;"> x </p><p style="display:inline; font-size: 16px;" id="passengers">{{ entity.payingPlaces }}</p><p style="display: inline; font-size: 16px;"> = </p>
+                {% if entity.currency %}<p id="currency" style="display: inline; font-size: inherit;">{{ entity.currency.htmlSymbol | raw }}</p>{% endif %}<p style="display: inline; font-size: 16px; color: green;" id="adjusted-price">{{ entity.payingPlaces * entity.pricePerson }}</p>
+                <p style="display:none; font-size: 16px;" id="total">{{ entity.payingPlaces * entity.pricePerson }}</p>
+                {% if entity.currency %}<p id="currency" style="display: none">{{ entity.currency.htmlSymbol | raw }}</p>{% endif %}
+            </li>
+
+            <li>
+                <strong>Set payment amounts and due dates</strong>
+                <p>This is the suggested per passenger deposit price.  You can increase the price or reduce it if you are fundraising.</p>
+                {#{{ form_widget(setup_form.paymentTasks) }}#}
+                {#{{ dump(setup_form) }}#}
+                <div class="paymenttasks" data-prototype="{{ form_widget(setup_form.paymentTasksPassenger.vars.prototype)|e }}">
+                {# iterate over each existing paymenttask and render its  fields:  #}
+                    {% for paymentTaskPassenger in setup_form.paymentTasksPassenger %}
+                        <ul class="payment_task" taskid = "{{ paymentTaskPassenger.vars.value.id }}">
+                            <li>{{ form_widget(paymentTaskPassenger.name) }}</li>
+                            <li>{{ form_widget(paymentTaskPassenger.value) }}</li>
+                            <li>{{ form_widget(paymentTaskPassenger.dueDate) }}</li>
+                        </ul>
+                    {% endfor %}
+                    {#{{ form_errors(setup_form.paymentTasksPassenger) }}#}
+                </div>
+            </li>
+            <li>
+                <strong>How do you want passengers to pay?</strong>
+                <p>Select your preferred payment methods</p>
+                <div class="payment-types">
+                    {{ form_widget(setup_form.cashPayment) }}
+                    {{ form_widget(setup_form.cashPaymentDescription) }}
+                    {{ form_widget(setup_form.bankTransferPayment) }}
+                    {{ form_widget(setup_form.bankTransferPaymentDescription) }}
+                    {{ form_widget(setup_form.onlinePayment) }}
+                    {{ form_widget(setup_form.onlinePaymentDescription) }}
+                    {{ form_widget(setup_form.otherPayment) }}
+                    {{ form_widget(setup_form.otherPaymentDescription) }}
+                </div>
+            </li>
+        </ol>
+        {{ form_rest(setup_form) }}
+        {{ form_end(setup_form) }}
+        {{ form_javascript(setup_form) }}
     </div>
 
-    <div class="mdl-card__supporting-text mdl-card--border">
-        <i class="fa fa-clone"></i> <a href="{{ path('tour_site_action_show', { 'id': entity.id }) }}">Personalize your website</a>
+    <div class="mdl-card__supporting-text mdl-card--border" style="color: grey;">
+        <p style="margin: 0; font-size: inherit;">Next</p>
     </div>
 
-    <div class="mdl-card__supporting-text mdl-card--border">
-        <i class="fa fa-share"></i> Promote your website
+    <div class="mdl-card__supporting-text mdl-card--border" style="color: grey;">
+        <i class="fa fa-clone"></i>Personalize your website
+    </div>
+
+    <div class="mdl-card__supporting-text mdl-card--border" style="color: grey;">
+        <i class="fa fa-share"></i> Promote your tour
     </div>
 
 </div>
+
+<script>
+    var $collectionHolder;
+
+    // setup an "add a tag" link
+    var $addPaymentTaskLink = $('<a href="#" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add_tag_link" title="Add a Payment"><i class="fa fa-plus"></i>Add Payment</a>');
+    var $newLinkDiv = $('<div></div>').append($addPaymentTaskLink);
+
+    $( document ).ready(function() {
+
+        //To expose the payment type description fields
+        $('.payment-types').find('.mdl-textfield').each( function() {
+//            if ($(".mdl-checkbox__input").parent().hasClass("is-checked")) {
+//                $(this).next().css({"display": "inline-block"})
+//            }
+            $(".mdl-checkbox").change(function()
+            {
+                if ($(".mdl-checkbox__input").parent().hasClass("is-checked")) {
+                    $(this).next().css({"display": "inline-block"})
+                }
+                else if (!$(".mdl-checkbox__input").parent().hasClass("is-checked")){
+                    $(this).next().css({"display": "none"})
+
+                }
+            });
+        });
+
+        $( ".hasDatepicker" ).datepicker( "option", "dateFormat", "{{ date_format }}" );
+        $( ".hasDatepicker" ).change(function(){
+            $(this).parent().addClass('is-dirty');
+        });
+
+        // Get the div that holds the collection of payments
+        $collectionHolder = $('div.paymenttasks');
+
+        // add a delete link to all of the existing payment form ul elements
+        $collectionHolder.find('ul.payment_task').each(function() {
+            addPaymentTaskFormDeleteLink($(this), 'li');
+        });
+
+        // add the "add a Payment" anchor and li to the Payment div
+        $collectionHolder.append($newLinkDiv);
+
+        // count the current form inputs we have (e.g. 2), use that as the new
+        // index when inserting a new item (e.g. 2)
+        $collectionHolder.data('index', $collectionHolder.find('ul').length);
+
+        $addPaymentTaskLink.on('click', function(e) {
+            // prevent the link from creating a "#" on the URL
+            e.preventDefault();
+
+            // add a new tag form (see next code block)
+            addPaymentTaskForm($collectionHolder, $newLinkDiv);
+        });
+
+        $('#tui_toolkit_tourbundle_toursetup_submit').on('click', function() {
+           console.log($('form'));
+        });
+
+    });
+    function addPaymentTaskForm($collectionHolder, $newLinkDiv) {
+        // Get the data-prototype explained earlier
+        var prototype = $collectionHolder.data('prototype');
+
+        // get the new index
+        var index = $collectionHolder.data('index');
+        console.log(index);
+
+        // Replace '__name__' in the prototype's HTML to
+        // instead be a number based on how many items we have
+        var newForm = prototype.replace(/__name__/g, index);
+
+        // increase the index with one for the next item
+        $collectionHolder.data('index', index + 1);
+
+        // Display the form in the page in an div, before the "Add a Payment" link div
+        var $newFormDiv = $('<div class="new_payment_task" task="' + index + '"></div>').append(newForm);
+        $newLinkDiv.before($newFormDiv);
+
+        // add a delete link to the new form
+        addPaymentTaskFormDeleteLink($newFormDiv, 'div');
+
+        //trigger date field popup
+        $("input[id*='_dueDate']").each(function() {
+            var $configs = $.extend({
+                minDate: new Date(2010, 0, 1),
+                maxDate: new Date(2030, 11, 31)
+            }, $.datepicker.regional['{{ locale }}'] ,{"dateFormat":"{{ date_format }}"});
+            $(this).datepicker($configs);
+        });
+        $( ".hasDatepicker" ).datepicker( "option", "dateFormat", "{{ date_format }}" );
+        $( ".hasDatepicker" ).change(function(){
+            $(this).parent().addClass('is-dirty');
+        });
+        doMDLpopup($newFormDiv);
+    }
+
+    function addPaymentTaskFormDeleteLink($paymentFormDiv, elem) {
+        var $removeFormA;
+        if (elem=='li'){
+            $removeFormA = $('<li><a href="#" title="Delete this Payment"><i class="fa fam-delete"></i></a></li>');
+            $paymentFormDiv.append($removeFormA);
+        } else {
+            $removeFormA = $('<div class="form-row"><a href="#" title="Delete this Payment"><i class="fa fam-delete"></i></a></div>');
+            var hidden = $paymentFormDiv.find('input[type="hidden"]');
+            $paymentFormDiv.children().first().append($removeFormA);
+        }
+
+        $removeFormA.on('click', function(e) {
+            // prevent the link from creating a "#" on the URL
+            e.preventDefault();
+            if ($paymentFormDiv.get(0).tagName =='UL') {
+                if (confirm('Are you sure you want to remove this payment? You must click Update for changes to be saved.')) {
+
+                }
+            } else {
+                $paymentFormDiv.remove();
+            }
+        });
+    }
+
+</script>
+
+

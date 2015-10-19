@@ -1,26 +1,275 @@
-<div class="tour-edit mdl-card mdl-shadow--2dp">
+{% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
+{% if 'en_GB' in locale %} {% set shortFormat = 'd M' %} {% else %} {% set format = 'M d' %} {% endif %}
 
-    <div class="mdl-card__title">
-        <h3 class="mdl-card__title-text">Get Started</h3>
+{% if entity.passportDate != null %}
+    {% set passDtg  = date(entity.passPortDate).diff(date("now")) %}
+    {% if passDtg.days < 1 %} {%  set passDtgFinal = 0  %} {% else %} {% set passDtgFinal = passDtg.days %}{% endif %}
+{% endif %}
+
+{% if entity.medicalDate != null%}
+    {% set medDtg  = date(entity.medicalDate).diff(date("now")) %}
+    {% if medDtg.days < 1 %} {%  set medDtgFinal = 0  %} {% else %} {% set medDtgFinal = medDtg.days %}{% endif %}
+{% endif %}
+
+{% if entity.dietaryDate != null%}
+    {% set dietDtg  = date(entity.dietaryDate).diff(date("now")) %}
+    {% if dietDtg.days < 1 %} {%  set dietDtgFinal = 0  %} {% else %} {% set dietDtgFinal = dietDtg.days %}{% endif %}
+{% endif %}
+
+
+{% set dtg  = date(entity.departureDate).diff(date("now")) %}
+{% if dtg.days < 1 %} {%  set dtgFinal = 0  %} {% else %} {% set dtgFinal = dtg.days %}{% endif %}
+
+{#{{ dump(entity) }}#}
+{% if is_granted("ROLE_BRAND") or app.user.email == entity.organizer.email %}
+
+    {#{{ dump(entity) }}#}
+    <div class="tour-edit mdl-card mdl-shadow--2dp">
+
+            <div class="mdl-card__title">
+                <h3 class="mdl-card__title-text">Status</h3>
+                {#<span class="tour-dashboard-cta status-block"><a class=""><i class="fa fa-ellipsis-v"></i></a></span>#}
+            </div>
+            <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
+                <ul>
+                    <li>
+                        <div class="profile-list-item item-1 tour-dashboard">
+                            <span class="date-span">{% if entity.currency %}<p id="currency" style="display: inline; font-size: inherit;">{{ entity.currency.htmlSymbol | raw }}</p>{% endif %}1000</span>
+                            <label>Rasied of {% if entity.currency %}<p id="currency" style="display: inline; font-size: inherit">{{ entity.currency.htmlSymbol | raw }}</p>{% endif %}10000</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="profile-list-item item-2 tour-dashboard">
+                            <span class="date-span">0/4</span>
+                            <label>Task Complete</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="profile-list-item item-3 tour-dashboard">
+                            <span class="date-span">{{ dtgFinal }}</span>
+                            <label>Days To Go</label>
+                        </div>
+                    </li>
+                </ul>
+            </div>
     </div>
 
-    <div class="mdl-card__supporting-text mdl-card--border">
-        <i class="fa fa-check"></i> Sign up to EToolkit
+    <h5>ToDo</h5>
+    {% if entity.passportDate != null%}
+        <div class="tour-edit mdl-card mdl-shadow--2dp">
+            <a class ="dashboard-titles" href="#">
+                <div class="mdl-card__title">
+                    <h3 class="mdl-card__title-text">Collect Passport Data By {{ entity.passPortDate|date(shortFormat) }}</h3>
+                    <span class="tour-dashboard-cta"><i class="fa fa-arrow-right"></i></span>
+                </div>
+            </a>
+            <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
+                <ul>
+                    <li>
+                        <div class="profile-list-item item-1 tour-dashboard">
+                            <span class="date-span">0</span>
+                            <label>Collecting</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="profile-list-item item-2 tour-dashboard">
+                            <span class="date-span">60</span>
+                            <label>Outstanding</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="profile-list-item item-3 tour-dashboard">
+                            <span class="date-span">{{ passDtgFinal }}</span>
+                            <label>Days To Go</label>
+                        </div>
+                    </li>
+                    <li>
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if entity.medicalDate != null%}
+        <div class="tour-edit mdl-card mdl-shadow--2dp">
+
+            <a class ="dashboard-titles" href="#">
+                <div class="mdl-card__title">
+                    <h3 class="mdl-card__title-text">Collect Medical Data By {{ entity.medicalDate|date(shortFormat) }}</h3>
+                    <span class="tour-dashboard-cta"><i class="fa fa-arrow-right"></i></span>
+                </div>
+            </a>
+            <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
+                <ul>
+                    <li>
+                        <div class="profile-list-item item-1 tour-dashboard">
+                            <span class="date-span">0</span>
+                            <label>Collecting</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="profile-list-item item-2 tour-dashboard">
+                            <span class="date-span">60</span>
+                            <label>Outstanding</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="profile-list-item item-3 tour-dashboard">
+                            <span class="date-span">{{ medDtgFinal }}</span>
+                            <label>Days To Go</label>
+                        </div>
+                    </li>
+                    <li>
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if entity.dietaryDate != null%}
+        <div class="tour-edit mdl-card mdl-shadow--2dp">
+
+            <a class ="dashboard-titles" href="#">
+                <div class="mdl-card__title">
+                    <h3 class="mdl-card__title-text">Collect Dietary Data By {{ entity.dietaryDate|date(shortFormat) }}</h3>
+                    <span class="tour-dashboard-cta"><i class="fa fa-arrow-right"></i></span>
+                </div>
+            </a>
+            <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
+                <ul>
+                    <li>
+                        <div class="profile-list-item item-1 tour-dashboard">
+                            <span class="date-span">0</span>
+                            <label>Collecting</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="profile-list-item item-2 tour-dashboard">
+                            <span class="date-span">60</span>
+                            <label>Outstanding</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="profile-list-item item-3 tour-dashboard">
+                            <span class="date-span">{{ dietDtgFinal }}</span>
+                            <label>Days To Go</label>
+                        </div>
+                    </li>
+                    <li>
+                </ul>
+            </div>
+        </div>
+
+    {% if entity.paymentTasks != null %}
+        {% set depositdtg  = date(entity.paymentTasks[0].dueDate).diff(date("now")) %}
+        {% if depositdtg.days < 1 %} {%  set depositDtgFinal = 0  %} {% else %} {% set depositDtgFinal = depositdtg.days %}{% endif %}
+        <div class="tour-edit mdl-card mdl-shadow--2dp">
+            <div class="mdl-card__title">
+                <h3 class="mdl-card__title-text">Pay Deposit To {{ brand.name }} {{ entity.paymentTasks[0].dueDate|date(shortFormat) }}</h3>
+            </div>
+            <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
+                <ul>
+                    <li>
+                        <div class="profile-list-item item-1 tour-dashboard two-column">
+                            <span class="date-span">{% if entity.currency %}<p id="currency" style="display: inline; font-size: inherit;">{{ entity.currency.htmlSymbol | raw }}</p>{% endif %}{{ entity.paymentTasks[0].value }}</span>
+                            <label>Due</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="profile-list-item item-2 tour-dashboard two-column">
+                            <span class="date-span">{{ depositDtgFinal }}</span>
+                            <label>Days to Go</label>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+
+        <div class="tour-edit mdl-card mdl-shadow--2dp">
+
+            <div class="mdl-card__title">
+                <h3 class="mdl-card__title-text">Download Booking Form</h3>
+            </div>
+            <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
+                <div class="mdl-card__supporting-text">
+                    <p style="font-size: inherit;">Download the booking form, complete it, and send it in with the correct deposit</p>
+                    <a class="add-organizer mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#"><i class="fa fa-download"></i>Download</a>
+                </div>
+            </div>
+        </div>
+
+{% endif %}
+    <h5>Completed</h5>
+
+    <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
+         <div class="mdl-card__title">
+            <h3 class="mdl-card__title-text">Collect Passport Data</h3>
+            <span class="tour-dashboard-cta"><i class="fa fa-check"></i></span>
+        </div>
     </div>
 
-    <div class="mdl-card__supporting-text mdl-card--border">
-        <i class="fa fa-check"></i> Set up your payment settings
-        {% for task in entity.paymentTasks %}
-            {#{{ render(controller('TourBundle:PaymentTask:edit', { 'id': task.id })) }}#}
-        {% endfor %}
+    <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
+        <div class="mdl-card__title">
+            <h3 class="mdl-card__title-text">Collect Medical Data</h3>
+            <span class="tour-dashboard-cta"><i class="fa fa-check"></i></span>
+        </div>
     </div>
 
-    <div class="mdl-card__supporting-text mdl-card--border">
-        <i class="fa fa-clone"></i> <a href="{{ path('tour_site_action_show', { 'id': entity.id }) }}">Personalize your website</a>
+    <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
+        <div class="mdl-card__title">
+            <h3 class="mdl-card__title-text">Collect Dietary Data</h3>
+            <span class="tour-dashboard-cta"><i class="fa fa-check"></i></span>
+        </div>
     </div>
 
-    <div class="mdl-card__supporting-text mdl-card--border">
-        <i class="fa fa-share"></i> Promote your website
+    <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
+        <div class="mdl-card__title">
+            <h3 class="mdl-card__title-text">Pay Deposit To {{ brand.name }}</h3>
+            <span class="tour-dashboard-cta"><i class="fa fa-check"></i></span>
+        </div>
     </div>
 
-</div>
+{% endif %}
+
+<script>
+    {% if entity.media != NULL %}
+    var something = '<a href="/tour/view/export/{{ entity.id }}/{{ entity.quoteNumber }}.zip" target="_blank" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions"> <i class="fa fa-download"></i> Download Promo Materials</a>';
+    {% else %}
+    var something = '<a class="expired-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#"><i class="fa fa-download"></i> Download Promo Materials </a>';
+    {% endif %}
+// Promote Popup
+$(document).on('click', '#promote-tour', function (e) {
+e.preventDefault();
+var shareValue = "{{ url('tour_site_show', { 'id': entity.id, 'quoteNumber' : entity.quoteNumber }) }}";
+$("#dialog").html('<div id="content-wrapper" class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">' +
+'<div id="content-blocks-wrapper" class="content-block-tabs-bar mdl-tabs__tab-bar">' +
+'<a href="#tabs-drawer-1" class="view-tab site-content-blocks-tab mdl-tabs__tab " tabId="1"><span class="tab-name"><i style="margin-right: 10px;" class="fa fa-link fa-1x"></i>Url</span></a>' +
+'<a href="#tabs-drawer-2" class="view-tab site-content-blocks-tab mdl-tabs__tab " tabId="2"><span class="tab-name"><i style="margin-right: 10px;" class="fa fa-download fa-1x"></i>Toolkit</span></a>' +
+'</div></div>' +
+'<div id="tabs-drawer-1" class="mdl-tabs__panel content-blocks-drawer">' +
+
+    '<h3>Share this Tour with others</h3>' +
+'<div><p>To send this tour to others, copy the URL below.</p></div>' +
+'<div class="input"><input style="width:70%; padding:.25em; margin:1em;" type="text" id="share_url" name="share_url" value="' + shareValue + '" readonly="readonly">' +
+    '<a href="#" id="copy-button" data-clipboard-target="share_url"' +
+    'title="Click to copy Tour URL"' +
+    'class="not-full mdl-button mdl-js-button mdl-button--raised mdl-button--colored">' +
+    '<i class="fa fa-sign-in fa-stack"></i>' +
+    '</a></div></div>' +
+    '<div id="tabs-drawer-2" class="mdl-tabs__panel content-blocks-drawer">' + something +'</div>'
+);
+$("#dialog").dialog({width: '30%', height: '200'}).dialog("option", "title", "Promote the Tour").dialog("open");
+// Copy to Clipboard
+ZeroClipboard.config({swfPath: "//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf"});
+var client = new ZeroClipboard(document.getElementById("copy-button"));
+client.on('aftercopy', function (event) {
+$('#copy-button').css('background-color', 'green');
+});
+//remove the CopytoClipboard button if not Flash
+if (navigator.mimeTypes["application/x-shockwave-flash"] == undefined) {
+$("#copy-button").addClass('hidden');
+$('share_url').css('width', '80%');
+}
+doMDL_popup('.input');
+
+});
+</script>

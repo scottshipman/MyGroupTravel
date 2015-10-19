@@ -4,23 +4,24 @@
         <h3 class="mdl-card__title-text">Get Started</h3>
     </div>
 
-    <div class="mdl-card__supporting-text mdl-card--border">
+    <div class="mdl-card__supporting-text mdl-card--border" style="color: grey;">
         <i class="fa fa-check"></i> Sign up to EToolkit
     </div>
 
-    <div class="mdl-card__supporting-text mdl-card--border">
+    <div class="mdl-card__supporting-text mdl-card--border" style="color: grey;">
         <i class="fa fa-check"></i> Set up your payment settings
-        {% for task in entity.paymentTasks %}
-            {#{{ render(controller('TourBundle:PaymentTask:edit', { 'id': task.id })) }}#}
-        {% endfor %}
     </div>
 
     <div class="mdl-card__supporting-text mdl-card--border">
-        <i class="fa fa-clone"></i> <a href="{{ path('tour_site_action_show', { 'id': entity.id }) }}">Personalize your website</a>
+        <i class="fa fa-clone"></i> <a href="{{ path('manage_tour_setup_complete', { 'id': entity.id, "quoteNumber": entity.quoteNumber } ) }}">Personalize your website</a>
     </div>
 
-    <div class="mdl-card__supporting-text mdl-card--border">
-        <i class="fa fa-share"></i> Promote your website
+    <div class="mdl-card__supporting-text mdl-card--border" style="color: grey;">
+        <p style="margin: 0; font-size: inherit;">Next</p>
+    </div>
+
+    <div class="mdl-card__supporting-text mdl-card--border" style="color: grey;">
+        <i class="fa fa-share"></i> Promote your tour
     </div>
 
 </div>

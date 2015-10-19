@@ -227,7 +227,18 @@ class QuoteController extends Controller
         $em->persist($quote);
         $em->persist($quoteVersion);
 
+        // get first trip status from doctrine
+        $tripStatus = $em->createQueryBuilder()
+          ->select('e')
+          ->from('TripStatusBundle:TripStatus', 'e')
+          ->orderBy('e.id', 'ASC')
+          ->where('e.visible = TRUE')
+          ->setMaxResults(1)
+          ->getQuery()
+          ->getOneOrNullResult();
+
         $tour = new Tour();
+        $tour->setTripStatus($tripStatus);
         $tour->setQuoteNumber($quoteVersion->getQuoteNumber());
         $tour->setQuoteReference($quote);
         $tour->setQuoteVersionReference($quoteVersion);
@@ -255,6 +266,10 @@ class QuoteController extends Controller
         $tour->setTransportType($quoteVersion->getTransportType());
         //$tour->setTripStatus();
         $tour->setWelcomeMsg($quoteVersion->getWelcomeMsg());
+        $tour->setCashPayment(false);
+        $tour->setBankTransferPayment(false);
+        $tour->setOnlinePayment(false);
+        $tour->setOtherPayment(false);
 
 
       //  $tour->setContent()

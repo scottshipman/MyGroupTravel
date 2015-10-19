@@ -274,6 +274,7 @@ class ContentBlockController extends Controller
 
         if (NULL != $editForm->getData()->getMediaWrapper()) {
             $fileArrays = json_decode($editForm->getData()->getMediaWrapper());
+            $wrappers = array();
             foreach ($fileArrays as $fileArray) {
                 $mediaWrappers = $this->forward('MediaBundle:MediaWrapper:create', array(
                     'fileArray' => $fileArray,
@@ -283,11 +284,12 @@ class ContentBlockController extends Controller
             }
 
             $newWrappers = array();
-            foreach ($wrappers as $wrap) {
-                $newContent = json_decode($wrap, true);
-                $newWrappers[] = $newContent;
+            if ($wrappers != null) {
+                foreach ($wrappers as $wrap) {
+                    $newContent = json_decode($wrap, true);
+                    $newWrappers[] = $newContent;
+                }
             }
-
             if ($newWrappers != NULL) {
                 foreach ($newWrappers as $newWrapper) {
                     $wrapper = $em->getRepository('MediaBundle:MediaWrapper')->find($newWrapper['id']);

@@ -14,6 +14,14 @@ manage_tour_get_not_completed_and_setup:
     path:     /{id}/notcompleted/setup
     defaults: { _controller: "TourBundle:Tour:getTourNotCompletedAndSetup" }
 
-manage_tour_get_not_setup:
-    path:     /{id}/notsetup
-    defaults: { _controller: "TourBundle:Tour:getTourNotCompletedAndSetup" }
+manage_tour_create_setup_form:
+    path:   /setup/form/{id}
+    defaults:  { _controller: "TourBundle:Tour:getTourNotSetup"}
+
+manage_tour_setup:
+    path:      /setup/{id}
+    defaults:  { _controller: "TourBundle:Tour:TourSetup" }
+
+manage_tour_setup_complete:
+    path:     /setup/complete/{id}/{quoteNumber}
+    defaults: { _controller: "TourBundle:Tour:setupComplete" }

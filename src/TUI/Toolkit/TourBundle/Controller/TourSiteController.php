@@ -50,7 +50,10 @@ class TourSiteController extends Controller
             throw $this->createNotFoundException('Unable to find Tour entity.');
         }
 
-    // if no quoteNumber supplied in URL, then prompt for quoteNumber first
+        $collection = $entity->getMedia()->toArray() ? $entity->getMedia()->toArray() : NULL;
+
+
+      // if no quoteNumber supplied in URL, then prompt for quoteNumber first
     $securityContext = $this->get('security.context');
     $user = $securityContext->getToken()->getUser();
     if($user !='anon.') {
@@ -58,14 +61,6 @@ class TourSiteController extends Controller
         ->getPermission($id, 'tour', $user->getId());
     }
 
-    if($quoteNumber===NULL && FALSE === $securityContext->isGranted('ROLE_BRAND')){
-
-      $promptForm = $this->createPromptTypeForm($id);
-      return $this->render('TourBundle:TourSite:sitePrompt.html.twig', array(
-        'entity'      => $entity,
-        'form'        => $promptForm->createView(),
-      ));
-    }
 
     //Get all brand stuff
     $brand = $em->getRepository('BrandBundle:Brand')->findAll();
@@ -119,6 +114,7 @@ class TourSiteController extends Controller
       'header'      => $headerBlock,
       'editable'    => $editable,
       'brand'       => $brand,
+      'collection' => $collection,
     ));
   }
 
