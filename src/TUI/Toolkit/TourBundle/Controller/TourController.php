@@ -1252,7 +1252,7 @@ class TourController extends Controller
                         )
                     ), 'text/html');
         } elseif ($entity->getOrganizer()->isEnabled() == false) {
-            $user = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
+            $user = $entity->getOrganizer();
             // Create token
             $tokenGenerator = $this->container->get('fos_user.util.token_generator');
 
@@ -1285,7 +1285,7 @@ class TourController extends Controller
         $this->get('session')->getFlashBag()->add('notice', 'Your Message has been sent to '. $organizerEmail);
 
 
-        return $this->redirect($this->generateUrl('_manage_tour_home', array('id' => $id)));
+        return $this->redirect($this->generateUrl('manage_tour'));
 
     }
 }
