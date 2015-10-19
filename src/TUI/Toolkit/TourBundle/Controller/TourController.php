@@ -115,7 +115,7 @@ class TourController extends Controller
             }
         );
         $grid->addRowAction($editAction);
-        $showAction = new RowAction('View', 'manage_tour_show');
+        $showAction = new RowAction('Dashboard', 'manage_tour_show');
         $grid->addRowAction($showAction);
         $previewAction = new RowAction('Preview', 'tour_site_action_show');
         $grid->addRowAction($previewAction);
