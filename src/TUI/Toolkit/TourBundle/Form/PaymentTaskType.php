@@ -36,8 +36,9 @@ class PaymentTaskType extends AbstractType
 
         $builder
             ->add('name')
-            ->add('value', 'text', array(
-              'label' =>  'Amount',
+            ->add('value', 'integer', array(
+                'label' =>  'Amount',
+                'scale' => 2,
             ))
 
             ->add('dueDate', 'genemu_jquerydate', array(
