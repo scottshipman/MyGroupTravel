@@ -319,22 +319,6 @@
     <div class="quote-info"><span class="quote-label">Price per person:</span><span
                 class="quote-price">{% if entity.pricePerson %}
 
-                <strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong>{% endif %}</span>
+                <strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePersonPublic }}</strong>{% endif %}</span>
     </div>
-    {#{% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}#}
-        {#{% if date(entity.expiryDate) < date('now') %}#}
-            {#<a class="expired-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">#}
-                {#<i class="fa fa-calendar-times-o"></i> Expired#}
-            {#</a>#}
-        {#{% else %}#}
-            {#<a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"#}
-               {#href="{{ path('quote_site_quote_accepted', { 'id': entity.id }) }}">#}
-                {#<i class="fa fa-thumbs-o-up"> </i> Like Quote#}
-            {#</a>#}
-        {#{% endif %}#}
-    {#{% elseif (entity.converted is sameas(true)) and (entity.quoteReference.converted is sameas(true)) %}#}
-        {#<a class="accepted-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">#}
-            {#<i class="fa fa-thumbs-up"> </i> Liked#}
-        {#</a>#}
-    {#{% endif %}#}
 {% endblock %}
