@@ -30,7 +30,7 @@
                 var link = $("a[title='Email']").attr('href');
                 $("a[title='Email']").attr("href", "#");
                 $(document).on('click', "a[title='Email']", function (e) {
-                    //e.preventDefault();
+                    e.preventDefault();
                     $("#dialog").html("");
                     $("#dialog").dialog("open");
                     $("#dialog").load(link , function () {
