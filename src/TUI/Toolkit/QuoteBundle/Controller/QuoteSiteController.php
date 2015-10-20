@@ -369,14 +369,14 @@ class QuoteSiteController extends Controller
             $toArray[] = $secondaryAgent;
         }
 
+        $quoteNumber = $entity->getQuoteNumber();
+
         $brand = $em->getRepository('BrandBundle:Brand')->findAll();
         $brand = $brand[0];
-        $brandName = $brand->getName();
-
 
         $message = \Swift_Message::newInstance()
-            ->setSubject('Quote ' . $tourName . ' has been accepted!')
-            ->setFrom('Notify@Toolkit.com')
+            ->setSubject('Quote ' . $quoteNumber . ' has been liked!')
+            ->setFrom('Quote@Toolkit.com')
             ->setBody(
                 $this->renderView(
                     'QuoteBundle:Emails:acceptQuote.html.twig',
