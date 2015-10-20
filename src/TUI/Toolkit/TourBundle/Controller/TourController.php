@@ -1134,6 +1134,12 @@ class TourController extends Controller
 
         $entity->setSetupComplete(true);
 
+        $payments = $setupForm->getData()->getPaymentTasksPassenger();
+
+        foreach ($payments as $payment) {
+            $payment->setType("passenger");
+        }
+
         if ($setupForm->isValid()) {
             $em->flush();
             $permission = $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
