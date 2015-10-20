@@ -311,7 +311,7 @@
         {% endif %}
         <span class="agent">{{ entity.quoteReference.salesAgent.firstName }} {{ entity.quoteReference.salesAgent.lastName }}
             <br>
-            {{ entity.quoteReference.salesAgent.email }}</span>
+            <a href="mailto:{{ entity.quoteReference.salesAgent.email }}">{{ entity.quoteReference.salesAgent.email }}</a></span>
     {% endif %}
 {% endblock %}
 
