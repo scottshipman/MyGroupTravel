@@ -159,7 +159,7 @@
                     {% set activeTab = '' %}
                 {% endfor %}
 
-                {% if alternate %}
+                {% if alternate or related %}
                     <a id="tab-alternate-quotes" href="#tabs-drawer-alternate-quotes" class="site-content-blocks-tab mdl-tabs__tab {{ activeTab }}">Alternate Quotes</a>
                 {% endif %}
 
@@ -220,12 +220,27 @@
                 </div>
                 {% set activeTab = '' %}
             {% endfor %}
-
-            {% if alternate %}
+            {% if alternate or related %}
+                {% set quoteID = entity.quoteReference.id %}
                 <div id="tabs-drawer-alternate-quotes" class="mdl-tabs__panel {{ activeTab }}">
-                    {{ render(controller('QuoteBundle:QuoteSite:getQuoteSiblings', {'id':  entity.quoteReference.id  })) }}
+                    {% if alternate %}
+                            {{ render(controller('QuoteBundle:QuoteSite:getQuoteSiblings', {'id':  quoteID  })) }}
+                    {% endif %}
+                    {% if related %}
+                            {{ render(controller('QuoteBundle:QuoteSite:getRelatedQuotes', {'id':  quoteID  })) }}
+                    {% endif %}
                 </div>
+                <script>
+                    $(document).ready(function() {
+                        $(".alt-quote").on('click', function(e){
+                            var ID = $(this).attr('quote');
+                            var quoteNumber = $(this).attr('quotenumber');
+                            window.location.href = '/quote/view/' + ID + '/' + quoteNumber
+                        });
+                    });
+                </script>
             {% endif %}
+
         </div>
     </div><!-- view-mode -->
 

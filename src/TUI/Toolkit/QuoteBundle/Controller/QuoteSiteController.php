@@ -37,6 +37,7 @@ class QuoteSiteController extends Controller
   {
 
     $alternate=FALSE;
+    $related=FALSE;
     $editable = false;
     $permission = array();
     // TODO if user is allowed to edit then set $editable to true
@@ -119,6 +120,23 @@ class QuoteSiteController extends Controller
       $alternate=TRUE;
     }
 
+    // check for related quotes too
+    $quote = $em->getRepository('QuoteBundle:Quote')->find($qr);
+    $qb = $this->getDoctrine()->getManager()->createQueryBuilder();
+    $qb
+      ->select('q')
+      ->from('QuoteBundle:Quote', 'q')
+      ->where('q.organizer = ?1')
+      ->andWhere('q.institution = ?2')
+      ->andWhere('q.converted = FALSE');
+    $qb->setParameter(1, $quote->getOrganizer()->getId());
+    $qb->setParameter(2, $quote->getInstitution()->getId());
+    $query = $qb->getQuery();
+    $relatedQuotes = $query->getResult();
+    if(count($relatedQuotes) > 1){
+      $related=TRUE;
+    }
+
 
     return $this->render('QuoteBundle:QuoteSite:siteShow.html.twig', array(
       'entity'      => $entity,
@@ -129,6 +147,7 @@ class QuoteSiteController extends Controller
       'header'      => $headerBlock,
       'editable'  =>  $editable,
       'alternate' => $alternate,
+      'related'  => $related,
       'brand' => $brand,
     ));
   }
@@ -519,6 +538,64 @@ class QuoteSiteController extends Controller
       'tourName'  => $tourName,
     ));
   }
+
+  /**
+   * @param $id
+   *
+   * Get all Quote Versions whose organizer and institution match and return a stand alone Twig of tabular data
+   *
+   *  not converted
+   *  same organizer
+   *  same institution
+   *
+   */
+  public function getRelatedQuotesAction($id)
+  {
+    $entities = array();
+    $locale = $this->container->getParameter('locale');
+    $em = $this->getDoctrine()->getManager();
+    $tour = $em->getRepository('QuoteBundle:Quote')->find($id);
+    if(!$tour){
+      throw $this->createNotFoundException('Unable to find Quote entity for related quotes tab.');
+    }
+    $tourOrganizer = $tour->getOrganizer();
+    $tourInstitution = $tour->getInstitution();
+
+    $qb = $this->getDoctrine()->getManager()->createQueryBuilder();
+    $qb
+      ->select('q')
+      ->from('QuoteBundle:Quote', 'q')
+      ->where('q.organizer = ?1')
+      ->andWhere('q.institution = ?2')
+      ->andWhere('q.converted = FALSE')
+      ->andWhere('q.id != ?3');
+    $qb->setParameter(1, $tourOrganizer->getId());
+    $qb->setParameter(2, $tourInstitution->getId());
+    $qb->setParameter(3, $id);
+    $query = $qb->getQuery();
+    $quotes = $query->getResult();
+
+    if(!$quotes){
+      throw $this->createNotFoundException('Unable to find Quote entities for alternate quotes tab.');
+    }
+
+    foreach($quotes as $relQuote){
+      $relQuoteID = $relQuote->getId();
+      $relatedversions =  $em->getRepository('QuoteBundle:QuoteVersion')->findBy(array('quoteReference' => $relQuoteID));
+      foreach($relatedversions as $version) {
+        $entities[] = $version;
+      }
+    }
+
+    return $this->render('QuoteBundle:QuoteSite:relatedQuotes.html.twig', array(
+      'entities' => $entities,
+      'locale'  => $locale,
+      'tourOrganizer'  => $tourOrganizer,
+      'tourInstitution'  => $tourInstitution,
+    ));
+  }
+
+
 
   /**
    * @param $id
