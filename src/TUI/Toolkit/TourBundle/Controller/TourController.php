@@ -123,18 +123,18 @@ class TourController extends Controller
         $deleteAction->setRole('ROLE_ADMIN');
         $deleteAction->setConfirm(true);
         $grid->addRowAction($deleteAction);
-        $lockAction = new RowAction('Lock', 'manage_tour_lock_nonajax');
-        $lockAction->manipulateRender(
-            function ($action, $row) {
-                if ($row->getField('locked') == true) {
-                    $action->setTitle('Unlock');
-                }
-                return $action;
-            }
-        );
-        // Lock actions are only available to admins
-        $lockAction->setRole('ROLE_ADMIN');
-        $grid->addRowAction($lockAction);
+//        $lockAction = new RowAction('Lock', 'manage_tour_lock_nonajax');
+//        $lockAction->manipulateRender(
+//            function ($action, $row) {
+//                if ($row->getField('locked') == true) {
+//                    $action->setTitle('Unlock');
+//                }
+//                return $action;
+//            }
+//        );
+//        // Lock actions are only available to admins
+//        $lockAction->setRole('ROLE_ADMIN');
+//        $grid->addRowAction($lockAction);
 
         // Change Row Color if locked
         $source->manipulateRow(
@@ -1133,6 +1133,12 @@ class TourController extends Controller
         $setupForm->handleRequest($request);
 
         $entity->setSetupComplete(true);
+
+        $payments = $setupForm->getData()->getPaymentTasksPassenger();
+
+        foreach ($payments as $payment) {
+            $payment->setType("passenger");
+        }
 
         if ($setupForm->isValid()) {
             $em->flush();

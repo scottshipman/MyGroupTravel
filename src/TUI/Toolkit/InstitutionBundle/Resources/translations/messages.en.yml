@@ -48,7 +48,7 @@ institution:
 
       grid:
           no_result: There are no Institutions to show. Please check your filter settings and try again.
-          no_result-deleted: There are no Deleted Institutions to show. Please check your filter settings and try again.
+          no_result_deleted: There are no Deleted Institutions to show. Please check your filter settings and try again.
           export: Institutions as CSV
           export_deleted: Deleted Institutions as CSV
 

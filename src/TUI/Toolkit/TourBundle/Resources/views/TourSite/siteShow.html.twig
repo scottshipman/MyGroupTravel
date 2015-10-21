@@ -99,6 +99,10 @@
         </a>
         {% endif %}
 
+        {% if is_granted("ROLE_BRAND") %}
+            <a href="#" id="notify-organizer" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions"><i class="fa fa-envelope"></i> Email/Notify Organizer</a>
+        {% endif %}
+
         {% if warning | length >0 %}
             <div id="site-warning">
                 {% for message in warning %}
@@ -288,6 +292,23 @@
                 });
 
             {% endif %}
+
+            /**
+             * manipulate the tour show page for business users when they want contact/notify organizers
+             */
+
+            if($("#notify-organizer").length) {
+                var entityId = {{ entity.id }};
+                $(document).on('click', "#notify-organizer", function (e) {
+                    e.preventDefault();
+                    $("#dialog").html("");
+                    $("#dialog").dialog("open");
+                    $("#dialog").load('/manage/tour/notify/organizers/form/' + entityId, function () {
+                        $(this).dialog("option", "title", "Email the organizer");
+                        doMDLpopup($('#dialog')); // run the function to add appropriate MDL classes to form elements
+                    });
+                });
+            }
         });
     </script>
 
@@ -311,7 +332,7 @@
         {% endif %}
         <span class="agent">{{ entity.quoteReference.salesAgent.firstName }} {{ entity.quoteReference.salesAgent.lastName }}
             <br>
-            {{ entity.quoteReference.salesAgent.email }}</span>
+            <a href="mailto:{{ entity.quoteReference.salesAgent.email }}">{{ entity.quoteReference.salesAgent.email }}</a></span>
     {% endif %}
 {% endblock %}
 

@@ -5,7 +5,7 @@
 
 {% block body %}
 
-    {% embed "TourBundle:Tour:buttons.html.twig" %}{% endembed %}
+    {#{% embed "TourBundle:Tour:buttons.html.twig" %}{% endembed %}#}
 
     {% embed "TourBundle:Tour:tour_tabs.html.twig" %}
         {% block active_tab %}
@@ -30,7 +30,7 @@
                 var link = $("a[title='Email']").attr('href');
                 $("a[title='Email']").attr("href", "#");
                 $(document).on('click', "a[title='Email']", function (e) {
-                    //e.preventDefault();
+                    e.preventDefault();
                     $("#dialog").html("");
                     $("#dialog").dialog("open");
                     $("#dialog").load(link , function () {
