@@ -47,10 +47,6 @@
       padding: 0;
     }
 
-    .active a {
-      @include mdl-secondary-color(color, 12);
-    }
-
     span.mdl-navigation__link {
       cursor: pointer;
     }
