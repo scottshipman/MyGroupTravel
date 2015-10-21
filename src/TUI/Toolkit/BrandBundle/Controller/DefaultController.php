@@ -39,7 +39,7 @@ class DefaultController extends Controller
       if(!$brand){
         $brand = $default_brand;
       }
-      return $this->render('BrandBundle:Default:colors.html.twig', array('brand' => $brand));
+      return $this->render('BrandBundle:Default:colors.html.php', array('brand' => $brand));
     }
 
     public function colorsErrorAction()
