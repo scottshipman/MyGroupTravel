@@ -111,7 +111,7 @@
     <div id="dropzone-dialog" style="display: none;">
         {{ render(controller('MediaBundle:Media:createDropzoneLightForm', {'context':'tourassets'})) }}
     </div>
-    {#{{ form_javascript(edit_form) }}#}
+    {{ form_javascript(edit_form) }}
     <ul class="mdl-card__actions record_actions">
         <li>
             <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_tour') }}">
