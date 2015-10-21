@@ -141,6 +141,23 @@ a {
   color: <?php echo hsl_rgb(hsl_text(rgb_hsl($secondaryArray), 0.5)) ?>;
 }
 
+.mdl-textfield--floating-label.is-focused .mdl-textfield__label,
+.mdl-textfield--floating-label.is-dirty .mdl-textfield__label {
+  color: <?php echo $primary ?>;
+}
+
+.mdl-textfield__label::after {
+  background-color: <?php echo $primary ?>;
+}
+
+.mdl-checkbox.is-checked .mdl-checkbox__box-outline {
+  border-color: <?php echo $primary ?>;
+}
+
+.mdl-checkbox.is-checked .mdl-checkbox__tick-outline {
+  background-color: <?php echo $primary ?>;
+}
+
 /* Custom MDL matching colors */
 .tui-text-avatar {
   background-color: <?php echo $primary ?>;
