@@ -9,13 +9,13 @@
 
     {{ form_start(edit_form) }}
 
-   {% if template is null%} {{ form_row(edit_form.quoteReference.institution) }} {% endif %}
+    {% if template is empty %} {{ form_row(edit_form.quoteReference.institution) }} {% endif %}
     {{ form_row(edit_form.quoteReference.name) }}
     {{ form_row(edit_form.quoteNumber) }}
     {{ form_row(edit_form.name) }}
-   {% if template is null %} {{ form_row(edit_form.quoteReference.organizer) }} {% endif %}
-     {{ form_row(edit_form.quoteReference.salesAgent) }}
-   {% if template is null%}  {{ form_row(edit_form.quoteReference.secondaryContact) }}{% endif %}
+    {% if template is empty %}{{ form_row(edit_form.quoteReference.organizer) }}{% endif %}
+    {{ form_row(edit_form.quoteReference.salesAgent) }}
+    {% if template is empty %}{{ form_row(edit_form.quoteReference.secondaryContact) }}{% endif %}
     {{ form_rest(edit_form) }}
 
     {{ form_end(edit_form) }}

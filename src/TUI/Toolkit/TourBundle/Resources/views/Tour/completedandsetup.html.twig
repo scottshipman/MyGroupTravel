@@ -66,7 +66,8 @@
     </div>
 
     <h5>ToDo</h5>
-    {% if entity.passportDate != null%}
+    {% if entity.passportDate != null %}
+        {% if entity.passPortDate|date(shortFormat) > "now"|date(shortFormat) %}
         <div class="tour-edit mdl-card mdl-shadow--2dp">
             <a class ="dashboard-titles" href="#">
                 <div class="mdl-card__title">
@@ -98,10 +99,12 @@
                 </ul>
             </div>
         </div>
+        {% endif %}
     {% endif %}
 
-    {% if entity.medicalDate != null%}
-        <div class="tour-edit mdl-card mdl-shadow--2dp">
+    {% if entity.medicalDate != null %}
+        {% if entity.medicalDate|date(shortFormat) > "now"|date(shortFormat) %}
+            <div class="tour-edit mdl-card mdl-shadow--2dp">
 
             <a class ="dashboard-titles" href="#">
                 <div class="mdl-card__title">
@@ -133,10 +136,12 @@
                 </ul>
             </div>
         </div>
+        {% endif %}
     {% endif %}
 
-    {% if entity.dietaryDate != null%}
-        <div class="tour-edit mdl-card mdl-shadow--2dp">
+    {% if entity.dietaryDate != null %}
+        {% if entity.dietaryDate|date(shortFormat) > "now"|date(shortFormat) %}
+            <div class="tour-edit mdl-card mdl-shadow--2dp">
 
             <a class ="dashboard-titles" href="#">
                 <div class="mdl-card__title">
@@ -168,32 +173,34 @@
                 </ul>
             </div>
         </div>
-
-    {% if entity.paymentTasks is not empty %}
-        {% set depositdtg  = date(entity.paymentTasks[0].dueDate).diff(date("now")) %}
-        {% if depositdtg.days < 1 %} {%  set depositDtgFinal = 0  %} {% else %} {% set depositDtgFinal = depositdtg.days %}{% endif %}
-        <div class="tour-edit mdl-card mdl-shadow--2dp">
-            <div class="mdl-card__title">
-                <h3 class="mdl-card__title-text">Pay Deposit To {{ brand.name }} {{ entity.paymentTasks[0].dueDate|date(shortFormat) }}</h3>
-            </div>
-            <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
-                <ul>
-                    <li>
-                        <div class="profile-list-item item-1 tour-dashboard two-column">
-                            <span class="date-span">{% if entity.currency %}<p id="currency" style="display: inline; font-size: inherit;">{{ entity.currency.htmlSymbol | raw }}</p>{% endif %}{{ entity.paymentTasks[0].value }}</span>
-                            <label>Due</label>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="profile-list-item item-2 tour-dashboard two-column">
-                            <span class="date-span">{{ depositDtgFinal }}</span>
-                            <label>Days to Go</label>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
+        {% endif %}
     {% endif %}
+
+    {#{% if entity.paymentTasks is not empty %}#}
+        {#{% set depositdtg  = date(entity.paymentTasks[0].dueDate).diff(date("now")) %}#}
+        {#{% if depositdtg.days < 1 %} {%  set depositDtgFinal = 0  %} {% else %} {% set depositDtgFinal = depositdtg.days %}{% endif %}#}
+        {#<div class="tour-edit mdl-card mdl-shadow--2dp">#}
+            {#<div class="mdl-card__title">#}
+                {#<h3 class="mdl-card__title-text">Pay Deposit To {{ brand.name }} {{ entity.paymentTasks[0].dueDate|date(shortFormat) }}</h3>#}
+            {#</div>#}
+            {#<div class="mdl-card__supporting-text mdl-card--border profile-tour-details">#}
+                {#<ul>#}
+                    {#<li>#}
+                        {#<div class="profile-list-item item-1 tour-dashboard two-column">#}
+                            {#<span class="date-span">{% if entity.currency %}<p id="currency" style="display: inline; font-size: inherit;">{{ entity.currency.htmlSymbol | raw }}</p>{% endif %}{{ entity.paymentTasks[0].value }}</span>#}
+                            {#<label>Due</label>#}
+                        {#</div>#}
+                    {#</li>#}
+                    {#<li>#}
+                        {#<div class="profile-list-item item-2 tour-dashboard two-column">#}
+                            {#<span class="date-span">{{ depositDtgFinal }}</span>#}
+                            {#<label>Days to Go</label>#}
+                        {#</div>#}
+                    {#</li>#}
+                {#</ul>#}
+            {#</div>#}
+        {#</div>#}
+    {#{% endif %}#}
 
         <div class="tour-edit mdl-card mdl-shadow--2dp">
 
@@ -210,36 +217,45 @@
 
 {% endif %}
     <h5>Completed</h5>
+    {% if entity.passportDate != null %}
+        {% if entity.passPortDate|date(shortFormat) < "now"|date(shortFormat) %}
+            <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
+                 <div class="mdl-card__title">
+                    <h3 class="mdl-card__title-text">Collect Passport Data</h3>
+                    <span class="tour-dashboard-cta"><i class="fa fa-check"></i></span>
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
 
-    <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
-         <div class="mdl-card__title">
-            <h3 class="mdl-card__title-text">Collect Passport Data</h3>
-            <span class="tour-dashboard-cta"><i class="fa fa-check"></i></span>
-        </div>
-    </div>
+    {% if entity.medicalDate != null %}
+        {% if entity.medicalDate|date(shortFormat) < "now"|date(shortFormat) %}
+            <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
+                <div class="mdl-card__title">
+                    <h3 class="mdl-card__title-text">Collect Medical Data</h3>
+                    <span class="tour-dashboard-cta"><i class="fa fa-check"></i></span>
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
 
-    <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
-        <div class="mdl-card__title">
-            <h3 class="mdl-card__title-text">Collect Medical Data</h3>
-            <span class="tour-dashboard-cta"><i class="fa fa-check"></i></span>
-        </div>
-    </div>
+    {% if entity.dietaryDate != null %}
+        {% if entity.dietaryDate|date(shortFormat) > "now"|date(shortFormat) %}
+            <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
+                <div class="mdl-card__title">
+                    <h3 class="mdl-card__title-text">Collect Dietary Data</h3>
+                    <span class="tour-dashboard-cta"><i class="fa fa-check"></i></span>
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
 
-    <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
-        <div class="mdl-card__title">
-            <h3 class="mdl-card__title-text">Collect Dietary Data</h3>
-            <span class="tour-dashboard-cta"><i class="fa fa-check"></i></span>
-        </div>
-    </div>
-
-    <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
-        <div class="mdl-card__title">
-            <h3 class="mdl-card__title-text">Pay Deposit To {{ brand.name }}</h3>
-            <span class="tour-dashboard-cta"><i class="fa fa-check"></i></span>
-        </div>
-    </div>
-
-{% endif %}
+    {#<div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">#}
+        {#<div class="mdl-card__title">#}
+            {#<h3 class="mdl-card__title-text">Pay Deposit To {{ brand.name }}</h3>#}
+            {#<span class="tour-dashboard-cta"><i class="fa fa-check"></i></span>#}
+        {#</div>#}
+    {#</div>#}
 
 <script>
     {% if entity.media != NULL %}

@@ -138,7 +138,7 @@
             <span class="tui-text-avatar mdl-typography--headline">{{ entity.organizer.username[:1] }}</span>
         {% endif %}
         <span class="agent">{{ entity.organizer.firstName }} {{ entity.organizer.lastName }}<br>
-        {{ entity.organizer.email }}</span>
+        <a href="mailto:{{ entity.organizer.email }}">{{ entity.organizer.email }}</a></span>
     {% endif %}
 {% endblock %}
 
