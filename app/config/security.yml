@@ -35,6 +35,8 @@ security:
 
     access_control:
             - { path: ^/admin/, role: ROLE_ADMIN }
+            - { path: ^/manage/contentblocks/, role: ROLE_CUSTOMER }
+            - { path: ^/manage/headerblock/, role: ROLE_CUSTOMER }
             - { path: ^/manage/, role: ROLE_BRAND }
             - { path: ^/user/password-set/, role: ROLE_CUSTOMER }
             - { path: ^/user/add/, role: ROLE_CUSTOMER }
