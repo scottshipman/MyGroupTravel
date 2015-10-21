@@ -22,7 +22,9 @@
 
 {% block edit_link %}
     {% if editable and entity.converted is sameas(false) %}
-        <a id="link-preview-edit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">Switch to Edit Mode</a>
+        {% if entity.locked == 0 %}
+            <a id="link-preview-edit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">Switch to Edit Mode</a>
+        {% endif %}
     {% endif %}
 {% endblock %}
 
