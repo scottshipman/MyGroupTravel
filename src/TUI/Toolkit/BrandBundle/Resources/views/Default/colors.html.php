@@ -142,7 +142,8 @@ a {
 }
 
 .mdl-textfield--floating-label.is-focused .mdl-textfield__label,
-.mdl-textfield--floating-label.is-dirty .mdl-textfield__label {
+.mdl-textfield--floating-label.is-dirty .mdl-textfield__label,
+.mdl-label-mimic {
   color: <?php echo $primary ?>;
 }
 
@@ -158,9 +159,30 @@ a {
   background-color: <?php echo $primary ?>;
 }
 
+.mdl-tabs.is-upgraded .mdl-tabs__tab.is-active::after {
+  background: <?php echo $primary ?>;
+}
+
 /* Custom MDL matching colors */
 .tui-text-avatar {
   background-color: <?php echo $primary ?>;
   color: <?php echo $contrast ?>;
+}
+
+.content-block h2 {
+  color: <?php echo $primary ?>;
+}
+
+.add-content-block {
+  border-color: <?php echo $primary ?>;
+  color: <?php echo $primary ?>;
+}
+
+.site-content-block-actions {
+  background-color: <?php echo $primary ?>;
+}
+
+.mode-edit .inner-wrapper:hover {
+  outline-color: <?php echo $primary ?>;
 }
 </style>

@@ -18,11 +18,6 @@ form {
 .mdl-label-mimic {
   font-size: 12px;
   white-space: nowrap;
-
-  label {
-    @include mdl-primary-color(color, 6);
-  }
-
 }
 
 .mdl-form-wrap {

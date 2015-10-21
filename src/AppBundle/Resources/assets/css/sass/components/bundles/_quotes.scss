@@ -467,7 +467,6 @@
 
 .site-content-block-actions {
   height: 32px;
-  @include mdl-primary-color(background, 6);
 
   .move-icon {
     cursor: move;
@@ -516,7 +515,6 @@
 
     &:hover {
       outline: 1px solid #000;
-      @include mdl-primary-color( outline-color, 6 );
     }
 
   }
