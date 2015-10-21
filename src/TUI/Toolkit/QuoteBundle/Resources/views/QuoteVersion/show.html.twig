@@ -99,12 +99,15 @@
         </li>
 
         <li>
+        {% if (entity.locked is sameas(false)) %}
             <a id="quoteLock" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-                {% if (entity.locked is sameas(false)) %}
-                    <i class="fa fa-lock"></i> Lock
-                {% else %}
-                    <i class="fa fa-unlock"></i> Unlock
-                {% endif %}
+            <i class="fa fa-lock"></i> Lock
+        {% else %}
+            {% if is_granted("ROLE_ADMIN") %}
+                <a id="quoteLock" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+                <i class="fa fa-unlock"></i> Unlock
+            {% endif %}
+        {% endif %}
             </a>
         </li>
         {% if entity.isTemplate == 0 %} {# no Quotelinks for templates needed #}
