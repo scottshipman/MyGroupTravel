@@ -1,6 +1,6 @@
 {%  if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
 {% set zebra = "odd"  %}
-<h3 id="alternate-quotes-headline">Alternate Quotes for {% if tourName %}{{ tourName }}{% else %}this tour{% endif %}</h3>
+<h3 id="related-quotes-headline">Other Related Quotes for {% if tourOrganizer and tourInstitution%}{{ tourOrganizer.firstName }} {{ tourOrganizer.lastName }} and {{ tourInstitution.name }}{% else %}this tour{% endif %}</h3>
 <table>
     <thead>
         <tr>
