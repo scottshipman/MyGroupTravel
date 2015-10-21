@@ -40,6 +40,11 @@ function rgb_hsl( $rgb ) {
 	return array( round( $h, 3 ), round( $s, 3 ), round( $l, 3 ) );
 };
 
+function hsl_text( $hsl, $l ) {
+  $h = $hsl[0];
+
+  return array( $h, 1, $l );
+};
 
 function hsl_rgb( $hsl ) {
   $h = $hsl[0];
@@ -108,6 +113,10 @@ if ( rgb_brightness($primaryArray) <= 125 ) {
 };
 
 ?><style>
+a {
+  color: <?php echo hsl_rgb(hsl_text(rgb_hsl($secondaryArray), 0.5)) ?>;
+}
+
 .mdl-color-text--primary-contrast {
   color: <?php echo $contrast ?> !important;
 }
@@ -128,6 +137,6 @@ if ( rgb_brightness($primaryArray) <= 125 ) {
 }
 
 .mdl-layout__drawer .mdl-navigation .active a {
-  color: <?php echo $secondary ?>;
+  color: <?php echo hsl_rgb(hsl_text(rgb_hsl($secondaryArray), 0.5)) ?>;
 }
 </style>
