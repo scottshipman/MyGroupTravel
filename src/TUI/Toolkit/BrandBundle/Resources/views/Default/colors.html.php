@@ -113,6 +113,7 @@ if ( rgb_brightness($primaryArray) <= 125 ) {
 };
 
 ?><style>
+/* MDL color overrides */
 a {
   color: <?php echo hsl_rgb(hsl_text(rgb_hsl($secondaryArray), 0.5)) ?>;
 }
@@ -131,12 +132,18 @@ a {
   color: <?php echo $contrast ?>;
 }
 
-.header {
+.mdl-layout__header {
   background-color: <?php echo $primary ?>;
   color: <?php echo $contrast ?>;
 }
 
 .mdl-layout__drawer .mdl-navigation .active a {
   color: <?php echo hsl_rgb(hsl_text(rgb_hsl($secondaryArray), 0.5)) ?>;
+}
+
+/* Custom MDL matching colors */
+.tui-text-avatar {
+  background-color: <?php echo $primary ?>;
+  color: <?php echo $contrast ?>;
 }
 </style>

@@ -107,7 +107,6 @@
   line-height: 48px;
   width: 48px;
   color: $text_white;
-  @include mdl-primary-color(background-color, 6);
   text-align: center;
   @include inline-block-vertical();
 
