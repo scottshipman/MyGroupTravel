@@ -185,4 +185,10 @@ a {
 .mode-edit .inner-wrapper:hover {
   outline-color: <?php echo $primary ?>;
 }
+
+.sp-replacer.sp-active,
+.sp-replacer:hover,
+.sp-container {
+  border-color: <?php echo $primary ?>;
+}
 </style>
