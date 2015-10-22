@@ -224,4 +224,8 @@ a {
 .alt-quote.even:hover {
   color: <?php echo hsl_rgb(hsl_background(rgb_hsl($primaryArray), 0.9)) ?>;
 }
+
+.profile-tour-header:before {
+  background: linear-gradient(to bottom right, <?php echo hsl_rgb(hsl_background(rgb_hsl($primaryArray), 0.3)) ?> 0%, <?php echo hsl_rgb(hsl_background(rgb_hsl($primaryArray), 0.7)) ?> 100%);
+}
 </style>
