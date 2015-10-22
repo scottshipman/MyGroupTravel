@@ -1,95 +1,5 @@
-.user_0 {
-
-  .exceptions-block {
-    max-width: 436px;
-    height: auto;
-    position: relative;
-    background-color: white;
-    margin: 0 auto;
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
-    -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
-    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
-    padding: 2em;
-
-    h2 {
-      font-weight: 100;
-      text-align: center;
-    }
-  }
-
-  .login-block {
-    max-width: 436px;
-    height: auto;
-    position: relative;
-    background-color: white;
-    margin: 0 auto;
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
-    -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
-    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
-
-    h2 {
-      font-weight: 100;
-      text-align: center;
-    }
-
-    .login-reset {
-      color: $bg_grey_d;
-      text-align: center;
-      padding: 24px 0;
-
-      a {
-        color: #A9A9AB;
-        text-decoration: none;
-      }
-
-    }
-
-    form {
-      text-align: center;
-    }
-
-    input[type="text"],
-    input[type="password"] {
-      width: 85%;
-      margin: 0 auto;
-      position: relative;
-      padding: 15px;
-    }
-
-    #remember_me {
-      display: none;
-    }
-
-    label {
-      display: none;
-    }
-
-    input[type="submit"] {
-      width: 85%;
-      margin: 0 auto;
-      position: relative;
-      padding: 15px;
-      color: $white;
-      background-color: $lime_green;
-      border: none;
-      box-shadow: none;
-      margin-top: 20px;
-      border-radius: 3px;
-    }
-
-    .login-form > div {
-      color: red;
-      text-align: center;
-      padding-bottom: 5px;
-    }
-
-  }
-
-}
-
-.login-block {
+.login-block,
+.exceptions-block {
   max-width: 436px;
   height: auto;
   position: relative;
@@ -99,16 +9,22 @@
   -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
   -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
   box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+  padding: 24px;
 
   h2 {
     font-weight: 100;
     text-align: center;
+    margin-top: 0;
   }
+
+}
+
+.login-block {
 
   .login-reset {
     color: $bg_grey_d;
     text-align: center;
-    padding: 24px 0;
+    padding: 24px 0 0;
 
     a {
       color: #A9A9AB;
@@ -117,47 +33,33 @@
 
   }
 
-  form {
-    text-align: center;
-  }
-
   input[type="text"],
   input[type="password"] {
-    width: 85%;
-    margin: 0 auto;
-    position: relative;
+    width: 100%;
     padding: 15px;
-  }
-
-  #remember_me {
-    display: none;
-  }
-
-  label {
-    display: none;
   }
 
   input[type="submit"] {
-    width: 85%;
-    margin: 0 auto;
-    position: relative;
-    padding: 15px;
-    color: $white;
-    background-color: $lime_green;
-    border: none;
-    box-shadow: none;
+    width: 100%;
     margin-top: 20px;
-    border-radius: 3px;
   }
 
   .login-form > div {
-//    color: red;
     text-align: center;
     padding-bottom: 35px;
   }
 
-  input[type="submit"] {
-    @include mdl-primary-color( background-color, 6 );
+}
+
+.user_0 {
+
+  .login-block {
+
+    .login-form > div {
+      color: red;
+      padding-bottom: 5px;
+    }
+
   }
 
 }
