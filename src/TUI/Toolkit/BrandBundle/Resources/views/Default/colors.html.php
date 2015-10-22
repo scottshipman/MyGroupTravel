@@ -46,6 +46,13 @@ function hsl_text( $hsl, $l ) {
   return array( $h, 1, $l );
 };
 
+function hsl_background( $hsl, $l ) {
+  $h = $hsl[0];
+  $s = $hsl[1];
+
+  return array( $h, $s, $l );
+};
+
 function hsl_rgb( $hsl ) {
   $h = $hsl[0];
   $s = $hsl[1];
@@ -144,7 +151,7 @@ a {
 .mdl-textfield--floating-label.is-focused .mdl-textfield__label,
 .mdl-textfield--floating-label.is-dirty .mdl-textfield__label,
 .mdl-label-mimic {
-  color: <?php echo $primary ?>;
+  color: <?php echo hsl_rgb(hsl_text(rgb_hsl($primaryArray), 0.25)) ?>;
 }
 
 .mdl-textfield__label::after {
@@ -159,7 +166,8 @@ a {
   background-color: <?php echo $primary ?>;
 }
 
-.mdl-tabs.is-upgraded .mdl-tabs__tab.is-active::after {
+.mdl-tabs.is-upgraded .mdl-tabs__tab.is-active::after,
+.mdl-tabs-no-swap .is-active::after {
   background: <?php echo $primary ?>;
 }
 
@@ -190,5 +198,30 @@ a {
 .sp-replacer:hover,
 .sp-container {
   border-color: <?php echo $primary ?>;
+}
+
+.media-placeholder-image,
+#dropzone_form {
+  border-color: <?php echo $primary ?>;
+}
+
+#avatar-label {
+  color: <?php echo hsl_rgb(hsl_text(rgb_hsl($primaryArray), 0.25)) ?>;
+}
+
+.existing-media-wrapper .existing-media-item .existing-delete {
+  color: <?php echo $primary ?>;
+}
+
+.tab-reorder-modal .submit-button-container .reorder-button {
+  color: <?php echo $primary ?>;
+}
+
+.alt-quote.even {
+  color: <?php echo hsl_rgb(hsl_background(rgb_hsl($primaryArray), 0.7)) ?>;
+}
+
+.alt-quote.even:hover {
+  color: <?php echo hsl_rgb(hsl_background(rgb_hsl($primaryArray), 0.9)) ?>;
 }
 </style>
