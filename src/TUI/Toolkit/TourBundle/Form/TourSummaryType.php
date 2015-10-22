@@ -44,19 +44,19 @@ class TourSummaryType extends AbstractType
             ->add('expiryDate', 'genemu_jquerydate', array(
                 'widget' => 'single_text',
                 'required' => false,
-                'label' => 'tour.form.tour_summary.expiration ' .$date_label,
+                'label' => 'tour.form.tour_summary.expiration',
                 'format' => $date_format,
             ))
             ->add('departureDate', 'genemu_jquerydate', array(
                 'widget' => 'single_text',
                 'required' => false,
-                'label' => 'tour.form.tour_summary.departure ' .$date_label,
+                'label' => 'tour.form.tour_summary.departure',
                 'format' => $date_format,
             ))
             ->add('returnDate', 'genemu_jquerydate', array(
                 'widget' => 'single_text',
                 'required' => false,
-                'label' => 'tour.form.tour_summary.return ' .$date_label,
+                'label' => 'tour.form.tour_summary.return',
                 'format' => $date_format,
             ))
             ->add('duration', 'text', array(

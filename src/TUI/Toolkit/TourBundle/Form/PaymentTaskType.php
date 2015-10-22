@@ -44,7 +44,7 @@ class PaymentTaskType extends AbstractType
             ->add('dueDate', 'genemu_jquerydate', array(
               'widget' => 'single_text',
               'required' => true,
-              'label' => 'tour.form.payment_task.date ' . $date_label,
+              'label' => 'tour.form.payment_task.date',
               'format' => $date_format,
             ))
 
