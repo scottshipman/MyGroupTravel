@@ -115,7 +115,7 @@ if ( rgb_brightness($primaryArray) <= 125 ) {
 ?><style>
 /* MDL color overrides */
 a {
-  color: <?php echo hsl_rgb(hsl_text(rgb_hsl($secondaryArray), 0.5)) ?>;
+  color: <?php echo hsl_rgb(hsl_text(rgb_hsl($secondaryArray), 0.25)) ?>;
 }
 
 .mdl-color-text--primary-contrast {
@@ -138,7 +138,7 @@ a {
 }
 
 .mdl-layout__drawer .mdl-navigation .active a {
-  color: <?php echo hsl_rgb(hsl_text(rgb_hsl($secondaryArray), 0.5)) ?>;
+  color: <?php echo hsl_rgb(hsl_text(rgb_hsl($secondaryArray), 0.25)) ?>;
 }
 
 .mdl-textfield--floating-label.is-focused .mdl-textfield__label,
