@@ -1,10 +1,5 @@
 (function ($) {
 
-    // Add Placeholder Fields to Login Form
-    $("#username").attr("placeholder", "Email");
-    $("#password").attr("placeholder", "Password");
-
-
     if ($('#reset-password-form').length) {
         $("#fos_user_resetting_form_plainPassword_first").attr("placeholder", "New Password");
         $("#fos_user_resetting_form_plainPassword_second").attr("placeholder", "Confirm New Password");

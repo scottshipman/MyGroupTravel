@@ -38,7 +38,17 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.7.0/spectrum.min.js"></script>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.6.1/spectrum.min.css">
 
+    <link rel="stylesheet" href="//storage.googleapis.com/code.getmdl.io/1.0.0/material.indigo-pink.min.css">
+
+    {% stylesheets filter="compass" "@AppBundle/Resources/assets/css/sass/main.scss" %}
+        <link rel="stylesheet" type="text/css" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+
     {{ render(controller('BrandBundle:Default:colors')) }}
+
+</head>
+
+<body class="user_{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}{{ app.user.id }}{% else %}0{% endif %}">
 
 <div class="base-site toolkit-layout {% if is_granted("ROLE_BRAND") %}toolkit-fixed-drawer{% else %}toolkit-no-drawer{% endif %}">
 
