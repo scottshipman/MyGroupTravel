@@ -164,11 +164,13 @@ a {
   background-color: <?php echo $primary ?>;
 }
 
-.mdl-checkbox.is-checked .mdl-checkbox__box-outline {
+.mdl-checkbox.is-checked .mdl-checkbox__box-outline,
+.mdl-radio.is-checked .mdl-radio__outer-circle {
   border-color: <?php echo $primary ?>;
 }
 
-.mdl-checkbox.is-checked .mdl-checkbox__tick-outline {
+.mdl-checkbox.is-checked .mdl-checkbox__tick-outline,
+.mdl-radio__inner-circle {
   background-color: <?php echo $primary ?>;
 }
 
