@@ -272,17 +272,17 @@ tour:
         tour:
             placeholder: Select
             name: Tour Name
-            expiration: Quote Expiration?
+            expiration: Quote Expiration? (DD-MM-YYYY)
             sales_agent: Primary Business Admin
             second_contact: Other Business Admin
             destination: Destination
-            departure: Departure Date
-            return: Return Date
+            departure: Departure Date (DD-MM-YYYY)
+            return: Return Date (DD-MM-YYYY)
             board: Board Basis
-            passenger_date: Passenger Info Due Date
-            passport_date: Passport Info Due Date
-            medical_date: Medical Info Due Date
-            dietary_date: Dietary Info Due Date
+            passenger_date: Passenger Info Due Date (DD-MM-YYYY)
+            passport_date: Passport Info Due Date (DD-MM-YYYY)
+            medical_date: Medical Info Due Date (DD-MM-YYYY)
+            dietary_date: Dietary Info Due Date (DD-MM-YYYY)
 
 
     payment_task:

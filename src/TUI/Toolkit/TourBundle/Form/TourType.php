@@ -70,7 +70,7 @@ class TourType extends AbstractType
           ->add('expiryDate', 'genemu_jquerydate', array(
             'widget' => 'single_text',
             'required' => false,
-            'label' => 'tour.form.tour.expiration ' . $date_label,
+            'label' => 'tour.form.tour.expiration',
             'format' => $date_format,
           ))
           ->add('institution', 'genemu_jqueryautocomplete_entity', array(
@@ -114,13 +114,13 @@ class TourType extends AbstractType
           ->add('departureDate', 'genemu_jquerydate', array(
             'widget' => 'single_text',
             'required' => false,
-            'label' => 'tour.form.tour.departure ' . $date_label,
+            'label' => 'tour.form.tour.departure',
             'format' => $date_format,
           ))
           ->add('returnDate', 'genemu_jquerydate', array(
             'widget' => 'single_text',
             'required' => false,
-            'label' => 'tour.form.tour.return ' . $date_label,
+            'label' => 'tour.form.tour.return',
             'format' => $date_format,
           ))
           ->add('duration')
@@ -158,28 +158,28 @@ class TourType extends AbstractType
           ->add('passengerDate', 'genemu_jquerydate', array(
             'widget' => 'single_text',
             'required' => false,
-            'label' => 'tour.form.tour.passenger_date ' . $date_label,
+            'label' => 'tour.form.tour.passenger_date',
             'format' => $date_format,
           ))
 
           ->add('passportDate', 'genemu_jquerydate', array(
             'widget' => 'single_text',
             'required' => false,
-            'label' => 'tour.form.tour.passport_date ' . $date_label,
+            'label' => 'tour.form.tour.passport_date',
             'format' => $date_format,
           ))
 
           ->add('medicalDate', 'genemu_jquerydate', array(
             'widget' => 'single_text',
             'required' => false,
-            'label' => 'tour.form.tour.medical_date ' . $date_label,
+            'label' => 'tour.form.tour.medical_date',
             'format' => $date_format,
           ))
 
           ->add('dietaryDate', 'genemu_jquerydate', array(
             'widget' => 'single_text',
             'required' => false,
-            'label' => 'tour.form.tour.dietary_date ' . $date_label,
+            'label' => 'tour.form.tour.dietary_date',
             'format' => $date_format,
           ))
             ->add('media', 'hidden', array(
