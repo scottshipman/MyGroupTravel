@@ -4,7 +4,7 @@
 
 {% block title %}
     {% if is_granted("ROLE_BRAND") %}
-        {% trans %}tour.title.tour{% endtrans %}
+        {% trans %}tour.page_title.index{% endtrans %}
     {% else %}
         {{ entity.name }}
     {% endif %}
