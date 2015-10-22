@@ -1,23 +1,36 @@
-#UserBundle/Resources/translations/messages.en.yml
+#TourBundle/Resources/translations/messages.en.yml
 tour:
     title:
         edit: Edit Tour
-        index: User Dashboard
-        new: Create New User
-        show: User
+        index: Tour Dashboard
+        new: Create New Tour
+        show: Tour
         layout_auth: My Tours
-        layout_anon: User Login
-        deleted: User Dashboard - Deleted
+        layout_anon: Tour Login
+        deleted: Tour Dashboard - Deleted
         restore: Restore
 
     page_title:
-        edit: Edit User
-        index: User
-        new: Create New User
-        show: User
+        edit: Edit Tour
+        index: Tour
+        new: Create New Tour
+        show: Tour
         layout_auth: My Tours
-        layout_anon: User Login
-        deleted: User Dashboard - Deleted
+        layout_anon: Tour Login
+        deleted: Tour Dashboard - Deleted
+        payment_task:
+            edit: PaymentTask edit
+            new: PaymentTask create
+            show: PaymentTask
+                id: Id
+                name: Name
+                value: Value
+                duedate: Due Date
+                paiddate: Paid Date
+                type: Type
+                string: String
+                actions: Actions
+            list: PaymentTask List
 
     actions:
         back: Back to the list
@@ -25,12 +38,13 @@ tour:
         update: Update
         create: Create
         delete: Delete
-        create_new: Create a New User
+        create_new: Create a New Tour
         password: Set Password
         edit_profile: Edit My Profile
         notify: Send User a Notification
         send: Send
         go: Go
+        create_new_paymentTask: Create New Entry
 
     table:
         label:
@@ -50,10 +64,8 @@ tour:
     flash:
         save: Tour Saved -
         not_saved: Tour Not Saved -
-        delete: User deleted -
-        restore: User Restored -
-        password: Password updated for
-        cant_delete: Unable to delete this user because they are associated with Quotes or Tours
+        delete: Tour deleted -
+        restore: Tour Restored -
         registration_notification: A Notification was sent to
         lock: Tour Lock has been toggled
         warning:
@@ -86,9 +98,6 @@ tour:
 
     media:
         label: Click to upload
-
-    exception:
-        access: You do not have the ability to edit this User's information.
 
     email:
         registration:
