@@ -250,7 +250,7 @@ tour:
             message: Message to the organiser
         payment_task:
             value: Amount
-            date: Due Date
+            date: Due Date (DD-MM-YYYY)
         tour_setup:
             price: Price Per Person
             cash: Cash / Cheque
@@ -259,9 +259,9 @@ tour:
             online: Online Payment
             other: Other
         tour_summary:
-            expiration: Tour Expiration?
-            departure: Departure Date
-            return: Return Date
+            expiration: Tour Expiration? (DD-MM-YYYY)
+            departure: Departure Date (DD-MM-YYYY)
+            return: Return Date (DD-MM-YYYY)
             duration: Duration
             board: Board Basis
             free_places: Free Places
