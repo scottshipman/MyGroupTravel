@@ -37,14 +37,14 @@ class PaymentTaskType extends AbstractType
         $builder
             ->add('name')
             ->add('value', 'integer', array(
-                'label' =>  'Amount',
+                'label' =>  'tour.form.payment_task.value',
                 'scale' => 2,
             ))
 
             ->add('dueDate', 'genemu_jquerydate', array(
               'widget' => 'single_text',
               'required' => true,
-              'label' => 'Due Date ' . $date_label,
+              'label' => 'tour.form.payment_task.date ' . $date_label,
               'format' => $date_format,
             ))
 

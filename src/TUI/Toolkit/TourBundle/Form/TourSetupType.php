@@ -40,7 +40,7 @@ class TourSetupType extends AbstractType
 
         $builder
             ->add('pricePersonPublic', 'number', array(
-                'label' => 'Price Per Person'
+                'label' => 'tour.form.tour_setup.price'
             ))
             ->add('paymentTasksPassenger', 'collection', array(
                 'type' => new PaymentTaskType($this->locale),
@@ -50,35 +50,35 @@ class TourSetupType extends AbstractType
             ))
             ->add('cashPayment', 'checkbox', array(
                 'required' => false,
-                'label' => 'Cash / Cheque',
+                'label' => 'tour.form.tour_setup.cash',
             ))
             ->add('cashPaymentDescription', 'textarea', array(
                 'required' => false,
-                'label' => 'Optional payment instructions',
+                'label' => 'tour.form.tour_setup.instructions',
             ))
             ->add('bankTransferPayment', 'checkbox', array(
                 'required' => false,
-                'label' => 'Bank Transfer',
+                'label' => 'tour.form.tour_setup.bank',
             ))
             ->add('bankTransferPaymentDescription', 'textarea', array(
                 'required' => false,
-                'label' => 'Optional payment instructions',
+                'label' => 'tour.form.tour_setup.instructions',
             ))
             ->add('onlinePayment', 'checkbox', array(
                 'required' => false,
-                'label' => 'Online Payment',
+                'label' => 'tour.form.tour_setup.online',
             ))
             ->add('onlinePaymentDescription', 'textarea', array(
                 'required' => false,
-                'label' => 'Optional payment instructions',
+                'label' => 'tour.form.tour_setup.instructions',
             ))
             ->add('otherPayment', 'checkbox', array(
                 'required' => false,
-                'label' => 'Other',
+                'label' => 'tour.form.tour_setup.other',
             ))
             ->add('otherPaymentDescription', 'textarea', array(
                 'required' => false,
-                'label' => 'Optional payment instructions'
+                'label' => 'tour.form.tour_setup.instructions'
             ))
         ;
     }
