@@ -94,7 +94,7 @@
         </a>
         {% else %}
         <a class="expired-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
-           href="#">
+           href="">
             <i class="fa fa-download"></i> {% trans %}tour.actions.download_promo{% endtrans %}
         </a>
         {% endif %}
@@ -320,7 +320,7 @@
 
 {% block footer_left %}
     {% if entity.quoteReference.salesAgent %}
-        <span class="intro">{% trans %}tour.actions.site_show.footer.intro{% endtrans %}</span>
+        <span class="intro">{% trans %}tour.site_show.footer.intro{% endtrans %}</span>
         {% if entity.quoteReference.salesAgent.media %}
             <span class="tui-image-avatar"><img
                         src="{{ asset( entity.quoteReference.salesAgent.media.getRelativePath ~ "/" ~ entity.quoteReference.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}"
@@ -337,7 +337,7 @@
 {% endblock %}
 
 {% block footer_right %}
-    <div class="quote-info"><span class="quote-label">{% trans %}tour.actions.site_show.footer.price{% endtrans %}</span><span
+    <div class="quote-info"><span class="quote-label">{% trans %}tour.site_show.footer.price{% endtrans %}</span><span
                 class="quote-price">{% if entity.pricePerson %}
 
                 <strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePersonPublic }}</strong>{% endif %}</span>
