@@ -1,14 +1,14 @@
 {% extends '::base.html.twig' %}
 
 {% block body -%}
-    <h1>PaymentTask creation</h1>
+    <h1>{% trans %}tour.page_title.payment_task.new{% endtrans %}</h1>
 
     {{ form(form) }}
 
         <ul class="record_actions">
     <li>
         <a href="{{ path('paymenttask') }}">
-            Back to the list
+            {% trans %}tour.actions.back{% endtrans %}
         </a>
     </li>
 </ul>
