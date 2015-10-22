@@ -1,6 +1,6 @@
 {% extends '::base.html.twig' %}
-{% block title %}Create Tour{% endblock %}
-{% block page_title %}Create Tour{% endblock %}
+{% block title %{% trans %}tour.title.new{% endtrans %}{% endblock %}
+{% block page_title %}{% trans %}tour.page_title.new{% endtrans %}{% endblock %}
 
 {% block body -%}
 
@@ -11,7 +11,7 @@
         <li>
             <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
                href="{{ path('manage_tour') }}">
-                <i class="fa fa-arrow-circle-left"></i> Back to the list
+                <i class="fa fa-arrow-circle-left"></i>{% trans %}tour.actions.back{% endtrans %}
             </a>
         </li>
     </ul>

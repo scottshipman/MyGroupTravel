@@ -1,14 +1,14 @@
 {% extends '::base.html.twig' %}
-{% block title %}Tour Dashboard - Deleted{% endblock %}
-{% block page_title %}Tour Dashboard - Deleted{% endblock %}
+{% block title %}{% trans %}tour.title.deleted{% endtrans %}{% endblock %}
+{% block page_title %}{% trans %}tour.page_title.deleted{% endtrans %}{% endblock %}
 
 {% block body -%}
 
-    {% embed "TourBundle:Tour:buttons.html.twig" %}{% endembed %}
+    {#{% embed "TourBundle:Tour:buttons.html.twig" %}{% endembed %}#}
 
     {% embed "TourBundle:Tour:tour_tabs.html.twig" %}
         {% block deleted_tab %}
-            <a class="mdl-tabs__tab is-active" href="{{ path('manage_tour_deleted') }}">Deleted Tours</a>
+            <a class="mdl-tabs__tab is-active" href="{{ path('manage_tour_deleted') }}">{% trans %}tour.tabs.deleted{% endtrans %}</a>
         {% endblock %}
     {% endembed %}
 

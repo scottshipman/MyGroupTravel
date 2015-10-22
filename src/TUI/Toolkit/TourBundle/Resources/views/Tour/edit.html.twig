@@ -2,15 +2,15 @@
 
 {% set title_label = 'Edit' %}
 
-{% block title %}{{ title_label }} Tour {{ entity.name }}{% endblock %}
-{% block page_title %}{{ title_label }} Tour {{ entity.name }}{% endblock %}
+{% block title %}{{ title_label }} {% trans %}tour.title.show{% endtrans %} {{ entity.name }}{% endblock %}
+{% block page_title %}{{ title_label }} {% trans %}tour.title.show{% endtrans %} {{ entity.name }}{% endblock %}
 
 {% block body -%}
     {{ form_start(edit_form) }}
     {# Summary Section #}
     <div class = "tour-edit mdl-card mdl-shadow--2dp">
         <div class="mdl-card__supporting-text">
-            <h3 class="mdl-card__title">Summary</h3>
+            <h3 class="mdl-card__title">{% trans %}tour.edit.summary{% endtrans %}</h3>
             {{ form_row(edit_form.tripStatus) }}
             {{ form_row(edit_form.name) }}
             {{ form_row(edit_form.quoteNumber) }}
@@ -25,7 +25,7 @@
     {# Details Section #}
     <div class = "tour-edit mdl-card mdl-shadow--2dp">
         <div class="mdl-card__supporting-text">
-            <h3 class="mdl-card__title">Details</h3>
+            <h3 class="mdl-card__title">{% trans %}tour.edit.details{% endtrans %}</h3>
             {{ form_row(edit_form.destination) }}
             {{ form_row(edit_form.departureDate) }}
             {{ form_row(edit_form.returnDate) }}
@@ -47,7 +47,7 @@
     {# Payment Tasks #}
     <div class = "tour-edit mdl-card mdl-shadow--2dp">
         <div class="mdl-card__supporting-text">
-            <h3 class="mdl-card__title">Payment Schedule</h3>
+            <h3 class="mdl-card__title">{% trans %}tour.edit.schedule{% endtrans %}</h3>
             <div class="paymenttasks" data-prototype="{{ form_widget(edit_form.paymentTasks.vars.prototype)|e }}">
                 {# iterate over each existing paymenttask and render its fields:  #}
                 {% for paymentTask in edit_form.paymentTasks %}
@@ -63,7 +63,7 @@
     {# Information Tasks #}
     <div class = "tour-edit mdl-card mdl-shadow--2dp">
         <div class="mdl-card__supporting-text">
-            <h3 class="mdl-card__title">Task Deadlines</h3>
+            <h3 class="mdl-card__title">{% trans %}tour.edit.deadlines{% endtrans %}</h3>
             {{ form_row(edit_form.passportDate) }}
             {{ form_row(edit_form.passengerDate) }}
             {{ form_row(edit_form.medicalDate) }}
@@ -73,7 +73,7 @@
     {#Promotional Content#}
         <div class = "tour-edit mdl-card mdl-shadow--2dp">
             <div class="mdl-card__supporting-text">
-                <h3 class="mdl-card__title">Upload Promotional Content</h3>
+                <h3 class="mdl-card__title">{% trans %}tour.edit.promotional_content{% endtrans %}</h3>
                     <div class="media-wrapper">
                         <div class="existing-media-wrapper">
                             {% if entity.media %}
@@ -93,16 +93,16 @@
                                     </div>
                                 {% endfor %}
                             {% else %}
-                                <p class="none">No assets uploaded.</p>
+                                <p class="none">{% trans %}tour.edit.no_assets{% endtrans %}</p>
                             {% endif %}
                         </div>
                     </div>
                 <a id="promo-assets-upload" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-                    <i class="fa fa-cloud-upload"></i> Upload Promotional Assets
+                    <i class="fa fa-cloud-upload"></i> {% trans %}tour.edit.promo_assets{% endtrans %}
                 </a>
 
                 <a id="promo-assets-closed" style="display: none;" class="accepted-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="">
-                    <i class="fa fa-cloud-upload"></i> Cannot Upload Any More Assets
+                    <i class="fa fa-cloud-upload"></i> {% trans %}tour.edit.cannot_upload{% endtrans %}
                 </a>
             </div>
         </div>
@@ -115,7 +115,7 @@
     <ul class="mdl-card__actions record_actions">
         <li>
             <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_tour') }}">
-                <i class="fa fa-arrow-circle-left"></i> Back to the list
+                <i class="fa fa-arrow-circle-left"></i> {% trans %}tour.actions.back{% endtrans %}
             </a>
         </li>
         {% if delete_form is defined %}
