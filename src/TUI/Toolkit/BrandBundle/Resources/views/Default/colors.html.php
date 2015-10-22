@@ -119,6 +119,12 @@ if ( rgb_brightness($primaryArray) <= 125 ) {
   $contrast = 'rgb(66,66,66)';
 };
 
+if ( rgb_brightness($secondaryArray) <= 125 ) {
+  $contrast_2 = 'rgb(255,255,255)';
+} else {
+  $contrast_2 = 'rgb(66,66,66)';
+};
+
 ?><style>
 /* MDL color overrides */
 a {
@@ -168,7 +174,13 @@ a {
 
 .mdl-tabs.is-upgraded .mdl-tabs__tab.is-active::after,
 .mdl-tabs-no-swap .is-active::after {
-  background: <?php echo $primary ?>;
+  background-color: <?php echo $primary ?>;
+}
+
+.page-title .mdl-button--raised.mdl-button--colored,
+.page-title .mdl-button--raised.mdl-button--colored:hover {
+  background-color: <?php echo $secondary ?>;
+  color: <?php echo $contrast_2 ?>;
 }
 
 /* Custom MDL matching colors */
