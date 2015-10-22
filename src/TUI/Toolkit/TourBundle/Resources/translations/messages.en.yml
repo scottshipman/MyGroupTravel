@@ -3,25 +3,26 @@ tour:
     title:
         edit: Edit Tour
         index: Tour Dashboard
+        index_active: Tour Dashboard - Active
         new: Create New Tour
         show: Tour
-        layout_auth: My Tours
-        layout_anon: Tour Login
         deleted: Tour Dashboard - Deleted
         restore: Restore
 
     page_title:
         edit: Edit Tour
         index: Tour
+        index_active: Tour Dashboard - Active
         new: Create New Tour
         show: Tour
-        layout_auth: My Tours
-        layout_anon: Tour Login
+        dashboard: Dashboard
         deleted: Tour Dashboard - Deleted
         payment_task:
             edit: PaymentTask edit
             new: PaymentTask create
-            show: PaymentTask
+            index: PaymentTask
+            list: PaymentTask List
+            show:
                 id: Id
                 name: Name
                 value: Value
@@ -30,10 +31,10 @@ tour:
                 type: Type
                 string: String
                 actions: Actions
-            list: PaymentTask List
 
     actions:
         back: Back to the list
+        back_dashboard: Back to Dashboard
         edit: Edit
         update: Update
         create: Create
@@ -45,6 +46,89 @@ tour:
         send: Send
         go: Go
         create_new_paymentTask: Create New Entry
+
+    menu:
+        my_tours: My Tours
+        preview: Preview Tour
+
+    not_completed:
+        get_started: Get Started
+        signup: Sign Up
+        payment_settings: Set up your payment settings
+        next: Next
+        promote: Promote Your Tour
+        personalize: Personalize your website
+
+    not_setup:
+       get_started: Get Started
+       signup: Sign Up
+       payment_settings: Set up your payment settings
+       how_much: How much do you want ot charge each passenger?
+       pass_price: This will be the per passenger price shown on the tour prmotional website.  You can increase the price or reduce it if you are fundraising
+       amounts_and_dates: Set payment amounts and due dates
+       suggested_price: This is the suggested per passenger deposit price.  You can increase the price or reduce it if you are fundraising.
+       how_to_pay: How do you want passengers to pay?
+       preferred_payment: Select your preferred payment methods
+       next: Next
+       personalize: Personalize your website
+       promote: Promote Your Tour
+
+    show:
+       summary: Tour Summary
+       institution: Institution
+       departure: Departure Date
+       passengers: Number Of Passengers
+       price: Price Per Passenger
+       organizers: Organizers
+       footer:
+            intro: Tour Organizer:
+            price: Price per person:
+
+    contact_organizer:
+        name: Tour Name:
+        reference: Reference:
+        institution: Institution:
+        destination: Destination:
+        share: Share this Tour with others
+        message: Your Message
+        to: To:
+        message_text: Message Text:
+
+    dashboard:
+        status: Status
+        due: due by
+        no_payments: No payments due at this time
+        na: N/A
+        signups: Sign-ups
+        days: Days To Go
+        passport_data: Collect Passport Data By
+        collecting: Collecting
+        outstanding: Outstanding
+        medical_data: Collect Medical Data By
+        dietary_data: Collect Dietary Data By
+        booking_form: Download Booking Form
+        booking_form_copy: Download the booking form, complete it, and send it in with the correct deposit
+        download: Download
+        todo: ToDo
+        completed: Completed
+        completed_passport_data: Collect Passport Data
+        completed_medical_data: Collect Medical Data
+        completed_dietary_data: Collect Dietary Data
+
+    edit:
+        summary: Summary
+        details: Details
+        schedule: Payment Schedule
+        deadlines: Task Deadlines
+        promotional_content: Upload Promotional Content
+        no_assets: No assets uploaded.
+        promo_assets: Upload Promotional Assets
+        cannot_upload: Cannot Upload Any More Assets
+
+
+
+
+
 
     table:
         label:
@@ -92,9 +176,8 @@ tour:
     tabs:
         deleted: Deleted Tours
         current:  Current Tours
+        active: Active Tours
 
-    avatar:
-        label: Profile Image
 
     media:
         label: Click to upload
@@ -153,23 +236,6 @@ tour:
             medical_date: Medical Info Due Date
             dietary_date: Dietary Info Due Date
 
-    profile:
-        label:
-            name: Name
-            email: Email
-            created: Created
-        login:
-            reset: Reset Password
-            sign_in: Sign In
-            forgot: Forgot Password?
-        my_quotes:
-            institution: Institution
-            organizer: Organizer
-            salesAgent: Business Contact
-            price: Price
-            quote: Quote
-            tour: Tour
-            days: Days to go
 
     payment_task:
         actions:
