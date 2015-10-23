@@ -44,27 +44,32 @@ class QuoteSummaryType extends AbstractType
             ->add('expiryDate', 'genemu_jquerydate', array(
               'widget' => 'single_text',
               'required' => false,
-              'label' => 'Quote Expiration? ' .$date_label,
+              'label' => 'quote.form.summary.expiry'. ' ' .$date_label,
+                'translation_domain'  => 'messages',
               'format' => $date_format,
             ))
             ->add('departureDate', 'genemu_jquerydate', array(
               'widget' => 'single_text',
               'required' => false,
-              'label' => 'Departure Date ' .$date_label,
+              'label' => 'quote.form.summary.departure'. ' ' .$date_label,
+              'translation_domain'  => 'messages',
               'format' => $date_format,
             ))
             ->add('returnDate', 'genemu_jquerydate', array(
               'widget' => 'single_text',
               'required' => false,
-              'label' => 'Return Date ' .$date_label,
+              'label' => 'quote.form.summary.return'. ' ' .$date_label,
+              'translation_domain'  => 'messages',
               'format' => $date_format,
             ))
             ->add('duration', 'text', array(
               'required'  => false,
-              'label' => 'Duration',
+              'label' => 'quote.form.summary.duration',
+              'translation_domain'  => 'messages',
             ))
             ->add('boardBasis','entity', array(
-            'label' => 'Board Basis',
+            'label' => 'quote.form.summary.boardBasis',
+              'translation_domain'  => 'messages',
             'required' => false,
             'placeholder' => 'Select',
             'class' => 'BoardBasisBundle:BoardBasis',
@@ -76,6 +81,8 @@ class QuoteSummaryType extends AbstractType
               ))
             ->add('transportType','entity', array(
               'required' => false,
+              'label' => 'quote.form.summary.transport',
+              'translation_domain'  => 'messages',
               'placeholder' => 'Select',
               'class' => 'TransportBundle:Transport',
               'property' => 'name',
@@ -85,19 +92,24 @@ class QuoteSummaryType extends AbstractType
                     },
                 ))
             ->add('freePlaces', 'integer', array(
-              'label' => 'Free Places',
+              'label' => 'quote.form.summary.freePlaces',
+              'translation_domain'  => 'messages',
               'required'  => false,
             ))
             ->add('payingPlaces', 'integer', array(
-              'label' => 'Paying Places',
+              'label' => 'quote.form.summary.payingPlaces',
+              'translation_domain'  => 'messages',
               'required'  => false,
             ))
             ->add('pricePerson', 'integer', array(
-              'label' => 'Price per Person',
+              'label' => 'quote.form.summary.pricePerson',
+              'translation_domain'  => 'messages',
               'required'  => false,
             ))
             ->add('currency', 'entity', array(
                 'required' => false,
+              'translation_domain'  => 'messages',
+              'label' => 'quote.form.summary.currency',
                 'placeholder' => 'Select',
                 'class' => 'CurrencyBundle:Currency',
                 'property'  =>  'name',
@@ -107,7 +119,8 @@ class QuoteSummaryType extends AbstractType
                     },
               ))
             ->add('welcomeMsg', 'ckeditor', array(
-                'label' => 'Summary Message',
+                'label' => 'quote.form.summary.welcomeMsg',
+              'translation_domain'  => 'messages',
             ))
         ;
     }

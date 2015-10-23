@@ -2,28 +2,28 @@
 
 {% block title %}
     {% if is_granted("ROLE_BRAND") %}
-        Site View
+        {% trans %}quote.title.show{% endtrans %}
     {% else %}
         {{ entity.quoteReference.name }}, {{ entity.name }}
     {% endif %}
 {% endblock %}
 
 {% block page_title %}
-    <span>Site View</span>
+    <span>{% trans %}quote_site.site_pdf.alternate_quotes{% endtrans %}</span>
 {% endblock %}
 
 {% block back_link %}
     {% if is_granted("ROLE_BRAND") %}
-        <a class="back-link" href="{{ path('manage_quoteversion_show', { 'id': entity.id }) }}"><i class="fa fa-arrow-left"></i> Back to Show</a>
+        <a class="back-link" href="{{ path('manage_quoteversion_show', { 'id': entity.id }) }}"><i class="fa fa-arrow-left"></i> {% trans %}quote.actions.back_show{% endtrans %}</a>
     {% else %}
-        <a class="back-link" href="/"><i class="fa fa-arrow-left"></i> Back to Dashboard</a>
+        <a class="back-link" href="/"><i class="fa fa-arrow-left"></i> {% trans %}quote.actions.back_dash{% endtrans %}</a>
     {% endif %}
 {% endblock %}
 
 {% block edit_link %}
     {% if editable and entity.converted is sameas(false) %}
         {% if entity.locked == 0 %}
-            <a id="link-preview-edit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">Switch to Edit Mode</a>
+            <a id="link-preview-edit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">{% trans %}quote.actions.edit_mode{% endtrans %}</a>
         {% endif %}
     {% endif %}
 {% endblock %}
@@ -71,11 +71,11 @@
     <div id="quote-version-{{ entity.id }}" class="site-show mode-toggle mode-preview" entityId="{{ entity.id }}" entityType="quote" entityClass="QuoteVersion" entityPath="quoteversion">
 
         <a href="javascript:window.print()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
-            <i class="fa fa-print"></i> Print
+            <i class="fa fa-print"></i> {% trans %}quote.actions.print{% endtrans %}
         </a>
 
         <a href="/quote/print/{{ entity.id }}/{{ entity.quoteNumber }}.pdf" target="_blank" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
-            <i class="fa fa-file-pdf-o"></i> PDF
+            <i class="fa fa-file-pdf-o"></i> {% trans %}quote.actions.pdf{% endtrans %}
         </a>
 
         {% if warning | length >0 %}
@@ -111,7 +111,7 @@
                     {% if editable %}
                         <div id="site-header-slideshow-content">
                             <a id="add-header-content" href="#" class="status-preview-edit mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
-                                <i class="fa fa-plus-circle"></i> Add Header Slideshow
+                                <i class="fa fa-plus-circle"></i> {% trans %}quote.actions.add_header{% endtrans %}
                             </a>
                         </div>
                     {% endif %}
@@ -160,12 +160,12 @@
                 {% endfor %}
 
                 {% if alternate or related %}
-                    <a id="tab-alternate-quotes" href="#tabs-drawer-alternate-quotes" class="site-content-blocks-tab mdl-tabs__tab {{ activeTab }}">Alternate Quotes</a>
+                    <a id="tab-alternate-quotes" href="#tabs-drawer-alternate-quotes" class="site-content-blocks-tab mdl-tabs__tab {{ activeTab }}">{% trans %}quote.tabs.alternate{% endtrans %}</a>
                 {% endif %}
 
                 {% if editable %}
-                    <span id="edit-tabs" class="site-content-blocks-tab status-preview-edit"><i class="fa fa-pencil"></i> Edit Tabs</span>
-                    <span id="add-new-tab" class="site-content-blocks-tab status-preview-edit"><i class="fa fa-plus-circle"></i> Add New Tab</span>
+                    <span id="edit-tabs" class="site-content-blocks-tab status-preview-edit"><i class="fa fa-pencil"></i> {% trans %}quote.actions.edit_tabs% endtrans %}</span>
+                    <span id="add-new-tab" class="site-content-blocks-tab status-preview-edit"><i class="fa fa-plus-circle"></i> {% trans %}quote.actions.add_tab{% endtrans %}</span>
                 {% endif %}
             </div>
 
@@ -280,7 +280,7 @@
 
 {% block footer_left %}
     {% if entity.quoteReference.salesAgent %}
-        <span class="intro">Primary Business Contact:</span>
+        <span class="intro">{% trans %}quote.footer.salesAgent{% endtrans %}</span>
         {% if entity.quoteReference.salesAgent.media %}
             <span class="tui-image-avatar"><img
                         src="{{ asset( entity.quoteReference.salesAgent.media.getRelativePath ~ "/" ~ entity.quoteReference.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}"
@@ -297,7 +297,7 @@
 {% endblock %}
 
 {% block footer_right %}
-    <div class="quote-info"><span class="quote-label">Price per person:</span><span
+    <div class="quote-info"><span class="quote-label">{% trans %}quote.footer.price_person{% endtrans %}</span><span
                 class="quote-price">{% if entity.pricePerson %}
 
                 <strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong>{% endif %}</span>
@@ -305,12 +305,12 @@
     {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
         {% if date(entity.expiryDate) < date('now') %}
             <a class="expired-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-                <i class="fa fa-calendar-times-o"></i> Expired
+                <i class="fa fa-calendar-times-o"></i> {% trans %}quote.footer.actions.expired{% endtrans %}
             </a>
         {% else %}
             <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
                href="{{ path('quote_site_quote_accepted', { 'id': entity.id }) }}">
-                <i class="fa fa-thumbs-o-up"> </i> Like Quote
+                <i class="fa fa-thumbs-o-up"> </i> {% trans %}quote.footer.actions.like{% endtrans %}
             </a>
         {% endif %}
     {% endif %}

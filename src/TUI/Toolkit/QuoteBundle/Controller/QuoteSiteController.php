@@ -51,7 +51,7 @@ class QuoteSiteController extends Controller
         // Get all Quote versions referencing Parent Quote object
         $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find QuoteVersion entity.');
+            throw $this->createNotFoundException('Unable to find QuoteVersion entity in order to show the quote site.');
         }
 
       //Get all brand stuff
@@ -66,7 +66,7 @@ class QuoteSiteController extends Controller
         ->getPermission($id, 'quote', $user->getId());
     }
 
-    if($quoteNumber===NULL && FALSE === $securityContext->isGranted('ROLE_BRAND')){
+    if(($quoteNumber===NULL || $quoteNumber != $entity->getQuoteNumber()) && FALSE === $securityContext->isGranted('ROLE_BRAND')){
 
       $promptForm = $this->createPromptTypeForm($id);
       return $this->render('QuoteBundle:QuoteSite:sitePrompt.html.twig', array(
@@ -76,8 +76,9 @@ class QuoteSiteController extends Controller
     }
 
     if ($securityContext->isGranted('ROLE_BRAND') ){
-      if ($entity->getConverted() == false )
-      $editable = TRUE;
+      if ($entity->getConverted() == false ) {
+        $editable = TRUE;
+      }
     }
     // get the content blocks to send to twig
     $items=array(); $tabs=array();
@@ -89,7 +90,7 @@ class QuoteSiteController extends Controller
         foreach ($blocks as $block) {
           $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find((int) $block);
           if(!$blockObj){
-            throw $this->createNotFoundException('Unable to find Content Block entity.');
+            throw $this->createNotFoundException('Unable to find Content Block entity while compiling the quote site.');
           }
           $items[$blockObj->getId()] = $blockObj;
         }
@@ -107,7 +108,7 @@ class QuoteSiteController extends Controller
     // send warning messages
     $warningMsg = array();
     if(Null!==$entity->getExpiryDate() && $entity->getExpiryDate() < date($date_format)){
-      $warningMsg[] = "This quote has expired. Please contact $entity>getQuoteReference()->getSalesAgent()->getFirstName()   $entity>getQuoteReference()->getSalesAgent()->getLasttName()  at $entity>getQuoteReference()->getSalesAgent()->getEmail()";
+      $warningMsg[] = $this->get('translator')->trans('quote.exception.expired') . " $entity>getQuoteReference()->getSalesAgent()->getFirstName()   $entity>getQuoteReference()->getSalesAgent()->getLasttName()  at $entity>getQuoteReference()->getSalesAgent()->getEmail()";
     }
 
     // Record Views
@@ -163,7 +164,7 @@ class QuoteSiteController extends Controller
       'method' => 'POST',
     ));
 
-    $form->add('submit', 'submit', array('label' => 'Go'));
+    $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('quote.actions.prompt')));
 
     return $form;
   }
@@ -179,7 +180,7 @@ class QuoteSiteController extends Controller
     $em = $this->getDoctrine()->getManager();
     $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
     if (!$entity) {
-      throw $this->createNotFoundException('Unable to find QuoteVersion entity.');
+      throw $this->createNotFoundException('Unable to find QuoteVersion entity while validating Quote Number form.');
     }
     $promptForm = $this->createPromptTypeForm($id);
     $promptForm->handleRequest($request);
@@ -193,7 +194,7 @@ class QuoteSiteController extends Controller
       return $this->redirect($this->generateUrl('quote_site_show', array('id' => $id, 'quoteNumber' => $realQuoteNumber)));
     } else {
     //send back to form page
-      $this->get('session')->getFlashBag()->add('notice', 'The Quote Number did not match our records for this requested Quote. Please try again or consult your Sales Contact.');
+      $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.exception.prompt_error'));
       return $this->redirect($this->generateUrl('quote_site_action_show', array('id' => $id)));
   }
 
@@ -254,7 +255,7 @@ class QuoteSiteController extends Controller
             'method' => 'POST',
         ));
 
-        $changeForm->add('submit', 'submit', array('label' => 'Submit Change Request'));
+        $changeForm->add('submit', 'submit', array('label' => $this->get('translator')->trans('quote.actions.change_request')));
 
         return $changeForm;
 
@@ -298,8 +299,8 @@ class QuoteSiteController extends Controller
         $brand = $brand[0];
 
         $message = \Swift_Message::newInstance()
-            ->setSubject('Quote Change Request For ' . $tourName)
-            ->setFrom('ChangeRequest@toolkit.com')
+            ->setSubject($this->get('translator')->trans('quote.email.change_request.subject') .' '. $tourName)
+            ->setFrom($this->container->getParameter('user_system_email'))
             ->setTo($agentEmail)
             ->setBody(
                 $this->renderView(
@@ -318,7 +319,7 @@ class QuoteSiteController extends Controller
 
         $this->get('mailer')->send($message);
 
-        $this->get('session')->getFlashBag()->add('notice', 'You have requested a change to' . $tourName);
+        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.change_request') . ' '. $tourName);
 
         return $this->redirect($this->generateUrl('quote_site_action_show', array('id' => $id)));
 
@@ -331,7 +332,7 @@ class QuoteSiteController extends Controller
             'method' => 'POST',
         ));
 
-        $acceptForm->add('submit', 'submit', array('label' => 'Go'));
+        $acceptForm->add('submit', 'submit', array('label' => $this->get('translator')->trans('quote.actions.accept_form')));
 
         return $acceptForm;
 
@@ -394,8 +395,8 @@ class QuoteSiteController extends Controller
         $brand = $brand[0];
 
         $message = \Swift_Message::newInstance()
-            ->setSubject('Quote ' . $quoteNumber . ' has been liked!')
-            ->setFrom('Quote@Toolkit.com')
+            ->setSubject($this->get('translator')->trans('quote.email.liked.subject') . ' ' . $quoteNumber)
+            ->setFrom($this->container->getParameter('user_system_email'))
             ->setBody(
                 $this->renderView(
                     'QuoteBundle:Emails:acceptQuote.html.twig',
@@ -418,7 +419,7 @@ class QuoteSiteController extends Controller
             $this->get('mailer')->send($message);
         }
 
-        $this->get('session')->getFlashBag()->add('notice', 'Quote ' . $tourName . ' has been accepted.');
+        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.liked') . ' ' . $tourName );
 
         return $this->redirect($this->generateUrl('quote_site_action_show', array('id' => $id)));
 
@@ -428,8 +429,6 @@ class QuoteSiteController extends Controller
     {
       $alternate=FALSE;
       $editable = false;
-      // TODO if user is allowed to edit then set $editable to true
-      // if organizer or if brand or higher (check permission table for organizer)
 
       $em = $this->getDoctrine()->getManager();
 
@@ -439,9 +438,8 @@ class QuoteSiteController extends Controller
       // Get all Quote versions referencing Parent Quote object
       $entity = $em->getRepository('QuoteBundle:QuoteVersion')->findById($id);
       if (!$entity) {
-        throw $this->createNotFoundException('Unable to find QuoteVersion entity.');
+        throw $this->createNotFoundException('Unable to find QuoteVersion entity in order to display as PDF.');
       }
-
 
       // get the content blocks to send to twig
       $items=array();
@@ -466,7 +464,7 @@ class QuoteSiteController extends Controller
       // send warning messages
       $warningMsg = array();
       if($entity[0]->getExpiryDate() < date($date_format)){
-        $warningMsg[] = "This quote has expired. Please contact $entity>getQuoteReference()->getSalesAgent()->getFirstName()   $entity>getQuoteReference()->getSalesAgent()->getLasttName()  at $entity>getQuoteReference()->getSalesAgent()->getEmail()";
+        $warningMsg[] = $this->get('translator')->trans('quote.exception.expired') . " $entity>getQuoteReference()->getSalesAgent()->getFirstName()   $entity>getQuoteReference()->getSalesAgent()->getLasttName()  at $entity>getQuoteReference()->getSalesAgent()->getEmail()";
       }
 
       $request = $this->getRequest();
@@ -498,18 +496,6 @@ class QuoteSiteController extends Controller
       return new Response($dompdf->output(), 200, array(
           'Content-Type' => 'application/pdf'
       ));
-
-      /*
-      return $this->render('QuoteBundle:QuoteSite:sitePDF.html.twig', array(
-        'entity'      => $entity[0],
-        'locale'      => $locale,
-        'items'       => $items,
-        'warning'     => $warningMsg,
-        'header'      => $headerBlock,
-        'editable'    => $editable,
-        'path'        => $path,
-      ));
-      */
     }
 
   /**
@@ -576,7 +562,7 @@ class QuoteSiteController extends Controller
     $quotes = $query->getResult();
 
     if(!$quotes){
-      throw $this->createNotFoundException('Unable to find Quote entities for alternate quotes tab.');
+      throw $this->createNotFoundException('Unable to find Quote entities for related quotes tab.');
     }
 
     foreach($quotes as $relQuote){
@@ -662,7 +648,7 @@ class QuoteSiteController extends Controller
       )
     ));
 
-    $form->add('submit', 'submit', array('label' => 'Update'));
+    $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('quote.actions.update')));
 
     return $form;
   }
@@ -677,7 +663,7 @@ class QuoteSiteController extends Controller
     $em = $this->getDoctrine()->getManager();
     $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
     if (!$entity) {
-      throw $this->createNotFoundException('Unable to find QuoteVersion entity.');
+      throw $this->createNotFoundException('Unable to find QuoteVersion entity while updating quote summary data.');
     }
 
 

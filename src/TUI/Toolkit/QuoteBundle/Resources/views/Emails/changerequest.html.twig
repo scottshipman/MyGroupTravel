@@ -24,24 +24,23 @@
                                             <p style="text-align: center; text-transform: uppercase; color: #283F5F;">{{ brand.name }}</p>
                                         {% endif %}
                                     </center>
-                                    <h2 style="text-align: center; font-weight: 100; color: #283F5F;">You have a request for a change to your quote</h2></br>
-                                    <p>Institution Name: {{ entity.quoteReference.institution }}</p></br>
-                                    <p>Tour Name : {{ entity.name }}</p></br>
-                                    <p>Quote Number: {{ entity.quoteNumber }}</p></br>
-                                    <p>Organizer Name/Email: {{ entity.quoteReference.organizer.firstName }} {{ entity.quoteReference.organizer.lastName }} {{ entity.quoteReference.organizer.email }}</p></br>
-                                    <h4 style="text-align: center; color: #717D82;">Changes Requested:</h4></br>
+                                    <h2 style="text-align: center; font-weight: 100; color: #283F5F;">{% trans %}quote.email.change_request.intro{% endtrans %}</h2></br>
+                                    <p>{% trans %}quote.email.change_request.institution_name{% endtrans %} {{ entity.quoteReference.institution }}</p></br>
+                                    <p>{% trans %}quote.email.change_request.tour_name{% endtrans %} {{ entity.name }}</p></br>
+                                    <p>{% trans %}quote.email.change_request.quote_number{% endtrans %} {{ entity.quoteNumber }}</p></br>
+                                    <p>{% trans %}quote.email.change_request.organizer{% endtrans %} {{ entity.quoteReference.organizer.firstName }} {{ entity.quoteReference.organizer.lastName }} {{ entity.quoteReference.organizer.email }}</p></br>
+                                    <h4 style="text-align: center; color: #717D82;">{% trans %}quote.email.change_request.changes{% endtrans %}</h4></br>
                                     {% for change in changes %}
                                         <p style="text-align: center;">{{ change }}</p></br>
                                     {% endfor %}
                                     <p style="text-align: center">{{ additional }}</p></br>
                                     <center>
                                         <a style="text-decoration: none; color:#fff; display: block; width: 40%; text-align: center; padding: 20px; margin: 20px auto; background-color:{{ brand.primaryColor }};"
-                                           href="{{ absolute_url("/manage/quote/" ~ entity.id ~ "/edit") }}">Edit Your
-                                            Quote</a></br>
+                                           href="{{ absolute_url("/manage/quote/" ~ entity.id ~ "/edit") }}">{% trans %}quote.email.change_request.cta{% endtrans %}</a></br>
                                     </center>
                                     <hr>
                                     <p style="text-align: center; color: #C7C3C5;">
-                                        You can also paste the link below straight into your browser window:
+                                        {% trans %}quote.email.change_request.link_text{% endtrans %}
                                     </p></br>
                                     <a style="text-decoration: none; display: block; width: auto; margin: 0 auto; text-align: center; color:{{ brand.primaryColor }};"
                                        href="{{ absolute_url("/manage/quote/" ~ entity.id ~ "/edit") }}">{{ absolute_url("/manage/quote/" ~ entity.id ~ "/edit") }}</a></br>

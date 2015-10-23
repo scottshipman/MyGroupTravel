@@ -21,14 +21,15 @@ class QuoteAcceptType extends AbstractType
     {
         $builder
             ->add('additional', 'textarea', array(
-                'label' => 'Anything else?',
+                'label' => 'quote.form.accept.additional',
+                'translation_domain'  => 'messages',
                 'mapped' => false,
                 'required' => false,
                 'attr' => array(
                     'maxlength' => 500,
                 )
             ))
-            ->add('submit', 'submit', array('label' => 'Submit'))
+            ->add('submit', 'submit', array('label' => 'quote.form.accept.submit'))
             ->getForm();
         ;
 

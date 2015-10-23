@@ -112,6 +112,7 @@ user:
             quote: Quote
             tour: Tour
             days: Days to go
+            no_price: N/A
 
 
 

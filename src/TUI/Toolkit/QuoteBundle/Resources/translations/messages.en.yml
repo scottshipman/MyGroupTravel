@@ -1,0 +1,244 @@
+#QuoteBundle/Resources/translations/messages.en.yml
+quote:
+    title:
+        edit: Edit Quote
+        index: Quote Dashboard
+        new: Create New Quote
+        show: Site View
+        layout_auth: My Tours
+        layout_anon: Quote Login
+        deleted: Quote Dashboard - Deleted
+        converted: Quote Dashboard - Converted
+
+    page_title:
+        edit: Edit Quote
+        index: Quote Dashboard - Active
+        new: Create New Quote
+        show: Site View
+        layout_auth: My Tours
+        layout_anon: Quote Login
+        deleted: Quote Dashboard - Deleted
+        converted: Quote Dashboard - Converted
+
+    actions:
+        back: Back to the list
+        back_dash: Back to the Dashboard
+        back_show: Back to Show
+        edit: Edit
+        update: Update
+        create: Create
+        create_template: Create Template
+        delete: Delete
+        create_new: Create a New Quote
+        create_new_template: Create a new Template
+        prompt: Go
+        change_request: Submit Change request
+        accept_form: Go
+        clone: Save as Clone
+        restore: Restore
+        edit_mode: Switch to Edit Mode
+        print: Print
+        pdf: PDF
+        add_header: Add Header Slideshow
+        edit_tabs: Edit Tabs
+        add_tab: Add New Tab
+
+
+    table:
+        label:
+            name: Name
+            action: Actions
+            visible: Visible
+            phone: Phone Number
+            created: Created
+            enabled: Enabled
+            last_login: Last Login
+            avatar: Avatar
+
+        actions:
+            view: View
+            edit: Edit
+
+    flash:
+        save: Quote Saved -
+        save_template: Quote Template Saved -
+        delete: Quote deleted -
+        restore: Quote Restored -
+        password: Password updated for
+        cant_delete: Unable to delete this Quote because they are associated with Quotes or Tours
+        registration_notification: A Notification was sent to
+        change_request: Your change request was successfully submitted for
+        liked: Your Sales Contact has been notified that you liked this quote -
+        lock: This quote's lock has been toggled.
+
+    grid:
+        no_result: There are no Quotes to show. Please check your filter settings and try again.
+        no_result-deleted: There are no Deleted Quotes to show. Please check your filter settings and try again.
+        no_result-converted: There are no Converted Quotes to show. Please check your filter settings and try again.
+        no_results-templates: There are no Templates to show. Please check your filter settings and try again.
+        export: Quotes as CSV
+        export_deleted: Deleted Quotes as CSV
+        export_converted: Converted Quotes as CSV
+        export_templates: Templates as CSV
+        filters:
+            title:
+                sales_agent: Primary Business Admin (last name)
+                organizer: Organizer (last name)
+                createdby: Created By
+
+        column:
+            title:
+                last_login: Last Login
+
+    tabs:
+        deleted: Deleted Quotes
+        current:  Current Quotes
+        converted: Converted Quotes
+        alternate: Alternate Quotes
+
+    media:
+        label: Click to upload
+
+    exception:
+        access: You do not have the ability to edit this Quote's information.
+        convert: Cannot convert the quote because it is already converted.
+        convert_sibling: Cannot convert the quote because one of its siblings has already been converted.
+        expired: This quote has expired. Please contact
+        duplicate_quotenumber: This quote number is already in user by another quote.
+        prompt_error: The Quote Number did not match our records for this requested Quote. Please try again or consult our Sales Contact.
+
+    email:
+        change_request:
+            subject: Quote Change Request For
+            intro: You have a request for a change to your quote
+            institution_name: "Institution Name:"
+            tour_name: "Tour Name:"
+            quote_number: "Quote Number:"
+            organizer: "Organizer Name / Email:"
+            changes: "Additions:"
+            cta: Edit your Quote
+            link_text: "You can also paste the link below straight into your browser window:"
+        liked:
+            subject: Someone has like the Quote with Quote Number -
+        accepted:
+            institution_name: "Institution Name:"
+            tour_name: "Tour Name:"
+            quote_number: "Quote Number:"
+            organizer: "Organizer Name / Email:"
+            additions: "Additions:"
+            cta: View Quote
+            link_text: "You can also paste the link below straight into your browser window:"
+
+    footer:
+        salesAgent: "Primary Business Contact: "
+        price_person: "Price per person: "
+        actions:
+            expired: Expired
+            like: Like Quote
+
+    form:
+
+        prompt:
+            quotenumber: Quote Number
+        accept:
+            additional: Anything Else?
+            submit: Submit
+        changes:
+            choices:
+                numbers: Our numbers have changed
+                reduce_price: Need advice on how to reduce price
+                dates: Can we look at different dates?
+                destination: Where else can you recomend?
+            additional: Anything Else?
+            submit: Submit
+        summary:
+            expiry: Quote Expiration?
+            departure: Departure Date
+            return: Return Date
+            duration: Duration
+            boardBasis: Board Basis
+            transport: Transport Type
+            freePlaces: Free Places
+            payingPlaces: Paying Places
+            pricePerson: Price per Person
+            currency: Currency
+            welcomeMsg: Summary Message
+        quote:
+            secondaryContact: Other Business Admin
+            organizer: Organizer
+            institution: Institution
+            salesAgent: Primary Business Admin
+            salesAgentTemplate: Template Owner
+            name: Tour Name
+            destination: Destination
+        quote_version:
+            quoteNumber: Quote Number
+            template: Convert to Template?
+            quoteReference: Quote Details
+            name: Quote Name
+            expiry: Quote Expiration?
+            departure: Departure Date
+            return: Return Date
+            duration: Duration
+            boardBasis: Board Basis
+            transport: Transport Type
+            freePlaces: Free Places
+            payingPlaces: Paying Places
+            pricePerson: Price per Person
+            currency: Currency
+            welcomeMsg: Summary Message
+quote_site:
+    accepted:
+        quote_number: "Quote Number "
+        departing: "Departing "
+        duration: "For "
+        returning: "Returning "
+        price_person: "Price per person "
+        expiry: "Quote valid until "
+    change_request:
+        quote_number: "Quote Number "
+        departing: "Departing "
+        duration: "For "
+        returning: "Returning "
+        price_person: "Price per person "
+        expiry: "Quote valid until "
+    quote_sibling:
+        intro: "Alternate quotes for "
+        related: "Other Related Quotes for "
+        default_name: this tour
+        tour_name: Tour Name
+        quote_number: Quote Number
+        departing: Departure date
+        created: Date created
+        price_person: Price per person
+    quote_summary:
+        departing: "Departing: "
+        duration: "Duration: "
+        returning: "Returning: "
+        board_basis: "Board basis: "
+        transport: "Transport: "
+        price_person: "Price per person: "
+        expiry: "Quote valid until "
+        actions:
+            like: Like Quote
+            expired: Expired
+            converted: Converted
+            request_change: Request Changes
+            share: Share this quote with others
+    site _pdf:
+        quote_number: "Quote Number: "
+        alternate_quotes: Alternate Quotes
+        organizer: "Tour Organizer: "
+        price_person: "Price per person: "
+    site_prompt:
+        quote_number: Enter your Quote Number
+        help_text: "You'll find this on your quote email."
+    tab_order:
+        delete_tab: Delete Tab
+        actions:
+            submit: Submit
+            cancel: Cancel
+        editable:
+            tooltip: Click to edit
+
+

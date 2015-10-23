@@ -1,14 +1,14 @@
 {%  if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
 {% set zebra = "odd"  %}
-<h3 id="alternate-quotes-headline">Alternate Quotes for {% if tourName %}{{ tourName }}{% else %}this tour{% endif %}</h3>
+<h3 id="alternate-quotes-headline">{% trans %}quote_site.quote_sibling.intro{% endtrans %} {% if tourName %}{{ tourName }}{% else %}{% trans %}quote_site.quote_sibling.default_name{% endtrans %}{% endif %}</h3>
 <table>
     <thead>
         <tr>
-            <th>Tour name</th>
-            <th>Quote number</th>
-            <th>Departure date</th>
-            <th>Date created</th>
-            <th>Price per person</th>
+            <th>{% trans %}quote_site.quote_sibling.tour_name{% endtrans %}</th>
+            <th>{% trans %}quote_site.quote_sibling.quote_number{% endtrans %}</th>
+            <th>{% trans %}quote_site.quote_sibling.departing{% endtrans %}</th>
+            <th>{% trans %}quote_site.quote_sibling.created{% endtrans %}</th>
+            <th>{% trans %}quote_site.quote_sibling.price_person{% endtrans %}</th>
         </tr>
     </thead>
     <tbody>

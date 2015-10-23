@@ -163,19 +163,19 @@ class QuoteVersionController extends Controller
         // add business admin last name filter
         $column = $grid->getColumn('quoteReference.salesAgent.lastName');
         $column->setFilterable(true);
-        $column->setTitle('Primary Business Admin (Last Name)');
+        $column->setTitle($this->get('translator')->trans('quote.grid.filters.title.sales_agent'));
         $column->setOperatorsVisible(false);
 
         // add organizer last name filter
         $column = $grid->getColumn('quoteReference.organizer.lastName');
         $column->setFilterable(true);
-        $column->setTitle('Organizer (Last Name)');
+        $column->setTitle($this->get('translator')->trans('quote.grid.filters.title.organizer'));
         $column->setOperatorsVisible(false);
 
         // Get locale for stuff
         $locale = $this->container->getParameter('locale');
 
-        // Change date format for british folks. Merica
+        // Change date format for british folks. 'Murica!
         $column = $grid->getColumn('created');
         if (strpos($locale, "en_GB") !== false) {
             $column->setFormat('d-M-Y');
@@ -188,11 +188,11 @@ class QuoteVersionController extends Controller
         $grid->setLimits(array(10, 25, 50, 100));
 
         //set no data message
-        $grid->setNoDataMessage("There are no quotes to show. Please check your filter settings and try again.");
+        $grid->setNoDataMessage($this->get('translator')->trans('quote.grid.no_result'));
 
 
         // Export of the grid
-        $grid->addExport(new CSVExport("Quotes as CSV", "activeQuotes", array('delimiter' => ','), "UTF-8", "ROLE_BRAND"));
+        $grid->addExport(new CSVExport($this->get('translator')->trans('quote.grid.export'), "activeQuotes", array('delimiter' => ','), "UTF-8", "ROLE_BRAND"));
 
 
         // Manage the grid redirection, exports and the response of the controller
@@ -275,13 +275,13 @@ class QuoteVersionController extends Controller
         // add business admin last name filter
         $column = $grid->getColumn('quoteReference.salesAgent.lastName');
         $column->setFilterable(true);
-        $column->setTitle('Primary Business Admin (Last Name)');
+        $column->setTitle($this->get('translator')->trans('quote.grid.filters.title.sales_agent'));
         $column->setOperatorsVisible(false);
 
         // add organizer last name filter
         $column = $grid->getColumn('quoteReference.organizer.lastName');
         $column->setFilterable(true);
-        $column->setTitle('Organizer (Last Name)');
+        $column->setTitle($this->get('translator')->trans('quote.grid.filters.title.organizer'));
         $column->setOperatorsVisible(false);
 
         // Get locale for stuff
@@ -300,7 +300,7 @@ class QuoteVersionController extends Controller
         $grid->setLimits(array(10, 25, 50, 100));
 
         //set no data message
-        $grid->setNoDataMessage("There are no converted quotes to show. Please check your filter settings and try again.");
+        $grid->setNoDataMessage($this->get('translator')->trans('quote.grid.no_results-converted'));
 
         //set default filter value
         $match_route = $this->generateUrl('manage_quote_converted');
@@ -318,7 +318,7 @@ class QuoteVersionController extends Controller
         }
 
         // Export of the grid
-        $grid->addExport(new CSVExport("Converted Quotes as CSV", "convertedQuotes", array('delimiter' => ','), "UTF-8", "ROLE_BRAND"));
+        $grid->addExport(new CSVExport($this->get('translator')->trans('quote.grid.export_converted'), "convertedQuotes", array('delimiter' => ','), "UTF-8", "ROLE_BRAND"));
 
 
         // Manage the grid redirection, exports and the response of the controller
@@ -400,19 +400,19 @@ class QuoteVersionController extends Controller
         // add business admin last name filter
         $column = $grid->getColumn('quoteReference.salesAgent.lastName');
         $column->setFilterable(true);
-        $column->setTitle('Primary Business Admin (Last Name)');
+        $column->setTitle($this->get('translator')->trans('quote.grid.filters.title.sales_agent'));
         $column->setOperatorsVisible(false);
 
         // add organizer last name filter
         $column = $grid->getColumn('quoteReference.organizer.lastName');
         $column->setFilterable(true);
-        $column->setTitle('Organizer (Last Name)');
+        $column->setTitle($this->get('translator')->trans('quote.grid.filters.title.organizer'));
         $column->setOperatorsVisible(false);
 
         // Get locale for stuff
         $locale = $this->container->getParameter('locale');
 
-        // Change date format for british folks. Merica
+        // Change date format for british folks. 'Murica
         $column = $grid->getColumn('created');
         if (strpos($locale, "en_GB") !== false) {
             $column->setFormat('d-M-Y');
@@ -425,7 +425,7 @@ class QuoteVersionController extends Controller
         $grid->setLimits(array(10, 25, 50, 100));
 
         //set no data message
-        $grid->setNoDataMessage("There are no deleted quotes to show. Please check your filter settings and try again.");
+        $grid->setNoDataMessage($this->get('translator')->trans('quote.grid.no_results-deleted'));
 
         //set default filter value
         $match_route = $this->generateUrl('manage_quote_deleted');
@@ -444,7 +444,7 @@ class QuoteVersionController extends Controller
         }
 
         // Export of the grid
-        $grid->addExport(new CSVExport("Deleted Quotes as CSV", "deletedQuotes", array('delimiter' => ','), "UTF-8", "ROLE_BRAND"));
+        $grid->addExport(new CSVExport($this->get('translator')->trans('quote.grid.export_deleted'), "deletedQuotes", array('delimiter' => ','), "UTF-8", "ROLE_BRAND"));
 
 
         // Manage the grid redirection, exports and the response of the controller
@@ -555,7 +555,7 @@ class QuoteVersionController extends Controller
 
         // rename Primary sales AGent to Created By
         $organizer = $grid->getColumn('salesAgent_full');
-        $organizer->setTitle('Created By');
+        $organizer->setTitle($this->get('translator')->trans('quote.grid.filter.title.createdby'));
 
         // Get locale for stuff
         $locale = $this->container->getParameter('locale');
@@ -573,11 +573,11 @@ class QuoteVersionController extends Controller
         $grid->setLimits(array(10, 25, 50, 100));
 
         //set no data message
-        $grid->setNoDataMessage("There are no templates to show. Please check your filter settings and try again.");
+        $grid->setNoDataMessage($this->get('translator')->trans('quote.grid.no_results-templates'));
 
 
         // Export of the grid
-        $grid->addExport(new CSVExport("Quote Templates as CSV", "templatesQuotes", array('delimiter' => ','), "UTF-8", "ROLE_BRAND"));
+        $grid->addExport(new CSVExport($this->get('translator')->trans('quote.grid.export_templates'), "templatesQuotes", array('delimiter' => ','), "UTF-8", "ROLE_BRAND"));
 
 
         // Manage the grid redirection, exports and the response of the controller
@@ -650,7 +650,7 @@ class QuoteVersionController extends Controller
             $em->flush();
             // Create organizer permission
             $permission = $this->get("permission.set_permission")->setPermission($entity->getQuoteReference()->getId(), 'quote', $entity->getQuoteReference()->getOrganizer(), 'organizer');
-            $this->get('session')->getFlashBag()->add('notice', 'Quote Saved: ' . $entity->getName());
+            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.save') . ' ' . $entity->getName());
 
             return $this->redirect($this->generateUrl('manage_quote_show', array('id' => $entity->getId())));
         }
@@ -688,7 +688,7 @@ class QuoteVersionController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-            $this->get('session')->getFlashBag()->add('notice', 'Quote Template Saved: ' . $entity->getName());
+            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.save_template'). ' ' . $entity->getName());
 
             return $this->redirect($this->generateUrl('manage_quote_templates'));
         }
@@ -724,7 +724,7 @@ class QuoteVersionController extends Controller
         $form->get('quoteReference')->get('salesAgent')->setData($this->get('security.token_storage')->getToken()->getUser());
         $form->get('currency')->setdata($currency);
         $form->get('expiryDate')->setdata(new \DateTime('now + 30 days'));
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('quote.action.create')));
 
         return $form;
     }
@@ -750,7 +750,7 @@ class QuoteVersionController extends Controller
 
         $form->get('quoteReference')->get('salesAgent')->setData($this->get('security.token_storage')->getToken()->getUser());
         $form->get('currency')->setdata($currency);
-        $form->add('submit', 'submit', array('label' => 'Create Template'));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('quote.action.create_template')));
 
         return $form;
     }
@@ -805,7 +805,7 @@ class QuoteVersionController extends Controller
         // Get all Quote versions referencing Parent Quote object
         $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find QuoteVersion entity.');
+            throw $this->createNotFoundException('Unable to find QuoteVersion entity while showing quote admin screen.');
         }
 
 
@@ -821,14 +821,14 @@ class QuoteVersionController extends Controller
                 if ($blockCount <= 1) {
                     $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($blocks[0]);
                     if (!$blockObj) {
-                        throw $this->createNotFoundException('Unable to find Content Block entity.');
+                        throw $this->createNotFoundException('Unable to find Content Block entity while compiling quote show admin screen.');
                     }
                     $items[$blockObj->getId()] = $blockObj;
                 } else {
                     foreach ($blocks as $block) {
                         $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find((int)$block);
                         if (!$blockObj) {
-                            throw $this->createNotFoundException('Unable to find Content Block entity.');
+                            throw $this->createNotFoundException('Unable to find Content Block entity while compiling quote show admin screen.');
                         }
                         $items[$blockObj->getId()] = $blockObj;
                     }
@@ -863,7 +863,7 @@ class QuoteVersionController extends Controller
         // Get all Quote versions referencing Parent Quote object
         $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find QuoteVersion entity.');
+            throw $this->createNotFoundException('Unable to find QuoteVersion entity while compiling quote tabs.');
         }
 
 
@@ -879,14 +879,14 @@ class QuoteVersionController extends Controller
                 if ($blockCount <= 1) {
                     $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($blocks[0]);
                     if (!$blockObj) {
-                        throw $this->createNotFoundException('Unable to find Content Block entity.');
+                        throw $this->createNotFoundException('Unable to find Content Block entity while compiling quote version tabs.');
                     }
                     $items[$blockObj->getId()] = $blockObj;
                 } else {
                     foreach ($blocks as $block) {
                         $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find((int)$block);
                         if (!$blockObj) {
-                            throw $this->createNotFoundException('Unable to find Content Block entity.');
+                            throw $this->createNotFoundException('Unable to find Content Block entity while compiling quote version tabs.');
                         }
                         $items[$blockObj->getId()] = $blockObj;
                     }
@@ -918,7 +918,7 @@ class QuoteVersionController extends Controller
         $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find QuoteVersion entity.' . $id);
+            throw $this->createNotFoundException('Unable to find QuoteVersion entity for edit form.' . $id);
         }
 
         if ($entity->getIsTemplate()) {
@@ -953,7 +953,7 @@ class QuoteVersionController extends Controller
         $original_entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
 
         if (!$original_entity) {
-            throw $this->createNotFoundException('Unable to find QuoteVersion entity.' . $id);
+            throw $this->createNotFoundException('Unable to find QuoteVersion entity while cloning quote version.' . $id);
         }
 
         $deepCopy = new DeepCopy();
@@ -999,7 +999,7 @@ class QuoteVersionController extends Controller
         $original_entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
 
         if (!$original_entity) {
-            throw $this->createNotFoundException('Unable to find QuoteVersion entity.' . $id);
+            throw $this->createNotFoundException('Unable to find QuoteVersion entity while cloning a template.' . $id);
         }
 
         $deepCopy = new DeepCopy();
@@ -1046,7 +1046,7 @@ class QuoteVersionController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('quote.action.update')));
 
         return $form;
     }
@@ -1066,7 +1066,7 @@ class QuoteVersionController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Save as Clone'));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('quote.action.clone')));
 
         return $form;
     }
@@ -1082,7 +1082,7 @@ class QuoteVersionController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find QuoteVersion entity.');
+            throw $this->createNotFoundException('Unable to find QuoteVersion entity while updating quote version.');
         }
         if ($entity->getIsTemplate()) {
             $template = 'Template';
@@ -1169,7 +1169,7 @@ class QuoteVersionController extends Controller
 
             // Validate the quoteNumber field is unique
             $uniqueEntity = new UniqueEntity('quoteNumber');
-            $message = 'This Quote Number is already used on another Quote.';
+            $message = $this->get('translator')->trans('quote.exception.duplicate_quotenumber');
             $uniqueEntity->message = $message;
             $errors = $this->get('validator')->validate(
                 $new_entity,
@@ -1192,7 +1192,7 @@ class QuoteVersionController extends Controller
                 $em->persist($new_entity);
                 $em->flush($new_entity);
                 $permission = $this->get("permission.set_permission")->setPermission($new_entity->getQuoteReference()->getId(), 'quote', $new_entity->getQuoteReference()->getOrganizer(), 'organizer');
-                $this->get('session')->getFlashBag()->add('notice', 'Quote Saved: ' . $new_entity->getName());
+                $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.save') . ' ' . $new_entity->getName());
                 return $this->redirect($this->generateUrl('manage_quote' . $route));
             }
             $this->get('session')->getFlashBag()->add('error', $message);
@@ -1209,7 +1209,7 @@ class QuoteVersionController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
             $permission = $this->get("permission.set_permission")->setPermission($entity->getQuoteReference()->getId(), 'quote', $entity->getQuoteReference()->getOrganizer(), 'organizer');
-            $this->get('session')->getFlashBag()->add('notice', 'Quote Saved: ' . $entity->getName());
+            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.save') . ' ' . $entity->getName());
             return $this->redirect($this->generateUrl('manage_quote_show', array('id' => $entity->getId())));
         }
 
@@ -1330,7 +1330,7 @@ class QuoteVersionController extends Controller
             $em->persist($entity);
             $em->flush();
             $permission = $this->get("permission.set_permission")->setPermission($entity->getQuoteReference()->getId(), 'quote', $entity->getQuoteReference()->getOrganizer(), 'organizer');
-            $this->get('session')->getFlashBag()->add('notice', 'Quote Saved: ' . $entity->getName());
+            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.save') . ' ' . $entity->getName());
 
 
             return $this->redirect($this->generateUrl('manage_quote_show', array('id' => $entity->getId())));
@@ -1359,12 +1359,12 @@ class QuoteVersionController extends Controller
             $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find QuoteVersion entity.');
+                throw $this->createNotFoundException('Unable to find QuoteVersion entity in order to delete it.');
             }
 
             $em->remove($entity);
             $em->flush();
-            $this->get('session')->getFlashBag()->add('notice', 'Quote Deleted: ' . $entity->getName());
+            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.delete') . ' ' . $entity->getName());
 
         }
 
@@ -1384,7 +1384,7 @@ class QuoteVersionController extends Controller
             ->setAction($this->generateUrl('manage_quote_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'button', array(
-                'label' => 'Delete',
+                'label' => $this->get('translator')->trans('quote.actions.delete'),
                 'attr' => array(
                     'class' => 'delete-btn'
                 )
@@ -1404,11 +1404,11 @@ class QuoteVersionController extends Controller
 
         $quoteVersion = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
         if (!$quoteVersion) {
-            throw $this->createNotFoundException('Unable to find Quote Version entity.');
+            throw $this->createNotFoundException('Unable to find Quote Version entity in order to delete it using ajax.');
         }
         $em->remove($quoteVersion);
         $em->flush();
-        $this->get('session')->getFlashBag()->add('notice', 'Quote Deleted: ' . $quoteVersion->getName());
+        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.delete'). ' ' . $quoteVersion->getName());
 
         return $this->redirect($this->generateUrl('manage_quote'));
     }
@@ -1426,7 +1426,7 @@ class QuoteVersionController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('manage_quote_restore', array('id' => $id)))
             ->setMethod('POST')
-            ->add('submit', 'submit', array('label' => 'RESTORE'))
+            ->add('submit', 'submit', array('label' => $this->get('translator')->trans('quote.action.restore')))
             ->getForm();
     }
 
@@ -1446,12 +1446,12 @@ class QuoteVersionController extends Controller
         $quoteVersion = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
 
         if (!$quoteVersion) {
-            throw $this->createNotFoundException('Unable to find Quote entity.');
+            throw $this->createNotFoundException('Unable to find Quote entity in order to restore it.');
         }
         $quoteVersion->setDeleted(NULL);
         $em->persist($quoteVersion);
         $em->flush();
-        $this->get('session')->getFlashBag()->add('notice', 'Quote Restored: ' . $quoteVersion->getName());
+        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.restore'). ' ' . $quoteVersion->getName());
 
         return $this->redirect($this->generateUrl('manage_quote'));
     }
@@ -1469,7 +1469,7 @@ class QuoteVersionController extends Controller
         $quoteVersion = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
 
         if (!$quoteVersion) {
-            throw $this->createNotFoundException('Unable to find Quote entity.');
+            throw $this->createNotFoundException('Unable to find Quote entity in order to lock it.');
         }
 
         if ($quoteVersion->getLocked() == false) {
@@ -1498,7 +1498,7 @@ class QuoteVersionController extends Controller
         $quoteVersion = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
 
         if (!$quoteVersion) {
-            throw $this->createNotFoundException('Unable to find Quote entity.');
+            throw $this->createNotFoundException('Unable to find Quote entity during lock toggle.');
         }
 
         if ($quoteVersion->getLocked() == false) {
@@ -1509,7 +1509,7 @@ class QuoteVersionController extends Controller
         $quoteVersion->setLocked($status);
         $em->persist($quoteVersion);
         $em->flush();
-        $this->get('session')->getFlashBag()->add('notice', 'Quote Lock has been toggled ');
+        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.lock'));
 
         return $this->redirect($this->generateUrl('manage_quote'));
 
@@ -1531,7 +1531,7 @@ class QuoteVersionController extends Controller
                     $originalBlock = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($block);
 
                     if (!$originalBlock) {
-                        throw $this->createNotFoundException('Unable to find Content entity while cloning.');
+                        throw $this->createNotFoundException('Unable to find Content entity while cloning quote content.');
                     }
 
                     $newBlock = clone $originalBlock;
@@ -1562,7 +1562,7 @@ class QuoteVersionController extends Controller
             $originalBlock = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($block);
 
             if (!$originalBlock) {
-                throw $this->createNotFoundException('Unable to find Content entity.');
+                throw $this->createNotFoundException('Unable to find Content entity while cloning quote header block.');
             }
 
             $newBlock = clone $originalBlock;

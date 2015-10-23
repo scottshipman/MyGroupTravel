@@ -34,8 +34,8 @@
     <div class="mdl-card__supporting-text profile-tour-details">
         <ul>
             <li>
-                <div class="profile-list-item item-1">
-                    {% if quote.currency %}{{ quote.currency.htmlSymbol | raw}}{% endif %}{% if quote.pricePerson %}{{ quote.pricePerson }}{% endif %}<br /><label>{% trans %}user.profile.my_quotes.price{% endtrans %}</label>
+                <div class="profile-list-item seperator">
+                    {% if quote.currency %}{{ quote.currency.htmlSymbol | raw}}{% endif %}{% if quote.pricePerson %}{{ quote.pricePerson }}{% else %}{% trans %}user.profile.my_quotes.no_price{% endtrans %} {% endif %}<br /><label>{% trans %}user.profile.my_quotes.price{% endtrans %}</label>
                 </div>
             </li>
             <li>

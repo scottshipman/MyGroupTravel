@@ -22,7 +22,8 @@ class PromptType extends AbstractType
 
       $builder
         ->add('quoteNumber', 'text', array(
-          'label' => 'Quote Number',
+          'label' => 'quote.form.prompt.quotenumber',
+          'translation_domain'  => 'messages',
           'mapped' => false
         ));
 

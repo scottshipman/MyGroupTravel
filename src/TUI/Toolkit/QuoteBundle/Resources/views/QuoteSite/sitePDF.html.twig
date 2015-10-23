@@ -18,7 +18,7 @@
 
 {% block body -%}
 
-    <div id="site-quote-number">Quote Number: {% if entity.quoteNumber %}{{ entity.quoteNumber }}{% endif %}</div>
+    <div id="site-quote-number">{% trans %}quote_site.site_pdf.quote_number{% endtrans %} {% if entity.quoteNumber %}{{ entity.quoteNumber }}{% endif %}</div>
 
     <div id="site-header" class="quote-view-site-header">
 
@@ -54,7 +54,7 @@
                 {% set activeTab = '' %}
             {% endfor %}
             {% if alternate %}
-                <a id="tab-alternate-quotes" href="#tabs-drawer-alternate-quotes" class="site-content-blocks-tab mdl-tabs__tab {{ activeTab }}">Alternate Quotes</a>
+                <a id="tab-alternate-quotes" href="#tabs-drawer-alternate-quotes" class="site-content-blocks-tab mdl-tabs__tab {{ activeTab }}">{% trans %}quote_site.site_pdf.alternate_quotes{% endtrans %}</a>
             {% endif %}
         </div>
 
@@ -88,12 +88,12 @@
 
 {% block footer_left %}
     {% if entity.quoteReference.salesAgent %}
-        <span class="intro">Tour Organizer:</span>
+        <span class="intro">{% trans %}quote_site.site_pdf.organizer{% endtrans %}</span>
         <span class="agent">{{ entity.quoteReference.salesAgent.firstName }} {{ entity.quoteReference.salesAgent.lastName }}<br>
         {{ entity.quoteReference.salesAgent.email }}</span>
     {% endif %}
 {% endblock %}
 
 {% block footer_right %}
-    <div class="quote-info"><span class="quote-label">Price per person:</span> <span class="quote-price">{% if entity.pricePerson %}<strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong>{% endif %}</span></div>
+    <div class="quote-info"><span class="quote-label">{% trans %}quote_site.site_pdf.price_person{% endtrans %}</span> <span class="quote-price">{% if entity.pricePerson %}<strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong>{% endif %}</span></div>
 {% endblock %}
