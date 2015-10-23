@@ -9,6 +9,10 @@
   display: block;
   z-index: auto;
 
+  .pdf-layout & {
+    margin-bottom: 1em;
+  }
+
   .page-title {
     position: relative;
     padding-top: 1em;

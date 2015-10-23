@@ -105,23 +105,16 @@
 #site-quote-name {}
 
 #site-quote-title {
-
-  .pdf-layout & {
-    padding: 0.5em 132px 0.5em 0;
-  }
-
+  padding: 0.5em 132px 0.5em 0;
+  margin: 0;
 }
 
 #site-school-logo {
-
-  .pdf-layout & {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 120px;
-    height: auto;
-  }
-
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 120px;
+  height: auto;
 }
 
 #site-summary-details {

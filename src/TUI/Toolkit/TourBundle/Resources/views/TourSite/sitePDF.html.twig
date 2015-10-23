@@ -14,11 +14,13 @@
     {% endif %}
 {% endblock %}
 
+{% block quote_number %}
+    {% trans %}tour.pdf.quoteNumber{% endtrans %} {% if entity.quoteNumber %}{{ entity.quoteNumber }}{% endif %}
+{% endblock %}
+
 {% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
 
 {% block body -%}
-
-    <div id="site-quote-number">{% trans %}tour.pdf.quoteNumber{% endtrans %} {% if entity.quoteNumber %}{{ entity.quoteNumber }}{% endif %}</div>
 
     <div id="site-header" class="quote-view-site-header">
 
