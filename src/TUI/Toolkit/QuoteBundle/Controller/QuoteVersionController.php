@@ -1046,7 +1046,7 @@ class QuoteVersionController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('quote.action.update')));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('quote.actions.update')));
 
         return $form;
     }

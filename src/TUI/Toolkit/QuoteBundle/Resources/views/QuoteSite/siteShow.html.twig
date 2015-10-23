@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block page_title %}
-    <span>{% trans %}quote_site.site_pdf.alternate_quotes{% endtrans %}</span>
+    <span>{% trans %}quote.page_title.show{% endtrans %}</span>
 {% endblock %}
 
 {% block back_link %}
@@ -57,10 +57,10 @@
                 <div id="site-quote-name">{{ entity.quoteReference.institution.name }}</div>
             {% endif %}
 
-            <h2 class="{% if entity.quoteReference.institution.media %}has-school-logo{% endif %} {% if not app.user and brand.media %}has-brand-logo{% endif %}">{{ entity.quoteReference.name }}{% if is_granted("ROLE_BRAND") %}, {{ entity.name }}{% endif %} {% if entity.quoteNumber %}({{ entity.quoteNumber }}){% endif %}</h2>
+            <h2 class="{% if entity.quoteReference.institution.media %}has-school-logo{% endif %} {% if not app.user and brand.media %}has-brand-logo{% endif %}">{{ entity.quoteReference.name }}{% if is_granted("ROLE_BRAND") %}, {{ entity.name }}{% endif %}</h2>
 
-            {% if entity.quoteReference.destination %}
-                <div>{{ entity.quoteReference.destination }}</div>
+            {% if entity.quoteNumber %}
+                <div>{{ entity.quoteNumber }}</div>
             {% endif %}
         </div>
       </div>
@@ -164,7 +164,7 @@
                 {% endif %}
 
                 {% if editable %}
-                    <span id="edit-tabs" class="site-content-blocks-tab status-preview-edit"><i class="fa fa-pencil"></i> {% trans %}quote.actions.edit_tabs% endtrans %}</span>
+                    <span id="edit-tabs" class="site-content-blocks-tab status-preview-edit"><i class="fa fa-pencil"></i> {% trans %}quote.actions.edit_tabs{% endtrans %}</span>
                     <span id="add-new-tab" class="site-content-blocks-tab status-preview-edit"><i class="fa fa-plus-circle"></i> {% trans %}quote.actions.add_tab{% endtrans %}</span>
                 {% endif %}
             </div>
