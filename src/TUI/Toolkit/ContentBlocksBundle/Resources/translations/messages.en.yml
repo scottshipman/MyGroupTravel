@@ -20,6 +20,8 @@ contentBlocks:
           upload: Click to upload
           cancel: Cancel
 
+      label:
+          terms: By uploading these images you certify that you have the right to use them and that they comply with all relevant terms and conditions as contained in our
 
       table:
           label:
