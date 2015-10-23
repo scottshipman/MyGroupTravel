@@ -1384,7 +1384,7 @@ class QuoteVersionController extends Controller
             ->setAction($this->generateUrl('manage_quote_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'button', array(
-                'label' => $this->get('translator')->trans('quote.action.delete'),
+                'label' => $this->get('translator')->trans('quote.actions.delete'),
                 'attr' => array(
                     'class' => 'delete-btn'
                 )
