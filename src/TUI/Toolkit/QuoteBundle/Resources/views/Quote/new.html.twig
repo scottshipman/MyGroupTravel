@@ -1,14 +1,14 @@
 {% extends '::base.html.twig' %}
-{% block title %}Create Quote{% endblock %}
+{% block title %}{% trans %}quote.title.new{% endtrans %}{% endblock %}
 {% block body -%}
-    <h1>Quote creation</h1>
+    <h1>{% trans %}quote.page_title.new{% endtrans %}</h1>
 
     {{ form(form) }}
 
         <ul class="record_actions">
     <li>
         <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quote') }}">
-            <i class="fa fa-arrow-circle-left"></i> Back to the list
+            <i class="fa fa-arrow-circle-left"></i> {% trans %}quote.actions.back{% endtrans %}
         </a>
     </li>
 </ul>

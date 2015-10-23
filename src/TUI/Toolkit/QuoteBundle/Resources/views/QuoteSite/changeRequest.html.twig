@@ -3,13 +3,13 @@
     <div class="request-changes">
         <h4>{{ entity.name }}</h4>
         <ul>
-            <li>Quote Number: {{ entity.quoteNumber }}</li>
-            <li>Departing: {{ entity.departureDate|date(format) }}</li>
-            <li>For {{ entity.duration }}</li>
-            <li>Returning {{ entity.returnDate|date(format) }}</li>
-            <li>Price per person: {% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</li>
+            <li>{% trans %}quote_site.change_request.quote_number{% endtrans %} {{ entity.quoteNumber }}</li>
+            <li>{% trans %}quote_site.change_request.departing{% endtrans %} {{ entity.departureDate|date(format) }}</li>
+            <li>{% trans %}quote_site.change_request.duration{% endtrans %} {{ entity.duration }}</li>
+            <li>{% trans %}quote_site.change_request.returning{% endtrans %} {{ entity.returnDate|date(format) }}</li>
+            <li>{% trans %}quote_site.change_request.price_person{% endtrans %} {% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</li>
             <li>Based on {{ entity.payingPlaces }} paying plus {{ entity.freePlaces }} free places</li>
-            <li><strong>Quote valid until {{ entity.expiryDate|date(format) }}</strong></li>
+            <li><strong>{% trans %}quote_site.change_request.expiry{% endtrans %} {{ entity.expiryDate|date(format) }}</strong></li>
         </ul>
 
         {% if entity.headerBlock %}

@@ -6,7 +6,7 @@
                 <i class="content-block-tab-handle fa fa-arrows"></i>
                 <h4 id="tab-label-{{ tab }}" class="editable-tab">{{ data[0] }}</h4>
                 {% if data[1] | length < 1 %}
-                    <span class="modal-tab-delete icon-label" tabId="{{ tab }}"><i class="content-block-tab-actions fa fa-trash-o"></i> Delete Tab</span>
+                    <span class="modal-tab-delete icon-label" tabId="{{ tab }}"><i class="content-block-tab-actions fa fa-trash-o"></i> {% trans %}quote_site.tab_order.delete_tab{% endtrans %}</span>
                 {% endif %}
             </span>
 
@@ -27,9 +27,9 @@
     </div>
     <div class="submit-button-container">
         <a id="update-tabs" quoteId="{{ entity.id }}" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored reorder-button"
-           href="#"><i class="fa fa-thumbs-o-up"> </i> Submit</a>
+           href="#"><i class="fa fa-thumbs-o-up"> </i> {% trans %}quote_site.tab_order.actions.submit{% endtrans %}</a>
         <a id="close-dialog" quoteId="{{ entity.id }}" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored reorder-button"
-           href="#"><i class="fa fa-ban"> </i> Cancel</a>
+           href="#"><i class="fa fa-ban"> </i> {% trans %}quote_site.tab_order.actions.cancel{% endtrans %}</a>
     </div>
 </div>
 
@@ -143,7 +143,7 @@
         }, {
             width: '20em',
             onblur: "submit",
-            tooltip: 'Click to edit'
+            tooltip: '{% trans %}quote_site.tab_order.editable.tooltip{% endtrans %}'
         });
     })
     ;

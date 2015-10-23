@@ -4,7 +4,7 @@ quote:
         edit: Edit Quote
         index: Quote Dashboard
         new: Create New Quote
-        show: Quote
+        show: Site View
         layout_auth: My Tours
         layout_anon: Quote Login
         deleted: Quote Dashboard - Deleted
@@ -12,9 +12,9 @@ quote:
 
     page_title:
         edit: Edit Quote
-        index: Quote
+        index: Quote Dashboard - Active
         new: Create New Quote
-        show: Quote
+        show: Site View
         layout_auth: My Tours
         layout_anon: Quote Login
         deleted: Quote Dashboard - Deleted
@@ -22,6 +22,8 @@ quote:
 
     actions:
         back: Back to the list
+        back_dash: Back to the Dashboard
+        back_show: Back to Show
         edit: Edit
         update: Update
         create: Create
@@ -34,6 +36,12 @@ quote:
         accept_form: Go
         clone: Save as Clone
         restore: Restore
+        edit_mode: Switch to Edit Mode
+        print: Print
+        pdf: PDF
+        add_header: Add Header Slideshow
+        edit_tabs: Edit Tabs
+        add_tab: Add New Tab
 
 
     table:
@@ -86,6 +94,7 @@ quote:
         deleted: Deleted Quotes
         current:  Current Quotes
         converted: Converted Quotes
+        alternate: Alternate Quotes
 
     media:
         label: Click to upload
@@ -101,12 +110,13 @@ quote:
     email:
         change_request:
             subject: Quote Change Request For
+            intro: You have a request for a change to your quote
             institution_name: "Institution Name:"
             tour_name: "Tour Name:"
             quote_number: "Quote Number:"
             organizer: "Organizer Name / Email:"
-            additions: "Additions:"
-            cta: View Quote
+            changes: "Additions:"
+            cta: Edit your Quote
             link_text: "You can also paste the link below straight into your browser window:"
         liked:
             subject: Someone has like the Quote with Quote Number -
@@ -119,7 +129,12 @@ quote:
             cta: View Quote
             link_text: "You can also paste the link below straight into your browser window:"
 
-
+    footer:
+        salesAgent: "Primary Business Contact: "
+        price_person: "Price per person: "
+        actions:
+            expired: Expired
+            like: Like Quote
 
     form:
 
@@ -172,13 +187,58 @@ quote:
             pricePerson: Price per Person
             currency: Currency
             welcomeMsg: Summary Message
-
-
-
-
-
-    
-
-
+quote_site:
+    accepted:
+        quote_number: "Quote Number "
+        departing: "Departing "
+        duration: "For "
+        returning: "Returning "
+        price_person: "Price per person "
+        expiry: "Quote valid until "
+    change_request:
+        quote_number: "Quote Number "
+        departing: "Departing "
+        duration: "For "
+        returning: "Returning "
+        price_person: "Price per person "
+        expiry: "Quote valid until "
+    quote_sibling:
+        intro: "Alternate quotes for "
+        related: "Other Related Quotes for "
+        default_name: this tour
+        tour_name: Tour Name
+        quote_number: Quote Number
+        departing: Departure date
+        created: Date created
+        price_person: Price per person
+    quote_summary:
+        departing: "Departing: "
+        duration: "Duration: "
+        returning: "Returning: "
+        board_basis: "Board basis: "
+        transport: "Transport: "
+        price_person: "Price per person: "
+        expiry: "Quote valid until "
+        actions:
+            like: Like Quote
+            expired: Expired
+            converted: Converted
+            request_change: Request Changes
+            share: Share this quote with others
+    site _pdf:
+        quote_number: "Quote Number: "
+        alternate_quotes: Alternate Quotes
+        organizer: "Tour Organizer: "
+        price_person: "Price per person: "
+    site_prompt:
+        quote_number: Enter your Quote Number
+        help_text: "You'll find this on your quote email."
+    tab_order:
+        delete_tab: Delete Tab
+        actions:
+            submit: Submit
+            cancel: Cancel
+        editable:
+            tooltip: Click to edit
 
 
