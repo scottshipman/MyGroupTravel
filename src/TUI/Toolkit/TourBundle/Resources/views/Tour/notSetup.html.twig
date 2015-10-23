@@ -26,7 +26,7 @@
             <li>
                 <strong>{% trans %}tour.not_setup.amounts_and_dates{% endtrans %}</strong>
                 <p>{% trans %}tour.not_setup.suggested_price{% endtrans %}</p>
-                <div class="paymenttasks" data-prototype="{{ form_widget(setup_form.paymentTasksPassenger.vars.prototype)|e }}">
+                <div style="margin-bottom: 20px" class="paymenttasks" data-prototype="{{ form_widget(setup_form.paymentTasksPassenger.vars.prototype)|e }}">
                 {# iterate over each existing paymenttask and render its  fields:  #}
                     {% for paymentTaskPassenger in setup_form.paymentTasksPassenger %}
                         <ul class="payment_task" taskid = "{{ paymentTaskPassenger.vars.value.id }}">
@@ -41,14 +41,14 @@
                 <strong>{% trans %}tour.not_setup.how_to_pay{% endtrans %}</strong>
                 <p>{% trans %}tour.not_setup.preferred_payment{% endtrans %}</p>
                 <div class="payment-types">
-                    {{ form_widget(setup_form.cashPayment) }}
+                    {{ form_widget(setup_form.cashPayment, {'label' : 'tour.form.tour_setup.cash'|trans}) }}
                     {{ form_widget(setup_form.cashPaymentDescription) }}
-                    {{ form_widget(setup_form.bankTransferPayment) }}
+                    {{ form_widget(setup_form.bankTransferPayment, {'label' : 'tour.form.tour_setup.bank'|trans}) }}
                     {{ form_widget(setup_form.bankTransferPaymentDescription) }}
-                    {{ form_widget(setup_form.onlinePayment) }}
+                    {{ form_widget(setup_form.onlinePayment, {'label' : 'tour.form.tour_setup.online'|trans}) }}
                     {{ form_widget(setup_form.onlinePaymentDescription) }}
                     {{ form_widget(setup_form.otherPayment) }}
-                    {{ form_widget(setup_form.otherPaymentDescription) }}
+                    {{ form_widget(setup_form.otherPaymentDescription, {'label' : 'tour.form.tour_setup.other'|trans}) }}
                 </div>
             </li>
         </ol>

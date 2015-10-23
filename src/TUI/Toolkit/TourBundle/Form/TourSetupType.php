@@ -50,7 +50,6 @@ class TourSetupType extends AbstractType
             ))
             ->add('cashPayment', 'checkbox', array(
                 'required' => false,
-                'label' => 'tour.form.tour_setup.cash',
             ))
             ->add('cashPaymentDescription', 'textarea', array(
                 'required' => false,
@@ -58,7 +57,6 @@ class TourSetupType extends AbstractType
             ))
             ->add('bankTransferPayment', 'checkbox', array(
                 'required' => false,
-                'label' => 'tour.form.tour_setup.bank',
             ))
             ->add('bankTransferPaymentDescription', 'textarea', array(
                 'required' => false,
@@ -66,7 +64,6 @@ class TourSetupType extends AbstractType
             ))
             ->add('onlinePayment', 'checkbox', array(
                 'required' => false,
-                'label' => 'tour.form.tour_setup.online',
             ))
             ->add('onlinePaymentDescription', 'textarea', array(
                 'required' => false,
@@ -74,7 +71,6 @@ class TourSetupType extends AbstractType
             ))
             ->add('otherPayment', 'checkbox', array(
                 'required' => false,
-                'label' => 'tour.form.tour_setup.other',
             ))
             ->add('otherPaymentDescription', 'textarea', array(
                 'required' => false,
