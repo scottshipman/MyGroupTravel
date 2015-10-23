@@ -1,9 +1,9 @@
 {# CTA buttons above the quote grid #}
 <ul class="record_actions">
     <li>
-        <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quote_new') }}"><i class="fa fa-plus-circle"></i> Create a new Quote</a>
+        <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quote_new') }}"><i class="fa fa-plus-circle"></i> {% trans %}quote.actions.create_new{% endtrans %}</a>
     </li>
     <li>
-        <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quote_newtemplate') }}"><i class="fa fa-plus-circle"></i> Create a new Template</a>
+        <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quote_newtemplate') }}"><i class="fa fa-plus-circle"></i> {% trans %}quote.actions.create_new_template{% endtrans %}</a>
     </li>
 </ul>

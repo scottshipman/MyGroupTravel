@@ -5,7 +5,7 @@
 <div class = "tour-edit mdl-card mdl-shadow--2dp">
     {% set bgpath = '' %}
     {% if quote.headerBlock %}
-        {% for media in quote.headerBlock.media %}
+        {% for media in quote.headerBlock.mediaWrapper %}
             {% if loop.first %}
                 {% set bgpath = app.request.uriForPath( asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) )   %}
             {% endif %}
@@ -28,7 +28,7 @@
         <ul>
             <li>
                 <div class="profile-list-item seperator">
-                    {% if quote.currency %}{{ quote.currency.htmlSymbol | raw}}{% endif %}{% if quote.pricePerson %}{{ quote.pricePerson }}{% endif %}<br /><label>{% trans %}user.profile.my_quotes.price{% endtrans %}</label>
+                    {% if quote.currency %}{{ quote.currency.htmlSymbol | raw}}{% endif %}{% if quote.pricePerson %}{{ quote.pricePerson }}{% else %}{% trans %}user.profile.my_quotes.no_price{% endtrans %} {% endif %}<br /><label>{% trans %}user.profile.my_quotes.price{% endtrans %}</label>
                 </div>
             </li>
             <li>

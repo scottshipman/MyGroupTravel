@@ -27,25 +27,25 @@
                                     </center>
                                     <h4>{{ entity.name }}</h4>
 
-                                    <p>Institution Name: {{ entity.quoteReference.institution }}</p>
+                                    <p>{% trans %}quote.email.accepted.institution_name{% endtrans %} {{ entity.quoteReference.institution }}</p>
 
-                                    <p>Tour Name : {{ entity.name }}</p>
+                                    <p>{% trans %}quote.email.accepted.tour_name{% endtrans %} {{ entity.name }}</p>
 
-                                    <p>Quote Number: {{ entity.quoteNumber }}</p>
+                                    <p>{% trans %}quote.email.accepted.quote_number{% endtrans %} {{ entity.quoteNumber }}</p>
 
-                                    <p>Organizer Name/Email: {{ entity.quoteReference.organizer.firstName }} {{ entity.quoteReference.organizer.lastName }} {{ entity.quoteReference.organizer.email }}</p>
+                                    <p>{% trans %}quote.email.accepted.organizer{% endtrans %} {{ entity.quoteReference.organizer.firstName }} {{ entity.quoteReference.organizer.lastName }} {{ entity.quoteReference.organizer.email }}</p>
 
                                     {% if additional %}
-                                        <p><strong>Additions:</strong></p>
+                                        <p><strong>{% trans %}quote.email.accepted.additions{% endtrans %}</strong></p>
                                         <p>{{ additional }}</p>
                                     {% endif %}
                                     <center>
                                         <a style="text-decoration: none; color:#fff; display: block; width: 40%; padding: 20px; margin: 20px auto; background-color:{{ brand.primaryColor }}; text-align: center;"
-                                           href="{{ absolute_url("/manage/quoteversion/" ~ entity.id ~ "/show") }}">View Quote</a>
+                                           href="{{ absolute_url("/manage/quoteversion/" ~ entity.id ~ "/show") }}">{% trans %}quote.email.accepted.cta{% endtrans %}</a>
                                     </center>
                                     <hr>
                                     <p style="text-align: center; color: #C7C3C5;">
-                                        You can also paste the link below straight into your browser window:
+                                        {% trans %}quote.email.accepted.link_text{% endtrans %}
                                     </p></br>
                                     <a style="text-decoration: none; display: block; width: auto; margin: 0 auto; text-align: center; color:{{ brand.primaryColor }};"
                                        href="{{ absolute_url("/manage/quoteversion/" ~ entity.id ~ "/show") }}">{{ absolute_url("/manage/quoteversion/" ~ entity.id ~ "/show") }}</a></br>
