@@ -6,6 +6,7 @@
 
     <div class="existing-media-wrapper sortable-images">
         <div class="mdl-label-mimic"><label>{% trans %}contentBlocks.upload_form.title{% endtrans %}</label></div>
+        <p>{% trans %}contentBlocks.label.terms{% endtrans %} <a href="">Terms of Use.</a></p>
         {% if entity.mediaWrapper %}
             {% for mediaWrapper in collection %}
                 {% for media in mediaWrapper.media %}
