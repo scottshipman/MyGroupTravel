@@ -211,11 +211,6 @@ td .layout-icons.image_bottom {
 
 .content-block-media {
   @include clear-fix();
-
-  img {
-    float: left;
-  }
-
 }
 
 .content-block-layout-image_right,
