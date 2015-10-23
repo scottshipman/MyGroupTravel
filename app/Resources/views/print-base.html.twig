@@ -13,8 +13,6 @@
         <link rel="stylesheet" type="text/css" href="{{ app.request.uriForPath( asset_url ) }}"/>
     {% endstylesheets %}
 
-    {{ render(controller('BrandBundle:Default:colors')) }}
-
 </head>
 
 <body class="user_0">
@@ -31,6 +29,10 @@
             <h1 id="site-quote-title">
                 {% block page_title %}{% endblock %}
             </h1>
+
+            <div id="site-quote-number">
+                {% block quote_number %}{% endblock %}
+            </div>
         </div>
 
         <div class="content">
