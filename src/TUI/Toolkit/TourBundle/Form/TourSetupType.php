@@ -40,7 +40,7 @@ class TourSetupType extends AbstractType
 
         $builder
             ->add('pricePersonPublic', 'number', array(
-                'label' => 'Price Per Person'
+                'label' => 'tour.form.tour_setup.price'
             ))
             ->add('paymentTasksPassenger', 'collection', array(
                 'type' => new PaymentTaskType($this->locale),
@@ -50,35 +50,31 @@ class TourSetupType extends AbstractType
             ))
             ->add('cashPayment', 'checkbox', array(
                 'required' => false,
-                'label' => 'Cash / Cheque',
             ))
             ->add('cashPaymentDescription', 'textarea', array(
                 'required' => false,
-                'label' => 'Optional payment instructions',
+                'label' => 'tour.form.tour_setup.instructions',
             ))
             ->add('bankTransferPayment', 'checkbox', array(
                 'required' => false,
-                'label' => 'Bank Transfer',
             ))
             ->add('bankTransferPaymentDescription', 'textarea', array(
                 'required' => false,
-                'label' => 'Optional payment instructions',
+                'label' => 'tour.form.tour_setup.instructions',
             ))
             ->add('onlinePayment', 'checkbox', array(
                 'required' => false,
-                'label' => 'Online Payment',
             ))
             ->add('onlinePaymentDescription', 'textarea', array(
                 'required' => false,
-                'label' => 'Optional payment instructions',
+                'label' => 'tour.form.tour_setup.instructions',
             ))
             ->add('otherPayment', 'checkbox', array(
                 'required' => false,
-                'label' => 'Other',
             ))
             ->add('otherPaymentDescription', 'textarea', array(
                 'required' => false,
-                'label' => 'Optional payment instructions'
+                'label' => 'tour.form.tour_setup.instructions'
             ))
         ;
     }

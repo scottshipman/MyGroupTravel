@@ -1,31 +1,31 @@
 {% extends '::base.html.twig' %}
 
 {% block body -%}
-    <h1>PaymentTask</h1>
+    <h1>{% trans %}tour.page_title.payment_task.index{% endtrans %}</h1>
 
     <table class="record_properties">
         <tbody>
             <tr>
-                <th>Id</th>
+                <th>{% trans %}tour.page_title.payment_task.show.id{% endtrans %}</th>
                 <td>{{ entity.id }}</td>
             </tr>
-                <th>Name</th>
+                <th>{% trans %}tour.page_title.payment_task.show.name{% endtrans %}</th>
                 <td>{{ entity.name }}</td>
             </tr>
             <tr>
-                <th>Value</th>
+                <th>{% trans %}tour.page_title.payment_task.value{% endtrans %}</th>
                 <td>{{ entity.value }}</td>
             </tr>
             <tr>
-                <th>Duedate</th>
+                <th>{% trans %}tour.page_title.payment_task.duedate{% endtrans %}</th>
                 <td>{{ entity.dueDate|date('Y-m-d H:i:s') }}</td>
             </tr>
             <tr>
-                <th>Paiddate</th>
+                <th>{% trans %}tour.page_title.payment_task.show.paiddate{% endtrans %}</th>
                 <td>{{ entity.paidDate|date('Y-m-d H:i:s') }}</td>
             </tr>
             <tr>
-                <th>Type</th>
+                <th>{% trans %}tour.page_title.payment_task.show.type{% endtrans %}</th>
                 <td>{{ entity.type }}</td>
             </tr>
         </tbody>
@@ -34,12 +34,12 @@
         <ul class="record_actions">
     <li>
         <a href="{{ path('paymenttask') }}">
-            Back to the list
+            {% trans %}tour.actions.back{% endtrans %}
         </a>
     </li>
     <li>
         <a href="{{ path('paymenttask_edit', { 'id': entity.id }) }}">
-            Edit
+            {% trans %}tour.actions.edit{% endtrans %}
         </a>
     </li>
     <li>{{ form(delete_form) }}</li>

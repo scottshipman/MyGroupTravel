@@ -1,0 +1,296 @@
+#TourBundle/Resources/translations/messages.en.yml
+tour:
+    title:
+        edit: Edit Tour
+        index: Tour Dashboard
+        index_active: Tour Dashboard - Active
+        new: Create New Tour
+        show: Tour
+        deleted: Tour Dashboard - Deleted
+        restore: Restore
+        site_view: Site View
+        back_list: Back to List
+        back_dashboard: Back to Dashboard
+
+    page_title:
+        edit: Edit Tour
+        index: Tour
+        index_active: Tour Dashboard - Active
+        new: Create New Tour
+        show: Tour
+        site_view: Site View
+        dashboard: Dashboard
+        deleted: Tour Dashboard - Deleted
+        payment_task:
+            edit: PaymentTask edit
+            new: PaymentTask create
+            index: PaymentTask
+            list: PaymentTask List
+            show:
+                id: Id
+                name: Name
+                value: Value
+                duedate: Due Date
+                paiddate: Paid Date
+                type: Type
+                string: String
+                actions: Actions
+
+    actions:
+        back: Back to the list
+        back_dashboard: Back to Dashboard
+        edit: Edit
+        update: Update
+        create: Create
+        delete: Delete
+        create_new: Create a New Tour
+        password: Set Password
+        edit_profile: Edit My Profile
+        notify: Send User a Notification
+        send: Send
+        go: Go
+        create_new_paymentTask: Create New Entry
+        back_show: Back to Show
+        promote: Promote
+        edit_mode: Switch to Edit Mode
+        print: Print
+        pdf: PDF
+        download_promo: Download Promo Materials
+        email_organizer: Email/Notify Organizer
+        add_header: Add Header Slideshow
+        edit_tabs: Edit Tabs
+        add_tab: Add New Tab
+        add_block: Add Block
+        save: Save
+
+    menu:
+        my_tours: My Tours
+        preview: Preview Tour
+
+    not_completed:
+        get_started: Get Started
+        signup: Sign Up
+        payment_settings: Set up your payment settings
+        next: Next
+        promote: Promote Your Tour
+        personalize: Personalize your website
+
+    not_setup:
+       get_started: Get Started
+       signup: Sign Up
+       payment_settings: Set up your payment settings
+       how_much: How much do you want ot charge each passenger?
+       pass_price: This will be the per passenger price shown on the tour prmotional website.  You can increase the price or reduce it if you are fundraising
+       amounts_and_dates: Set payment amounts and due dates
+       suggested_price: This is the suggested per passenger deposit price.  You can increase the price or reduce it if you are fundraising.
+       how_to_pay: How do you want passengers to pay?
+       preferred_payment: Select your preferred payment methods
+       next: Next
+       personalize: Personalize your website
+       promote: Promote Your Tour
+
+    show:
+       summary: Tour Summary
+       institution: Institution
+       departure: Departure Date
+       passengers: Number Of Passengers
+       price: Price Per Passenger
+       organizers: Organizers
+       footer:
+            intro: Tour Organizer:
+            price: Price per person:
+
+    contact_organizer:
+        name: Tour Name:
+        reference: Reference:
+        institution: Institution:
+        destination: Destination:
+        share: Share this Tour with others
+        message: Your Message
+        to: To:
+        message_text: Message Text:
+
+    dashboard:
+        status: Status
+        due: due by
+        no_payments: No payments due at this time
+        na: N/A
+        signups: Sign-ups
+        days: Days To Go
+        passport_data: Collect Passport Data By
+        collecting: Collecting
+        outstanding: Outstanding
+        medical_data: Collect Medical Data By
+        dietary_data: Collect Dietary Data By
+        booking_form: Download Booking Form
+        booking_form_copy: Download the booking form, complete it, and send it in with the correct deposit
+        download: Download
+        todo: ToDo
+        completed: Completed
+        completed_passport_data: Collect Passport Data
+        completed_medical_data: Collect Medical Data
+        completed_dietary_data: Collect Dietary Data
+
+    edit:
+        summary: Summary
+        details: Details
+        schedule: Payment Schedule
+        deadlines: Task Deadlines
+        promotional_content: Upload Promotional Content
+        no_assets: No assets uploaded.
+        promo_assets: Upload Promotional Assets
+        cannot_upload: Cannot Upload Any More Assets
+
+    pdf:
+        quoteNumber: Quote Number:
+        footer:
+            price: Price per person:
+
+    prompt:
+        number: Enter your Quote Number
+        email: You'll find this on your quote email.
+
+    site_show_tab_order:
+        delete: Delete Tab
+        submit: Submit
+        cancel: Cancel
+
+    tour_summary:
+        signup: Sign Me Up
+        expired: Expired
+        departing: Departing:
+        duration: Duration:
+        returning: Returning:
+        board: Board Basis:
+        transport: Transport:
+        price: Price per person:
+        based: Based on
+        valid: Tour valid until
+        paying: paying
+        and: and
+        free: free
+        places: places
+
+
+    site_show:
+        footer:
+            intro: Primary Business Contact:
+            price: Price per person:
+
+
+
+    table:
+        label:
+            name: Name
+            action: Actions
+            visible: Visible
+            phone: Phone Number
+            created: Created
+            enabled: Enabled
+            last_login: Last Login
+            avatar: Avatar
+
+        actions:
+            view: View
+            edit: Edit
+
+    flash:
+        save: Tour Saved -
+        not_saved: Tour Not Saved -
+        delete: Tour deleted -
+        restore: Tour Restored -
+        registration_notification: A Notification was sent to
+        lock: Tour Lock has been toggled
+        warning:
+            expired: This quote has expired. Please contact
+            at: at
+        no_match:  The Quote Number did not match our records for this requested Quote. Please try again or consult your Sales Contact.
+
+    grid:
+        no_result: There are no tours to show. Please check your filter settings and try again.
+        no_result-deleted: There are no Deleted Tours to show. Please check your filter settings and try again.
+        export: Tours as CSV
+        export_deleted: Deleted Tours as CSV
+        filter:
+            title:
+                role: Role
+                email: Email
+                enabled: Enabled
+                ba_lname: Primary Business Admin (Last Name)
+                o_lname: Organizer (Last Name)
+        column:
+            title:
+                last_login: Last Login
+
+    tabs:
+        deleted: Deleted Tours
+        current:  Current Tours
+        active: Active Tours
+
+
+    media:
+        label: Click to upload
+
+    email:
+        registration:
+            subject: Toolkit Registration Confirmation
+        password_reset:
+            subject: Toolkit Password Reset
+            action: Set Password
+        setup:
+            subject: Set Up Your Tour
+    form:
+        honorific: Title
+        fname: First Name
+        lname: Last Name
+        email: Email Address
+        phone: Phone Number
+        media: Avatar
+        password: Password
+        contact_organizer:
+            message: Message to the organiser
+        payment_task:
+            value: Amount
+            date: Due Date (DD-MM-YYYY)
+        tour_setup:
+            price: Price Per Person
+            cash: Cash / Cheque
+            instructions: Optional payment instructions
+            bank: Bank Transfer
+            online: Online Payment
+            other: Other
+        tour_summary:
+            expiration: Tour Expiration? (DD-MM-YYYY)
+            departure: Departure Date (DD-MM-YYYY)
+            return: Return Date (DD-MM-YYYY)
+            duration: Duration
+            board: Board Basis
+            free_places: Free Places
+            paying_places: Paying Places
+            price: Price per Person
+            placeholder: Select
+            welcomeMsg: Summary Message
+        tour:
+            placeholder: Select
+            name: Tour Name
+            expiration: Quote Expiration? (DD-MM-YYYY)
+            sales_agent: Primary Business Admin
+            second_contact: Other Business Admin
+            destination: Destination
+            departure: Departure Date (DD-MM-YYYY)
+            return: Return Date (DD-MM-YYYY)
+            board: Board Basis
+            passenger_date: Passenger Info Due Date (DD-MM-YYYY)
+            passport_date: Passport Info Due Date (DD-MM-YYYY)
+            medical_date: Medical Info Due Date (DD-MM-YYYY)
+            dietary_date: Dietary Info Due Date (DD-MM-YYYY)
+
+
+    payment_task:
+        actions:
+            create: Create
+            update: Update
+            delete: Delete
+
+
+

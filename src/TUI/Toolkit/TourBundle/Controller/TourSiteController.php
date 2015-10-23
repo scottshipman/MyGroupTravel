@@ -97,7 +97,7 @@ class TourSiteController extends Controller
     // send warning messages
     $warningMsg = array();
     if(Null!==$entity->getExpiryDate() && $entity->getExpiryDate() < date($date_format)){
-      $warningMsg[] = "This quote has expired. Please contact $entity>getQuoteReference()->getSalesAgent()->getFirstName()   $entity>getQuoteReference()->getSalesAgent()->getLasttName()  at $entity>getQuoteReference()->getSalesAgent()->getEmail()";
+      $warningMsg[] = $this->get('translator')->trans('tour.flash.warning.expired') . " " . $entity->getQuoteReference()->getSalesAgent()->getFirstName() ." ".  $entity->getQuoteReference()->getSalesAgent()->getLasttName() . " " .  $this->get('translator')->trans('tour.flash.warning.at') . " " . $entity->getQuoteReference()->getSalesAgent()->getEmail();
     }
 
     // Record Views
@@ -129,7 +129,7 @@ class TourSiteController extends Controller
       'method' => 'POST',
     ));
 
-    $form->add('submit', 'submit', array('label' => 'Go'));
+    $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('tour.actions.go')));
 
     return $form;
   }
@@ -159,7 +159,7 @@ class TourSiteController extends Controller
       return $this->redirect($this->generateUrl('tour_site_show', array('id' => $id, 'quoteNumber' => $realQuoteNumber)));
     } else {
     //send back to form page
-      $this->get('session')->getFlashBag()->add('notice', 'The Quote Number did not match our records for this requested Quote. Please try again or consult your Sales Contact.');
+      $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tour.flash.no_match'));
       return $this->redirect($this->generateUrl('tour_site_action_show', array('id' => $id)));
   }
 
@@ -249,7 +249,7 @@ class TourSiteController extends Controller
       // send warning messages
       $warningMsg = array();
       if($entity->getExpiryDate() < date($date_format)){
-        $warningMsg[] = "This tour has expired. Please contact $entity-->getSalesAgent()->getFirstName()   $entity-->getSalesAgent()->getLastName()  at $entity-->getSalesAgent()->getEmail()";
+        $warningMsg[] = $this->get('translator')->trans('tour.flash.warning.expired') . " " . $entity->getQuoteReference()->getSalesAgent()->getFirstName() ." ".  $entity->getQuoteReference()->getSalesAgent()->getLasttName() . " " .  $this->get('translator')->trans('tour.flash.warning.at') . " " . $entity->getQuoteReference()->getSalesAgent()->getEmail();
       }
 
       $request = $this->getRequest();
@@ -342,7 +342,7 @@ class TourSiteController extends Controller
       )
     ));
 
-    $form->add('submit', 'submit', array('label' => 'Update'));
+    $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('tour.actions.update')));
 
     return $form;
   }

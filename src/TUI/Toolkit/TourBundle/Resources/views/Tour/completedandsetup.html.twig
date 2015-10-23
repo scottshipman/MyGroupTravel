@@ -25,7 +25,7 @@
 
     <div class="tour-edit mdl-card mdl-shadow--2dp">
         <div class="mdl-card__title">
-            <h3 class="mdl-card__title-text">Status</h3>
+            <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.status{% endtrans %}</h3>
             {#<span class="tour-dashboard-cta status-block"><a class=""><i class="fa fa-ellipsis-v"></i></a></span>#}
         </div>
         <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
@@ -36,7 +36,7 @@
                                 <li>
                                     <div class="profile-list-item item-1 tour-dashboard">
                                         <span class="date-span">{% if entity.currency %}<p id="currency" style="display: inline; font-size: inherit;">{{ entity.currency.htmlSymbol | raw }}</p>{% endif %}{{ paymentTask.value * entity.payingPlaces }}</span>
-                                        <label>{{ paymentTask.name|capitalize }} due by {{ paymentTask.dueDate|date(shortFormat) }}</label>
+                                        <label>{{ paymentTask.name|capitalize }} {% trans %}tour.dashboard.due{% endtrans %} {{ paymentTask.dueDate|date(shortFormat) }}</label>
                                     </div>
                                 </li>
                         {% endif %}
@@ -44,34 +44,34 @@
                 {% elseif entity.paymentTasks is empty  %}
                 <li>
                     <div class="profile-list-item item-1 tour-dashboard">
-                        <span class="date-span">N/A</span>
-                        <label>No payments due at this time</label>
+                        <span class="date-span">{% trans %}tour.dashboard.na{% endtrans %}</span>
+                        <label>{% trans %}tour.dashboard.no_payments{% endtrans %}</label>
                     </div>
                 </li>
                 {% endif %}
                 <li>
                     <div class="profile-list-item item-2 tour-dashboard">
                         <span class="date-span">{{ entity.payingPlaces }}</span>
-                        <label>Sign-ups</label>
+                        <label>{% trans %}tour.dashboard.signups{% endtrans %}</label>
                     </div>
                 </li>
                 <li>
                     <div class="profile-list-item item-3 tour-dashboard">
                         <span class="date-span">{{ dtgFinal }}</span>
-                        <label>Days To Go</label>
+                        <label>{% trans %}tour.dashboard.days{% endtrans %}</label>
                     </div>
                 </li>
             </ul>
         </div>
     </div>
 
-    <h5>ToDo</h5>
+    <h5>{% trans %}tour.dashboard.todo{% endtrans %}</h5>
     {% if entity.passportDate != null %}
         {% if entity.passPortDate|date(shortFormat) > "now"|date(shortFormat) %}
         <div class="tour-edit mdl-card mdl-shadow--2dp">
             <a class ="dashboard-titles" href="#">
                 <div class="mdl-card__title">
-                    <h3 class="mdl-card__title-text">Collect Passport Data By {{ entity.passPortDate|date(shortFormat) }}</h3>
+                    <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.passport_data{% endtrans %} {{ entity.passPortDate|date(shortFormat) }}</h3>
                     <span class="tour-dashboard-cta"><i class="fa fa-arrow-right"></i></span>
                 </div>
             </a>
@@ -80,19 +80,19 @@
                     <li>
                         <div class="profile-list-item item-1 tour-dashboard">
                             <span class="date-span">0</span>
-                            <label>Collecting</label>
+                            <label>{% trans %}tour.dashboard.collecting{% endtrans %}</label>
                         </div>
                     </li>
                     <li>
                         <div class="profile-list-item item-2 tour-dashboard">
                             <span class="date-span">60</span>
-                            <label>Outstanding</label>
+                            <label>{% trans %}tour.dashboard.outstanding{% endtrans %}</label>
                         </div>
                     </li>
                     <li>
                         <div class="profile-list-item item-3 tour-dashboard">
                             <span class="date-span">{{ passDtgFinal }}</span>
-                            <label>Days To Go</label>
+                            <label>{% trans %}tour.dashboard.days{% endtrans %}</label>
                         </div>
                     </li>
                     <li>
@@ -108,7 +108,7 @@
 
             <a class ="dashboard-titles" href="#">
                 <div class="mdl-card__title">
-                    <h3 class="mdl-card__title-text">Collect Medical Data By {{ entity.medicalDate|date(shortFormat) }}</h3>
+                    <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.medical_data{% endtrans %} {{ entity.medicalDate|date(shortFormat) }}</h3>
                     <span class="tour-dashboard-cta"><i class="fa fa-arrow-right"></i></span>
                 </div>
             </a>
@@ -117,19 +117,19 @@
                     <li>
                         <div class="profile-list-item item-1 tour-dashboard">
                             <span class="date-span">0</span>
-                            <label>Collecting</label>
+                            <label>{% trans %}tour.dashboard.collecting{% endtrans %}</label>
                         </div>
                     </li>
                     <li>
                         <div class="profile-list-item item-2 tour-dashboard">
                             <span class="date-span">60</span>
-                            <label>Outstanding</label>
+                            <label>{% trans %}tour.dashboard.outstanding{% endtrans %}</label>
                         </div>
                     </li>
                     <li>
                         <div class="profile-list-item item-3 tour-dashboard">
                             <span class="date-span">{{ medDtgFinal }}</span>
-                            <label>Days To Go</label>
+                            <label>{% trans %}tour.dashboard.days{% endtrans %}</label>
                         </div>
                     </li>
                     <li>
@@ -145,7 +145,7 @@
 
             <a class ="dashboard-titles" href="#">
                 <div class="mdl-card__title">
-                    <h3 class="mdl-card__title-text">Collect Dietary Data By {{ entity.dietaryDate|date(shortFormat) }}</h3>
+                    <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.dietary_data{% endtrans %} {{ entity.dietaryDate|date(shortFormat) }}</h3>
                     <span class="tour-dashboard-cta"><i class="fa fa-arrow-right"></i></span>
                 </div>
             </a>
@@ -154,19 +154,19 @@
                     <li>
                         <div class="profile-list-item item-1 tour-dashboard">
                             <span class="date-span">0</span>
-                            <label>Collecting</label>
+                            <label>{% trans %}tour.dashboard.collecting{% endtrans %}</label>
                         </div>
                     </li>
                     <li>
                         <div class="profile-list-item item-2 tour-dashboard">
                             <span class="date-span">60</span>
-                            <label>Outstanding</label>
+                            <label>{% trans %}tour.dashboard.outstanding{% endtrans %}</label>
                         </div>
                     </li>
                     <li>
                         <div class="profile-list-item item-3 tour-dashboard">
                             <span class="date-span">{{ dietDtgFinal }}</span>
-                            <label>Days To Go</label>
+                            <label>{% trans %}tour.dashboard.days{% endtrans %}</label>
                         </div>
                     </li>
                     <li>
@@ -205,23 +205,23 @@
         <div class="tour-edit mdl-card mdl-shadow--2dp">
 
             <div class="mdl-card__title">
-                <h3 class="mdl-card__title-text">Download Booking Form</h3>
+                <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.booking_form{% endtrans %}</h3>
             </div>
             <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
                 <div class="mdl-card__supporting-text">
-                    <p style="font-size: inherit;">Download the booking form, complete it, and send it in with the correct deposit</p>
-                    <a class="add-organizer mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#"><i class="fa fa-download"></i>Download</a>
+                    <p style="font-size: inherit;">{% trans %}tour.dashboard.booking_form_copy{% endtrans %}</p>
+                    <a class="add-organizer mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#"><i class="fa fa-download"></i>{% trans %}tour.dashboard.download{% endtrans %}</a>
                 </div>
             </div>
         </div>
 
 {% endif %}
-    <h5>Completed</h5>
+    <h5>{% trans %}tour.dashboard.completed{% endtrans %}</h5>
     {% if entity.passportDate != null %}
         {% if entity.passPortDate|date(shortFormat) < "now"|date(shortFormat) %}
             <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
                  <div class="mdl-card__title">
-                    <h3 class="mdl-card__title-text">Collect Passport Data</h3>
+                    <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.completed_passport_data{% endtrans %}</h3>
                     <span class="tour-dashboard-cta"><i class="fa fa-check"></i></span>
                 </div>
             </div>
@@ -232,7 +232,7 @@
         {% if entity.medicalDate|date(shortFormat) < "now"|date(shortFormat) %}
             <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
                 <div class="mdl-card__title">
-                    <h3 class="mdl-card__title-text">Collect Medical Data</h3>
+                    <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.completed_medical_data{% endtrans %}</h3>
                     <span class="tour-dashboard-cta"><i class="fa fa-check"></i></span>
                 </div>
             </div>
@@ -243,7 +243,7 @@
         {% if entity.dietaryDate|date(shortFormat) > "now"|date(shortFormat) %}
             <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
                 <div class="mdl-card__title">
-                    <h3 class="mdl-card__title-text">Collect Dietary Data</h3>
+                    <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.completed_dietary_data{% endtrans %}</h3>
                     <span class="tour-dashboard-cta"><i class="fa fa-check"></i></span>
                 </div>
             </div>
