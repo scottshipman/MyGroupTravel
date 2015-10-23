@@ -199,7 +199,7 @@ tour:
         not_saved: Tour Not Saved -
         delete: Tour deleted -
         restore: Tour Restored -
-        registration_notification: A Notification was sent to
+        registration_notification: A Notification was sent to -
         lock: Tour Lock has been toggled
         warning:
             expired: This quote has expired. Please contact

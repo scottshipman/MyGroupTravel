@@ -1288,7 +1288,7 @@ class TourController extends Controller
         $em->persist($entity);
         $em->flush();
         $this->get('mailer')->send($message);
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tour.flash.registration_confirmation'). $organizerEmail);
+        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tour.flash.registration_notification') . " " . $organizerEmail);
 
 
         return $this->redirect($this->generateUrl('manage_tour'));
