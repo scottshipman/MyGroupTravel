@@ -3,7 +3,7 @@
         <div class="content-block-media">
             {% for mediaWrapper in entity.mediaWrapper %}
                 {% for media in mediaWrapper.media %}
-                <img class="block-image-stacked" src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}" title="{{ mediaWrapper.title }}" alt="{{ mediaWrapper.title }}">
+                <img class="block-image-stacked" src="{{ app.request.uriForPath( asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) ) }}" title="{{ mediaWrapper.title }}" alt="{{ mediaWrapper.title }}">
                 {% endfor %}
             {% endfor %}
         </div>
@@ -19,7 +19,7 @@
         <div class="content-block-media">
         {% for mediaWrapper in entity.mediaWrapper %}
             {% for media in mediaWrapper.media %}
-                <img class="block-image-stacked" src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}" title="{{ mediaWrapper.title }}" alt="{{ mediaWrapper.title }}">
+                <img class="block-image-stacked" src="{{ app.request.uriForPath( asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) ) }}" title="{{ mediaWrapper.title }}" alt="{{ mediaWrapper.title }}">
             {% endfor %}
         {% endfor %}
         </div>
