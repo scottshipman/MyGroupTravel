@@ -1,7 +1,7 @@
 {% extends '::base.html.twig' %}
 
-{% block title %}Tour Dashboard - Active{% endblock %}
-{% block page_title %}Tour Dashboard - Active{% endblock %}
+{% block title %}{% trans %}tour.title.index_active{% endtrans %}{% endblock %}
+{% block page_title %}{% trans %}tour.page_title.index_active{% endtrans %}{% endblock %}
 
 {% block body %}
 
@@ -9,7 +9,7 @@
 
     {% embed "TourBundle:Tour:tour_tabs.html.twig" %}
         {% block active_tab %}
-            <a class="mdl-tabs__tab is-active" href="{{ path('manage_tour') }}">Active Tours</a>
+            <a class="mdl-tabs__tab is-active" href="{{ path('manage_tour') }}">{% trans %}tour.tabs.active{% endtrans %}</a>
         {% endblock %}
     {% endembed %}
 
@@ -27,9 +27,9 @@
              */
 
             if($("a[title='Email']").length) {
-                var link = $("a[title='Email']").attr('href');
-                $("a[title='Email']").attr("href", "#");
                 $(document).on('click', "a[title='Email']", function (e) {
+                    var link = $(this).attr('href');
+                    console.log(link);
                     e.preventDefault();
                     $("#dialog").html("");
                     $("#dialog").dialog("open");

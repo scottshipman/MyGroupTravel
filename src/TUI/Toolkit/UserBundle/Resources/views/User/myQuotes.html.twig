@@ -5,10 +5,12 @@
 <div class = "tour-edit mdl-card mdl-shadow--2dp">
     {% set bgpath = '' %}
     {% if quote.headerBlock %}
-        {% for media in quote.headerBlock.mediaWrapper %}
-            {% if loop.first %}
-                {% set bgpath = app.request.uriForPath( asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) )   %}
-            {% endif %}
+        {% for mediaWrapper in quote.headerBlock.mediaWrapper %}
+            {% for media in mediaWrapper.media %}
+                {% if loop.first %}
+                    {% set bgpath = app.request.uriForPath( asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) )   %}
+                {% endif %}
+            {% endfor %}
         {% endfor %}
     {% endif %}
     <div class="mdl-card__supporting-text profile-tour-header" style="background-image: url({{ bgpath }});background-size: 100% 100% ;">

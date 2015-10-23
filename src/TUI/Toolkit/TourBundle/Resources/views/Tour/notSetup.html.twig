@@ -3,20 +3,20 @@
 <div class="tour-edit mdl-card mdl-shadow--2dp">
 
     <div class="mdl-card__title">
-        <h3 class="mdl-card__title-text">Get Started</h3>
+        <h3 class="mdl-card__title-text">{% trans %}tour.not_setup.get_started{% endtrans %}</h3>
     </div>
 
     <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
-        <i class="fa fa-check"></i> Sign up to EToolkit
+        <i class="fa fa-check"></i> {% trans %}tour.not_setup.signup{% endtrans %}
     </div>
 
     <div class="mdl-card__supporting-text mdl-card--border">
         {{ form_start(setup_form) }}
-        <i class="fa fa-credit-card "></i> Set up your payment settings
+        <i class="fa fa-credit-card "></i> {% trans %}tour.not_setup.payment_settings{% endtrans %}
         <ol class="setup-form-list">
             <li>
-                <strong>How much do you want ot charge each passenger</strong>
-                <p>This will be the per passenger price shown on the tour prmotional website.  You can increase the price or reduce it if you are fundraising</p>
+                <strong>{% trans %}tour.not_setup.how_much{% endtrans %}</strong>
+                <p>{% trans %}tour.not_setup.pass_price{% endtrans %}</p>
                 {{ form_widget(setup_form.pricePersonPublic) }}<p style="display: inline; font-size: 16px;"> x </p><p style="display:inline; font-size: 16px;" id="passengers">{{ entity.payingPlaces }}</p><p style="display: inline; font-size: 16px;"> = </p>
                 {% if entity.currency %}<p id="currency" style="display: inline; font-size: inherit;">{{ entity.currency.htmlSymbol | raw }}</p>{% endif %}<p style="display: inline; font-size: 16px; color: green;" id="adjusted-price">{{ entity.payingPlaces * entity.pricePerson }}</p>
                 <p style="display:none; font-size: 16px;" id="total">{{ entity.payingPlaces * entity.pricePerson }}</p>
@@ -24,11 +24,9 @@
             </li>
 
             <li>
-                <strong>Set payment amounts and due dates</strong>
-                <p>This is the suggested per passenger deposit price.  You can increase the price or reduce it if you are fundraising.</p>
-                {#{{ form_widget(setup_form.paymentTasks) }}#}
-                {#{{ dump(setup_form) }}#}
-                <div class="paymenttasks" data-prototype="{{ form_widget(setup_form.paymentTasksPassenger.vars.prototype)|e }}">
+                <strong>{% trans %}tour.not_setup.amounts_and_dates{% endtrans %}</strong>
+                <p>{% trans %}tour.not_setup.suggested_price{% endtrans %}</p>
+                <div style="margin-bottom: 20px" class="paymenttasks" data-prototype="{{ form_widget(setup_form.paymentTasksPassenger.vars.prototype)|e }}">
                 {# iterate over each existing paymenttask and render its  fields:  #}
                     {% for paymentTaskPassenger in setup_form.paymentTasksPassenger %}
                         <ul class="payment_task" taskid = "{{ paymentTaskPassenger.vars.value.id }}">
@@ -37,21 +35,20 @@
                             <li>{{ form_widget(paymentTaskPassenger.dueDate) }}</li>
                         </ul>
                     {% endfor %}
-                    {#{{ form_errors(setup_form.paymentTasksPassenger) }}#}
                 </div>
             </li>
             <li>
-                <strong>How do you want passengers to pay?</strong>
-                <p>Select your preferred payment methods</p>
+                <strong>{% trans %}tour.not_setup.how_to_pay{% endtrans %}</strong>
+                <p>{% trans %}tour.not_setup.preferred_payment{% endtrans %}</p>
                 <div class="payment-types">
-                    {{ form_widget(setup_form.cashPayment) }}
+                    {{ form_widget(setup_form.cashPayment, {'label' : 'tour.form.tour_setup.cash'|trans}) }}
                     {{ form_widget(setup_form.cashPaymentDescription) }}
-                    {{ form_widget(setup_form.bankTransferPayment) }}
+                    {{ form_widget(setup_form.bankTransferPayment, {'label' : 'tour.form.tour_setup.bank'|trans}) }}
                     {{ form_widget(setup_form.bankTransferPaymentDescription) }}
-                    {{ form_widget(setup_form.onlinePayment) }}
+                    {{ form_widget(setup_form.onlinePayment, {'label' : 'tour.form.tour_setup.online'|trans}) }}
                     {{ form_widget(setup_form.onlinePaymentDescription) }}
                     {{ form_widget(setup_form.otherPayment) }}
-                    {{ form_widget(setup_form.otherPaymentDescription) }}
+                    {{ form_widget(setup_form.otherPaymentDescription, {'label' : 'tour.form.tour_setup.other'|trans}) }}
                 </div>
             </li>
         </ol>
@@ -61,15 +58,15 @@
     </div>
 
     <div class="mdl-card__supporting-text mdl-card--border" style="color: grey;">
-        <p style="margin: 0; font-size: inherit;">Next</p>
+        <p style="margin: 0; font-size: inherit;">{% trans %}tour.not_setup.next{% endtrans %}</p>
     </div>
 
     <div class="mdl-card__supporting-text mdl-card--border" style="color: grey;">
-        <i class="fa fa-clone"></i>Personalize your website
+        <i class="fa fa-clone"></i>{% trans %}tour.not_setup.personalize{% endtrans %}
     </div>
 
     <div class="mdl-card__supporting-text mdl-card--border" style="color: grey;">
-        <i class="fa fa-share"></i> Promote your tour
+        <i class="fa fa-share"></i> {% trans %}tour.not_setup.promote{% endtrans %}
     </div>
 
 </div>

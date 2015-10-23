@@ -6,7 +6,7 @@
                 <i class="content-block-tab-handle fa fa-arrows"></i>
                 <h4 id="tab-label-{{ tab }}" class="editable-tab">{{ data[0] }}</h4>
                 {% if data[1] | length < 1 %}
-                    <span class="modal-tab-delete icon-label" tabId="{{ tab }}"><i class="content-block-tab-actions fa fa-trash-o"></i> Delete Tab</span>
+                    <span class="modal-tab-delete icon-label" tabId="{{ tab }}"><i class="content-block-tab-actions fa fa-trash-o"></i> {% trans %}tour.site_show_tab_order.delete{% endtrans %}</span>
                 {% endif %}
             </span>
 
@@ -27,9 +27,9 @@
     </div>
     <div class="submit-button-container">
         <a id="update-tabs" quoteId="{{ entity.id }}" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored reorder-button"
-           href="#"><i class="fa fa-thumbs-o-up"> </i> Submit</a>
+           href="#"><i class="fa fa-thumbs-o-up"> </i> {% trans %}tour.site_show_tab_order.submit{% endtrans %}</a>
         <a id="close-dialog" quoteId="{{ entity.id }}" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored reorder-button"
-           href="#"><i class="fa fa-ban"> </i> Cancel</a>
+           href="#"><i class="fa fa-ban"> </i> {% trans %}tour.site_show_tab_order.cancel{% endtrans %}</a>
     </div>
 </div>
 

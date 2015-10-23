@@ -44,29 +44,29 @@ class TourSummaryType extends AbstractType
             ->add('expiryDate', 'genemu_jquerydate', array(
                 'widget' => 'single_text',
                 'required' => false,
-                'label' => 'Tour Expiration? ' .$date_label,
+                'label' => 'tour.form.tour_summary.expiration',
                 'format' => $date_format,
             ))
             ->add('departureDate', 'genemu_jquerydate', array(
                 'widget' => 'single_text',
                 'required' => false,
-                'label' => 'Departure Date ' .$date_label,
+                'label' => 'tour.form.tour_summary.departure',
                 'format' => $date_format,
             ))
             ->add('returnDate', 'genemu_jquerydate', array(
                 'widget' => 'single_text',
                 'required' => false,
-                'label' => 'Return Date ' .$date_label,
+                'label' => 'tour.form.tour_summary.return',
                 'format' => $date_format,
             ))
             ->add('duration', 'text', array(
                 'required'  => false,
-                'label' => 'Duration',
+                'label' => 'tour.form.tour_summary.duration',
             ))
             ->add('boardBasis','entity', array(
-                'label' => 'Board Basis',
+                'label' => 'tour.form.tour_summary.board',
                 'required' => false,
-                'placeholder' => 'Select',
+                'placeholder' => 'tour.form.tour_summary.placeholder',
                 'class' => 'BoardBasisBundle:BoardBasis',
                 'property' => 'name',
                 'query_builder' => function (EntityRepository $er) {
@@ -76,7 +76,7 @@ class TourSummaryType extends AbstractType
             ))
             ->add('transportType','entity', array(
                 'required' => false,
-                'placeholder' => 'Select',
+                'placeholder' => 'tour.form.tour_summary.placeholder',
                 'class' => 'TransportBundle:Transport',
                 'property' => 'name',
                 'query_builder' => function (EntityRepository $er) {
@@ -85,20 +85,20 @@ class TourSummaryType extends AbstractType
                 },
             ))
             ->add('freePlaces', 'integer', array(
-                'label' => 'Free Places',
+                'label' => 'tour.form.tour_summary.free_places',
                 'required'  => false,
             ))
             ->add('payingPlaces', 'integer', array(
-                'label' => 'Paying Places',
+                'label' => 'tour.form.tour_summary.paying_places',
                 'required'  => false,
             ))
             ->add('pricePerson', 'integer', array(
-                'label' => 'Price per Person',
+                'label' => 'tour.form.tour_summary.price',
                 'required'  => false,
             ))
             ->add('currency', 'entity', array(
                 'required' => false,
-                'placeholder' => 'Select',
+                'placeholder' => 'tour.form.tour_summary.placeholder',
                 'class' => 'CurrencyBundle:Currency',
                 'property'  =>  'name',
                 'query_builder' => function (EntityRepository $er) {
@@ -107,7 +107,7 @@ class TourSummaryType extends AbstractType
                 },
             ))
             ->add('welcomeMsg', 'ckeditor', array(
-                'label' => 'Summary Message',
+                'label' => 'tour.form.tour_summary.welcomeMsg',
             ))
         ;
     }

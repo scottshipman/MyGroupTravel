@@ -153,13 +153,13 @@ class TourController extends Controller
         // add business admin last name filter
         $column = $grid->getColumn('salesAgent.lastName');
         $column->setFilterable(true);
-        $column->setTitle('Primary Business Admin (Last Name)');
+        $column->setTitle($this->get('translator')->trans('tour.grid.filter.title.ba_lname'));
         $column->setOperatorsVisible(false);
 
         // add organizer last name filter
         $column = $grid->getColumn('organizer.lastName');
         $column->setFilterable(true);
-        $column->setTitle('Organizer (Last Name)');
+        $column->setTitle($this->get('translator')->trans('tour.grid.filter.title.o_lname'));
         $column->setOperatorsVisible(false);
 
         // Set the default order of the grid
@@ -169,7 +169,7 @@ class TourController extends Controller
         $grid->setLimits(array(10, 25, 50, 100));
 
         //set no data message
-        $grid->setNoDataMessage("There are no tours to show. Please check your filter settings and try again.");
+        $grid->setNoDataMessage($this->get('translator')->trans('tour.grid.no_result'));
 
         //set default filter value
         $match_route = $this->generateUrl('manage_tour');
@@ -187,7 +187,7 @@ class TourController extends Controller
         }
 
         // Export of the grid
-        $grid->addExport(new CSVExport("Tours as CSV", "activeTours", array('delimiter' => ','), "UTF-8", "ROLE_BRAND"));
+        $grid->addExport(new CSVExport($this->get('translator')->trans('tour.grid.export'), "activeTours", array('delimiter' => ','), "UTF-8", "ROLE_BRAND"));
 
 
         // Manage the grid redirection, exports and the response of the controller
@@ -280,13 +280,13 @@ class TourController extends Controller
         // add business admin last name filter
         $column = $grid->getColumn('salesAgent.lastName');
         $column->setFilterable(true);
-        $column->setTitle('Primary Business Admin (Last Name)');
+        $column->setTitle($this->get('translator')->trans('tour.grid.filter.title.ba_lname'));
         $column->setOperatorsVisible(false);
 
         // add organizer last name filter
         $column = $grid->getColumn('organizer.lastName');
         $column->setFilterable(true);
-        $column->setTitle('Organizer (Last Name)');
+        $column->setTitle($this->get('translator')->trans('tour.grid.filter.title.o_lname'));
         $column->setOperatorsVisible(false);
 
         // Set the default order of the grid
@@ -296,7 +296,7 @@ class TourController extends Controller
         $grid->setLimits(array(10, 25, 50, 100));
 
         //set no data message
-        $grid->setNoDataMessage("There are no deleted tours to show. Please check your filter settings and try again.");
+        $grid->setNoDataMessage($this->get('translator')->trans('tour.grid.no_result-deleted'));
 
         //set default filter value
         $match_route = $this->generateUrl('manage_tour_deleted');
@@ -315,7 +315,7 @@ class TourController extends Controller
         }
 
         // Export of the grid
-        $grid->addExport(new CSVExport("Deleted Tours as CSV", "deletedTours", array('delimiter' => ','), "UTF-8", "ROLE_BRAND"));
+        $grid->addExport(new CSVExport($this->get('translator')->trans('tour.grid.export_deleted'), "deletedTours", array('delimiter' => ','), "UTF-8", "ROLE_BRAND"));
 
 
         // Manage the grid redirection, exports and the response of the controller
@@ -387,7 +387,7 @@ class TourController extends Controller
             $em->flush();
             // Create organizer permission
             $permission = $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
-            $this->get('session')->getFlashBag()->add('notice', 'Tour Saved: ' . $entity->getName());
+            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tour.flash.save') . $entity->getName());
 
             return $this->redirect($this->generateUrl('manage_tour'));
         }
@@ -422,7 +422,7 @@ class TourController extends Controller
         $form->get('quoteReference')->get('salesAgent')->setData($this->get('security.token_storage')->getToken()->getUser());
         $form->get('currency')->setdata($currency);
        // $form->get('expiryDate')->setdata(new \DateTime('now + 30 days'));
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('tour.actions.create')));
 
         return $form;
     }
@@ -634,7 +634,7 @@ class TourController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('tour.actions.update')));
 
         return $form;
     }
@@ -750,7 +750,7 @@ class TourController extends Controller
 
             $em->flush();
             $permission = $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
-            $this->get('session')->getFlashBag()->add('notice', 'Tour Saved: ' . $entity->getName());
+            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tour.flash.save') . $entity->getName());
             return $this->redirect($this->generateUrl('manage_tour'));
         }
 
@@ -783,7 +783,7 @@ class TourController extends Controller
 
             $em->remove($entity);
             $em->flush();
-            $this->get('session')->getFlashBag()->add('notice', 'Tour Deleted: ' . $entity->getName());
+            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tour.flash.delete') . $entity->getName());
 
         }
 
@@ -803,7 +803,7 @@ class TourController extends Controller
             ->setAction($this->generateUrl('manage_tour_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'button', array(
-                'label' => 'Delete',
+                'label' => $this->get('translator')->trans('tour.actions.delete'),
                 'attr' => array(
                     'class' => 'delete-btn'
                 )
@@ -827,7 +827,7 @@ class TourController extends Controller
         }
         $em->remove($tour);
         $em->flush();
-        $this->get('session')->getFlashBag()->add('notice', 'Tour Deleted: ' . $tour->getName());
+        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tour.flash.delete') . $tour->getName());
 
         return $this->redirect($this->generateUrl('manage_tour'));
     }
@@ -845,7 +845,7 @@ class TourController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('manage_tour_restore', array('id' => $id)))
             ->setMethod('POST')
-            ->add('submit', 'submit', array('label' => 'RESTORE'))
+            ->add('submit', 'submit', array('label' => $this->get('translator')->trans('tour.actions.restore')))
             ->getForm();
     }
 
@@ -870,7 +870,7 @@ class TourController extends Controller
         $tour->setDeleted(NULL);
         $em->persist($tour);
         $em->flush();
-        $this->get('session')->getFlashBag()->add('notice', 'Tour Restored: ' . $tour->getName());
+        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tour.flash.restore') . $tour->getName());
 
         return $this->redirect($this->generateUrl('manage_tour'));
     }
@@ -899,7 +899,7 @@ class TourController extends Controller
         $tour->setLocked($status);
         $em->persist($tour);
         $em->flush();
-        $this->get('session')->getFlashBag()->add('notice', 'Tour Lock has been toggled ');
+        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tour.flash.lock'));
 
         return new Response(json_encode((array)$tour));
 
@@ -928,7 +928,7 @@ class TourController extends Controller
         $tour->setLocked($status);
         $em->persist($tour);
         $em->flush();
-        $this->get('session')->getFlashBag()->add('notice', 'Tour Lock has been toggled ');
+        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tour.flash.lock'));
 
         return $this->redirect($this->generateUrl('manage_tour'));
 
@@ -1114,7 +1114,7 @@ class TourController extends Controller
             'method' => 'PUT',
         ));
 
-        $setupForm->add('submit', 'submit', array('label' => 'Save'));
+        $setupForm->add('submit', 'submit', array('label' => $this->get('translator')->trans('tour.actions.save')));
 
         return $setupForm;
     }
@@ -1143,11 +1143,11 @@ class TourController extends Controller
         if ($setupForm->isValid()) {
             $em->flush();
             $permission = $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
-            $this->get('session')->getFlashBag()->add('notice', 'Tour Saved: ' . $entity->getName());
+            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tour.flash.save') . $entity->getName());
             return $this->redirect($this->generateUrl('manage_tour_show', array('id' => $id)));
         }
 
-        $this->get('session')->getFlashBag()->add('notice', 'Tour Not Saved: ' . $entity->getName());
+        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tour.flash.not_saved') . $entity->getName());
         return $this->redirect($this->generateUrl('manage_tour_show', array('id' => $id)));
 
 
@@ -1189,7 +1189,7 @@ class TourController extends Controller
             'method' => 'POST',
         ));
 
-        $notifyForm->add('submit', 'submit', array('label' => 'Send'));
+        $notifyForm->add('submit', 'submit', array('label' => $this->get('translator')->trans('tour.actions.send')));
 
         return $notifyForm;
 
@@ -1240,7 +1240,7 @@ class TourController extends Controller
         if ($entity->getOrganizer()->isEnabled() == true) {
 
             $message = \Swift_Message::newInstance()
-                ->setSubject('Set Up Your Tour')
+                ->setSubject($this->get('translator')->trans('tour.email.setup.subject'))
                 ->setFrom('Notify@Toolkit.com')
                 ->setTo($organizerEmail)
                 ->setBody(
@@ -1266,7 +1266,7 @@ class TourController extends Controller
             $user->setConfirmationToken($tokenGenerator->generateToken());
 
             $message = \Swift_Message::newInstance()
-                ->setSubject('Set Up Your Tour')
+                ->setSubject($this->get('translator')->trans('tour.email.setup.subject'))
                 ->setFrom('Notify@Toolkit.com')
                 ->setTo($organizerEmail)
                 ->setBody(
@@ -1288,7 +1288,7 @@ class TourController extends Controller
         $em->persist($entity);
         $em->flush();
         $this->get('mailer')->send($message);
-        $this->get('session')->getFlashBag()->add('notice', 'Your Message has been sent to '. $organizerEmail);
+        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tour.flash.registration_notification') . " " . $organizerEmail);
 
 
         return $this->redirect($this->generateUrl('manage_tour'));

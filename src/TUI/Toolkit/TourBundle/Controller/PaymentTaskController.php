@@ -68,7 +68,7 @@ class PaymentTaskController extends Controller
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('tour.payment_task.actions.create')));
 
         return $form;
     }
@@ -148,7 +148,7 @@ class PaymentTaskController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('tour.payment_task.actions.update')));
 
         return $form;
     }
@@ -218,7 +218,7 @@ class PaymentTaskController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('paymenttask_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->add('submit', 'submit', array('label' => $this->get('translator')->trans('tour.payment_task.actions.delete')))
             ->getForm()
         ;
     }

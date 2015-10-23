@@ -4,11 +4,11 @@
       <div class="mdl-tabs__tab-bar">
 
             {% block active_tab %}
-                <a class='mdl-tabs__tab' href="{{ path('manage_tour_active') }}">Active Tours</a>
+                <a class='mdl-tabs__tab' href="{{ path('manage_tour_active') }}">{% trans %}tour.tabs.active{% endtrans %}</a>
             {% endblock %}
 
             {% block deleted_tab %}
-                <a class='mdl-tabs__tab' href="{{ path('manage_tour_deleted') }}">Deleted Tours</a>
+                <a class='mdl-tabs__tab' href="{{ path('manage_tour_deleted') }}">{% trans %}tour.tabs.deleted{% endtrans %}</a>
             {% endblock %}
 
       </div>

@@ -7,9 +7,9 @@
 
 {% block body -%}
     <div class="login-block">
-        <h2>Enter your Quote Number</h2>
+        <h2>{% trans %}tour.prompt.number{% endtrans %}</h2>
         <hr>
-        <span style="text-align:center; display:block;">You'll find this on your quote email.</span>
+        <span style="text-align:center; display:block;">{% trans %}tour.prompt.email{% endtrans %}</span>
             {#  {{ dump(entity) }} #}
 
         {{ form(form) }}

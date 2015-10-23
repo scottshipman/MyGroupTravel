@@ -4,14 +4,14 @@
 
 {% block title %}
     {% if is_granted("ROLE_BRAND") %}
-        Tour
+        {% trans %}tour.page_title.index{% endtrans %}
     {% else %}
         {{ entity.name }}
     {% endif %}
 {% endblock %}
 
 {% block page_title %}
-    <span>Dashboard</span>
+    <span>{% trans %}tour.page_title.dashboard{% endtrans %}</span>
 {% endblock %}
 
 {% block page_title_menu %}
@@ -21,7 +21,7 @@
     {% embed "TourBundle:Tour:tourMenu.html.twig" %}
         {% if editable %}
             {% block tour_dashboard_link %}
-                <li><a href="{{ path('manage_tour_show', { 'id': entity.id }) }}" class="mdl-menu__item">Tour Dashboard</a></li>
+                <li><a href="{{ path('manage_tour_show', { 'id': entity.id }) }}" class="mdl-menu__item">{% trans %}tour.title.index{% endtrans %}</a></li>
             {% endblock %}
         {% endif %}
     {% endembed %}
@@ -29,33 +29,32 @@
 
 {% block back_link %}
     {% if is_granted("ROLE_BRAND") %}
-        <a class="back-link" href="{{ path('manage_tour') }}"><i class="fa fa-arrow-left"></i> Back to the List</a>
+        <a class="back-link" href="{{ path('manage_tour') }}"><i class="fa fa-arrow-left"></i> {% trans %}tour.title.back_list{% endtrans %}</a>
     {% else %}
-        <a class="back-link" href="/"><i class="fa fa-arrow-left"></i> Back to Dashboard</a>
+        <a class="back-link" href="/"><i class="fa fa-arrow-left"></i> {% trans %}tour.title.back_dashboard{% endtrans %}</a>
     {% endif %}
 {% endblock %}
 
 {% block body -%}
 
-    {#{{ dump(entity) }}#}
     <div class="tour-show-wrapper">
 
     <div class="tour-show-left-column">
         <ul class="tour-show-submenu">
-            <li><strong>Tour Summary</strong></li>
+            <li><strong>{% trans %}tour.show.summary{% endtrans %}</strong></li>
             <hr>
-            <li><label>Institution</label><br><strong>{{ entity.institution.name }}</strong></li>
+            <li><label>{% trans %}tour.show.institution{% endtrans %}</label><br><strong>{{ entity.institution.name }}</strong></li>
             <hr>
-            <li><label>Departure Date</label><br><strong>{{ entity.departureDate|date(format) }}</strong></li>
+            <li><label>{% trans %}tour.show.departure{% endtrans %}</label><br><strong>{{ entity.departureDate|date(format) }}</strong></li>
             <hr>
-            <li><label>Number Of Passengers</label><br><strong>{{ entity.payingPlaces }} paying passengers {% if entity.freePlaces > 0 %} and {{ entity.freePlaces }} free passengers{% endif %}</strong></li>
+            <li><label>{% trans %}tour.show.passengers{% endtrans %}</label><br><strong>{{ entity.payingPlaces }} paying passengers {% if entity.freePlaces > 0 %} and {{ entity.freePlaces }} free passengers{% endif %}</strong></li>
             <hr>
-            <li><label>Price Per Passenger</label><br><strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong></li>
+            <li><label>{% trans %}tour.show.price{% endtrans %}</label><br><strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong></li>
             <hr>
         </ul>
 
         <div class="tour-edit-organizer-left">
-            <label>Organizers</label><br>
+            <label>{% trans %}tour.show.organizers{% endtrans %}</label><br>
             {% if entity.organizer.media %}
                 <img class="tui-image-avatar" src="{{ asset( entity.organizer.media.getRelativePath ~ "/" ~ entity.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.organizer.username }}">
             {% elseif entity.organizer.firstName and entity.organizer.lastName %}
@@ -129,7 +128,7 @@
 
 {% block footer_left %}
     {% if entity.organizer %}
-        <span class="intro">Tour Organizer:</span>
+        <span class="intro">{% trans %}tour.show.footer.intro{% endtrans %}</span>
         {% if entity.organizer.media %}
             <span class="tui-image-avatar"><img src="{{ asset( entity.organizer.media.getRelativePath ~ "/" ~ entity.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.organizer.username }}"></span>
         {% elseif entity.organizer.firstName and entity.organizer.lastName %}
@@ -143,5 +142,5 @@
 {% endblock %}
 
 {% block footer_right %}
-    <div class="quote-info"><span class="quote-label">Price per person:</span><span class="quote-price">{% if entity.pricePerson %}<strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong>{% endif %}</span></div>
+    <div class="quote-info"><span class="quote-label">{% trans %}tour.show.footer.price{% endtrans %}</span><span class="quote-price">{% if entity.pricePerson %}<strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong>{% endif %}</span></div>
 {% endblock %}
