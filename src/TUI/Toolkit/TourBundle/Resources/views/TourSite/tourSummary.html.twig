@@ -1,29 +1,29 @@
 {% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
 <ul id="site-summary-details">
-    {% if tour.departureDate %}<li class="right"><span class="label">Departing:</span> <strong>{{ tour.departureDate|date(format) }}</strong></li>{% endif %}
-    {% if tour.duration %}<li class="right"><span class="label">Duration:</span> <strong>{{ tour.duration }}</strong></li>{% endif %}
-    {% if tour.returnDate %}<li class="right"><span class="label">Returning:</span> <strong>{{ tour.returnDate|date(format) }}</strong></li>{% endif %}
-    {% if tour.boardBasis %}<li class="right"><span class="label">Board Basis:</span> <strong>{{ tour.boardBasis.name }}</strong></li>{% endif %}
-    {% if tour.transportType %}<li class="right"><span class="label">Transport:</span> <strong>{{ tour.transportType.name }}</strong></li>{% endif %}
-    {% if tour.pricePerson %}<li class="right"><span class="label">Price per person:</span> <span class="tour-price"><strong>{% if tour.currency %}{{ tour.currency.htmlSymbol | raw }}{% endif %}{{ tour.pricePerson }}</strong></span></li>{% endif %}
-    {% if (tour.payingPlaces) or (tour.freePlaces) %}<li>Based on {% if tour.payingPlaces %}<strong>{{ tour.payingPlaces }}</strong>{% endif %} paying {% if tour.freePlaces != 0 %} and <strong>{{ tour.freePlaces }}</strong> free {% endif %}places</li>{% endif %}
-    {% if tour.expiryDate %}<li>Tour valid until <strong>{{ tour.expiryDate|date(format) }}</strong></li>{% endif %}
+    {% if tour.departureDate %}<li class="right"><span class="label">{% trans %}tour.tour_summary.departing{% endtrans %}</span> <strong>{{ tour.departureDate|date(format) }}</strong></li>{% endif %}
+    {% if tour.duration %}<li class="right"><span class="label">{% trans %}tour.tour_summary.duration{% endtrans %}</span> <strong>{{ tour.duration }}</strong></li>{% endif %}
+    {% if tour.returnDate %}<li class="right"><span class="label">{% trans %}tour.tour_summary.returning{% endtrans %}</span> <strong>{{ tour.returnDate|date(format) }}</strong></li>{% endif %}
+    {% if tour.boardBasis %}<li class="right"><span class="label">{% trans %}tour.tour_summary.board{% endtrans %}</span> <strong>{{ tour.boardBasis.name }}</strong></li>{% endif %}
+    {% if tour.transportType %}<li class="right"><span class="label">{% trans %}tour.tour_summary.transport{% endtrans %}</span> <strong>{{ tour.transportType.name }}</strong></li>{% endif %}
+    {% if tour.pricePersonPublic %}<li class="right"><span class="label">{% trans %}tour.tour_summary.price{% endtrans %}</span> <span class="tour-price"><strong>{% if tour.currency %}{{ tour.currency.htmlSymbol | raw }}{% endif %}{{ tour.pricePersonPublic }}</strong></span></li>{% endif %}
+    {% if (tour.payingPlaces) or (tour.freePlaces) %}<li>{% trans %}tour.tour_summary.based{% endtrans %} {% if tour.payingPlaces %}<strong>{{ tour.payingPlaces }}</strong>{% endif %} {% trans %}tour.tour_summary.paying{% endtrans %} {% if tour.freePlaces != 0 %} {% trans %}tour.tour_summary.and{% endtrans %} <strong>{{ tour.freePlaces }}</strong> {% trans %}tour.tour_summary.free{% endtrans %} {% endif %}{% trans %}tour.tour_summary.places{% endtrans %}</li>{% endif %}
+    {% if tour.expiryDate %}<li>{% trans %}tour.tour_summary.valid{% endtrans %} <strong>{{ tour.expiryDate|date(format) }}</strong></li>{% endif %}
     <ul class="quote-site-actions">
         <li>
             {#{% if (tour.converted is sameas(false)) and (tour.tourReference.converted is sameas(false)) %}#}
                 {% if date(tour.expiryDate) < date('now') %}
                     <a class="expired-tour mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
                        href="#">
-                        <i class="fa fa-calendar-times-o"></i> Expired
+                        <i class="fa fa-calendar-times-o"></i> {% trans %}tour.tour_summary.expired{% endtrans %}
                     </a>
                 {% else %}
                     <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
                        id="accept-tour" href="#">
-                        <i class="fa fa-thumbs-o-up"> </i> Sign Me Up
+                        <i class="fa fa-thumbs-o-up"> </i> {% trans %}tour.tour_summary.signup{% endtrans %}
                     </a>
                 {% endif %}
 
         </li>
     </ul>
-    <li id="headerBlock-text">{% if tour.headerBlock %}{{ tour.welcomeMsg|raw }}{% endif %}</li>
+    <li id="headerBlock-text">{% if tour.welcomeMsg %}{{ tour.welcomeMsg|raw }}{% endif %}</li>
 </ul>

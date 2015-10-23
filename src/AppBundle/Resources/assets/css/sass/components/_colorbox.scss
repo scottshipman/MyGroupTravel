@@ -3,11 +3,6 @@
   border-color: $border_grey_l;
   padding: 6px;
 
-  &.sp-active,
-  &:hover {
-    @include mdl-primary-color( border-color, 6 );
-  }
-
   .sp-preview {
     border-color: $text_grey;
   }
@@ -38,5 +33,4 @@
 .sp-container {
   margin-top: -1px;
   background: $bg_white;
-  @include mdl-primary-color( border-color, 6 );
 }

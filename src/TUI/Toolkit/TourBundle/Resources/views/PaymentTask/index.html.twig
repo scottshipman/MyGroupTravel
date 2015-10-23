@@ -1,19 +1,19 @@
 {% extends '::base.html.twig' %}
 
 {% block body -%}
-    <h1>PaymentTask list</h1>
+    <h1>{% trans %}tour.page_title.payment_task.list{% endtrans %}</h1>
 
     <table class="records_list">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>String</th>
-                <th>Name</th>
-                <th>Value</th>
-                <th>Duedate</th>
-                <th>Paiddate</th>
-                <th>Type</th>
-                <th>Actions</th>
+                <th>{% trans %}tour.page_title.payment_task.show.id{% endtrans %}</th>
+                <th>{% trans %}tour.page_title.payment_task.show.string{% endtrans %}</th>
+                <th>{% trans %}tour.page_title.payment_task.show.name{% endtrans %}</th>
+                <th>{% trans %}tour.page_title.payment_task.show.value{% endtrans %}</th>
+                <th>{% trans %}tour.page_title.payment_task.show.duedate{% endtrans %}</th>
+                <th>{% trans %}tour.page_title.payment_task.show.paiddate{% endtrans %}</th>
+                <th>{% trans %}tour.page_title.payment_task.show.type{% endtrans %}</th>
+                <th>{% trans %}tour.page_title.payment_task.show.actions{% endtrans %}</th>
             </tr>
         </thead>
         <tbody>
@@ -44,7 +44,7 @@
         <ul>
         <li>
             <a href="{{ path('paymenttask_new') }}">
-                Create a new entry
+                {% trans %}tour.actions.create_new_paymentTask{% endtrans %}
             </a>
         </li>
     </ul>

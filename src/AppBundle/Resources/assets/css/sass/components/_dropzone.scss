@@ -61,7 +61,6 @@
   height: 160px;
   background: transparent;
   border: 1px dashed #000;
-  @include mdl-primary-color(border-color, 6);
   position: relative;
   border-radius: 20px;
   margin-bottom: 20px;
@@ -108,7 +107,6 @@
 #avatar-label {
   width: 300px;
   position: relative;
-  @include mdl-primary-color(color, 6);
 }
 
 #dropzone-form-close {

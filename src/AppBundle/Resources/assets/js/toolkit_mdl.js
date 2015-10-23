@@ -48,7 +48,6 @@
     // Find locked items and remove edit and delete actions
     if ($(".mdl-data-table").length) {
         $('.locked').each(function(){
-            console.log(this);
             var editAction = $(this).find("li a[title='Edit']");
             editAction.parent().remove();
             var deleteAction = $(this).find("li a[title='Delete']").parent().remove();

@@ -18,7 +18,7 @@
 
 {% block body -%}
 
-    <div id="site-quote-number">Quote Number: {% if entity.quoteNumber %}{{ entity.quoteNumber }}{% endif %}</div>
+    <div id="site-quote-number">{% trans %}tour.pdf.quoteNumber{% endtrans %} {% if entity.quoteNumber %}{{ entity.quoteNumber }}{% endif %}</div>
 
     <div id="site-header" class="quote-view-site-header">
 
@@ -90,5 +90,5 @@
 {% endblock %}
 
 {% block footer_right %}
-    <div class="quote-info"><span class="quote-label">Price per person:</span> <span class="quote-price">{% if entity.pricePerson %}<strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong>{% endif %}</span></div>
+    <div class="quote-info"><span class="quote-label">{% trans %}tour.pdf.footer.price{% endtrans %}</span> <span class="quote-price">{% if entity.pricePerson %}<strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong>{% endif %}</span></div>
 {% endblock %}

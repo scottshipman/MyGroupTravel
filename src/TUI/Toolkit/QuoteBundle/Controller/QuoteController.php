@@ -55,18 +55,20 @@ class QuoteController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('QuoteBundle:Quote')->find($id);
+          $em = $this->getDoctrine()->getManager();
+          $entity = $em->getRepository('QuoteBundle:Quote')->find($id);
 
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Quote entity.');
-            }
+          if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Quote entity.');
+          }
 
-            $em->remove($entity);
-            $em->flush();
-            $this->get('session')->getFlashBag()->add('notice', 'Quote Deleted: ' . $entity->getName());
+          $em->remove($entity);
+          $em->flush();
+          $this->get('session')
+            ->getFlashBag()
+            ->add('notice', $this->get('translator')
+                ->trans('quote.flash.delete') . $entity->getName());
         }
-
         return $this->redirect($this->generateUrl('manage_quote'));
     }
 
@@ -82,7 +84,7 @@ class QuoteController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('manage_quote_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->add('submit', 'submit', array('label' => $this->get('translator')->trans('quote.actions.delete')))
             ->getForm();
     }
 
@@ -211,13 +213,13 @@ class QuoteController extends Controller
         // just in case - dont convert if the following rules fail
 
         if($quote->getConverted() == TRUE ){
-          throw $this->createNotFoundException('Cannot convert the quote because its already converted.');
+          throw $this->createNotFoundException($this->get('translator')->trans('quote.exception.convert'));
         }
 
         $siblings = $em->getRepository('QuoteBundle:QuoteVersion')->findBy(array('quoteReference' => $quoteReference));
         foreach($siblings as $sibling){
           if($sibling->getConverted() == TRUE){
-            throw $this->createNotFoundException('Cannot convert the quote because one of its siblings has already been converted.');
+            throw $this->createNotFoundException($this->get('translator')->trans('quote.exception.convert_sibling'));
           }
         }
 
@@ -338,7 +340,7 @@ class QuoteController extends Controller
       $originalBlock = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($block);
 
       if (!$originalBlock) {
-        throw $this->createNotFoundException('Unable to find Content entity.');
+        throw $this->createNotFoundException('Unable to find Content entity while cloning the header.');
       }
 
       $newBlock = clone $originalBlock;

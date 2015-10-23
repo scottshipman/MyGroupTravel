@@ -2,14 +2,14 @@
 
 {% block title %}
     {% if is_granted("ROLE_BRAND") %}
-        Site View
+        {% trans %}tour.page_title.site_view{% endtrans %}
     {% else %}
         {{ entity.quoteReference.name }}, {{ entity.name }}
     {% endif %}
 {% endblock %}
 
 {% block page_title %}
-    <span>Site View</span>
+    <span>{% trans %}tour.title.site_view{% endtrans %}</span>
 {% endblock %}
 
 {% block page_title_menu %}
@@ -19,7 +19,7 @@
     {% embed "TourBundle:Tour:tourMenu.html.twig" %}
         {% if editable %}
             {% block tour_dashboard_link %}
-                <li><a href="{{ path('manage_tour_show', { 'id': entity.id }) }}" class="mdl-menu__item">Tour Dashboard</a></li>
+                <li><a href="{{ path('manage_tour_show', { 'id': entity.id }) }}" class="mdl-menu__item">{% trans %}tour.title.index{% endtrans %}</a></li>
             {% endblock %}
         {% endif %}
     {% endembed %}
@@ -27,16 +27,16 @@
 
 {% block back_link %}
     {% if is_granted("ROLE_BRAND") %}
-        <a class="back-link" href="{{ path('manage_tour_show', { 'id': entity.id }) }}"><i class="fa fa-arrow-left"></i> Back to Show</a>
+        <a class="back-link" href="{{ path('manage_tour_show', { 'id': entity.id }) }}"><i class="fa fa-arrow-left"></i> {% trans %}tour.actions.back_show{% endtrans %}</a>
     {% else %}
-        <a class="back-link" href="/"><i class="fa fa-arrow-left"></i> Back to Dashboard</a>
+        <a class="back-link" href="/"><i class="fa fa-arrow-left"></i> {% trans %}tour.actions.back_dashboard{% endtrans %}</a>
     {% endif %}
 {% endblock %}
 
 {% block edit_link %}
     {% if editable %}
-        <a id="promote-tour" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Promote</a>
-        <a id="link-preview-edit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">Switch to Edit Mode</a>
+        <a id="promote-tour" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">{% trans %}tour.actions.promote{% endtrans %}</a>
+        <a id="link-preview-edit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">{% trans %}tour.actions.edit_mode{% endtrans %}</a>
     {% endif %}
 {% endblock %}
 
@@ -81,22 +81,26 @@
     <div id="tour-version-{{ entity.id }}" class="site-show mode-toggle mode-preview" entityId="{{ entity.id }}" entityType="tour" entityClass="tour" entityPath="tour">
 
         <a href="javascript:window.print()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
-            <i class="fa fa-print"></i> Print
+            <i class="fa fa-print"></i> {% trans %}tour.actions.print{% endtrans %}
         </a>
 
         <a href="/tour/print/{{ entity.id }}/{{ entity.quoteNumber }}.pdf" target="_blank" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
-            <i class="fa fa-file-pdf-o"></i> PDF
+            <i class="fa fa-file-pdf-o"></i> {% trans %}tour.actions.pdf{% endtrans %}
         </a>
 
         {% if collection != NULL %}
         <a href="/tour/view/export/{{ entity.id }}/{{ entity.quoteNumber }}.zip" target="_blank" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
-            <i class="fa fa-download"></i> Download Promo Materials
+            <i class="fa fa-download"></i> {% trans %}tour.actions.download_promo{% endtrans %}
         </a>
         {% else %}
         <a class="expired-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
-           href="#">
-            <i class="fa fa-download"></i> Download Promo Materials
+           href="">
+            <i class="fa fa-download"></i> {% trans %}tour.actions.download_promo{% endtrans %}
         </a>
+        {% endif %}
+
+        {% if is_granted("ROLE_BRAND") %}
+            <a href="#" id="notify-organizer" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions"><i class="fa fa-envelope"></i> {% trans %}tour.actions.email_organizer{% endtrans %}</a>
         {% endif %}
 
         {% if warning | length >0 %}
@@ -132,7 +136,7 @@
                     {% if editable %}
                         <div id="site-header-slideshow-content">
                             <a id="add-header-content" href="#" class="status-preview-edit mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
-                                <i class="fa fa-plus-circle"></i> Add Header Slideshow
+                                <i class="fa fa-plus-circle"></i> {% trans %}tour.actions.add_header{% endtrans %}
                             </a>
                         </div>
                     {% endif %}
@@ -181,8 +185,8 @@
                 {% endfor %}
 
                 {% if editable %}
-                    <span id="edit-tabs" class="site-content-blocks-tab status-preview-edit"><i class="fa fa-pencil"></i> Edit Tabs</span>
-                    <span id="add-new-tab" class="site-content-blocks-tab status-preview-edit"><i class="fa fa-plus-circle"></i> Add New Tab</span>
+                    <span id="edit-tabs" class="site-content-blocks-tab status-preview-edit"><i class="fa fa-pencil"></i> {% trans %}tour.actions.edit_tabs{% endtrans %}</span>
+                    <span id="add-new-tab" class="site-content-blocks-tab status-preview-edit"><i class="fa fa-plus-circle"></i>{% trans %}tour.actions.add_tab{% endtrans %}</span>
                 {% endif %}
             </div>
 
@@ -231,7 +235,7 @@
                     {% endfor %}
                     </div><!-- sortable-items -->
 
-                    <a id="add-content-block" tabId="{{ tab }}" href="#" class="add-content-block site-content-blocks-edit status-preview-edit"><i class="fa fa-plus-circle"></i> Add Block</a>
+                    <a id="add-content-block" tabId="{{ tab }}" href="#" class="add-content-block site-content-blocks-edit status-preview-edit"><i class="fa fa-plus-circle"></i> {% trans %}tour.actions.add_block{% endtrans %}</a>
 
                     <div id="content-block-editForm-{{ tab }}" class="add-content-block-form" style="display: none;"></div>
                 </div>
@@ -288,6 +292,23 @@
                 });
 
             {% endif %}
+
+            /**
+             * manipulate the tour show page for business users when they want contact/notify organizers
+             */
+
+            if($("#notify-organizer").length) {
+                var entityId = {{ entity.id }};
+                $(document).on('click', "#notify-organizer", function (e) {
+                    e.preventDefault();
+                    $("#dialog").html("");
+                    $("#dialog").dialog("open");
+                    $("#dialog").load('/manage/tour/notify/organizers/form/' + entityId, function () {
+                        $(this).dialog("option", "title", "Email the organizer");
+                        doMDLpopup($('#dialog')); // run the function to add appropriate MDL classes to form elements
+                    });
+                });
+            }
         });
     </script>
 
@@ -299,7 +320,7 @@
 
 {% block footer_left %}
     {% if entity.quoteReference.salesAgent %}
-        <span class="intro">Primary Business Contact:</span>
+        <span class="intro">{% trans %}tour.site_show.footer.intro{% endtrans %}</span>
         {% if entity.quoteReference.salesAgent.media %}
             <span class="tui-image-avatar"><img
                         src="{{ asset( entity.quoteReference.salesAgent.media.getRelativePath ~ "/" ~ entity.quoteReference.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}"
@@ -311,30 +332,14 @@
         {% endif %}
         <span class="agent">{{ entity.quoteReference.salesAgent.firstName }} {{ entity.quoteReference.salesAgent.lastName }}
             <br>
-            {{ entity.quoteReference.salesAgent.email }}</span>
+            <a href="mailto:{{ entity.quoteReference.salesAgent.email }}">{{ entity.quoteReference.salesAgent.email }}</a></span>
     {% endif %}
 {% endblock %}
 
 {% block footer_right %}
-    <div class="quote-info"><span class="quote-label">Price per person:</span><span
+    <div class="quote-info"><span class="quote-label">{% trans %}tour.site_show.footer.price{% endtrans %}</span><span
                 class="quote-price">{% if entity.pricePerson %}
 
-                <strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong>{% endif %}</span>
+                <strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePersonPublic }}</strong>{% endif %}</span>
     </div>
-    {#{% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}#}
-        {#{% if date(entity.expiryDate) < date('now') %}#}
-            {#<a class="expired-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">#}
-                {#<i class="fa fa-calendar-times-o"></i> Expired#}
-            {#</a>#}
-        {#{% else %}#}
-            {#<a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"#}
-               {#href="{{ path('quote_site_quote_accepted', { 'id': entity.id }) }}">#}
-                {#<i class="fa fa-thumbs-o-up"> </i> Like Quote#}
-            {#</a>#}
-        {#{% endif %}#}
-    {#{% elseif (entity.converted is sameas(true)) and (entity.quoteReference.converted is sameas(true)) %}#}
-        {#<a class="accepted-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">#}
-            {#<i class="fa fa-thumbs-up"> </i> Liked#}
-        {#</a>#}
-    {#{% endif %}#}
 {% endblock %}

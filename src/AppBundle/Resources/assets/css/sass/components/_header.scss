@@ -7,6 +7,7 @@
 .header {
   position: relative;
   display: block;
+  z-index: auto;
 
   .page-title {
     position: relative;
@@ -40,7 +41,6 @@
 .brand_logo {
   padding-top: 8px;
   padding-bottom: 8px;
-  color: $text_white;
   float: right;
 
   img {
@@ -108,7 +108,6 @@
   line-height: 48px;
   width: 48px;
   color: $text_white;
-  @include mdl-primary-color(background-color, 6);
   text-align: center;
   @include inline-block-vertical();
 

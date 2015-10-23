@@ -65,7 +65,8 @@ class QuoteVersionType extends AbstractType
                     'data' => true,
                      ))
                      ->add('quoteNumber', 'text', array(
-                        'label' => 'Quote Number',
+                        'label' => 'quote.form.quote_version.quoteNumber',
+                        'translation_domain'  => 'messages',
                         'required' => $require_qn,
                      ));
             }
@@ -80,7 +81,8 @@ class QuoteVersionType extends AbstractType
                     'data' => $hasTemplate,
                      ))
                      ->add('quoteNumber', 'text', array(
-                        'label' => 'Quote Number',
+                        'label' => 'quote.form.quote_version.quoteNumber',
+                        'translation_domain'  => 'messages',
                         'required' => $require_qn,
                      ));
             }
@@ -89,7 +91,8 @@ class QuoteVersionType extends AbstractType
             if (!$isNew && !$hasTemplate) {
                 $form->add('isTemplate', 'checkbox', array(
                     'required' => FALSE,
-                    'label' => "Convert to Template?",
+                    'label' => 'Convert to Template?',
+                    'translation_domain'  => 'messages',
                 ));
                 $showAll = true;
             };
@@ -111,42 +114,50 @@ class QuoteVersionType extends AbstractType
                 'mapped' => false,
             ))
             ->add('quoteReference', new QuoteType(), array(
-                'label' => 'Quote details',
+                'label' => 'quote.form.quote_version.quoteReference',
+                'translation_domain'  => 'messages',
             ))
             // now the versionable fields
             ->add('name', 'text', array(
-                'label' => 'Quote Name',
+                'label' => 'quote.form.quote_version.name',
+                'translation_domain'  => 'messages',
                 'required' => $require_qn,
             ))
             ->add('quoteNumber', 'text', array(
-                'label' => 'Quote Number',
+                'label' => 'quote.form.quote_version.quoteNumber',
+                'translation_domain'  => 'messages',
                 'required' => $require_qn,
             ))
             // Expire default should be now + 30 days
             ->add('expiryDate', 'genemu_jquerydate', array(
                 'widget' => 'single_text',
                 'required' => false,
-                'label' => 'Quote Expiration? ' . $date_label,
+                'label' => 'quote.form.quote_version.expiry',
+                'translation_domain'  => 'messages',
                 'format' => $date_format,
             ))
             ->add('departureDate', 'genemu_jquerydate', array(
                 'widget' => 'single_text',
                 'required' => false,
-                'label' => 'Departure Date ' . $date_label,
+                'label' => 'quote.form.quote_version.departure',
+                'translation_domain'  => 'messages',
                 'format' => $date_format,
             ))
             ->add('returnDate', 'genemu_jquerydate', array(
                 'widget' => 'single_text',
                 'required' => false,
-                'label' => 'Return Date ' . $date_label,
+                'label' => 'quote.form.quote_version.return',
+                'translation_domain'  => 'messages',
                 'format' => $date_format,
             ))
             ->add('duration', 'text', array(
                 'required' => false,
-                'label' => 'Duration',
+                'label' => 'quote.form.quote_version.duration',
+                'translation_domain'  => 'messages',
             ))
             ->add('boardBasis', 'entity', array(
-                'label' => 'Board Basis',
+                'label' => 'quote.form.quote_version.boardBasis',
+                'translation_domain'  => 'messages',
                 'required' => false,
                 'placeholder' => 'Select',
                 'class' => 'BoardBasisBundle:BoardBasis',
@@ -158,6 +169,8 @@ class QuoteVersionType extends AbstractType
             ))
             ->add('transportType', 'entity', array(
                 'required' => false,
+                'label' => 'quote.form.quote_version.transport',
+                'translation_domain'  => 'messages',
                 'placeholder' => 'Select',
                 'class' => 'TransportBundle:Transport',
                 'property' => 'name',
@@ -167,19 +180,24 @@ class QuoteVersionType extends AbstractType
                 },
             ))
             ->add('freePlaces', 'integer', array(
-                'label' => 'Free Places',
+                'label' => 'quote.form.quote_version.freePlaces',
+                'translation_domain'  => 'messages',
                 'required' => false,
             ))
             ->add('payingPlaces', 'integer', array(
-                'label' => 'Paying Places',
+                'label' => 'quote.form.quote_version.payingPlaces',
+                'translation_domain'  => 'messages',
                 'required' => false,
             ))
             ->add('pricePerson', 'integer', array(
-                'label' => 'Price per Person',
+                'label' => 'quote.form.quote_version.pricePerson',
+                'translation_domain'  => 'messages',
                 'required' => false,
             ))
             ->add('currency', 'entity', array(
                 'required' => false,
+                'label' => 'quote.form.quote_version.currency',
+                'translation_domain'  => 'messages',
                 'placeholder' => 'Select',
                 'class' => 'CurrencyBundle:Currency',
                 'property' => 'name',
@@ -189,7 +207,8 @@ class QuoteVersionType extends AbstractType
                 },
             ))
             ->add('welcomeMsg', 'ckeditor', array(
-                'label' => 'Summary Message',
+                'label' => 'quote.form.quote_version.welcomeMsg',
+                'translation_domain'  => 'messages',
             ));
     }
 

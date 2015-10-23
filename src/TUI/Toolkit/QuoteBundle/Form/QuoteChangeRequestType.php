@@ -22,26 +22,28 @@ class QuoteChangeRequestType extends AbstractType
         $builder
             ->add('changes', 'choice', array(
                 'choices' => array(
-                    'Our numbers have changed' => 'Our numbers have changed',
-                    'Need advice on how to reduce price' => 'Need advice on how to reduce price',
-                    'Can we look at different dates?' => 'Can we look at different dates?',
-                    'Where else do you recommend?' => 'Where else do you recommend?'
+                  'quote.form.changes.choices.numbers' => 'quote.form.changes.choices.numbers',
+                  'quote.form.changes.choices.reduce_price' => 'quote.form.changes.choices.reduce_price',
+                  'quote.form.changes.choices.dates' => 'quote.form.changes.choices.dates',
+                  'quote.form.changes.choices.destination' => 'quote.form.changes.choices.destination'
                 ),
                 'multiple' => true,
                 'expanded' => true,
                 'required' => false,
                 'mapped' => false,
+                'translation_domain'  => 'messages',
 
             ))
             ->add('additional', 'textarea', array(
-                'label' => 'Anything else?',
+                'label' => 'quote.form.changes.additional',
+                'translation_domain'  => 'messages',
                 'mapped' => false,
                 'required' => false,
                 'attr' => array(
                     'maxlength' => 500,
                 )
             ))
-            ->add('submit', 'submit', array('label' => 'Submit'))
+            ->add('submit', 'submit', array('label' => 'quote.form.changes.submit', 'translation_domain'  => 'messages',))
             ->getForm();
         ;
 

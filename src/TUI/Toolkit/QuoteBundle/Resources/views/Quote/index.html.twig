@@ -1,15 +1,15 @@
 {% extends '::base.html.twig' %}
-{% block title %}Manage Quotes{% endblock %}
+{% block title %}{% trans %}quote.title.index{% endtrans %}{% endblock %}
 
 {% block body %}
 
-    <h1>Quote Dashboard - Active</h1>
+    <h1>{% trans %}quote.page_title.index{% endtrans %}</h1>
 
     {% embed "QuoteBundle:Quote:buttons.html.twig" %}{% endembed %}
 
     {% embed "QuoteBundle:Quote:quote_tabs.html.twig" %}
         {% block active_tab %}
-            <a class="mdl-tabs__tab is-active" href="{{ path('manage_quote') }}">Active Quotes</a>
+            <a class="mdl-tabs__tab is-active" href="{{ path('manage_quote') }}">{% trans %}quote.tabs.current{% endtrans %}</a>
         {% endblock %}
     {% endembed %}
 

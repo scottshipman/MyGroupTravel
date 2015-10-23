@@ -1,14 +1,14 @@
 {% extends '::base.html.twig' %}
 {{ form_javascript(edit_form) }}
 {% block body -%}
-    <h1>PaymentTask edit</h1>
+    <h1>{% trans %}tour.page_title.payment_task.edit{% endtrans %}</h1>
 
     {{ form(edit_form) }}
 
         <ul class="record_actions">
     <li>
         <a href="{{ path('paymenttask') }}">
-            Back to the list
+            {% trans %}tour.actions.back{% endtrans %}
         </a>
     </li>
     <li>{{ form(delete_form) }}</li>

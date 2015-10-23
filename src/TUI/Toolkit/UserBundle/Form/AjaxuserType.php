@@ -40,7 +40,7 @@ class AjaxuserType extends AbstractType
           ->add('honorific', 'choice', array(
             'required' => false,
             'placeholder' => 'Select',
-            'label' => 'messages.user.form.honorific',
+            'label' => 'user.form.honorific',
             'translation_domain'  => 'messages',
               'choices' => array(
                 'Mr.' => 'Mr.',
@@ -51,24 +51,24 @@ class AjaxuserType extends AbstractType
                 )
               ))
           ->add('firstName', 'text', array(
-            'label' => 'messages.user.form.fname',
+            'label' => 'user.form.fname',
             'translation_domain'  => 'messages',
             'required' => true,
 
           ))
           ->add('lastName', 'text', array(
-            'label' => 'messages.user.form.lname',
+            'label' => 'user.form.lname',
             'translation_domain'  => 'messages',
             'required' => true,
           ))
           ->add('email', 'email', array(
-            'label' => 'messages.user.form.email',
+            'label' => 'user.form.email',
             'translation_domain'  => 'messages',
             'required'  => true,
 
           ))
           ->add('phoneNumber', 'tel', array(
-            'label' => 'messages.user.form.phone',
+            'label' => 'user.form.phone',
             'translation_domain'  => 'messages',
             'required' => false,
             'default_region' => $defaultRegion,

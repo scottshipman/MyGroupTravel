@@ -1,6 +1,6 @@
 {%  if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
 {% set zebra = "odd"  %}
-<h3 id="alternate-quotes-headline">{% trans %}quote_site.quote_sibling.intro{% endtrans %} {% if tourName %}{{ tourName }}{% else %}{% trans %}quote_site.quote_sibling.default_name{% endtrans %}{% endif %}</h3>
+<h3 id="related-quotes-headline">{% trans %}quote_site.quote_sibling.related{% endtrans %} {% if tourOrganizer and tourInstitution%}{{ tourOrganizer.firstName }} {{ tourOrganizer.lastName }} and {{ tourInstitution.name }}{% else %}{% trans %}quote_site.quote_sibling.default_name{% endtrans %}{% endif %}</h3>
 <table>
     <thead>
         <tr>

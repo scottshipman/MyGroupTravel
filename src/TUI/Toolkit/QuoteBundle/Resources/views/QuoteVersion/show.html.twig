@@ -99,12 +99,15 @@
         </li>
 
         <li>
+        {% if (entity.locked is sameas(false)) %}
             <a id="quoteLock" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-                {% if (entity.locked is sameas(false)) %}
-                    <i class="fa fa-lock"></i> Lock
-                {% else %}
-                    <i class="fa fa-unlock"></i> Unlock
-                {% endif %}
+            <i class="fa fa-lock"></i> Lock
+        {% else %}
+            {% if is_granted("ROLE_ADMIN") %}
+                <a id="quoteLock" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+                <i class="fa fa-unlock"></i> Unlock
+            {% endif %}
+        {% endif %}
             </a>
         </li>
         {% if entity.isTemplate == 0 %} {# no Quotelinks for templates needed #}
@@ -200,20 +203,20 @@
         </tbody>
     </table>
 
+{% if entity.locked == 0%}
     {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
         <hr>
         <h3>Header Content</h3>
 
-
-        {% if entity.headerBlock %}
-            <a id="edit-headerBlock" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-                <i class="fa fa-pencil-square-o"></i> Edit Header Content
-            </a>
-        {% else %}
-            <a id="add-headerBlock" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-                <i class="fa fa-plus-circle"></i> Add Header Content
-            </a>
-        {% endif %}
+            {% if entity.headerBlock %}
+                <a id="edit-headerBlock" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+                    <i class="fa fa-pencil-square-o"></i> Edit Header Content
+                </a>
+            {% else %}
+                <a id="add-headerBlock" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+                    <i class="fa fa-plus-circle"></i> Add Header Content
+                </a>
+            {% endif %}
     {% endif %}
     <hr>
 
@@ -266,6 +269,7 @@
            {% endfor %}
        </div>
 
+{% endif %}
        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.js"></script>
        <script>
            $(document).ready(function() {
@@ -532,7 +536,7 @@
             <span class="tui-text-avatar mdl-typography--headline">{{ entity.quoteReference.salesAgent.username[:1] }}</span>
         {% endif %}
         <span class="agent">{{ entity.quoteReference.salesAgent.firstName }} {{ entity.quoteReference.salesAgent.lastName }}<br>
-        {{ entity.quoteReference.salesAgent.email }}</span>
+        <a href="mailto:{{ entity.quoteReference.salesAgent.email }}">{{ entity.quoteReference.salesAgent.email }}</a></span>
     {% endif %}
 {% endblock %}
 

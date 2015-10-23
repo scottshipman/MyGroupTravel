@@ -1,13 +1,13 @@
 {% extends '::base.html.twig' %}
-{% block title %}Quote Dashboard - Converted{% endblock %}
-{% block page_title %}Quote Dashboard - Converted{% endblock %}
+{% block title %}{% trans %}quote.title.converted{% endtrans %}{% endblock %}
+{% block page_title %}{% trans %}quote.page_title.converted{% endtrans %}{% endblock %}
 
 {% block body -%}
 
     {% embed "QuoteBundle:QuoteVersion:buttons.html.twig" %}{% endembed %}
     {% embed "QuoteBundle:QuoteVersion:quote_tabs.html.twig" %}
         {% block converted_tab %}
-            <a class="mdl-tabs__tab is-active" href="{{ path('manage_quote_converted') }}">Converted Quotes</a>
+            <a class="mdl-tabs__tab is-active" href="{{ path('manage_quote_converted') }}">{% trans %}quote.tabs.converted{% endtrans %}</a>
         {% endblock %}
     {% endembed %}
 

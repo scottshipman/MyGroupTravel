@@ -39,12 +39,12 @@ class TourType extends AbstractType
 
         $builder
           ->add('name', 'text', array(
-            'label' => 'Tour Name',
+            'label' => 'tour.form.tour.name',
           ))
 
           ->add('tripStatus', 'entity', array(
             'required' => false,
-            'placeholder' => 'Select',
+            'placeholder' => 'tour.form.tour.placeholder',
             'class' => 'TripStatusBundle:TripStatus',
             'property' => 'name',
             'query_builder' => function (EntityRepository $er) {
@@ -59,7 +59,7 @@ class TourType extends AbstractType
           ))
           ->add('currency', 'entity', array(
             'required' => false,
-            'placeholder' => 'Select',
+            'placeholder' => 'tour.form.tour.placeholder',
             'class' => 'CurrencyBundle:Currency',
             'property' => 'name',
             'query_builder' => function (EntityRepository $er) {
@@ -70,7 +70,7 @@ class TourType extends AbstractType
           ->add('expiryDate', 'genemu_jquerydate', array(
             'widget' => 'single_text',
             'required' => false,
-            'label' => 'Quote Expiration? ' . $date_label,
+            'label' => 'tour.form.tour.expiration',
             'format' => $date_format,
           ))
           ->add('institution', 'genemu_jqueryautocomplete_entity', array(
@@ -96,37 +96,37 @@ class TourType extends AbstractType
             'class' => 'TUI\Toolkit\UserBundle\Entity\User',
             'route_name' => 'retrieve_salesagent_name',
             'data_class' => 'TUI\Toolkit\UserBundle\Entity\User',
-            'label' => 'Primary Business Admin',
+            'label' => 'tour.form.tour.sales_agent',
           ))
           ->add('secondaryContact', 'genemu_jqueryautocomplete_entity', array(
             'class' => 'TUI\Toolkit\UserBundle\Entity\User',
             'required' => FALSE,
             'route_name' => 'retrieve_salesagent_name',
             'data_class' => 'TUI\Toolkit\UserBundle\Entity\User',
-            'label' => 'Other Business Admin',
+            'label' => 'tour.form.tour.second_contact',
             //'multiple' => true,
           ))
           ->add('destination', 'genemu_jqueryautocomplete_entity', array(
             'class' => 'TUI\Toolkit\QuoteBundle\Entity\Quote',
             'property' => 'destination',
-            'label'   => 'Destination',
+            'label'   => 'tour.form.tour.destination',
           ))
           ->add('departureDate', 'genemu_jquerydate', array(
             'widget' => 'single_text',
             'required' => false,
-            'label' => 'Departure Date ' . $date_label,
+            'label' => 'tour.form.tour.departure',
             'format' => $date_format,
           ))
           ->add('returnDate', 'genemu_jquerydate', array(
             'widget' => 'single_text',
             'required' => false,
-            'label' => 'Return Date ' . $date_label,
+            'label' => 'tour.form.tour.return',
             'format' => $date_format,
           ))
           ->add('duration')
           ->add('transportType', 'entity', array(
             'required' => false,
-            'placeholder' => 'Select',
+            'placeholder' => 'tour.form.tour.placeholder',
             'class' => 'TransportBundle:Transport',
             'property' => 'name',
             'query_builder' => function (EntityRepository $er) {
@@ -135,9 +135,9 @@ class TourType extends AbstractType
             },
           ))
           ->add('boardBasis', 'entity', array(
-            'label' => 'Board Basis',
+            'label' => 'tour.form.tour.board',
             'required' => false,
-            'placeholder' => 'Select',
+            'placeholder' => 'tour.form.tour.placeholder',
             'class' => 'BoardBasisBundle:BoardBasis',
             'property' => 'name',
             'query_builder' => function (EntityRepository $er) {
@@ -158,28 +158,28 @@ class TourType extends AbstractType
           ->add('passengerDate', 'genemu_jquerydate', array(
             'widget' => 'single_text',
             'required' => false,
-            'label' => 'Passenger Info Due Date ' . $date_label,
+            'label' => 'tour.form.tour.passenger_date',
             'format' => $date_format,
           ))
 
           ->add('passportDate', 'genemu_jquerydate', array(
             'widget' => 'single_text',
             'required' => false,
-            'label' => 'Passport Info Due Date ' . $date_label,
+            'label' => 'tour.form.tour.passport_date',
             'format' => $date_format,
           ))
 
           ->add('medicalDate', 'genemu_jquerydate', array(
             'widget' => 'single_text',
             'required' => false,
-            'label' => 'Medical Info Due Date ' . $date_label,
+            'label' => 'tour.form.tour.medical_date',
             'format' => $date_format,
           ))
 
           ->add('dietaryDate', 'genemu_jquerydate', array(
             'widget' => 'single_text',
             'required' => false,
-            'label' => 'Dietary Info Due Date ' . $date_label,
+            'label' => 'tour.form.tour.dietary_date',
             'format' => $date_format,
           ))
             ->add('media', 'hidden', array(

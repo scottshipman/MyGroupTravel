@@ -1,9 +1,11 @@
 {% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
-{#  {{ dump(tours) }} #}
 
 {%  for tour in tours %}
-    {% set dtg  = date(tour.departureDate).diff(date("now")) %}
-    {% if dtg.days < 1 %} {%  set dtgFinal = 0  %} {% else %} {% set dtgFinal = dtg.days %}{% endif %}
+    {% if tour.departureDate is defined %}
+        {% set dtg  = date(tour.departureDate).diff(date("now")) %}
+        {% if dtg.days < 1 %} {%  set dtgFinal = 0  %} {% else %} {% set dtgFinal = dtg.days %}{% endif %}
+    {% else %} {% set dtgFinal = 'n/a' %}
+    {% endif %}
     <div class="tour-edit mdl-card mdl-shadow--2dp">
         {% set bgpath = ' ' %}
         {% if tour.headerBlock %}
@@ -17,11 +19,12 @@
         {% endif %}
 
         <div class="profile-tour-header mdl-card__title" style="background-image: url({{ bgpath }}); background-size: cover;">
-            {% if (is_granted("ROLE_BRAND")) or (tour.organizer.id == app.user.id) %}
+            {% if (is_granted("ROLE_BRAND")) or (tour.organizer is defined and tour.organizer.id == app.user.id) %}
                 {% set tourlink = path('manage_tour_show', {'id': tour.id}) %}
                 {% set tourEdit = path('manage_tour_edit', {'id': tour.id}) %}
             {% else %}
-                {% set tourlink = path('tour_site_show', {'id': tour.id, 'quoteNumber': tour.quoteNumber}) %}
+                {% set tourlink = path('tour_site_show', {'id': tour.id, 'quoteNumber': tour.quoteNumber})  %}
+
             {% endif %}
 
             <h2 class="mdl-card__title-text"><a href="{{ tourlink }}">{% trans %}user.profile.my_quotes.tour{% endtrans %}: {{ tour.name }} <i class="fa fa-arrow-right"></i></a></h2>
@@ -38,9 +41,9 @@
                <li>
                    <div class="profile-list-item item-1">
                         {% if (tour.organizer.id == app.user.id) or (tour.salesAgent.id == app.user.id) %}
-                            {% if tour.currency %}{{ tour.currency.htmlSymbol | raw}}{% endif %}{% if tour.pricePerson %}{{ tour.pricePerson }}{% endif %}<br /><label>{% trans %}user.profile.my_quotes.price{% endtrans %}</label>
+                            {% if tour.currency %}{{ tour.currency.htmlSymbol | raw}}{% endif %}{% if tour.pricePerson %}{{ tour.pricePerson }}{% else %}{% trans %}user.profile.my_quotes.no_price{% endtrans %}{% endif %}<br /><label>{% trans %}user.profile.my_quotes.price{% endtrans %}</label>
                         {% else %} {# show the Public price for passenger/parents#}
-                       {% if tour.currency %}{{ tour.currency.htmlSymbol | raw}}{% endif %}{% if tour.pricePersonPublic %}{{ tour.pricePersonPublic }}{% endif %}<br /><label>{% trans %}user.profile.my_quotes.price{% endtrans %}</label>
+                       {% if tour.currency %}{{ tour.currency.htmlSymbol | raw}}{% endif %}{% if tour.pricePersonPublic %}{{ tour.pricePersonPublic }}{% else %}{% trans %}user.profile.my_quotes.no_price{% endtrans %}{% endif %}<br /><label>{% trans %}user.profile.my_quotes.price{% endtrans %}</label>
                         {% endif %}
                    </div>
                </li>

@@ -1,27 +1,27 @@
 <div class="tour-edit mdl-card mdl-shadow--2dp">
 
     <div class="mdl-card__title">
-        <h3 class="mdl-card__title-text">Get Started</h3>
+        <h3 class="mdl-card__title-text">{% trans %}tour.not_completed.get_started{% endtrans %}</h3>
     </div>
 
     <div class="mdl-card__supporting-text mdl-card--border" style="color: grey;">
-        <i class="fa fa-check"></i> Sign up to EToolkit
+        <i class="fa fa-check"></i> {% trans %}tour.not_completed.signup{% endtrans %}
     </div>
 
     <div class="mdl-card__supporting-text mdl-card--border" style="color: grey;">
-        <i class="fa fa-check"></i> Set up your payment settings
+        <i class="fa fa-check"></i> {% trans %}tour.not_completed.payment_settings{% endtrans %}
     </div>
 
     <div class="mdl-card__supporting-text mdl-card--border">
-        <i class="fa fa-clone"></i> <a href="{{ path('manage_tour_setup_complete', { 'id': entity.id, "quoteNumber": entity.quoteNumber } ) }}">Personalize your website</a>
+        <i class="fa fa-clone"></i> <a href="{{ path('manage_tour_setup_complete', { 'id': entity.id, "quoteNumber": entity.quoteNumber } ) }}">{% trans %}tour.not_completed.personalize{% endtrans %}</a>
     </div>
 
     <div class="mdl-card__supporting-text mdl-card--border" style="color: grey;">
-        <p style="margin: 0; font-size: inherit;">Next</p>
+        <p style="margin: 0; font-size: inherit;">{% trans %}tour.not_completed.next{% endtrans %}</p>
     </div>
 
     <div class="mdl-card__supporting-text mdl-card--border" style="color: grey;">
-        <i class="fa fa-share"></i> Promote your tour
+        <i class="fa fa-share"></i> {% trans %}tour.not_completed.promote{% endtrans %}
     </div>
 
 </div>

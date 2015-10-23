@@ -1,47 +1,53 @@
 {% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
 {#  {{ dump(quotes) }} #}
 
-{%  for quote in quotes %}
-<div class = "tour-edit mdl-card mdl-shadow--2dp">
+{% for quote in quotes %}
+<div class="tour-edit mdl-card mdl-shadow--2dp">
     {% set bgpath = '' %}
     {% if quote.headerBlock %}
-        {% for media in quote.headerBlock.media %}
-            {% if loop.first %}
-                {% set bgpath = app.request.uriForPath( asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) )   %}
-            {% endif %}
+        {% for mediaWrapper in quote.headerBlock.mediaWrapper %}
+            {% for media in mediaWrapper.media %}
+                {% if loop.first %}
+                    {% set bgpath = app.request.uriForPath( asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) )   %}
+                {% endif %}
+            {% endfor %}
         {% endfor %}
     {% endif %}
-    <div class="mdl-card__supporting-text profile-tour-header" style="background-image: url({{ bgpath }});background-size: 100% 100% ;">
-        {% if quote.quoteNumber %}
-            <a href="{{ path('quote_site_show', {'id': quote.id, 'quoteNumber': quote.quoteNumber}) }}" class="">
+
+    <div class="profile-tour-header mdl-card__title" style="background-image: url({{ bgpath }}); background-size: cover;">
+        {% if (is_granted("ROLE_BRAND")) or (quote.quoteReference.organizer is defined and quote.quoteReference.organizer.id == app.user.id) %}
+            {% set quotelink = path('manage_tour_show', {'id': quote.id}) %}
+            {% set quoteEdit = path('manage_tour_edit', {'id': quote.id}) %}
         {% else %}
-            <a href="{{ path('quote_site_show', {'id': quote.id}) }}" class="">
+            {% set quotelink = path('tour_site_show', {'id': quote.id, 'quoteNumber': quote.quoteNumber})  %}
         {% endif %}
-            <h3 class="mdl-card__title">{% trans %}user.profile.my_quotes.quote{% endtrans %}: {{ quote.quoteReference.name }} - {{ quote.name }} <i class="fa fa-arrow-right"></i></h3>
-        </a>
+
+        <h2 class="mdl-card__title-text"><a href="{{ quotelink }}">{% trans %}user.profile.my_quotes.quote{% endtrans %}: {{ quote.quoteReference.name }} - {{ quote.name }} <i class="fa fa-arrow-right"></i></a></h2>
+
         {% if is_granted("ROLE_BRAND") %}
-            <span quoteid= "{{ quote.id }}" class="profile-quote-edit"><i class= "profile-quote-edit-link fa fa-pencil">edit</i></span>
+            <a href="{{ quoteEdit }}" quoteid="{{ quote.id }}" class="profile-tour-edit"><i class="profile-quote-edit-link fa fa-pencil"></i> Edit</a>
         {% endif %}
-        <span class="date-span" >{% if quote.departureDate and quote.returnDate%}{{ quote.departureDate|date(format)  }} - {{ quote.returnDate|date(format)  }} |{% endif %} {% if quote.quoteReference.destination %}{{ quote.quoteReference.destination }}{% endif %}</span>
+
+        <span class="date-span">{% if quote.departureDate and quote.returnDate%}{{ quote.departureDate|date(format)  }} - {{ quote.returnDate|date(format) }} | {% endif %}{% if quote.quoteReference.destination %}{{ quote.quoteReference.destination }}{% endif %}</span>
     </div>
+
     <div class="mdl-card__supporting-text profile-tour-details">
         <ul>
             <li>
                 <div class="profile-list-item seperator">
-                    {% if quote.currency %}{{ quote.currency.htmlSymbol | raw}}{% endif %}{% if quote.pricePerson %}{{ quote.pricePerson }}{% endif %}<br /><label>{% trans %}user.profile.my_quotes.price{% endtrans %}</label>
+                    {% if quote.currency %}{{ quote.currency.htmlSymbol | raw}}{% endif %}{% if quote.pricePerson %}{{ quote.pricePerson }}{% else %}{% trans %}user.profile.my_quotes.no_price{% endtrans %} {% endif %}<br /><label>{% trans %}user.profile.my_quotes.price{% endtrans %}</label>
                 </div>
             </li>
             <li>
-                <div class="profile-list-item seperator">
-                    {{ quote.quoteReference.institution.name}}<br /><label>{% trans %}user.profile.my_quotes.institution{% endtrans %}</label>
-                </div>
+                <div class="profile-list-item item-2">{{ quote.quoteReference.institution.name}}<br /><label>{% trans %}user.profile.my_quotes.institution{% endtrans %}</label></div>
             </li>
             <li>
-                <div class="profile-list-item">
+                <div class="profile-list-item item-3">
                     {% if quote.quoteReference.organizer.id == app.user.id %}
                         {% if quote.quoteReference.salesAgent.media %}
                             <span class="tui-image-avatar">
-                                    <img src="{{ asset( quote.quoteReference.salesAgent.media.getRelativePath ~ "/" ~ quote.quoteReference.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ quote.quoteReference.salesAgent.username }}"></span>
+                                <img src="{{ asset( quote.quoteReference.salesAgent.media.getRelativePath ~ "/" ~ quote.quoteReference.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ quote.quoteReference.salesAgent.username }}">
+                            </span>
                         {% elseif quote.quoteReference.salesAgent.firstName and tour.salesAgent.lastName %}
                             <span class="tui-text-avatar mdl-typography--headline">{{ quote.quoteReference.salesAgent.firstName[:1] }}{{ quote.quoteReference.salesAgent.lastName[:1] }}</span>
                         {% else %}
@@ -68,13 +74,3 @@
     </div>
 </div>
 {% endfor %}
-<script>
-    //edit quotes action
-    $(document).ready(function () {
-        $(document).on('click', '.profile-quote-edit', function (e) {
-            var quoteid = $(this).attr('quoteid');
-            window.location.href = '/manage/quote/' + quoteid + '/edit';
-        });
-
-    });
-</script>
