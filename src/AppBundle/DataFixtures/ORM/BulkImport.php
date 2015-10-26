@@ -54,7 +54,7 @@ class BulkImport implements FixtureInterface, ContainerAwareInterface
         $row = array_combine($head, $row);
         $name = $row['institutionName'];
 
-        echo "creating $name ";
+        echo "$count.  creating $name ";
 
         $institution = new Institution();
         $institution->setName($row['institutionName']);
@@ -86,9 +86,9 @@ class BulkImport implements FixtureInterface, ContainerAwareInterface
 
 //        $id = $institution->getId();
 
-        $final =  microtime(true) - $time;
+        $final =  round(microtime(true) - $time, 4);
         $memory = memory_get_usage()/1024;
-        echo ".....TIME: $final   and count - $count  and memory = $memory \n ";
+        echo "       TIME: $final    (memory used: $memory) \n ";
         $count++;
 
         if ($count %500 ==0){
