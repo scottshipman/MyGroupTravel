@@ -1,11 +1,13 @@
 {% if entity.layoutType %}
     {% if entity.layoutType.name != 'image_bottom' %}
         <div class="content-block-media">
+            {% spaceless %}
             {% for mediaWrapper in entity.mediaWrapper %}
                 {% for media in mediaWrapper.media %}
                 <img class="block-image-stacked" src="{{ app.request.uriForPath( asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) ) }}" title="{{ mediaWrapper.title }}" alt="{{ mediaWrapper.title }}">
                 {% endfor %}
             {% endfor %}
+            {% endspaceless %}
         </div>
     {% endif %}
 {% endif %}
@@ -17,11 +19,13 @@
 {% if entity.layoutType %}
     {% if entity.layoutType.name == 'image_bottom' %}
         <div class="content-block-media">
-        {% for mediaWrapper in entity.mediaWrapper %}
-            {% for media in mediaWrapper.media %}
-                <img class="block-image-stacked" src="{{ app.request.uriForPath( asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) ) }}" title="{{ mediaWrapper.title }}" alt="{{ mediaWrapper.title }}">
+            {% spaceless %}
+            {% for mediaWrapper in entity.mediaWrapper %}
+                {% for media in mediaWrapper.media %}
+                    <img class="block-image-stacked" src="{{ app.request.uriForPath( asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) ) }}" title="{{ mediaWrapper.title }}" alt="{{ mediaWrapper.title }}">
+                {% endfor %}
             {% endfor %}
-        {% endfor %}
+            {% endspaceless %}
         </div>
     {% endif %}
 {% endif %}
