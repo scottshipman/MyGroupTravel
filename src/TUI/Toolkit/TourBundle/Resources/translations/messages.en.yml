@@ -132,6 +132,15 @@ tour:
         completed_passenger_data: Collect Passenger Data
         completed_medical_data: Collect Medical Data
         completed_dietary_data: Collect Dietary Data
+        sign_up: Sign Up
+        passengers: Passengers
+        views: Views
+        accepted_of: Accepted Of
+        waitlist: Waitlist
+        collect: Collect
+        payments_by: Payments By
+        paid: Paid
+        unpaid: Unpaid
 
     edit:
         summary: Summary
