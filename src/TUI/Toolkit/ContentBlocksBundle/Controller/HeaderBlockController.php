@@ -303,35 +303,26 @@ class HeaderBlockController extends Controller
         $medias = array();
 
         if (NULL != $editForm->getData()->getMediaWrapper()) {
-            $wrappers = array();
             $fileArrays = json_decode($editForm->getData()->getMediaWrapper());
-            foreach ($fileArrays as $fileArray) {
-                $id = $fileArray[0];
-                $mediaItem = $em->getRepository('MediaBundle:Media')->find($id);
-                $existingWrapper = $mediaItem->getMediaWrappers()->toArray();
-                if ($existingWrapper) {
-                    $existingWrapper = $existingWrapper[0];
-                    $id = $existingWrapper->getId();
-                    $mediaWrappers = $this->forward('MediaBundle:MediaWrapper:update', array(
-                        'id' => $id,
-                        'fileArray' => $fileArray,
-                    ));
-                } else {
+            $wrappers = array();
+            if (!empty($fileArrays)) {
+                foreach ($fileArrays as $fileArray) {
                     $mediaWrappers = $this->forward('MediaBundle:MediaWrapper:create', array(
                         'fileArray' => $fileArray,
                     ));
+                    $content = $mediaWrappers->getContent();
+                    $wrappers[] = $content;
                 }
-                $content = $mediaWrappers->getContent();
-                $wrappers[] = $content;
             }
 
             $newWrappers = array();
-            foreach ($wrappers as $wrap) {
-                $newContent = json_decode($wrap, true);
-                $newWrappers[] = $newContent;
+            if ($wrappers != null || !empty($wrappers)) {
+                foreach ($wrappers as $wrap) {
+                    $newContent = json_decode($wrap, true);
+                    $newWrappers[] = $newContent;
+                }
             }
-
-            if ($newWrappers != NULL) {
+            if ($newWrappers != NULL || !empty($newWrappers)) {
                 foreach ($newWrappers as $newWrapper) {
                     $wrapper = $em->getRepository('MediaBundle:MediaWrapper')->find($newWrapper['id']);
                     $medias[] = $wrapper;
@@ -341,7 +332,9 @@ class HeaderBlockController extends Controller
 
         if (!empty($medias)) {
             $editForm->getData()->setMediaWrapper($medias);
-
+        }
+        else if (empty($medias)) {
+            $editForm->getData()->setMediaWrapper(NULL);
         }
 
         if ($editForm->isValid()) {
@@ -392,44 +385,38 @@ class HeaderBlockController extends Controller
         $medias = array();
 
         if (NULL != $editForm->getData()->getMediaWrapper()) {
-            $wrappers = array();
             $fileArrays = json_decode($editForm->getData()->getMediaWrapper());
-            foreach ($fileArrays as $fileArray) {
-                $id = $fileArray[0];
-                $mediaItem = $em->getRepository('MediaBundle:Media')->find($id);
-                $existingWrapper = $mediaItem->getMediaWrappers()->toArray();
-                if ($existingWrapper) {
-                    $existingWrapper = $existingWrapper[0];
-                    $id = $existingWrapper->getId();
-                    $mediaWrappers = $this->forward('MediaBundle:MediaWrapper:update', array(
-                        'id' => $id,
-                        'fileArray' => $fileArray,
-                    ));
-                } else {
+            $wrappers = array();
+            if (!empty($fileArrays)) {
+                foreach ($fileArrays as $fileArray) {
                     $mediaWrappers = $this->forward('MediaBundle:MediaWrapper:create', array(
                         'fileArray' => $fileArray,
                     ));
+                    $content = $mediaWrappers->getContent();
+                    $wrappers[] = $content;
                 }
-                $content = $mediaWrappers->getContent();
-                $wrappers[] = $content;
             }
 
             $newWrappers = array();
-            foreach ($wrappers as $wrap) {
-                $newContent = json_decode($wrap, true);
-                $newWrappers[] = $newContent;
+            if ($wrappers != null || !empty($wrappers)) {
+                foreach ($wrappers as $wrap) {
+                    $newContent = json_decode($wrap, true);
+                    $newWrappers[] = $newContent;
+                }
             }
-
-            if ($newWrappers != NULL) {
+            if ($newWrappers != NULL || !empty($newWrappers)) {
                 foreach ($newWrappers as $newWrapper) {
                     $wrapper = $em->getRepository('MediaBundle:MediaWrapper')->find($newWrapper['id']);
                     $medias[] = $wrapper;
                 }
             }
         }
+
         if (!empty($medias)) {
             $editForm->getData()->setMediaWrapper($medias);
-
+        }
+        else if (empty($medias)) {
+            $editForm->getData()->setMediaWrapper(NULL);
         }
 
         if ($editForm->isValid()) {
