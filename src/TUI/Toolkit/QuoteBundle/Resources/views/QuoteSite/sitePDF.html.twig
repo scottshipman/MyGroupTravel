@@ -2,7 +2,9 @@
 
 {% block title %}{{ entity.name }}{% endblock %}
 
-{% block page_title %}{{ entity.quoteReference.name  }}, {{ entity.name }}{% endblock %}
+{% block page_title %}
+    {% if entity.displayName %}{{ entity.displayName }}{% else %}{{ entity.quoteReference.name }}{% endif %}{% if is_granted("ROLE_BRAND") %}, {{ entity.name }}{% endif %}
+{% endblock %}
 
 {% block page_institution %}
     {% if entity.quoteReference.institution %}
@@ -15,7 +17,7 @@
 {% endblock %}
 
 {% block quote_number %}
-    {% trans %}tour.pdf.quoteNumber{% endtrans %} {% if entity.quoteNumber %}{{ entity.quoteNumber }}{% endif %}
+    {% if entity.quoteNumber %}{{ entity.quoteNumber }}{% endif %}
 {% endblock %}
 
 {% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
