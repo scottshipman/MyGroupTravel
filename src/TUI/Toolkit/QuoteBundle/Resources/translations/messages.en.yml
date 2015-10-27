@@ -180,6 +180,7 @@ quote:
             departure: Departure Date
             return: Return Date
             duration: Duration
+            displayName: Display Name
             boardBasis: Board Basis
             transport: Transport Type
             freePlaces: Free Places
@@ -214,6 +215,7 @@ quote_site:
     quote_summary:
         departing: "Departing: "
         duration: "Duration: "
+        displayName: "Display Name: "
         returning: "Returning: "
         board_basis: "Board basis: "
         transport: "Transport: "
