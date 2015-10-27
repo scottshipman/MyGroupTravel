@@ -160,6 +160,7 @@ tour:
         expired: Expired
         departing: Departing:
         duration: Duration:
+        display_name: Display Name:
         returning: Returning:
         board: Board Basis:
         transport: Transport:
@@ -264,6 +265,7 @@ tour:
             departure: Departure Date (DD-MM-YYYY)
             return: Return Date (DD-MM-YYYY)
             duration: Duration
+            display_name: Display Name
             board: Board Basis
             free_places: Free Places
             paying_places: Paying Places
@@ -279,6 +281,7 @@ tour:
             destination: Destination
             departure: Departure Date (DD-MM-YYYY)
             return: Return Date (DD-MM-YYYY)
+            display_name: Display Name
             board: Board Basis
             passenger_date: Passenger Info Due Date (DD-MM-YYYY)
             passport_date: Passport Info Due Date (DD-MM-YYYY)
