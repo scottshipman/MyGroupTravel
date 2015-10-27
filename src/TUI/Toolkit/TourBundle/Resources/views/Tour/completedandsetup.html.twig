@@ -163,7 +163,7 @@
                 {% if "now"|date(compareFormat) < paymentTask.dueDate|date(compareFormat)  %}
                     <div class="tour-edit mdl-card mdl-shadow--2dp">
                         <div class="mdl-card__title">
-                            <h3 class="mdl-card__title-text">Pay {{ paymentTask.name|capitalize }} To {{ brand.name|capitalize }} {{ paymentTask.dueDate|date(shortFormat) }}</h3>
+                            <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.pay{% endtrans %} {{ paymentTask.name|capitalize }} {% trans %}tour.dashboard.to{% endtrans %} {{ brand.name|capitalize }} {{ paymentTask.dueDate|date(shortFormat) }}</h3>
                         </div>
                         <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
                             <ul>
@@ -186,11 +186,11 @@
                     <div class="tour-edit mdl-card mdl-shadow--2dp">
                         <div class="mdl-card__title">
                             <i style="margin: 0 10px" class="fa fa-exclamation-triangle fa-2x"></i>
-                            <h3 class="mdl-card__title-text">Pay {{ paymentTask.name }} To {{ brand.name }} </h3>
+                            <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.pay{% endtrans %} {{ paymentTask.name }} {% trans %}tour.dashboard.to{% endtrans %} {{ brand.name }} </h3>
                         </div>
                         <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
                             <div class="mdl-card__supporting-text">
-                                <p style="font-size: inherit;">The deadline for {{ paymentTask.name }} has passed.  If you have any questions please contact {{ entity.salesAgent.firstName|capitalize }} {{ entity.salesAgent.lastName|capitalize }} in our operations team.</p>
+                                <p style="font-size: inherit;">{% trans %}tour.dashboard.the_deadline{% endtrans %} {{ paymentTask.name }}{% trans %}tour.dashboard.has_passed{% endtrans %}  {{ entity.salesAgent.firstName|capitalize }} {{ entity.salesAgent.lastName|capitalize }} {% trans %}tour.dashboard.operations_team{% endtrans %} </p>
                             </div>
                         </div>
                     </div>

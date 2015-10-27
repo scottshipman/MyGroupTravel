@@ -141,6 +141,11 @@ tour:
         payments_by: Payments By
         paid: Paid
         unpaid: Unpaid
+        pay: Pay
+        to: To
+        the_deadline: The deadline for
+        has_passed: has passed.  If you have any questions please contact
+        operations_team: in our operations team.
 
     edit:
         summary: Summary
