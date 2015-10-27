@@ -118,6 +118,7 @@ tour:
         signups: Sign-ups
         days: Days To Go
         passport_data: Collect Passport Data By
+        passenger_data: Collect Passenger Data By
         collecting: Collecting
         outstanding: Outstanding
         medical_data: Collect Medical Data By
@@ -128,6 +129,7 @@ tour:
         todo: ToDo
         completed: Completed
         completed_passport_data: Collect Passport Data
+        completed_passenger_data: Collect Passenger Data
         completed_medical_data: Collect Medical Data
         completed_dietary_data: Collect Dietary Data
 
