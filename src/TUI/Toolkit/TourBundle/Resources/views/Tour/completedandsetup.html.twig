@@ -82,6 +82,36 @@
 
     <h5>{% trans %}tour.dashboard.todo{% endtrans %}</h5>
 
+    {#Sign Up Passengers#}
+
+    <div class="tour-edit mdl-card mdl-shadow--2dp">
+        <div class="mdl-card__title">
+            <h3 class="mdl-card__title-text">Sign Up {{ entity.payingPlaces }} Passengers</h3>
+        </div>
+        <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
+            <ul>
+                <li>
+                    <div class="profile-list-item item-1 tour-dashboard four-column">
+                        <span class="date-span">{{ entity.views }}</span>
+                        <label>Views</label>
+                    </div>
+                </li>
+                <li>
+                    <div class="profile-list-item item-2 tour-dashboard">
+                        <span class="date-span">10</span>
+                        <label>Accepted of {{ entity.payingPlaces }}</label>
+                    </div>
+                </li>
+                <li>
+                    <div class="profile-list-item item-3 tour-dashboard">
+                        <span class="date-span">0</span>
+                        <label>Waitlist</label>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
     {#First and not paid passenger payment tasks#}
 
     {% if entity.paymentTasksPassenger is not empty  %}
