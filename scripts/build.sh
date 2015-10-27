@@ -24,7 +24,7 @@ case "$1" in
     ;;
   prod)
     application_env="prod"
-    composer_params="--no-dev --optimize-autoloader"
+    composer_params="--optimize-autoloader"
     ;;
 esac
 
