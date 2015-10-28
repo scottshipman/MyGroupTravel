@@ -67,6 +67,10 @@
 {% endblock %}
 
 {% block body -%}
+    {% if (entity.locked is sameas(true)) %}
+        <h3 style="color: red;">{{ entity.name }} is locked</h3>
+    {% endif %}
+
     <ul class="record_actions">
         {% if (entity.locked is sameas(false)) and (is_granted("ROLE_BRAND")) %}
             {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
