@@ -24,10 +24,13 @@
 
             {% if is_granted("ROLE_BRAND") %}
                 if ($(".fam-unlock").length > 0) {
-                    $(".fam-unlock").parent().remove();
-                    var width = $(".grid-row-actions").width();
-                    var newWidth = width - 60;
-                    $(".grid-row-actions").css({"min-width": newWidth});
+                    $(".fam-unlock").each( function() {
+                        var row = $(this).parent().parent().parent();
+                        var linkWidth = $(this).parent().parent().width();
+                        var rowWidth = row.width() - linkWidth;
+                        $(this).parent().remove();
+                        row.css({"min-width": rowWidth});
+                    });
                 }
             {% endif %}
         });
