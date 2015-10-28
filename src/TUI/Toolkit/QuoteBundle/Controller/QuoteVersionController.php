@@ -715,7 +715,7 @@ class QuoteVersionController extends Controller
         $form->get('quoteReference')->get('salesAgent')->setData($this->get('security.token_storage')->getToken()->getUser());
         $form->get('currency')->setdata($currency);
         $form->get('expiryDate')->setdata(new \DateTime('now + 30 days'));
-        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('quote.action.create')));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('quote.actions.create')));
 
         return $form;
     }
@@ -741,7 +741,7 @@ class QuoteVersionController extends Controller
 
         $form->get('quoteReference')->get('salesAgent')->setData($this->get('security.token_storage')->getToken()->getUser());
         $form->get('currency')->setdata($currency);
-        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('quote.action.create_template')));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('quote.actions.create_template')));
 
         return $form;
     }
@@ -1057,7 +1057,7 @@ class QuoteVersionController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('quote.action.clone')));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('quote.actions.clone')));
 
         return $form;
     }
@@ -1417,7 +1417,7 @@ class QuoteVersionController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('manage_quote_restore', array('id' => $id)))
             ->setMethod('POST')
-            ->add('submit', 'submit', array('label' => $this->get('translator')->trans('quote.action.restore')))
+            ->add('submit', 'submit', array('label' => $this->get('translator')->trans('quote.actions.restore')))
             ->getForm();
     }
 
