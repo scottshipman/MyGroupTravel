@@ -68,7 +68,7 @@
 
 {% block body -%}
     <ul class="record_actions">
-        {% if (entity.locked is sameas(false)) and (is_granted("ROLE_ADMIN")) %}
+        {% if (entity.locked is sameas(false)) and (is_granted("ROLE_BRAND")) %}
             {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
                 <li>
                     <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quoteversion_edit', { 'id': entity.id }) }}">

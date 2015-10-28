@@ -22,7 +22,7 @@
                 $("#loader").css("display", "inline-block");
             });
 
-            {% if is_granted("ROLE_BRAND") %}
+            {% if is_granted("ROLE_ADMIN") == false %}
                 if ($(".fam-unlock").length > 0) {
                     $(".fam-unlock").each( function() {
                         var row = $(this).parent().parent().parent();
