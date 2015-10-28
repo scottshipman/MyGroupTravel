@@ -157,7 +157,7 @@ class QuoteVersionType extends AbstractType
             ))
             ->add('displayName', 'text', array(
                 'required' => false,
-                'label' => 'quote.form.quote_version.displayName',
+                'label' => 'quote.form.quote_version.display_name',
                 'translation_domain'  => 'messages',
             ))
             ->add('boardBasis', 'entity', array(

@@ -3,7 +3,11 @@
 {% block title %}{{ entity.name }}{% endblock %}
 
 {% block page_title %}
-    {% if entity.displayName %}{{ entity.displayName }}{% else %}{{ entity.quoteReference.name }}{% endif %}{% if is_granted("ROLE_BRAND") %}, {{ entity.name }}{% endif %}
+    {% if entity.displayName %}
+        {{ entity.displayName }}
+    {% else %}
+        {{ entity.quoteReference.name }}{% if is_granted("ROLE_BRAND") %}, {{ entity.name }}{% endif %}
+    {% endif %}
 {% endblock %}
 
 {% block page_institution %}
