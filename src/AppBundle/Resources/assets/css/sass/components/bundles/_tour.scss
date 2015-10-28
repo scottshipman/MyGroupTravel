@@ -148,14 +148,27 @@
     background-color: #eee;
   }
 
-}
+  .download {
+    vertical-align: top;
+    position: relative;
+    top: 6px;
+    width: 90%;
+    margin: 0 auto;
+    display: block;
 
-.progress-bar {
-  height: 20px;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  border-bottom: none;
-  border-right: none;
-  border-left: none;
-  background: #F5F5F5;
-}
+    @include breakpoint_desktop() {
+      width: auto;
+      max-width: 200px;
+      margin: 0;
+    }
+  }
+  .progress-bar {
+    height: 20px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: none;
+    border-right: none;
+    border-left: none;
+    background: #F5F5F5;
+  }
 
+}
