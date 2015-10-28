@@ -147,7 +147,7 @@ class TourController extends Controller
             }
         );
         $emailAction = new RowAction('Email', 'manage_tour_notify_organizers_form');
-        $emailAction->setRole('ROLE_ADMIN');
+        $emailAction->setRole('ROLE_BRAND');
         $grid->addRowAction($emailAction);
 
         // add business admin last name filter
