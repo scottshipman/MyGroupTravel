@@ -322,18 +322,18 @@ class QuoteVersion
         }
     }
 
-  /**
-   * @Assert\Callback
-   */
-  public function isExpiryBeforeNow(ExecutionContextInterface $context)
-  {
-    $now = new \DateTime('now');
-    if ( $now >= $this->getExpiryDate() ) {
-      $context->buildViolation('The expiry date must be in the future.')
-          ->atPath('expiryDate')
-          ->addViolation();
+    /**
+     * @Assert\Callback
+     */
+    public function isExpiryBeforeNow(ExecutionContextInterface $context)
+    {
+      $now = new \DateTime('now');
+      if ( $now >= $this->getExpiryDate() ) {
+        $context->buildViolation('The expiry date must be in the future.')
+            ->atPath('expiryDate')
+            ->addViolation();
+      }
     }
-  }
 
 
     public function getId()
