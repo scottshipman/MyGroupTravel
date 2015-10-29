@@ -42,6 +42,7 @@ quote:
         add_header: Add Header Slideshow
         edit_tabs: Edit Tabs
         add_tab: Add New Tab
+        is_locked: is locked
 
 
     table:
@@ -130,7 +131,7 @@ quote:
             link_text: "You can also paste the link below straight into your browser window:"
 
     footer:
-        salesAgent: "Primary Business Contact: "
+        salesAgent: "Your Contact: "
         price_person: "Price per person: "
         actions:
             expired: Expired
