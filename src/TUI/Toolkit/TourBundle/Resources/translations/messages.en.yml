@@ -118,6 +118,7 @@ tour:
         signups: Sign-ups
         days: Days To Go
         passport_data: Collect Passport Data By
+        passenger_data: Collect Passenger Data By
         collecting: Collecting
         outstanding: Outstanding
         medical_data: Collect Medical Data By
@@ -128,8 +129,23 @@ tour:
         todo: ToDo
         completed: Completed
         completed_passport_data: Collect Passport Data
+        completed_passenger_data: Collect Passenger Data
         completed_medical_data: Collect Medical Data
         completed_dietary_data: Collect Dietary Data
+        sign_up: Sign Up
+        passengers: Passengers
+        views: Views
+        accepted_of: Accepted Of
+        waitlist: Waitlist
+        collect: Collect
+        payments_by: Payments By
+        paid: Paid
+        unpaid: Unpaid
+        pay: Pay
+        to: To
+        the_deadline: The deadline for
+        has_passed: has passed.  If you have any questions please contact
+        operations_team: in our operations team.
 
     edit:
         summary: Summary
@@ -174,7 +190,7 @@ tour:
 
     site_show:
         footer:
-            intro: Primary Business Contact:
+            intro: Your Contact:
             price: Price per person:
 
 

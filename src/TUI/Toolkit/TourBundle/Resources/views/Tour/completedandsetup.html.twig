@@ -1,18 +1,33 @@
 {% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
 {% if 'en_GB' in locale %} {% set shortFormat = 'd M' %} {% else %} {% set format = 'M d' %} {% endif %}
+{% set compareFormat = 'Y-m-d' %}
 
 {% if entity.passportDate != null %}
     {% set passDtg  = date(entity.passPortDate).diff(date("now")) %}
+    {% set passTime  = date(entity.created.date).diff(date(entity.passPortDate))%}
+    {% set passPercent = ((passTime.days - passDtg.days)/passTime.days) * 100  %}
     {% if passDtg.days < 1 %} {%  set passDtgFinal = 0  %} {% else %} {% set passDtgFinal = passDtg.days %}{% endif %}
+{% endif %}
+
+
+{% if entity.passengerDate != null %}
+    {% set passengerDtg  = date(entity.passengerDate).diff(date("now")) %}
+    {% set passengerTime  = date(entity.created.date).diff(date(entity.passengerDate))%}
+    {% set passengerPercent = ((passengerTime.days - passengerDtg.days)/passengerTime.days) * 100  %}
+    {% if passengerDtg.days < 1 %} {%  set passengerDtgFinal = 0  %} {% else %} {% set passengerDtgFinal = passengerDtg.days %}{% endif %}
 {% endif %}
 
 {% if entity.medicalDate != null%}
     {% set medDtg  = date(entity.medicalDate).diff(date("now")) %}
+    {% set medTime  = date(entity.created.date).diff(date(entity.medicalDate))%}
+    {% set medPercent = ((medTime.days - medDtg.days)/medTime.days) * 100  %}
     {% if medDtg.days < 1 %} {%  set medDtgFinal = 0  %} {% else %} {% set medDtgFinal = medDtg.days %}{% endif %}
 {% endif %}
 
 {% if entity.dietaryDate != null%}
     {% set dietDtg  = date(entity.dietaryDate).diff(date("now")) %}
+    {% set dietTime  = date(entity.created.date).diff(date(entity.dietaryDate))%}
+    {% set dietPercent = ((dietTime.days - dietDtg.days)/dietTime.days) * 100  %}
     {% if dietDtg.days < 1 %} {%  set dietDtgFinal = 0  %} {% else %} {% set dietDtgFinal = dietDtg.days %}{% endif %}
 {% endif %}
 
@@ -20,9 +35,9 @@
 {% set dtg  = date(entity.departureDate).diff(date("now")) %}
 {% if dtg.days < 1 %} {%  set dtgFinal = 0  %} {% else %} {% set dtgFinal = dtg.days %}{% endif %}
 
-{#{{ dump(entity) }}#}
 {% if is_granted("ROLE_BRAND") or app.user.email == entity.organizer.email %}
 
+{#Status Bar, only the organizer for the specific tour or brand users can view the dashboard#}
     <div class="tour-edit mdl-card mdl-shadow--2dp">
         <div class="mdl-card__title">
             <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.status{% endtrans %}</h3>
@@ -66,8 +81,127 @@
     </div>
 
     <h5>{% trans %}tour.dashboard.todo{% endtrans %}</h5>
+
+    {#Sign Up Passengers#}
+
+    <div class="tour-edit mdl-card mdl-shadow--2dp">
+        <div class="mdl-card__title">
+            <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.sign_up{% endtrans %} {{ entity.payingPlaces }} {% trans %}tour.dashboard.passengers{% endtrans %}</h3>
+        </div>
+        <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
+            <ul>
+                <li>
+                    <div class="profile-list-item item-1 tour-dashboard four-column">
+                        <span class="date-span">{{ entity.views }}</span>
+                        <label>{% trans %}tour.dashboard.views{% endtrans %}</label>
+                    </div>
+                </li>
+                <li>
+                    <div class="profile-list-item item-2 tour-dashboard">
+                        <span class="date-span">10</span>
+                        <label>{% trans %}tour.dashboard.accepted_of{% endtrans %} {{ entity.payingPlaces }}</label>
+                    </div>
+                </li>
+                <li>
+                    <div class="profile-list-item item-3 tour-dashboard">
+                        <span class="date-span">0</span>
+                        <label>{% trans %}tour.dashboard.waitlist{% endtrans %}</label>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    {#First and not paid passenger payment tasks#}
+
+    {% if entity.paymentTasksPassenger is not empty  %}
+        {% for paymentTask in entity.paymentTasksPassenger if paymentTask.paidDate == null %}
+            {% if loop.first %}
+                {% set passengerDepositDtg  = date(paymentTask.dueDate).diff(date("now")) %}
+                {% if passengerDepositDtg.days < 1 %} {%  set passengerDepositDtgFinal = 0  %} {% else %} {% set passengerDepositDtgFinal = passengerDepositDtg.days %}{% endif %}
+                {% if "now"|date(compareFormat) < paymentTask.dueDate|date(compareFormat) %}
+                    <div class="tour-edit mdl-card mdl-shadow--2dp">
+                        <div class="mdl-card__title">
+                            <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.collect{% endtrans %} {{ entity.payingPlaces }} {{ paymentTask.name|capitalize }} {% trans %}tour.dashboard.payments_by{% endtrans %} {{ paymentTask.dueDate|date(shortFormat) }}</h3>
+                        </div>
+                        <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
+                            <ul>
+                                <li>
+                                    <div class="profile-list-item item-1 tour-dashboard">
+                                        <span class="date-span">5</span>
+                                        <label>{% trans %}tour.dashboard.paid{% endtrans %}</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="profile-list-item item-2 tour-dashboard">
+                                        <span class="date-span">10</span>
+                                        <label>{% trans %}tour.dashboard.unpaid{% endtrans %}</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="profile-list-item item-3 tour-dashboard">
+                                        <span class="date-span">{{ passengerDepositDtgFinal }}</span>
+                                        <label>{% trans %}tour.dashboard.days{% endtrans %}</label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    {#Payment Tasks Always show the first unpaid payment#}
+
+
+    {% if entity.paymentTasks is not empty  %}
+        {% for paymentTask in entity.paymentTasks if paymentTask.paidDate == null %}
+            {% if loop.first %}
+                {% set depositdtg  = date(paymentTask.dueDate).diff(date("now")) %}
+                {% if depositdtg.days < 1 %} {%  set depositDtgFinal = 0  %} {% else %} {% set depositDtgFinal = depositdtg.days %}{% endif %}
+                {% if "now"|date(compareFormat) < paymentTask.dueDate|date(compareFormat)  %}
+                    <div class="tour-edit mdl-card mdl-shadow--2dp">
+                        <div class="mdl-card__title">
+                            <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.pay{% endtrans %} {{ paymentTask.name|capitalize }} {% trans %}tour.dashboard.to{% endtrans %} {{ brand.name|capitalize }} {{ paymentTask.dueDate|date(shortFormat) }}</h3>
+                        </div>
+                        <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
+                            <ul>
+                                <li>
+                                    <div class="profile-list-item item-1 tour-dashboard two-column">
+                                        <span class="date-span">{% if entity.currency %}<p id="currency" style="display: inline; font-size: inherit;">{{ entity.currency.htmlSymbol | raw }}</p>{% endif %}{{ paymentTask.value }}</span>
+                                        <label>Due</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="profile-list-item item-2 tour-dashboard two-column">
+                                        <span class="date-span">{{ depositDtgFinal }}</span>
+                                        <label>{% trans %}tour.dashboard.days{% endtrans %}</label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                {% elseif "now"|date(compareFormat) > paymentTask.dueDate|date(compareFormat) %}
+                    <div class="tour-edit mdl-card mdl-shadow--2dp">
+                        <div class="mdl-card__title">
+                            <i style="margin: 0 10px" class="fa fa-exclamation-triangle fa-2x"></i>
+                            <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.pay{% endtrans %} {{ paymentTask.name }} {% trans %}tour.dashboard.to{% endtrans %} {{ brand.name }} </h3>
+                        </div>
+                        <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
+                            <div class="mdl-card__supporting-text">
+                                <p style="font-size: inherit;">{% trans %}tour.dashboard.the_deadline{% endtrans %} {{ paymentTask.name }}{% trans %}tour.dashboard.has_passed{% endtrans %}  {{ entity.salesAgent.firstName|capitalize }} {{ entity.salesAgent.lastName|capitalize }} {% trans %}tour.dashboard.operations_team{% endtrans %} </p>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+{#Passport Date info task#}
     {% if entity.passportDate != null %}
-        {% if entity.passPortDate|date(shortFormat) > "now"|date(shortFormat) %}
+        {% if "now"|date(compareFormat) < entity.passPortDate|date(compareFormat) %}
         <div class="tour-edit mdl-card mdl-shadow--2dp">
             <a class ="dashboard-titles" href="#">
                 <div class="mdl-card__title">
@@ -75,6 +209,7 @@
                     <span class="tour-dashboard-cta"><i class="fa fa-arrow-right"></i></span>
                 </div>
             </a>
+            <div id="passport-progress" class="progress-bar"></div>
             <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
                 <ul>
                     <li>
@@ -102,123 +237,141 @@
         {% endif %}
     {% endif %}
 
+    {#Passenger Data info task#}
+    {% if entity.passengerDate != null %}
+        {% if "now"|date(compareFormat) < entity.passengerDate|date(compareFormat) %}
+            <div class="tour-edit mdl-card mdl-shadow--2dp">
+                <a class ="dashboard-titles" href="#">
+                    <div class="mdl-card__title">
+                        <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.passenger_data{% endtrans %} {{ entity.passengerDate|date(shortFormat) }}</h3>
+                        <span class="tour-dashboard-cta"><i class="fa fa-arrow-right"></i></span>
+                    </div>
+                </a>
+                <div id="passenger-progress" class="progress-bar"></div>
+                <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
+                    <ul>
+                        <li>
+                            <div class="profile-list-item item-1 tour-dashboard">
+                                <span class="date-span">0</span>
+                                <label>{% trans %}tour.dashboard.collecting{% endtrans %}</label>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="profile-list-item item-2 tour-dashboard">
+                                <span class="date-span">60</span>
+                                <label>{% trans %}tour.dashboard.outstanding{% endtrans %}</label>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="profile-list-item item-3 tour-dashboard">
+                                <span class="date-span">{{ passengerDtgFinal }}</span>
+                                <label>{% trans %}tour.dashboard.days{% endtrans %}</label>
+                            </div>
+                        </li>
+                        <li>
+                    </ul>
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
+
+{#Medical Date info task#}
     {% if entity.medicalDate != null %}
-        {% if entity.medicalDate|date(shortFormat) > "now"|date(shortFormat) %}
+        {% if "now"|date(compareFormat) < entity.medicalDate|date(compareFormat)  %}
             <div class="tour-edit mdl-card mdl-shadow--2dp">
-
-            <a class ="dashboard-titles" href="#">
-                <div class="mdl-card__title">
-                    <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.medical_data{% endtrans %} {{ entity.medicalDate|date(shortFormat) }}</h3>
-                    <span class="tour-dashboard-cta"><i class="fa fa-arrow-right"></i></span>
+                <a class ="dashboard-titles" href="#">
+                    <div class="mdl-card__title">
+                        <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.medical_data{% endtrans %} {{ entity.medicalDate|date(shortFormat) }}</h3>
+                        <span class="tour-dashboard-cta"><i class="fa fa-arrow-right"></i></span>
+                    </div>
+                </a>
+                <div id="medical-progress" class="progress-bar"></div>
+                <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
+                    <ul>
+                        <li>
+                            <div class="profile-list-item item-1 tour-dashboard">
+                                <span class="date-span">0</span>
+                                <label>{% trans %}tour.dashboard.collecting{% endtrans %}</label>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="profile-list-item item-2 tour-dashboard">
+                                <span class="date-span">60</span>
+                                <label>{% trans %}tour.dashboard.outstanding{% endtrans %}</label>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="profile-list-item item-3 tour-dashboard">
+                                <span class="date-span">{{ medDtgFinal }}</span>
+                                <label>{% trans %}tour.dashboard.days{% endtrans %}</label>
+                            </div>
+                        </li>
+                        <li>
+                    </ul>
                 </div>
-            </a>
-            <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
-                <ul>
-                    <li>
-                        <div class="profile-list-item item-1 tour-dashboard">
-                            <span class="date-span">0</span>
-                            <label>{% trans %}tour.dashboard.collecting{% endtrans %}</label>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="profile-list-item item-2 tour-dashboard">
-                            <span class="date-span">60</span>
-                            <label>{% trans %}tour.dashboard.outstanding{% endtrans %}</label>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="profile-list-item item-3 tour-dashboard">
-                            <span class="date-span">{{ medDtgFinal }}</span>
-                            <label>{% trans %}tour.dashboard.days{% endtrans %}</label>
-                        </div>
-                    </li>
-                    <li>
-                </ul>
             </div>
-        </div>
         {% endif %}
     {% endif %}
 
+{#Dietary Date Task#}
     {% if entity.dietaryDate != null %}
-        {% if entity.dietaryDate|date(shortFormat) > "now"|date(shortFormat) %}
+        {% if "now"|date(compareFormat) < entity.dietaryDate|date(compareFormat) %}
             <div class="tour-edit mdl-card mdl-shadow--2dp">
-
-            <a class ="dashboard-titles" href="#">
-                <div class="mdl-card__title">
-                    <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.dietary_data{% endtrans %} {{ entity.dietaryDate|date(shortFormat) }}</h3>
-                    <span class="tour-dashboard-cta"><i class="fa fa-arrow-right"></i></span>
+                <a class ="dashboard-titles" href="#">
+                    <div class="mdl-card__title">
+                        <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.dietary_data{% endtrans %} {{ entity.dietaryDate|date(shortFormat) }}</h3>
+                        <span class="tour-dashboard-cta"><i class="fa fa-arrow-right"></i></span>
+                    </div>
+                </a>
+                <div id="dietary-progress" class="progress-bar"></div>
+                <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
+                    <ul>
+                        <li>
+                            <div class="profile-list-item item-1 tour-dashboard">
+                                <span class="date-span">0</span>
+                                <label>{% trans %}tour.dashboard.collecting{% endtrans %}</label>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="profile-list-item item-2 tour-dashboard">
+                                <span class="date-span">60</span>
+                                <label>{% trans %}tour.dashboard.outstanding{% endtrans %}</label>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="profile-list-item item-3 tour-dashboard">
+                                <span class="date-span">{{ dietDtgFinal }}</span>
+                                <label>{% trans %}tour.dashboard.days{% endtrans %}</label>
+                            </div>
+                        </li>
+                        <li>
+                    </ul>
                 </div>
-            </a>
-            <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
-                <ul>
-                    <li>
-                        <div class="profile-list-item item-1 tour-dashboard">
-                            <span class="date-span">0</span>
-                            <label>{% trans %}tour.dashboard.collecting{% endtrans %}</label>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="profile-list-item item-2 tour-dashboard">
-                            <span class="date-span">60</span>
-                            <label>{% trans %}tour.dashboard.outstanding{% endtrans %}</label>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="profile-list-item item-3 tour-dashboard">
-                            <span class="date-span">{{ dietDtgFinal }}</span>
-                            <label>{% trans %}tour.dashboard.days{% endtrans %}</label>
-                        </div>
-                    </li>
-                    <li>
-                </ul>
             </div>
-        </div>
         {% endif %}
     {% endif %}
 
-    {#{% if entity.paymentTasks is not empty %}#}
-        {#{% set depositdtg  = date(entity.paymentTasks[0].dueDate).diff(date("now")) %}#}
-        {#{% if depositdtg.days < 1 %} {%  set depositDtgFinal = 0  %} {% else %} {% set depositDtgFinal = depositdtg.days %}{% endif %}#}
-        {#<div class="tour-edit mdl-card mdl-shadow--2dp">#}
-            {#<div class="mdl-card__title">#}
-                {#<h3 class="mdl-card__title-text">Pay Deposit To {{ brand.name }} {{ entity.paymentTasks[0].dueDate|date(shortFormat) }}</h3>#}
-            {#</div>#}
-            {#<div class="mdl-card__supporting-text mdl-card--border profile-tour-details">#}
-                {#<ul>#}
-                    {#<li>#}
-                        {#<div class="profile-list-item item-1 tour-dashboard two-column">#}
-                            {#<span class="date-span">{% if entity.currency %}<p id="currency" style="display: inline; font-size: inherit;">{{ entity.currency.htmlSymbol | raw }}</p>{% endif %}{{ entity.paymentTasks[0].value }}</span>#}
-                            {#<label>Due</label>#}
-                        {#</div>#}
-                    {#</li>#}
-                    {#<li>#}
-                        {#<div class="profile-list-item item-2 tour-dashboard two-column">#}
-                            {#<span class="date-span">{{ depositDtgFinal }}</span>#}
-                            {#<label>Days to Go</label>#}
-                        {#</div>#}
-                    {#</li>#}
-                {#</ul>#}
-            {#</div>#}
-        {#</div>#}
-    {#{% endif %}#}
 
+{#Download Booking Form#}
         <div class="tour-edit mdl-card mdl-shadow--2dp">
-
             <div class="mdl-card__title">
                 <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.booking_form{% endtrans %}</h3>
             </div>
             <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
                 <div class="mdl-card__supporting-text">
                     <p style="font-size: inherit;">{% trans %}tour.dashboard.booking_form_copy{% endtrans %}</p>
-                    <a class="add-organizer mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#"><i class="fa fa-download"></i>{% trans %}tour.dashboard.download{% endtrans %}</a>
+                    <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored download" href="#"><i class="fa fa-download"></i>{% trans %}tour.dashboard.download{% endtrans %}</a>
                 </div>
             </div>
         </div>
 
 {% endif %}
+
     <h5>{% trans %}tour.dashboard.completed{% endtrans %}</h5>
+
+    {#Passport Data completed#}
     {% if entity.passportDate != null %}
-        {% if entity.passPortDate|date(shortFormat) < "now"|date(shortFormat) %}
+        {% if "now"|date(compareFormat) > entity.passPortDate|date(compareFormat) %}
             <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
                  <div class="mdl-card__title">
                     <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.completed_passport_data{% endtrans %}</h3>
@@ -228,8 +381,21 @@
         {% endif %}
     {% endif %}
 
+    {#Passenger Data completed#}
+    {% if entity.passengerDate != null %}
+        {% if "now"|date(compareFormat) > entity.passengerDate|date(compareFormat) %}
+            <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
+                <div class="mdl-card__title">
+                    <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.completed_passenger_data{% endtrans %}</h3>
+                    <span class="tour-dashboard-cta"><i class="fa fa-check"></i></span>
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
+
+    {#Medical Data completed#}
     {% if entity.medicalDate != null %}
-        {% if entity.medicalDate|date(shortFormat) < "now"|date(shortFormat) %}
+        {% if "now"|date(compareFormat) > entity.medicalDate|date(compareFormat) %}
             <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
                 <div class="mdl-card__title">
                     <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.completed_medical_data{% endtrans %}</h3>
@@ -239,8 +405,9 @@
         {% endif %}
     {% endif %}
 
+    {#Dietary Data completed#}
     {% if entity.dietaryDate != null %}
-        {% if entity.dietaryDate|date(shortFormat) > "now"|date(shortFormat) %}
+        {% if "now"|date(compareFormat) > entity.dietaryDate|date(compareFormat) %}
             <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
                 <div class="mdl-card__title">
                     <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.completed_dietary_data{% endtrans %}</h3>
@@ -250,19 +417,87 @@
         {% endif %}
     {% endif %}
 
-    {#<div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">#}
-        {#<div class="mdl-card__title">#}
-            {#<h3 class="mdl-card__title-text">Pay Deposit To {{ brand.name }}</h3>#}
-            {#<span class="tour-dashboard-cta"><i class="fa fa-check"></i></span>#}
-        {#</div>#}
-    {#</div>#}
+    {#Completed Payment Tasks#}
+    {% if entity.paymentTasks is not empty  %}
+        {% for paymentTask in entity.paymentTasks if paymentTask.paidDate != null and "now"|date(compareFormat) > paymentTask.dueDate|date(compareFormat)  %}
+        <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
+            <div class="mdl-card__title">
+                <h3 class="mdl-card__title-text">Pay Deposit To {{ brand.name }}</h3>
+                <span class="tour-dashboard-cta"><i class="fa fa-check"></i></span>
+            </div>
+        </div>
+        {% endfor %}
+    {% endif %}
+
+    {#Complete Passenger Payment Tasks#}
+    {% if entity.paymentTasksPassenger is not empty  %}
+        {% for paymentTask in entity.paymentTasksPassenger if paymentTask.paidDate != null %}
+            <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
+                <div class="mdl-card__title">
+                    <h3 class="mdl-card__title-text">Collect {{ entity.payingPlaces }} {{ paymentTask.name|capitalize }} Payments</h3>
+                    <span class="tour-dashboard-cta"><i class="fa fa-check"></i></span>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
 
 <script>
-    {% if entity.media != NULL %}
+
+//Only allow users to download promo assets when there are some
+{% if entity.media != NULL %}
     var something = '<a href="/tour/view/export/{{ entity.id }}/{{ entity.quoteNumber }}.zip" target="_blank" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions"> <i class="fa fa-download"></i> Download Promo Materials</a>';
-    {% else %}
+{% else %}
     var something = '<a class="expired-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#"><i class="fa fa-download"></i> Download Promo Materials </a>';
-    {% endif %}
+{% endif %}
+
+//Percentage Bars
+$(document).ready(function() {
+    var passPercent = {% if passPercent is defined %}{{ passPercent }}{% endif %};
+    var medPercent = {% if medPercent is defined %}{{ medPercent }}{% endif %};
+    var dietPercent = {% if dietPercent is defined %}{{ dietPercent }}{% endif %};
+    var passengerPercent = {% if passengerPercent is defined %}{{ passengerPercent }}{% endif %};
+
+    //Passport Data percentage
+    $(function() {
+        $("#passport-progress").progressbar({
+            value: 1
+        });
+        $("#passport-progress > .ui-progressbar-value").animate({
+            width: passPercent + "%"
+        }, 1500).html('<p style="margin: -2px 0 1em; font-size: 15px;"class="mdl-color-text--primary-contrast">' + Math.round(passPercent) + "% Completed" + '</p>').css({"background": "{{ brand.primaryColor }}"});
+    });
+
+    //Passenger Data percentage
+    $(function() {
+        $("#passenger-progress").progressbar({
+            value: 1
+        });
+        $("#passenger-progress > .ui-progressbar-value").animate({
+            width: passengerPercent + "%"
+        }, 1500).html('<p style="margin: -2px 0 1em; font-size: 15px;"class="mdl-color-text--primary-contrast">' + Math.round(passengerPercent) + "% Completed" + '</p>').css({"background": "{{ brand.primaryColor }}"});
+    });
+
+    //Medical Data percentage
+    $(function() {
+        $("#medical-progress").progressbar({
+            value: 1
+        });
+        $("#medical-progress > .ui-progressbar-value").animate({
+            width: medPercent + "%"
+        }, 1500).html('<p style="margin: -2px 0 1em; font-size: 15px;"class="mdl-color-text--primary-contrast">' + Math.round(medPercent) + "% Completed" + '</p>').css({"background": "{{ brand.primaryColor }}"});
+    });
+
+    //Dietary Data percentage
+    $(function() {
+        $("#dietary-progress").progressbar({
+            value: 1
+        });
+        $("#dietary-progress > .ui-progressbar-value").animate({
+            width: dietPercent + "%"
+        }, 1500).html('<p style="margin: -2px 0 1em; font-size: 15px;"class="mdl-color-text--primary-contrast">' + Math.round(dietPercent) + "% Completed" + '</p>').css({"background": "{{ brand.primaryColor }}"});
+    });
+
+});
 // Promote Popup
 $(document).on('click', '#promote-tour', function (e) {
 e.preventDefault();
