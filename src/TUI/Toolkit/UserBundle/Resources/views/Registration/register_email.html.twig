@@ -32,14 +32,14 @@
                                         activating your account please click the button</p>
                                     <center>
                                         <a style="text-decoration: none; color:#fff; display: block; width: 40%; text-align: center; padding: 20px; margin: 20px auto; background-color:{{ brand.primaryColor }};"
-                                           href="{{ absolute_url("/register/confirm/" ~ user.confirmationToken) }}">Activate</a>
+                                           href="{{ absolute_url("/user/register/confirm/" ~ user.confirmationToken) }}">Activate</a>
                                     </center>
                                     <hr>
                                     <p style="text-align: center; color: #C7C3C5;">
                                         You can also paste the link below straight into your browser window:
                                     </p></br>
                                     <a style="text-decoration: none; color:{{ brand.primaryColor }}; text-align: center; display: block; width: auto;"
-                                       href="{{ absolute_url("/register/confirm/" ~ user.confirmationToken) }}">{{ absolute_url("/register/confirm/" ~ user.confirmationToken) }}</a></br>
+                                       href="{{ absolute_url("/user/register/confirm/" ~ user.confirmationToken) }}">{{ absolute_url("/register/confirm/" ~ user.confirmationToken) }}</a></br>
                                 </div>
                             </center>
                         </div>

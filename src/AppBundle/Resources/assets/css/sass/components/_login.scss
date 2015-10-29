@@ -39,12 +39,12 @@
     padding: 15px;
   }
 
-  input[type="submit"] {
+  input[type="submit"], #tui_toolkit_user_register_confirm_submit  {
     width: 100%;
-    margin-top: 20px;
+    margin-top: 40px;
   }
 
-  .login-form > div {
+  .login-form > div{
     text-align: center;
     padding-bottom: 35px;
   }

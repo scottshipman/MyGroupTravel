@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumber;
 use Gedmo\Mapping\Annotation as Gedmo;
 use APY\DataGridBundle\Grid\Mapping as GRID;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -69,6 +70,34 @@ class User extends BaseUser
      * @ORM\Column(type="phone_number", nullable=true)
      */
     protected $phoneNumber = null;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @Assert\NotBlank(message="Please enter A Security Question.", groups={"Registration", "Profile"})
+     * @Assert\Length(
+     *     min=10,
+     *     max=255,
+     *     minMessage="The question is too short.",
+     *     maxMessage="The question is too long.",
+     *     groups={"Registration", "Profile"}
+     * )
+     */
+
+    protected $question = null;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @Assert\NotBlank(message="Please enter your Security Question Answer.", groups={"Registration", "Profile"})
+     * @Assert\Length(
+     *     min=5,
+     *     max=255,
+     *     minMessage="The answer is too short.",
+     *     maxMessage="The answer is too long.",
+     *     groups={"Registration", "Profile"}
+     * )
+     */
+
+    protected $answer = null;
 
 
     public function __construct()
@@ -238,4 +267,52 @@ class User extends BaseUser
   {
     return $this->created;
   }
+
+  /**
+   * Set question
+   *
+   * @param date $created
+   * @return User
+   */
+  public function setQuestion($question)
+  {
+    $this->question = $question;
+
+    return $this;
+  }
+
+  /**
+   * Get question
+   *
+   * @return string
+   */
+  public function getQuestion()
+  {
+    return $this->question;
+  }
+
+  /**
+   * Set answer
+   *
+   * @param string $answer
+   * @return User
+   */
+  public function setAnswer($answer)
+  {
+    $this->answer = $answer;
+
+    return $this;
+  }
+
+  /**
+   * Get answer
+   *
+   * @return string
+   */
+  public function getAnswer()
+  {
+    return $this->answer;
+  }
+
+
 } 

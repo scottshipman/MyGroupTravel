@@ -95,3 +95,7 @@ _liip_imagine:
 
 elfinder:
      resource: "@FMElfinderBundle/Resources/config/routing.yml"
+
+terms_of_service:
+  path: /terms-of-service
+  defaults: { _controller: "BrandBundle:Brand:terms" }

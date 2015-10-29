@@ -18,7 +18,7 @@ use TUI\Toolkit\UserBundle\Entity\User;
 use TUI\Toolkit\UserBundle\Form\UserType;
 use TUI\Toolkit\UserBundle\Form\AjaxuserType;
 use TUI\Toolkit\UserBundle\Form\UserMediaType;
-use TUI\Toolkit\UserBundle\Form\PasswordSetType;
+use TUI\Toolkit\UserBundle\Form\ActivateUserType;
 use TUI\Toolkit\MediaBundle\Form\MediaType;
 use APY\DataGridBundle\Grid\Source\Entity;
 use APY\DataGridBundle\Grid\Export\CSVExport;
@@ -27,6 +27,10 @@ use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
+
+use Symfony\Component\EventDispatcher\EventDispatcher,
+  Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken,
+  Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 /**
  * User controller.
@@ -451,19 +455,21 @@ class UserController extends Controller
      * Displays a form to edit an existing User entity.
      *
      */
-    public function passwordSetAction($id)
+    public function activateUserAction($token)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
+        $entity = $em->getRepository('TUIToolkitUserBundle:User')->findByConfirmationToken($token);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find User entity.');
+            throw $this->createNotFoundException('Unable to find User entity while rendering activation form.');
         }
-        $setForm = $this->createPasswordSetForm($entity);
+        $setForm = $this->createActivateUserForm($entity[0]);
 
-        return $this->render('TUIToolkitUserBundle:User:password-set.html.twig', array(
-            'set_form' => $setForm->createView(),
+        return $this->render('TUIToolkitUserBundle:Registration:activation.html.twig', array(
+            'form' => $setForm->createView(),
+            'user'  => $entity[0],
+            'token' => $token,
         ));
     }
 
@@ -524,23 +530,20 @@ class UserController extends Controller
     }
 
     /**
-     * Creates a form to set a User password.
-     *
+     * Creates a form to activate a User.
+     * sets password and security question, plus terms of service check
      * @param User $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createPasswordSetForm(User $entity)
+    private function createActivateUserForm(User $entity)
     {
-        $form = $this->createForm(new PasswordSetType(), $entity, array(
-            'action' => $this->generateUrl('user_password_set', array('id' => $entity->getId())),
+        $form = $this->createForm(new ActivateUserType(), $entity, array(
+            'action' => $this->generateUrl('activate_user_submit', array('id' => $entity->getId())),
             'method' => 'POST',
         ));
 
-        // get current user's roles and add form elements
-
-
-        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('user.actions.password')));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('user.actions.activate')));
 
         return $form;
     }
@@ -598,32 +601,54 @@ class UserController extends Controller
     }
 
     /**
-     * Edits an existing User entity.
+     * Activate a User account by validating form submission.
      *
      */
-    public function setPasswordAction(Request $request, $id)
+    public function activateUserSubmitAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find User entity.');
+            throw $this->createNotFoundException('Unable to find User entity rendering activation form.');
         }
 
-        $setForm = $this->createPasswordSetForm($entity);
+        $setForm = $this->createActivateUserForm($entity);
         $setForm->handleRequest($request);
 
         if ($setForm->isValid()) {
             $entity->setPassword($setForm->getData()->getPlainPassword());
+            $entity->setQuestion($setForm->getData()->getQuestion());
+            $entity->setAnswer($setForm->getData()->getAnswer());
+            $entity->setEnabled(true);
             $em->persist($entity);
             $em->flush();
-            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.password') . ' ' . $entity->getUsername());
+
+          // todo trigger user registration complete here
+          $dispatcher = $this->get('event_dispatcher');
+          $event = new FormEvent($form, $request);
+          dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS, $event);
+          if (null === $response = $event->getResponse()) {
+            $url = $this->generateUrl('fos_user_registration_confirmed');
+            $response = new RedirectResponse($url);
+          }
+          $dispatcher->dispatch(FOSUserEvents::REGISTRATION_COMPLETED, new FilterUserResponseEvent($user, $request, $response));
+
+          $token = new UsernamePasswordToken($entity, $entity->getPassword(),
+            "public", $entity->getRoles());
+
+          $this->get("security.context")->setToken($token);
+
+          // Trigger login event
+          $event = new InteractiveLoginEvent($request, $token);
+          $this->get("event_dispatcher")
+            ->dispatch("security.interactive_login", $event);
 
             return $this->redirect($this->generateUrl('fos_user_profile_show'));
         }
 
-        return $this->render('TUIToolkitUserBundle:Registration:confirmed.html.twig', array(
+        return $this->render('TUIToolkitUserBundle:Registration:activation.html.twig', array(
             'user' => $entity,
             'set_form' => $setForm->createView(),
         ));
@@ -675,7 +700,7 @@ class UserController extends Controller
       return $this->createFormBuilder()
           ->setAction($this->generateUrl('user_delete', array('id' => $id)))
           ->setMethod('DELETE')
-          ->add('submit', 'submit', array('label' => $this->get('translator')->trans('user.flash.delete')))
+          ->add('submit', 'submit', array('label' => $this->get('translator')->trans('user.actions.delete')))
           ->getForm();
     }
 
@@ -748,7 +773,10 @@ class UserController extends Controller
         ));
     }
 
-    public function registerConfirmationTriggerAction($id)
+  /*
+   * Sends an email to a User when brand user clicks Notify User
+   */
+  public function registerConfirmationTriggerAction($id)
     {
 
         $mailer = $this->container->get('mailer');
@@ -790,7 +818,10 @@ class UserController extends Controller
 
     }
 
-    public function resetUserPasswordAction($id)
+  /*
+   * Sends an email after the Brand person clicks the User reset action
+   */
+  public function resetUserPasswordAction($id)
     {
         $mailer = $this->container->get('mailer');
 
@@ -849,56 +880,7 @@ class UserController extends Controller
 
     }
 
-    /**
-     * Receive the confirmation token from user email provider, login the user
-     */
-    public function confirmAction(Request $request, $token)
-    {
-        /** @var $formFactory \FOS\UserBundle\Form\Factory\FactoryInterface */
-        $formFactory = $this->get('fos_user.resetting.form.factory');
-        /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
-        $userManager = $this->get('fos_user.user_manager');
-        /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
-        $dispatcher = $this->get('event_dispatcher');
 
-        $em = $this->getDoctrine()->getManager();
-
-        $user = $userManager->findUserByConfirmationToken($token);
-
-        if (null === $user) {
-            throw new NotFoundHttpException(sprintf('The user with confirmation token "%s" does not exist', $token));
-        }
-
-        $event = new GetResponseUserEvent($user, $request);
-        $dispatcher->dispatch(FOSUserEvents::REGISTRATION_CONFIRM, $event);
-
-        $form = $formFactory->createForm();
-        $form->setData($user);
-
-        $form->handleRequest($request);
-
-        $userManager->updateUser($user);
-
-        //Get Brand Stuff
-        $brand = $em->getRepository('BrandBundle:Brand')->findAll();
-        $brand = $brand[0];
-
-        if (null === $response = $event->getResponse()) {
-            $url = $this->generateUrl('fos_user_registration_confirmed');
-            $response = new RedirectResponse($url);
-        }
-
-        $dispatcher->dispatch(FOSUserEvents::REGISTRATION_CONFIRMED, new FilterUserResponseEvent($user, $request, $response));
-
-
-        return $this->render('TUIToolkitUserBundle:Registration:activation.html.twig', array(
-            'token' => $token,
-            'brand' => $brand,
-            'user' => $user,
-            'form' => $form->createView(),
-        ));
-
-    }
 
     /**
      * Request reset user password: submit form and send email
@@ -963,69 +945,6 @@ class UserController extends Controller
         ));
     }
 
-    /**
-     * Reset user password
-     */
-    public function resetAction(Request $request, $token)
-    {
-        /** @var $formFactory \FOS\UserBundle\Form\Factory\FactoryInterface */
-        $formFactory = $this->get('fos_user.resetting.form.factory');
-        /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
-        $userManager = $this->get('fos_user.user_manager');
-        /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
-        $dispatcher = $this->get('event_dispatcher');
-
-        $user = $userManager->findUserByConfirmationToken($token);
-
-        $em = $this->getDoctrine()->getManager();
-
-        //Get Brand Stuff
-        $brand = $em->getRepository('BrandBundle:Brand')->findAll();
-        $brand = $brand[0];
-
-        if (null === $user) {
-            throw new NotFoundHttpException(sprintf('The user with "confirmation token" does not exist for value "%s"', $token));
-        }
-
-        $event = new GetResponseUserEvent($user, $request);
-        $dispatcher->dispatch(FOSUserEvents::RESETTING_RESET_INITIALIZE, $event);
-
-//        if (null !== $event->getResponse()) {
-//            return $event->getResponse();
-//        }
-
-        $form = $formFactory->createForm();
-        $form->setData($user);
-
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $event = new FormEvent($form, $request);
-            $dispatcher->dispatch(FOSUserEvents::RESETTING_RESET_SUCCESS, $event);
-
-            $userManager->updateUser($user);
-
-            if ($user->isEnabled() == false) {
-                $user->setEnabled(true);
-            }
-
-            if (null === $response = $event->getResponse()) {
-                $url = $this->generateUrl('fos_user_profile_show');
-                $response = new RedirectResponse($url);
-            }
-
-            $dispatcher->dispatch(FOSUserEvents::RESETTING_RESET_COMPLETED, new FilterUserResponseEvent($user, $request, $response));
-
-            return $response;
-        }
-
-        return $this->render('TUIToolkitUserBundle:Resetting:reset.html.twig', array(
-            'token' => $token,
-            'brand' => $brand,
-            'user' => $user,
-            'form' => $form->createView(),
-        ));
-    }
 
     /**
      * Get the truncated email displayed when requesting the resetting.
@@ -1167,6 +1086,35 @@ class UserController extends Controller
         } else {
             return true;
         }
+    }
+
+    public function getWelcomeMessageAction($token)
+    {
+      $em = $this->getDoctrine()->getManager();
+      $user = $em->getRepository('TUIToolkitUserBundle:User')->findBy(array('confirmationToken' => $token));
+
+      if (!$user) {
+        throw $this->createNotFoundException('Unable to find User entity for activation welcome message display.');
+      }
+
+      if (in_array('ROLE_BRAND', $user[0]->getRoles())) {
+        // use Brand msg
+        $msg = $this->get('translator')->trans('user.activate.brand');
+      } else {
+        // see what object type the user is associated with in permission table
+        $permission = $em->getRepository('PermissionBundle:Permission')->findBy(array('user' => $user));
+        $role = $permission[0]->getGrants();
+        if ($role =='organizer'){
+          $msg = $this->get('translator')->trans('user.activate.organizer');
+        }
+        if ($role == 'participant'){
+          $msg = $this->get('translator')->trans('user.activate.participant');
+        }
+      }
+      return $this->render('TUIToolkitUserBundle:Resetting:welcomeMessage.html.twig', array(
+        'message' => $msg,
+      ));
+
     }
 
 }

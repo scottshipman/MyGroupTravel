@@ -68,3 +68,12 @@ user_password_set:
 user_password_reset:
   path: /{id}/user-password-reset
   defaults: {_controller: "TUIToolkitUserBundle:User:resetUserPassword" }
+
+register_confirm:
+  path: /register/confirm/{token}
+  defaults: {_controller: "TUIToolkitUserBundle:User:activateUser" }
+
+activate_user_submit:
+  path: /register/{id}/confirm/submit
+  defaults: {_controller: "TUIToolkitUserBundle:User:activateUserSubmit" }
+  methods:  [POST]

@@ -8,7 +8,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use libphonenumber\PhoneNumberUtils;
 use libphonenumber\PhoneNumberFormat;
 
-class PasswordSetType extends AbstractType
+class ActivateUserType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -17,7 +17,6 @@ class PasswordSetType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
 
-      // todo: Add logic so you cant add any role greater than your own
         $builder
           ->add('plainPassword', 'repeated', array(
             'type' => 'password',
@@ -26,6 +25,20 @@ class PasswordSetType extends AbstractType
             'second_options' => array('label' => 'form.new_password_confirmation'),
             'invalid_message' => 'fos_user.password.mismatch',
             'required' => true,
+          ))
+          ->add('question', 'text', array(
+            'label' => 'user.form.question',
+            'translation_domain'  => 'messages',
+            'required' => true,
+          ))
+          ->add('answer', 'text', array(
+            'label' => 'user.form.answer',
+            'translation_domain'  => 'messages',
+            'required' => true,
+          ))
+          ->add('termsAgree', 'checkbox', array(
+            'mapped' => FALSE,
+            'required' => TRUE,
           ))
         ;
     }
@@ -45,6 +58,6 @@ class PasswordSetType extends AbstractType
      */
     public function getName()
     {
-        return 'tui_toolkit_ajax_userbundle_user';
+        return 'tui_toolkit_user_register_confirm';
     }
 }

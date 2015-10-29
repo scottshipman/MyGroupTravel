@@ -39,6 +39,7 @@ security:
             - { path: ^/manage/headerblock/, role: ROLE_CUSTOMER }
             - { path: ^/manage/, role: ROLE_BRAND }
             - { path: ^/user/password-set/, role: ROLE_CUSTOMER }
+            - { path: ^/user/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
             - { path: ^/user/add/, role: ROLE_CUSTOMER }
             - { path: ^/user/[0-9]+/edit$, role: ROLE_CUSTOMER }
             - { path: ^/user/[0-9]+/update$, role: ROLE_CUSTOMER }
