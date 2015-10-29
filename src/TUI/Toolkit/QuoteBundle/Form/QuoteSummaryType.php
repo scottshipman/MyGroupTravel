@@ -67,11 +67,11 @@ class QuoteSummaryType extends AbstractType
               'label' => 'quote.form.summary.duration',
               'translation_domain'  => 'messages',
             ))
-            ->add('displayName', 'text', array(
+            /* ->add('displayName', 'text', array(
               'required'  => false,
               'label' => 'quote.form.summary.display_name',
               'translation_domain'  => 'messages',
-            ))
+            )) */
             ->add('boardBasis','entity', array(
             'label' => 'quote.form.summary.boardBasis',
               'translation_domain'  => 'messages',
