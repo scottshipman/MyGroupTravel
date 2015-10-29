@@ -67,7 +67,6 @@
     // Transform select for display name
     $('#tui_toolkit_userbundle_user_displayName').parent().hide().after('<div class="mdl-selectfield"><label class="mdl-label-mimic" for="tui_display_name_select">' + textDisplayNameLabel + '</label><select class="mdl-select" id="tui_display_name_select"></select></div>');
     var transformSelectDisplayName = function() {
-        var existingValue = textDisplayName.val(); // get it from text field
         $('#tui_display_name_select').html('');
         var firstName = $('#tui_toolkit_userbundle_user_firstName').val();
         var lastName = $('#tui_toolkit_userbundle_user_lastName').val();
@@ -85,7 +84,7 @@
         if ( nickName.length > 0 ) {
             $('#tui_display_name_select').append('<option value="' + nickName + '">' + nickName + '</option>');
         };
-        $('#tui_display_name_select option[value="' + existingValue + '"]').attr('selected', 'selected');
+        $('#tui_display_name_select option[value="' + textDisplayName.val() + '"]').attr('selected', 'selected');
     };
     // Change the hidden text field value when changing the select dropdown
     $(document).on('change', '#tui_display_name_select', function() {
@@ -95,7 +94,8 @@
         transformSelectDisplayName();
         $('#tui_display_name_select').trigger('change');
     });
-    transformSelectDisplayName();
+    // Do on initial page load
+    $('.track_for_display_name').trigger('change');
     </script>
 
 {% endblock %}
