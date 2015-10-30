@@ -28,6 +28,8 @@ user:
         password: Set Password
         edit_profile: Edit My Profile
         notify: Send User a Notification
+        activate: Submit
+        security: Reset Security Info
 
     table:
         label:
@@ -96,6 +98,14 @@ user:
         phone: Phone Number
         media: Avatar
         password: Password
+        question: Please enter a Security Question.
+        question_prompt: Please answer your pre-selected Security Question.
+        answer: Your Security Question's answer.
+        terms_agree: I have read and agree to the %link_start%Terms of Service%link_end%
+        resetting:
+            submit: Submit
+        activate:
+            submit: Submit
 
     profile:
         label:
@@ -116,7 +126,10 @@ user:
             days: Days to go
             no_price: N/A
 
-
+    activate:
+        brand: "Its time to set up your account so you can start managing Tours. Just setup your password and security question and you'll be on your way."
+        organizer: "Its time to set up your account so you can start promoting your tour to passengers. Just setup your password and security question and you'll be on your way."
+        participant: "Its time to set up your account so you can manage your passenger data. Just setup your password and security question and you'll be on your way."
 
 
 

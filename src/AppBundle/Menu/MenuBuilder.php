@@ -48,9 +48,10 @@ class MenuBuilder
           ->setLabelAttribute('class', 'mdl-navigation__link');
     $menu['Company']->addChild('Brands', array('route' => '_manage_brand'))
           ->setLinkAttribute('class', 'mdl-navigation__link');
+    $menu['Company']->addChild('Terms of Service', array('route' => '_manage_brand_terms'))
+          ->setLinkAttribute('class', 'mdl-navigation__link');
     $menu['Company']->addChild('Institutions', array('route' => 'manage_institution'))
           ->setLinkAttribute('class', 'mdl-navigation__link');
-
 
     $menu->addChild('Tools')
           ->setAttribute('dropdown', true)

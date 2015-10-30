@@ -1,5 +1,16 @@
 {% extends "FOSUserBundle::layout.html.twig" %}
 
 {% block fos_user_content %}
-    {% include "TUIToolkitUserBundle:Resetting:reset_content.html.twig" %}
+    {% trans_default_domain 'messages' %}
+
+   {{ form_start(form) }}
+
+        {{ form_errors(form) }}
+    <div>Please Provide the answer to you preset Security Question:</div>
+        {{ form_widget(form.answerConfirm, {'label' : question }) }}
+        {{ form_row(form.plainPassword) }}
+
+
+       <div> {{ form_widget(form.submit) }}</div>
+    {{ form_end(form) }}
 {% endblock fos_user_content %}

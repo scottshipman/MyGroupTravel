@@ -159,6 +159,8 @@ fos_user:
     resetting:
             email:
                 template:   TUIToolkitUserBundle:Resetting:reset.html.twig
+#            form:
+#                type: tui_user_resetting
 
 
 knp_menu:

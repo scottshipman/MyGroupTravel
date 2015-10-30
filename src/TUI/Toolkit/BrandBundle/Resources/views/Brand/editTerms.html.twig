@@ -1,0 +1,18 @@
+{% extends '::base.html.twig' %}
+{% block title %}Edit Terms of Service: {{ brand.name }}{% endblock %}
+{% block page_title %}Edit Terms of Service: {{ brand.name }}{% endblock %}
+
+{% block body -%}
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+
+    <ul class="record_actions">
+        <li>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+               href="{{ cancel }}">
+                <i class="fa fa-arrow-circle-left"></i> cancel</a>
+        </li>
+    </ul>
+
+{% endblock %}
