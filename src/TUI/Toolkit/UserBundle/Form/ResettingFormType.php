@@ -25,31 +25,41 @@ class ResettingFormType extends AbstractType
   // http://symfony.com/doc/current/bundles/FOSUserBundle/overriding_forms.html
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-      $builder->addEventSubscriber(new AddTermsFieldSubscriber());
 
       $builder
-        ->add('question', 'text', array(
-          'label' => 'user.form.question_prompt',
-          'translation_domain'  => 'messages',
-          'read_only' => true,
-          'disabled'  => true,
-        ))
-        ->add('answer', 'text', array(
+
+        ->add('answerConfirm', 'text', array(
           'label' => 'user.form.answer',
           'translation_domain'  => 'messages',
           'required' => true,
           'mapped'  => false,
         ))
+        ->add('plainPassword', 'repeated', array(
+          'type' => 'password',
+          'options' => array('translation_domain' => 'FOSUserBundle'),
+          'first_options' => array('label' => 'form.new_password'),
+          'second_options' => array('label' => 'form.new_password_confirmation'),
+          'invalid_message' => 'fos_user.password.mismatch',
+          'required' => true,
+        ))
       ;
     }
 
-    public function getParent()
+    /**
+     * @param OptionsResolverInterface $resolver
+     */
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-      return 'fos_user_resetting';
+        $resolver->setDefaults(array(
+            'data_class' => 'TUI\Toolkit\UserBundle\Entity\User'
+        ));
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
-        return 'tui_user_resetting';
+        return 'tui_user_password_reset';
     }
 }

@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Form\FormError;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -15,10 +16,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Symfony\Component\Validator\Constraints\Null;
 use TUI\Toolkit\UserBundle\Entity\User;
+use TUI\Toolkit\UserBundle\Form\ResettingFormType;
 use TUI\Toolkit\UserBundle\Form\UserType;
 use TUI\Toolkit\UserBundle\Form\AjaxuserType;
 use TUI\Toolkit\UserBundle\Form\UserMediaType;
 use TUI\Toolkit\UserBundle\Form\ActivateUserType;
+use TUI\Toolkit\UserBundle\Form\SecurityType;
 use TUI\Toolkit\MediaBundle\Form\MediaType;
 use APY\DataGridBundle\Grid\Source\Entity;
 use APY\DataGridBundle\Grid\Export\CSVExport;
@@ -103,7 +106,7 @@ class UserController extends Controller
         $grid->addRowAction($notifyAction);
         $showAction = new RowAction('View', 'user_show');
         $grid->addRowAction($showAction);
-        $resetAction = new RowAction('Reset', 'user_password_reset');
+        $resetAction = new RowAction('Reset', 'user_password_reset_grid');
         $resetAction->setRole('ROLE_ADMIN');
         $resetAction->setConfirm(true);
         $grid->addRowAction($resetAction);
@@ -452,29 +455,6 @@ class UserController extends Controller
 
 
     /**
-     * Displays a form to edit an existing User entity.
-     *
-     */
-    public function activateUserAction($token)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('TUIToolkitUserBundle:User')->findByConfirmationToken($token);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find User entity while rendering activation form.');
-        }
-        $setForm = $this->createActivateUserForm($entity[0]);
-
-        return $this->render('TUIToolkitUserBundle:Registration:activation.html.twig', array(
-            'form' => $setForm->createView(),
-            'user'  => $entity[0],
-            'token' => $token,
-        ));
-    }
-
-
-    /**
      * Creates a form to edit a User entity.
      *
      * @param User $entity The entity
@@ -525,25 +505,6 @@ class UserController extends Controller
         }
 
         $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('user.actions.update')));
-
-        return $form;
-    }
-
-    /**
-     * Creates a form to activate a User.
-     * sets password and security question, plus terms of service check
-     * @param User $entity The entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createActivateUserForm(User $entity)
-    {
-        $form = $this->createForm(new ActivateUserType(), $entity, array(
-            'action' => $this->generateUrl('activate_user_submit', array('id' => $entity->getId())),
-            'method' => 'POST',
-        ));
-
-        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('user.actions.activate')));
 
         return $form;
     }
@@ -601,6 +562,53 @@ class UserController extends Controller
     }
 
     /**
+     * Displays a page with a form to activate an existing User entity.
+     *
+     */
+    public function activateUserAction($token)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('TUIToolkitUserBundle:User')->findByConfirmationToken($token);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('This is no longer a valid One Time Use login token.');
+        }
+
+        if(true===$entity[0]->isEnabled()){
+            throw $this->createNotFoundException('This activation link is no longer valid because the account is already activated.');
+        }
+        $setForm = $this->createActivateUserForm($entity[0]);
+
+        return $this->render('TUIToolkitUserBundle:Registration:activation.html.twig', array(
+            'form' => $setForm->createView(),
+            'user'  => $entity[0],
+            'token' => $token,
+        ));
+    }
+
+
+    /**
+     * Creates a form to activate a User.
+     * sets password and security question, plus terms of service check
+     * @param User $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createActivateUserForm(User $entity)
+    {
+        $form = $this->createForm(new ActivateUserType(), $entity, array(
+            'action' => $this->generateUrl('activate_user_submit', array('id' => $entity->getId())),
+            'method' => 'POST',
+        ));
+
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('user.actions.activate')));
+
+        return $form;
+    }
+
+
+    /**
      * Activate a User account by validating form submission.
      *
      */
@@ -608,51 +616,149 @@ class UserController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
+        $user = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
 
-        if (!$entity) {
+        if (!$user) {
             throw $this->createNotFoundException('Unable to find User entity rendering activation form.');
         }
 
-        $setForm = $this->createActivateUserForm($entity);
+        $setForm = $this->createActivateUserForm($user);
         $setForm->handleRequest($request);
 
         if ($setForm->isValid()) {
-            $entity->setPassword($setForm->getData()->getPlainPassword());
-            $entity->setQuestion($setForm->getData()->getQuestion());
-            $entity->setAnswer($setForm->getData()->getAnswer());
-            $entity->setEnabled(true);
-            $em->persist($entity);
+            $user->setPassword($setForm->getData()->getPlainPassword());
+            $user->setQuestion($setForm->getData()->getQuestion());
+            $user->setAnswer($setForm->getData()->getAnswer());
+            $user->setEnabled(true);
+            $user->setConfirmationToken(null);
+            $em->persist($user);
             $em->flush();
 
-          // todo trigger user registration complete here
+          // trigger "registration complete" event here in case other place are listening for the event
           $dispatcher = $this->get('event_dispatcher');
-          $event = new FormEvent($form, $request);
-          dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS, $event);
-          if (null === $response = $event->getResponse()) {
             $url = $this->generateUrl('fos_user_registration_confirmed');
             $response = new RedirectResponse($url);
-          }
           $dispatcher->dispatch(FOSUserEvents::REGISTRATION_COMPLETED, new FilterUserResponseEvent($user, $request, $response));
 
-          $token = new UsernamePasswordToken($entity, $entity->getPassword(),
-            "public", $entity->getRoles());
+          $token = new UsernamePasswordToken($user, $user->getPassword(),
+            "public", $user->getRoles());
 
           $this->get("security.context")->setToken($token);
 
           // Trigger login event
-          $event = new InteractiveLoginEvent($request, $token);
+          $loginEvent = new InteractiveLoginEvent($request, $token);
           $this->get("event_dispatcher")
-            ->dispatch("security.interactive_login", $event);
+            ->dispatch("security.interactive_login", $loginEvent);
 
             return $this->redirect($this->generateUrl('fos_user_profile_show'));
         }
 
         return $this->render('TUIToolkitUserBundle:Registration:activation.html.twig', array(
-            'user' => $entity,
-            'set_form' => $setForm->createView(),
+            'user' => $user,
+            'form' => $setForm->createView(),
         ));
     }
+
+
+    /**
+     * Displays a page with a form to reset an existing User password.
+     *
+     */
+    public function resetPasswordAction($token)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('TUIToolkitUserBundle:User')->findByConfirmationToken($token);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('This Password Reset token is no longer valid.');
+        }
+        $setForm = $this->createResetPasswordForm($entity[0]);
+        $question = $entity[0]->getQuestion();
+
+        return $this->render('TUIToolkitUserBundle:Resetting:reset.html.twig', array(
+            'form' => $setForm->createView(),
+            'user'  => $entity[0],
+            'token' => $token,
+            'question' => $question,
+        ));
+    }
+
+    /**
+     * Creates a form to reset a User password.
+     * sets password and security question, plus terms of service check
+     * @param User $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createResetPasswordForm(User $entity)
+    {
+        $form = $this->createForm(new ResettingFormType(), $entity, array(
+            'action' => $this->generateUrl('user_password_reset_submit', array('id' => $entity->getId())),
+            'method' => 'POST',
+        ));
+
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('user.actions.password')));
+
+        return $form;
+    }
+
+
+    /**
+     * Reset a User password by validating form submission.
+     *
+     */
+    public function resetPasswordSubmitAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $user = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
+
+        if (!$user) {
+            throw $this->createNotFoundException('Unable to find User entity rendering activation form.');
+        }
+
+        $setForm = $this->createResetPasswordForm($user);
+        $setForm->handleRequest($request);
+        $token = $user->getConfirmationToken();
+        $question = $user->getQuestion();
+
+        if ($setForm->isValid()) {
+            $answer = $setForm['answerConfirm']->getData();
+            if($answer == $user->getAnswer()) {
+
+
+                $user->setPassword($setForm->getData()->getPlainPassword());
+                $user->setConfirmationToken(null);
+                $em->persist($user);
+                $em->flush();
+
+                $token = new UsernamePasswordToken($user, $user->getPassword(),
+                    "public", $user->getRoles());
+
+                $this->get("security.context")->setToken($token);
+
+                // Trigger login event
+                $loginEvent = new InteractiveLoginEvent($request, $token);
+                $this->get("event_dispatcher")
+                    ->dispatch("security.interactive_login", $loginEvent);
+
+                $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.password') . $user->getEmail());
+                return $this->redirect($this->generateUrl('fos_user_profile_show'));
+            } else {
+                $setForm->addError(new FormError('Your security answer did not match our records. Please try again, or contact your application\'s contact.'));
+            }
+        }
+
+
+        return $this->render('TUIToolkitUserBundle:Resetting:reset.html.twig', array(
+            'user' => $user,
+            'form' => $setForm->createView(),
+            'token' => $token,
+            'question' => $question,
+        ));
+    }
+
 
 
     /**
@@ -964,6 +1070,124 @@ class UserController extends Controller
 
         return $email;
     }
+
+
+    /**
+     * Show a page with a security info edit form
+     */
+    public function securityResetAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find User entity to edit security info.');
+        }
+        $currentUser = $this->get('security.context')->getToken()->getUser();
+        if ($id != $currentUser->getId()) {
+            throw $this->createAccessDeniedException('You cannot edit another User\'s security information.');
+        }
+            $question = $entity->getQuestion();
+            $securityForm = $this->createSecurityForm($entity);
+
+            return $this->render('TUIToolkitUserBundle:User:editSecurity.html.twig', array(
+                'entity' => $entity,
+                'form' => $securityForm->createView(),
+                'question' => $question,
+
+            ));
+
+    }
+
+    /**
+     * Creates a form to edit a User's security info.
+     * @param User $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createSecurityForm(User $entity)
+    {
+        $form = $this->createForm(new SecurityType(), $entity, array(
+            'action' => $this->generateUrl('user_security_submit', array('id' => $entity->getId())),
+            'method' => 'POST',
+        ));
+
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('user.actions.security')));
+
+        return $form;
+    }
+
+    /**
+     * Updates an existing User's security info.
+     *
+     */
+    public function securitySubmitAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find User entity when submitting security info changes.');
+        }
+
+
+
+        $question = $entity->getQuestion();
+        $securityForm = $this->createSecurityForm($entity);
+        $securityForm->handleRequest($request);
+
+        if ($securityForm->isValid()) {
+            $answer = $securityForm['originalAnswer']->getData();
+            if($answer == $entity->getAnswer()) {
+                // $entity->setUsername($securityForm->getData()->getEmail());
+                $fields = array();
+                $pw = $securityForm['plainPassword']->getData();
+                $newQuestion = $securityForm['newQuestion']->getData();
+                $newAnswer = $securityForm['newAnswer']->getData();
+
+                if (!empty($pw)){
+                    $entity->setPassword($pw);
+                    $fields[] = 'Password';
+                }
+                if (!empty($newQuestion)){
+                    $entity->setQuestion($newQuestion);
+                    $fields[] = 'Security Question';
+                }
+                if (!empty($newAnswer)){
+                    $entity->setAnswer($newAnswer);
+                    $fields[] = 'Security Answer';
+                }
+                $em->persist($entity);
+                $em->flush();
+
+                if(count($fields) == 0) {
+                    $msg = "No data was changed.";
+                } else {
+                    $msg = $this->get('translator')
+                            ->trans('user.flash.save') . $entity->getUsername() .  ' for the fields: ' . implode(', ', $fields);
+                }
+
+                $this->get('session')
+                    ->getFlashBag()
+                    ->add('notice', $msg);
+
+
+                return $this->redirect('/profile');
+            } else {
+                $securityForm->addError(new FormError('Your security answer did not match our records. Please try again, or contact your application\'s contact.'));
+            }
+        }
+
+        return $this->render('TUIToolkitUserBundle:User:editSecurity.html.twig', array(
+            'entity' => $entity,
+            'form' => $securityForm->createView(),
+            'question' => $question,
+        ));
+    }
+
+
 
     /**
      * getQuotes

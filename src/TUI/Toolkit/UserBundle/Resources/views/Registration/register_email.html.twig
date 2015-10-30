@@ -28,8 +28,10 @@
                                         account</h2>
 
                                     <p style="text-align: center; color: #717D82;">
-                                        Hi {{ user.firstName|capitalize }} {{ user.lastName|capitalize }}</br> To finish
-                                        activating your account please click the button</p>
+                                        Hi {{ user.firstName|capitalize }} {{ user.lastName|capitalize }}</br>
+                                        An account has been created for you for {{ brand.name }}'s Tour management application.</br>
+                                        Your login will be your email address: {{ user.email }}</br>
+                                        To finish activating your account please click the button below.</p>
                                     <center>
                                         <a style="text-decoration: none; color:#fff; display: block; width: 40%; text-align: center; padding: 20px; margin: 20px auto; background-color:{{ brand.primaryColor }};"
                                            href="{{ absolute_url("/user/register/confirm/" ~ user.confirmationToken) }}">Activate</a>
