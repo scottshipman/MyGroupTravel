@@ -17,7 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity
  * @ORM\Table(name="fos_user",uniqueConstraints={@ORM\UniqueConstraint(name="email", columns={"email"})})
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
- * @GRID\Source(columns="id, lastName, firstName, fullname, email, enabled, roles, created, lastLogin", filterable=false, sortable=true)
+ * @GRID\Source(columns="id, lastName, firstName, fullname, nickname, displayName, email, enabled, roles, created, lastLogin", filterable=false, sortable=true)
  * @GRID\Column(id="fullname", type="join", title="Name", columns={"firstName", "lastName"}, filterable=false, operatorsVisible=false)
  */
 class User extends BaseUser
@@ -60,6 +60,18 @@ class User extends BaseUser
      * @GRID\Column(visible=false, filterable=false, export=true)
      */
     protected $lastName = null;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @GRID\Column(visible=false, filterable=false, export=true)
+     */
+    protected $nickname = null;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @GRID\Column(visible=false, filterable=false, export=true)
+     */
+    protected $displayName = null;
 
     /**
      * @ORM\Column(type="string", nullable=true)
@@ -204,6 +216,38 @@ class User extends BaseUser
     }
 
     /**
+     * @param mixed $nickname
+     */
+    public function setNickname($nickname)
+    {
+        $this->nickname = $nickname;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNickname()
+    {
+        return $this->nickname;
+    }
+
+    /**
+     * @param mixed $displayName
+     */
+    public function setDisplayName($displayName)
+    {
+        $this->displayName = $displayName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDisplayName()
+    {
+        return $this->displayName;
+    }
+
+    /**
      * @param mixed $phoneNumber
      */
     public function setPhoneNumber($phoneNumber)
@@ -315,4 +359,4 @@ class User extends BaseUser
   }
 
 
-} 
+}
