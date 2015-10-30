@@ -48,6 +48,7 @@
         title: 'Loading...',
         autoOpen: false,
         open: function (e, ui) {
+            $(this).parent().addClass('mdl-shadow--8dp');
             if ( !toolkitBreakpointAllowDrag() ) {
                 // Modal to full screen on phone
                 $("#dialog")

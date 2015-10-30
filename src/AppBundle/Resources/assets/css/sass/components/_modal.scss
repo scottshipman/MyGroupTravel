@@ -4,10 +4,16 @@
   cursor: pointer;
 }
 
+.ui-widget-overlay {
+  background: $text_grey_t1;
+  opacity: 1;
+}
+
 .ui-widget {
   font-family: inherit;
   font-size: 1em;
   border-radius: 0;
+  border-width: 0;
   padding: 0;
 
   input,
@@ -19,8 +25,15 @@
   }
 
   .ui-dialog-titlebar {
-    border: 0;
+    border-width: 0 0 1px;
     border-radius: 0;
+    background: transparent;
+  }
+
+  .mdl-submit-row {
+    padding: 0.4em 1em;
+    border-top: 1px solid #aaa;
+    text-align: right;
   }
 
 }
@@ -127,5 +140,7 @@
       margin: 0;
       padding: 20px 0;
     }
+
   }
+
 }
