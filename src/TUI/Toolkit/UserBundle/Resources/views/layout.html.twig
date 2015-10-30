@@ -20,7 +20,7 @@
     <div class="login-block">
 
         {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-            {%  if 'resetting/' in app.request.pathinfo  %} <h2>{% trans %}user.profile.login.reset{% endtrans %}</h2>
+            {%  if ('password/reset/' in app.request.pathinfo) or ('resetting/' in app.request.pathinfo)  %} <h2>{% trans %}user.profile.login.reset{% endtrans %}</h2>
                 {% else %}
                 <h2>{% trans %}user.profile.login.sign_in{% endtrans %}</h2>
             {% endif %}
@@ -43,7 +43,9 @@
 
         {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
             <div class="login-reset">
-             {%  if not ('resetting/' in app.request.pathinfo)  %}   <a href="{{ path('fos_user_resetting_request') }}">{% trans %}user.profile.login.forgot{% endtrans %}</a>{% endif %}
+                {%  if not ('password/reset/' in app.request.pathinfo) and not ( 'resetting/' in app.request.pathinfo ) %}
+                <a href="{{ path('fos_user_resetting_request') }}">{% trans %}user.profile.login.forgot{% endtrans %}</a>
+             {% endif %}
             </div>
           {% endif %}
 

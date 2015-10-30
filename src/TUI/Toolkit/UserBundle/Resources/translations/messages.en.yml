@@ -29,6 +29,7 @@ user:
         edit_profile: Edit My Profile
         notify: Send User a Notification
         activate: Submit
+        security: Reset Security Info
 
     table:
         label:
