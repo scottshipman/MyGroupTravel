@@ -63,6 +63,10 @@ class TourSummaryType extends AbstractType
                 'required'  => false,
                 'label' => 'tour.form.tour_summary.duration',
             ))
+            ->add('displayName', 'text', array(
+                'required'  => false,
+                'label' => 'tour.form.tour_summary.display_name',
+            ))
             ->add('boardBasis','entity', array(
                 'label' => 'tour.form.tour_summary.board',
                 'required' => false,

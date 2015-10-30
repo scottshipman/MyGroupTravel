@@ -57,7 +57,13 @@
                 <div id="site-quote-name">{{ entity.quoteReference.institution.name }}</div>
             {% endif %}
 
-            <h2 class="{% if entity.quoteReference.institution.media %}has-school-logo{% endif %} {% if not app.user and brand.media %}has-brand-logo{% endif %}">{{ entity.quoteReference.name }}{% if is_granted("ROLE_BRAND") %}, {{ entity.name }}{% endif %}</h2>
+            <h2 class="{% if entity.quoteReference.institution.media %}has-school-logo{% endif %} {% if not app.user and brand.media %}has-brand-logo{% endif %}">
+                {% if entity.displayName %}
+                    {{ entity.displayName }}
+                {% else %}
+                    {{ entity.quoteReference.name }}{% if is_granted("ROLE_BRAND") %}, {{ entity.name }}{% endif %}
+                {% endif %}
+            </h2>
 
             {% if entity.quoteNumber %}
                 <div>Quote Number: {{ entity.quoteNumber }}</div>

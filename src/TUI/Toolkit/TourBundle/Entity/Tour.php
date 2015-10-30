@@ -18,7 +18,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @UniqueEntity(fields={"quoteNumber"}, message="This Quote Number already exists on another Tour.", ignoreNull=true)
  *
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
- * @GRID\Source(columns="id, institution_full, institution.name, institution.city, name, quoteNumber, tripStatus.name, created, destination, quoteReference.id, organizer_full, salesAgent_full, salesAgent_name, salesAgent.firstName, salesAgent.lastName,  salesAgent.email, organizer.firstName, organizer.lastName, organizer.email, views, deleted, locked,  version, duration, expiryDate, transportType.name, boardBasis.name, freePlaces, payingPlaces, departureDate, returnDate, pricePerson,  pricePersonPublic, currency.name, status, passengerDate, passportDate, medicalDate, dietaryDate, cashPayment, cashPaymentDescription, bankTransferPayment, bankTransferPaymentDescription, onlinePayment, onlinePaymentDescription, otherPayment, otherPaymentDescription", filterable=false, sortable=true)
+ * @GRID\Source(columns="id, institution_full, institution.name, institution.city, name, quoteNumber, tripStatus.name, created, destination, quoteReference.id, organizer_full, salesAgent_full, salesAgent_name, salesAgent.firstName, salesAgent.lastName,  salesAgent.email, organizer.firstName, organizer.lastName, organizer.email, views, deleted, locked,  version, duration, displayName, expiryDate, transportType.name, boardBasis.name, freePlaces, payingPlaces, departureDate, returnDate, pricePerson,  pricePersonPublic, currency.name, status, passengerDate, passportDate, medicalDate, dietaryDate, cashPayment, cashPaymentDescription, bankTransferPayment, bankTransferPaymentDescription, onlinePayment, onlinePaymentDescription, otherPayment, otherPaymentDescription", filterable=false, sortable=true)
  * @GRID\Column(id="organizer_full", type="join", columns = {"organizer.firstName", "organizer.lastName", "organizer.email"}, title="Organizer", export=false, filterable=false, operatorsVisible=false)
  * @GRID\Column(id="salesAgent_full",  type="join", columns = {"salesAgent.firstName", "salesAgent.lastName", "salesAgent.email"}, title="Primary Business Admin", export=false, filterable=false, operatorsVisible=false)
  * @GRID\Column(id="salesAgent_name",  type="join", columns = {"salesAgent.firstName", "salesAgent.lastName"}, title="Primary Business Admin", export=false, filterable=false, operatorsVisible=false)
@@ -293,6 +293,14 @@ class Tour
      * @GRID\Column(title="Duration", export=true)
      */
     private $duration;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="displayName", type="text", nullable=true)
+     * @GRID\Column(title="Display Name", export=true)
+     */
+    private $displayName;
 
     /**
      * @var float
@@ -643,7 +651,7 @@ class Tour
     /**
      * Get boardBasis
      *
-     * @return integer 
+     * @return integer
      */
     public function getBoardBasis()
     {
@@ -713,7 +721,7 @@ class Tour
     /**
      * Get expiryDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getExpiryDate()
     {
@@ -736,7 +744,7 @@ class Tour
     /**
      * Get freePlaces
      *
-     * @return integer 
+     * @return integer
      */
     public function getFreePlaces()
     {
@@ -759,7 +767,7 @@ class Tour
     /**
      * Get payingPlaces
      *
-     * @return integer 
+     * @return integer
      */
     public function getPayingPlaces()
     {
@@ -782,7 +790,7 @@ class Tour
     /**
      * Get departureDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDepartureDate()
     {
@@ -805,7 +813,7 @@ class Tour
     /**
      * Get quoteReference
      *
-     * @return integer 
+     * @return integer
      */
     public function getQuoteReference()
     {
@@ -851,7 +859,7 @@ class Tour
     /**
      * Get totalPrice
      *
-     * @return float 
+     * @return float
      */
     public function getTotalPrice()
     {
@@ -874,7 +882,7 @@ class Tour
     /**
      * Get tripStatus
      *
-     * @return string 
+     * @return string
      */
     public function getTripStatus()
     {
@@ -897,7 +905,7 @@ class Tour
     /**
      * Get transportType
      *
-     * @return integer 
+     * @return integer
      */
     public function getTransportType()
     {
@@ -920,7 +928,7 @@ class Tour
     /**
      * Get welcomeMsg
      *
-     * @return string 
+     * @return string
      */
     public function getWelcomeMsg()
     {
@@ -948,6 +956,29 @@ class Tour
     public function getDuration()
     {
       return $this->duration;
+    }
+
+    /**
+     * Set displayName
+     *
+     * @param string $displayName
+     * @return Tour
+     */
+    public function setDisplayName($displayName)
+    {
+      $this->displayName = $displayName;
+
+      return $this;
+    }
+
+    /**
+     * Get displayName
+     *
+     * @return string
+     */
+    public function getDisplayName()
+    {
+      return $this->displayName;
     }
 
     /**
@@ -1392,7 +1423,7 @@ class Tour
         $this->paymentTasksPassenger = $paymentTasks;
         return $this;
     }
-    
+
 
 
     /**
