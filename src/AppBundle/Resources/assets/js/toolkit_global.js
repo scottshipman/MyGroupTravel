@@ -149,6 +149,12 @@ var doMDLpopup = function(t) {
             $(this).parent().addClass('is-checked');
         }
     });
+    t.find('.button-row').each(function () {
+        $(this).addClass('mdl-submit-row');
+        if ( $(this).parents('#dialog') ) {
+            $(this).appendTo( $('#dialog').parent() );
+        }
+    });
 };
 
 //Update Content Block Image arrays for title field and weight
