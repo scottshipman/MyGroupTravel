@@ -90,6 +90,8 @@ user:
         honorific: Title
         fname: First Name
         lname: Last Name
+        nickname: Nickname
+        display_name: Display Name
         email: Email Address
         phone: Phone Number
         media: Avatar
