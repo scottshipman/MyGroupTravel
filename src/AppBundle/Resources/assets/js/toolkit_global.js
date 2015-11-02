@@ -16,6 +16,15 @@ var toolkitBreakpointAllowDrag = function() {
     }
 };
 
+var toolkitStandardPopup = function(title, loadLink) {
+    $("#dialog").html("");
+    $("#dialog").dialog("option", "title", "Loading...").dialog("open");
+    $("#dialog").load(loadLink, function () {
+        $(this).dialog("option", "title", title);
+        doMDLpopup($(this));
+    });
+};
+
 /**
  * Persist Content block data to the database/entity
  * @param id - Quote Version # passed from window.path
