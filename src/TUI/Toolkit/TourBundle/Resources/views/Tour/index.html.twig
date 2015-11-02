@@ -28,15 +28,8 @@
 
             if($("a[title='Email']").length) {
                 $(document).on('click', "a[title='Email']", function (e) {
-                    var link = $(this).attr('href');
-                    console.log(link);
                     e.preventDefault();
-                    $("#dialog").html("");
-                    $("#dialog").dialog("open");
-                    $("#dialog").load(link , function () {
-                        $(this).dialog("option", "title", "Email the organizer");
-                        doMDLpopup($(this)); // run the function to add appropriate MDL classes to form elements
-                    });
+                    toolkitStandardPopup( "Email the organizer", $(this).attr('href') );
                 });
             }
         });

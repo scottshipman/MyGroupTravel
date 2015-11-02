@@ -365,23 +365,13 @@
 
                // Add a headerBlock to a site
                $("#add-headerBlock").on('click', function(){
-                   $("#dialog").html("");
-                   $("#dialog").dialog("open");
-                   $("#dialog").load('/manage/headerblock/header/new/' + {{ entity.id}} +'/QuoteVersion', function() {
-                       $(this).dialog("option", "title", 'Add Header Content');
-                       doMDLpopup( $(this) );
-                   });
+                  toolkitStandardPopup( "Add Header Content", "/manage/headerblock/header/new/" + {{ entity.id}} + "/QuoteVersion" );
                });
 
                {% if entity.headerBlock %}
                    // Edit the headerBlock for a site
                    $("#edit-headerBlock").on('click', function(){
-                       $("#dialog").html("");
-                       $("#dialog").dialog("open");
-                       $("#dialog").load('/manage/headerblock/'+ {{ entity.headerBlock.id }} + '/header/edit/' + {{ entity.id}} +'/QuoteVersion', function() {
-                           $(this).dialog("option", "title", 'Edit Header Content');
-                           doMDLpopup( $(this) );
-                       });
+                       toolkitStandardPopup( "Edit Header Content", "/manage/headerblock/" + {{ entity.headerBlock.id }} + "/header/edit/" + {{ entity.id}} + "/QuoteVersion" );
                    });
                {% endif %}
 
@@ -450,13 +440,7 @@
                 // todo Get item.id and item.name
                 var actionParent = $(this).parent().attr('id');
                 var block = actionParent.substring(22);
-                //e.preventDefault();
-                $("#dialog").html("");
-                $("#dialog").dialog("open");
-                $("#dialog").load( '/ajax/contentblocks/' + block + '/edit/' + {{ entity.id}} + '/QuoteVersion', function() {
-                    $(this).dialog("option", "title", 'Edit Content Block');
-                    doMDLpopup( $(this) );
-                });
+                toolkitStandardPopup( "Edit Content Block", "/ajax/contentblocks/" + block + "/edit/" + {{ entity.id}} + "/QuoteVersion" );
             });
 
             // toggle the locked boolean on a content block on the fly!
