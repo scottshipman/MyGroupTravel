@@ -67,13 +67,7 @@
         var modal_form = e.currentTarget.id;
         var parts = modal_form.split("-add");
         var form_type = parts[0].toLowerCase();
-        //e.preventDefault();
-        $("#dialog").html("");
-        $("#dialog").dialog("open");
-        $("#dialog").load('/ajax/' + form_type + '/new', function () {
-            $(this).dialog("option", "title", 'Create New ' + parts[0]);
-            doMDLpopup( $(this) );
-        });
+        toolkitStandardPopup( "Create New " + parts[0], "/ajax/" + form_type + "/new" + entityId );
     });
 
     /*
