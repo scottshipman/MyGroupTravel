@@ -99,6 +99,10 @@ assetic:
                 inputs:
                     - @AppBundle/Resources/assets/js/toolkit_siteshow_edit.js
 
+            toolkit_display_name:
+                inputs:
+                    - @AppBundle/Resources/assets/js/toolkit_display_name.js
+
 
 # Doctrine Configuration
 doctrine:
