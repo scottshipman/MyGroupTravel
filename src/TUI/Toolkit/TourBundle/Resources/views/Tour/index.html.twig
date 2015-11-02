@@ -35,7 +35,7 @@
                     $("#dialog").dialog("open");
                     $("#dialog").load(link , function () {
                         $(this).dialog("option", "title", "Email the organizer");
-                        doMDLpopup($('#dialog')); // run the function to add appropriate MDL classes to form elements
+                        doMDLpopup($(this)); // run the function to add appropriate MDL classes to form elements
                     });
                 });
             }
