@@ -43,13 +43,11 @@ body {
   top:-70px;
   transition: bottom 0.5s ease-in-out;
   z-index:9;
-
-  .snackclose, label {
-    top:-70px;
-    position:absolute;
-    border:0;
-  }
-
+}
+#flash-label{
+  top:-70px;
+  position:absolute;
+  border:0;
 }
 .snackclose {
   display:none;
