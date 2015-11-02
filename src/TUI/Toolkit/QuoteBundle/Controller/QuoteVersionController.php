@@ -1082,9 +1082,11 @@ class QuoteVersionController extends Controller
         if ($entity->getIsTemplate()) {
             $template = 'Template';
             $route = '_templates';
+            $handleAjax = false;
         } else {
             $template = '';
             $route = '';
+            $handleAjax = true;
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -1107,7 +1109,7 @@ class QuoteVersionController extends Controller
         }
 
         //Dont handle ajax request on template
-        if ($entity->getIsTemplate() == false) {
+        if ($handleAjax === true) {
 
             //handling ajax request for organizer
             $o_data = $editForm->getData()->getQuoteReference()->getOrganizer();
@@ -1202,8 +1204,21 @@ class QuoteVersionController extends Controller
 
         // handling a standard edit (not a save as new version)
         if ($editForm->isValid()) {
-            $em->flush();
-            $permission = $this->get("permission.set_permission")->setPermission($entity->getQuoteReference()->getId(), 'quote', $entity->getQuoteReference()->getOrganizer(), 'organizer');
+            if($editForm->getData()->getIsTemplate() === true){
+                // remove institution and organizer data for templates
+
+                $entity->getQuoteReference()->setOrganizer(NULL);
+                $entity->getQuoteReference()->setInstitution(NULL);
+                $em->flush();
+            } else {
+                $em->flush();
+                $permission = $this->get("permission.set_permission")
+                    ->setPermission($entity->getQuoteReference()
+                        ->getId(), 'quote', $entity->getQuoteReference()
+                        ->getOrganizer(), 'organizer');
+
+            }
+
             $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.save') . ' ' . $entity->getName());
             return $this->redirect($this->generateUrl('manage_quote_show', array('id' => $entity->getId())));
         }
