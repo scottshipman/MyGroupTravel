@@ -150,8 +150,9 @@ var doMDLpopup = function(t) {
         }
     });
     t.find('.button-row').each(function () {
-        $(this).addClass('mdl-submit-row');
+        $('.mdl-submit-row').remove();
         if ( $(this).parents('#dialog') ) {
+            $(this).addClass('mdl-submit-row');
             $(this).appendTo( $('#dialog').parent() );
         }
     });
