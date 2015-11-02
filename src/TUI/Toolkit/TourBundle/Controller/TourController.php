@@ -1043,15 +1043,38 @@ class TourController extends Controller
         $locale = $this->container->getParameter('locale');
 
         //brand stuff
-        $brand = $em->getRepository('BrandBundle:Brand')->findAll();
-        $brand = $brand[0];
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+          $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+          $brand = $default_brand;
+        }
+
+        //get number of wait listed
+        $passengers = $em->getRepository('PassengerBundle:Passenger')->findByTourReference($entity);
+        $waitlist = 0;
+        $accepted = 0;
+        foreach ($passengers as $passenger) {
+            if ($passenger->getStatus() == "waitlist") {
+                $waitlist++;
+            }
+            else if ($passenger->getStatus() == "accepted"){
+                $accepted++;
+            }
+        }
 
         return $this->render('TourBundle:Tour:completedandsetup.html.twig', array(
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'date_format' => $date_format,
             'locale' => $locale,
-            'brand' => $brand
+            'brand' => $brand,
+            'waitlist' => $waitlist,
+            'accepted' => $accepted,
         ));
 
     }
@@ -1234,9 +1257,17 @@ class TourController extends Controller
 
         $agent = $em->getRepository('TUIToolkitUserBundle:User')->find($BusinessPersonId);
 
-        //get brand stuff
-        $brand = $em->getRepository('BrandBundle:Brand')->findAll();
-        $brand = $brand[0];
+        //brand stuff
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
 
         $departure = $entity->getDepartureDate();
         $tourName = $entity->getName();

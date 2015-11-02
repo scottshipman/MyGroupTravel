@@ -61,17 +61,6 @@ class Passenger
      */
     protected $dateOfBirth;
 
-
-    /**
-     *
-     * @var \TUI\Toolkit\UserBundle\Entity\User
-     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\UserBundle\Entity\User", cascade={"persist"}, fetch="LAZY")
-     * @ORM\JoinColumn(name="user", referencedColumnName="id")
-     *
-     */
-    protected $userReference;
-
-
     /**
      *
      * @var \TUI\Toolkit\TourBundle\Entity\Tour
@@ -165,25 +154,6 @@ class Passenger
     {
         return $this->dateOfBirth;
     }
-
-    /**
-     * @param  $user
-     */
-    public function setUserReference($userReference)
-    {
-        $this->userReference = $userReference;
-
-        return $userReference;
-    }
-
-    /**
-     * @return user
-     */
-    public function getUserReference()
-    {
-        return $this->userReference;
-    }
-
 
     /**
      * @param  $tourReference
