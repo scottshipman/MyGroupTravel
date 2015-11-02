@@ -28,6 +28,7 @@
     border-width: 0 0 1px;
     border-radius: 0;
     background: transparent;
+    padding: 6px 16px;
   }
 
   .ui-dialog-title {
@@ -43,8 +44,12 @@
     right: 1em;
   }
 
+  .ui-dialog-content {
+    padding: 6px 16px;
+  }
+
   .mdl-submit-row {
-    padding: 0.4em 1em;
+    padding: 6px 16px;
     border-top: 1px solid #aaa;
     text-align: right;
   }
