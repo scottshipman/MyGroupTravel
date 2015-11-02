@@ -105,7 +105,7 @@
                     '<i class="fa fa-sign-in fa-stack"></i>' +
                     '</a></div>'
             );
-            $("#dialog").dialog({width: '30%', height: '200'}).dialog("option", "title", "Promote the Tour").dialog("open");
+            $("#dialog").dialog("option", "title", "Promote the Tour").dialog("open");
             // Copy to Clipboard
             ZeroClipboard.config({swfPath: "//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf"});
             var client = new ZeroClipboard(document.getElementById("copy-button"));
@@ -117,7 +117,7 @@
                 $("#copy-button").addClass('hidden');
                 $('share_url').css('width', '80%');
             }
-            doMDL_popup('.input');
+            doMDL_popup($('#dialog'));
 
         });
     });
