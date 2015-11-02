@@ -1326,7 +1326,7 @@ class UserController extends Controller
         $msg = $this->get('translator')->trans('user.activate.brand');
       } else {
         // see what object type the user is associated with in permission table
-        $permission = $em->getRepository('PermissionBundle:Permission')->findBy(array('user' => $user));
+        $permission = $em->getRepository('PermissionBundle:Permission')->findBy(array('user' => $user[0]));
         $role = $permission[0]->getGrants();
         if ($role =='organizer'){
           $msg = $this->get('translator')->trans('user.activate.organizer');
