@@ -1,0 +1,20 @@
+{% extends '::base.html.twig' %}
+{% block title %}{% trans %}user.title.edit{% endtrans %} '{{ entity.username }}'{% endblock %}
+{% block page_title %}{% trans %}user.page_title.edit{% endtrans %} '{{ entity.username }}'{% endblock %}
+
+
+
+{% block body -%}
+
+    {{ form_start(form) }}
+    {{ form_errors(form) }}
+    <div id="security-label">In order to make changes, please provide you secret Security Question answer below.</div>
+    {{ form_widget(form.originalAnswer, {'label' : question }) }}
+    {{ form_row(form.plainPassword) }}
+    {{ form_row(form.newQuestion) }}
+    {{ form_row(form.newAnswer) }}
+
+
+        {{ form_end(form) }}
+
+{% endblock %}
