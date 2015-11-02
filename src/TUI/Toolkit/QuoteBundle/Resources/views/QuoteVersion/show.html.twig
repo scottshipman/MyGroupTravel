@@ -52,11 +52,14 @@
                 {% endif %}
             {% endif %}
 
+            {% set titleClass = "" %}
             {% if entity.quoteReference.institution %}
+                {% if entity.quoteReference.institution.media %}{% set titleClass = "has-school-logo" %}{% endif %}
                 <div id="site-quote-name">{{ entity.quoteReference.institution.name }}</div>
             {% endif %}
+            {% if not app.user and brand.media %}{% set titleClass = "has-brand-logo" %}{% endif %}
+                <h2 class="{{ titleClass }}">
 
-            <h2 class="{% if entity.quoteReference.institution.media %}has-school-logo{% endif %} {% if not app.user and brand.media %}has-brand-logo{% endif %}">
                 {% if entity.displayName %}
                     {{ entity.displayName }}
                 {% else %}
@@ -193,7 +196,7 @@
             <tbody>
             <tr>
                 <th>Organizer</th><td>{% if entity.quoteReference.organizer %}{{ entity.quoteReference.organizer.firstName }} {{ entity.quoteReference.organizer.lastName }} {{ entity.quoteReference.organizer.email }}{% endif %}
-                    {% if entity.quoteReference.organizer %}<a href="{{ path('user_edit', { 'id': entity.quoteReference.organizer.id }) }}" alt = "Edit"><i class="fa fa-pencil-square-o"></i></a>{% endif %}
+                    {% if entity.quoteReference.organizer %}<a href="{{ path('user_edit', { 'id': entity.quoteReference.organizer.id }) }}" title = "Edit this User's account information"><i class="fa fa-pencil-square-o"></i></a>{% endif %}
                 </td>
             </tr>
             </tbody>
