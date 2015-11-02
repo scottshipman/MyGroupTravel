@@ -122,7 +122,6 @@ var contentBlocksRefresh = function(id, hash) {
 // Do lots of MDL stuff when a jQuery modal is opened
 var doMDLpopup = function(t) {
     t.addClass('mdl-form-mimic');
-    $(document).find('.mdl-submit-row').remove();
     t.find('.mdl-textfield__input').each(function () {
         if ( $(this).val() ) {
             $(this).parent()
