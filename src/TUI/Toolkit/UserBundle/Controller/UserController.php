@@ -725,7 +725,7 @@ class UserController extends Controller
 
         if ($setForm->isValid()) {
             $answer = $setForm['answerConfirm']->getData();
-            if($answer == $user->getAnswer()) {
+            if(trim(strtolower($answer)) == trim(strtolower($user->getAnswer()))) {
 
 
                 $user->setPassword($setForm->getData()->getPlainPassword());
@@ -743,7 +743,7 @@ class UserController extends Controller
                 $this->get("event_dispatcher")
                     ->dispatch("security.interactive_login", $loginEvent);
 
-                $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.password') . $user->getEmail());
+                $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.password') . ' ' . $user->getEmail());
                 return $this->redirect($this->generateUrl('fos_user_profile_show'));
             } else {
                 $setForm->addError(new FormError('Your security answer did not match our records. Please try again, or contact your application\'s contact.'));
@@ -829,7 +829,7 @@ class UserController extends Controller
         $entity->setDeleted(NULL);
         $em->persist($entity);
         $em->flush();
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.restore') . $entity->getUsername());
+        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.restore') . ' ' . $entity->getUsername());
 
         return $this->redirect($this->generateUrl('user'));
     }
@@ -1140,7 +1140,7 @@ class UserController extends Controller
 
         if ($securityForm->isValid()) {
             $answer = $securityForm['originalAnswer']->getData();
-            if($answer == $entity->getAnswer()) {
+            if(trim(strtolower($answer)) == trim(strtolower($entity->getAnswer()))) {
                 // $entity->setUsername($securityForm->getData()->getEmail());
                 $fields = array();
                 $pw = $securityForm['plainPassword']->getData();
