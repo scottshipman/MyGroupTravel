@@ -79,6 +79,7 @@ $(document).ready(function () {
         $("#dialog").dialog("open");
         $("#dialog").load('/manage/' + entityPath + '/show/tabs/' + entityId, function () {
             $(this).dialog("option", "title", "Rearrange Tabs");
+            doMDLpopup($('#dialog')); // run the function to add appropriate MDL classes to form elements
             $(".modal-sortable-tabs").sortable("enable");
         });
     });
