@@ -1327,11 +1327,16 @@ class UserController extends Controller
       } else {
         // see what object type the user is associated with in permission table
         $permission = $em->getRepository('PermissionBundle:Permission')->findBy(array('user' => $user[0]));
-        $role = $permission[0]->getGrants();
+
+          if(empty($permission)) {
+              $role = 'participant';
+          } else {
+             $role = $permission[0]->getGrants();
+          }
         if ($role =='organizer'){
           $msg = $this->get('translator')->trans('user.activate.organizer');
         }
-        if ($role == 'participant'){
+        if ($role == 'participant' ){
           $msg = $this->get('translator')->trans('user.activate.participant');
         }
       }
