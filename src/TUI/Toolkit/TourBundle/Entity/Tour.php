@@ -354,8 +354,6 @@ class Tour
      */
     public $paymentTasksPassenger;
 
-
-
     /**
      * @var DateTime
      *
@@ -451,22 +449,6 @@ class Tour
      * @GRID\Column(visible=false, filterable=false, export=true)
      */
     private $otherPaymentDescription;
-
-    /**
-     * @var integer
-     *
-     * @GRID\Column(field="confirmed", type="integer", export=true, nullable=true)
-     * @GRID\Column(visible=false, filterable=false, export=true)
-     */
-    private $confirmed;
-
-    /**
-     * @var integer
-     *
-     * @GRID\Column(field="waitlist", type="integer", export=true, nullable=true)
-     * @GRID\Column(visible=false, filterable=false, export=true)
-     */
-    private $waitList;
 
 
     public function __construct()

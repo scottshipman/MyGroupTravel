@@ -1,6 +1,6 @@
 <?php
 
-namespace TUI\Toolkit\TourBundle\Form;
+namespace TUI\Toolkit\PassengerBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -12,6 +12,7 @@ use Symfony\Component\Form\FormEvents;
 use TUI\Toolkit\PassengerBundle\Form\PassengerType;
 use TUI\Toolkit\UserBundle\Form\UserType;
 use TUI\Toolkit\UserBundle\Form\UserPassengerType;
+use TUI\Toolkit\PassengerBundle\Controller;
 
 class TourPassengerType extends AbstractType
 {
@@ -44,18 +45,23 @@ class TourPassengerType extends AbstractType
             ->add('firstName', 'text', array(
                 'label' => 'user.form.fname',
                 'translation_domain'  => 'messages',
-                'required' => false,
+                'required' => true,
+                'mapped' => false,
 
             ))
             ->add('lastName', 'text', array(
                 'label' => 'user.form.lname',
                 'translation_domain'  => 'messages',
-                'required' => false,
+                'required' => true,
+                'mapped' => false,
+
             ))
             ->add('email', 'email', array(
                 'label' => 'user.form.email',
                 'translation_domain'  => 'messages',
-                'required'  => false,
+                'required'  => true,
+                'mapped' => false,
+
 
             ))
             ->add('passengers', 'collection', array(
@@ -63,6 +69,7 @@ class TourPassengerType extends AbstractType
                 'allow_add'    => true,
                 'allow_delete' => true,
                 'by_reference' => false,
+                'mapped' => false,
             ))
             ;
     }
@@ -73,7 +80,6 @@ class TourPassengerType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-//            'data_class' => 'TUI\Toolkit\TourBundle\Entity\Tour',
             'cascade_validation' => true,
         ));
     }
@@ -83,6 +89,6 @@ class TourPassengerType extends AbstractType
      */
     public function getName()
     {
-        return 'tui_toolkit_tourbundle_tourpassenger';
+        return 'tui_toolkit_passengerbundle_tourpassenger';
     }
 }

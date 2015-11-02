@@ -7,11 +7,11 @@ manage_passenger_show:
     defaults: { _controller: "PassengerBundle:Passenger:show" }
 
 manage_passenger_new:
-    path:     /new
+    path:     /new/{tourId}
     defaults: { _controller: "PassengerBundle:Passenger:new" }
 
 manage_passenger_create:
-    path:     /create
+    path:     /create/{tourId}
     defaults: { _controller: "PassengerBundle:Passenger:create" }
     methods:  POST
 

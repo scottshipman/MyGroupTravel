@@ -41,7 +41,7 @@ $(document).ready(function () {
         var entityId = $('.site-show').attr('entityId');
         $("#dialog").html("");
         $("#dialog").dialog("open");
-        $("#dialog").load('/tour/view/new/passenger/form/' + entityId, function () {
+        $("#dialog").load('/passenger/new/' + entityId, function () {
             $(this).dialog("option", "title", "Sign Up");
             doMDLpopup($('#dialog')); // run the function to add appropriate MDL classes to form elements
         });

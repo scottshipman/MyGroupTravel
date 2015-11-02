@@ -34,34 +34,22 @@ class PassengerType extends AbstractType
 
 
         $builder
-            ->add('over18', 'choice', array(
-                'choices'  => array(
-                    'Yes' => 'Yes',
-                    'No' => 'No',
-                ),
-                'required' => false,
-                'expanded' => true,
-                'label' => 'Is the passenger over 18?',
-                'mapped' => false,
-                'empty_value' => false
-
+            ->add('firstName', 'text', array(
+                'required' => true,
             ))
-            ->add('userReference', 'hidden', array(
-                'required' => false
+            ->add('lastName', 'text', array(
+                'required' => true,
             ))
-            ->add('firstName')
-            ->add('lastName')
-            ->add('dateOfBirth', 'datetime', array(
+            ->add('dateOfBirth', 'birthday', array(
                 'format' => $date_format,
+                'required' => true,
             ))
-            ->add('Gender', 'choice', array(
+            ->add('gender', 'choice', array(
                 'choices' => array(
                     'Male' => 'Male',
                     'Female' => 'Female'
-                )
-            ))
-            ->add('guardian', 'hidden', array(
-                'required' => false
+                ),
+                'required' => true,
             ))
         ;
     }
@@ -72,7 +60,8 @@ class PassengerType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'TUI\Toolkit\PassengerBundle\Entity\Passenger'
+            'data_class' => 'TUI\Toolkit\PassengerBundle\Entity\Passenger',
+            'cascade_validation' => true,
         ));
     }
 

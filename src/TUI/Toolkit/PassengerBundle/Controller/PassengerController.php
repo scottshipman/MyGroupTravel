@@ -4,9 +4,16 @@ namespace TUI\Toolkit\PassengerBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use TUI\Toolkit\UserBundle\Entity\User;
+use TUI\Toolkit\TourBundle\Entity\Tour;
+use TUI\Toolkit\PermissionBundle\Entity\Permission;
+
+
 
 use TUI\Toolkit\PassengerBundle\Entity\Passenger;
 use TUI\Toolkit\PassengerBundle\Form\PassengerType;
+use TUI\Toolkit\PassengerBundle\Form\TourPassengerType;
+
 
 /**
  * Passenger controller.
@@ -33,18 +40,57 @@ class PassengerController extends Controller
      * Creates a new Passenger entity.
      *
      */
-    public function createAction(Request $request)
+    public function createAction(Request $request, $tourId)
     {
         $entity = new Passenger();
-        $form = $this->createCreateForm($entity);
+        $form = $this->createCreateForm($entity, $tourId);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
-            $em->flush();
 
-            return $this->redirect($this->generateUrl('manage_passenger_show', array('id' => $entity->getId())));
+            $em = $this->getDoctrine()->getManager();
+            $userEmail = $form->get('email')->getData();
+            $user = $em->getRepository('TUIToolkitUserBundle:User')->findOneByEmail($userEmail);
+            $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
+
+            if (!$user){
+                //do some stuff
+                $user = new User();
+                $user->setUsername($form->get('email')->getData());
+                $user->setPassword('');
+                $user->setEmail($form->get('email')->getData());
+                $user->setFirstName($form->get('firstName')->getData());
+                $user->setLastName($form->get('lastName')->getData());
+                $user->setRoles(array('ROLE_CUSTOMER'));
+                $em->persist($user);
+                $em->flush();
+            }
+
+            foreach ($form->get('passengers') as $passenger){
+                //do more stuff
+                $newPassenger = new Passenger();
+                $newPassenger->setDateOfBirth($passenger->get('dateOfBirth')->getData());
+                $newPassenger->setFirstName($passenger->get('firstName')->getData());
+                $newPassenger->setGender($passenger->get('gender')->getData());
+                $newPassenger->setLastName($passenger->get('lastName')->getData());
+                $newPassenger->setStatus("waitlist");
+                $newPassenger->setTourReference($tour);
+                $em->persist($newPassenger);
+                $em->flush();
+
+                $permission = new Permission();
+                $permission->setClass('passenger');
+                $permission->setObject($newPassenger->getId());
+                $permission->setGrants('parent');
+                $permission->setUser($user);
+                $em->persist($permission);
+                $em->flush();
+            }
+
+            $em->flush();
+            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('passenger.flash.save'));
+
+            return $this->redirect($this->generateUrl('tour_site_action_show', array('id' => $tourId)));
         }
 
         return $this->render('PassengerBundle:Passenger:new.html.twig', array(
@@ -60,10 +106,12 @@ class PassengerController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Passenger $entity)
+    private function createCreateForm(Passenger $entity, $tourId)
     {
-        $form = $this->createForm(new PassengerType(), $entity, array(
-            'action' => $this->generateUrl('manage_passenger_create'),
+        $date_format = $this->container->getParameter('date_format');
+        $locale = $this->container->getParameter('locale');
+        $form = $this->createForm(new TourPassengerType($locale), $entity, array(
+            'action' => $this->generateUrl('manage_passenger_create', array("tourId" => $tourId)),
             'method' => 'POST',
         ));
 
@@ -76,13 +124,18 @@ class PassengerController extends Controller
      * Displays a form to create a new Passenger entity.
      *
      */
-    public function newAction()
+    public function newAction($tourId)
     {
         $entity = new Passenger();
-        $form   = $this->createCreateForm($entity);
+        $form   = $this->createCreateForm($entity, $tourId);
+        $date_format = $this->container->getParameter('date_format');
+        $locale = $this->container->getParameter('locale');
 
         return $this->render('PassengerBundle:Passenger:new.html.twig', array(
             'entity' => $entity,
+            'locale' => $locale,
+            'date_format' =>$date_format,
+            'tourId' => $tourId,
             'form'   => $form->createView(),
         ));
     }

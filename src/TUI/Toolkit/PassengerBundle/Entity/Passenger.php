@@ -3,6 +3,8 @@
 namespace TUI\Toolkit\PassengerBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+
 
 /**
  * Passenger
@@ -43,13 +45,6 @@ class Passenger
      */
     protected $lastName = null;
 
-    /**
-     * @var date
-     *
-     * @ORM\Column(name="email", type="string", nullable=false)
-     */
-    protected $email;
-
 
     /**
      * @var string
@@ -76,14 +71,6 @@ class Passenger
      */
     protected $userReference;
 
-    /**
-     *
-     * @var \TUI\Toolkit\UserBundle\Entity\User
-     * @ORM\OneToOne(targetEntity="TUI\Toolkit\UserBundle\Entity\User", cascade={"persist"}, fetch="LAZY")
-     * @ORM\JoinColumn(name="guardian", referencedColumnName="id")
-     *
-     */
-    protected $guardian;
 
     /**
      *
@@ -94,6 +81,17 @@ class Passenger
      */
     protected $tourReference;
 
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="status", type="string")
+     */
+    protected $status;
+
+
+    public function __construct()  {
+    }
 
 
     /**
@@ -130,24 +128,6 @@ class Passenger
     public function getLastName()
     {
         return $this->lastName;
-    }
-
-    /**
-     * @param  $email
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-
-        return $email;
-    }
-
-    /**
-     * @return email
-     */
-    public function getEmail()
-    {
-        return $this->email;
     }
 
     /**
@@ -189,11 +169,11 @@ class Passenger
     /**
      * @param  $user
      */
-    public function setUserReference($user)
+    public function setUserReference($userReference)
     {
-        $this->user = $user;
+        $this->userReference = $userReference;
 
-        return $user;
+        return $userReference;
     }
 
     /**
@@ -201,25 +181,43 @@ class Passenger
      */
     public function getUserReference()
     {
-        return $this->user;
+        return $this->userReference;
+    }
+
+
+    /**
+     * @param  $tourReference
+     */
+    public function setTourReference($tourReference)
+    {
+        $this->tourReference = $tourReference;
+
+        return $tourReference;
     }
 
     /**
-     * @param  $guardian
+     * @return tourReference
      */
-    public function setGuardian($guardian)
+    public function getTourReference()
     {
-        $this->guardian = $guardian;
-
-        return $guardian;
+        return $this->tourReference;
     }
 
     /**
-     * @return guardian
+     * @param  $status
      */
-    public function getGuardian()
+    public function setStatus($status)
     {
-        return $this->guardian;
+        $this->status = $status;
+
+        return $status;
     }
 
+    /**
+     * @return tourReference
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
 }

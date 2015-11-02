@@ -1,15 +1,124 @@
-{% extends '::base.html.twig' %}
-
+{%  if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
 {% block body -%}
-    <h1>Passenger creation</h1>
 
-    {{ form(form) }}
+    <div class="signup-form">
+        {#{% if entity.headerBlock %}#}
+            {#<img src="{{ asset( entity.headerBlock.mediaWrapper[0].media[0].getRelativePath ~ "/" ~ entity.headerBlock.mediaWrapper[0].media[0].getHashedFilename ) | imagine_filter('modalImage')}}"/>#}
+        {#{% endif %}#}
+        {#&#123;&#35;{{ dump(entity) }}&#35;&#125;#}
+        {#{{ entity.departureDate|date(format) }} - {{ entity.returnDate|date(format) }}#}
+        {#{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{% if entity.pricePersonPublic != null %}{{ entity.pricePersonPublic }}{% endif %}/per person#}
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('manage_passenger') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
+        {{ form_start(form) }}
+
+        <div id="guardian-form">
+            <h5>Parent/Guardian</h5>
+            {{ form_widget(form.firstName) }}
+            {{ form_widget(form.lastName) }}
+            {{ form_widget(form.email) }}
+
+
+        </div>
+        <h5>Passenger</h5>
+        <div class="passenger-form" data-prototype="{{ form_widget(form.passengers.vars.prototype)|e }}">
+            {% for passenger in form.passengers %}
+                <ul class="passenger_info" taskid = "{{ passenger.vars.value.id }}">
+                    <li>{{ form_widget(passenger.firstName) }}</li>
+                    <li>{{ form_widget(passenger.lastName) }}</li>
+                    <li>{{ form_widget(passenger.dateOfBirth) }}</li>
+                    <li>{{ form_widget(passenger.gender) }}</li>
+                </ul>
+            {% endfor %}
+        </div>
+        {{ form_rest(form) }}
+        {{ form_end(form) }}
+    </div>
+    <script>
+
+        var $collectionHolder;
+
+        // setup an "add a tag" link
+        var $addPassengerLink = $('<a href="#" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add_tag_link" title="Add a Passenger"><i class="fa fa-plus"></i>Add Passenger</a>');
+        var $newLinkDiv = $('<div></div>').append($addPassengerLink);
+        $('#tui_toolkit_tourbundle_tourpassenger_passengers_0_dateOfBirth > div:nth-child(1)').css({"width": "100"});
+
+
+
+
+        $(document).ready(function () {
+
+            // Get the div that holds the collection of passengers
+            $collectionHolder = $('div.passenger-form');
+
+            // add a delete link to all of the existing passenger form ul elements
+            $collectionHolder.find('ul.passenger_info').each(function() {
+                addPassengerFormDeleteLink($(this), 'li');
+            });
+
+
+            // add the "add a Passenger" anchor and li to the Passenger div
+            $collectionHolder.append($newLinkDiv);
+
+            // count the current form inputs we have (e.g. 2), use that as the new
+            // index when inserting a new item (e.g. 2)
+            $collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+            $addPassengerLink.on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+
+                // add a new tag form (see next code block)
+                addPassengerForm($collectionHolder, $newLinkDiv);
+            });
+
+        });
+
+        function addPassengerForm($collectionHolder, $newLinkDiv) {
+            // Get the data-prototype explained earlier
+            var prototype = $collectionHolder.data('prototype');
+
+            // get the new index
+            var index = $collectionHolder.data('index');
+
+            // Replace '__name__' in the prototype's HTML to
+            // instead be a number based on how many items we have
+            var newForm = prototype.replace(/__name__/g, index);
+
+            // increase the index with one for the next item
+            $collectionHolder.data('index', index + 1);
+
+            // Display the form in the page in an div, before the "Add a Passenger" link div
+            var $newFormDiv = $('<div class="new_passenger" task="' + index + '"></div>').append(newForm);
+            $newLinkDiv.before($newFormDiv);
+
+            // add a delete link to the new form
+            addPassengerFormDeleteLink($newFormDiv, 'div');
+
+        }
+
+        function addPassengerFormDeleteLink($passengerFormDiv, elem) {
+            var $removeFormA;
+            if (elem == 'li') {
+                $removeFormA = $('<li><a href="#" title="Delete this Passenger"><i class="fa fam-delete"></i></a></li>');
+                $passengerFormDiv.append($removeFormA);
+            } else {
+                $removeFormA = $('<div class="form-row"><a href="#" title="Delete this Passenger"><i class="fa fam-delete"></i></a></div>');
+                $passengerFormDiv.children().first().append($removeFormA);
+            }
+
+
+            $removeFormA.on('click', function (e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+                if ($passengerFormDiv.get(0).tagName == 'UL') {
+                    if (confirm('Are you sure you want to remove this passenger? You must click Update for changes to be saved.')) {
+
+                    }
+                } else {
+                    $passengerFormDiv.remove();
+                }
+            });
+        }
+
+    </script>
 {% endblock %}

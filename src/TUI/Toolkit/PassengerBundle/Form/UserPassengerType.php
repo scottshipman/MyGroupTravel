@@ -66,7 +66,7 @@ class UserPassengerType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'TUI\Toolkit\UserBundle\Entity\User'
+//            'data_class' => 'TUI\Toolkit\UserBundle\Entity\User'
         ));
     }
 

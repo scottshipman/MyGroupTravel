@@ -1,6 +1,6 @@
 passenger_manage_passenger:
     resource: "@PassengerBundle/Resources/config/routing/passenger.yml"
-    prefix:   /manage/passenger
+    prefix:   /passenger
 
 passenger_homepage:
     path:     /hello/{name}
