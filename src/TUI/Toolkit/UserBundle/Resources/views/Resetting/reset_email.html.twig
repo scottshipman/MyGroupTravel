@@ -1,6 +1,6 @@
 {% block body_html %}
     {% autoescape false %}
-    <div style="color:#fff; font-size: 1px; text-align: center;">Ensure receiving emails from {{ brand.name }}, please
+        <div style="color:#fff; font-size: 1px; text-align: center;" xmlns="http://www.w3.org/1999/html">Ensure receiving emails from {{ brand.name }}, please
         add us to
         your contact list.
     </div>
@@ -30,24 +30,19 @@
                                         password</h2>
 
                                     <p style="text-align: center; color: #717D82;">
-                                        Hi {{ user.firstName|capitalize }} {{ user.lastName|capitalize }}, we've
-                                        received a
-                                        request to
-                                        change your
-                                        password. Click on the button below and follow the instructions to change your
-                                        password</p>
+                                        Hi {{ user.firstName|capitalize }} {{ user.lastName|capitalize }}, </br>
+                                        we've received a request to change your password. </br>
+                                        Click on the button below and follow the instructions to change your password</p>
                                     <center>
                                         <a style="text-decoration: none; color:#fff; display: block; width: 40%; text-align: center; padding: 20px; margin: 20px auto; background-color:{{ brand.primaryColor }};"
-                                           href="{{ absolute_url("/resetting/reset/" ~ user.confirmationToken) }}">Choose
-                                            a
-                                            password</a>
+                                           href="{{ absolute_url("/user/password/reset/" ~ user.confirmationToken) }}">Choose a password</a>
                                     </center>
                                     <hr>
                                     <p style="text-align: center; color: #C7C3C5;">
                                         You can also paste the link below straight into your browser window:
                                     </p></br>
                                     <a style="text-decoration: none; width: auto; text-align: center; display: block; color:{{ brand.primaryColor }};"
-                                       href="{{ absolute_url("/resetting/reset/" ~ user.confirmationToken) }}">{{ absolute_url("/resetting/reset/" ~ user.confirmationToken) }}</a></br>
+                                       href="{{ absolute_url("/user/password/reset/" ~ user.confirmationToken) }}">{{ absolute_url("/resetting/reset/" ~ user.confirmationToken) }}</a></br>
                                     <p style="text-align: center; color: #717D82;">
                                         if you didn't make this request, or didn't mean to, just ignore this email and
                                         your

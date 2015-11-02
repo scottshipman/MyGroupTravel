@@ -64,6 +64,13 @@ class Brand
      */
     private $footerBody;
 
+    /**
+     * @var longtext
+     *
+     * @ORM\Column(name="terms", type="text", length=4294967295, nullable=true)
+     */
+    private $terms;
+
 
     /**
      * Get id
@@ -238,5 +245,26 @@ class Brand
         return $this->media;
     }
 
+    /**
+     * Set terms
+     *
+     * @param text $terms
+     * @return Brand
+     */
+    public function setTerms($terms)
+    {
+      $this->terms = $terms;
 
+      return $this;
+    }
+
+    /**
+     * Get terms
+     *
+     * @return text
+     */
+    public function getTerms()
+    {
+      return $this->terms;
+    }
 }

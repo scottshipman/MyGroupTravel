@@ -2,7 +2,13 @@
 
 {% block title %}{{ entity.name }}{% endblock %}
 
-{% block page_title %}{{ entity.quoteReference.name  }}, {{ entity.name }}{% endblock %}
+{% block page_title %}
+    {% if entity.displayName %}
+        {{ entity.displayName }}
+    {% else %}
+        {{ entity.quoteReference.name  }}, {{ entity.name }}
+    {% endif %}
+{% endblock %}
 
 {% block page_institution %}
     {% if entity.quoteReference.institution %}

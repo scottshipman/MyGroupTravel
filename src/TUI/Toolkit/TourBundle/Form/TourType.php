@@ -124,6 +124,10 @@ class TourType extends AbstractType
             'format' => $date_format,
           ))
           ->add('duration')
+          ->add('displayName', 'text', array(
+            'required'  => false,
+            'label' => 'tour.form.tour.display_name',
+          ))
           ->add('transportType', 'entity', array(
             'required' => false,
             'placeholder' => 'tour.form.tour.placeholder',

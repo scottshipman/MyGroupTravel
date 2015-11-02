@@ -56,10 +56,16 @@
                 <div id="site-quote-name">{{ entity.quoteReference.institution.name }}</div>
             {% endif %}
 
-            <h2 class="{% if entity.quoteReference.institution.media %}has-school-logo{% endif %} {% if not app.user and brand.media %}has-brand-logo{% endif %}">{{ entity.quoteReference.name }}{% if is_granted("ROLE_BRAND") %}, {{ entity.name }}{% endif %} {% if entity.quoteNumber %}({{ entity.quoteNumber }}){% endif %}</h2>
+            <h2 class="{% if entity.quoteReference.institution.media %}has-school-logo{% endif %} {% if not app.user and brand.media %}has-brand-logo{% endif %}">
+                {% if entity.displayName %}
+                    {{ entity.displayName }}
+                {% else %}
+                    {{ entity.quoteReference.name }}{% if is_granted("ROLE_BRAND") %}, {{ entity.name }}{% endif %}
+                {% endif %}
+            </h2>
 
-            {% if entity.quoteReference.destination %}
-                <div>{{ entity.quoteReference.destination }}</div>
+            {% if entity.quoteNumber %}
+                <div>{{ entity.quoteNumber }}</div>
             {% endif %}
         </div>
       </div>
@@ -67,8 +73,12 @@
 {% endblock %}
 
 {% block body -%}
+    {% if (entity.locked is sameas(true)) %}
+        <h3 style="color: red;">{{ entity.name }} {% trans %}quote.actions.is_locked{% endtrans %}</h3>
+    {% endif %}
+
     <ul class="record_actions">
-        {% if (entity.locked is sameas(false)) and (is_granted("ROLE_ADMIN")) %}
+        {% if (entity.locked is sameas(false)) and (is_granted("ROLE_BRAND")) %}
             {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
                 <li>
                     <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quoteversion_edit', { 'id': entity.id }) }}">

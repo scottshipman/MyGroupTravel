@@ -21,6 +21,18 @@
             $(".fam-lock, .fam-unlock").parent().on('click', function() {
                 $("#loader").css("display", "inline-block");
             });
+
+            {% if is_granted("ROLE_ADMIN") == false %}
+                if ($(".fam-unlock").length > 0) {
+                    $(".fam-unlock").each( function() {
+                        var row = $(this).parent().parent().parent();
+                        var linkWidth = $(this).parent().parent().width();
+                        var rowWidth = row.width() - linkWidth;
+                        $(this).parent().remove();
+                        row.css({"min-width": rowWidth});
+                    });
+                }
+            {% endif %}
         });
     </script>
 

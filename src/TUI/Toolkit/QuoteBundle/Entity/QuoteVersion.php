@@ -18,7 +18,7 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
  * @UniqueEntity(fields={"quoteNumber"}, message="This Quote Number already exists on another Quote.", ignoreNull=true)
  *
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
- * @GRID\Source(columns="id, institution_full, quoteReference.institution.name, quoteReference.institution.city, quoteReference.name, name, isTemplate, quoteReference.ts, quoteReference.id, quoteNumber, organizer_full, salesAgent_full, salesAgent_name, quoteReference.salesAgent.firstName, quoteReference.salesAgent.lastName,  quoteReference.salesAgent.email, quoteReference.organizer.firstName, quoteReference.organizer.lastName, quoteReference.organizer.email, quoteReference.views, quoteReference.shareViews, quoteReference.converted, deleted, locked, quoteReference.setupComplete, quoteReference.destination, created, version, duration, tripStatus.name, expiryDate, transportType.name, boardBasis.name, freePlaces, payingPlaces, departureDate, returnDate, pricePerson,  currency.name, converted, views, shareViews", filterable=false, sortable=true)
+ * @GRID\Source(columns="id, institution_full, quoteReference.institution.name, quoteReference.institution.city, quoteReference.name, name, isTemplate, quoteReference.ts, quoteReference.id, quoteNumber, organizer_full, salesAgent_full, salesAgent_name, quoteReference.salesAgent.firstName, quoteReference.salesAgent.lastName,  quoteReference.salesAgent.email, quoteReference.organizer.firstName, quoteReference.organizer.lastName, quoteReference.organizer.email, quoteReference.views, quoteReference.shareViews, quoteReference.converted, deleted, locked, quoteReference.setupComplete, quoteReference.destination, created, version, duration, displayName, tripStatus.name, expiryDate, transportType.name, boardBasis.name, freePlaces, payingPlaces, departureDate, returnDate, pricePerson,  currency.name, converted, views, shareViews", filterable=false, sortable=true)
  * @GRID\Column(id="organizer_full", type="join", columns = {"quoteReference.organizer.firstName", "quoteReference.organizer.lastName", "quoteReference.organizer.email"}, title="Organizer", export=false, filterable=false, operatorsVisible=false)
  * @GRID\Column(id="salesAgent_full", type="join", columns = {"quoteReference.salesAgent.firstName", "quoteReference.salesAgent.lastName", "quoteReference.salesAgent.email"}, title="Primary Business Admin", export=false, filterable=false, operatorsVisible=false)
  * @GRID\Column(id="salesAgent_name", type="join", columns = {"quoteReference.salesAgent.firstName", "quoteReference.salesAgent.lastName"}, title="Primary Business Admin", export=false, filterable=false, operatorsVisible=false)
@@ -254,6 +254,14 @@ class QuoteVersion
     private $duration;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="displayName", type="text", nullable=true)
+     * @GRID\Column(title="Display Name", export=true)
+     */
+    private $displayName;
+
+    /**
      * @var float
      *
      * @ORM\Column(name="pricePerson", type="float", nullable=true)
@@ -282,7 +290,7 @@ class QuoteVersion
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
 
     /**
@@ -320,6 +328,19 @@ class QuoteVersion
                 ->atPath('expiryDate')
                 ->addViolation();
         }
+    }
+
+    /**
+     * @Assert\Callback
+     */
+    public function isExpiryBeforeNow(ExecutionContextInterface $context)
+    {
+      $now = new \DateTime('now');
+      if ( $now >= $this->getExpiryDate() ) {
+        $context->buildViolation('The expiry date must be in the future.')
+            ->atPath('expiryDate')
+            ->addViolation();
+      }
     }
 
 
@@ -381,7 +402,7 @@ class QuoteVersion
     /**
      * Get boardBasis
      *
-     * @return integer 
+     * @return integer
      */
     public function getBoardBasis()
     {
@@ -428,7 +449,7 @@ class QuoteVersion
     /**
      * Get content
      *
-     * @return array 
+     * @return array
      */
     public function getContent()
     {
@@ -451,7 +472,7 @@ class QuoteVersion
     /**
      * Get expiryDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getExpiryDate()
     {
@@ -474,7 +495,7 @@ class QuoteVersion
     /**
      * Get freePlaces
      *
-     * @return integer 
+     * @return integer
      */
     public function getFreePlaces()
     {
@@ -497,7 +518,7 @@ class QuoteVersion
     /**
      * Get payingPlaces
      *
-     * @return integer 
+     * @return integer
      */
     public function getPayingPlaces()
     {
@@ -520,7 +541,7 @@ class QuoteVersion
     /**
      * Get departureDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDepartureDate()
     {
@@ -543,7 +564,7 @@ class QuoteVersion
     /**
      * Get quoteReference
      *
-     * @return integer 
+     * @return integer
      */
     public function getQuoteReference()
     {
@@ -566,7 +587,7 @@ class QuoteVersion
     /**
      * Get quoteDays
      *
-     * @return integer 
+     * @return integer
      */
     public function getQuoteDays()
     {
@@ -589,7 +610,7 @@ class QuoteVersion
     /**
      * Get quoteNights
      *
-     * @return integer 
+     * @return integer
      */
     public function getQuoteNights()
     {
@@ -612,7 +633,7 @@ class QuoteVersion
     /**
      * Get totalPrice
      *
-     * @return float 
+     * @return float
      */
     public function getTotalPrice()
     {
@@ -635,7 +656,7 @@ class QuoteVersion
     /**
      * Get tripStatus
      *
-     * @return string 
+     * @return string
      */
     public function getTripStatus()
     {
@@ -658,7 +679,7 @@ class QuoteVersion
     /**
      * Get transportType
      *
-     * @return integer 
+     * @return integer
      */
     public function getTransportType()
     {
@@ -681,7 +702,7 @@ class QuoteVersion
     /**
      * Get welcomeMsg
      *
-     * @return string 
+     * @return string
      */
     public function getWelcomeMsg()
     {
@@ -709,6 +730,29 @@ class QuoteVersion
   public function getDuration()
   {
     return $this->duration;
+  }
+
+  /**
+   * Set displayName
+   *
+   * @param string $displayName
+   * @return QuoteVersion
+   */
+  public function setDisplayName($displayName)
+  {
+    $this->displayName = $displayName;
+
+    return $this;
+  }
+
+  /**
+   * Get displayName
+   *
+   * @return string
+   */
+  public function getDisplayName()
+  {
+    return $this->displayName;
   }
 
 

@@ -251,6 +251,7 @@ class QuoteController extends Controller
         $tour->setDepartureDate($quoteVersion->getDepartureDate());
         $tour->setDestination($quote->getDestination());
         $tour->setDuration($quoteVersion->getDuration());
+        $tour->setDisplayName($quoteVersion->getDisplayName());
         $tour->setExpiryDate($quoteVersion->getExpiryDate());
         $tour->setFreePlaces($quoteVersion->getFreePlaces());
 
