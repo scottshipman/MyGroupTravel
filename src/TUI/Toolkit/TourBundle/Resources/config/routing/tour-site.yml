@@ -39,3 +39,11 @@ tour_summary_update:
 manage_tour_export_assets:
     path:     /export/{id}/{fileName}
     defaults: { _controller: "TourBundle:Tour:exportTourAssets" }
+
+tour_site_passenger_form:
+    path: /new/passenger/form/{id}
+    defaults: { _controller: "TourBundle:Tour:newPassenger" }
+
+tour_site_passenger_update:
+    path: /update/passenger/{id}
+    defaults: { _controller: "TourBundle:Tour:passengerUpdate" }

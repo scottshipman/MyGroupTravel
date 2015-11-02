@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use TUI\Toolkit\TourBundle\Entity\Tour;
 use TUI\Toolkit\QuoteBundle\Entity\QuoteVersion;
 use TUI\Toolkit\TourBundle\Form\ContactOrganizerType;
+use TUI\Toolkit\TourBundle\Form\TourPassengerType;
 use TUI\Toolkit\TourBundle\Form\TourSetupType;
 use TUI\Toolkit\UserBundle\Controller\UserController;
 use TUI\Toolkit\TourBundle\Form\TourType;
@@ -1293,5 +1294,54 @@ class TourController extends Controller
 
         return $this->redirect($this->generateUrl('manage_tour'));
 
+    }
+
+    public function createPassengerForm($id)
+    {
+        $locale = $this->container->getParameter('locale');
+        $passengerForm = $this->createForm(new TourPassengerType($locale), array(), array(
+            'action' => $this->generateUrl('tour_site_passenger_update', array('id' => $id)),
+            'method' => 'PUT',
+        ));
+
+        $passengerForm->add('submit', 'submit', array('label' => $this->get('translator')->trans('tour.actions.submit')));
+
+        return $passengerForm;
+    }
+
+    public function newPassengerAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('TourBundle:Tour')->find($id);
+        $passengerForm = $this->createPassengerForm($id);
+        $locale = $this->container->getParameter('locale');
+        $date_format = $this->container->getParameter('date_format');
+
+
+        return $this->render('TourBundle:Tour:addpassenger.html.twig', array(
+            'passenger_form' => $passengerForm->createView(),
+            'entity' => $entity,
+            'locale' => $locale,
+            'date_format' => $date_format,
+        ));
+    }
+
+    public function passengerUpdateAction(Request $request, $id)
+    {
+        $locale = $this->container->getParameter('locale');
+        $date_format = $this->container->getParameter('date_format');
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('TourBundle:Tour')->find($id);
+
+        $passengerForm = $this->createPassengerForm($id);
+        $passengerForm->handleRequest($request);
+
+        return $this->render('TourBundle:Tour:addpassenger.html.twig', array(
+            'passenger_form' => $passengerForm->createView(),
+            'entity' => $entity,
+            'locale' => $locale,
+            'date_format' => $date_format,
+        ));
     }
 }

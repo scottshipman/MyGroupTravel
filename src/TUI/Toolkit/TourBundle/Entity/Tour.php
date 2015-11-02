@@ -452,6 +452,22 @@ class Tour
      */
     private $otherPaymentDescription;
 
+    /**
+     * @var integer
+     *
+     * @GRID\Column(field="confirmed", type="integer", export=true, nullable=true)
+     * @GRID\Column(visible=false, filterable=false, export=true)
+     */
+    private $confirmed;
+
+    /**
+     * @var integer
+     *
+     * @GRID\Column(field="waitlist", type="integer", export=true, nullable=true)
+     * @GRID\Column(visible=false, filterable=false, export=true)
+     */
+    private $waitList;
+
 
     public function __construct()
     {
@@ -460,6 +476,9 @@ class Tour
       $this->shareViews = 0;
       $this->paymentTasks = new ArrayCollection();
       $this->paymentTasksPassenger = new ArrayCollection();
+      $this->confirmed = 0;
+      $this->waitList = 0;
+
     }
 
     /**
@@ -1627,6 +1646,50 @@ class Tour
     public function setOtherPaymentDescription($otherPaymentDescription)
     {
         $this->otherPaymentDescription = $otherPaymentDescription;
+
+        return $this;
+    }
+
+    /**
+     * @return integer
+     */
+
+    public function getConfirmed()
+    {
+        return $this->confirmed;
+    }
+
+    /**
+     * @param $confirmed
+     * @return $this
+     *
+     */
+
+    public function setConfirmed($confirmed)
+    {
+        $this->confirmed = $confirmed;
+
+        return $this;
+    }
+
+    /**
+     * @return integer
+     */
+
+    public function getWaitList()
+    {
+        return $this->waitList;
+    }
+
+    /**
+     * @param $waitList
+     * @return $this
+     *
+     */
+
+    public function setWaitList($waitList)
+    {
+        $this->waitList = $waitList;
 
         return $this;
     }

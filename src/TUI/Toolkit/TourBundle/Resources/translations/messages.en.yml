@@ -62,6 +62,7 @@ tour:
         add_tab: Add New Tab
         add_block: Add Block
         save: Save
+        submit: Submit
 
     menu:
         my_tours: My Tours
