@@ -11,12 +11,13 @@ use Doctrine\ORM\Mapping as ORM;
 use Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumber;
 use Gedmo\Mapping\Annotation as Gedmo;
 use APY\DataGridBundle\Grid\Mapping as GRID;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="fos_user",uniqueConstraints={@ORM\UniqueConstraint(name="email", columns={"email"})})
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
- * @GRID\Source(columns="id, lastName, firstName, fullname, email, enabled, roles, created, lastLogin", filterable=false, sortable=true)
+ * @GRID\Source(columns="id, lastName, firstName, fullname, nickname, displayName, email, enabled, roles, created, lastLogin", filterable=false, sortable=true)
  * @GRID\Column(id="fullname", type="join", title="Name", columns={"firstName", "lastName"}, filterable=false, operatorsVisible=false)
  */
 class User extends BaseUser
@@ -62,6 +63,18 @@ class User extends BaseUser
 
     /**
      * @ORM\Column(type="string", nullable=true)
+     * @GRID\Column(visible=false, filterable=false, export=true)
+     */
+    protected $nickname = null;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @GRID\Column(visible=false, filterable=false, export=true)
+     */
+    protected $displayName = null;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
      */
     protected $honorific = null;
 
@@ -69,6 +82,34 @@ class User extends BaseUser
      * @ORM\Column(type="phone_number", nullable=true)
      */
     protected $phoneNumber = null;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @Assert\NotBlank(message="Please enter A Security Question.", groups={"Registration", "Profile"})
+     * @Assert\Length(
+     *     min=10,
+     *     max=255,
+     *     minMessage="The question is too short.",
+     *     maxMessage="The question is too long.",
+     *     groups={"Registration", "Profile"}
+     * )
+     */
+
+    protected $question = null;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @Assert\NotBlank(message="Please enter your Security Question Answer.", groups={"Registration", "Profile"})
+     * @Assert\Length(
+     *     min=5,
+     *     max=255,
+     *     minMessage="The answer is too short.",
+     *     maxMessage="The answer is too long.",
+     *     groups={"Registration", "Profile"}
+     * )
+     */
+
+    protected $answer = null;
 
 
     public function __construct()
@@ -175,6 +216,38 @@ class User extends BaseUser
     }
 
     /**
+     * @param mixed $nickname
+     */
+    public function setNickname($nickname)
+    {
+        $this->nickname = $nickname;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNickname()
+    {
+        return $this->nickname;
+    }
+
+    /**
+     * @param mixed $displayName
+     */
+    public function setDisplayName($displayName)
+    {
+        $this->displayName = $displayName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDisplayName()
+    {
+        return $this->displayName;
+    }
+
+    /**
      * @param mixed $phoneNumber
      */
     public function setPhoneNumber($phoneNumber)
@@ -238,4 +311,52 @@ class User extends BaseUser
   {
     return $this->created;
   }
-} 
+
+  /**
+   * Set question
+   *
+   * @param date $created
+   * @return User
+   */
+  public function setQuestion($question)
+  {
+    $this->question = $question;
+
+    return $this;
+  }
+
+  /**
+   * Get question
+   *
+   * @return string
+   */
+  public function getQuestion()
+  {
+    return $this->question;
+  }
+
+  /**
+   * Set answer
+   *
+   * @param string $answer
+   * @return User
+   */
+  public function setAnswer($answer)
+  {
+    $this->answer = $answer;
+
+    return $this;
+  }
+
+  /**
+   * Get answer
+   *
+   * @return string
+   */
+  public function getAnswer()
+  {
+    return $this->answer;
+  }
+
+
+}

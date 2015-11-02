@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use TUI\Toolkit\BrandBundle\Entity\Brand;
 use TUI\Toolkit\BrandBundle\Form\BrandType;
+use TUI\Toolkit\BrandBundle\Form\TermsType;
 use Application\Sonata\MediaBundle\Entity\Media;
 
 
@@ -280,5 +281,121 @@ class BrandController extends Controller
             ->add('submit', 'submit', array('label' => $this->get('translator')->trans('brand.actions.delete')))
             ->getForm();
     }
+
+  /**
+   * Show terms of service.
+   *
+   */
+  public function termsAction()
+  {
+    $em = $this->getDoctrine()->getManager();
+    // Get the default/hardcoded Brand
+    $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+    // look for a configured brand
+    if($brand_id = $this->container->getParameter('brand_id')){
+      $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+    }
+
+    if(!$brand){
+      $brand = $default_brand;
+    }
+
+    return $this->render('BrandBundle:Brand:terms.html.twig', array('brand' => $brand));
+  }
+
+  /**
+   * Displays a form to edit an existing Brand terms.
+   *
+   * @Route("/edit/terms", name="_manage_brand_terms")
+   * @Method("GET")
+   * @Template("BrandBundle:Brand:editTerms.html.twig")
+   */
+  public function editTermsAction()
+  {
+    $em = $this->getDoctrine()->getManager();
+    // Get the default/hardcoded Brand
+    $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+    // look for a configured brand
+    if($brand_id = $this->container->getParameter('brand_id')){
+      $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+    }
+
+    if(!$brand){
+      $brand = $default_brand;
+    }
+
+    $editForm = $this->editTermsForm($brand);
+    $cancel = $_SERVER['HTTP_REFERER'] ? $_SERVER['HTTP_REFERER'] : $this->generateUrl('_manage_brand_show', array('id' => $brand->getId()));
+
+    return array(
+      'brand' => $brand,
+      'form' => $editForm->createView(),
+      'cancel' => $cancel,
+    );
+  }
+
+  /**
+   * Update a Brand terms of service.
+   *
+   * @Route("/terms/update", name="_manage_brand_terms_update")
+   * @Method("POST")
+   */
+  public function updateTermsAction(Request $request)
+  {
+
+    $em = $this->getDoctrine()->getManager();
+    // Get the default/hardcoded Brand
+    $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+    // look for a configured brand
+    if($brand_id = $this->container->getParameter('brand_id')){
+      $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+    }
+
+    if(!$brand){
+      $brand = $default_brand;
+    }
+
+    $cancel = $_SERVER['HTTP_REFERER'] ? $_SERVER['HTTP_REFERER'] : $this->generateUrl('_manage_brand_show', array('id' => $entity->getId()));
+    $form = $this->editTermsForm($brand);
+    $form->handleRequest($request);
+
+
+    if ($form->isValid()) {
+      $em->persist($brand);
+      $em->flush();
+      $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('brand.flash.terms') . $brand->getName());
+
+
+      return $this->redirect($this->generateUrl('_manage_brand_show', array('id' => $brand->getId())));
+    }
+
+    return array(
+      'brand' => $brand,
+      'form' => $form->createView(),
+      'cancel' => $cancel,
+    );
+  }
+
+  /**
+   * Creates a form to edit a Brand terms.
+   *
+   * @param Brand $entity The entity
+   *
+   * @return \Symfony\Component\Form\Form The form
+   */
+  private function editTermsForm(Brand $entity)
+  {
+    $form = $this->createForm(new TermsType(), $entity, array(
+      'action' => $this->generateUrl('_manage_brand_terms_update', array('id' => $entity->getId())),
+      'method' => 'POST',
+    ));
+
+    $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('brand.actions.update')));
+
+    return $form;
+  }
 
 }

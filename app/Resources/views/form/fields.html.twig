@@ -57,9 +57,9 @@
     <label class="mdl-checkbox mdl-js-checkbox">
         <input type="checkbox" class="mdl-checkbox__input" {{ block('widget_attributes') }} {% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %}>
         {% if (label) %}
-            <span class="mdl-checkbox__label">{{ label }}</span>
+            <span class="mdl-checkbox__label">{{ label | raw}}</span>
         {% else %}
-            <span class="mdl-checkbox__label">{{ form_label(form) }}</span>
+            <span class="mdl-checkbox__label">{{ form_label(form) | raw }}</span>
         {% endif %}
     </label>
     {% endspaceless %}

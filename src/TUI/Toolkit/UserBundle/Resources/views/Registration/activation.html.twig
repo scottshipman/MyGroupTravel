@@ -1,5 +1,27 @@
 {% extends "FOSUserBundle::layout.html.twig" %}
 
 {% block fos_user_content %}
-    {% include "FOSUserBundle:Registration:activation_content.html.twig" %}
+    {% trans_default_domain 'messages' %}
+
+<div id="activation-form" class="main_login">
+
+    <p>Hi {{ user.firstName }},
+        {{ render(controller('TUIToolkitUserBundle:User:getWelcomeMessage', { 'token': token } )) }}
+
+
+    {{ form_start(form) }}
+    {{ form_errors(form) }}
+    {{ form_row(form.plainPassword) }}
+    {{ form_row(form.question) }}
+    {{ form_row(form.answer) }}
+    {% if form.termsAgree is defined %}
+        {{ form_widget(form.termsAgree,{'label' : 'user.form.terms_agree'|trans|nl2br|replace
+            ({'%link_start%' : '<a target="_blank" href="'~path('terms_of_service')~'">', '%link_end%' : '</a>'}) | raw}) }}
+    {% endif %}
+
+       <div> {{ form_widget(form.submit) }}</div>
+
+{{ form_end(form) }}
+
+</div>
 {% endblock fos_user_content %}

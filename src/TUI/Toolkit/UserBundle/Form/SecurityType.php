@@ -8,7 +8,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use libphonenumber\PhoneNumberUtils;
 use libphonenumber\PhoneNumberFormat;
 
-class PasswordSetType extends AbstractType
+class SecurityType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -17,7 +17,6 @@ class PasswordSetType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
 
-      // todo: Add logic so you cant add any role greater than your own
         $builder
           ->add('plainPassword', 'repeated', array(
             'type' => 'password',
@@ -25,8 +24,26 @@ class PasswordSetType extends AbstractType
             'first_options' => array('label' => 'form.new_password'),
             'second_options' => array('label' => 'form.new_password_confirmation'),
             'invalid_message' => 'fos_user.password.mismatch',
-            'required' => true,
+            'required' => false,
           ))
+          ->add('newQuestion', 'text', array(
+            'label' => 'user.form.question',
+            'translation_domain'  => 'messages',
+            'mapped' => false,
+            'required' => false,
+          ))
+          ->add('newAnswer', 'text', array(
+            'label' => 'user.form.answer',
+            'translation_domain'  => 'messages',
+            'mapped' => false,
+            'required'=> false,
+          ))
+           ->add('originalAnswer', 'text', array(
+            'label' => 'user.form.answer',
+            'translation_domain'  => 'messages',
+               'mapped' => false,
+               'required'=> true,
+           ))
         ;
     }
 
@@ -45,6 +62,6 @@ class PasswordSetType extends AbstractType
      */
     public function getName()
     {
-        return 'tui_toolkit_ajax_userbundle_user';
+        return 'tui_toolkit_user_security_edit';
     }
 }

@@ -64,6 +64,16 @@ class UserType extends AbstractType
             'translation_domain'  => 'messages',
             'required' => true,
               ))
+          ->add('nickname', 'text', array(
+            'label' => 'user.form.nickname',
+            'translation_domain'  => 'messages',
+            'required' => false,
+              ))
+          ->add('displayName', 'text', array(
+            'label' => 'user.form.display_name',
+            'translation_domain'  => 'messages',
+            'required' => true,
+          ))
           ->add('email', 'email', array(
             'label' => 'user.form.email',
             'translation_domain'  => 'messages',

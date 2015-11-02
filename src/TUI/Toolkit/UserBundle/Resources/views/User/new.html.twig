@@ -4,15 +4,20 @@
 
 {% block body -%}
 
-  {{ form(form) }}
+    {{ form(form) }}
+
     {# {{ render(controller('MediaBundle:Media:createDropzoneForm', {'context':'user'}))  }} #}
 
+    <ul class="record_actions">
+        <li>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('user') }}">
+                <i class="fa fa-arrow-circle-left"></i> {% trans %}user.actions.back{% endtrans %}
+            </a>
+        </li>
+    </ul>
 
-        <ul class="record_actions">
-    <li>
-        <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('user') }}">
-            <i class="fa fa-arrow-circle-left"></i> {% trans %}user.actions.back{% endtrans %}
-        </a>
-    </li>
-</ul>
+    {% javascripts '@toolkit_display_name' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
 {% endblock %}

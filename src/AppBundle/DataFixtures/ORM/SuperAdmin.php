@@ -36,6 +36,8 @@ class SuperAdmin implements FixtureInterface, ContainerAwareInterface
     $user->setRoles(array('ROLE_SUPER_ADMIN'));
     $user->setFirstName('SUPER');
     $user->setLastName('ADMIN');
+    $user->setQuestion('What is the real name of Bad Decision Pizza');
+    $user->setAnswer('Pauls Chicago Pizza');
 
     $userManager->persist($user);
     $userManager->flush();

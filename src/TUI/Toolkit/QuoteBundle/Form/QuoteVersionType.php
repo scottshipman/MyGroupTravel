@@ -155,6 +155,11 @@ class QuoteVersionType extends AbstractType
                 'label' => 'quote.form.quote_version.duration',
                 'translation_domain'  => 'messages',
             ))
+            /* ->add('displayName', 'text', array(
+                'required' => false,
+                'label' => 'quote.form.quote_version.display_name',
+                'translation_domain'  => 'messages',
+            )) */
             ->add('boardBasis', 'entity', array(
                 'label' => 'quote.form.quote_version.boardBasis',
                 'translation_domain'  => 'messages',

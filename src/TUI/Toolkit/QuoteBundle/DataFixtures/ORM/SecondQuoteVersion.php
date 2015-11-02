@@ -48,9 +48,10 @@ class FirstQuoteVersion implements FixtureInterface, ContainerAwareInterface
     $quoteversion->setReturnDate(new \DateTime('now + 97 days'));
     $quoteversion->setQuoteReference($quote);
     $quoteversion->setDuration('7 days and 6 nites with 5 hotel stays');
+    $quoteversion->setDisplayName('');
     $quoteversion->setPricePerson(2599);
 
     $quoteversionManager->persist($quoteversion);
     $quoteversionManager->flush();
   }
-} 
+}

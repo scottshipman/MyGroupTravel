@@ -43,7 +43,13 @@
             </span>
         {% endif %}
     </div>
+    {% if app.user.id == entity.id %}
+        <div id="security-edit-link">
+            To Edit your account password or Security Question, <a href="{{ path('user_security_reset', {'id' : entity.id}) }}">click here</a>.
+        </div>
+    {% endif %}
     {{ form_widget(edit_form) }}
+
     {{ form_end(edit_form) }}
 
     {% if is_granted("ROLE_BRAND") %}
@@ -55,4 +61,9 @@
             {% if delete_form %}<li>{{ form(delete_form) }}</li>{% endif %}
         </ul>
     {% endif %}
+
+    {% javascripts '@toolkit_display_name' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
 {% endblock %}
