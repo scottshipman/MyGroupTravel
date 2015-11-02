@@ -19,9 +19,11 @@
 
 
         </div>
-        <h5>Passenger</h5>
         <div class="passenger-form" data-prototype="{{ form_widget(form.passengers.vars.prototype)|e }}">
+            {#<h5>Passenger</h5>#}
             {% for passenger in form.passengers %}
+            {#<div class = "tour-edit mdl-card mdl-shadow--2dp">#}
+                {#<div class="mdl-card__supporting-text">#}
                 <ul class="passenger_info" taskid = "{{ passenger.vars.value.id }}">
                     <li>{{ form_widget(passenger.firstName) }}</li>
                     <li>{{ form_widget(passenger.lastName) }}</li>
@@ -88,7 +90,7 @@
             $collectionHolder.data('index', index + 1);
 
             // Display the form in the page in an div, before the "Add a Passenger" link div
-            var $newFormDiv = $('<div class="new_passenger" task="' + index + '"></div>').append(newForm);
+            var $newFormDiv = $('<div class="new_passenger mdl-card mdl-shadow--2dp" task="' + index + '"><h5>Passenger</h5></div>').append(newForm);
             $newLinkDiv.before($newFormDiv);
 
             // add a delete link to the new form
