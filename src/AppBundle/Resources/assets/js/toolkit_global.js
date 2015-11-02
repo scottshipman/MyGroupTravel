@@ -25,6 +25,14 @@ var toolkitStandardPopup = function(title, loadLink) {
     });
 };
 
+var toolkitStaticPopup = function(title, loadContent) {
+    $("#dialog").html("");
+    $("#dialog").dialog("option", "title", "Loading...");
+    $("#dialog").html(loadContent);
+    $("#dialog").dialog("option", "title", title).dialog("open");
+    doMDLpopup($("#dialog"));
+};
+
 /**
  * Persist Content block data to the database/entity
  * @param id - Quote Version # passed from window.path
