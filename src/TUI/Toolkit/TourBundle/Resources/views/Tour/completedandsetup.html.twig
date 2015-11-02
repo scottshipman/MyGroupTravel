@@ -503,8 +503,7 @@ $(document).ready(function() {
 $(document).on('click', '#promote-tour', function (e) {
     e.preventDefault();
     var shareValue = "{{ url('tour_site_show', { 'id': entity.id, 'quoteNumber' : entity.quoteNumber }) }}";
-    $("#dialog").html("");
-    $("#dialog").html('<div id="content-wrapper" class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">' +
+    var link_html = '<div id="content-wrapper" class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">' +
     '<div id="content-blocks-wrapper" class="content-block-tabs-bar mdl-tabs__tab-bar">' +
     '<a href="#tabs-drawer-1" class="view-tab site-content-blocks-tab mdl-tabs__tab " tabId="1"><span class="tab-name"><i style="margin-right: 10px;" class="fa fa-link fa-1x"></i>Url</span></a>' +
     '<a href="#tabs-drawer-2" class="view-tab site-content-blocks-tab mdl-tabs__tab " tabId="2"><span class="tab-name"><i style="margin-right: 10px;" class="fa fa-download fa-1x"></i>Toolkit</span></a>' +
@@ -518,9 +517,8 @@ $(document).on('click', '#promote-tour', function (e) {
         'class="not-full mdl-button mdl-js-button mdl-button--raised mdl-button--colored">' +
         '<i class="fa fa-sign-in fa-stack"></i>' +
         '</a></div></div>' +
-        '<div id="tabs-drawer-2" class="mdl-tabs__panel content-blocks-drawer">' + something +'</div>'
-    );
-    $("#dialog").dialog("option", "title", "Promote the Tour").dialog("open");
+        '<div id="tabs-drawer-2" class="mdl-tabs__panel content-blocks-drawer">' + something + '</div>';
+    toolkitStaticPopup("Promote the Tour", link_html);
     // Copy to Clipboard
     ZeroClipboard.config({swfPath: "//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf"});
     var client = new ZeroClipboard(document.getElementById("copy-button"));
@@ -531,7 +529,6 @@ $(document).on('click', '#promote-tour', function (e) {
     if (navigator.mimeTypes["application/x-shockwave-flash"] == undefined) {
         $("#copy-button").addClass('hidden');
         $('share_url').css('width', '80%');
-    }
-    doMDLpopup($("#dialog"));
+    };
 });
 </script>
