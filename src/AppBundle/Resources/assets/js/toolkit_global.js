@@ -122,6 +122,7 @@ var contentBlocksRefresh = function(id, hash) {
 // Do lots of MDL stuff when a jQuery modal is opened
 var doMDLpopup = function(t) {
     t.addClass('mdl-form-mimic');
+    $(document).find('.mdl-submit-row').remove();
     t.find('.mdl-textfield__input').each(function () {
         if ( $(this).val() ) {
             $(this).parent()
@@ -150,8 +151,8 @@ var doMDLpopup = function(t) {
         }
     });
     t.find('.button-row').each(function () {
-        $('.mdl-submit-row').remove();
         if ( $(this).parents('#dialog') ) {
+            $('#dialog').height( $('#dialog').height() - (36+12+1) ); // Height of button row
             $(this).addClass('mdl-submit-row');
             $(this).appendTo( $('#dialog').parent() );
         }
