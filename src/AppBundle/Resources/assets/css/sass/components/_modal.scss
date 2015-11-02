@@ -30,16 +30,25 @@
     background: transparent;
   }
 
+  .ui-dialog-title {
+    text-transform: capitalize;
+    margin: 0;
+    float: none;
+    display: block;
+    width: 100%;
+    padding-right: 32px;
+  }
+
+  .ui-dialog-titlebar-close {
+    right: 1em;
+  }
+
   .mdl-submit-row {
     padding: 0.4em 1em;
     border-top: 1px solid #aaa;
     text-align: right;
   }
 
-}
-
-.ui-dialog-title {
-  text-transform: capitalize;
 }
 
 .request-changes {
