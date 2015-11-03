@@ -1,0 +1,117 @@
+{% extends '::base.html.twig' %}
+{% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
+{% set spotsRemaining = tour.payingPlaces - acceptedobjects|length %}
+
+{% block body -%}
+
+    <div class="tour-show-wrapper">
+
+        <div class="tour-show-left-column">
+            <ul class="tour-show-submenu">
+                <li><strong>Passengers For {{ tour.name|capitalize }}</strong></li>
+                <hr>
+                {#<li><strong>Accepted ({{ accepted|length }})</strong></li>#}
+                {#<hr>#}
+                <li><strong>Wait List ({{ waitlistobjects|length }})</strong></li>
+                <hr>
+                {#<li><strong>Free</strong></li>#}
+                {#<hr>#}
+                {#<li><strong><a href="#">Organisers</a></strong></li>#}
+                {#<hr>#}
+            </ul>
+
+            <div class="tour-edit-organizer-left">
+                <label>{% trans %}tour.show.organizers{% endtrans %}</label><br>
+                {% if tour.organizer.media %}
+                    <img class="tui-image-avatar" src="{{ asset( tour.organizer.media.getRelativePath ~ "/" ~ tour.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ tour.organizer.username }}">
+                {% elseif tour.organizer.firstName and tour.organizer.lastName %}
+                    <span class="tui-text-avatar mdl-typography--headline">{{ tour.organizer.firstName[:1] }}{{ tour.organizer.lastName[:1] }}</span>
+                {% else %}
+                    <span class="tui-text-avatar mdl-typography--headline">{{ tour.organizer.username[:1] }}</span>
+                {% endif %}
+                {#<a class="add-organizer" href="#"><i class="add-icon fa fa-plus"></i></a>#}
+                {#<a class="add-organizer mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">Add/remove organizers</a>#}
+            </div>
+        </div>
+
+        <div class="tour-show-right-column">
+
+            <div class="waitlist tour-edit mdl-card mdl-shadow--2dp">
+
+                <div class="mdl-card__title">
+                    <h3 class="mdl-card__title-text">Passenger List</h3>
+                </div>
+
+                <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
+                    <div class="paying-passengers-title"><h3>Add Paying Passengers</h3></div> <div class="passenger-count"><p style="color: {{ brand.primaryColor }}" class="spots-remaining">{{ spotsRemaining }}</p><p class="spots-remaining-copy"><strong>Remaining</strong></p></div>
+                    <p>Some Bullshit text goes here because no one told us what to put so blah blah blah</p>
+                    <div style="clear: both"></div>
+                    <a style="display: inline-block; margin: 10px auto;" id="invite-passengers" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored download" href="#">Invite Passengers</a>
+                    <a style="display: inline-block; margin: 10px auto;" id="accept-tour" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored download" href="#"><i class="fa fa-user-plus"></i>Add Passenger</a>
+                </div>
+                {% for passenger in waitlistobjects %}
+                    <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
+                        <p style="display: inline-block"><strong>{{ passenger[0].p_firstName }}</strong></p> <p style="display: inline-block"><strong>{{ passenger[0].p_lastName }}</strong></p> <p style="display: inline-block"><strong><a href="mailto:{{ passenger[1].email }}">{{ passenger[1].email }}</a></strong></p>
+                        <label style="display: block">Signed up on {{ passenger[0].p_signUpDate|date(format) }}</label>
+                    </div>
+                {% endfor %}
+                </div>
+        </div>
+
+            {#{% if entity.SetupComplete == true and entity.isComplete == true %}#}
+
+                {#{{ render(controller('TourBundle:Tour:getTourCompletedAndSetup', { 'id': entity.id } )) }}#}
+
+            {#{% elseif entity.SetupComplete == true and entity.isComplete == false %}#}
+
+                {#{{ render(controller('TourBundle:Tour:getTourNotCompletedAndSetup', { 'id': entity.id } )) }}#}
+
+            {#{% elseif entity.SetupComplete == false %}#}
+
+                {#{{ render(controller('TourBundle:Tour:getTourNotSetup', { 'id': entity.id } )) }}#}
+
+            {#{% endif %}#}
+
+        </div>
+
+    </div>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.js"></script>
+
+    {% javascripts '@toolkit_siteshow' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    
+    <script>
+        $(document).ready(function () {
+
+                // Promote Popup
+                $(document).on('click', '#invite-passengers', function (e) {
+                    e.preventDefault();
+                    var shareValue = "{{ url('tour_site_show', { 'id': tour.id, 'quoteNumber' : tour.quoteNumber }) }}";
+                    var link_html = '<h3>Share this Tour with others</h3>' +
+                                      '<div><p>To send this tour to others, copy the URL below.</p></div>' +
+                                      '<div class="input"><input style="width:70%; padding:.25em; margin:1em;" type="text" id="share_url" name="share_url" value="' + shareValue + '" readonly="readonly">' +
+                                      '<a href="#" id="copy-button" data-clipboard-target="share_url"' +
+                                      'title="Click to copy Tour URL"' +
+                                      'class="not-full mdl-button mdl-js-button mdl-button--raised mdl-button--colored">' +
+                                      '<i class="fa fa-sign-in fa-stack"></i>' +
+                                      '</a></div>';
+                    toolkitStaticPopup("Promote the Tour", link_html);
+                    // Copy to Clipboard
+                    ZeroClipboard.config({swfPath: "//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf"});
+                    var client = new ZeroClipboard(document.getElementById("copy-button"));
+                    client.on('aftercopy', function (event) {
+                        $('#copy-button').css('background-color', 'green');
+                    });
+                    //remove the CopytoClipboard button if not Flash
+                    if (navigator.mimeTypes["application/x-shockwave-flash"] == undefined) {
+                        $("#copy-button").addClass('hidden');
+                        $('share_url').css('width', '80%');
+                    };
+
+                });
+
+        });
+    </script>
+{% endblock %}

@@ -9,7 +9,6 @@ use TUI\Toolkit\TourBundle\Entity\Tour;
 use TUI\Toolkit\PermissionBundle\Entity\Permission;
 
 
-
 use TUI\Toolkit\PassengerBundle\Entity\Passenger;
 use TUI\Toolkit\PassengerBundle\Form\PassengerType;
 use TUI\Toolkit\PassengerBundle\Form\TourPassengerType;
@@ -36,6 +35,7 @@ class PassengerController extends Controller
             'entities' => $entities,
         ));
     }
+
     /**
      * Creates a new Passenger entity.
      *
@@ -53,7 +53,7 @@ class PassengerController extends Controller
             $user = $em->getRepository('TUIToolkitUserBundle:User')->findOneByEmail($userEmail);
             $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
 
-            if (!$user){
+            if (!$user) {
                 //do some stuff
                 $user = new User();
                 $user->setUsername($form->get('email')->getData());
@@ -66,7 +66,7 @@ class PassengerController extends Controller
                 $em->flush();
             }
 
-            foreach ($form->get('passengers') as $passenger){
+            foreach ($form->get('passengers') as $passenger) {
                 //do more stuff
                 $newPassenger = new Passenger();
                 $newPassenger->setDateOfBirth($passenger->get('dateOfBirth')->getData());
@@ -74,6 +74,7 @@ class PassengerController extends Controller
                 $newPassenger->setGender($passenger->get('gender')->getData());
                 $newPassenger->setLastName($passenger->get('lastName')->getData());
                 $newPassenger->setStatus("waitlist");
+                $newPassenger->setSignUpDate(new \DateTime());
                 $newPassenger->setTourReference($tour);
                 $em->persist($newPassenger);
                 $em->flush();
@@ -95,7 +96,7 @@ class PassengerController extends Controller
 
         return $this->render('PassengerBundle:Passenger:new.html.twig', array(
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'form' => $form->createView(),
         ));
     }
 
@@ -127,16 +128,16 @@ class PassengerController extends Controller
     public function newAction($tourId)
     {
         $entity = new Passenger();
-        $form   = $this->createCreateForm($entity, $tourId);
+        $form = $this->createCreateForm($entity, $tourId);
         $date_format = $this->container->getParameter('date_format');
         $locale = $this->container->getParameter('locale');
 
         return $this->render('PassengerBundle:Passenger:new.html.twig', array(
             'entity' => $entity,
             'locale' => $locale,
-            'date_format' =>$date_format,
+            'date_format' => $date_format,
             'tourId' => $tourId,
-            'form'   => $form->createView(),
+            'form' => $form->createView(),
         ));
     }
 
@@ -157,7 +158,7 @@ class PassengerController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('PassengerBundle:Passenger:show.html.twig', array(
-            'entity'      => $entity,
+            'entity' => $entity,
             'delete_form' => $deleteForm->createView(),
         ));
     }
@@ -180,19 +181,19 @@ class PassengerController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('PassengerBundle:Passenger:edit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-    * Creates a form to edit a Passenger entity.
-    *
-    * @param Passenger $entity The entity
-    *
-    * @return \Symfony\Component\Form\Form The form
-    */
+     * Creates a form to edit a Passenger entity.
+     *
+     * @param Passenger $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
     private function createEditForm(Passenger $entity)
     {
         $form = $this->createForm(new PassengerType(), $entity, array(
@@ -204,6 +205,7 @@ class PassengerController extends Controller
 
         return $form;
     }
+
     /**
      * Edits an existing Passenger entity.
      *
@@ -229,11 +231,12 @@ class PassengerController extends Controller
         }
 
         return $this->render('PassengerBundle:Passenger:edit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
     }
+
     /**
      * Deletes a Passenger entity.
      *
@@ -271,7 +274,74 @@ class PassengerController extends Controller
             ->setAction($this->generateUrl('manage_passenger_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-        ;
+            ->getForm();
+    }
+
+    public function getPassengerDashboardAction($tourId)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
+
+        //Query builder for waitlist
+        $qb = $em->createQueryBuilder();
+        $qb->select('p')
+            ->from('PassengerBundle:Passenger', 'p')
+            ->where($qb->expr()->andX(
+                $qb->expr()->eq('p.status', '?1')
+            ));
+        $qb->setParameters(array(1 => 'waitlist' ));
+        $query = $qb->getQuery();
+        $waitList = $query->getScalarResult();
+
+        $waitListObjects = array();
+
+        foreach($waitList as $passenger) {
+            $object = $passenger['p_id'];
+            $parent = $this->get("permission.set_permission")->getUser('parent', $object, 'passenger');
+            $parentObject = $em->getRepository('TUIToolkitUserBundle:User')->find($parent[1]);
+            $waitListObjects[]= array($passenger, $parentObject);
+        }
+
+
+
+        //Query builder for accepted
+        $qb = $em->createQueryBuilder();
+        $qb->select('p')
+            ->from('PassengerBundle:Passenger', 'p')
+            ->where($qb->expr()->andX(
+                $qb->expr()->eq('p.status', '?1')
+            ));
+        $qb->setParameters(array(1 => 'accepted' ));
+        $query = $qb->getQuery();
+        $accepted = $query->getScalarResult();
+
+        $acceptedObjects = array();
+        foreach($accepted as $passenger) {
+            $object = $passenger['p_id'];
+            $parent = $this->get("permission.set_permission")->getUser('parent', $object, 'passenger');
+            $parentObject = $em->getRepository('TUIToolkitUserBundle:User')->find($parent[1]);
+            $acceptedObjects[]= array($passenger, $parentObject);
+        }
+
+
+
+        //brand stuff
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
+
+        return $this->render('PassengerBundle:Passenger:dashboard.html.twig', array(
+            'tour' => $tour,
+            'waitlistobjects' => $waitListObjects,
+            'acceptedobjects' => $acceptedObjects,
+            'brand' => $brand,
+        ));
     }
 }
