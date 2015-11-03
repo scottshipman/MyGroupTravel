@@ -91,7 +91,8 @@ class PassengerController extends Controller
             $em->flush();
             $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('passenger.flash.save'));
 
-            return $this->redirect($this->generateUrl('tour_site_action_show', array('id' => $tourId)));
+
+            return $this->redirect($request->server->get('HTTP_REFERER'));
         }
 
         return $this->render('PassengerBundle:Passenger:new.html.twig', array(
