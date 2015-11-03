@@ -339,17 +339,16 @@
 
                // Generate a Quote LInk
 
-               $("#generate-link").on('click', function(e){
+               $("#generate-link").on('click', function(e) {
+                   e.preventDefault();
                    // todo Get item.id and item.name
                    var link_html = '<p>Copy and paste this link into your email and send it to your opportunity:</p>'+
-                                   '<input size="35" type="text" id="quote-link-input" name="quote-link-input" class="form-control" value="{{ url('quote_site_action_show', {'id': entity.id}) }}" disabled>'+
+                                   '<p><input size="35" type="text" id="quote-link-input" name="quote-link-input" class="form-control" value="{{ url('quote_site_action_show', {'id': entity.id}) }}" disabled>'+
                                    '<a href="#" id="copy-button" data-clipboard-target="quote-link-input" title="Click to copy Quote URL" class="not-full mdl-button mdl-js-button mdl-button--raised mdl-button--colored">'+
                                         '<i class="fa fa-sign-in fa-stack"></i>' +
-                                    '</a>'+
+                                    '</a></p>'+
                                     '<p>You should also provide the Quote Number: <strong>{{ entity.quoteNumber }}<strong></p>';
-                   //e.preventDefault();
-                   $("#dialog").html(link_html);
-                   $("#dialog").dialog({width:'37%', minHeight: 165, height: 165}).dialog("option", "title", "Quote Link").dialog("open");
+                   toolkitStaticPopup("Quote Link", link_html);
                    // Copy to Clipboard
                    ZeroClipboard.config( { swfPath: "//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf" } );
                    var client = new ZeroClipboard( document.getElementById("copy-button") );
@@ -362,23 +361,13 @@
 
                // Add a headerBlock to a site
                $("#add-headerBlock").on('click', function(){
-                   $("#dialog").html("");
-                   $("#dialog").dialog("open");
-                   $("#dialog").load('/manage/headerblock/header/new/' + {{ entity.id}} +'/QuoteVersion', function() {
-                       $(this).dialog("option", "title", 'Add Header Content');
-                       doMDLpopup( $(this) );
-                   });
+                  toolkitStandardPopup( "Add Header Content", "/manage/headerblock/header/new/" + {{ entity.id}} + "/QuoteVersion" );
                });
 
                {% if entity.headerBlock %}
                    // Edit the headerBlock for a site
                    $("#edit-headerBlock").on('click', function(){
-                       $("#dialog").html("");
-                       $("#dialog").dialog("open");
-                       $("#dialog").load('/manage/headerblock/'+ {{ entity.headerBlock.id }} + '/header/edit/' + {{ entity.id}} +'/QuoteVersion', function() {
-                           $(this).dialog("option", "title", 'Edit Header Content');
-                           doMDLpopup( $(this) );
-                       });
+                       toolkitStandardPopup( "Edit Header Content", "/manage/headerblock/" + {{ entity.headerBlock.id }} + "/header/edit/" + {{ entity.id}} + "/QuoteVersion" );
                    });
                {% endif %}
 
@@ -447,13 +436,7 @@
                 // todo Get item.id and item.name
                 var actionParent = $(this).parent().attr('id');
                 var block = actionParent.substring(22);
-                //e.preventDefault();
-                $("#dialog").html("");
-                $("#dialog").dialog("open");
-                $("#dialog").load( '/ajax/contentblocks/' + block + '/edit/' + {{ entity.id}} + '/QuoteVersion', function() {
-                    $(this).dialog("option", "title", 'Edit Content Block');
-                    doMDLpopup( $(this) );
-                });
+                toolkitStandardPopup( "Edit Content Block", "/ajax/contentblocks/" + block + "/edit/" + {{ entity.id}} + "/QuoteVersion" );
             });
 
             // toggle the locked boolean on a content block on the fly!

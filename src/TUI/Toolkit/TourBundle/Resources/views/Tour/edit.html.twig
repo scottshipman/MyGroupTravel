@@ -328,8 +328,7 @@
         $(document).on('click', '#promo-assets-upload', function (e) {
             e.preventDefault();
             var div = $("#dropzone-dialog");
-            $("#dialog").html("");
-            $("#dialog").dialog({width: '40%', height: 'auto'}).dialog("option", "title", "Upload Promotional Assets").dialog("open");
+            toolkitStaticPopup("Upload Promotional Assets", "");
             $("#dialog").append(div);
             div.show();
             $("#dropzone_form").css({

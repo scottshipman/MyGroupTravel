@@ -16,6 +16,23 @@ var toolkitBreakpointAllowDrag = function() {
     }
 };
 
+var toolkitStandardPopup = function(title, loadLink) {
+    $("#dialog").html("");
+    $("#dialog").dialog("option", "title", "Loading...").dialog("open");
+    $("#dialog").load(loadLink, function () {
+        $(this).dialog("option", "title", title);
+        doMDLpopup($(this));
+    });
+};
+
+var toolkitStaticPopup = function(title, loadContent) {
+    $("#dialog").html("");
+    $("#dialog").dialog("option", "title", "Loading...");
+    $("#dialog").html(loadContent);
+    $("#dialog").dialog("option", "title", title).dialog("open");
+    doMDLpopup($("#dialog"));
+};
+
 /**
  * Persist Content block data to the database/entity
  * @param id - Quote Version # passed from window.path
@@ -147,6 +164,13 @@ var doMDLpopup = function(t) {
             .append('<span class="mdl-radio__outer-circle"></span><span class="mdl-radio__inner-circle"></span>');
         if ( $(this).is(':checked') ) {
             $(this).parent().addClass('is-checked');
+        }
+    });
+    t.find('.button-row').each(function () {
+        if ( $(this).parents('#dialog') ) {
+            $('#dialog').height( $('#dialog').height() - (36+12+1) ); // Height of button row
+            $(this).addClass('mdl-submit-row');
+            $(this).appendTo( $('#dialog').parent() );
         }
     });
 };
