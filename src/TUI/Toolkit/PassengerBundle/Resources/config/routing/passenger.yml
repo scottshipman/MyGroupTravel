@@ -28,3 +28,7 @@ manage_passenger_delete:
     path:     /{id}/delete
     defaults: { _controller: "PassengerBundle:Passenger:delete" }
     methods:  [POST, DELETE]
+
+manager_passenger_dashboard:
+    path: /dashboard/{tourId}
+    defaults: { _controller: "PassengerBundle:Passenger:getPassengerDashboard" }

@@ -62,6 +62,13 @@ class Passenger
     protected $dateOfBirth;
 
     /**
+     * @var datetime
+     *
+     * @ORM\Column(name="signup", type="date", nullable=false)
+     */
+    protected $signUpDate;
+
+    /**
      *
      * @var \TUI\Toolkit\TourBundle\Entity\Tour
      * @ORM\ManyToOne(targetEntity="TUI\Toolkit\TourBundle\Entity\Tour", cascade={"persist"}, fetch="LAZY")
@@ -153,6 +160,24 @@ class Passenger
     public function getDateOfBirth()
     {
         return $this->dateOfBirth;
+    }
+
+    /**
+     * @param  $signUpDate
+     */
+    public function setSignUpDate($signUpDate)
+    {
+        $this->signUpDate = $signUpDate;
+
+        return $signUpDate;
+    }
+
+    /**
+     * @return signUpDate
+     */
+    public function getSignUpDate()
+    {
+        return $this->signUpDate;
     }
 
     /**

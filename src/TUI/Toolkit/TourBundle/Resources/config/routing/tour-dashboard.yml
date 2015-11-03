@@ -25,3 +25,7 @@ manage_tour_setup:
 manage_tour_setup_complete:
     path:     /setup/complete/{id}/{quoteNumber}
     defaults: { _controller: "TourBundle:Tour:setupComplete" }
+
+manage_passenger_dashboard:
+    path: /{tourId}/passengers
+    defaults: { _controller: "PassengerBundle:Passenger:getPassengerDashboard" }
