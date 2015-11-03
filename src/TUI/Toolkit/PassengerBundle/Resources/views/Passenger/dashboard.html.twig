@@ -2,17 +2,48 @@
 {% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
 {% set spotsRemaining = tour.payingPlaces - acceptedobjects|length %}
 
+{% block title %}
+    {% if is_granted("ROLE_BRAND") %}
+        {{ tour.name }} {% trans %}passenger.title.show{% endtrans %}
+    {% else %}
+        {{ tour.name }}
+    {% endif %}
+{% endblock %}
+
+{% block page_title %}
+    <span>{% trans %}passenger.page_title.index{% endtrans %}</span>
+{% endblock %}
+
+{% block page_title_menu %}
+    <button id="tour-title-drop" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-menu-drop">
+        <i class="material-icons">arrow_drop_down</i>
+    </button>
+    {% embed "PassengerBundle:Passenger:passengerMenu.html.twig" %}
+            {% block tour_dashboard_link %}
+                <li><a href="{{ path('manage_tour_show', { 'id': tour.id }) }}" class="mdl-menu__item">{% trans %}tour.title.index{% endtrans %}</a></li>
+            {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block back_link %}
+    {% if is_granted("ROLE_BRAND") %}
+        <a class="back-link" href="{{ path('manage_tour_show', { 'id': tour.id }) }}"><i class="fa fa-arrow-left"></i> {% trans %}passenger.actions.back{% endtrans %}</a>
+    {% else %}
+        <a class="back-link" href="/"><i class="fa fa-arrow-left"></i> {% trans %}passenger.actions.back{% endtrans %}</a>
+    {% endif %}
+{% endblock %}
+
 {% block body -%}
 
     <div class="tour-show-wrapper">
 
         <div class="tour-show-left-column">
             <ul class="tour-show-submenu">
-                <li><strong>Passengers For {{ tour.name|capitalize }}</strong></li>
+                <li><strong>{% trans %}passenger.labels.passengers_for{% endtrans %} {{ tour.name|capitalize }}</strong></li>
                 <hr>
                 {#<li><strong>Accepted ({{ accepted|length }})</strong></li>#}
                 {#<hr>#}
-                <li><strong>Wait List ({{ waitlistobjects|length }})</strong></li>
+                <li><strong>{% trans %}passenger.labels.waitlist{% endtrans %} ({{ waitlistobjects|length }})</strong></li>
                 <hr>
                 {#<li><strong>Free</strong></li>#}
                 {#<hr>#}
@@ -39,15 +70,15 @@
             <div class="waitlist tour-edit mdl-card mdl-shadow--2dp">
 
                 <div class="mdl-card__title">
-                    <h3 class="mdl-card__title-text">Passenger List</h3>
+                    <h3 class="mdl-card__title-text">{% trans %}passenger.labels.passenger_list{% endtrans %}</h3>
                 </div>
 
                 <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
-                    <div class="paying-passengers-title"><h3>Add Paying Passengers</h3></div> <div class="passenger-count"><p style="color: {{ brand.primaryColor }}" class="spots-remaining">{{ spotsRemaining }}</p><p class="spots-remaining-copy"><strong>Remaining</strong></p></div>
-                    <p>Some Bullshit text goes here because no one told us what to put so blah blah blah</p>
+                    <div class="paying-passengers-title"><h3>{% trans %}passenger.labels.add_paying{% endtrans %}</h3></div> <div class="passenger-count"><p style="color: {{ brand.primaryColor }}" class="spots-remaining">{{ spotsRemaining }}</p><p class="spots-remaining-copy"><strong>{% trans %}passenger.labels.remaining{% endtrans %}</strong></p></div>
+                    <p class="passenger-dashboard-copy">{% trans %}passenger.labels.welcome{% endtrans %}</p>
                     <div style="clear: both"></div>
-                    <a style="display: inline-block; margin: 10px auto;" id="invite-passengers" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored download" href="#">Invite Passengers</a>
-                    <a style="display: inline-block; margin: 10px auto;" id="accept-tour" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored download" href="#"><i class="fa fa-user-plus"></i>Add Passenger</a>
+                    <a id="invite-passengers" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="#">{% trans %}passenger.labels.invite{% endtrans %}</a>
+                    <a id="accept-tour" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="#"><i class="fa fa-user-plus"></i>{% trans %}passenger.labels.add{% endtrans %}</a>
                 </div>
                 {% for passenger in waitlistobjects %}
                     <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
