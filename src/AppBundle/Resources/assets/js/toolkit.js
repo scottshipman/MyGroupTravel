@@ -48,7 +48,7 @@
         title: 'Loading...',
         autoOpen: false,
         open: function (e, ui) {
-            $(this).next('.button-row').remove(); // Button row may have been appended to #dialog
+            $(this).parent().removeClass('has-mdl-submit-row');
             $(this).parent().addClass('mdl-shadow--8dp');
             if ( !toolkitBreakpointAllowDrag() ) {
                 // Modal to full screen on phone

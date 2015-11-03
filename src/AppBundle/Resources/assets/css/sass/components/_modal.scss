@@ -48,8 +48,24 @@
     padding: 6px 16px;
   }
 
+}
+
+.ui-dialog.has-mdl-submit-row {
+  margin-top: -(36px + 12px + 1px) / 2;
+
+  .ui-dialog-content {
+    position: static;
+    margin-bottom: 36px + 12px + 1px;
+  }
+
   .mdl-submit-row {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
     padding: 6px 16px;
+    margin: 0;
     border-top: 1px solid #aaa;
     text-align: right;
   }
