@@ -7,6 +7,7 @@ use Sonata\MediaBundle\Model\Media;
 use Application\Sonata\MediaBundle;
 use Gedmo\Mapping\Annotation as Gedmo;
 use APY\DataGridBundle\Grid\Mapping as GRID;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Institution
@@ -16,6 +17,7 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
  * @GRID\Source(columns="id, location, name, city, county, state, country", filterable=false, sortable=true)
  * @GRID\Column(id="location", type="join", title="Location", columns={"city", "county", "state", "country"}, filterable=true, operatorsVisible=false)
+ * @UniqueEntity("name")
  */
 class Institution
 {
@@ -41,7 +43,7 @@ class Institution
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=255, unique=true)
      * @GRID\Column(title="Name", visible=true, filterable=true, operatorsVisible=false, export=true)
      */
     private $name;
@@ -106,7 +108,7 @@ class Institution
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -137,7 +139,7 @@ class Institution
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -160,7 +162,7 @@ class Institution
     /**
      * Get address1
      *
-     * @return string 
+     * @return string
      */
     public function getAddress1()
     {
@@ -183,7 +185,7 @@ class Institution
     /**
      * Get address2
      *
-     * @return string 
+     * @return string
      */
     public function getAddress2()
     {
@@ -206,7 +208,7 @@ class Institution
     /**
      * Get city
      *
-     * @return string 
+     * @return string
      */
     public function getCity()
     {
@@ -229,7 +231,7 @@ class Institution
     /**
      * Get county
      *
-     * @return string 
+     * @return string
      */
     public function getCounty()
     {
@@ -252,7 +254,7 @@ class Institution
     /**
      * Get state
      *
-     * @return string 
+     * @return string
      */
     public function getState()
     {
@@ -275,7 +277,7 @@ class Institution
     /**
      * Get postCode
      *
-     * @return string 
+     * @return string
      */
     public function getPostCode()
     {
@@ -298,7 +300,7 @@ class Institution
     /**
      * Get country
      *
-     * @return string 
+     * @return string
      */
     public function getCountry()
     {
