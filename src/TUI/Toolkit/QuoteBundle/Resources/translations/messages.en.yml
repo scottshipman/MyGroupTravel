@@ -43,6 +43,7 @@ quote:
         edit_tabs: Edit Tabs
         add_tab: Add New Tab
         is_locked: is locked
+        save: Save Quote
 
 
     table:

@@ -1060,8 +1060,8 @@ class QuoteVersionController extends Controller
             'action' => $this->generateUrl('manage_quoteversion_clone'),
             'method' => 'PUT',
         ));
-
-        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('quote.actions.clone')));
+        if (!$entity->getIsTemplate()){ $label = 'quote.actions.save';} else { $label = 'quote.actions.clone';}
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans($label)));
 
         return $form;
     }
