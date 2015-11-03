@@ -146,7 +146,7 @@ class Tour
      * @var integer
      * @ORM\JoinColumn(name="institution", referencedColumnName="id")
      * @ORM\ManyToOne(targetEntity="TUI\Toolkit\InstitutionBundle\Entity\Institution", cascade={"all"}, fetch="EAGER")
-     * @GRID\Column(field="institution.name", title="Institution", filterable=false, operatorsVisible=false, export=true)
+     * @GRID\Column(field="institution.name", title="Institution", filterable=true, operatorsVisible=false, export=true)
      */
     private $institution;
 
@@ -154,7 +154,7 @@ class Tour
      * @var string
      *
      * @ORM\Column(name="destination", type="string")
-     * @GRID\Column(title="Destination", filterable=true, operatorsVisible=false, sortable=true, export=true)
+     * @GRID\Column(title="Destination", filterable=false, operatorsVisible=false, sortable=true, export=true)
      */
     private $destination;
 
