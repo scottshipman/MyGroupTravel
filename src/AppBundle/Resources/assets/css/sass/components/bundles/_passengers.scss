@@ -1,0 +1,33 @@
+.paying-passengers-title {
+  float:left;
+  display: inline-block;
+
+  h3 {
+    font-size: 30px;
+    font-weight: 300;
+  }
+}
+
+.passenger-dashboard-copy {
+  width: 60%;
+  float:left;
+}
+
+.passenger-dashboard-buttons {
+  display: inline-block;
+  margin: 10px auto;
+}
+
+.passenger-count {
+  float: right;
+  width: 30%;
+  display: inline-block;
+  margin-top: 20px;
+
+  .spots-remaining {
+    font-size: 60px;
+    font-weight: 200;
+    margin-bottom: 10px;
+
+  }
+}
