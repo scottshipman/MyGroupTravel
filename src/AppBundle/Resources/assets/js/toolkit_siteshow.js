@@ -30,6 +30,7 @@ $(document).ready(function () {
         e.preventDefault();
         var entityId = $('.site-show').attr('entityId');
         $("#dialog").html("");
+        $("#dialog").dialog("option", "title", "Sign Up");
         $("#dialog").dialog("open");
         $("#dialog").load('/passenger/new/' + entityId, function () {
             $(this).dialog("option", "title", "Sign Up");
