@@ -27,7 +27,8 @@ class ContentBlockType extends AbstractType
 
         $builder
           ->add('title', 'text', array(
-            'data' => 'New Content Block'
+            // 'data' => isset($options['data']) ? $options['data']->getTitle() : 'New Content Block'
+            'data' => (isset($options['data']) && $options['data']->getTitle() !== null) ? $options['data']->getTitle() : 'New Content Block'
           ))
           ->add('body', 'ckeditor', array());
 
