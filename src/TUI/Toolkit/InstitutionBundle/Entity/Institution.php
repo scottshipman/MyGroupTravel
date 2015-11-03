@@ -17,7 +17,10 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
  * @GRID\Source(columns="id, location, name, city, county, state, country", filterable=false, sortable=true)
  * @GRID\Column(id="location", type="join", title="Location", columns={"city", "county", "state", "country"}, filterable=true, operatorsVisible=false)
- * @UniqueEntity("name")
+ * @UniqueEntity(
+ *    fields={"name", "city"},
+ *    message="This Institution and City combination has already been used."
+ * )
  */
 class Institution
 {
@@ -75,7 +78,7 @@ class Institution
     /**
      * @var string
      *
-     * @ORM\Column(name="county", type="string", length=255, nullable=true)
+     * @ORM\Column(name="county", type="string", length=255, nullable=true, unique=true)
      * @GRID\Column(visible=false, filterable=false, export=true)
      */
     private $county;
