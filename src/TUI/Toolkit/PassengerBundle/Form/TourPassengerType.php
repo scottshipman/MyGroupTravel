@@ -71,6 +71,8 @@ class TourPassengerType extends AbstractType
                 'by_reference' => false,
                 'mapped' => false,
             ))
+                    // Honeypot field
+            ->add('password', 'honeypot')
             ;
     }
 

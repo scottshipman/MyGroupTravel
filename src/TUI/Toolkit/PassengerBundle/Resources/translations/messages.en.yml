@@ -33,7 +33,7 @@ passenger:
             edit: Edit
 
     flash:
-        save: Passenger Saved -
+        save: Passenger Saved
         delete: Passenger deleted -
         restore: Passenger Restored -
 

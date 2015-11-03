@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "4762e1aeb903d431062b3bf528c0fa93",
+    "hash": "6cfa99848448c52a1857cd9454dfe8b1",
     "packages": [
         {
             "name": "apy/datagrid-bundle",
@@ -1326,6 +1326,56 @@
             "time": "2014-03-11 01:59:52"
         },
         {
+            "name": "eo/honeypot-bundle",
+            "version": "v1.0.0",
+            "target-dir": "Eo/HoneypotBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/eymengunay/EoHoneypotBundle.git",
+                "reference": "b466e9edf9c6a360455b3b38283df3a839a8a406"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/eymengunay/EoHoneypotBundle/zipball/b466e9edf9c6a360455b3b38283df3a839a8a406",
+                "reference": "b466e9edf9c6a360455b3b38283df3a839a8a406",
+                "shasum": ""
+            },
+            "require": {
+                "symfony/symfony": "~2.1"
+            },
+            "require-dev": {
+                "eo/symfony-test-edition": "dev-master"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Eo\\HoneypotBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Eymen Gunay",
+                    "email": "eymen@egunay.com",
+                    "homepage": "https://github.com/eymengunay"
+                }
+            ],
+            "description": "Honeypot trap for Symfony2 forms.",
+            "keywords": [
+                "Honeypot",
+                "spam"
+            ],
+            "time": "2014-06-02 22:22:55"
+        },
+        {
             "name": "ezyang/htmlpurifier",
             "version": "v4.7.0",
             "source": {
@@ -1379,7 +1429,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/d5b28c367d393f9d9fbc48c4138b2a74d51c0c83",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/45d6f40178216a840885b4ca6d7de9e67068568a",
                 "reference": "d5b28c367d393f9d9fbc48c4138b2a74d51c0c83",
                 "shasum": ""
             },
@@ -2362,7 +2412,7 @@
                     "email": "stof@notk.org"
                 },
                 {
-                    "name": "KnpLabs",
+                    "name": "Knplabs",
                     "homepage": "http://knplabs.com"
                 },
                 {

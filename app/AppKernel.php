@@ -29,6 +29,8 @@ class AppKernel extends Kernel
             new Trsteel\CkeditorBundle\TrsteelCkeditorBundle(),
             new Liip\ImagineBundle\LiipImagineBundle(),
             new FM\ElfinderBundle\FMElfinderBundle(),
+            new Eo\HoneypotBundle\EoHoneypotBundle(),
+
 
 
             // In Toolkit Project ( in /src directory) bundles...
