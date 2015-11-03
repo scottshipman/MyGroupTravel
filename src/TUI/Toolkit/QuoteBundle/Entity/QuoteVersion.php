@@ -186,12 +186,12 @@ class QuoteVersion
      * @GRID\Column(field = "quoteReference.salesAgent.email", title="BA email", export=true)
      * @GRID\Column(field = "quoteReference.converted", title="Converted", export=true)
      * @GRID\Column(field = "quoteReference.setupComplete", title="Setup Complete", export=true)
-     * @GRID\Column(field = "quoteReference.institution.name", title="Institution Name", export=true, filterable=false, operatorsVisible=false)
+     * @GRID\Column(field = "quoteReference.institution.name", title="Institution Name", export=true, filterable=true, operatorsVisible=false)
      * @GRID\Column(field = "quoteReference.institution.city", title="Institution City", export=true, filterable=false, operatorsVisible=false)
      * @GRID\Column(field = "quoteReference.organizer.firstName", title="Organiser first", export=true)
      * @GRID\Column(field = "quoteReference.organizer.lastName", title="Organiser last", export=true)
      * @GRID\Column(field = "quoteReference.organizer.email", title="Organiser email", export=true)
-     * @GRID\Column(field = "quoteReference.destination", title="Destination", export=true, filterable=true, operatorsVisible=false)
+     * @GRID\Column(field = "quoteReference.destination", title="Destination", export=true, filterable=false, operatorsVisible=false)
      */
     private $quoteReference;
 
