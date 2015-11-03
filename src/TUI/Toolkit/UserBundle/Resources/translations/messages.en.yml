@@ -119,7 +119,7 @@ user:
         my_quotes:
             institution: Institution
             organizer: Organizer
-            salesAgent: Business Contact
+            salesAgent: Your Contact
             price: Price
             quote: Quote
             tour: Tour
