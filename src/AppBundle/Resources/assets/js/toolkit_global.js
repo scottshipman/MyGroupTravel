@@ -170,7 +170,7 @@ var doMDLpopup = function(t) {
         if ( $(this).parents('#dialog').length ) {
             $('#dialog').height( $('#dialog').height() - (36+12+1) ); // Height of button row
             $(this).addClass('mdl-submit-row');
-            $(this).appendTo( $('#dialog').parent() );
+            //$(this).appendTo( $('#dialog').parent() );
         }
     });
 };
