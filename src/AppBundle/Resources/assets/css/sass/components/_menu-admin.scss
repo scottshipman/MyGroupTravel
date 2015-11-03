@@ -28,6 +28,13 @@
     width: 100%;
   }
 
+  span {
+    overflow: hidden;
+    width: 100%;
+    line-height: 20px;
+    height: 20px;
+  }
+
   .header & {
     width: 100%;
   }
