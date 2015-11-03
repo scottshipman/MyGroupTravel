@@ -4,12 +4,15 @@ namespace TUI\Toolkit\PassengerBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 
 /**
  * Passenger
  *
- * @ORM\Table()
+ * @ORM\Table(name="passenger", uniqueConstraints={@ORM\UniqueConstraint(name="unique_passenger", columns={"first_name", "last_name", "dob", "tour"})})
+ * @UniqueEntity(fields={"firstName"}, message="This Passenger is already listed on this tour", ignoreNull=true)
  * @ORM\Entity(repositoryClass="TUI\Toolkit\PassengerBundle\Entity\PassengerRepository")
  */
 class Passenger
