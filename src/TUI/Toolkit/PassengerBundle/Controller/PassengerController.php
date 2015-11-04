@@ -7,6 +7,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use TUI\Toolkit\UserBundle\Entity\User;
 use TUI\Toolkit\TourBundle\Entity\Tour;
 use TUI\Toolkit\PermissionBundle\Entity\Permission;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 
 use TUI\Toolkit\PassengerBundle\Entity\Passenger;
@@ -59,8 +61,8 @@ class PassengerController extends Controller
                 $user->setUsername($form->get('email')->getData());
                 $user->setPassword('');
                 $user->setEmail($form->get('email')->getData());
-                $user->setFirstName($form->get('firstName')->getData());
-                $user->setLastName($form->get('lastName')->getData());
+                $user->setFName($form->get('fName')->getData());
+                $user->setLName($form->get('lName')->getData());
                 $user->setRoles(array('ROLE_CUSTOMER'));
                 $em->persist($user);
                 $em->flush();
@@ -70,9 +72,9 @@ class PassengerController extends Controller
                 //do more stuff
                 $newPassenger = new Passenger();
                 $newPassenger->setDateOfBirth($passenger->get('dateOfBirth')->getData());
-                $newPassenger->setFirstName($passenger->get('firstName')->getData());
+                $newPassenger->setFName($passenger->get('fName')->getData());
                 $newPassenger->setGender($passenger->get('gender')->getData());
-                $newPassenger->setLastName($passenger->get('lastName')->getData());
+                $newPassenger->setLName($passenger->get('lName')->getData());
                 $newPassenger->setStatus("waitlist");
                 $newPassenger->setSignUpDate(new \DateTime());
                 $newPassenger->setTourReference($tour);
@@ -95,10 +97,15 @@ class PassengerController extends Controller
             return $this->redirect($request->server->get('HTTP_REFERER'));
         }
 
-        return $this->render('PassengerBundle:Passenger:new.html.twig', array(
+        $template = $this->renderView('PassengerBundle:Passenger:new.html.twig', array(
             'entity' => $entity,
             'form' => $form->createView(),
         ));
+
+        $response = new Response($template);
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+
     }
 
     /**
@@ -115,6 +122,9 @@ class PassengerController extends Controller
         $form = $this->createForm(new TourPassengerType($locale), $entity, array(
             'action' => $this->generateUrl('manage_passenger_create', array("tourId" => $tourId)),
             'method' => 'POST',
+            'attr'  => array (
+                'id' => 'ajax_passenger_form'
+            ),
         ));
 
         $form->add('submit', 'submit', array('label' => 'Create'));
