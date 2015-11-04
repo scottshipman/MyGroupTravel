@@ -234,16 +234,6 @@
   margin-left: -$column_gutter_width_reset;
   width: $column_total_width_reset;
   @include clear-fix();
-
-  .pdf-layout & {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    background: transparent;
-    position: relative;
-    overflow: hidden;
-  }
-
 }
 
 #site-header-slideshow,
@@ -257,17 +247,6 @@
 
   @include breakpoint_desktop() {
     width: $column_total_width * 3;
-  }
-
-  .pdf-layout & {
-    width: 60%;
-    float: none;
-    padding: 0;
-
-    img {
-      width: 100%;
-    }
-
   }
 
 }
@@ -292,15 +271,6 @@
 
   @include breakpoint_desktop() {
     width: $column_total_width;
-  }
-
-  .pdf-layout & {
-    width: 35%;
-    float: none;
-    padding: 0;
-    position: absolute;
-    top: 0;
-    right: 0;
   }
 
 }

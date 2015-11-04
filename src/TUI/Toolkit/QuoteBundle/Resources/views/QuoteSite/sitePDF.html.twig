@@ -28,48 +28,43 @@
 
 {% block body -%}
 
-    <div id="site-header" class="quote-view-site-header">
-
-        <div id="site-header-slideshow">
-            {% if entity.headerBlock %}
-                {% for mediaWrapper in entity.headerBlock.mediaWrapper %}
-                    {% if loop.first %}
-                        {% for media in mediaWrapper.media %}
-                            <img src="{{ asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) | imagine_filter('slideShow') }}">
+    <div id="site-header" class="pdf-site-header">
+        <table>
+            <tr>
+                <td class="pdf-site-header-slideshow">
+                    {% if entity.headerBlock %}
+                        {% for mediaWrapper in entity.headerBlock.mediaWrapper %}
+                            {% if loop.first %}
+                                {% for media in mediaWrapper.media %}
+                                    <img src="{{ asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) | imagine_filter('slideShow') }}">
+                                {% endfor %}
+                            {% endif %}
                         {% endfor %}
                     {% endif %}
-                {% endfor %}
-            {% endif %}
-        </div>
-
-        <div id="site-header-summary">
-            <div id="site-header-summary-content">
-                {{ render(controller('QuoteBundle:QuoteSite:showSummary', {'id':  entity.id })) }}
-            </div>
-        </div>
-
+                </td>
+                <td class="pdf-site-header-summary">
+                    {% if entity.departureDate %}<p><span class="label">{% trans %}quote_site.quote_summary.departing{% endtrans %}</span> <strong>{{ entity.departureDate|date(format) }}</strong></p>{% endif %}
+                    {% if entity.duration %}<p><span class="label">{% trans %}quote_site.quote_summary.duration{% endtrans %}</span> <strong>{{ entity.duration }}</strong></p>{% endif %}
+                    {% if entity.returnDate %}<p><span class="label">{% trans %}quote_site.quote_summary.returning{% endtrans %}</span> <strong>{{ entity.returnDate|date(format) }}</strong></p>{% endif %}
+                    {% if entity.boardBasis %}<p><span class="label">{% trans %}quote_site.quote_summary.board_basis{% endtrans %}</span> <strong>{{ entity.boardBasis.name }}</strong></p>{% endif %}
+                    {% if entity.transportType %}<p><span class="label">{% trans %}quote_site.quote_summary.transport{% endtrans %}</span> <strong>{{ entity.transportType.name }}</strong></p>{% endif %}
+                    {% if entity.pricePerson %}<p><span class="label">{% trans %}quote_site.quote_summary.price_person{% endtrans %}</span> <span class="quote-price"><strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong></span></p>{% endif %}
+                    {% if (entity.payingPlaces) or (entity.freePlaces) %}<p>Based on {% if entity.payingPlaces %}<strong>{{ entity.payingPlaces }}</strong>{% endif %} paying {% if entity.freePlaces != 0 %} and <strong>{{ entity.freePlaces }}</strong> free {% endif %} places</p>{% endif %}
+                    {% if entity.expiryDate %}<p>{% trans %}quote_site.quote_summary.expiry{% endtrans %} <strong>{{ entity.expiryDate|date(format) }}</strong></p>{% endif %}
+                    {% if entity.welcomeMsg %}<p>{{ entity.welcomeMsg|raw }}</p>{% endif %}
+                </td>
+            </tr>
+        </table>
     </div>
 
     {# RENDER THE CONTENT BLOCKS HERE #}
 
     <div id="content-wrapper" class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
-
-        <div id="content-blocks-wrapper" class="sortable-tabs mdl-tabs__tab-bar">
-            {# render the tabs #}
-            {% set activeTab = 'is-active' %}
-            {% for tab, data in entity.content %}
-                <a id="tab-{{ tab }}" href="#tabs-drawer-{{ tab }}" class="site-content-blocks-tab mdl-tabs__tab {{ activeTab }}">{{ data[0] }}</a>
-                {% set activeTab = '' %}
-            {% endfor %}
-            {% if alternate %}
-                <a id="tab-alternate-quotes" href="#tabs-drawer-alternate-quotes" class="site-content-blocks-tab mdl-tabs__tab {{ activeTab }}">{% trans %}quote_site.site_pdf.alternate_quotes{% endtrans %}</a>
-            {% endif %}
-        </div>
-
         {# render the tabs' content #}
-        {% set activeTab = 'is-active' %}
         {% for tab, data in entity.content %}
-            <div id="tabs-drawer-{{ tab }}" class="mdl-tabs__panel sortable-items content-blocks-drawer {{ activeTab }} ">
+            <div id="tabs-drawer-{{ tab }}" class="mdl-tabs__panel sortable-items content-blocks-drawer">
+                <h2 class="pdf-tab-header">{{ data[0] }}</h2>
+
                 {% for item in data[1] %}
                     <div id="content-blocks-{{ items[item].id }}" class="site-content-blocks site-content-blocks-item">
                         {# render the actual content block #}
@@ -79,13 +74,7 @@
                     </div>
                 {% endfor %}
             </div>
-            {% set activeTab = '' %}
         {% endfor %}
-        {% if alternate %}
-            <div id="tabs-drawer-alternate-options" class="mdl-tabs__panel {{ activeTab }} ">
-                {{ render(controller('QuoteBundle:QuoteSite:getQuoteSiblings', {'id':  entity.quoteReference.id })) }}
-            </div>
-        {% endif %}
     </div>
 
 {% endblock %}
@@ -97,11 +86,16 @@
 {% block footer_left %}
     {% if entity.quoteReference.salesAgent %}
         <span class="intro">{% trans %}quote_site.site_pdf.organizer{% endtrans %}</span>
-        <span class="agent">{{ entity.quoteReference.salesAgent.firstName }} {{ entity.quoteReference.salesAgent.lastName }}<br>
-        {{ entity.quoteReference.salesAgent.email }}</span>
+        <span class="agent">
+            {{ entity.quoteReference.salesAgent.firstName }} {{ entity.quoteReference.salesAgent.lastName }}<br>
+            {{ entity.quoteReference.salesAgent.email }}
+        </span>
     {% endif %}
 {% endblock %}
 
 {% block footer_right %}
-    <div class="quote-info"><span class="quote-label">{% trans %}quote_site.site_pdf.price_person{% endtrans %}</span> <span class="quote-price">{% if entity.pricePerson %}<strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong>{% endif %}</span></div>
+    <div class="quote-info">
+        <span class="quote-label">{% trans %}quote_site.site_pdf.price_person{% endtrans %}</span>
+        <span class="quote-price">{% if entity.pricePerson %}<strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong>{% endif %}</span>
+    </div>
 {% endblock %}

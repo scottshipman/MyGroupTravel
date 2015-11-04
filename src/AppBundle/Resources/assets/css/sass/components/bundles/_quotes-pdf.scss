@@ -1,0 +1,32 @@
+html > body {
+  font-family: "Helvetica" !important;
+}
+
+.mdl-button,
+.quote-site-actions {
+  display: none;
+}
+
+.pdf-site-header table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.pdf-site-header-slideshow {
+  width: 50%;
+}
+
+.pdf-site-header-summary {
+  width: 50%;
+
+  p {
+    padding-left: 1em;
+    margin: 0.75em 0;
+  }
+
+}
+
+.pdf-tab-header {
+  padding-bottom: 0.5em;
+  border-bottom: 1px solid $black;
+}
