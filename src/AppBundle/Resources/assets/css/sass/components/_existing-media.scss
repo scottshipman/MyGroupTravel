@@ -15,8 +15,12 @@
     float: left;
     position: relative;
     margin: 0 10px 10px 0;
-    border-radius: 20px;
-    overflow: hidden;
+
+    .existing-media-item-image {
+      border-radius: 20px;
+      overflow: hidden;
+      margin: 0 0 10px;
+    }
 
     img {
       height: 160px;
@@ -28,6 +32,10 @@
       top: 0;
       right: 0;
       padding: 10px;
+    }
+
+    .mdl-textfield {
+      width: auto;
     }
 
   }
