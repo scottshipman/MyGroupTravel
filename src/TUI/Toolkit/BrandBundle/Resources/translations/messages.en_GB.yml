@@ -1,0 +1,38 @@
+#BrandBundle/Resources/translations/messages.en.yml
+
+brand:
+    title:
+        edit: Edit Board
+        index: Manage Boards
+        new: Create New Board Basis
+        show: Board
+    page_title:
+        edit: Edit Board
+        index: Manage Boards
+        new: Create New Board Basis
+        show: Board
+
+    actions:
+        back: Back to the list
+        edit: Edit
+        delete: Delete
+        create: Create
+        update: Update
+
+
+    table:
+        label:
+            name: Name (ID)
+            action: Actions
+        actions:
+            view: View
+            edit: Edit
+
+    flash:
+        save: Brand Saved -
+        delete: Brand deleted -
+
+    form:
+        label:
+            p_color: Primary color
+            s_color: Secondary color

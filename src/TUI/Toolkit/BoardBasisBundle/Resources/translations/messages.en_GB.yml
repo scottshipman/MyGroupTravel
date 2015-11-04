@@ -1,0 +1,30 @@
+#boardBasisBundle/Resources/translations/messages.en.yml
+
+boardBasis:
+    title:
+        edit: Edit Board
+        index: Manage BoardsGB
+        new: Create New Board Basis
+        show: Board
+    page_title:
+        edit: Edit Board
+        index: Manage BoardsGB
+        new: Create New Board Basis
+        show: Board
+
+    actions:
+        back: Back to the list
+        edit: Edit
+        create: Create
+        delete: Delete
+        update: Update
+        create_new: Create A New Board Basis
+
+
+    table:
+        label:
+            name: Name (ID)
+            action: Actions
+        actions:
+            view: View
+            edit: Edit
