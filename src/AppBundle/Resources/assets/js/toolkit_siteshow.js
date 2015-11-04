@@ -34,7 +34,29 @@ $(document).ready(function () {
         $("#dialog").dialog("open");
         $("#dialog").load('/passenger/new/' + entityId, function () {
             $(this).dialog("option", "title", "Sign Up");
-            doMDLpopup($('#dialog')); // run the function to add appropriate MDL classes to form elements
+            doMDLpopup($('#dialog'));// run the function to add appropriate MDL classes to form elements
+            $('#ajax_passenger_form').on('submit', function(e) {
+
+                var formAction = $(this).attr('action');
+                console.log("message");
+                e.preventDefault();
+                $.ajax({
+                    url: formAction,
+                    type: 'POST',
+                    headers: {
+                        "Pragma": "no-cache",
+                        "Expires": -1,
+                        "Cache-Control": "no-cache"
+                    },
+                    data: $('#ajax_passenger_form').serialize(),
+                    contentType: "application/x-www-form-urlencoded",
+                }).success(function (response) {
+                    window.location.reload(true);
+                }).error(function (response) {
+                    console.log("you suck lulz");
+                });
+
+            })
         });
     });
 
