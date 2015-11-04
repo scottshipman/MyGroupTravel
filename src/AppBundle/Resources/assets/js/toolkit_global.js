@@ -168,9 +168,8 @@ var doMDLpopup = function(t) {
     });
     t.find('.button-row').each(function () {
         if ( $(this).parents('#dialog').length ) {
-            $('#dialog').height( $('#dialog').height() - (36+12+1) ); // Height of button row
+            $('#dialog').parent().addClass('has-mdl-submit-row');
             $(this).addClass('mdl-submit-row');
-            //$(this).appendTo( $('#dialog').parent() );
         }
     });
 };
