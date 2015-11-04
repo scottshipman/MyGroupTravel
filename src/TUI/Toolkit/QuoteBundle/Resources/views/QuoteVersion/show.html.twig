@@ -77,7 +77,7 @@
 
 {% block body -%}
     {% if (entity.locked is sameas(true)) %}
-        <h3 style="color: red;">{{ entity.name }} {% trans %}quote.actions.is_locked{% endtrans %}</h3>
+        <h3 style="color: red;">{% trans %}quote.actions.is_locked{% endtrans %}</h3>
     {% endif %}
 
     <ul class="record_actions">
