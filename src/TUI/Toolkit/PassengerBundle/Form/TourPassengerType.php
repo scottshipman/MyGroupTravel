@@ -17,10 +17,12 @@ use TUI\Toolkit\PassengerBundle\Controller;
 class TourPassengerType extends AbstractType
 {
     private $locale;
+    private $tourId;
 
-    public function __construct($locale)
+    public function __construct($locale, $tourId)
     {
         $this->locale = $locale;
+        $this->tourId = $tourId;
     }
 
     /**
@@ -65,7 +67,7 @@ class TourPassengerType extends AbstractType
 
             ))
             ->add('passengers', 'collection', array(
-                'type' => new PassengerType($this->locale),
+                'type' => new PassengerType($this->locale, $this->tourId),
                 'allow_add'    => true,
                 'allow_delete' => true,
                 'by_reference' => false,

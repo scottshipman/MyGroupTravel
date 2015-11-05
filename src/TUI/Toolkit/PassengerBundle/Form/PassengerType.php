@@ -5,14 +5,18 @@ namespace TUI\Toolkit\PassengerBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Doctrine\ORM\EntityRepository;
+
 
 class PassengerType extends AbstractType
 {
     private $locale;
+    private $tourId;
 
-    public function __construct($locale)
+    public function __construct($locale, $tourId)
     {
         $this->locale = $locale;
+        $this->tourId = $tourId;
     }
 
     /**
@@ -34,11 +38,13 @@ class PassengerType extends AbstractType
 
 
         $builder
-            ->add('firstName', 'text', array(
+            ->add('fName', 'text', array(
                 'required' => true,
+                'label' => 'First Name'
             ))
-            ->add('lastName', 'text', array(
+            ->add('lName', 'text', array(
                 'required' => true,
+                'label' => 'Last Name'
             ))
             ->add('dateOfBirth', 'birthday', array(
                 'format' => $date_format,
@@ -51,6 +57,18 @@ class PassengerType extends AbstractType
                 ),
                 'required' => true,
             ))
+            ->add('tourReference', 'entity', array(
+                'class' => 'TourBundle:Tour',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('t')
+                        ->where('t.id = ?1')
+                        ->setParameter(1, $this->tourId )
+                        ->orderBy('t.name', 'ASC');
+                },
+                'attr' => array(
+                    'class' => 'tour-reference'
+                )
+            ))
         ;
     }
 
@@ -62,6 +80,7 @@ class PassengerType extends AbstractType
         $resolver->setDefaults(array(
             'data_class' => 'TUI\Toolkit\PassengerBundle\Entity\Passenger',
             'cascade_validation' => true,
+            'error_bubbling' => true,
         ));
     }
 

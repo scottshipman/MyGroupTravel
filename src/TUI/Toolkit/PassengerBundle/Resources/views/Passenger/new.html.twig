@@ -20,13 +20,14 @@
 
         </div>
         <div class="passenger-form" data-prototype="{{ form_widget(form.passengers.vars.prototype)|e }}">
+            {% if errors is defined %}{{ errors }}{% endif %}
             {#<h5>Passenger</h5>#}
             {% for passenger in form.passengers %}
             {#<div class = "tour-edit mdl-card mdl-shadow--2dp">#}
                 {#<div class="mdl-card__supporting-text">#}
                 <ul class="passenger_info" taskid = "{{ passenger.vars.value.id }}">
-                    <li>{{ form_widget(passenger.firstName) }}</li>
-                    <li>{{ form_widget(passenger.lastName) }}</li>
+                    <li>{{ form_widget(passenger.fName) }}</li>
+                    <li>{{ form_widget(passenger.lName) }}</li>
                     <li>{{ form_widget(passenger.dateOfBirth) }}</li>
                     <li>{{ form_widget(passenger.gender) }}</li>
                 </ul>
@@ -45,7 +46,7 @@
         $('#tui_toolkit_tourbundle_tourpassenger_passengers_0_dateOfBirth > div:nth-child(1)').css({"width": "100"});
 
 
-
+        {#var tourId = {{ tourId }};#}
 
         $(document).ready(function () {
 
@@ -95,6 +96,8 @@
 
             // add a delete link to the new form
             addPassengerFormDeleteLink($newFormDiv, 'div');
+
+//            $(".tour-reference").val(tourId);
 
         }
 

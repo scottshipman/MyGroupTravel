@@ -11,8 +11,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * Passenger
  *
- * @ORM\Table(name="passenger", uniqueConstraints={@ORM\UniqueConstraint(name="unique_passenger", columns={"first_name", "last_name", "dob", "tour"})})
- * @UniqueEntity(fields={"firstName"}, message="This Passenger is already listed on this tour", ignoreNull=true)
+ * @ORM\Table(name="passenger", uniqueConstraints={@ORM\UniqueConstraint(name="unique_passenger", columns={"f_name", "l_name", "dob", "tour"})})
+ * @UniqueEntity(fields={"fName", "lName", "dateOfBirth", "tourReference"}, message="This Passenger is already listed on this tour", ignoreNull=true)
  * @ORM\Entity(repositoryClass="TUI\Toolkit\PassengerBundle\Entity\PassengerRepository")
  */
 class Passenger
@@ -41,12 +41,12 @@ class Passenger
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    protected $firstName = null;
+    protected $fName = null;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    protected $lastName = null;
+    protected $lName = null;
 
 
     /**
@@ -93,40 +93,41 @@ class Passenger
     }
 
 
-    /**
-     * @param  $firstName
-     */
-    public function setFirstName($firstName)
-    {
-        $this->firstName = $firstName;
 
-        return $firstName;
+    /**
+     * @param  $fName
+     */
+    public function setFName($fName)
+    {
+        $this->fName = $fName;
+
+        return $fName;
     }
 
     /**
-     * @return firstName
+     * @return fName
      */
-    public function getFirstName()
+    public function getFName()
     {
-        return $this->firstName;
+        return $this->fName;
     }
 
     /**
-     * @param  $lastName
+     * @param  $lName
      */
-    public function setLastName($lastName)
+    public function setLName($lName)
     {
-        $this->lastName = $lastName;
+        $this->lName = $lName;
 
-        return $lastName;
+        return $lName;
     }
 
     /**
-     * @return lastName
+     * @return lName
      */
-    public function getLastName()
+    public function getLName()
     {
-        return $this->lastName;
+        return $this->lName;
     }
 
     /**

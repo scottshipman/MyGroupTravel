@@ -38,7 +38,6 @@ $(document).ready(function () {
             $('#ajax_passenger_form').on('submit', function(e) {
 
                 var formAction = $(this).attr('action');
-                console.log("message");
                 e.preventDefault();
                 $.ajax({
                     url: formAction,
@@ -53,7 +52,7 @@ $(document).ready(function () {
                 }).success(function (response) {
                     window.location.reload(true);
                 }).error(function (response) {
-                    console.log("you suck lulz");
+                    console.log(response);
                 });
 
             })

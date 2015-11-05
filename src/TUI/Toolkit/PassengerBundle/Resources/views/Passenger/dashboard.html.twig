@@ -82,7 +82,7 @@
                 </div>
                 {% for passenger in waitlistobjects %}
                     <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
-                        <p style="display: inline-block"><strong>{{ passenger[0].p_firstName }}</strong></p> <p style="display: inline-block"><strong>{{ passenger[0].p_lastName }}</strong></p> <p style="display: inline-block"><strong><a href="mailto:{{ passenger[1].email }}">{{ passenger[1].email }}</a></strong></p>
+                        <p style="display: inline-block"><strong>{{ passenger[0].p_fName }}</strong></p> <p style="display: inline-block"><strong>{{ passenger[0].p_lName }}</strong></p> <p style="display: inline-block"><strong><a href="mailto:{{ passenger[1].email }}">{{ passenger[1].email }}</a></strong></p>
                         <label style="display: block">Signed up on {{ passenger[0].p_signUpDate|date(format) }}</label>
                     </div>
                 {% endfor %}
