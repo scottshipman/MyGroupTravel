@@ -307,6 +307,7 @@
   align-items: flex-end;
   height: auto;
   margin-top: 48px;
+  @include no-print();
 
   @include breakpoint_tablet() {
     display: flex;

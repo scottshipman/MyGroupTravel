@@ -17,6 +17,12 @@ html {
     margin-right: auto;
     width: $page_width;
     max-width: $page_max_width;
+
+    @include print() {
+      width: 100%;
+      max-width: 100%;
+    }
+
   }
 
 }
