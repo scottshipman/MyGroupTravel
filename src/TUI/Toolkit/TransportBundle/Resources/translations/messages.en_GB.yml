@@ -1,0 +1,42 @@
+#TransportBundle/Resources/translations/messages.en.yml
+
+transport:
+      title:
+          edit: Edit Transportation Type
+          index: Transportation Types
+          new: Create New Transportation Type
+          show: Transportation
+          deleted: Transportation Types - Deleted
+      page_title:
+          edit: Edit Transportation Type
+          index: Transportation Types
+          new: Create New Transportation Type
+          show: Transportation Type
+
+      actions:
+          back: Back to the list
+          edit: Edit
+          update: Update
+          create: Create
+          delete: Delete
+          create_new: Create a New Transportation Type
+          upload: Upload a new file
+
+      table:
+          label:
+              name: Name (ID)
+              action: Actions
+              filename: Filename
+              context: Context
+
+          actions:
+              view: View
+              edit: Edit
+
+      flash:
+          save: Transportation Type Saved -
+          delete: Transportation Type deleted -
+          restore: Transportation Type Restored -
+
+      Transportation:
+          label: Click to upload
