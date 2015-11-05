@@ -4,14 +4,16 @@
 {% for quote in quotes %}
 <div class="tour-edit mdl-card mdl-shadow--2dp">
     {% set bgpath = '' %}
-    {% if quote.headerBlock %}
-        {% for mediaWrapper in quote.headerBlock.mediaWrapper %}
-            {% for media in mediaWrapper.media %}
-                {% if loop.first %}
-                    {% set bgpath = app.request.uriForPath( asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) )   %}
-                {% endif %}
+    {% if quote.headerBlock is defined and quote.headerBlock != null %}
+        {% if quote.headerBlock.mediaWrapper is defined and  quote.headerBlock.mediaWrapper != null %}
+            {% for mediaWrapper in quote.headerBlock.mediaWrapper %}
+                {% for media in mediaWrapper.media %}
+                    {% if loop.first %}
+                        {% set bgpath = app.request.uriForPath( asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) )   %}
+                    {% endif %}
+                {% endfor %}
             {% endfor %}
-        {% endfor %}
+        {% endif %}
     {% endif %}
 
     <div class="profile-tour-header mdl-card__title" style="background-image: url({{ bgpath }}); background-size: cover;">

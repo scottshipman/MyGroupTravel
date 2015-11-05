@@ -8,14 +8,16 @@
     {% endif %}
     <div class="tour-edit mdl-card mdl-shadow--2dp">
         {% set bgpath = ' ' %}
-        {% if tour.headerBlock is defined %}
-            {% for mediaWrapper in tour.headerBlock.mediaWrapper %}
-                {% for media in mediaWrapper.media %}
-                    {% if loop.first %}
-                        {% set bgpath = app.request.uriForPath( asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) )   %}
-                    {% endif %}
+        {% if tour.headerBlock is defined and tour.headerBlock != null %}
+            {% if tour.headerBlock.mediaWrapper is defined and tour.headerBlock.mediaWrapper != null %}
+                {% for mediaWrapper in tour.headerBlock.mediaWrapper %}
+                    {% for media in mediaWrapper.media %}
+                        {% if loop.first %}
+                            {% set bgpath = app.request.uriForPath( asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) )   %}
+                        {% endif %}
+                    {% endfor %}
                 {% endfor %}
-            {% endfor %}
+            {% endif %}
         {% endif %}
 
         <div class="profile-tour-header mdl-card__title" style="background-image: url({{ bgpath }}); background-size: cover;">
