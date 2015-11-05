@@ -105,7 +105,7 @@
                     }
                     this.on("success", function (file, response) {
                         $('.existing-media-wrapper').find('.none').hide();
-                        $('.existing-media-wrapper').append('<div class="existing-media-item"><img id="' + response.id + '" src="' + response.relativepath + '/' + response.filename + '">' +
+                        $('.existing-media-wrapper').append('<div class="existing-media-item"><div class="existing-media-item-image"><img id="' + response.id + '" src="' + response.relativepath + '/' + response.filename + '"></div>' +
                         '<a class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a>' +
                         '<div id="'+ response.id +'"class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">' +
                         '<input class="caption mdl-textfield__input" type="text" data="'+ response.id +'" name="caption" id="'+ response.id + '-caption">' +
