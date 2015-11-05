@@ -372,12 +372,6 @@
     padding: 0 $column_gutter_width;
   }
 
-  .pdf-layout & {
-    clear: both;
-    float: none;
-    width: auto;
-  }
-
   .content-block-size-half {
 
     @include breakpoint_tablet() {

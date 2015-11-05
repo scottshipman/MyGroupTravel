@@ -7,19 +7,30 @@ html > body {
   display: none;
 }
 
-.pdf-site-header table {
-  width: 100%;
-  table-layout: fixed;
+.pdf-site-header-slideshow,
+.pdf-site-header-summary {
+  @include inline-block-vertical();
+  width: 50%;
 }
 
 .pdf-site-header-slideshow {
-  width: 50%;
+  background: red;
+
+  img {
+    width: 100%;
+    height: auto;
+  }
+
 }
 
 .pdf-site-header-summary {
-  width: 50%;
 
-  p {
+  ul {
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
     padding-left: 1em;
     margin: 0.75em 0;
   }
@@ -29,4 +40,36 @@ html > body {
 .pdf-tab-header {
   padding-bottom: 0.5em;
   border-bottom: 1px solid $black;
+}
+
+.pdf-content-block {
+
+  .content-block-layout-image_left,
+  .content-block-layout-image_right {
+
+    .content-block-media,
+    .content-block-body {
+      @include inline-block-vertical();
+      width: 50%;
+      padding: 0;
+    }
+
+  }
+
+  .content-block-layout-image_left {
+
+    .content-block-body {
+      padding-left: 1em;
+    }
+
+  }
+
+  .content-block-layout-image_right {
+
+    .content-block-body {
+      padding-right: 1em;
+    }
+
+  }
+
 }
