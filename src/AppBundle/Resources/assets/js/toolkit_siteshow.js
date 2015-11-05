@@ -38,6 +38,7 @@ $(document).ready(function () {
             $('#ajax_passenger_form').on('submit', function(e) {
 
                 var formAction = $(this).attr('action');
+                var form =$(this);
                 e.preventDefault();
                 $.ajax({
                     url: formAction,
@@ -52,7 +53,19 @@ $(document).ready(function () {
                 }).success(function (response) {
                     window.location.reload(true);
                 }).error(function (response) {
-                    console.log(response);
+                    var parsed = $.parseJSON(response.responseText);
+                        $.each(parsed, function(i, item) {
+                            //console.log(i);
+                            $.each(item, function(c, child) {
+                                console.log(c);
+                                var task = c;
+                                $.each(child, function(f, field) {
+                                    var specificFrom = $('.new_passenger[task="'+task+'"]');
+                                    specificFrom.prepend('<p style="color:red;">'+ field + '</p>');
+                                });
+                            });
+                        });
+                    });
                 });
 
             })
@@ -60,4 +73,3 @@ $(document).ready(function () {
     });
 
 
-});

@@ -121,16 +121,21 @@ class PassengerController extends Controller
             return $this->redirect($request->server->get('HTTP_REFERER'));
         }
 
-        $errors = var_export($this->getErrorMessages($form), true);
+        $errors = $this->getErrorMessages($form);
 
-        $template = $this->renderView('PassengerBundle:Passenger:new.html.twig', array(
-            'entity' => $entity,
-            'errors' => $errors,
-            'form' => $form->createView(),
-        ));
+//        $template = $this->renderView('PassengerBundle:Passenger:new.html.twig', array(
+//            'entity' => $entity,
+//            'errors' => $errors,
+//            'form' => $form->createView(),
+//        ));
 
-        $response = new Response($template);
+        $serializer = $this->container->get('jms_serializer');
+        $errors = $serializer->serialize($errors, 'json');
+//        $errors = json_encode($errors);
+
+        $response = new Response($errors);
         $response->headers->set('Content-Type', 'application/json');
+        $response->setStatusCode('400');
         return $response;
 
     }
