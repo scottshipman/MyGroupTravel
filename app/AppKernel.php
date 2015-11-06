@@ -29,6 +29,8 @@ class AppKernel extends Kernel
             new Trsteel\CkeditorBundle\TrsteelCkeditorBundle(),
             new Liip\ImagineBundle\LiipImagineBundle(),
             new FM\ElfinderBundle\FMElfinderBundle(),
+            new Eo\HoneypotBundle\EoHoneypotBundle(),
+
 
 
             // In Toolkit Project ( in /src directory) bundles...
@@ -46,6 +48,7 @@ class AppKernel extends Kernel
             new TUI\Toolkit\MediaBundle\MediaBundle(),
             new TUI\Toolkit\PermissionBundle\PermissionBundle(),
             new TUI\Toolkit\TourBundle\TourBundle(),
+            new TUI\Toolkit\PassengerBundle\PassengerBundle(),
 
             // All of this just to use Sonata Media Bundle (but some good stuff in there, like date picker)
 /*            new Sonata\ClassificationBundle\SonataClassificationBundle(),

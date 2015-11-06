@@ -98,13 +98,13 @@
                 </li>
                 <li>
                     <div class="profile-list-item item-2 tour-dashboard">
-                        <span class="date-span">10</span>
+                        <span class="date-span">{{ accepted }}</span>
                         <label>{% trans %}tour.dashboard.accepted_of{% endtrans %} {{ entity.payingPlaces }}</label>
                     </div>
                 </li>
                 <li>
                     <div class="profile-list-item item-3 tour-dashboard">
-                        <span class="date-span">0</span>
+                        <span class="date-span">{{ waitlist }}</span>
                         <label>{% trans %}tour.dashboard.waitlist{% endtrans %}</label>
                     </div>
                 </li>
@@ -353,17 +353,17 @@
 
 
 {#Download Booking Form#}
-        <div class="tour-edit mdl-card mdl-shadow--2dp">
-            <div class="mdl-card__title">
-                <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.booking_form{% endtrans %}</h3>
-            </div>
-            <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
-                <div class="mdl-card__supporting-text">
-                    <p style="font-size: inherit;">{% trans %}tour.dashboard.booking_form_copy{% endtrans %}</p>
-                    <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored download" href="#"><i class="fa fa-download"></i>{% trans %}tour.dashboard.download{% endtrans %}</a>
-                </div>
-            </div>
-        </div>
+        {#<div class="tour-edit mdl-card mdl-shadow--2dp">#}
+            {#<div class="mdl-card__title">#}
+                {#<h3 class="mdl-card__title-text">{% trans %}tour.dashboard.booking_form{% endtrans %}</h3>#}
+            {#</div>#}
+            {#<div class="mdl-card__supporting-text mdl-card--border profile-tour-details">#}
+                {#<div class="mdl-card__supporting-text">#}
+                    {#<p style="font-size: inherit;">{% trans %}tour.dashboard.booking_form_copy{% endtrans %}</p>#}
+                    {#<a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored download" href="#"><i class="fa fa-download"></i>{% trans %}tour.dashboard.download{% endtrans %}</a>#}
+                {#</div>#}
+            {#</div>#}
+        {#</div>#}
 
 {% endif %}
 
@@ -498,40 +498,37 @@ $(document).ready(function() {
     });
 
 });
+
 // Promote Popup
 $(document).on('click', '#promote-tour', function (e) {
-e.preventDefault();
-var shareValue = "{{ url('tour_site_show', { 'id': entity.id, 'quoteNumber' : entity.quoteNumber }) }}";
-$("#dialog").html('<div id="content-wrapper" class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">' +
-'<div id="content-blocks-wrapper" class="content-block-tabs-bar mdl-tabs__tab-bar">' +
-'<a href="#tabs-drawer-1" class="view-tab site-content-blocks-tab mdl-tabs__tab " tabId="1"><span class="tab-name"><i style="margin-right: 10px;" class="fa fa-link fa-1x"></i>Url</span></a>' +
-'<a href="#tabs-drawer-2" class="view-tab site-content-blocks-tab mdl-tabs__tab " tabId="2"><span class="tab-name"><i style="margin-right: 10px;" class="fa fa-download fa-1x"></i>Toolkit</span></a>' +
-'</div></div>' +
-'<div id="tabs-drawer-1" class="mdl-tabs__panel content-blocks-drawer">' +
-
+    e.preventDefault();
+    var shareValue = "{{ url('tour_site_show', { 'id': entity.id, 'quoteNumber' : entity.quoteNumber }) }}";
+    var link_html = '<div id="content-wrapper" class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">' +
+    '<div id="content-blocks-wrapper" class="content-block-tabs-bar mdl-tabs__tab-bar">' +
+    '<a href="#tabs-drawer-1" class="view-tab site-content-blocks-tab mdl-tabs__tab " tabId="1"><span class="tab-name"><i style="margin-right: 10px;" class="fa fa-link fa-1x"></i>Url</span></a>' +
+    '<a href="#tabs-drawer-2" class="view-tab site-content-blocks-tab mdl-tabs__tab " tabId="2"><span class="tab-name"><i style="margin-right: 10px;" class="fa fa-download fa-1x"></i>Toolkit</span></a>' +
+    '</div></div>' +
+    '<div id="tabs-drawer-1" class="mdl-tabs__panel content-blocks-drawer">' +
     '<h3>Share this Tour with others</h3>' +
-'<div><p>To send this tour to others, copy the URL below.</p></div>' +
-'<div class="input"><input style="width:70%; padding:.25em; margin:1em;" type="text" id="share_url" name="share_url" value="' + shareValue + '" readonly="readonly">' +
-    '<a href="#" id="copy-button" data-clipboard-target="share_url"' +
-    'title="Click to copy Tour URL"' +
-    'class="not-full mdl-button mdl-js-button mdl-button--raised mdl-button--colored">' +
-    '<i class="fa fa-sign-in fa-stack"></i>' +
-    '</a></div></div>' +
-    '<div id="tabs-drawer-2" class="mdl-tabs__panel content-blocks-drawer">' + something +'</div>'
-);
-$("#dialog").dialog({width: '30%', height: '200'}).dialog("option", "title", "Promote the Tour").dialog("open");
-// Copy to Clipboard
-ZeroClipboard.config({swfPath: "//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf"});
-var client = new ZeroClipboard(document.getElementById("copy-button"));
-client.on('aftercopy', function (event) {
-$('#copy-button').css('background-color', 'green');
-});
-//remove the CopytoClipboard button if not Flash
-if (navigator.mimeTypes["application/x-shockwave-flash"] == undefined) {
-$("#copy-button").addClass('hidden');
-$('share_url').css('width', '80%');
-}
-doMDL_popup('.input');
-
+    '<div><p>To send this tour to others, copy the URL below.</p></div>' +
+    '<div class="input"><input style="width:70%; padding:.25em; margin:1em;" type="text" id="share_url" name="share_url" value="' + shareValue + '" readonly="readonly">' +
+        '<a href="#" id="copy-button" data-clipboard-target="share_url"' +
+        'title="Click to copy Tour URL"' +
+        'class="not-full mdl-button mdl-js-button mdl-button--raised mdl-button--colored">' +
+        '<i class="fa fa-sign-in fa-stack"></i>' +
+        '</a></div></div>' +
+        '<div id="tabs-drawer-2" class="mdl-tabs__panel content-blocks-drawer">' + something + '</div>';
+    toolkitStaticPopup("Promote the Tour", link_html);
+    // Copy to Clipboard
+    ZeroClipboard.config({swfPath: "//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf"});
+    var client = new ZeroClipboard(document.getElementById("copy-button"));
+    client.on('aftercopy', function (event) {
+        $('#copy-button').css('background-color', 'green');
+    });
+    //remove the CopytoClipboard button if not Flash
+    if (navigator.mimeTypes["application/x-shockwave-flash"] == undefined) {
+        $("#copy-button").addClass('hidden');
+        $('share_url').css('width', '80%');
+    };
 });
 </script>

@@ -4,10 +4,16 @@
   cursor: pointer;
 }
 
+.ui-widget-overlay {
+  background: $text_grey_t1;
+  opacity: 1;
+}
+
 .ui-widget {
   font-family: inherit;
   font-size: 1em;
   border-radius: 0;
+  border-width: 0;
   padding: 0;
 
   input,
@@ -19,14 +25,51 @@
   }
 
   .ui-dialog-titlebar {
-    border: 0;
+    border-width: 0 0 1px;
     border-radius: 0;
+    background: transparent;
+    padding: 6px 16px;
+  }
+
+  .ui-dialog-title {
+    text-transform: capitalize;
+    margin: 0;
+    float: none;
+    display: block;
+    width: 100%;
+    padding-right: 32px;
+  }
+
+  .ui-dialog-titlebar-close {
+    right: 1em;
+  }
+
+  .ui-dialog-content {
+    padding: 6px 16px;
   }
 
 }
 
-.ui-dialog-title {
-  text-transform: capitalize;
+.ui-dialog.has-mdl-submit-row {
+  margin-top: -(36px + 12px + 1px) / 2;
+
+  .ui-dialog-content {
+    position: static;
+    margin-bottom: 36px + 12px + 1px;
+  }
+
+  .mdl-submit-row {
+    //position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    padding: 6px 16px;
+    margin: 0;
+    border-top: 1px solid #aaa;
+    text-align: right;
+  }
+
 }
 
 .request-changes {
@@ -126,6 +169,38 @@
       width: 100%;
       margin: 0;
       padding: 20px 0;
+    }
+
+  }
+}
+
+.signup-form {
+  width: 80%;
+  margin: 0 auto;
+  position: relative;
+  display: block;
+
+  .passenger-form {
+    margin-bottom: 20px;
+
+    .form-row {
+      max-width: 300px;
+      display: inline;
+    }
+    div.new_passenger.mdl-card.mdl-shadow--2dp > h5 > div {
+      position: absolute;
+      right: 20px;
+    }
+
+    .mdl-card {
+      width: auto;
+      margin-bottom: 20px;
+      padding: 10px;
+    }
+
+
+    .mdl-selectfield {
+      width: 100px;
     }
   }
 }

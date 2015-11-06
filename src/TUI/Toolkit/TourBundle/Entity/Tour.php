@@ -146,7 +146,7 @@ class Tour
      * @var integer
      * @ORM\JoinColumn(name="institution", referencedColumnName="id")
      * @ORM\ManyToOne(targetEntity="TUI\Toolkit\InstitutionBundle\Entity\Institution", cascade={"all"}, fetch="EAGER")
-     * @GRID\Column(field="institution.name", title="Institution", filterable=false, operatorsVisible=false, export=true)
+     * @GRID\Column(field="institution.name", title="Institution", filterable=true, operatorsVisible=false, export=true)
      */
     private $institution;
 
@@ -154,7 +154,7 @@ class Tour
      * @var string
      *
      * @ORM\Column(name="destination", type="string")
-     * @GRID\Column(title="Destination", filterable=true, operatorsVisible=false, sortable=true, export=true)
+     * @GRID\Column(title="Destination", filterable=false, operatorsVisible=false, sortable=true, export=true)
      */
     private $destination;
 
@@ -362,8 +362,6 @@ class Tour
      */
     public $paymentTasksPassenger;
 
-
-
     /**
      * @var DateTime
      *
@@ -468,6 +466,14 @@ class Tour
       $this->shareViews = 0;
       $this->paymentTasks = new ArrayCollection();
       $this->paymentTasksPassenger = new ArrayCollection();
+      $this->confirmed = 0;
+      $this->waitList = 0;
+
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 
     /**
@@ -1658,6 +1664,50 @@ class Tour
     public function setOtherPaymentDescription($otherPaymentDescription)
     {
         $this->otherPaymentDescription = $otherPaymentDescription;
+
+        return $this;
+    }
+
+    /**
+     * @return integer
+     */
+
+    public function getConfirmed()
+    {
+        return $this->confirmed;
+    }
+
+    /**
+     * @param $confirmed
+     * @return $this
+     *
+     */
+
+    public function setConfirmed($confirmed)
+    {
+        $this->confirmed = $confirmed;
+
+        return $this;
+    }
+
+    /**
+     * @return integer
+     */
+
+    public function getWaitList()
+    {
+        return $this->waitList;
+    }
+
+    /**
+     * @param $waitList
+     * @return $this
+     *
+     */
+
+    public function setWaitList($waitList)
+    {
+        $this->waitList = $waitList;
 
         return $this;
     }

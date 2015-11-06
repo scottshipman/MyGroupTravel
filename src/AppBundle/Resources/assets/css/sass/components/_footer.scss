@@ -60,6 +60,7 @@
     display: block;
     margin: 1em 0;
     width: 100%;
+    @include no-print();
 
     .pdf-layout & {
       display: none;

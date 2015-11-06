@@ -6,16 +6,15 @@
 {% block page_title %}{{ title_label }} Quote {% if template is defined %}{{ template }} {% endif %} {{ entity.quoteReference.name }}{% endblock %}
 
 {% block body -%}
-
     {{ form_start(edit_form) }}
 
-    {% if template is empty %} {{ form_row(edit_form.quoteReference.institution) }} {% endif %}
+    {% if template is empty or edit_form.quoteReference.institution is defined %} {{ form_row(edit_form.quoteReference.institution) }} {% endif %}
     {{ form_row(edit_form.quoteReference.name) }}
     {{ form_row(edit_form.quoteNumber) }}
     {{ form_row(edit_form.name) }}
-    {% if template is empty %}{{ form_row(edit_form.quoteReference.organizer) }}{% endif %}
+    {% if template is empty or edit_form.quoteReference.organizer is defined %}{{ form_row(edit_form.quoteReference.organizer) }}{% endif %}
     {{ form_row(edit_form.quoteReference.salesAgent) }}
-    {% if template is empty %}{{ form_row(edit_form.quoteReference.secondaryContact) }}{% endif %}
+    {% if template is empty or edit_form.quoteReference.secondaryContact is defined %}{{ form_row(edit_form.quoteReference.secondaryContact) }}{% endif %}
     {{ form_rest(edit_form) }}
 
     {{ form_end(edit_form) }}

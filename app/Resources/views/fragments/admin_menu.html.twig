@@ -12,11 +12,7 @@
         {% endif %}
         <div class="tui-avatar-dropdown">
             <span>
-                {% if app.user.displayName %}
-                    {{ app.user.displayName }}
-                {% else %}
-                    {{ app.user.username }}
-                {% endif %}
+                {{ app.user.username }}
             </span>
             <div class="mdl-layout-spacer"></div>
             <button id="accbtn-admin" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">

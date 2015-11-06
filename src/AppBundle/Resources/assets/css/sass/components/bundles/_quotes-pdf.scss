@@ -1,0 +1,87 @@
+html > body {
+  font-family: "Helvetica" !important;
+}
+
+.mdl-button,
+.quote-site-actions {
+  display: none;
+}
+
+.pdf-site-header-slideshow,
+.pdf-site-header-summary {
+  @include inline-block-vertical();
+}
+
+.pdf-site-header-slideshow {
+  width: 50%;
+}
+
+.pdf-site-header-summary {
+  width: 48%;
+  margin-left: 2%;
+}
+
+.pdf-site-header-slideshow {
+
+  img {
+    width: 100%;
+    height: auto;
+  }
+
+}
+
+.pdf-site-header-summary {
+
+  ul {
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    margin: 0.75em 0;
+  }
+
+}
+
+.pdf-tab-header {
+  padding-bottom: 0.5em;
+  border-bottom: 1px solid $black;
+}
+
+.pdf-content-block {
+
+  .content-block {
+    margin-bottom: 0;
+  }
+
+  .content-block-layout-image_left,
+  .content-block-layout-image_right {
+
+    .content-block-media,
+    .content-block-body {
+      @include inline-block-vertical();
+      width: 50%;
+      padding: 0;
+    }
+
+  }
+
+  .content-block-layout-image_left {
+
+    .content-block-body {
+      width: 48%;
+      margin-left: 2%;
+    }
+
+  }
+
+  .content-block-layout-image_right {
+
+    .content-block-body {
+      width: 48%;
+      margin-right: 2%;
+    }
+
+  }
+
+}

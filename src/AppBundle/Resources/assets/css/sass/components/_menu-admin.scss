@@ -28,6 +28,13 @@
     width: 100%;
   }
 
+  span {
+    overflow: hidden;
+    width: 100%;
+    line-height: 20px;
+    height: 20px;
+  }
+
   .header & {
     width: 100%;
   }
@@ -83,6 +90,7 @@
   margin: 16px;
   cursor: pointer;
   z-index: 10;
+  @include no-print();
 
   @include breakpoint_desktop() {
     position: fixed;

@@ -420,7 +420,7 @@ class UserController extends Controller
     public function editAction($id)
     {
         // set a session var for referrer to return user back to it
-        $referer = $_SERVER['HTTP_REFERER'] ? $_SERVER['HTTP_REFERER'] : null;
+        $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null;
         $_SESSION['user_edit_return'] = $referer;
 
         $em = $this->getDoctrine()->getManager();

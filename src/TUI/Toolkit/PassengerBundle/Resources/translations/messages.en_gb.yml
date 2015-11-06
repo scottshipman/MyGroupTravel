@@ -1,0 +1,52 @@
+#UserBundle/Resources/translations/messages.en.yml
+passenger:
+    title:
+        edit: Edit Passenger
+        index: Passenger Dashboard
+        new: Create New Passenger
+        show: Passengers
+
+    page_title:
+        edit: Edit Passenger
+        index: Passengers
+        new: Create New Passenger
+        show: Passenger
+        layout_auth: My Tours
+        layout_anon: User Login
+        deleted: User Dashboard - Deleted
+
+    actions:
+        back: Back to the Dashboard
+        edit: Edit
+        update: Update
+        create: Create
+        delete: Delete
+        create_new: Create a New User
+        password: Set Password
+        edit_profile: Edit My Profile
+        notify: Send User a Notification
+        activate: Submit
+        security: Reset Security Info
+
+        actions:
+            view: View
+            edit: Edit
+
+    flash:
+        save: Passenger Saved
+        delete: Passenger deleted -
+        restore: Passenger Restored -
+
+    labels:
+        passengers_for: Passengers For
+        waitlist: Wait List
+        passenger_list: Passenger List
+        add_paying: Add Paying Passengers
+        remaining: Remaining
+        welcome: Welcome to the passenger dashboard.  Here you can invite, add, and manage all of your passengers.
+        invite: Invite Passengers
+        add: Add Passenger
+
+    emails:
+        thank_you: Thank you for your submission
+        notifications: You have new notifications

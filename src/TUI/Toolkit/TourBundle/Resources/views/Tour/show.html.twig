@@ -96,16 +96,15 @@
         $(document).on('click', '#promote-tour', function (e) {
             e.preventDefault();
             var shareValue = "{{ url('tour_site_show', { 'id': entity.id, 'quoteNumber' : entity.quoteNumber }) }}";
-            $("#dialog").html('<h3>Share this Tour with others</h3>' +
+            var link_html = '<h3>Share this Tour with others</h3>' +
                     '<div><p>To send this tour to others, copy the URL below.</p></div>' +
                     '<div class="input"><input style="width:70%; padding:.25em; margin:1em;" type="text" id="share_url" name="share_url" value="' + shareValue + '" readonly="readonly">' +
                     '<a href="#" id="copy-button" data-clipboard-target="share_url"' +
                     'title="Click to copy Tour URL"' +
                     'class="not-full mdl-button mdl-js-button mdl-button--raised mdl-button--colored">' +
                     '<i class="fa fa-sign-in fa-stack"></i>' +
-                    '</a></div>'
-            );
-            $("#dialog").dialog({width: '30%', height: '200'}).dialog("option", "title", "Promote the Tour").dialog("open");
+                    '</a></div>';
+            toolkitStaticPopup("Promote the Tour", link_html);
             // Copy to Clipboard
             ZeroClipboard.config({swfPath: "//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf"});
             var client = new ZeroClipboard(document.getElementById("copy-button"));
@@ -116,8 +115,7 @@
             if (navigator.mimeTypes["application/x-shockwave-flash"] == undefined) {
                 $("#copy-button").addClass('hidden');
                 $('share_url').css('width', '80%');
-            }
-            doMDL_popup('.input');
+            };
 
         });
     });
@@ -136,8 +134,14 @@
         {% else %}
             <span class="tui-text-avatar mdl-typography--headline">{{ entity.organizer.username[:1] }}</span>
         {% endif %}
-        <span class="agent">{{ entity.organizer.firstName }} {{ entity.organizer.lastName }}<br>
-        <a href="mailto:{{ entity.organizer.email }}">{{ entity.organizer.email }}</a></span>
+        <span class="agent">
+            {% if entity.organizer.displayName %}
+                {{ entity.organizer.displayName }}
+            {% else %}
+                {{ entity.organizer.firstName }} {{ entity.organizer.lastName }}
+            {% endif %}
+            <br>
+            <a href="mailto:{{ entity.organizer.email }}">{{ entity.organizer.email }}</a></span>
     {% endif %}
 {% endblock %}
 
