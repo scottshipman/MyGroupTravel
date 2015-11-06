@@ -134,8 +134,14 @@
         {% else %}
             <span class="tui-text-avatar mdl-typography--headline">{{ entity.organizer.username[:1] }}</span>
         {% endif %}
-        <span class="agent">{{ entity.organizer.firstName }} {{ entity.organizer.lastName }}<br>
-        <a href="mailto:{{ entity.organizer.email }}">{{ entity.organizer.email }}</a></span>
+        <span class="agent">
+            {% if entity.organizer.displayName %}
+                {{ entity.organizer.displayName }}
+            {% else %}
+                {{ entity.organizer.firstName }} {{ entity.organizer.lastName }}
+            {% endif %}
+            <br>
+            <a href="mailto:{{ entity.organizer.email }}">{{ entity.organizer.email }}</a></span>
     {% endif %}
 {% endblock %}
 
