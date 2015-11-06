@@ -56,11 +56,19 @@ class BulkImport implements FixtureInterface, ContainerAwareInterface
 
         echo "$count.  creating $name ";
 
+        if(empty($row['address1'])){$addy1 = '-- missing address --';}
+        else
+        {$addy1 = $row['address1'];}
+
+        if(empty($row['town'])){$town = '-- missing town/city name --';}
+        else
+        {$town = $row['town'];}
+
         $institution = new Institution();
         $institution->setName($row['institutionName']);
-        $institution->setAddress1($row['address1']);
+        $institution->setAddress1($addy1);
         $institution->setAddress2('');
-        $institution->setCity($row['town']);
+        $institution->setCity($town);
         $institution->setCounty($row['county']);
         $institution->setState('');
         $institution->setPostCode($row['postCode']);
