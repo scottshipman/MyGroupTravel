@@ -230,7 +230,7 @@ quote_site:
             converted: Converted
             request_change: Request Changes
             share: Share this quote with others
-    site _pdf:
+    site_pdf:
         quote_number: "Quote Number: "
         alternate_quotes: Alternate Quotes
         organizer: "Tour Organizer: "

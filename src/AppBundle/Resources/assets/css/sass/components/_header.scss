@@ -9,6 +9,10 @@
   display: block;
   z-index: auto;
 
+  .marketing-site & {
+    @include no-print();
+  }
+
   .pdf-layout & {
     margin-bottom: 1em;
   }
