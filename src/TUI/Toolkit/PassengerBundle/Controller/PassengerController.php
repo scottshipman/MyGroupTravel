@@ -70,6 +70,8 @@ class PassengerController extends Controller
         $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
         $entity->setTourReference($tour);
         $form = $this->createCreateForm($entity, $tourId);
+        $locale = $this->container->getParameter('locale');
+        $date_format = $this->container->getParameter('date_format');
 
         $form->handleRequest($request);
 
@@ -92,6 +94,7 @@ class PassengerController extends Controller
                 $em->flush();
             }
 
+            $newPassengers = array();
             foreach ($form->get('passengers') as $passenger) {
                 //do more stuff
                 $newPassenger = new Passenger();
@@ -105,6 +108,9 @@ class PassengerController extends Controller
                 $em->persist($newPassenger);
                 $em->flush();
 
+                //Add passenger to the new passenger array to access later
+                $newPassengers[] = $newPassenger;
+
                 $permission = new Permission();
                 $permission->setClass('passenger');
                 $permission->setObject($newPassenger->getId());
@@ -112,6 +118,96 @@ class PassengerController extends Controller
                 $permission->setUser($user);
                 $em->persist($permission);
                 $em->flush();
+            }
+
+            //brand stuff
+            $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+            // look for a configured brand
+            if($brand_id = $this->container->getParameter('brand_id')){
+                $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+            }
+
+            if(!$brand) {
+                $brand = $default_brand;
+            }
+
+            //Query builder for waitlist
+            $qb = $em->createQueryBuilder();
+            $qb->select('p')
+                ->from('PassengerBundle:Passenger', 'p')
+                ->where($qb->expr()->andX(
+                    $qb->expr()->eq('p.status', '?1')
+                ));
+            $qb->setParameters(array(1 => 'waitlist' ));
+            $query = $qb->getQuery();
+            $waitList = $query->getScalarResult();
+
+            $waitListObjects = array();
+
+            foreach($waitList as $passenger) {
+                $object = $passenger['p_id'];
+                $parent = $this->get("permission.set_permission")->getUser('parent', $object, 'passenger');
+                $parentObject = $em->getRepository('TUIToolkitUserBundle:User')->find($parent[1]);
+                $waitListObjects[]= array($passenger, $parentObject);
+            }
+
+            //get number of paying places in the tour
+            $payingPlaces = $tour->getPayingPlaces();
+
+            //Send email to the organizer if the organizer account the organizer account is enabled
+            if ($tour->getOrganizer()->isEnabled() == true and $tour->getOrganizer() != null ) {
+
+                $organizerEmail = $tour->getOrganizer()->getEmail();
+                $tourName = $tour->getName();
+
+                $message = \Swift_Message::newInstance()
+                    ->setSubject($this->get('translator')->trans('passenger.emails.notifications'))
+                    ->setFrom('Notify@Toolkit.com')
+                    ->setTo($organizerEmail)
+                    ->setBody(
+                        $this->renderView(
+                            'PassengerBundle:Emails:newPassengerOrganizerNotificationEmail.html.twig',
+                            array(
+                                'brand' => $brand,
+                                'tour' => $tour,
+                                'user' => $user,
+                                'newPassengers' => $newPassengers,
+                                'tour_name' => $tourName,
+                                'payingPlaces' => $payingPlaces,
+                                'waitlist' => $waitListObjects,
+                                'locale' => $locale,
+                                'date_format' => $date_format,
+                            )
+                        ), 'text/html');
+                $this->get('mailer')->send($message);
+            }
+
+            //Send Email to parent who filled out the form
+            if ($user->getEmail() != null ) {
+
+                $parentEmail = $user->getEmail();
+                $tourName = $tour->getName();
+
+                $message = \Swift_Message::newInstance()
+                    ->setSubject($this->get('translator')->trans('passenger.emails.thank_you'))
+                    ->setFrom('Notify@Toolkit.com')
+                    ->setTo($parentEmail)
+                    ->setBody(
+                        $this->renderView(
+                            'PassengerBundle:Emails:newPassengerEmail.html.twig',
+                            array(
+                                'brand' => $brand,
+                                'tour' => $tour,
+                                'tour_name' => $tourName,
+                                'user' => $user,
+                                'newPassengers' => $newPassengers,
+                                'locale' => $locale,
+                                'date_format' => $date_format,
+                            )
+                        ), 'text/html');
+                $this->get('mailer')->send($message);
+
             }
 
             $em->flush();
@@ -131,7 +227,6 @@ class PassengerController extends Controller
 
         $serializer = $this->container->get('jms_serializer');
         $errors = $serializer->serialize($errors, 'json');
-//        $errors = json_encode($errors);
 
         $response = new Response($errors);
         $response->headers->set('Content-Type', 'application/json');
