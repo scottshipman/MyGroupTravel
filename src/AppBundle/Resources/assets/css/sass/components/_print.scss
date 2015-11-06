@@ -16,12 +16,6 @@
     display: none;
   }
 
-  .mdl-layout--fixed-drawer > .mdl-layout__content {
-    margin-left: 0;
-    display: block;
-    overflow-x: auto;
-  }
-
   .mdl-tabs.is-upgraded .mdl-tabs__panel {
     display: block;
     margin-bottom: 2em;
@@ -48,28 +42,8 @@
     content: none !important;
   }
 
-  .mdl-layout--fixed-drawer {
-
-    .content .inner,
-    .header {
-      padding-left: 0;
-      padding-right: 0;
-    }
-
-  }
-
-  #site-header-slideshow {
-    padding: 0 1em 0 0;
-  }
-
-  #site-header-summary {
-    padding: 0 0 0 1em;
-  }
-
-  .flexslider {
-    border: 0 none;
-  }
-
+  // Generic styling
+  .mdl-button,
   .record_actions,
   .flash-messages,
   .brand_logo,
@@ -80,13 +54,12 @@
   .cell-actions,
   .grid-column-__actions,
   th.id___actions,
-  #content-blocks-wrapper,
-  .mdl-tabs-no-swap,
   .print-actions,
   .quote-site-actions {
     display: none;
   }
 
+  // Symfony styling
   .sf-toolbar {
     display: none !important;
   }

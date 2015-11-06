@@ -1,31 +1,31 @@
-{% if entity.layoutType %}
-    {% if entity.layoutType.name != 'image_bottom' %}
-        <div class="content-block-media">
-            {% spaceless %}
-            {% for mediaWrapper in entity.mediaWrapper %}
-                {% for media in mediaWrapper.media %}
-                <img class="block-image-stacked" src="{{ app.request.uriForPath( asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) ) }}" title="{{ mediaWrapper.title }}" alt="{{ mediaWrapper.title }}">
-                {% endfor %}
-            {% endfor %}
-            {% endspaceless %}
-        </div>
-    {% endif %}
-{% endif %}
-
-<div class="content-block-body">
-    {{ entity.body|raw }}
-</div>
-
-{% if entity.layoutType %}
-    {% if entity.layoutType.name == 'image_bottom' %}
-        <div class="content-block-media">
-            {% spaceless %}
-            {% for mediaWrapper in entity.mediaWrapper %}
-                {% for media in mediaWrapper.media %}
+<div class="content-block-content-wrapper">
+{% spaceless %}
+    {% if entity.layoutType %}
+        {% if entity.layoutType.name == 'image_top' or entity.layoutType.name == 'image_left' %}
+            <div class="content-block-media">
+                {% for mediaWrapper in entity.mediaWrapper %}
+                    {% for media in mediaWrapper.media %}
                     <img class="block-image-stacked" src="{{ app.request.uriForPath( asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) ) }}" title="{{ mediaWrapper.title }}" alt="{{ mediaWrapper.title }}">
+                    {% endfor %}
                 {% endfor %}
-            {% endfor %}
-            {% endspaceless %}
-        </div>
+            </div>
+        {% endif %}
     {% endif %}
-{% endif %}
+
+    <div class="content-block-body">
+        {{ entity.body|raw }}
+    </div>
+
+    {% if entity.layoutType %}
+        {% if entity.layoutType.name == 'image_bottom' or entity.layoutType.name == 'image_right' %}
+            <div class="content-block-media">
+                {% for mediaWrapper in entity.mediaWrapper %}
+                    {% for media in mediaWrapper.media %}
+                        <img class="block-image-stacked" src="{{ app.request.uriForPath( asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) ) }}" title="{{ mediaWrapper.title }}" alt="{{ mediaWrapper.title }}">
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endif %}
+{% endspaceless %}
+</div>

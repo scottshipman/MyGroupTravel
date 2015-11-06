@@ -16,6 +16,7 @@ body {
   -webkit-transform: translateX(-($admin_menu_width));
   -ms-transform: translateX(-($admin_menu_width));
   transform: translateX(-($admin_menu_width));
+  @include no-print();
 
   @include breakpoint_desktop() {
     -webkit-transform: translateX(0);
