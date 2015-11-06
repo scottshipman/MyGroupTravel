@@ -18,7 +18,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @GRID\Source(columns="id, location, name, city, county, state, country", filterable=false, sortable=true)
  * @GRID\Column(id="location", type="join", title="Location", columns={"city", "county", "state", "country"}, filterable=true, operatorsVisible=false)
  * @UniqueEntity(
- *    fields={"name", "city"},
+ *    fields={"name", "address1", "city", "county"},
  *    message="This Institution and City combination has already been used."
  * )
  */
@@ -46,7 +46,7 @@ class Institution
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, unique=true)
+     * @ORM\Column(name="name", type="string", length=255)
      * @GRID\Column(title="Name", visible=true, filterable=true, operatorsVisible=false, export=true)
      */
     private $name;
@@ -78,7 +78,7 @@ class Institution
     /**
      * @var string
      *
-     * @ORM\Column(name="county", type="string", length=255, nullable=true, unique=true)
+     * @ORM\Column(name="county", type="string", length=255, nullable=true)
      * @GRID\Column(visible=false, filterable=false, export=true)
      */
     private $county;
