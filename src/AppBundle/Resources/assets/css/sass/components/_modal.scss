@@ -172,5 +172,35 @@
     }
 
   }
+}
 
+.signup-form {
+  width: 80%;
+  margin: 0 auto;
+  position: relative;
+  display: block;
+
+  .passenger-form {
+    margin-bottom: 20px;
+
+    .form-row {
+      max-width: 300px;
+      display: inline;
+    }
+    div.new_passenger.mdl-card.mdl-shadow--2dp > h5 > div {
+      position: absolute;
+      right: 20px;
+    }
+
+    .mdl-card {
+      width: auto;
+      margin-bottom: 20px;
+      padding: 10px;
+    }
+
+
+    .mdl-selectfield {
+      width: 100px;
+    }
+  }
 }

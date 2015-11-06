@@ -42,7 +42,7 @@ quote:
         add_header: Add Header Slideshow
         edit_tabs: Edit Tabs
         add_tab: Add New Tab
-        is_locked: is locked
+        is_locked: This quote is locked
         save: Save Quote
 
 

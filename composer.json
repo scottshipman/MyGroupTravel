@@ -44,7 +44,8 @@
         "jms/serializer-bundle": "^1.0",
         "dompdf/dompdf": "0.6.*",
         "liip/imagine-bundle": "^1.3",
-        "helios-ag/fm-elfinder-bundle": "~5"
+        "helios-ag/fm-elfinder-bundle": "~5",
+        "eo/honeypot-bundle": "^1.0"
     },
     "require-dev": {
         "liip/functional-test-bundle": "~1.0",

@@ -56,7 +56,7 @@ user:
 
     grid:
         no_result: There are no Users to show. Please check your filter settings and try again.
-        no_result-deleted: There are no Deleted Users to show. Please check your filter settings and try again.
+        no_results-deleted: There are no Deleted Users to show. Please check your filter settings and try again.
         export: Users as CSV
         export_deleted: Deleted Users as CSV
         filter:
@@ -119,7 +119,7 @@ user:
         my_quotes:
             institution: Institution
             organizer: Organizer
-            salesAgent: Business Contact
+            salesAgent: Your Contact
             price: Price
             quote: Quote
             tour: Tour

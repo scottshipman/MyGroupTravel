@@ -323,11 +323,13 @@ class QuoteVersion
      */
     public function isExpiryBeforeDeparture(ExecutionContextInterface $context)
     {
+      if ($this->getExpiryDate() != NULL) {
         if ($this->getExpiryDate() >= $this->getDepartureDate()) {
-            $context->buildViolation('The expiry date must be prior to the departure date.')
-                ->atPath('expiryDate')
-                ->addViolation();
+          $context->buildViolation('The expiry date must be prior to the departure date.')
+              ->atPath('expiryDate')
+              ->addViolation();
         }
+      }
     }
 
     /**
@@ -336,10 +338,12 @@ class QuoteVersion
     public function isExpiryBeforeNow(ExecutionContextInterface $context)
     {
       $now = new \DateTime('now');
-      if ( $now >= $this->getExpiryDate() ) {
-        $context->buildViolation('The expiry date must be in the future.')
-            ->atPath('expiryDate')
-            ->addViolation();
+      if ($this->getExpiryDate() != NULL) {
+        if ($now >= $this->getExpiryDate()) {
+          $context->buildViolation('The expiry date must be in the future.')
+              ->atPath('expiryDate')
+              ->addViolation();
+        }
       }
     }
 

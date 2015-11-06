@@ -98,13 +98,13 @@
                 </li>
                 <li>
                     <div class="profile-list-item item-2 tour-dashboard">
-                        <span class="date-span">10</span>
+                        <span class="date-span">{{ accepted }}</span>
                         <label>{% trans %}tour.dashboard.accepted_of{% endtrans %} {{ entity.payingPlaces }}</label>
                     </div>
                 </li>
                 <li>
                     <div class="profile-list-item item-3 tour-dashboard">
-                        <span class="date-span">0</span>
+                        <span class="date-span">{{ waitlist }}</span>
                         <label>{% trans %}tour.dashboard.waitlist{% endtrans %}</label>
                     </div>
                 </li>
@@ -353,17 +353,17 @@
 
 
 {#Download Booking Form#}
-        <div class="tour-edit mdl-card mdl-shadow--2dp">
-            <div class="mdl-card__title">
-                <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.booking_form{% endtrans %}</h3>
-            </div>
-            <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
-                <div class="mdl-card__supporting-text">
-                    <p style="font-size: inherit;">{% trans %}tour.dashboard.booking_form_copy{% endtrans %}</p>
-                    <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored download" href="#"><i class="fa fa-download"></i>{% trans %}tour.dashboard.download{% endtrans %}</a>
-                </div>
-            </div>
-        </div>
+        {#<div class="tour-edit mdl-card mdl-shadow--2dp">#}
+            {#<div class="mdl-card__title">#}
+                {#<h3 class="mdl-card__title-text">{% trans %}tour.dashboard.booking_form{% endtrans %}</h3>#}
+            {#</div>#}
+            {#<div class="mdl-card__supporting-text mdl-card--border profile-tour-details">#}
+                {#<div class="mdl-card__supporting-text">#}
+                    {#<p style="font-size: inherit;">{% trans %}tour.dashboard.booking_form_copy{% endtrans %}</p>#}
+                    {#<a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored download" href="#"><i class="fa fa-download"></i>{% trans %}tour.dashboard.download{% endtrans %}</a>#}
+                {#</div>#}
+            {#</div>#}
+        {#</div>#}
 
 {% endif %}
 
