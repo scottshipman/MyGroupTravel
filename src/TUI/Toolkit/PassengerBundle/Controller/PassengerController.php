@@ -156,7 +156,7 @@ class PassengerController extends Controller
             $payingPlaces = $tour->getPayingPlaces();
 
             //Send email to the organizer if the organizer account the organizer account is enabled
-            if ($tour->getOrganizer()->isEnabled() == true and $tour->getOrganizer() != null ) {
+            if ( $tour->getOrganizer() != null ) {
 
                 $organizerEmail = $tour->getOrganizer()->getEmail();
                 $tourName = $tour->getName();
