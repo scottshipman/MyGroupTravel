@@ -93,7 +93,7 @@ user:
         fname: First Name
         lname: Last Name
         nickname: Nickname
-        display_name: Display Name
+        display_name: Display name publicly as one of the following
         email: Email Address
         phone: Phone Number
         media: Avatar
