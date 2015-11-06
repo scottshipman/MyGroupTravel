@@ -163,7 +163,7 @@ class PassengerController extends Controller
 
                 $message = \Swift_Message::newInstance()
                     ->setSubject($this->get('translator')->trans('passenger.emails.notifications'))
-                    ->setFrom('Notify@Toolkit.com')
+                    ->setFrom($this->container->getParameter('user_system_email'))
                     ->setTo($organizerEmail)
                     ->setBody(
                         $this->renderView(
@@ -191,7 +191,7 @@ class PassengerController extends Controller
 
                 $message = \Swift_Message::newInstance()
                     ->setSubject($this->get('translator')->trans('passenger.emails.thank_you'))
-                    ->setFrom('Notify@Toolkit.com')
+                    ->setFrom($this->container->getParameter('user_system_email'))
                     ->setTo($parentEmail)
                     ->setBody(
                         $this->renderView(

@@ -1276,7 +1276,7 @@ class TourController extends Controller
 
             $message = \Swift_Message::newInstance()
                 ->setSubject($this->get('translator')->trans('tour.email.setup.subject'))
-                ->setFrom('Notify@Toolkit.com')
+                ->setFrom($this->container->getParameter('user_system_email'))
                 ->setTo($organizerEmail)
                 ->setBody(
                     $this->renderView(
@@ -1302,7 +1302,7 @@ class TourController extends Controller
 
             $message = \Swift_Message::newInstance()
                 ->setSubject($this->get('translator')->trans('tour.email.setup.subject'))
-                ->setFrom('Notify@Toolkit.com')
+                ->setFrom($this->container->getParameter('user_system_email'))
                 ->setTo($organizerEmail)
                 ->setBody(
                     $this->renderView(
