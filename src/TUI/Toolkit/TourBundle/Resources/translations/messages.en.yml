@@ -97,6 +97,8 @@ tour:
        passengers: Number Of Passengers
        price: Price Per Passenger
        organizers: Organizers
+       number: Tour Number
+       schedule: Passenger Payment Schedule
        footer:
             intro: Tour Organizer:
             intro_self: Your Contact:

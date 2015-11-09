@@ -42,12 +42,13 @@
     <div class="tour-show-left-column">
         <ul class="tour-show-submenu">
             <li><strong>{% trans %}tour.show.summary{% endtrans %}</strong></li>
+            <li><label>{% trans %}tour.show.number{% endtrans %}</label><strong>{{ entity.quoteNumber }}</strong></li>
             <li><label>{% trans %}tour.show.institution{% endtrans %}</label><strong>{{ entity.institution.name }}</strong></li>
             <li><label>{% trans %}tour.show.departure{% endtrans %}</label><strong>{{ entity.departureDate|date(format) }}</strong></li>
             <li><label>{% trans %}tour.show.passengers{% endtrans %}</label><strong>{{ entity.payingPlaces }} paying passengers {% if entity.freePlaces > 0 %} and {{ entity.freePlaces }} free passengers{% endif %}</strong></li>
             <li><label>{% trans %}tour.show.price{% endtrans %}</label><strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong></li>
             <li>
-                <label>Passenger Payment Schedule</label>
+                <label>{% trans %}tour.show.schedule{% endtrans %}</label>
                 {% for payment in passenger_payment_tasks %}
                     {# render(controller('TourBundle:PaymentTask:showList', { 'id': payment.id } )) #}
                     <ul class="payment-task-list">
