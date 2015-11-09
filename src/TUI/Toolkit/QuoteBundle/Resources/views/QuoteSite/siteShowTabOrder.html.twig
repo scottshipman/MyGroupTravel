@@ -102,8 +102,11 @@
         $(document).on('click', '#update-tabs', function (e) {
             e.preventDefault();
             // cancel any unfinished jeditable actions
-            console.log("clicked submit");
-            $(".editable-tab")[0].reset();
+            $.each($(".editable-tab"), function(index, value){
+                $(".editable-tab")[index].reset();
+            });
+
+
             var quoteID = $(this).attr('quoteid');
             // scrape DOM to get heirarchy of tabs & blocks
             var result = {};
