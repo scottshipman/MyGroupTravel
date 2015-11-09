@@ -26,10 +26,12 @@
             <td class="mdl-data-table__cell--non-numeric th-mimic">{% trans %}institution.table.label.county{% endtrans %}</td>
             <td class="mdl-data-table__cell--non-numeric">{{ entity.county }}</td>
         </tr>
+        {% if 'en_GB' not in locale %}
         <tr>
             <td class="mdl-data-table__cell--non-numeric th-mimic">{% trans %}institution.table.label.state{% endtrans %}</td>
             <td class="mdl-data-table__cell--non-numeric">{{ entity.state }}</td>
         </tr>
+        {% endif %}
         <tr>
             <td class="mdl-data-table__cell--non-numeric th-mimic">{% trans %}institution.table.label.postcode{% endtrans %}</td>
             <td class="mdl-data-table__cell--non-numeric">{{ entity.postCode }}</td>
