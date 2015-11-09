@@ -45,6 +45,10 @@
             <hr>
             <li><label>{% trans %}tour.show.institution{% endtrans %}</label><br><strong>{{ entity.institution.name }}</strong></li>
             <hr>
+            <li><label>{% trans %}tour.show.name{% endtrans %}</label><br><strong>{{ entity.name}}</strong></li>
+            <hr>
+            <li><label>{% trans %}tour.show.number{% endtrans %}</label><br><strong>{{ entity.tourNumber}}</strong></li>
+            <hr>
             <li><label>{% trans %}tour.show.departure{% endtrans %}</label><br><strong>{{ entity.departureDate|date(format) }}</strong></li>
             <hr>
             <li><label>{% trans %}tour.show.passengers{% endtrans %}</label><br><strong>{{ entity.payingPlaces }} paying passengers {% if entity.freePlaces > 0 %} and {{ entity.freePlaces }} free passengers{% endif %}</strong></li>

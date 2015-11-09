@@ -96,6 +96,8 @@ tour:
        departure: Departure Date
        passengers: Number Of Passengers
        price: Price Per Passenger
+       name: Tour Name
+       number: Tour Number
        organizers: Organizers
        footer:
             intro: Tour Organizer:

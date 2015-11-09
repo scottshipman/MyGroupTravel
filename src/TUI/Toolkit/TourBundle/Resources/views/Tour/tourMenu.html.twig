@@ -6,6 +6,7 @@
         {% block tour_dashboard_link %}{% endblock %}
         <li><a href="{{ path('tour_site_action_show', { 'id': entity.id }) }}" class="mdl-menu__item">{% trans %}tour.menu.preview{% endtrans %}</a></li>
         <li><a href="{{ path('manage_passenger_dashboard', { 'tourId': entity.id }) }}" class="mdl-menu__item">{% trans %}passenger.title.index{% endtrans %}</a></li>
+            <li><a href="{{ path('manage_tour_edit_payments', { 'id': entity.id }) }}" class="mdl-menu__item">Edit Payments</a></li>
     </span>
 </ul>
 {% endif %}

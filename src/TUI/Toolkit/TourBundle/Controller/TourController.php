@@ -1124,6 +1124,24 @@ class TourController extends Controller
 
     }
 
+
+    public function getEditPaymentsAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('TourBundle:Tour')->find($id);
+        $date_format = $this->container->getParameter('date_format');
+        $locale = $this->container->getParameter('locale');
+        $setupForm = $this->createTourSetupForm($entity);
+
+        return $this->render('TourBundle:Tour:editPayments.html.twig', array(
+            'entity' => $entity,
+            'setup_form' => $setupForm->createView(),
+            'date_format' => $date_format,
+            'locale' => $locale,
+        ));
+
+    }
+
     /**
      * Creates a form to edit a Tour entity on first setup.
      *
