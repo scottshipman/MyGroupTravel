@@ -1200,8 +1200,8 @@ class UserController extends Controller
     public function getQuotesAction($id)
     {
         $locale = $this->container->getParameter('locale');
-        switch ($locale) {
-            case 'en_GB.utf8':
+        switch (true) {
+            case strstr($locale, 'en_GB'):
                 $format = 'd-m-Y';
                 break;
             default:

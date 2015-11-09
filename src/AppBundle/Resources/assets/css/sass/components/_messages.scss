@@ -82,7 +82,7 @@
 @keyframes snackbar-hide {
   0%, 7.5% {top:10px; }
   5%,10% {top:15px; }
-  100% {top:-70px; }
+  100% {top:-70px; display: none; z-index: -1}
 }
 
 .flash-message-notice {

@@ -28,8 +28,8 @@ class QuoteSummaryType extends AbstractType
       $require_qn = true;
 
 
-      switch ($this->locale){
-          case 'en_GB.utf8':
+      switch (true){
+          case strstr($this->locale, 'en_GB'):
             $date_label = '(DD-MM-YYYY)';
             $date_format = 'dd-MM-yyyy';
             break;
