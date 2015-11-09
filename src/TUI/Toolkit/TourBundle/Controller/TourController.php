@@ -755,7 +755,13 @@ class TourController extends Controller
             $em->flush();
             $permission = $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
             $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tour.flash.save') . $entity->getName());
-            return $this->redirect($this->generateUrl('manage_tour'));
+            if ( $entity->getSetupComplete() == false and $entity->getIsComplete() == false) {
+
+                return $this->redirect($this->generateUrl('tour_site_show', array('id' => $entity->getId(), 'quoteNumber' => $entity->getQuoteNumber())));
+
+            }else {
+                return $this->redirect($this->generateUrl('manage_tour'));
+            }
         }
 
         return $this->render('TourBundle:Tour:edit.html.twig', array(
