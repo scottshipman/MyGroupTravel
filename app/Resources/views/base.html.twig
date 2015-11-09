@@ -107,16 +107,6 @@
           </div>
         </div>
 
-        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-            <footer class="mdl-mini-footer site-footer">
-              <div class="sizer">
-                <div class="mdl-mini-footer__left-section footer-full-section">
-                    {{ render(controller('BrandBundle:Default:footer')) }}
-                </div>
-              </div>
-            </footer>
-        {% endif %}
-
     </main>
 
 </div><!-- toolkit-layout -->
