@@ -29,7 +29,7 @@ tour:
             show:
                 id: Id
                 name: Name
-                value: Value
+                value: Amount Due
                 duedate: Due Date
                 paiddate: Paid Date
                 type: Type
@@ -98,6 +98,7 @@ tour:
        organizers: Organizers
        footer:
             intro: Tour Organizer:
+            intro_self: Your Contact:
             price: Price per person:
 
     contact_organizer:

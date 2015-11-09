@@ -42,15 +42,29 @@
     <div class="tour-show-left-column">
         <ul class="tour-show-submenu">
             <li><strong>{% trans %}tour.show.summary{% endtrans %}</strong></li>
-            <hr>
-            <li><label>{% trans %}tour.show.institution{% endtrans %}</label><br><strong>{{ entity.institution.name }}</strong></li>
-            <hr>
-            <li><label>{% trans %}tour.show.departure{% endtrans %}</label><br><strong>{{ entity.departureDate|date(format) }}</strong></li>
-            <hr>
-            <li><label>{% trans %}tour.show.passengers{% endtrans %}</label><br><strong>{{ entity.payingPlaces }} paying passengers {% if entity.freePlaces > 0 %} and {{ entity.freePlaces }} free passengers{% endif %}</strong></li>
-            <hr>
-            <li><label>{% trans %}tour.show.price{% endtrans %}</label><br><strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong></li>
-            <hr>
+            <li><label>{% trans %}tour.show.institution{% endtrans %}</label><strong>{{ entity.institution.name }}</strong></li>
+            <li><label>{% trans %}tour.show.departure{% endtrans %}</label><strong>{{ entity.departureDate|date(format) }}</strong></li>
+            <li><label>{% trans %}tour.show.passengers{% endtrans %}</label><strong>{{ entity.payingPlaces }} paying passengers {% if entity.freePlaces > 0 %} and {{ entity.freePlaces }} free passengers{% endif %}</strong></li>
+            <li><label>{% trans %}tour.show.price{% endtrans %}</label><strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong></li>
+            <li>
+                <label>Passenger Payment Schedule</label>
+                {% for payment in passenger_payment_tasks %}
+                    {# render(controller('TourBundle:PaymentTask:showList', { 'id': payment.id } )) #}
+                    <ul class="payment-task-list">
+                        <li>
+                            <strong>{{ payment.name }}</strong>
+                        </li>
+                        <li>
+                            <label>{% trans %}tour.page_title.payment_task.show.value{% endtrans %}</label>
+                            <strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ payment.value }}</strong>
+                        </li>
+                        <li>
+                            <label>{% trans %}tour.page_title.payment_task.show.duedate{% endtrans %}</label>
+                            <strong>{{ payment.dueDate|date(format) }}</strong>
+                        </li>
+                    </ul>
+                {% endfor %}
+            </li>
         </ul>
 
         <div class="tour-edit-organizer-left">
@@ -126,7 +140,13 @@
 
 {% block footer_left %}
     {% if entity.organizer %}
-        <span class="intro">{% trans %}tour.show.footer.intro{% endtrans %}</span>
+        <span class="intro">
+            {% if app.user.email == entity.organizer.email %}
+                {% trans %}tour.show.footer.intro_self{% endtrans %}
+            {% else %}
+                {% trans %}tour.show.footer.intro{% endtrans %}
+            {% endif %}
+        </span>
         {% if entity.organizer.media %}
             <span class="tui-image-avatar"><img src="{{ asset( entity.organizer.media.getRelativePath ~ "/" ~ entity.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.organizer.username }}"></span>
         {% elseif entity.organizer.firstName and entity.organizer.lastName %}
