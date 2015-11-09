@@ -62,10 +62,12 @@ tour:
         add_tab: Add New Tab
         add_block: Add Block
         save: Save
+        submit: Submit
 
     menu:
         my_tours: My Tours
         preview: Preview Tour
+        payments: Edit Payments
 
     not_completed:
         get_started: Get Started
@@ -95,6 +97,8 @@ tour:
        departure: Departure Date
        passengers: Number Of Passengers
        price: Price Per Passenger
+       name: Tour Name
+       number: Tour Number
        organizers: Organizers
        footer:
             intro: Tour Organizer:
