@@ -270,11 +270,14 @@ class PassengerController extends Controller
         $form = $this->createCreateForm($entity, $tourId);
         $date_format = $this->container->getParameter('date_format');
         $locale = $this->container->getParameter('locale');
+        $em = $this->getDoctrine()->getManager();
+        $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
 
         return $this->render('PassengerBundle:Passenger:new.html.twig', array(
             'entity' => $entity,
             'locale' => $locale,
             'date_format' => $date_format,
+            'tour' => $tour,
             'tourId' => $tourId,
             'form' => $form->createView(),
         ));

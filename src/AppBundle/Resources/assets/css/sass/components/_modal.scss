@@ -175,10 +175,99 @@
 }
 
 .signup-form {
-  width: 80%;
-  margin: 0 auto;
-  position: relative;
-  display: block;
+  width: 100%;
+
+  @include breakpoint_tablet() {
+
+    width: 55%;
+    margin: 0 auto;
+    position: relative;
+    display: block;
+  }
+
+  .form-header {
+    background: #F5F5F5;
+    margin-bottom: 20px;
+    padding: 10px;
+
+    @include breakpoint_tablet() {
+      padding: 0;
+      background: #F5F5F5;
+      margin-bottom: 20px;
+    }
+
+      .tour-image-wrapper {
+      width: 100%;
+      display: block;
+
+      @include breakpoint_tablet() {
+
+        width: 45%;
+        display: inline-flex;
+        position: relative;
+      }
+
+      .tour-image {
+        display: block;
+        position: relative;
+        margin: 20px auto;
+        max-width: 300px;
+        max-height: 300px;
+
+        @include breakpoint_tablet() {
+
+          margin-top: 20px;
+          margin-bottom: 20px;
+          margin-left: 20px;
+          max-width: 200px;
+          max-height: 200px;
+
+        }
+      }
+
+    }
+
+    .tour-copy {
+      width: 100%;
+      display: block;
+      text-align: center;
+
+      @include breakpoint_tablet() {
+        display: inline-block;
+        margin-left: 20px;
+        width: 45%;
+        text-align: left;
+      }
+
+      .tour-title {
+        width: 100%;
+        font-size: 25px;
+        position: relative;
+
+        @include breakpoint_tablet() {
+
+          font-size: 23px;
+          position: relative;
+          width: 75%;
+        }
+      }
+
+      .tour-dates {
+         margin-bottom: 20px;
+         font-size: 16px;
+      }
+
+      .tour-price {
+        font-size: 25px;
+        font-weight: 500;
+        margin-bottom: 20px;
+
+        .price-copy {
+          font-size: 16px;
+        }
+      }
+    }
+  }
 
   .passenger-form {
     margin-bottom: 20px;
