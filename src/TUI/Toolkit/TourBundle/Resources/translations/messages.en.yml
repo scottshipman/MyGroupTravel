@@ -31,7 +31,7 @@ tour:
             show:
                 id: Id
                 name: Name
-                value: Value
+                value: Amount Due
                 duedate: Due Date
                 paiddate: Paid Date
                 type: Type
@@ -102,8 +102,11 @@ tour:
        name: Tour Name
        number: Tour Number
        organizers: Organizers
+       number: Tour Number
+       schedule: Passenger Payment Schedule
        footer:
-            intro: Tour Organizer:
+            intro: Business Administrator Contact:
+            intro_org: Your Contact:
             price: Price per person:
 
     contact_organizer:
