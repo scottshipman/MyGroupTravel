@@ -478,7 +478,6 @@ $(document).ready(function() {
         $("#signup-progress").progressbar({
            value: 1
         });
-        console.log(signupPercent);
     $("#signup-progress > .ui-progressbar-value").animate({
         width: signupPercent + "%"
     }, 1500).html('<p style="margin: -2px 0 1em; font-size: 15px;"class="mdl-color-text--primary-contrast">' + Math.round(signupPercent) + "% Completed" + '</p>').css({"background": "{{ brand.primaryColor }}"});
