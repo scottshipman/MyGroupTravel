@@ -64,6 +64,6 @@
                 <i class="fa fa-pencil-square-o"></i> {% trans %}institution.actions.edit{% endtrans %}
             </a>
         </li>
-        <li>{{ form(delete_form) }}</li>
+        <li onclick="return confirm('{% trans %}institution.actions.confirm{% endtrans %}')">{{ form(delete_form) }}</li>
     </ul>
 {% endblock %}
