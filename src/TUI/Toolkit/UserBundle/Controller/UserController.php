@@ -1224,8 +1224,8 @@ class UserController extends Controller
     public function getQuotesAction($id)
     {
         $locale = $this->container->getParameter('locale');
-        switch ($locale) {
-            case 'en_GB.utf8':
+        switch (true) {
+            case strstr($locale, 'en_GB'):
                 $format = 'd-m-Y';
                 break;
             default:
@@ -1244,10 +1244,9 @@ class UserController extends Controller
                 ->select('qv', 'q')
                 ->from('QuoteBundle:QuoteVersion', 'qv')
                 ->leftJoin('qv.quoteReference', 'q', 'WITH', 'q.id = qv.quoteReference')
-                ->where('q.salesAgent = ?1')
-                ->orWhere('q.secondaryContact = ?2')
+                ->where('q.salesAgent = ?1 OR q.secondaryContact = ?2')
                 ->AndWhere('qv.converted = false')
-                ->AndWhere('qv.expiryDate < ?3')
+                ->AndWhere('qv.expiryDate > ?3 OR qv.expiryDate is null')
                 ->AndWhere('q.converted = false')
                 ->AndWhere('qv.isTemplate = false');
             $qb->setParameter(1, $id);
