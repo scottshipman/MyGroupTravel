@@ -66,7 +66,7 @@ class TourSiteController extends Controller
     $brand = $em->getRepository('BrandBundle:Brand')->findAll();
     $brand = $brand[0];
 
-    if ($securityContext->isGranted('ROLE_BRAND') || in_array('organizer', $permission)){
+    if ($securityContext->isGranted('ROLE_BRAND') || in_array('organizer', $permission) || in_array('assistant', $permission)){
       $editable = TRUE;
     }
     // get the content blocks to send to twig
