@@ -64,6 +64,6 @@
                 <i class="fa fa-pencil-square-o"></i> {% trans %}institution.actions.edit{% endtrans %}
             </a>
         </li>
-        <li>{{ form(delete_form) }}</li>
+        <li onclick="return confirm('Are you sure? This action cannot be undone.')">{{ form(delete_form) }}</li>
     </ul>
 {% endblock %}
