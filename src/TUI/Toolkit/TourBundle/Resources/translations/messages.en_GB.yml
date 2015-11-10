@@ -11,6 +11,8 @@ tour:
         site_view: Site View
         back_list: Back to List
         back_dashboard: Back to Dashboard
+        new_tour: New Tour
+        back: Back
 
     page_title:
         edit: Edit Tour
