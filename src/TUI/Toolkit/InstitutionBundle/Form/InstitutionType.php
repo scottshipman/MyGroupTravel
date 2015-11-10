@@ -25,8 +25,8 @@ class InstitutionType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-      switch ($this->locale){
-        case 'en_GB.utf8':
+      switch (true){
+        case strstr($this->locale, 'en_GB'):
           $regional_label = 'institution.form.label.county';
           $regional_field = 'county';
           $zip_label = "Post code";

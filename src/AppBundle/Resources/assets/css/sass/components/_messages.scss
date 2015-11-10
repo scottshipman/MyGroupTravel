@@ -64,12 +64,12 @@
   animation-fill-mode: forwards;
 }
 
-.snackclose:checked ~ .snackbar,
-.snackclose:checked,
-.snackclose:checked + label {
-  animation-name: snackbar-hide;
-  animation-delay:0s;
-}
+//.snackclose:checked ~ .snackbar,
+//.snackclose:checked,
+//.snackclose:checked + label {
+//  animation-name: snackbar-hide;
+//  animation-delay:0s;
+//}
 
 @keyframes snackbar-show {
   0%{ top:-48px; }
@@ -97,4 +97,5 @@
   top: 14px;
   line-height: inherit;
   font-style: normal;
+  z-index: 1
 }

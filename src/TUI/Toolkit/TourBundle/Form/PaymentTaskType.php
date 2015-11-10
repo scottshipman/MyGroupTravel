@@ -23,8 +23,8 @@ class PaymentTaskType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-      switch ($this->locale) {
-        case 'en_GB.utf8':
+      switch (true) {
+        case strstr($this->locale, 'en_GB'):
           $date_label = '(DD-MM-YYYY)';
           $date_format = 'dd-MM-yyyy';
           break;

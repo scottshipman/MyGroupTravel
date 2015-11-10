@@ -144,4 +144,11 @@
         }
     });
 
+    // close flash messages
+    $( document ).on('click', '.snackclose', function() {
+        console.log('close messages');
+        //$('.snack-wrap').css('display', 'none');
+        $('.snack-wrap').fadeOut('slow', 'linear');
+    });
+
 })(jQuery);

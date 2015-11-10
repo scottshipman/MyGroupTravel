@@ -26,8 +26,8 @@ class TourType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-      switch ($this->locale) {
-        case 'en_GB.utf8':
+      switch (true) {
+        case strstr($this->locale, 'en_GB'):
           $date_label = '(DD-MM-YYYY)';
           $date_format = 'dd-MM-yyyy';
           break;
@@ -54,8 +54,9 @@ class TourType extends AbstractType
             },
           ))
           ->add('quoteNumber')
-          ->add('version', 'text', array(
+          ->add('tourNumber', 'text', array(
             'read_only'  => true,
+            'label' => 'tour.form.tour.tour_number',
           ))
           ->add('currency', 'entity', array(
             'required' => false,

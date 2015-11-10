@@ -3,7 +3,13 @@
 {% set title_label = 'Edit' %}
 
 {% block title %}{{ title_label }} {% trans %}tour.title.show{% endtrans %} {{ entity.name }}{% endblock %}
-{% block page_title %}{{ title_label }} {% trans %}tour.title.show{% endtrans %} {{ entity.name }}{% endblock %}
+{% block page_title %}{{ title_label }}
+    {% if entity.isComplete == false and entity.setupComplete == false %}
+        {% trans %}tour.title.new_tour{% endtrans %}
+    {% else %}
+        {% trans %}tour.title.show{% endtrans %} {{ entity.name }}
+    {% endif %}
+{% endblock %}
 
 {% block body -%}
     {{ form_start(edit_form) }}
@@ -14,7 +20,7 @@
             {{ form_row(edit_form.tripStatus) }}
             {{ form_row(edit_form.name) }}
             {{ form_row(edit_form.quoteNumber) }}
-            {{ form_row(edit_form.version) }}
+            {{ form_row(edit_form.tourNumber) }}
             {{ form_row(edit_form.expiryDate) }}
             {{ form_row(edit_form.institution) }}
             {{ form_row(edit_form.organizer) }}
