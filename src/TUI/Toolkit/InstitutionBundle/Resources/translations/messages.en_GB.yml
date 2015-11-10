@@ -21,6 +21,7 @@ institution:
           create: Create
           delete: Delete
           create_new: Create a New Institution
+          confirm: Are you sure? This action cannot be undone.
 
 
 
@@ -30,7 +31,7 @@ institution:
               action: Actions
               address1: Address 1
               address2: Address 2
-              city: Town
+              city: City
               county: County
               state: State
               postcode: Postcode
