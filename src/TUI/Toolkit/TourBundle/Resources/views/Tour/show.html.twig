@@ -141,32 +141,69 @@
 
 
 {% block footer_left %}
-    {% if entity.salesAgent %}
-        <span class="intro">
-            {% if app.user.email == entity.organizer.email %}
-                {% trans %}tour.show.footer.intro_org{% endtrans %}
+    {% if editable==true %}
+        {% if entity.salesAgent %}
+            <span class="intro">
+                {% if app.user.email == entity.organizer.email %}
+                    {% trans %}tour.show.footer.intro_org{% endtrans %}
+                {% else %}
+                    {% trans %}tour.show.footer.intro{% endtrans %}
+                {% endif %}
+            </span>
+            {% if entity.salesAgent.media %}
+                <span class="tui-image-avatar"><img src="{{ asset( entity.salesAgent.media.getRelativePath ~ "/" ~ entity.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.salesAgent.username }}"></span>
+            {% elseif entity.salesAgent.firstName and entity.salesAgent.lastName %}
+                <span class="tui-text-avatar mdl-typography--headline">{{ entity.salesAgent.firstName[:1] }}{{ entity.salesAgent.lastName[:1] }}</span>
             {% else %}
-                {% trans %}tour.show.footer.intro{% endtrans %}
+                <span class="tui-text-avatar mdl-typography--headline">{{ entity.salesAgent.username[:1] }}</span>
             {% endif %}
-        </span>
-        {% if entity.salesAgent.media %}
-            <span class="tui-image-avatar"><img src="{{ asset( entity.salesAgent.media.getRelativePath ~ "/" ~ entity.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.salesAgent.username }}"></span>
-        {% elseif entity.salesAgent.firstName and entity.salesAgent.lastName %}
-            <span class="tui-text-avatar mdl-typography--headline">{{ entity.salesAgent.firstName[:1] }}{{ entity.salesAgent.lastName[:1] }}</span>
-        {% else %}
-            <span class="tui-text-avatar mdl-typography--headline">{{ entity.salesAgent.username[:1] }}</span>
+            <span class="agent">
+                {% if entity.salesAgent.displayName %}
+                    {{ entity.salesAgent.displayName }}
+                {% else %}
+                    {{ entity.salesAgent.firstName }} {{ entity.salesAgent.lastName }}
+                {% endif %}
+                <br>
+                <a href="mailto:{{ entity.salesAgent.email }}">{{ entity.salesAgent.email }}</a>
+            </span>
         {% endif %}
-        <span class="agent">
-            {% if entity.salesAgent.displayName %}
-                {{ entity.salesAgent.displayName }}
+    {% else %}
+        {% if entity.organizer %}
+            <span class="intro">
+                {% if app.user.email == entity.organizer.email %}
+                    {% trans %}tour.show.footer.intro_org{% endtrans %}
+                {% else %}
+                    {% trans %}tour.show.footer.intro{% endtrans %}
+                {% endif %}
+            </span>
+            {% if entity.organizer.media %}
+                <span class="tui-image-avatar"><img src="{{ asset( entity.organizer.media.getRelativePath ~ "/" ~ entity.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.organizer.username }}"></span>
+            {% elseif entity.organizer.firstName and entity.organizer.lastName %}
+                <span class="tui-text-avatar mdl-typography--headline">{{ entity.organizer.firstName[:1] }}{{ entity.organizer.lastName[:1] }}</span>
             {% else %}
-                {{ entity.salesAgent.firstName }} {{ entity.salesAgent.lastName }}
+                <span class="tui-text-avatar mdl-typography--headline">{{ entity.organizer.username[:1] }}</span>
             {% endif %}
-            <br>
-            <a href="mailto:{{ entity.salesAgent.email }}">{{ entity.salesAgent.email }}</a></span>
+            <span class="agent">
+                {% if entity.organizer.displayName %}
+                    {{ entity.organizer.displayName }}
+                {% else %}
+                    {{ entity.organizer.firstName }} {{ entity.organizer.lastName }}
+                {% endif %}
+                <br>
+                <a href="mailto:{{ entity.organizer.email }}">{{ entity.organizer.email }}</a>
+            </span>
+        {% endif %}
     {% endif %}
 {% endblock %}
 
 {% block footer_right %}
-    <div class="quote-info"><span class="quote-label">{% trans %}tour.show.footer.price{% endtrans %}</span><span class="quote-price">{% if entity.pricePerson %}<strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong>{% endif %}</span></div>
+    <div class="quote-info">
+        <span class="quote-label">{% trans %}tour.show.footer.price{% endtrans %}</span>
+
+        <span class="quote-price">
+            {% if entity.pricePerson %}
+                <strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePersonPublic }}</strong>
+            {% endif %}
+        </span>
+    </div>
 {% endblock %}
