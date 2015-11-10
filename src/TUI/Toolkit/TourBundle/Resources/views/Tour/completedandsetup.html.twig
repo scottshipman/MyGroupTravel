@@ -35,10 +35,12 @@
 {% set dtg  = date(entity.departureDate).diff(date("now")) %}
 {% if dtg.days < 1 %} {%  set dtgFinal = 0  %} {% else %} {% set dtgFinal = dtg.days %}{% endif %}
 
+{% set signup = waitlist + accepted %}{% if signup >= entity.payingPlaces %}{% set signupPercent = 100 %}{% elseif signup < entity.payingPlaces %}{% set signupPercent = (signup/entity.payingPlaces) * 100 %}{% endif %}
+
 {% if is_granted("ROLE_BRAND") or app.user.email == entity.organizer.email %}
 
 {#Status Bar, only the organizer for the specific tour or brand users can view the dashboard#}
-    {#{{ dump(entity) }}#}
+    {{ dump(signupPercent) }}
     <div class="tour-edit mdl-card mdl-shadow--2dp">
         <div class="mdl-card__title">
             <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.status{% endtrans %}</h3>
@@ -101,6 +103,7 @@
                 <span class="tour-dashboard-cta"><i class="fa fa-arrow-right"></i></span>
             </div>
         </a>
+        <div id="signup-progress" class="progress-bar"></div>
         <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
             <ul>
                 <li>
@@ -465,12 +468,25 @@
 
 //Percentage Bars
 $(document).ready(function() {
-    var passPercent = {% if passPercent is defined %}{{ passPercent }}{% endif %};
-    var medPercent = {% if medPercent is defined %}{{ medPercent }}{% endif %};
-    var dietPercent = {% if dietPercent is defined %}{{ dietPercent }}{% endif %};
-    var passengerPercent = {% if passengerPercent is defined %}{{ passengerPercent }}{% endif %};
+    var passPercent = {% if passPercent is defined %}{{ passPercent }}{% else %}""{% endif %};
+    var medPercent = {% if medPercent is defined %}{{ medPercent }}{% else %}""{% endif %};
+    var dietPercent = {% if dietPercent is defined %}{{ dietPercent }}{% else %}""{% endif %};
+    var passengerPercent = {% if passengerPercent is defined %}{{ passengerPercent }}{% else %}""{% endif %};
+    var signupPercent = {% if signupPercent is defined %}{{ signupPercent }}{% else %}""{% endif %};
 
-    //Passport Data percentage
+    //Passenger Sign Up Percentage
+    $(function() {
+        $("#signup-progress").progressbar({
+           value: 1
+        });
+        console.log(signupPercent);
+    $("#signup-progress > .ui-progressbar-value").animate({
+        width: signupPercent + "%"
+    }, 1500).html('<p style="margin: -2px 0 1em; font-size: 15px;"class="mdl-color-text--primary-contrast">' + Math.round(signupPercent) + "% Completed" + '</p>').css({"background": "{{ brand.primaryColor }}"});
+
+    });
+
+        //Passport Data percentage
     $(function() {
         $("#passport-progress").progressbar({
             value: 1
