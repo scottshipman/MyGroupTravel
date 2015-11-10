@@ -22,10 +22,10 @@ class QuoteChangeRequestType extends AbstractType
         $builder
             ->add('changes', 'choice', array(
                 'choices' => array(
-                  'quote.form.changes.choices.numbers' => 'quote.form.changes.choices.numbers',
-                  'quote.form.changes.choices.reduce_price' => 'quote.form.changes.choices.reduce_price',
-                  'quote.form.changes.choices.dates' => 'quote.form.changes.choices.dates',
-                  'quote.form.changes.choices.destination' => 'quote.form.changes.choices.destination'
+                  'Our numbers have changed' => 'quote.form.changes.choices.numbers',
+                  'Need advice on how to reduce price' => 'quote.form.changes.choices.reduce_price',
+                  'Can we look at different dates?' => 'quote.form.changes.choices.dates',
+                  'Where else do you recommend?' => 'quote.form.changes.choices.destination'
                 ),
                 'multiple' => true,
                 'expanded' => true,
