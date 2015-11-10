@@ -62,7 +62,7 @@ class TourController extends Controller
             'salesAgent.email',
             'destination',
             'created',
-            'version',
+            'tourNumber',
             'id',
             'duration',
             'displayName',
@@ -224,7 +224,7 @@ class TourController extends Controller
           'salesAgent.email',
           'destination',
           'created',
-          'version',
+          'tourNumber',
           'id',
           'duration',
           'displayName',
@@ -755,7 +755,13 @@ class TourController extends Controller
             $em->flush();
             $permission = $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
             $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tour.flash.save') . $entity->getName());
-            return $this->redirect($this->generateUrl('manage_tour'));
+            if ( $entity->getSetupComplete() == false and $entity->getIsComplete() == false) {
+
+                return $this->redirect($this->generateUrl('tour_site_show', array('id' => $entity->getId(), 'quoteNumber' => $entity->getQuoteNumber())));
+
+            }else {
+                return $this->redirect($this->generateUrl('manage_tour'));
+            }
         }
 
         return $this->render('TourBundle:Tour:edit.html.twig', array(
@@ -1116,6 +1122,24 @@ class TourController extends Controller
         $setupForm = $this->createTourSetupForm($entity);
 
         return $this->render('TourBundle:Tour:notSetup.html.twig', array(
+            'entity' => $entity,
+            'setup_form' => $setupForm->createView(),
+            'date_format' => $date_format,
+            'locale' => $locale,
+        ));
+
+    }
+
+
+    public function getEditPaymentsAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('TourBundle:Tour')->find($id);
+        $date_format = $this->container->getParameter('date_format');
+        $locale = $this->container->getParameter('locale');
+        $setupForm = $this->createTourSetupForm($entity);
+
+        return $this->render('TourBundle:Tour:editPayments.html.twig', array(
             'entity' => $entity,
             'setup_form' => $setupForm->createView(),
             'date_format' => $date_format,

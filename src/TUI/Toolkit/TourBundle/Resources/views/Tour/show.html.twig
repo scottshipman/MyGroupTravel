@@ -31,7 +31,7 @@
     {% if is_granted("ROLE_BRAND") %}
         <a class="back-link" href="{{ path('manage_tour') }}"><i class="fa fa-arrow-left"></i> {% trans %}tour.title.back_list{% endtrans %}</a>
     {% else %}
-        <a class="back-link" href="/"><i class="fa fa-arrow-left"></i> {% trans %}tour.title.back_dashboard{% endtrans %}</a>
+        <a class="back-link" href="/"><i class="fa fa-arrow-left"></i> {% trans %}tour.title.back{% endtrans %}</a>
     {% endif %}
 {% endblock %}
 
@@ -44,6 +44,10 @@
             <li><strong>{% trans %}tour.show.summary{% endtrans %}</strong></li>
             <hr>
             <li><label>{% trans %}tour.show.institution{% endtrans %}</label><br><strong>{{ entity.institution.name }}</strong></li>
+            <hr>
+            <li><label>{% trans %}tour.show.name{% endtrans %}</label><br><strong>{{ entity.name}}</strong></li>
+            <hr>
+            <li><label>{% trans %}tour.show.number{% endtrans %}</label><br><strong>{{ entity.tourNumber}}</strong></li>
             <hr>
             <li><label>{% trans %}tour.show.departure{% endtrans %}</label><br><strong>{{ entity.departureDate|date(format) }}</strong></li>
             <hr>

@@ -54,8 +54,9 @@ class TourType extends AbstractType
             },
           ))
           ->add('quoteNumber')
-          ->add('version', 'text', array(
+          ->add('tourNumber', 'text', array(
             'read_only'  => true,
+            'label' => 'tour.form.tour.tour_number',
           ))
           ->add('currency', 'entity', array(
             'required' => false,
