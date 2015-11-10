@@ -15,6 +15,10 @@
         {% if entity.headerBlock %}
             <img src="{{ asset( entity.headerBlock.mediaWrapper[0].media[0].getRelativePath ~ "/" ~ entity.headerBlock.mediaWrapper[0].media[0].getHashedFilename ) | imagine_filter('modalImage')}}"/>
         {% endif %}
-        {{ form(change_request_form) }}
+        {{ form_start(change_request_form) }}
+        {{ form_widget(change_request_form.changes) }}
+        {{ form_widget(change_request_form.additional) }}
+        <div style="clear: both"></div>
+        {{ form_rest(change_request_form) }}
     </div>
 {% endblock %}

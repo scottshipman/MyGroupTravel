@@ -87,7 +87,9 @@
     margin-bottom: 5px;
   }
 
-  #tui_toolkit_quotebundle_quotechangerequest {
+  #tui_toolkit_quotebundle_quotechangerequest,
+  #tui_toolkit_quotebundle_quoteaccept,
+  {
 
     div:nth-child(1) {
       width: 51%;
@@ -111,7 +113,8 @@
 
     }
 
-    #tui_toolkit_quotebundle_quotechangerequest_submit {
+    #tui_toolkit_quotebundle_quotechangerequest_submit,
+    #tui_toolkit_quotebundle_quoteaccept_submit {
       float: left;
     }
 
