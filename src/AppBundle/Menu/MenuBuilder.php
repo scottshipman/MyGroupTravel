@@ -21,7 +21,7 @@ class MenuBuilder
     $this->factory = $factory;
   }
 
-  public function createAdminMenu(RequestStack $requestStack)
+  public function createAdminMenu(array $options)
   {
     $menu = $this->factory->createItem('root');
 
@@ -46,29 +46,32 @@ class MenuBuilder
     $menu->addChild('Company')
           ->setAttribute('dropdown', true)
           ->setLabelAttribute('class', 'mdl-navigation__link');
-    $menu['Company']->addChild('Brands', array('route' => '_manage_brand'))
-          ->setLinkAttribute('class', 'mdl-navigation__link');
-    $menu['Company']->addChild('Terms of Service', array('route' => '_manage_brand_terms'))
-          ->setLinkAttribute('class', 'mdl-navigation__link');
     $menu['Company']->addChild('Institutions', array('route' => 'manage_institution'))
           ->setLinkAttribute('class', 'mdl-navigation__link');
 
-    $menu->addChild('Tools')
-          ->setAttribute('dropdown', true)
-          ->setLabelAttribute('class', 'mdl-navigation__link');
-    /* $menu['Tools']->addChild('Content Blocks', array('route' => 'manage_contentblocks'))
-          ->setLinkAttribute('class', 'mdl-navigation__link'); */
-    $menu['Tools']->addChild('Currency', array('route' => 'manage_currency'))
+    if (isset($options['admin']) && $options['admin'] == TRUE) {
+
+      $menu['Company']->addChild('Brands', array('route' => '_manage_brand'))
           ->setLinkAttribute('class', 'mdl-navigation__link');
-    $menu['Tools']->addChild('Board Basis', array('route' => '_manage_boardbasis'))
-          ->setLinkAttribute('class', 'mdl-navigation__link');
-    $menu['Tools']->addChild('Transport Type', array('route' => 'manage_transport'))
-          ->setLinkAttribute('class', 'mdl-navigation__link');
-    $menu['Tools']->addChild('Layout Types', array('route' => 'manage_layouttype'))
-          ->setLinkAttribute('class', 'mdl-navigation__link');
-    $menu['Tools']->addChild('Trip Status', array('route' => 'manage_tripstatus'))
+      $menu['Company']->addChild('Terms of Service', array('route' => '_manage_brand_terms'))
           ->setLinkAttribute('class', 'mdl-navigation__link');
 
+      $menu->addChild('Tools')
+          ->setAttribute('dropdown', TRUE)
+          ->setLabelAttribute('class', 'mdl-navigation__link');
+      /* $menu['Tools']->addChild('Content Blocks', array('route' => 'manage_contentblocks'))
+            ->setLinkAttribute('class', 'mdl-navigation__link'); */
+      $menu['Tools']->addChild('Currency', array('route' => 'manage_currency'))
+          ->setLinkAttribute('class', 'mdl-navigation__link');
+      $menu['Tools']->addChild('Board Basis', array('route' => '_manage_boardbasis'))
+          ->setLinkAttribute('class', 'mdl-navigation__link');
+      $menu['Tools']->addChild('Transport Type', array('route' => 'manage_transport'))
+          ->setLinkAttribute('class', 'mdl-navigation__link');
+      $menu['Tools']->addChild('Layout Types', array('route' => 'manage_layouttype'))
+          ->setLinkAttribute('class', 'mdl-navigation__link');
+      $menu['Tools']->addChild('Trip Status', array('route' => 'manage_tripstatus'))
+          ->setLinkAttribute('class', 'mdl-navigation__link');
+    }
     // ... add more children
 
     return $menu;
