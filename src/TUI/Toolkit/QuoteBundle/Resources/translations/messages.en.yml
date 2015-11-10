@@ -44,6 +44,7 @@ quote:
         add_tab: Add New Tab
         is_locked: This quote is locked
         save: Save Quote
+        confirm: Are you sure? This action cannot be undone.
 
 
     table:
