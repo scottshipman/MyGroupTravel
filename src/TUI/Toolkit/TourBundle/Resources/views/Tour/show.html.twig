@@ -42,12 +42,12 @@
     <div class="tour-show-left-column">
         <ul class="tour-show-submenu">
             <li><strong>{% trans %}tour.show.summary{% endtrans %}</strong></li>
-            <li><label>{% trans %}tour.show.institution{% endtrans %}</label><br><strong>{{ entity.institution.name }}</strong></li>
-            <li><label>{% trans %}tour.show.name{% endtrans %}</label><br><strong>{{ entity.name}}</strong></li>
-            <li><label>{% trans %}tour.show.number{% endtrans %}</label><br><strong>{{ entity.tourNumber}}</strong></li>
-            <li><label>{% trans %}tour.show.departure{% endtrans %}</label><br><strong>{{ entity.departureDate|date(format) }}</strong></li>
-            <li><label>{% trans %}tour.show.passengers{% endtrans %}</label><br><strong>{{ entity.payingPlaces }} paying passengers {% if entity.freePlaces > 0 %} and {{ entity.freePlaces }} free passengers{% endif %}</strong></li>
-            <li><label>{% trans %}tour.show.price{% endtrans %}</label><br><strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong></li>
+            <li><label>{% trans %}tour.show.institution{% endtrans %}</label><strong>{{ entity.institution.name }}</strong></li>
+            <li><label>{% trans %}tour.show.name{% endtrans %}</label><strong>{{ entity.name}}</strong></li>
+            <li><label>{% trans %}tour.show.number{% endtrans %}</label><strong>{{ entity.tourNumber}}</strong></li>
+            <li><label>{% trans %}tour.show.departure{% endtrans %}</label><strong>{{ entity.departureDate|date(format) }}</strong></li>
+            <li><label>{% trans %}tour.show.passengers{% endtrans %}</label><strong>{{ entity.payingPlaces }} paying passengers {% if entity.freePlaces > 0 %} and {{ entity.freePlaces }} free passengers{% endif %}</strong></li>
+            <li><label>{% trans %}tour.show.price{% endtrans %}</label><strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong></li>
             <li>
                 <label>{% trans %}tour.show.schedule{% endtrans %}</label>
                 {% for payment in passenger_payment_tasks %}
@@ -141,29 +141,29 @@
 
 
 {% block footer_left %}
-    {% if entity.organizer %}
+    {% if entity.salesAgent %}
         <span class="intro">
             {% if app.user.email == entity.organizer.email %}
-                {% trans %}tour.show.footer.intro_self{% endtrans %}
+                {% trans %}tour.show.footer.intro_org{% endtrans %}
             {% else %}
                 {% trans %}tour.show.footer.intro{% endtrans %}
             {% endif %}
         </span>
-        {% if entity.organizer.media %}
-            <span class="tui-image-avatar"><img src="{{ asset( entity.organizer.media.getRelativePath ~ "/" ~ entity.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.organizer.username }}"></span>
-        {% elseif entity.organizer.firstName and entity.organizer.lastName %}
-            <span class="tui-text-avatar mdl-typography--headline">{{ entity.organizer.firstName[:1] }}{{ entity.organizer.lastName[:1] }}</span>
+        {% if entity.salesAgent.media %}
+            <span class="tui-image-avatar"><img src="{{ asset( entity.salesAgent.media.getRelativePath ~ "/" ~ entity.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.salesAgent.username }}"></span>
+        {% elseif entity.salesAgent.firstName and entity.salesAgent.lastName %}
+            <span class="tui-text-avatar mdl-typography--headline">{{ entity.salesAgent.firstName[:1] }}{{ entity.salesAgent.lastName[:1] }}</span>
         {% else %}
-            <span class="tui-text-avatar mdl-typography--headline">{{ entity.organizer.username[:1] }}</span>
+            <span class="tui-text-avatar mdl-typography--headline">{{ entity.salesAgent.username[:1] }}</span>
         {% endif %}
         <span class="agent">
-            {% if entity.organizer.displayName %}
-                {{ entity.organizer.displayName }}
+            {% if entity.salesAgent.displayName %}
+                {{ entity.salesAgent.displayName }}
             {% else %}
-                {{ entity.organizer.firstName }} {{ entity.organizer.lastName }}
+                {{ entity.salesAgent.firstName }} {{ entity.salesAgent.lastName }}
             {% endif %}
             <br>
-            <a href="mailto:{{ entity.organizer.email }}">{{ entity.organizer.email }}</a></span>
+            <a href="mailto:{{ entity.salesAgent.email }}">{{ entity.salesAgent.email }}</a></span>
     {% endif %}
 {% endblock %}
 

@@ -319,11 +319,15 @@
 
 {% block footer_left %}
     {% if entity.quoteReference.salesAgent %}
-        <span class="intro">{% trans %}tour.site_show.footer.intro{% endtrans %}</span>
+        <span class="intro">
+            {% if app.user.email == entity.quoteReference.organizer.email %}
+                {% trans %}tour.show.footer.intro_org{% endtrans %}
+            {% else %}
+                {% trans %}tour.show.footer.intro{% endtrans %}
+            {% endif %}
+        </span>
         {% if entity.quoteReference.salesAgent.media %}
-            <span class="tui-image-avatar"><img
-                        src="{{ asset( entity.quoteReference.salesAgent.media.getRelativePath ~ "/" ~ entity.quoteReference.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}"
-                        alt="{{ entity.quoteReference.salesAgent.username }}"></span>
+            <span class="tui-image-avatar"><img src="{{ asset( entity.quoteReference.salesAgent.media.getRelativePath ~ "/" ~ entity.quoteReference.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.quoteReference.salesAgent.username }}"></span>
         {% elseif entity.quoteReference.salesAgent.firstName and entity.quoteReference.salesAgent.lastName %}
             <span class="tui-text-avatar mdl-typography--headline">{{ entity.quoteReference.salesAgent.firstName[:1] }}{{ entity.quoteReference.salesAgent.lastName[:1] }}</span>
         {% else %}
