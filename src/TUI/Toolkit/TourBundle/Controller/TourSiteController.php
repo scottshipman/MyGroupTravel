@@ -220,6 +220,18 @@ class TourSiteController extends Controller
         throw $this->createNotFoundException('Unable to find Tour entity for PDF.');
       }
 
+      // if no quoteNumber supplied in URL, then prompt for quoteNumber first
+      $securityContext = $this->get('security.context');
+      $user = $securityContext->getToken()->getUser();
+      if($user !='anon.') {
+        $permission = $this->get("permission.set_permission")
+          ->getPermission($id, 'tour', $user->getId());
+      }
+
+      if ($securityContext->isGranted('ROLE_BRAND') || in_array('organizer', $permission) || in_array('assistant', $permission)){
+        $editable = TRUE;
+      }
+
 
         // get the content blocks to send to twig
         $items=array(); $tabs=array();
@@ -262,6 +274,7 @@ class TourSiteController extends Controller
         'header' => $headerBlock,
         'editable' =>  $editable,
         'path' => $path,
+        'editable' => $editable
       );
 
       $html = $this->renderView( 'TourBundle:TourSite:sitePDF.html.twig', $data );
