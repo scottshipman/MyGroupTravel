@@ -65,13 +65,13 @@
             {% for flashMessage in app.session.flashbag.get('notice') %}
                 <div class="flash-message flash-message-notice snackbar animated">
                     <strong>Notice: </strong>{{ flashMessage }}
-                    <i class="fa fa-times-circle flash-close"> close</i>
+                    <span class="flash-close"><i class="fa fa-times-circle"></i> close</span>
                 </div>
             {% endfor %}
             {% for flashMessage in app.session.flashbag.get('error') %}
                 <div class="flash-message flash-message-error snackbar animated">
                     <strong>Error: </strong>{{ flashMessage }}
-                    <i class="fa fa-times-circle flash-close"> close</i>
+                    <span class="flash-close"><i class="fa fa-times-circle"></i> close</span>
                 </div>
             {% endfor %}
         </div>
