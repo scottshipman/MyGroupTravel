@@ -46,3 +46,7 @@ passenger:
         welcome: Welcome to the passenger dashboard.  Here you can invite, add, and manage all of your passengers.
         invite: Invite Passengers
         add: Add Passenger
+
+    emails:
+        thank_you: Thank you for your submission
+        notifications: You have new notifications

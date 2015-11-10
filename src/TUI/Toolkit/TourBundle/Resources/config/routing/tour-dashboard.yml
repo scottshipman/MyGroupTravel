@@ -29,3 +29,7 @@ manage_tour_setup_complete:
 manage_passenger_dashboard:
     path: /{tourId}/passengers
     defaults: { _controller: "PassengerBundle:Passenger:getPassengerDashboard" }
+
+manage_tour_edit_payments:
+    path: /edit/payments/{id}
+    defaults: { _controller: "TourBundle:Tour:getEditPayments" }
