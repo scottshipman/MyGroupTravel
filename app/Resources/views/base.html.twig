@@ -61,17 +61,16 @@
 
         <div class="flash-messages snack-wrap">
             <input type="checkbox" class="snackclose animated" id="close">
-            <label id="flash-label" class="snacklable animated" for="close"></label>
             {% for flashMessage in app.session.flashbag.get('notice') %}
                 <div class="flash-message flash-message-notice snackbar animated">
                     <strong>Notice: </strong>{{ flashMessage }}
-                    <span class="flash-close"><i class="fa fa-times-circle"></i> close</span>
+                    <label class="flash-close" for="close"><i class="fa fa-times-circle"></i> close</label>
                 </div>
             {% endfor %}
             {% for flashMessage in app.session.flashbag.get('error') %}
                 <div class="flash-message flash-message-error snackbar animated">
                     <strong>Error: </strong>{{ flashMessage }}
-                    <span class="flash-close"><i class="fa fa-times-circle"></i> close</span>
+                    <label class="flash-close" for="close"><i class="fa fa-times-circle"></i> close</label>
                 </div>
             {% endfor %}
         </div>
