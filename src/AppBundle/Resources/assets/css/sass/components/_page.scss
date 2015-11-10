@@ -15,12 +15,16 @@ html {
   .sizer {
     margin-left: auto;
     margin-right: auto;
-    width: $page_width;
-    max-width: $page_max_width;
+    width: $fluid_width;
+
+    @include breakpoint_desktop() {
+      width: $page_width;
+      max-width: $page_max_width;
+    }
 
     @include print() {
-      width: 100%;
-      max-width: 100%;
+      width: $fluid_width;
+      max-width: $fluid_width;
     }
 
   }
