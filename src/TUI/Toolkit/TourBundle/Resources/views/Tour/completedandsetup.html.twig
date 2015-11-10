@@ -40,7 +40,6 @@
 {% if is_granted("ROLE_BRAND") or app.user.email == entity.organizer.email %}
 
 {#Status Bar, only the organizer for the specific tour or brand users can view the dashboard#}
-    {{ dump(signupPercent) }}
     <div class="tour-edit mdl-card mdl-shadow--2dp">
         <div class="mdl-card__title">
             <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.status{% endtrans %}</h3>
