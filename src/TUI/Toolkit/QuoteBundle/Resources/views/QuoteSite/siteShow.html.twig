@@ -165,8 +165,10 @@
                     {% set activeTab = '' %}
                 {% endfor %}
 
-                {% if alternate or related %}
-                    <a id="tab-alternate-quotes" href="#tabs-drawer-alternate-quotes" class="site-content-blocks-tab mdl-tabs__tab {{ activeTab }}">{% trans %}quote.tabs.alternate{% endtrans %}</a>
+                {% if editable or not entity.hideAlt %}
+                    {% if alternate or related %}
+                        <a id="tab-alternate-quotes" href="#tabs-drawer-alternate-quotes" class="site-content-blocks-tab mdl-tabs__tab {{ activeTab }}">{% trans %}quote.tabs.alternate{% endtrans %}</a>
+                    {% endif %}
                 {% endif %}
 
                 {% if editable %}
@@ -196,7 +198,7 @@
                                             <i class="item-edit content-block-item-action fa fa-pencil-square-o" title="Edit" blockId="{{ items[item].id }}"></i>
                                             <i class="item-resize content-block-item-action fa fa-arrows-h {{ size }}" title="Resize" blockId="{{ items[item].id }}"></i>
                                             <i class="item-lock content-block-item-action fa {% if items[item].locked %}fa-unlock-alt{% else %}fa-lock{% endif %}" title="{% if items[item].locked %}Unlock{% else %}Lock{% endif %}" blockId="{{ items[item].id }}"></i>
-                                            <i class="item-delete content-block-item-action fa fa-trash-o" title="Delete" blockId = "{{ items[item].id }}"></i>
+                                            <i class="item-delete content-block-item-action fa fa-trash-o" title="Delete" blockId="{{ items[item].id }}"></i>
                                             {#
                                             {% if items[item].hidden %}
                                                 <i class="item-hide content-block-item-action fa fa-eye" title="Show"></i>
@@ -227,35 +229,41 @@
                 {% set activeTab = '' %}
             {% endfor %}
             {% if alternate or related %}
-                {% set quoteID = entity.quoteReference.id %}
-                <div id="tabs-drawer-alternate-quotes" class="mdl-tabs__panel content-blocks-drawer {{ activeTab }}">
-                    {% if alternate %}
-                        <div class="site-content-blocks site-content-blocks-item site-content-blocks-size-full">
-                            <div class="inner-wrapper">
-                                {% if editable %}
-                                    <div class="site-content-block-actions status-preview-edit">
-                                        <div class="edit-icons">
-                                            <i class="related-hide content-block-item-action fa fa-eye"></i>
-                                        </div>
-                                    </div>
-                                {% endif %}
-                                {{ render(controller('QuoteBundle:QuoteSite:getQuoteSiblings', {'id':  quoteID  })) }}
+                {% if editable or not entity.hideAlt %}
+                    {% set quoteID = entity.quoteReference.id %}
+                    <div id="tabs-drawer-alternate-quotes" class="mdl-tabs__panel content-blocks-drawer {{ activeTab }}">
+                        {% if editable %}
+                            <div class="site-content-block-actions status-preview-edit alt-tab-actions">
+                                <div class="edit-icons">
+                                    <i class="alt-hide content-block-item-action fa {% if entity.hideAlt %}fa-eye-slash{% else %}fa-eye{% endif %}" hide="{% if entity.hideAlt %}true{% else %}false{% endif %}" title="{% if entity.hideAlt %}Only visible to Brand Administrators{% else %}Visible to Everyone{% endif %}"></i>
+                                </div>
                             </div>
-                        </div>
-                    {% endif %}
-                    {% if related %}
-                        {{ render(controller('QuoteBundle:QuoteSite:getRelatedQuotes', {'id':  quoteID  })) }}
-                    {% endif %}
-                </div>
-                <script>
-                    $(document).ready(function() {
-                        $(".alt-quote").on('click', function(e){
-                            var ID = $(this).attr('quote');
-                            var quoteNumber = $(this).attr('quotenumber');
-                            window.location.href = '/quote/view/' + ID + '/' + quoteNumber
+                        {% endif %}
+                        {% if alternate %}
+                            <div class="site-content-blocks site-content-blocks-item site-content-blocks-size-full">
+                                <div class="inner-wrapper">
+                                    {{ render(controller('QuoteBundle:QuoteSite:getQuoteSiblings', {'id':  quoteID  })) }}
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if related %}
+                            <div class="site-content-blocks site-content-blocks-item site-content-blocks-size-full">
+                                <div class="inner-wrapper">
+                                    {{ render(controller('QuoteBundle:QuoteSite:getRelatedQuotes', {'id':  quoteID  })) }}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <script>
+                        $(document).ready(function() {
+                            $(".alt-quote").on('click', function(e){
+                                var ID = $(this).attr('quote');
+                                var quoteNumber = $(this).attr('quotenumber');
+                                window.location.href = '/quote/view/' + ID + '/' + quoteNumber
+                            });
                         });
-                    });
-                </script>
+                    </script>
+                {% endif %}
             {% endif %}
 
         </div>

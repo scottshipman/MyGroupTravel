@@ -429,6 +429,11 @@
 
   }
 
+  &.alt-tab-actions {
+    position: relative;
+    margin: 0 $column_gutter_width;
+  }
+
 }
 
 .move-cursor {

@@ -1497,6 +1497,34 @@ class QuoteVersionController extends Controller
     }
 
     /**
+     * Toggles hide/show on alternate quotes status on Quote entity.
+     *
+     */
+    public function hideAltAction(Request $request, $id)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $quoteVersion = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+
+        if (!$quoteVersion) {
+            throw $this->createNotFoundException('Unable to find Quote entity.');
+        }
+
+        if ($quoteVersion->getHideAlt() == false) {
+            $status = true;
+        } else {
+            $status = false;
+        }
+        $quoteVersion->setHideAlt($status);
+        $em->persist($quoteVersion);
+        $em->flush();
+
+        return new Response(json_encode((array)$quoteVersion));
+
+    }
+
+    /**
      * Toggles lock status Quote entity without ajax.
      *
      */
