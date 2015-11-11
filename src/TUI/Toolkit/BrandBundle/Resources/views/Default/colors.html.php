@@ -202,6 +202,7 @@ a {
 
 .site-content-block-actions {
   background-color: <?php echo $primary ?>;
+  color: <?php echo $contrast ?>;
 }
 
 .mode-edit .inner-wrapper:hover {
@@ -232,11 +233,11 @@ a {
 }
 
 .alt-quote.even {
-  color: <?php echo hsl_rgb(hsl_background(rgb_hsl($primaryArray), 0.7)) ?>;
+  color: <?php echo hsl_rgb(hsl_text(rgb_hsl($primaryArray), 0.25)) ?>;
 }
 
 .alt-quote.even:hover {
-  color: <?php echo hsl_rgb(hsl_background(rgb_hsl($primaryArray), 0.9)) ?>;
+  color: <?php echo hsl_rgb(hsl_text(rgb_hsl($primaryArray), 0)) ?>;
 }
 
 .profile-tour-header:before {

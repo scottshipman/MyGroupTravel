@@ -228,12 +228,23 @@
             {% endfor %}
             {% if alternate or related %}
                 {% set quoteID = entity.quoteReference.id %}
-                <div id="tabs-drawer-alternate-quotes" class="mdl-tabs__panel {{ activeTab }}">
+                <div id="tabs-drawer-alternate-quotes" class="mdl-tabs__panel content-blocks-drawer {{ activeTab }}">
                     {% if alternate %}
-                            {{ render(controller('QuoteBundle:QuoteSite:getQuoteSiblings', {'id':  quoteID  })) }}
+                        <div class="site-content-blocks site-content-blocks-item site-content-blocks-size-full">
+                            <div class="inner-wrapper">
+                                {% if editable %}
+                                    <div class="site-content-block-actions status-preview-edit">
+                                        <div class="edit-icons">
+                                            <i class="related-hide fa fa-eye"></i>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                {{ render(controller('QuoteBundle:QuoteSite:getQuoteSiblings', {'id':  quoteID  })) }}
+                            </div>
+                        </div>
                     {% endif %}
                     {% if related %}
-                            {{ render(controller('QuoteBundle:QuoteSite:getRelatedQuotes', {'id':  quoteID  })) }}
+                        {{ render(controller('QuoteBundle:QuoteSite:getRelatedQuotes', {'id':  quoteID  })) }}
                     {% endif %}
                 </div>
                 <script>
