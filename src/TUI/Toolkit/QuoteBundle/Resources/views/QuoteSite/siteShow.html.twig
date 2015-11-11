@@ -30,50 +30,53 @@
 
 {% block sub_header %}
     <div class="sub-header">
-      <div class="sizer">
-        <div class="inner">
-            {% if entity.isTemplate == 0 %}{# no Institutions on Templates #}
-                {% if app.user %}
-                    {% if entity.quoteReference.institution.media %}
-                        <div class="institution-logo">
-                            <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.quoteReference.institution.name }}">
-                        </div>
-                    {% endif %}
-                {% elseif not app.user %}
-                    {% if entity.quoteReference.institution.media %}
-                        <div class="institution-logo-with-brand">
-                            <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.quoteReference.institution.name }}">
-                        </div>
-                    {% endif %}
-                    {% if brand.media %}
-                        <div class="brand-logo">
-                            <img src="{{ asset( brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ brand.name }}">
-                        </div>
+        <div class="sizer">
+            <div class="inner">
+                {% if entity.isTemplate == 0 %}{# no Institutions on Templates #}
+                    {% if app.user %}
+                        {% if entity.quoteReference.institution.media %}
+                            <div class="institution-logo">
+                                <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.quoteReference.institution.name }}">
+                            </div>
+                        {% endif %}
+                    {% elseif not app.user %}
+                        {% if entity.quoteReference.institution.media %}
+                            <div class="institution-logo-with-brand">
+                                <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.quoteReference.institution.name }}">
+                            </div>
+                        {% endif %}
+                        {% if brand.media %}
+                            <div class="brand-logo">
+                                <img src="{{ asset( brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ brand.name }}">
+                            </div>
+                        {% endif %}
                     {% endif %}
                 {% endif %}
-            {% endif %}
 
-            {% if entity.quoteReference.institution %}
-                <div id="site-quote-name">{{ entity.quoteReference.institution.name }}</div>
-            {% endif %}
-
-            <h2 class="{% if entity.quoteReference.institution.media %}has-school-logo{% endif %} {% if not app.user and brand.media %}has-brand-logo{% endif %}">
-                {% if entity.displayName %}
-                    {{ entity.displayName }}
-                {% else %}
-                    {{ entity.quoteReference.name }}{% if is_granted("ROLE_BRAND") %}, {{ entity.name }}{% endif %}
+                {% if entity.quoteReference.institution %}
+                    <div id="site-quote-name">{{ entity.quoteReference.institution.name }}</div>
                 {% endif %}
-            </h2>
 
-            {% if entity.quoteNumber %}
-                <div>Quote Number: {{ entity.quoteNumber }}</div>
-            {% endif %}
+                <h2 class="{% if entity.quoteReference.institution.media %}has-school-logo{% endif %} {% if not app.user and brand.media %}has-brand-logo{% endif %}">
+                    {% if entity.displayName %}
+                        {{ entity.displayName }}
+                    {% else %}
+                        {{ entity.quoteReference.name }}{% if is_granted("ROLE_BRAND") %}, {{ entity.name }}{% endif %}
+                    {% endif %}
+                </h2>
+
+                {% if entity.quoteNumber %}
+                    <div>Quote Number: {{ entity.quoteNumber }}</div>
+                {% endif %}
+            </div>
         </div>
-      </div>
     </div>
 {% endblock %}
 
 {% block body -%}
+    {% if (entity.locked is sameas(true)) and (is_granted("ROLE_BRAND"))  %}
+        <h3 style="color: red;">{% trans %}quote.actions.is_locked{% endtrans %}</h3>
+    {% endif %}
     <div id="quote-version-{{ entity.id }}" class="site-show mode-toggle mode-preview" entityId="{{ entity.id }}" entityType="quote" entityClass="QuoteVersion" entityPath="quoteversion">
 
         <a href="javascript:window.print()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
@@ -100,12 +103,7 @@
                         <div class="site-content-blocks-item">
                             <div class="status-preview-edit site-content-block-actions">
                                 <div class="edit-icons">
-                                    {% if entity.headerBlock.locked %}
-                                        <i id="lock-header-block" class="item-lock content-block-item-action fa fa-unlock-alt" title="Unlock" blockId="{{ entity.headerBlock.id }}"></i>
-                                    {% else %}
-                                        <i id="edit-header-block" class="content-block-item-action item-edit fa fa-pencil-square-o" title="Edit" blockId="{{ entity.headerBlock.id }}"></i>
-                                        <i id="lock-header-block" class="item-lock content-block-item-action fa fa-lock" title="Lock" blockId="{{ entity.headerBlock.id }}"></i>
-                                    {% endif %}
+                                    <i id="edit-header-block" class="content-block-item-action item-edit fa fa-pencil-square-o" title="Edit" blockId="{{ entity.headerBlock.id }}"></i>
                                 </div>
                             </div>
                         </div>
@@ -180,44 +178,43 @@
             {% for tab, data in entity.content %}
                 <div id="tabs-drawer-{{ tab }}" class="mdl-tabs__panel content-blocks-drawer {{ activeTab }}">
                     <div class="sortable-items">
-                    {% for item in data[1] %}
-                        {% if items[item].doubleWidth == 1 %}
-                            {% set size = 'full' %}
-                        {% else %}
-                            {% set size = 'half' %}
-                        {% endif %}
-                        <div id="content-blocks-{{ items[item].id }}" class="site-content-blocks site-content-blocks-item site-content-blocks-size-{{ size }}" blockId="{{ items[item].id }}">
-                            <div class="inner-wrapper move-cursor">
-                                {% if editable %}
-                                    <div class="site-content-block-actions status-preview-edit">
-                                        {# probably render a controller here by passing in item as id and have block entity returned #}
-                                        <div class="move-icon"><i class="fa fa-arrows" title="Rearrange"></i></div>
-                                        <div id="content-block-actions-{{ items[item].id }}" class="edit-icons {% if items[item].locked %}content-block-locked{% endif %}">
-                                            <i class="item-edit content-block-item-action fa fa-pencil-square-o" title="Edit" blockId="{{ items[item].id }}"></i>
-                                            <i class="item-resize content-block-item-action fa fa-arrows-h {{ size }}" title="Resize" blockId="{{ items[item].id }}"></i>
-                                            <i class="item-lock content-block-item-action fa {% if items[item].locked %}fa-unlock-alt{% else %}fa-lock{% endif %}" title="{% if items[item].locked %}Unlock{% else %}Lock{% endif %}" blockId="{{ items[item].id }}"></i>
-                                            <i class="item-delete content-block-item-action fa fa-trash-o" title="Delete" blockId = "{{ items[item].id }}"></i>
-                                            {#
-                                            {% if items[item].hidden %}
-                                                <i class="item-hide content-block-item-action fa fa-eye" title="Show"></i>
-                                            {% else %}
-                                                <i class="item-hide content-block-item-action fa fa-ban" title="Hide"></i>
-                                            {% endif %}
-                                            #}
+                        {% for item in data[1] %}
+                            {% if items[item].doubleWidth == 1 %}
+                                {% set size = 'full' %}
+                            {% else %}
+                                {% set size = 'half' %}
+                            {% endif %}
+                            <div id="content-blocks-{{ items[item].id }}" class="site-content-blocks site-content-blocks-item site-content-blocks-size-{{ size }}" blockId="{{ items[item].id }}">
+                                <div class="inner-wrapper move-cursor">
+                                    {% if editable %}
+                                        <div class="site-content-block-actions status-preview-edit">
+                                            {# probably render a controller here by passing in item as id and have block entity returned #}
+                                            <div class="move-icon"><i class="fa fa-arrows" title="Rearrange"></i></div>
+                                            <div id="content-block-actions-{{ items[item].id }}" class="edit-icons">
+                                                <i class="item-edit content-block-item-action fa fa-pencil-square-o" title="Edit" blockId="{{ items[item].id }}"></i>
+                                                <i class="item-resize content-block-item-action fa fa-arrows-h {{ size }}" title="Resize" blockId="{{ items[item].id }}"></i>
+                                                <i class="item-delete content-block-item-action fa fa-trash-o" title="Delete" blockId = "{{ items[item].id }}"></i>
+                                                {#
+                                                {% if items[item].hidden %}
+                                                    <i class="item-hide content-block-item-action fa fa-eye" title="Show"></i>
+                                                {% else %}
+                                                    <i class="item-hide content-block-item-action fa fa-ban" title="Hide"></i>
+                                                {% endif %}
+                                                #}
+                                            </div>
                                         </div>
+                                    {% endif %}
+
+                                    {# render the actual content block #}
+                                    <div id="previewable-content-blocks-{{ items[item].id }}">
+                                        {{ render(controller('ContentBlocksBundle:ContentBlock:show', {'id':  items[item].id  })) }}
                                     </div>
-                                {% endif %}
 
-                                {# render the actual content block #}
-                                <div id="previewable-content-blocks-{{ items[item].id }}">
-                                    {{ render(controller('ContentBlocksBundle:ContentBlock:show', {'id':  items[item].id  })) }}
+                                    {# give a placeholder for the editable version #}
+                                    <div id="editable-content-blocks-{{ items[item].id }}"></div>
                                 </div>
-
-                                {# give a placeholder for the editable version #}
-                                <div id="editable-content-blocks-{{ items[item].id }}"></div>
                             </div>
-                        </div>
-                    {% endfor %}
+                        {% endfor %}
                     </div><!-- sortable-items -->
 
                     <a id="add-content-block" tabId="{{ tab }}" href="#" class="add-content-block site-content-blocks-edit status-preview-edit"><i class="fa fa-plus-circle"></i> Add Block</a>
@@ -230,10 +227,10 @@
                 {% set quoteID = entity.quoteReference.id %}
                 <div id="tabs-drawer-alternate-quotes" class="mdl-tabs__panel {{ activeTab }}">
                     {% if alternate %}
-                            {{ render(controller('QuoteBundle:QuoteSite:getQuoteSiblings', {'id':  quoteID  })) }}
+                        {{ render(controller('QuoteBundle:QuoteSite:getQuoteSiblings', {'id':  quoteID  })) }}
                     {% endif %}
                     {% if related %}
-                            {{ render(controller('QuoteBundle:QuoteSite:getRelatedQuotes', {'id':  quoteID  })) }}
+                        {{ render(controller('QuoteBundle:QuoteSite:getRelatedQuotes', {'id':  quoteID  })) }}
                     {% endif %}
                 </div>
                 <script>
@@ -253,12 +250,12 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.js"></script>
 
     {% javascripts '@toolkit_siteshow' %}
-        <script type="text/javascript" src="{{ asset_url }}"></script>
+    <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
     {% if editable %}
         {% javascripts '@toolkit_siteshow_edit' %}
-            <script type="text/javascript" src="{{ asset_url }}"></script>
+        <script type="text/javascript" src="{{ asset_url }}"></script>
         {% endjavascripts %}
     {% endif %}
 

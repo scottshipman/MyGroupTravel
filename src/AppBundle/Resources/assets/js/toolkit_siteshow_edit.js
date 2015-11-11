@@ -97,11 +97,13 @@ $(document).ready(function () {
         $("#loader").css("display", "block");
         var blockId = $('#header-block-content-item').attr('blockId')
         $("#site-header-editForm").load('/manage/headerblock/header/edit/layout-editor/' + blockId, function () {
+            $('#site-header-editForm .button-row').append( '<a id ="site-header-editForm-header-cancel" tabId="header" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored content-block-cancel" style="background-color: red; color: white;" href="#">Cancel</a>' );
             $('.item-edit').hide(); // hide ALL edit buttons for all content blocks
             $('.add-content-block').hide();
             $('#site-header-editForm').show();
             $('#site-header-slideshow').hide();
             doMDLpopup($('#site-header-editForm')); // run the function to add appropriate MDL classes to form elements
+            $('#site-header-editForm-header-cancel').show();
             $("#loader").css("display", "none");
             // bind header edit form and provide a simple callback function
             $('#ajax_headerblock_layout_form').ajaxForm({
@@ -129,11 +131,14 @@ $(document).ready(function () {
         var entityClass = $('.site-show').attr('entityClass');
         $("#loader").css("display", "block");
         $("#site-header-editForm").load('/manage/headerblock/header/new/' + entityId + '/' + entityClass, function () {
+            $('#site-header-editForm .button-row').append( '<a id ="site-header-editForm-header-cancel" tabId="header" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored content-block-cancel" style="background-color: red; color: white;" href="#">Cancel</a>' );
             $('.item-edit').hide(); // hide ALL edit buttons for all content blocks
             $("#loader").css("display", "none");
             $('#site-header-editForm').show();
             $('#site-header-slideshow').hide();
             doMDLpopup($('#site-header-editForm')); // run the function to add appropriate MDL classes to form elements
+
+            $('#site-header-editForm-header-cancel').show();
             $('#ajax_contentblocks_form').ajaxForm({
                 success: function (response) {
                     var blockId = response["id"];
@@ -167,9 +172,15 @@ $(document).ready(function () {
     // Cancel function for inline content block creation
     $(document).on('click', '.content-block-cancel', function (e) {
         var tabId = $(this).attr("tabId");
-        $('#content-block-editForm-' + tabId).empty().hide();
+        if(tabId == 'header') {
+            console.log('header cancelled');
+            $('#site-header-editForm').empty().hide();
+            $('#site-header-slideshow').show();
+        } else {
+            $('#content-block-editForm-' + tabId).empty().hide();
+            $(".site-content-blocks-edit").show();
+        }
         $('.item-edit').show();
-        $(".site-content-blocks-edit").show();
         $(this).hide();
         //$('.add-content-block').hide() // hide ALL Add Block's for all tabs
         if ( toolkitBreakpointAllowDrag() ) {

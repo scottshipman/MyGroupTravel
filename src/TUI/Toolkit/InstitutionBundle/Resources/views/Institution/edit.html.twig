@@ -48,7 +48,9 @@
                 <i class="fa fa-arrow-circle-left"></i> {% trans %}institution.actions.back{% endtrans %}
             </a>
         </li>
-        <li>{{ form(delete_form) }}</li>
+       {% if is_granted("ROLE_ADMIN") %}
+            <li>{{ form(delete_form) }}</li>
+       {% endif %}
     </ul>
 
 
