@@ -549,8 +549,8 @@ class QuoteVersionController extends Controller
         $organizer->setFilterable(false);
 
         // rename Primary sales AGent to Created By
-        $organizer = $grid->getColumn('salesAgent_full');
-        $organizer->setTitle($this->get('translator')->trans('quote.grid.filter.title.createdby'));
+        $agent = $grid->getColumn('salesAgent_name');
+        $agent->setTitle($this->get('translator')->trans('quote.grid.filters.title.owner'));
 
         // Get locale for stuff
         $locale = $this->container->getParameter('locale');
