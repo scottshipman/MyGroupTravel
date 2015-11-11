@@ -380,6 +380,31 @@ $(document).ready(function () {
         }
     });
 
+    // Toggle the hide/show on alternate quote tab
+    $('.alt-hide').click(function () {
+        $("#loader").css("display", "block");
+        var entityId = $('.site-show').attr('entityId');
+        var t = $(this);
+        $.ajax({
+            url: '/manage/quoteversion/' + entityId + '/hideAlt',
+            headers: {
+                "Pragma": "no-cache",
+                "Expires": -1,
+                "Cache-Control": "no-cache"
+            }
+        }).done(function () {
+            t.toggleClass('fa-eye').toggleClass('fa-eye-slash');
+            if (t.attr('hide') == true) {
+                t.attr('hide', false)
+                    .attr('title', 'Visible to Everyone');
+            } else {
+                t.attr('hide', true)
+                    .attr('title', 'Only visible to Brand Administrators');
+            }
+            $("#loader").css("display", "none");
+        });
+    });
+
     // Do all things for the loaded page to check various settings
 
     // Disable drag-and-drop on page load b/c the default is preview mode

@@ -18,7 +18,7 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
  * @UniqueEntity(fields={"quoteNumber"}, message="This Quote Number already exists on another Quote.", ignoreNull=true)
  *
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
- * @GRID\Source(columns="id, institution_full, quoteReference.institution.name, quoteReference.institution.city, quoteReference.name, name, isTemplate, quoteReference.ts, quoteReference.id, quoteNumber, organizer_full, salesAgent_full, salesAgent_name, quoteReference.salesAgent.firstName, quoteReference.salesAgent.lastName,  quoteReference.salesAgent.email, quoteReference.organizer.firstName, quoteReference.organizer.lastName, quoteReference.organizer.email, quoteReference.views, quoteReference.shareViews, quoteReference.converted, deleted, locked, quoteReference.setupComplete, quoteReference.destination, created, version, duration, displayName, tripStatus.name, expiryDate, transportType.name, boardBasis.name, freePlaces, payingPlaces, departureDate, returnDate, pricePerson,  currency.name, converted, views, shareViews", filterable=false, sortable=true)
+ * @GRID\Source(columns="id, institution_full, quoteReference.institution.name, quoteReference.institution.city, quoteReference.name, name, isTemplate, quoteReference.ts, quoteReference.id, quoteNumber, organizer_full, salesAgent_full, salesAgent_name, quoteReference.salesAgent.firstName, quoteReference.salesAgent.lastName,  quoteReference.salesAgent.email, quoteReference.organizer.firstName, quoteReference.organizer.lastName, quoteReference.organizer.email, quoteReference.views, quoteReference.shareViews, quoteReference.converted, deleted, locked, quoteReference.setupComplete, quoteReference.destination, created, version, duration, displayName, tripStatus.name, expiryDate, transportType.name, boardBasis.name, freePlaces, payingPlaces, departureDate, returnDate, pricePerson,  currency.name, converted, views, shareViews, hideAlt", filterable=false, sortable=true)
  * @GRID\Column(id="organizer_full", type="join", columns = {"quoteReference.organizer.firstName", "quoteReference.organizer.lastName", "quoteReference.organizer.email"}, title="Organizer", export=false, filterable=false, operatorsVisible=false)
  * @GRID\Column(id="salesAgent_full", type="join", columns = {"quoteReference.salesAgent.firstName", "quoteReference.salesAgent.lastName", "quoteReference.salesAgent.email"}, title="Primary Business Admin", export=false, filterable=false, operatorsVisible=false)
  * @GRID\Column(id="salesAgent_name", type="join", columns = {"quoteReference.salesAgent.firstName", "quoteReference.salesAgent.lastName"}, title="Primary Business Admin", export=false, filterable=false, operatorsVisible=false)
@@ -308,6 +308,14 @@ class QuoteVersion
      * @GRID\Column(title="Shared Views", filterable=false, export=true)
      */
     private $shareViews;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="hideAlt", type="boolean")
+     * @GRID\Column(visible=false, filterable=false, export=false)
+     */
+    private $hideAlt = false;
 
 
 
@@ -1037,6 +1045,29 @@ class QuoteVersion
   public function getShareViews()
   {
     return $this->shareViews;
+  }
+
+  /**
+   * Set hideAlt
+   *
+   * @param boolean $hideAlt
+   * @return Quote
+   */
+  public function setHideAlt($hideAlt)
+  {
+    $this->hideAlt = $hideAlt;
+
+    return $this;
+  }
+
+  /**
+   * Get hideAlt
+   *
+   * @return boolean
+   */
+  public function getHideAlt()
+  {
+    return $this->hideAlt;
   }
 
   /**
