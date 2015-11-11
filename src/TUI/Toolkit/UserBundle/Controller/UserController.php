@@ -896,9 +896,17 @@ class UserController extends Controller
         $user->setConfirmationToken($tokenGenerator->generateToken());
         $userEmail = $user->getEmail();
 
-        //Get Brand Stuff
-        $brand = $em->getRepository('BrandBundle:Brand')->findAll();
-        $brand = $brand[0];
+        //brand stuff
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
 
         $message = \Swift_Message::newInstance()
             ->setSubject($this->get('translator')->trans('user.email.registration.subject'))
@@ -955,9 +963,17 @@ class UserController extends Controller
             $user->setConfirmationToken($tokenGenerator->generateToken());
         }
 
-        //Get Brand Stuff
-        $brand = $em->getRepository('BrandBundle:Brand')->findAll();
-        $brand = $brand[0];
+        //brand stuff
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
 
         $message = \Swift_Message::newInstance()
             ->setSubject($this->get('translator')->trans('user.email.password_reset.subject'))
@@ -1018,9 +1034,17 @@ class UserController extends Controller
             $user->setConfirmationToken($tokenGenerator->generateToken());
         }
 
-        //Get Brand Stuff
-        $brand = $em->getRepository('BrandBundle:Brand')->findAll();
-        $brand = $brand[0];
+        //brand stuff
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
 
 
         $message = \Swift_Message::newInstance()

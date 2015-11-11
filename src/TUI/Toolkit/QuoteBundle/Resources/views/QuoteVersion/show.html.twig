@@ -131,7 +131,7 @@
             </li>
             <li>
                 {% if (entity.converted is sameas(false) and entity.quoteReference.converted is sameas(false)) %}
-                <a id="convert-quote" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quote_convert', { 'id': entity.id }) }}">
+                <a id="convert-quote" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quote_convert', { 'id': entity.id }) }}" onclick="return confirm('{% trans %}quote.actions.confirm{% endtrans %}')">
                     <i class="fa fa-paper-plane"></i> Convert to Tour
                 </a>
                 {% endif %}

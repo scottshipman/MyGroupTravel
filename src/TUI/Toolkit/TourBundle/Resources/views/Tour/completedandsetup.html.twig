@@ -95,37 +95,41 @@
 
     {#Sign Up Passengers#}
 
-    <div class="tour-edit mdl-card mdl-shadow--2dp">
-        <a class ="dashboard-titles" href="{{ path('manage_passenger_dashboard', { 'tourId': entity.id }) }}">
-            <div class="mdl-card__title">
-                <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.sign_up{% endtrans %} {{ entity.payingPlaces }} {% trans %}tour.dashboard.passengers{% endtrans %}</h3>
-                <span class="tour-dashboard-cta"><i class="fa fa-arrow-right"></i></span>
+    {% if signupPercent is defined and signupPercent != null %}
+        {% if signupPercent != 100 %}
+            <div class="tour-edit mdl-card mdl-shadow--2dp">
+                <a class ="dashboard-titles" href="{{ path('manage_passenger_dashboard', { 'tourId': entity.id }) }}">
+                    <div class="mdl-card__title">
+                        <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.sign_up{% endtrans %} {{ entity.payingPlaces }} {% trans %}tour.dashboard.passengers{% endtrans %}</h3>
+                        <span class="tour-dashboard-cta"><i class="fa fa-arrow-right"></i></span>
+                    </div>
+                </a>
+                <div id="signup-progress" class="progress-bar"></div>
+                <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
+                    <ul>
+                        <li>
+                            <div class="profile-list-item item-1 tour-dashboard two-column">
+                                <span class="date-span">{{ entity.views }}</span>
+                                <label>{% trans %}tour.dashboard.views{% endtrans %}</label>
+                            </div>
+                        </li>
+                        {#<li>#}
+                            {#<div class="profile-list-item item-2 tour-dashboard">#}
+                                {#<span class="date-span">{{ accepted }}</span>#}
+                                {#<label>{% trans %}tour.dashboard.accepted_of{% endtrans %} {{ entity.payingPlaces }}</label>#}
+                            {#</div>#}
+                        {#</li>#}
+                        <li>
+                            <div class="profile-list-item item-2 tour-dashboard two-column">
+                                <span class="date-span">{{ waitlist }}</span>
+                                <label>{% trans %}tour.dashboard.waitlist{% endtrans %}</label>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </div>
-        </a>
-        <div id="signup-progress" class="progress-bar"></div>
-        <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
-            <ul>
-                <li>
-                    <div class="profile-list-item item-1 tour-dashboard two-column">
-                        <span class="date-span">{{ entity.views }}</span>
-                        <label>{% trans %}tour.dashboard.views{% endtrans %}</label>
-                    </div>
-                </li>
-                {#<li>#}
-                    {#<div class="profile-list-item item-2 tour-dashboard">#}
-                        {#<span class="date-span">{{ accepted }}</span>#}
-                        {#<label>{% trans %}tour.dashboard.accepted_of{% endtrans %} {{ entity.payingPlaces }}</label>#}
-                    {#</div>#}
-                {#</li>#}
-                <li>
-                    <div class="profile-list-item item-2 tour-dashboard two-column">
-                        <span class="date-span">{{ waitlist }}</span>
-                        <label>{% trans %}tour.dashboard.waitlist{% endtrans %}</label>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </div>
+        {% endif %}
+    {% endif %}
 
     {#First and not paid passenger payment tasks#}
 
@@ -426,6 +430,18 @@
             <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
                 <div class="mdl-card__title">
                     <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.completed_dietary_data{% endtrans %}</h3>
+                    <span class="tour-dashboard-cta"><i class="fa fa-check"></i></span>
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
+
+    {#Completed passenger signups#}
+    {% if signupPercent is defined and signupPercent != null %}
+        {% if signupPercent == 100 %}
+            <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
+                <div class="mdl-card__title">
+                    <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.sign_up{% endtrans %} {{ entity.payingPlaces }} {% trans %}tour.dashboard.passengers{% endtrans %}</h3>
                     <span class="tour-dashboard-cta"><i class="fa fa-check"></i></span>
                 </div>
             </div>

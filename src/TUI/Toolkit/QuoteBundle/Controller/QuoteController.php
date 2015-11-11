@@ -95,12 +95,13 @@ class QuoteController extends Controller
         $role = '%ROLE_CUSTOMER%';
 
         $choices = array();
+        $term = str_replace(array('<', '>'), '', $term);
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder('TUIToolkitUserBundle:User');
         $qb->select('u')
             ->from('TUIToolkitUserBundle:User', 'u')
             ->where(
-                $qb->expr()->like('CONCAT(u.firstName, \' \', u.lastName, u.email)', ':term')
+                $qb->expr()->like('CONCAT(u.firstName, \' \', u.lastName, \' \', u.email)', ':term')
             )
             ->andWhere('u.roles LIKE :role')
             ->setParameters(array('role' => $role, 'term' => '%' . $term . '%'))
@@ -134,6 +135,7 @@ class QuoteController extends Controller
         $role = '%ROLE_BRAND%';
 
         $choices = array();
+        $term = str_replace(array('<', '>'), '', $term);
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder('TUIToolkitUserBundle:User');
         $qb->select('u')
@@ -165,12 +167,13 @@ class QuoteController extends Controller
         $term = $request->get('term', null);
 
         $choices = array();
+        $term = str_replace('- ', '', $term);
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder('InstitutionBundle:Institution');
         $qb->select('i')
             ->from('InstitutionBundle:Institution', 'i')
             ->where(
-                $qb->expr()->like('i.name', ':term')
+                $qb->expr()->like('CONCAT(i.name, \' \', i.city)', ':term')
             )
             ->setParameter('term', '%' . $term . '%')
             ->orderBy('i.name', 'ASC');

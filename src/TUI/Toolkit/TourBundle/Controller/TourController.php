@@ -480,6 +480,8 @@ class TourController extends Controller
 
         $collection = $entity->getMedia()->toArray() ? $entity->getMedia()->toArray() : NULL;
 
+        $passenger_payment_tasks = $entity->getPaymentTasksPassenger();
+
         // get the content blocks to send to twig
         $items = array();
         $tabs = array();
@@ -515,6 +517,7 @@ class TourController extends Controller
             'delete_form' => $deleteForm->createView(),
             'locale' => $locale,
             'collection' => $collection,
+            'passenger_payment_tasks' => $passenger_payment_tasks,
             'items' => $items,
             'tabs' => $tabs,
             'editable' => $editable,
@@ -1139,11 +1142,15 @@ class TourController extends Controller
         $locale = $this->container->getParameter('locale');
         $setupForm = $this->createTourSetupForm($entity);
 
+        $passenger_payment_tasks = $entity->getPaymentTasksPassenger();
+
+
         return $this->render('TourBundle:Tour:editPayments.html.twig', array(
             'entity' => $entity,
             'setup_form' => $setupForm->createView(),
             'date_format' => $date_format,
             'locale' => $locale,
+            'passenger_payment_tasks' => $passenger_payment_tasks,
         ));
 
     }
