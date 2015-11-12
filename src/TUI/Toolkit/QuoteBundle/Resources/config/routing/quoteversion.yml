@@ -53,3 +53,8 @@ manage_quoteversion_lock_nonajax:
     path:     /{id}/lockAction
     defaults: { _controller: "QuoteBundle:QuoteVersion:lockNonajax" }
     methods:  [POST, GET]
+
+manage_quoteversion_hide_alt:
+    path:     /{id}/hideAlt
+    defaults: { _controller: "QuoteBundle:QuoteVersion:hideAlt" }
+    methods:  [POST, GET]
