@@ -95,8 +95,7 @@
 
     {#Sign Up Passengers#}
 
-    {% if signupPercent is defined and signupPercent != null %}
-        {% if signupPercent != 100 %}
+    {% if signupPercent is defined and signupPercent != 100 %}
             <div class="tour-edit mdl-card mdl-shadow--2dp">
                 <a class ="dashboard-titles" href="{{ path('manage_passenger_dashboard', { 'tourId': entity.id }) }}">
                     <div class="mdl-card__title">
@@ -128,7 +127,6 @@
                     </ul>
                 </div>
             </div>
-        {% endif %}
     {% endif %}
 
     {#First and not paid passenger payment tasks#}
@@ -437,15 +435,13 @@
     {% endif %}
 
     {#Completed passenger signups#}
-    {% if signupPercent is defined and signupPercent != null %}
-        {% if signupPercent == 100 %}
+    {% if signupPercent is defined and signupPercent == 100%}
             <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
                 <div class="mdl-card__title">
                     <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.sign_up{% endtrans %} {{ entity.payingPlaces }} {% trans %}tour.dashboard.passengers{% endtrans %}</h3>
                     <span class="tour-dashboard-cta"><i class="fa fa-check"></i></span>
                 </div>
             </div>
-        {% endif %}
     {% endif %}
 
     {#Completed Payment Tasks#}
