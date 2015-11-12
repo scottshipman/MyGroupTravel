@@ -139,8 +139,8 @@ a {
 
 .mdl-button--raised.mdl-button--colored,
 .mdl-button--raised.mdl-button--colored:hover {
-  background-color: <?php echo $primary ?>;
-  color: <?php echo color_contrast($primaryArray) ?>;
+  background-color: <?php echo $secondary ?>;
+  color: <?php echo color_contrast($secondaryArray) ?>;
 }
 
 .mdl-layout__header {
@@ -174,7 +174,7 @@ a {
 
 .mdl-tabs.is-upgraded .mdl-tabs__tab.is-active::after,
 .mdl-tabs-no-swap .is-active::after {
-  background-color: <?php echo $primary ?>;
+  background-color: <?php echo $secondary ?>;
 }
 
 .page-title .mdl-button--raised.mdl-button--colored,
@@ -190,12 +190,12 @@ a {
 }
 
 .content-block h2 {
-  color: <?php echo $primary ?>;
+  color: <?php echo hsl_rgb(hsl_text(rgb_hsl($secondaryArray), 0.25)) ?>;;
 }
 
 .add-content-block {
-  border-color: <?php echo $primary ?>;
-  color: <?php echo $primary ?>;
+  border-color: <?php echo hsl_rgb(hsl_text(rgb_hsl($secondaryArray), 0.25)) ?>;
+  color: <?php echo hsl_rgb(hsl_text(rgb_hsl($secondaryArray), 0.25)) ?>;
 }
 
 .site-content-block-actions {
@@ -231,14 +231,14 @@ a {
 }
 
 .alt-quote.even {
-  color: <?php echo hsl_rgb(hsl_text(rgb_hsl($primaryArray), 0.25)) ?>;
+  color: <?php echo hsl_rgb(hsl_text(rgb_hsl($secondaryArray), 0.25)) ?>;
 }
 
 .alt-quote.even:hover {
-  color: <?php echo hsl_rgb(hsl_text(rgb_hsl($primaryArray), 0)) ?>;
+  color: <?php echo hsl_rgb(hsl_text(rgb_hsl($secondaryArray), 0.125)) ?>;
 }
 
 .profile-tour-header:before {
-  background: linear-gradient(to bottom right, <?php echo hsl_rgb(hsl_background(rgb_hsl($primaryArray), 0.3)) ?> 0%, <?php echo hsl_rgb(hsl_background(rgb_hsl($primaryArray), 0.7)) ?> 100%);
+  background: linear-gradient(to bottom right, <?php echo hsl_rgb(hsl_background(rgb_hsl($tertiaryArray), 0.3)) ?> 0%, <?php echo hsl_rgb(hsl_background(rgb_hsl($tertiaryArray), 0.7)) ?> 100%);
 }
 </style>
