@@ -744,6 +744,7 @@ class TourController extends Controller
 
                 foreach ($collection as $c) {
                     $zip->addFromString($c->gethashedFilename(), file_get_contents($c->getfilepath() . "/" . $c->gethashedFilename()));
+                    $zip->renameName($c->gethashedFilename(),$c->getFilename());
                 }
 
 
