@@ -148,6 +148,7 @@ a {
   color: <?php echo color_contrast($tertiaryArray) ?>;
 }
 
+.sub-header,
 .mdl-mini-footer {
   background-color: <?php echo $primary ?>;
   color: <?php echo color_contrast($primaryArray) ?>;
