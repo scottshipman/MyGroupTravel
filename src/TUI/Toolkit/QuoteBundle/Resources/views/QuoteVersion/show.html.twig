@@ -239,11 +239,11 @@
 
     <h3>Tour Information</h3>
 
-{% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
-    <a id="add-new-tab" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-        <i class="fa fa-plus-circle"></i>  Add New Tab
-    </a>
-{% endif %}
+    {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
+        <a id="add-new-tab" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+            <i class="fa fa-plus-circle"></i>  Add New Tab
+        </a>
+    {% endif %}
 
     <a id="site-content"></a>
     <div id="content-blocks-wrapper" class="content-blocks-wrapper sortable-tabs">
@@ -263,24 +263,23 @@
             <div id="tabs-drawer-{{ tab }}" class="sortable-items content-blocks-drawer">
                     {%  for item in data[1] %}
                         <div id="content-blocks-{{ item }}" class="content-blocks content-blocks-item {% if items[item].locked %}content-block-locked{% endif %}{{ cursor }}">
-                            {% if items[item].locked %}<i style="display: none" class="fa fa-arrows{{ editable }}"></i> {{ items[item].title }}{% else %}<i class="fa fa-arrows{{ editable }}"></i> {{ items[item].title }}{% endif %}
+                            <i class="fa fa-arrows{{ editable }}"></i> {{ items[item].title }}
                             {# probably render a controller here by passing in item as id and have block entity returned #}
                             <div id="content-block-actions-{{ item }}" class="content-block-actions {% if items[item].locked %}content-block-locked{% endif %}{{ editable }}">
                                 <i class="item-edit content-block-item-action fa fa-pencil-square-o" title="Edit"></i>
                                 <i class="item-delete content-block-item-action fa fa-trash-o" title="Delete" blockID="{{ item }}"></i>
-                                <i class="item-lock content-block-item-action fa {% if items[item].locked %}fa-unlock-alt{% else %}fa-lock{% endif %}" title="{% if items[item].locked %}Unlock{% else %}Lock{% endif %}" blockId="{{ items[item].id }}"></i>
                                 {#
                                 {% if items[item].hidden %}
                                     <i class="item-hide content-block-item-action fa fa-ban"></i>{% else %}<i class="item-hide content-block-item-action fa fa-eye"></i>
                                 {% endif %}
                                 #}
-                               </div>
-                           </div>
+                             </div>
+                         </div>
                        {% endfor %}
-               </div>
-           </div>
+             </div>
+         </div>
            {% endfor %}
-       </div>
+     </div>
 
 {% endif %}
        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.js"></script>
@@ -422,7 +421,6 @@
                         '<div id="content-block-actions-' + id + '" class="content-block-actions">' +
                         '<i class="item-edit content-block-item-action fa fa-pencil-square-o" title="Edit"></i> ' +
                         '<i class="item-delete content-block-item-action fa fa-trash-o" title="Delete" blockId="' + id + '"></i> ' +
-                        '<i class="item-lock content-block-item-action fa fa-lock" title="Lock"></i> ' +
                         {# '<i class="item-hide content-block-item-action fa fa-ban"></i>' + #}
                         '</div></div>'
                     );
@@ -439,39 +437,6 @@
                 toolkitStandardPopup( "Edit Content Block", "/ajax/contentblocks/" + block + "/edit/" + {{ entity.id}} + "/QuoteVersion" );
             });
 
-            // toggle the locked boolean on a content block on the fly!
-            $(".item-lock").on('click', function (e) {
-                var t = $(this);
-                $("#loader").css("display", "block");
-                var blockID = t.attr('blockId');
-                $.ajax({
-                    url: '/manage/contentblocks/' + blockID + '/lock/' + {{ entity.id }} +'/QuoteVersion',
-                    headers: {
-                        "Pragma": "no-cache",
-                        "Expires": -1,
-                        "Cache-Control": "no-cache"
-                    }
-                }).done(function () {
-                    t.toggleClass('fa-unlock-alt').toggleClass('fa-lock');
-                    if (t.attr('title') == 'Unlock') {
-//                        $("#loader").css("display", "block");
-                        // Will now be unlocked
-                        t.parent().removeClass('content-block-locked');
-                        t.parent().parent().removeClass('content-block-locked');
-                        var arrows = t.parent().parent().find(".fa-arrows");
-                        arrows.show();
-                        t.attr('title', 'Lock');
-                    } else {
-                        // Will now be locked
-                        t.parent().addClass('content-block-locked');
-                        t.parent().parent().addClass('content-block-locked');
-                        var arrows = t.parent().parent().find(".fa-arrows");
-                        arrows.hide();
-                        t.attr('title', 'Unlock');
-                    }
-                    $("#loader").css("display", "none");
-                });
-            });
 
             // delete a content block
                $(document).on('click', '.item-delete', function(e){

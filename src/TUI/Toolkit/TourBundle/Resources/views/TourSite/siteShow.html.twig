@@ -145,19 +145,11 @@
             </div>
 
             <div id="site-header-summary">
-                {% if editable %}
+                {% if editable and is_granted('ROLE_BRAND') %}
                     <div class="site-content-blocks-item">
                         <div class="status-preview-edit site-content-block-actions">
                             <div class="edit-icons">
-                                {% if entity.locked == 0 %}
                                     <i id="edit-header-summary" class="content-block-item-action item-edit fa fa-pencil-square-o" title="Edit"></i>
-                                {% endif %}
-
-                                {% if entity.locked %}
-                                    <i action="unlock" id="lock-header-summary"class="content-block-item-action fa fa-unlock-alt" title="Unlock"></i>
-                                {% else %}
-                                    <i action="lock" id="lock-header-summary" class="content-block-item-action fa fa-lock" title="Lock"></i>
-                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -318,9 +310,9 @@
         {% if entity.salesAgent %}
             <span class="intro">
                 {% if app.user.email == entity.organizer.email %}
-                    {% trans %}tour.show.footer.intro_org{% endtrans %}
-                {% else %}
                     {% trans %}tour.show.footer.intro{% endtrans %}
+                {% else %}
+                    {% trans %}tour.show.footer.intro_org{% endtrans %}
                 {% endif %}
             </span>
             {% if entity.salesAgent.media %}
@@ -343,12 +335,10 @@
     {% else %}
         {% if entity.organizer %}
             <span class="intro">
-                {% if app.user %}
-                    {% if app.user.email == entity.organizer.email %}
-                        {% trans %}tour.show.footer.intro_org{% endtrans %}
-                    {% else %}
-                        {% trans %}tour.show.footer.intro{% endtrans %}
-                    {% endif %}
+                {% if app.user and app.user.email == entity.organizer.email %}
+                    {% trans %}tour.show.footer.intro{% endtrans %}
+                {% else %}
+                    {% trans %}tour.show.footer.intro_org{% endtrans %}
                 {% endif %}
             </span>
             {% if entity.organizer.media %}

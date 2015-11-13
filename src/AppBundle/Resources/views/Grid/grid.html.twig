@@ -222,16 +222,18 @@
 
 {# --------------------------------------------------- grid_exports ------------------------------------------------- #}
 {% block grid_exports %}
-    <div class="exports" style="float:right">
-        {% spaceless %}
-            <select style="display: none;" name="{{grid.hash}}[{{ constant('APY\\DataGridBundle\\Grid\\Grid::REQUEST_QUERY_EXPORT') }}]">
-                {% for key, export in grid.exports %}
-                    <option selected="selected" value="{{key}}">{{ export.title|trans }}</option>
-                {% endfor %}
-            </select>
-            <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"><i class="fa fa-download"></i>{{  ' Export to CSV'|trans }}</button>
-        {% endspaceless %}
-    </div>
+    {%  if is_granted("ROLE_ADMIN") %}
+        <div class="exports" style="float:right">
+            {% spaceless %}
+                <select style="display: none;" name="{{grid.hash}}[{{ constant('APY\\DataGridBundle\\Grid\\Grid::REQUEST_QUERY_EXPORT') }}]">
+                    {% for key, export in grid.exports %}
+                        <option selected="selected" value="{{key}}">{{ export.title|trans }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"><i class="fa fa-download"></i>{{  ' Export to CSV'|trans }}</button>
+            {% endspaceless %}
+        </div>
+    {% endif %}
 {% endblock grid_exports %}
 
 {# --------------------------------------------------- grid_tweaks ------------------------------------------------- #}
