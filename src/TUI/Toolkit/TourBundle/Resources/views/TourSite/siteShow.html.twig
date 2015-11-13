@@ -186,8 +186,10 @@
                 {% endfor %}
 
                 {% if editable %}
-                    <span id="edit-tabs" class="site-content-blocks-tab status-preview-edit"><i class="fa fa-pencil"></i> {% trans %}tour.actions.edit_tabs{% endtrans %}</span>
-                    <span id="add-new-tab" class="site-content-blocks-tab status-preview-edit"><i class="fa fa-plus-circle"></i>{% trans %}tour.actions.add_tab{% endtrans %}</span>
+                    {% if is_granted("ROLE_BRAND") %}
+                        <span id="edit-tabs" class="site-content-blocks-tab status-preview-edit"><i class="fa fa-pencil"></i> {% trans %}tour.actions.edit_tabs{% endtrans %}</span>
+                        <span id="add-new-tab" class="site-content-blocks-tab status-preview-edit"><i class="fa fa-plus-circle"></i>{% trans %}tour.actions.add_tab{% endtrans %}</span>
+                    {% endif %}
                 {% endif %}
             </div>
 
