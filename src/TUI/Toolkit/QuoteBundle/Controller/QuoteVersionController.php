@@ -803,6 +803,18 @@ class QuoteVersionController extends Controller
             throw $this->createNotFoundException('Unable to find QuoteVersion entity while showing quote admin screen.');
         }
 
+        //brand stuff
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
+
 
         // get the content blocks to send to twig
         $items = array();
@@ -840,6 +852,7 @@ class QuoteVersionController extends Controller
             'locale' => $locale,
             'items' => $items,
             'tabs' => $tabs,
+            'brand' => $brand,
         ));
     }
 
