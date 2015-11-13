@@ -143,6 +143,7 @@ a {
   color: <?php echo color_contrast($secondaryArray) ?>;
 }
 
+.brand_logo_login,
 .mdl-layout__header {
   background-color: <?php echo $tertiary ?>;
   color: <?php echo color_contrast($tertiaryArray) ?>;
