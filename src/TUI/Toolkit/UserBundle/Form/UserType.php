@@ -27,8 +27,8 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
 
-      switch ($this->locale){
-        case 'en_GB.utf8':
+      switch (true){
+        case strstr($this->locale, 'en_GB'):
           $phoneFormat = PhoneNumberFormat::NATIONAL;
           $defaultRegion = 'GB';
           break;
@@ -64,15 +64,10 @@ class UserType extends AbstractType
             'translation_domain'  => 'messages',
             'required' => true,
               ))
-          ->add('nickname', 'text', array(
-            'label' => 'user.form.nickname',
-            'translation_domain'  => 'messages',
-            'required' => false,
-              ))
           ->add('displayName', 'text', array(
             'label' => 'user.form.display_name',
             'translation_domain'  => 'messages',
-            'required' => true,
+            'required' => false,
           ))
           ->add('email', 'email', array(
             'label' => 'user.form.email',

@@ -40,15 +40,10 @@
         <div class="tour-show-left-column">
             <ul class="tour-show-submenu">
                 <li><strong>{% trans %}passenger.labels.passengers_for{% endtrans %} {{ tour.name|capitalize }}</strong></li>
-                <hr>
                 {#<li><strong>Accepted ({{ accepted|length }})</strong></li>#}
-                {#<hr>#}
                 <li><strong>{% trans %}passenger.labels.waitlist{% endtrans %} ({{ waitlistobjects|length }})</strong></li>
-                <hr>
                 {#<li><strong>Free</strong></li>#}
-                {#<hr>#}
                 {#<li><strong><a href="#">Organisers</a></strong></li>#}
-                {#<hr>#}
             </ul>
 
             <div class="tour-edit-organizer-left">
@@ -112,7 +107,7 @@
     {% javascripts '@toolkit_siteshow' %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
-    
+
     <script>
         $(document).ready(function () {
 

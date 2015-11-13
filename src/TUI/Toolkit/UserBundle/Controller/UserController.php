@@ -70,6 +70,7 @@ class UserController extends Controller
         $column->setTitle($this->get('translator')->trans('user.grid.filter.title.role'));
         $column->setFilterType('select');
         $column->setOperatorsVisible(false);
+        $column->setExport('false');
 
         // add email filter
         $column = $grid->getColumn('email');
@@ -93,6 +94,14 @@ class UserController extends Controller
 
         // Add action column
         $editAction = new RowAction('Edit', 'user_edit');
+        $editAction->manipulateRender(
+            function ($action, $row) { // only show if canEditUser is true
+                if ($this->canEditUser($row->getField('id')) == false) {
+                    return null;
+                }
+                return $action;
+            }
+        );
         $grid->addRowAction($editAction);
         $notifyAction = new RowAction('Notify', 'user_registration_confirmation');
         $notifyAction->manipulateRender(
@@ -153,7 +162,7 @@ class UserController extends Controller
         $grid->setNoDataMessage($this->get('translator')->trans('user.grid.no_result'));
 
         // Export of the grid
-        $grid->addExport(new CSVExport($this->get('translator')->trans('user.grid.export'), "currentUsers", array('delimiter' => ','), "UTF-8", "ROLE_BRAND"));
+        $grid->addExport(new CSVExport($this->get('translator')->trans('user.grid.export'), "currentUsers", array('delimiter' => ','), "UTF-8", "ROLE_ADMIN"));
 
         // Manage the grid redirection, exports and the response of the controller
         return $grid->getGridResponse('TUIToolkitUserBundle:User:index.html.twig');
@@ -406,10 +415,17 @@ class UserController extends Controller
             $deleteForm = Null;
         }
 
+        if ($this->canEditUser($id)) {
+            $canEdit = TRUE;
+        } else {
+            $canEdit = FALSE;
+        }
+
         return $this->render('TUIToolkitUserBundle:User:show.html.twig', array(
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm,
+            'can_edit'  => $canEdit,
         ));
     }
 
@@ -896,9 +912,17 @@ class UserController extends Controller
         $user->setConfirmationToken($tokenGenerator->generateToken());
         $userEmail = $user->getEmail();
 
-        //Get Brand Stuff
-        $brand = $em->getRepository('BrandBundle:Brand')->findAll();
-        $brand = $brand[0];
+        //brand stuff
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
 
         $message = \Swift_Message::newInstance()
             ->setSubject($this->get('translator')->trans('user.email.registration.subject'))
@@ -955,9 +979,17 @@ class UserController extends Controller
             $user->setConfirmationToken($tokenGenerator->generateToken());
         }
 
-        //Get Brand Stuff
-        $brand = $em->getRepository('BrandBundle:Brand')->findAll();
-        $brand = $brand[0];
+        //brand stuff
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
 
         $message = \Swift_Message::newInstance()
             ->setSubject($this->get('translator')->trans('user.email.password_reset.subject'))
@@ -1018,9 +1050,17 @@ class UserController extends Controller
             $user->setConfirmationToken($tokenGenerator->generateToken());
         }
 
-        //Get Brand Stuff
-        $brand = $em->getRepository('BrandBundle:Brand')->findAll();
-        $brand = $brand[0];
+        //brand stuff
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
 
 
         $message = \Swift_Message::newInstance()
@@ -1200,8 +1240,8 @@ class UserController extends Controller
     public function getQuotesAction($id)
     {
         $locale = $this->container->getParameter('locale');
-        switch ($locale) {
-            case 'en_GB.utf8':
+        switch (true) {
+            case strstr($locale, 'en_GB'):
                 $format = 'd-m-Y';
                 break;
             default:
@@ -1220,10 +1260,9 @@ class UserController extends Controller
                 ->select('qv', 'q')
                 ->from('QuoteBundle:QuoteVersion', 'qv')
                 ->leftJoin('qv.quoteReference', 'q', 'WITH', 'q.id = qv.quoteReference')
-                ->where('q.salesAgent = ?1')
-                ->orWhere('q.secondaryContact = ?2')
+                ->where('q.salesAgent = ?1 OR q.secondaryContact = ?2')
                 ->AndWhere('qv.converted = false')
-                ->AndWhere('qv.expiryDate < ?3')
+                ->AndWhere('qv.expiryDate > ?3 OR qv.expiryDate is null')
                 ->AndWhere('q.converted = false')
                 ->AndWhere('qv.isTemplate = false');
             $qb->setParameter(1, $id);
@@ -1290,11 +1329,19 @@ class UserController extends Controller
         ));
     }
 
+    /**
+     * Test to see if current user has permission to delete another user
+     *
+     * @param $id
+     * @return bool
+     */
     public function canDeleteUser($id)
     {
 
         $em = $this->getDoctrine()->getManager();
-
+        if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            return TRUE;
+        }
         $permissions = $em->getRepository('PermissionBundle:Permission')->findOneBy(array('user' => $id));
         $primary_organizerq = $em->getRepository('QuoteBundle:Quote')->findOneBy(array('organizer' => $id));
         $primary_adminq = $em->getRepository('QuoteBundle:Quote')->findOneBy(array('salesAgent' => $id));
@@ -1310,6 +1357,50 @@ class UserController extends Controller
         } else {
             return true;
         }
+    }
+
+    /**
+     * Test to see if current user has permission to edit another user
+     *
+     * @param $id
+     * @return bool
+     */
+    public function canEditUser($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $targetUser = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
+        $roles = $targetUser->getRoles();
+        $curUser= $this->get('security.context')->getToken()->getUser();
+
+        if ($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
+            return TRUE;
+        }
+
+        if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            if(in_array('ROLE_SUPER_ADMIN', $roles)) {
+                return FALSE;
+            } else {
+                return TRUE;
+            }
+        }
+
+        if ($this->get('security.context')->isGranted('ROLE_BRAND')) {
+            $em = $this->getDoctrine()->getManager();
+            $targetUser = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
+            $roles = $targetUser->getRoles();
+            $intersect = count(array_intersect($roles, array('ROLE_ADMIN', 'ROLE_BRAND', 'ROLE_SUPER_ADMIN')));
+            if(count(array_intersect($roles, array('ROLE_ADMIN', 'ROLE_BRAND', 'ROLE_SUPER_ADMIN'))) > 0) {
+                if ($id != $curUser->getId()){
+                    return FALSE;
+                } else {
+                    return TRUE;
+                }
+            } else {
+                return TRUE;
+            }
+        }
+
+        return FALSE;
     }
 
     public function getWelcomeMessageAction($token)

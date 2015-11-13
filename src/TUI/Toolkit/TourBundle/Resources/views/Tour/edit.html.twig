@@ -3,7 +3,13 @@
 {% set title_label = 'Edit' %}
 
 {% block title %}{{ title_label }} {% trans %}tour.title.show{% endtrans %} {{ entity.name }}{% endblock %}
-{% block page_title %}{{ title_label }} {% trans %}tour.title.show{% endtrans %} {{ entity.name }}{% endblock %}
+{% block page_title %}{{ title_label }}
+    {% if entity.isComplete == false and entity.setupComplete == false %}
+        {% trans %}tour.title.new_tour{% endtrans %}
+    {% else %}
+        {% trans %}tour.title.show{% endtrans %} {{ entity.name }}
+    {% endif %}
+{% endblock %}
 
 {% block body -%}
     {{ form_start(edit_form) }}
@@ -14,7 +20,7 @@
             {{ form_row(edit_form.tripStatus) }}
             {{ form_row(edit_form.name) }}
             {{ form_row(edit_form.quoteNumber) }}
-            {{ form_row(edit_form.version) }}
+            {{ form_row(edit_form.tourNumber) }}
             {{ form_row(edit_form.expiryDate) }}
             {{ form_row(edit_form.institution) }}
             {{ form_row(edit_form.organizer) }}
@@ -180,6 +186,7 @@
                 maxFiles: 1,
                 acceptedMimeTypes: 'application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation, application/pdf',
                 uploadMultiple: false,
+                dictDefaultMessage: "{% trans %}media.dropzone.default_message{% endtrans %}",
                 init: function () {
                     var value = $(".media-placeholder").val();
                     var values = [];
@@ -229,17 +236,14 @@
                         '<a id="'+ response.id + '" href="' + response.relativepath + '/' + response.filename + '"></a>' +
                         '<a class="existing-delete" style= "top: 5px; right: -10px;" href="#"><i class="fa fa-trash-o fa-2x"></i></a></div></br>');
                         var id = '#' + response.id;
-                        console.log(id);
                         $(id).html(response.original_filename);
+                        this.removeFile(file);
                         $("#dialog").dialog('close');
 
                     });
-                    this.on("complete", function (file, response) {
-                        this.removeFile(file);
-                        $("#dialog").dialog('close');
-                    });
                     this.on("error", function (file, response) {
-                        console.log('Error: ' + response);
+                        this.removeFile(file);
+                        alert('Error: ' + response);
                     });
                 }
             });

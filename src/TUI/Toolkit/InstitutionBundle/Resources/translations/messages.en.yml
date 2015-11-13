@@ -21,6 +21,7 @@ institution:
           create: Create
           delete: Delete
           create_new: Create a New Institution
+          confirm: Are you sure? This action cannot be undone.
 
 
 

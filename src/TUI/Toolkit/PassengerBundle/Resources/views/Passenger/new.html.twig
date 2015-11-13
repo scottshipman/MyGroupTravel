@@ -1,13 +1,22 @@
 {%  if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
+{% set shortFormat = "d M" %}
 {% block body -%}
 
     <div class="signup-form">
-        {#{% if entity.headerBlock %}#}
-            {#<img src="{{ asset( entity.headerBlock.mediaWrapper[0].media[0].getRelativePath ~ "/" ~ entity.headerBlock.mediaWrapper[0].media[0].getHashedFilename ) | imagine_filter('modalImage')}}"/>#}
-        {#{% endif %}#}
-        {#&#123;&#35;{{ dump(entity) }}&#35;&#125;#}
-        {#{{ entity.departureDate|date(format) }} - {{ entity.returnDate|date(format) }}#}
-        {#{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{% if entity.pricePersonPublic != null %}{{ entity.pricePersonPublic }}{% endif %}/per person#}
+        {% if tour is defined and tour != null %}
+            <div class="form-header">
+                {% if tour.headerBlock is defined and tour.headerBlock != null %}
+                    <div class="tour-image-wrapper">
+                        <img class="tour-image" src="{{ asset( tour.headerBlock.mediaWrapper[0].media[0].getRelativePath ~ "/" ~ tour.headerBlock.mediaWrapper[0].media[0].getHashedFilename ) | imagine_filter('modalImage')}}"/>
+                    </div>
+                {% endif %}
+                <div class="tour-copy">
+                    <h3 class="tour-title">{{ tour.name }}</h3>
+                    <span class="tour-dates">{{ tour.departureDate|date(shortFormat) }} - {{ tour.returnDate|date(format) }}</span><br /><br />
+                    <span class="tour-price">{% if tour.currency %}{{ tour.currency.htmlSymbol | raw }}{% endif %}{% if tour.pricePersonPublic != null %}{{ tour.pricePersonPublic }}{% endif %}<span class="price-copy">/per person</span></span>
+                </div>
+            </div>
+        {% endif %}
 
         {{ form_start(form) }}
 

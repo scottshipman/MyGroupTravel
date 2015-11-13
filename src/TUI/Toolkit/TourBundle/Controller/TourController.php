@@ -62,7 +62,7 @@ class TourController extends Controller
             'salesAgent.email',
             'destination',
             'created',
-            'version',
+            'tourNumber',
             'id',
             'duration',
             'displayName',
@@ -224,7 +224,7 @@ class TourController extends Controller
           'salesAgent.email',
           'destination',
           'created',
-          'version',
+          'tourNumber',
           'id',
           'duration',
           'displayName',
@@ -480,6 +480,8 @@ class TourController extends Controller
 
         $collection = $entity->getMedia()->toArray() ? $entity->getMedia()->toArray() : NULL;
 
+        $passenger_payment_tasks = $entity->getPaymentTasksPassenger();
+
         // get the content blocks to send to twig
         $items = array();
         $tabs = array();
@@ -515,6 +517,7 @@ class TourController extends Controller
             'delete_form' => $deleteForm->createView(),
             'locale' => $locale,
             'collection' => $collection,
+            'passenger_payment_tasks' => $passenger_payment_tasks,
             'items' => $items,
             'tabs' => $tabs,
             'editable' => $editable,
@@ -741,6 +744,7 @@ class TourController extends Controller
 
                 foreach ($collection as $c) {
                     $zip->addFromString($c->gethashedFilename(), file_get_contents($c->getfilepath() . "/" . $c->gethashedFilename()));
+                    $zip->renameName($c->gethashedFilename(),$c->getFilename());
                 }
 
 
@@ -755,7 +759,13 @@ class TourController extends Controller
             $em->flush();
             $permission = $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
             $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tour.flash.save') . $entity->getName());
-            return $this->redirect($this->generateUrl('manage_tour'));
+            if ( $entity->getSetupComplete() == false and $entity->getIsComplete() == false) {
+
+                return $this->redirect($this->generateUrl('tour_site_show', array('id' => $entity->getId(), 'quoteNumber' => $entity->getQuoteNumber())));
+
+            }else {
+                return $this->redirect($this->generateUrl('manage_tour'));
+            }
         }
 
         return $this->render('TourBundle:Tour:edit.html.twig', array(
@@ -1120,6 +1130,28 @@ class TourController extends Controller
             'setup_form' => $setupForm->createView(),
             'date_format' => $date_format,
             'locale' => $locale,
+        ));
+
+    }
+
+
+    public function getEditPaymentsAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('TourBundle:Tour')->find($id);
+        $date_format = $this->container->getParameter('date_format');
+        $locale = $this->container->getParameter('locale');
+        $setupForm = $this->createTourSetupForm($entity);
+
+        $passenger_payment_tasks = $entity->getPaymentTasksPassenger();
+
+
+        return $this->render('TourBundle:Tour:editPayments.html.twig', array(
+            'entity' => $entity,
+            'setup_form' => $setupForm->createView(),
+            'date_format' => $date_format,
+            'locale' => $locale,
+            'passenger_payment_tasks' => $passenger_payment_tasks,
         ));
 
     }

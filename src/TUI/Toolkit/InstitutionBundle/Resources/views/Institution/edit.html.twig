@@ -29,6 +29,11 @@
                         "height": "160px"
                     });
                     $("#tui_toolkit_institutionbundle_institution_media").val('{{ entity.media.id }}');
+
+                    $(document).on('click', '.media-placeholder-image', function(e) {
+                        $("#tui_toolkit_institutionbundle_institution_media").val('');
+                        console.log($("#tui_toolkit_institutionbundle_institution_media").val());
+                    });
                 });
             </script>
         {% else %}
@@ -48,7 +53,9 @@
                 <i class="fa fa-arrow-circle-left"></i> {% trans %}institution.actions.back{% endtrans %}
             </a>
         </li>
-        <li>{{ form(delete_form) }}</li>
+       {% if is_granted("ROLE_ADMIN") %}
+            <li>{{ form(delete_form) }}</li>
+       {% endif %}
     </ul>
 
 

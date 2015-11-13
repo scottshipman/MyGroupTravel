@@ -59,27 +59,25 @@
 
     <main class="toolkit-main">
 
+        <div class="flash-messages snack-wrap">
+            <input type="checkbox" class="snackclose animated" id="close">
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+                <div class="flash-message flash-message-notice snackbar animated">
+                    <strong>Notice: </strong>{{ flashMessage }}
+                    <label class="flash-close" for="close"><i class="fa fa-times-circle"></i> close</label>
+                </div>
+            {% endfor %}
+            {% for flashMessage in app.session.flashbag.get('error') %}
+                <div class="flash-message flash-message-error snackbar animated">
+                    <strong>Error: </strong>{{ flashMessage }}
+                    <label class="flash-close" for="close"><i class="fa fa-times-circle"></i> close</label>
+                </div>
+            {% endfor %}
+        </div>
+
         {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
             <div class="header mdl-layout__header">
               <div class="sizer">
-                  <div class="flash-messages snack-wrap">
-                      <input type="checkbox" class="snackclose animated" id="close"/>
-                      <label id="flash-label" class="snacklable animated" for="close"></label>
-                      {% for flashMessage in app.session.flashbag.get('notice') %}
-                          <div class="flash-message flash-message-notice snackbar animated">
-                              <strong>Notice: </strong>{{ flashMessage }}
-                              <i class="fa fa-times-circle flash-close"> close</i>
-                          </div>
-                      {% endfor %}
-                      {% for flashMessage in app.session.flashbag.get('error') %}
-
-                          <div class="flash-message flash-message-error snackbar animated">
-                              <strong>Error: </strong>{{ flashMessage }}
-                              <i class="fa fa-times-circle flash-close"> close</i>
-                          </div>
-                      {% endfor %}
-                  </div>
-
                 {% embed "fragments/header.html.twig" %}{% endembed %}
 
                 {% block back_link %}{% endblock %}

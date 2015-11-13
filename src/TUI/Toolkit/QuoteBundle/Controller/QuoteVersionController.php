@@ -549,8 +549,8 @@ class QuoteVersionController extends Controller
         $organizer->setFilterable(false);
 
         // rename Primary sales AGent to Created By
-        $organizer = $grid->getColumn('salesAgent_full');
-        $organizer->setTitle($this->get('translator')->trans('quote.grid.filter.title.createdby'));
+        $agent = $grid->getColumn('salesAgent_name');
+        $agent->setTitle($this->get('translator')->trans('quote.grid.filters.title.owner'));
 
         // Get locale for stuff
         $locale = $this->container->getParameter('locale');
@@ -1491,6 +1491,34 @@ class QuoteVersionController extends Controller
         $em->persist($quoteVersion);
         $em->flush();
         // $this->get('session')->getFlashBag()->add('notice', 'Quote Lock has been toggled ');
+
+        return new Response(json_encode((array)$quoteVersion));
+
+    }
+
+    /**
+     * Toggles hide/show on alternate quotes status on Quote entity.
+     *
+     */
+    public function hideAltAction(Request $request, $id)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $quoteVersion = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+
+        if (!$quoteVersion) {
+            throw $this->createNotFoundException('Unable to find Quote entity.');
+        }
+
+        if ($quoteVersion->getHideAlt() == false) {
+            $status = true;
+        } else {
+            $status = false;
+        }
+        $quoteVersion->setHideAlt($status);
+        $em->persist($quoteVersion);
+        $em->flush();
 
         return new Response(json_encode((array)$quoteVersion));
 

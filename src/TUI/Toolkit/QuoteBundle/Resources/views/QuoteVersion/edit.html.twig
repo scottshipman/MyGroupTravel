@@ -38,8 +38,10 @@
             <i class="fa fa-arrow-circle-left"></i> Back to the list
         </a>
     </li>
-    {% if delete_form is defined %}
-        <li>{{ form(delete_form) }}</li>
+    {% if is_granted("ROLE_ADMIN") %}
+        {% if delete_form is defined %}
+            <li>{{ form(delete_form) }}</li>
+        {% endif %}
     {% endif %}
 
 </ul>

@@ -82,6 +82,7 @@ class QuoteType extends AbstractType
                 'property' => 'destination',
                 'label'   => 'quote.form.quote.destination',
                 'translation_domain'  => 'messages',
+                'required' => false,
             ))
 
             ->add('salesAgent', 'genemu_jqueryautocomplete_entity', array(

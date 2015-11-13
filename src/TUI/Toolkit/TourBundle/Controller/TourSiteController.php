@@ -66,7 +66,7 @@ class TourSiteController extends Controller
     $brand = $em->getRepository('BrandBundle:Brand')->findAll();
     $brand = $brand[0];
 
-    if ($securityContext->isGranted('ROLE_BRAND') || in_array('organizer', $permission)){
+    if ($securityContext->isGranted('ROLE_BRAND') || in_array('organizer', $permission) || in_array('assistant', $permission)){
       $editable = TRUE;
     }
     // get the content blocks to send to twig
@@ -97,7 +97,7 @@ class TourSiteController extends Controller
     // send warning messages
     $warningMsg = array();
     if(Null!==$entity->getExpiryDate() && $entity->getExpiryDate() < date($date_format)){
-      $warningMsg[] = $this->get('translator')->trans('tour.flash.warning.expired') . " " . $entity->getQuoteReference()->getSalesAgent()->getFirstName() ." ".  $entity->getQuoteReference()->getSalesAgent()->getLasttName() . " " .  $this->get('translator')->trans('tour.flash.warning.at') . " " . $entity->getQuoteReference()->getSalesAgent()->getEmail();
+      $warningMsg[] = $this->get('translator')->trans('tour.flash.warning.expired') . " " . $entity->getQuoteReference()->getSalesAgent()->getFirstName() ." ".  $entity->getQuoteReference()->getSalesAgent()->getLastName() . " " .  $this->get('translator')->trans('tour.flash.warning.at') . " " . $entity->getQuoteReference()->getSalesAgent()->getEmail();
     }
 
     // Record Views
@@ -220,6 +220,18 @@ class TourSiteController extends Controller
         throw $this->createNotFoundException('Unable to find Tour entity for PDF.');
       }
 
+      // if no quoteNumber supplied in URL, then prompt for quoteNumber first
+      $securityContext = $this->get('security.context');
+      $user = $securityContext->getToken()->getUser();
+      if($user !='anon.') {
+        $permission = $this->get("permission.set_permission")
+          ->getPermission($id, 'tour', $user->getId());
+      }
+
+      if ($securityContext->isGranted('ROLE_BRAND') || in_array('organizer', $permission) || in_array('assistant', $permission)){
+        $editable = TRUE;
+      }
+
 
         // get the content blocks to send to twig
         $items=array(); $tabs=array();
@@ -249,7 +261,7 @@ class TourSiteController extends Controller
       // send warning messages
       $warningMsg = array();
       if($entity->getExpiryDate() < date($date_format)){
-        $warningMsg[] = $this->get('translator')->trans('tour.flash.warning.expired') . " " . $entity->getQuoteReference()->getSalesAgent()->getFirstName() ." ".  $entity->getQuoteReference()->getSalesAgent()->getLasttName() . " " .  $this->get('translator')->trans('tour.flash.warning.at') . " " . $entity->getQuoteReference()->getSalesAgent()->getEmail();
+        $warningMsg[] = $this->get('translator')->trans('tour.flash.warning.expired') . " " . $entity->getQuoteReference()->getSalesAgent()->getFirstName() ." ".  $entity->getQuoteReference()->getSalesAgent()->getLastName() . " " .  $this->get('translator')->trans('tour.flash.warning.at') . " " . $entity->getQuoteReference()->getSalesAgent()->getEmail();
       }
 
       $request = $this->getRequest();
@@ -262,6 +274,7 @@ class TourSiteController extends Controller
         'header' => $headerBlock,
         'editable' =>  $editable,
         'path' => $path,
+        'editable' => $editable
       );
 
       $html = $this->renderView( 'TourBundle:TourSite:sitePDF.html.twig', $data );
