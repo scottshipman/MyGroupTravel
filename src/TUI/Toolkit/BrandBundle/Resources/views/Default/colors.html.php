@@ -148,6 +148,11 @@ a {
   color: <?php echo color_contrast($tertiaryArray) ?>;
 }
 
+.mdl-mini-footer {
+  background-color: <?php echo $primary ?>;
+  color: <?php echo color_contrast($primaryArray) ?>;
+}
+
 .mdl-layout__drawer .mdl-navigation .active a {
   color: <?php echo hsl_rgb(hsl_text(rgb_hsl($secondaryArray), 0.25)) ?>;
 }
