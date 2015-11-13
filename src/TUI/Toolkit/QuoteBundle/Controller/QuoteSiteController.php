@@ -5,6 +5,7 @@ namespace TUI\Toolkit\QuoteBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 use TUI\Toolkit\QuoteBundle\Form\PromptType;
 use TUI\Toolkit\QuoteBundle\Entity\QuoteVersion;
@@ -69,6 +70,13 @@ class QuoteSiteController extends Controller
     // if no quoteNumber supplied in URL, then prompt for quoteNumber first
     $securityContext = $this->get('security.context');
     $user = $securityContext->getToken()->getUser();
+
+    // if user is anonymous and this is a template, redirect to access denied.
+
+      if ($user =='anon.' and $entity->getIsTemplate() == TRUE) {
+          throw new AccessDeniedException('You are not authorized to view this URL or it does not exist.');
+      }
+
     if($user !='anon.') {
       $permission = $this->get("permission.set_permission")
         ->getPermission($id, 'quote', $user->getId());
@@ -130,7 +138,12 @@ class QuoteSiteController extends Controller
     }
 
     // check for related quotes too
+
+
     $quote = $em->getRepository('QuoteBundle:Quote')->find($qr);
+
+      $relOrganizer = $quote->getOrganizer() ? $quote->getOrganizer()->getId() : NULL ;
+      $relInstitution = $quote->getInstitution() ? $quote->getInstitution()->getId() : NULL ;
     $qb = $this->getDoctrine()->getManager()->createQueryBuilder();
     $qb
       ->select('q')
@@ -138,8 +151,8 @@ class QuoteSiteController extends Controller
       ->where('q.organizer = ?1')
       ->andWhere('q.institution = ?2')
       ->andWhere('q.converted = FALSE');
-    $qb->setParameter(1, $quote->getOrganizer()->getId());
-    $qb->setParameter(2, $quote->getInstitution()->getId());
+    $qb->setParameter(1, $relOrganizer);
+    $qb->setParameter(2, $relInstitution);
     $query = $qb->getQuery();
     $relatedQuotes = $query->getResult();
     if(count($relatedQuotes) > 1){
