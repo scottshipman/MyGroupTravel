@@ -343,10 +343,12 @@
     {% else %}
         {% if entity.organizer %}
             <span class="intro">
-                {% if app.user.email == entity.organizer.email %}
-                    {% trans %}tour.show.footer.intro_org{% endtrans %}
-                {% else %}
-                    {% trans %}tour.show.footer.intro{% endtrans %}
+                {% if app.user %}
+                    {% if app.user.email == entity.organizer.email %}
+                        {% trans %}tour.show.footer.intro_org{% endtrans %}
+                    {% else %}
+                        {% trans %}tour.show.footer.intro{% endtrans %}
+                    {% endif %}
                 {% endif %}
             </span>
             {% if entity.organizer.media %}
