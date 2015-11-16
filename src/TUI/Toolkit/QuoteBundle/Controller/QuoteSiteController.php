@@ -633,6 +633,7 @@ class QuoteSiteController extends Controller
     $locale = $this->container->getParameter('locale');
     $em = $this->getDoctrine()->getManager();
     $quote = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+    $share = strpos($_SERVER['REQUEST_URI'], 'share') !== FALSE ? TRUE : FALSE ;
     if(!$quote){
       throw $this->createNotFoundException('Unable to find Quote entity for summary header display.');
     }
@@ -640,6 +641,7 @@ class QuoteSiteController extends Controller
     return $this->render('QuoteBundle:QuoteSite:quoteSummary.html.twig', array(
       'quote' => $quote,
       'locale'  => $locale,
+      'share'   => $share,
     ));
   }
 
