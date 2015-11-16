@@ -189,3 +189,11 @@
   }
 
 }
+
+.promo-assets {
+  display: none;
+
+  @include breakpoint_desktop() {
+    display: inline-block;
+  }
+}

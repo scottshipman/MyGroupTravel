@@ -67,9 +67,9 @@
                 {% endif %}
             </h2>
 
-            {% if entity.quoteReference.destination %}
-                <div>{{ entity.quoteReference.destination }}</div>
-            {% endif %}
+            {#{% if entity.quoteReference.destination %}#}
+                {#<div>{{ entity.quoteReference.destination }}</div>#}
+            {#{% endif %}#}
         </div>
       </div>
     </div>
@@ -87,7 +87,7 @@
         </a>
 
         {% if collection != NULL and editable == true %}
-        <a href="/tour/view/export/{{ entity.id }}/{{ entity.quoteNumber }}.zip" target="_blank" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
+        <a href="/tour/view/export/{{ entity.id }}/{{ entity.quoteNumber }}.zip" target="_blank" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions promo-assets">
             <i class="fa fa-download"></i> {% trans %}tour.actions.download_promo{% endtrans %}
         </a>
         {% endif %}
@@ -137,19 +137,11 @@
             </div>
 
             <div id="site-header-summary">
-                {% if editable %}
+                {% if editable and is_granted('ROLE_BRAND') %}
                     <div class="site-content-blocks-item">
                         <div class="status-preview-edit site-content-block-actions">
                             <div class="edit-icons">
-                                {% if entity.locked == 0 %}
                                     <i id="edit-header-summary" class="content-block-item-action item-edit fa fa-pencil-square-o" title="Edit"></i>
-                                {% endif %}
-
-                                {% if entity.locked %}
-                                    <i action="unlock" id="lock-header-summary"class="content-block-item-action fa fa-unlock-alt" title="Unlock"></i>
-                                {% else %}
-                                    <i action="lock" id="lock-header-summary" class="content-block-item-action fa fa-lock" title="Lock"></i>
-                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -178,8 +170,10 @@
                 {% endfor %}
 
                 {% if editable %}
-                    <span id="edit-tabs" class="site-content-blocks-tab status-preview-edit"><i class="fa fa-pencil"></i> {% trans %}tour.actions.edit_tabs{% endtrans %}</span>
-                    <span id="add-new-tab" class="site-content-blocks-tab status-preview-edit"><i class="fa fa-plus-circle"></i>{% trans %}tour.actions.add_tab{% endtrans %}</span>
+                    {% if is_granted("ROLE_BRAND") %}
+                        <span id="edit-tabs" class="site-content-blocks-tab status-preview-edit"><i class="fa fa-pencil"></i> {% trans %}tour.actions.edit_tabs{% endtrans %}</span>
+                        <span id="add-new-tab" class="site-content-blocks-tab status-preview-edit"><i class="fa fa-plus-circle"></i>{% trans %}tour.actions.add_tab{% endtrans %}</span>
+                    {% endif %}
                 {% endif %}
             </div>
 
@@ -308,9 +302,9 @@
         {% if entity.salesAgent %}
             <span class="intro">
                 {% if app.user.email == entity.organizer.email %}
-                    {% trans %}tour.show.footer.intro_org{% endtrans %}
-                {% else %}
                     {% trans %}tour.show.footer.intro{% endtrans %}
+                {% else %}
+                    {% trans %}tour.show.footer.intro_org{% endtrans %}
                 {% endif %}
             </span>
             {% if entity.salesAgent.media %}
@@ -333,10 +327,10 @@
     {% else %}
         {% if entity.organizer %}
             <span class="intro">
-                {% if app.user.email == entity.organizer.email %}
-                    {% trans %}tour.show.footer.intro_org{% endtrans %}
-                {% else %}
+                {% if app.user and app.user.email == entity.organizer.email %}
                     {% trans %}tour.show.footer.intro{% endtrans %}
+                {% else %}
+                    {% trans %}tour.show.footer.intro_org{% endtrans %}
                 {% endif %}
             </span>
             {% if entity.organizer.media %}

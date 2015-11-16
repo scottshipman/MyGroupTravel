@@ -36,7 +36,6 @@ class Customer implements FixtureInterface, ContainerAwareInterface
     $user->setRoles(array('ROLE_CUSTOMER'));
     $user->setFirstName('Joe');
     $user->setLastName('Customer');
-    $user->setNickname('');
     $user->setDisplayName('');
 
     $userManager->persist($user);
