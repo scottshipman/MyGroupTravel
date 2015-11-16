@@ -1185,6 +1185,10 @@ class QuoteVersionController extends Controller
 
 
                 $new_entity->setId(null);
+                $new_entity->setViews(0);
+                $new_entity->setShareViews(0);
+                $newCreate = new \DateTime();
+                $new_entity->setCreated($newCreate);
                 $em->detach($entity);
                 $em->persist($new_entity);
                 $em->flush($new_entity);
