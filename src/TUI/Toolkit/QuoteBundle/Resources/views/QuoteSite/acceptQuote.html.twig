@@ -1,7 +1,7 @@
 {%  if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
 {% block body -%}
     <div class="request-changes">
-        <h4>{{ entity.name }}</h4>
+        <h4 style="margin-top: 10px" class="mdl-card__title-text">{{ entity.name }}</h4>
         <ul>
             <li>{% trans %}quote_site.accepted.quote_number{% endtrans %} {{ entity.quoteNumber }}</li>
             <li>{% trans %}quote_site.accepted.departing{% endtrans %} {{ entity.departureDate|date(format) }}</li>
@@ -14,9 +14,11 @@
         {% if entity.headerBlock %}
             <img src="{{ asset( entity.headerBlock.mediaWrapper[0].media[0].getRelativePath ~ "/" ~ entity.headerBlock.mediaWrapper[0].media[0].getHashedFilename ) | imagine_filter('modalImage')}}"/>
         {% endif %}
+        <h4 style="margin-top: 10px" class="mdl-card__title-text">Anything you would like to add?</h4>
         {{ form_start(accept_form) }}
         {{ form_widget(accept_form.additional) }}
         <div style="clear: both"></div>
+        {{ form_widget(accept_form.submit) }}
         {{ form_rest(accept_form) }}
     </div>
 {% endblock %}

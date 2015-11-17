@@ -17,7 +17,7 @@
         {% if entity.headerBlock %}
             <img src="{{ asset( entity.headerBlock.mediaWrapper[0].media[0].getRelativePath ~ "/" ~ entity.headerBlock.mediaWrapper[0].media[0].getHashedFilename ) | imagine_filter('modalImage')}}"/>
         {% endif %}
-        <h4 style="margin-top: 10px" class="mdl-card__title-text">Changes</h4>
+        <h4 style="margin-top: 10px" class="mdl-card__title-text">Changes I would like to make</h4>
         {{ form_start(change_request_form) }}
             {{ form_widget(change_request_form.changes[0], {'label' : 'quote.form.changes.choices.numbers'|trans}) }}
             {{ form_widget(change_request_form.changes[1], {'label' : 'quote.form.changes.choices.reduce_price'|trans}) }}
