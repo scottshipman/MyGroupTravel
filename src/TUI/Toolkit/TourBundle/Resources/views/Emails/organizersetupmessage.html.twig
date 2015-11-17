@@ -16,10 +16,10 @@
                                 <div class="content"
                                      style="position: relative; width: 80%; margin: 0 auto; text-align: center; padding-top: 30px; ">
                                     <center>
-                                        {% if brand.media %}
-                                            <img style="margin: 0 auto; position: relative; display: block; max-width: 250px;"
-                                                 src="{{ absolute_url(asset(".." ~ brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename )) }}"
-                                                 alt="{{ brand.name }}">
+                                        {% if brand.mediaEmail %}
+                                            <img style="margin: 0 auto; position: relative; display: block; max-width: 250px;" src="{{ absolute_url(asset( ".." ~ brand.mediaEmail.getRelativePath ~ "/" ~ brand.mediaEmail.getHashedFilename )) }}" alt="{{ brand.name }}">
+                                        {% elseif brand.media %}
+                                            <img style="margin: 0 auto; position: relative; display: block; max-width: 250px;" src="{{ absolute_url(asset( ".." ~ brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename )) }}" alt="{{ brand.name }}">
                                         {% else %}
                                             <p style="text-align: center; text-transform: uppercase; color: #283F5F;">{{ brand.name }}</p>
                                         {% endif %}
