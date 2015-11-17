@@ -32,8 +32,8 @@ $(document).ready(function () {
         $("#dialog").html("");
         $("#dialog").dialog("option", "title", "Sign Up");
         $("#dialog").dialog("open");
-        $("#dialog").load('/passenger/new/' + entityId, function () {
-            $(this).dialog("option", "title", "Sign Up");
+        toolkitStandardPopup("Sign Up", '/passenger/new/' + entityId, function () {
+            //$(this).dialog("option", "title", "Sign Up");
             doMDLpopup($('#dialog'));// run the function to add appropriate MDL classes to form elements
             $('#ajax_passenger_form').on('submit', function(e) {
 

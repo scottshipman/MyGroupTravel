@@ -1,27 +1,33 @@
 {%  if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
 {% block body -%}
     <div class="request-changes">
-        <h4>{{ entity.name }}</h4>
-        <ul>
-            <li>{% trans %}quote_site.change_request.quote_number{% endtrans %} {{ entity.quoteNumber }}</li>
-            <li>{% trans %}quote_site.change_request.departing{% endtrans %} {{ entity.departureDate|date(format) }}</li>
-            <li>{% trans %}quote_site.change_request.duration{% endtrans %} {{ entity.duration }}</li>
-            <li>{% trans %}quote_site.change_request.returning{% endtrans %} {{ entity.returnDate|date(format) }}</li>
-            <li>{% trans %}quote_site.change_request.price_person{% endtrans %} {% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</li>
-            <li>Based on {{ entity.payingPlaces }} paying plus {{ entity.freePlaces }} free places</li>
-            <li><strong>{% trans %}quote_site.change_request.expiry{% endtrans %} {{ entity.expiryDate|date(format) }}</strong></li>
-        </ul>
+        <h4 class="mdl-card__title-text">{{ entity.name }}</h4>
+    {#<div class="mdl-card__supporting-text">#}
+        {#<ul>#}
+            {#<li>{% trans %}quote_site.change_request.quote_number{% endtrans %} {{ entity.quoteNumber }}</li>#}
+            {#<li>{% trans %}quote_site.change_request.departing{% endtrans %} {{ entity.departureDate|date(format) }}</li>#}
+            {#<li>{% trans %}quote_site.change_request.duration{% endtrans %} {{ entity.duration }}</li>#}
+            {#<li>{% trans %}quote_site.change_request.returning{% endtrans %} {{ entity.returnDate|date(format) }}</li>#}
+            {#<li>{% trans %}quote_site.change_request.price_person{% endtrans %} {% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</li>#}
+            {#<li>Based on {{ entity.payingPlaces }} paying plus {{ entity.freePlaces }} free places</li>#}
+            {#<li><strong>{% trans %}quote_site.change_request.expiry{% endtrans %} {{ entity.expiryDate|date(format) }}</strong></li>#}
+        {#</ul>#}
+    {#</div>#}
 
         {% if entity.headerBlock %}
             <img src="{{ asset( entity.headerBlock.mediaWrapper[0].media[0].getRelativePath ~ "/" ~ entity.headerBlock.mediaWrapper[0].media[0].getHashedFilename ) | imagine_filter('modalImage')}}"/>
         {% endif %}
-        {{ form_start(change_request_form) }}
-        {{ form_widget(change_request_form.changes[0], {'label' : 'quote.form.changes.choices.numbers'|trans}) }}
-        {{ form_widget(change_request_form.changes[1], {'label' : 'quote.form.changes.choices.reduce_price'|trans}) }}
-        {{ form_widget(change_request_form.changes[2], {'label' : 'quote.form.changes.choices.dates'|trans}) }}
-        {{ form_widget(change_request_form.changes[3], {'label' : 'quote.form.changes.choices.destination'|trans}) }}
-        {{ form_widget(change_request_form.additional) }}
+            {{ form_start(change_request_form) }}
+            {{ form_widget(change_request_form.changes[0], {'label' : 'quote.form.changes.choices.numbers'|trans}) }}
+            {{ form_widget(change_request_form.changes[1], {'label' : 'quote.form.changes.choices.reduce_price'|trans}) }}
+            {{ form_widget(change_request_form.changes[2], {'label' : 'quote.form.changes.choices.dates'|trans}) }}
+            {{ form_widget(change_request_form.changes[3], {'label' : 'quote.form.changes.choices.destination'|trans}) }}
+            {{ form_widget(change_request_form.additional) }}
         <div style="clear: both"></div>
-        {{ form_rest(change_request_form) }}
+        {#<div class="mdl-card__actions mdl-card--border">#}
+            {{ form_widget(change_request_form.submit) }}
+        {#</div>#}
+
+            {{ form_rest(change_request_form) }}
     </div>
 {% endblock %}
