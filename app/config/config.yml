@@ -76,7 +76,6 @@ assetic:
                 inputs:
                     - @AppBundle/Resources/assets/js/toolkit.js
                     - @AppBundle/Resources/assets/js/toolkit_mdl.js
-                    - @AppBundle/Resources/assets/js/toolkit_dropzone.js
                     - @AppBundle/Resources/assets/js/toolkit_colorpicker.js
                     - @AppBundle/Resources/assets/js/toolkit_global.js
 
@@ -90,6 +89,10 @@ assetic:
             ckeditorcustomsettings:
                 inputs:
                   -   "%kernel.root_dir%/../src/AppBundle/Resources/public/js/ckeditor/config.js"
+
+            toolkit_dropzone:
+                inputs:
+                    - @AppBundle/Resources/assets/js/toolkit_dropzone.js
 
             toolkit_siteshow:
                 inputs:
