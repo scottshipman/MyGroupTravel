@@ -20,18 +20,19 @@
     {{ form_end(edit_form) }}
 
 
-
     {#{{ form(edit_form) }}#}
 
 <ul class="record_actions">
     {% if clone is defined %}
         {# do nothing#}
     {% else %}
-    <li>
-        <a id="save-revision" onclick="submitQuoteForm();" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-            <i class="fa fa-files-o"></i> Save as Alternative Quote
-        </a>
-    </li>
+        {% if entity.isTemplate != true %}
+            <li>
+                <a id="save-revision" onclick="submitQuoteForm();" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+                    <i class="fa fa-files-o"></i> Save as Alternative Quote
+                </a>
+            </li>
+        {% endif %}
     {% endif %}
     <li>
         <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quote') }}">
