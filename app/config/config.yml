@@ -36,6 +36,8 @@ framework:
     fragments:       ~
     http_method_override: true
     translator: ~
+    # asset_version used to bust cache on deployments. should be incremented during deployments using git tag number in paramters.yml by Jenkins
+    templating: { engines: ['twig'], assets_version: %cache_asset_version% }
 
 # Twig Configuration
 twig:

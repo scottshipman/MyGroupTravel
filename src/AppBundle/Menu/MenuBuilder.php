@@ -34,13 +34,14 @@ class MenuBuilder
     $menu->addChild('Users', array('route' => 'user'))
           ->setLinkAttribute('class', 'mdl-navigation__link');
 
-    $menu->addChild('Reports')
+  /*  $menu->addChild('Reports')
           ->setAttribute('dropdown', true)
           ->setLabelAttribute('class', 'mdl-navigation__link');
     $menu['Reports']->addChild('Modification Report', array('route' => '_tui_toolkit_reports_modification'))
           ->setLinkAttribute('class', 'mdl-navigation__link');
     $menu['Reports']->addChild('Opportunity Report', array('route' => '_tui_toolkit_reports_opportunity'))
           ->setLinkAttribute('class', 'mdl-navigation__link');
+  */
 
 
     $menu->addChild('Company')

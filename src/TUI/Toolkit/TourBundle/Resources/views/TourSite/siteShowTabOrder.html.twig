@@ -105,6 +105,7 @@
             $.each($(".editable-tab"), function(index, value){
                 $(".editable-tab")[index].reset();
             });
+            var quoteID = $(this).attr('quoteid');
             // scrape DOM to get heirarchy of tabs & blocks
             var result = {};
             var data = $(".modal-tab");

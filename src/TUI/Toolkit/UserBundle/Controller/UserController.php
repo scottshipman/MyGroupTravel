@@ -322,7 +322,7 @@ class UserController extends Controller
                 'required' => false,
             ))
                 ->add('roles', 'choice', array(
-                    'choices' => array('ROLE_USER' => 'User', 'ROLE_CUSTOMER' => 'CUSTOMER', 'ROLE_BRAND' => 'BRAND', 'ROLE_ADMIN' => 'ADMIN',),
+                    'choices' => array('ROLE_CUSTOMER' => 'CUSTOMER', 'ROLE_BRAND' => 'BRAND', 'ROLE_ADMIN' => 'ADMIN',),
                     'multiple' => true,
                     'expanded' => TRUE,
                 ));
@@ -493,7 +493,7 @@ class UserController extends Controller
             ))
                 ->add('roles', 'choice', array(
                     'choices' => array(
-                        'ROLE_USER' => 'User',
+                      //  'ROLE_USER' => 'User',
                         'ROLE_CUSTOMER' => 'CUSTOMER',
                         'ROLE_BRAND' => 'BRAND',
                         'ROLE_ADMIN' => 'ADMIN',
@@ -509,7 +509,7 @@ class UserController extends Controller
             ))
                 ->add('roles', 'choice', array(
                     'choices' => array(
-                        'ROLE_USER' => 'User',
+                     //   'ROLE_USER' => 'User',
                         'ROLE_CUSTOMER' => 'CUSTOMER',
                         'ROLE_BRAND' => 'BRAND',
                         'ROLE_ADMIN' => 'ADMIN',
@@ -1255,6 +1255,7 @@ class UserController extends Controller
         $securityContext = $this->get('security.context');
         if ($securityContext->isGranted('ROLE_BRAND')) {
             $today = new \DateTime();
+            $limit = $this->container->hasParameter('profile_query_limit') ? $this->container->getParameter('profile_query_limit') : 5;
             $qb = $this->getDoctrine()->getManager()->createQueryBuilder();
             $qb
                 ->select('qv', 'q')
@@ -1268,6 +1269,8 @@ class UserController extends Controller
             $qb->setParameter(1, $id);
             $qb->setParameter(2, $id);
             $qb->setParameter(3, $today->format($format));
+            $qb->orderBy('qv.created', 'DESC');
+            $qb->setMaxResults( $limit);
             $query = $qb->getQuery();
             $quotes = $query->getResult();
         } else {
@@ -1301,6 +1304,7 @@ class UserController extends Controller
         $tours = array();
         $securityContext = $this->get('security.context');
         if ($securityContext->isGranted('ROLE_BRAND')) {
+            $limit = $this->container->hasParameter('profile_query_limit') ? $this->container->getParameter('profile_query_limit') : 5;
             $qb = $this->getDoctrine()->getManager()->createQueryBuilder();
             $qb
                 ->select('t')
@@ -1309,6 +1313,8 @@ class UserController extends Controller
                 ->orWhere('t.secondaryContact = ?2');
             $qb->setParameter(1, $id);
             $qb->setParameter(2, $id);
+            $qb->orderBy('t.created', 'DESC');
+            $qb->setMaxResults( $limit);
             $query = $qb->getQuery();
             $tours = $query->getResult();
 

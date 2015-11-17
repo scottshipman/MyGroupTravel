@@ -195,9 +195,12 @@ class Brand
      *
      * @return string
      */
-    public function getTertiaryColor()
-    {
-        return $this->tertiaryColor;
+    public function getTertiaryColor() {
+        if (empty($this->tertiaryColor)){
+            return 'rgb(211,211,211)';
+        } else {
+            return $this->tertiaryColor;
+        }
     }
 
     /**
