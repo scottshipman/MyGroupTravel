@@ -9,6 +9,7 @@
     {% if (quote.payingPlaces) or (quote.freePlaces) %}<li>Based on {% if quote.payingPlaces %}<strong>{{ quote.payingPlaces }}</strong>{% endif %} paying {% if quote.freePlaces != 0 %} and <strong>{{ quote.freePlaces }}</strong> free {% endif %} places</li>{% endif %}
     {% if quote.expiryDate %}<li>{% trans %}quote_site.quote_summary.expiry{% endtrans %} <strong>{{ quote.expiryDate|date(format) }}</strong></li>{% endif %}
     <ul class="quote-site-actions">
+        {% if  share is sameas(false) %}
         <li>
             {% if (quote.converted is sameas(false)) and (quote.quoteReference.converted is sameas(false)) %}
                 {% if date(quote.expiryDate) < date('now') %}
@@ -37,6 +38,7 @@
                 </a>
             {% endif %}
         </li>
+        {% endif %}
         <li class="share-text">
 
                         <span>

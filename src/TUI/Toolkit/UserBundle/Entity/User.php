@@ -114,7 +114,7 @@ class User extends BaseUser
         $this->enabled = false;
         $this->created = new \DateTime();
 
-        $this->roles = array('ROLE_USER', 'ROLE_CUSTOMER');
+        $this->roles = array('ROLE_CUSTOMER');
 
         /*      existing roles are:
                     super admin

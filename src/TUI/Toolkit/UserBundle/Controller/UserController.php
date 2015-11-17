@@ -322,7 +322,7 @@ class UserController extends Controller
                 'required' => false,
             ))
                 ->add('roles', 'choice', array(
-                    'choices' => array('ROLE_USER' => 'User', 'ROLE_CUSTOMER' => 'CUSTOMER', 'ROLE_BRAND' => 'BRAND', 'ROLE_ADMIN' => 'ADMIN',),
+                    'choices' => array('ROLE_CUSTOMER' => 'CUSTOMER', 'ROLE_BRAND' => 'BRAND', 'ROLE_ADMIN' => 'ADMIN',),
                     'multiple' => true,
                     'expanded' => TRUE,
                 ));
@@ -493,7 +493,7 @@ class UserController extends Controller
             ))
                 ->add('roles', 'choice', array(
                     'choices' => array(
-                        'ROLE_USER' => 'User',
+                      //  'ROLE_USER' => 'User',
                         'ROLE_CUSTOMER' => 'CUSTOMER',
                         'ROLE_BRAND' => 'BRAND',
                         'ROLE_ADMIN' => 'ADMIN',
@@ -509,7 +509,7 @@ class UserController extends Controller
             ))
                 ->add('roles', 'choice', array(
                     'choices' => array(
-                        'ROLE_USER' => 'User',
+                     //   'ROLE_USER' => 'User',
                         'ROLE_CUSTOMER' => 'CUSTOMER',
                         'ROLE_BRAND' => 'BRAND',
                         'ROLE_ADMIN' => 'ADMIN',
