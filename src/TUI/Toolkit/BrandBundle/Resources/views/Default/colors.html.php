@@ -105,25 +105,23 @@ function rgb_brightness( $rgb ) {
   $b = $rgb[2];
 
   return ( ($r * 299) + ($g * 587) + ($b * 114) ) / 1000; // W3C recommendation
-}
+};
+
+function color_contrast( $colorArray ) {
+  if ( rgb_brightness($colorArray) <= 125 ) {
+    return 'rgb(255,255,255)';
+  } else {
+    return 'rgb(66,66,66)';
+  }
+};
 
 $primary = preg_replace('/\s+/', '', $brand->getPrimaryColor());
 $secondary = preg_replace('/\s+/', '', $brand->getSecondaryColor());
+$tertiary = preg_replace('/\s+/', '', $brand->getTertiaryColor());
 
 $primaryArray = explode(',', str_replace(array('rgb(', ')'), array('', ''), $primary) );
 $secondaryArray = explode(',', str_replace(array('rgb(', ')'), array('', ''), $secondary) );
-
-if ( rgb_brightness($primaryArray) <= 125 ) {
-  $contrast = 'rgb(255,255,255)';
-} else {
-  $contrast = 'rgb(66,66,66)';
-};
-
-if ( rgb_brightness($secondaryArray) <= 125 ) {
-  $contrast_2 = 'rgb(255,255,255)';
-} else {
-  $contrast_2 = 'rgb(66,66,66)';
-};
+$tertiaryArray = explode(',', str_replace(array('rgb(', ')'), array('', ''), $tertiary) );
 
 ?><style>
 /* MDL color overrides */
@@ -132,7 +130,7 @@ a {
 }
 
 .mdl-color-text--primary-contrast {
-  color: <?php echo $contrast ?> !important;
+  color: <?php echo color_contrast($primaryArray) ?> !important;
 }
 
 .mdl-button.mdl-button--colored {
@@ -141,13 +139,20 @@ a {
 
 .mdl-button--raised.mdl-button--colored,
 .mdl-button--raised.mdl-button--colored:hover {
-  background-color: <?php echo $primary ?>;
-  color: <?php echo $contrast ?>;
+  background-color: <?php echo $secondary ?>;
+  color: <?php echo color_contrast($secondaryArray) ?>;
 }
 
+.brand_logo_login,
 .mdl-layout__header {
+  background-color: <?php echo $tertiary ?>;
+  color: <?php echo color_contrast($tertiaryArray) ?>;
+}
+
+.sub-header,
+.mdl-mini-footer {
   background-color: <?php echo $primary ?>;
-  color: <?php echo $contrast ?>;
+  color: <?php echo color_contrast($primaryArray) ?>;
 }
 
 .mdl-layout__drawer .mdl-navigation .active a {
@@ -176,33 +181,33 @@ a {
 
 .mdl-tabs.is-upgraded .mdl-tabs__tab.is-active::after,
 .mdl-tabs-no-swap .is-active::after {
-  background-color: <?php echo $primary ?>;
+  background-color: <?php echo $secondary ?>;
 }
 
 .page-title .mdl-button--raised.mdl-button--colored,
 .page-title .mdl-button--raised.mdl-button--colored:hover {
   background-color: <?php echo $secondary ?>;
-  color: <?php echo $contrast_2 ?>;
+  color: <?php echo color_contrast($secondaryArray) ?>;
 }
 
 /* Custom MDL matching colors */
 .tui-text-avatar {
   background-color: <?php echo $primary ?>;
-  color: <?php echo $contrast ?>;
+  color: <?php echo color_contrast($primaryArray) ?>;
 }
 
 .content-block h2 {
-  color: <?php echo $primary ?>;
+  color: <?php echo hsl_rgb(hsl_text(rgb_hsl($secondaryArray), 0.25)) ?>;;
 }
 
 .add-content-block {
-  border-color: <?php echo $primary ?>;
-  color: <?php echo $primary ?>;
+  border-color: <?php echo hsl_rgb(hsl_text(rgb_hsl($secondaryArray), 0.25)) ?>;
+  color: <?php echo hsl_rgb(hsl_text(rgb_hsl($secondaryArray), 0.25)) ?>;
 }
 
 .site-content-block-actions {
   background-color: <?php echo $primary ?>;
-  color: <?php echo $contrast ?>;
+  color: <?php echo color_contrast($primaryArray) ?>;
 }
 
 .mode-edit .inner-wrapper:hover {
@@ -233,14 +238,14 @@ a {
 }
 
 .alt-quote.even {
-  color: <?php echo hsl_rgb(hsl_text(rgb_hsl($primaryArray), 0.25)) ?>;
+  color: <?php echo hsl_rgb(hsl_text(rgb_hsl($secondaryArray), 0.25)) ?>;
 }
 
 .alt-quote.even:hover {
-  color: <?php echo hsl_rgb(hsl_text(rgb_hsl($primaryArray), 0)) ?>;
+  color: <?php echo hsl_rgb(hsl_text(rgb_hsl($secondaryArray), 0.125)) ?>;
 }
 
 .profile-tour-header:before {
-  background: linear-gradient(to bottom right, <?php echo hsl_rgb(hsl_background(rgb_hsl($primaryArray), 0.3)) ?> 0%, <?php echo hsl_rgb(hsl_background(rgb_hsl($primaryArray), 0.7)) ?> 100%);
+  background: linear-gradient(to bottom right, <?php echo hsl_rgb(hsl_background(rgb_hsl($tertiaryArray), 0.3)) ?> 0%, <?php echo hsl_rgb(hsl_background(rgb_hsl($tertiaryArray), 0.7)) ?> 100%);
 }
 </style>

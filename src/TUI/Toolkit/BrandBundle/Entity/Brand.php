@@ -53,9 +53,12 @@ class Brand
      */
     private $secondaryColor;
 
-    // @var string
-    // @ORM\Column(name="hoverColor", type="string", length=32)
-    // private $hoverColor; */
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tertiaryColor", type="string", length=32)
+     */
+    private $tertiaryColor;
 
     /**
      * @var longtext
@@ -174,28 +177,28 @@ class Brand
         return $this->secondaryColor;
     }
 
-    /*
-     * Set hoverColor
+    /**
+     * Set tertiaryColor
      *
-     * @param string $hoverColor
+     * @param string $tertiaryColor
      * @return Brand
-
-    public function setHoverColor($hoverColor)
+     */
+    public function setTertiaryColor($tertiaryColor)
     {
-        $this->hoverColor = $hoverColor;
+        $this->tertiaryColor = $tertiaryColor;
 
         return $this;
     }
 
     /**
-     * Get hoverColor
+     * Get tertiaryColor
      *
      * @return string
-
-    public function getHoverColor()
+     */
+    public function getTertiaryColor()
     {
-        return $this->hoverColor;
-    } */
+        return $this->tertiaryColor;
+    }
 
     /**
      * Set footerBody
