@@ -102,6 +102,8 @@ tour:
        name: Tour Name
        number: Tour Number
        organizers: Organizers
+       number: Tour Number
+       schedule: Passenger Payment Schedule
        footer:
             intro: Business Administrator Contact:
             intro_org: Your Contact:
@@ -157,7 +159,7 @@ tour:
     edit:
         summary: Summary
         details: Details
-        schedule: Payment Schedule
+        schedule: Payment Schedule (Per Person Amounts)
         deadlines: Task Deadlines
         promotional_content: Upload Promotional Content
         no_assets: No assets uploaded.

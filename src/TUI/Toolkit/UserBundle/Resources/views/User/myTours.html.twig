@@ -50,7 +50,11 @@
                    </div>
                </li>
                <li>
-                   <div class="profile-list-item item-2">{{ dtgFinal }}<br /><label>{% trans %}user.profile.my_quotes.days{% endtrans %}</label> </div>
+                   {% if is_granted('ROLE_BRAND') %}
+                        <div class="profile-list-item item-2">{% if tour.institution %} {{  tour.institution.name }}{% endif %}<br /><label>{% trans %}user.profile.my_quotes.institution{% endtrans %}</label> </div>
+                    {% else %}
+                        <div class="profile-list-item item-2">{{ dtgFinal }}<br /><label>{% trans %}user.profile.my_quotes.days{% endtrans %}</label> </div>
+                   {% endif %}
                </li>
                <li>
                    <div class="profile-list-item item-3">

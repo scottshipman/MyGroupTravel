@@ -56,7 +56,8 @@
 }
 
 .media-placeholder-image,
-#dropzone_form {
+#dropzone_form,
+.dropzone_form {
   width: 300px;
   height: 160px;
   background: transparent;
@@ -66,10 +67,19 @@
   margin-bottom: 20px;
 }
 
+#dropzone_form,
+.dropzone_form {
+  display: none;
+  padding: 20px;
+}
+
 .media-placeholder-image {
   text-align: center;
   display: block;
   cursor: pointer;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: contain;
 
   .fa {
     display: block;
@@ -99,17 +109,14 @@
 
 }
 
-#dropzone_form {
-  display: none;
-  padding: 20px;
-}
-
-#avatar-label {
+#avatar-label,
+.avatar-label {
   width: 300px;
   position: relative;
 }
 
-#dropzone-form-close {
+#dropzone-form-close,
+.dropzone-form-close {
   position: absolute;
   right: 0;
   top: 100%;

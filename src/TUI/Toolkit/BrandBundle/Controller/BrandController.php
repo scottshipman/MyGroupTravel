@@ -223,6 +223,18 @@ class BrandController extends Controller
           }
         }
 
+        //handling ajax request for mediaEmail
+        if (NULL != $editForm->getData()->getMediaEmail()){
+            $fileId = $editForm->getData()->getMediaEmail();
+          $entities = $em->getRepository('MediaBundle:Media')
+            ->findById($fileId);
+
+          if (NULL !== $entities) {
+            $mediaEmail = array_shift($entities);
+            $editForm->getData()->setMediaEmail($mediaEmail);
+          }
+        }
+
 
 
         if ($editForm->isValid()) {
