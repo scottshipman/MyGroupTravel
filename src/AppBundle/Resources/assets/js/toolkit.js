@@ -41,9 +41,9 @@
 
     $("#dialog").dialog({
         modal: true,
-        width: '60%',
-        height: 400,
-        draggable: false,
+        width: '620px',
+        height: 'auto',
+        draggable: true,
         resizable: false,
         title: 'Loading...',
         autoOpen: false,
@@ -57,8 +57,8 @@
                     .dialog("option", "height", $(window).height() );
             } else {
                 $("#dialog")
-                    .dialog("option", "width", "60%")
-                    .dialog("option", "height", 400 );
+                    .dialog("option", "width", "620px")
+                    .dialog("option", "height", "auto" )
             };
         }
     });
