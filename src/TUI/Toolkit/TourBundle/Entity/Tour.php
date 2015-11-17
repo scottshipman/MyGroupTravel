@@ -49,10 +49,10 @@ class Tour
     /**
      * @var integer
      *
-     * @ORM\Column(name="tour_number", type="integer")
+     * @ORM\Column(name="tour_number", type="integer", nullable=true)
      * @GRID\Column(field="tourNumber", title="Tour Number", export=true)
      */
-    private $tourNumber = 1;
+    private $tourNumber;
 
     /**
      * @var string
