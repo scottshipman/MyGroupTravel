@@ -26,3 +26,4 @@ parameters:
     date_format:    dd-mm-yy
     user_system_email: noreply@toolkit.com
     user_system_name: TUI Toolkit System
+    profile_query_limit:    5

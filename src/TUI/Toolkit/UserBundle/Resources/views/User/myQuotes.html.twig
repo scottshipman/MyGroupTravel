@@ -2,7 +2,7 @@
 {#  {{ dump(quotes) }} #}
 
 {% for quote in quotes %}
-<div class="tour-edit mdl-card mdl-shadow--2dp">
+<div class="tour-edit mdl-card mdl-shadow--2dp quote-cards">
     {% set bgpath = '' %}
     {% if quote.headerBlock is defined and quote.headerBlock != null %}
         {% if quote.headerBlock.mediaWrapper is defined and  quote.headerBlock.mediaWrapper != null %}

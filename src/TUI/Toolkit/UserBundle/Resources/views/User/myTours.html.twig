@@ -6,7 +6,7 @@
         {% if dtg.days < 1 %} {%  set dtgFinal = 0  %} {% else %} {% set dtgFinal = dtg.days %}{% endif %}
     {% else %} {% set dtgFinal = 'n/a' %}
     {% endif %}
-    <div class="tour-edit mdl-card mdl-shadow--2dp">
+    <div class="tour-edit mdl-card mdl-shadow--2dp tour-cards">
         {% set bgpath = ' ' %}
         {% if tour.headerBlock is defined and tour.headerBlock != null %}
             {% if tour.headerBlock.mediaWrapper is defined and tour.headerBlock.mediaWrapper != null %}
