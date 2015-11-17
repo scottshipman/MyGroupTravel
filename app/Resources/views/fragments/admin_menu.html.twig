@@ -30,7 +30,12 @@
 
     <nav class="mdl-navigation">
         {% block admin_menu %}
-            {{ knp_menu_render('admin_menu', {'currentClass': 'active'}) }}
+            {# generate menu options#}
+            {% if is_granted('ROLE_ADMIN') %} {%  set roleAdmin = TRUE %} {% else %}{%  set roleAdmin = FALSE %}{% endif %}
+
+            {#{{ knp_menu_render('admin_menu', {'currentClass': 'active'}) }}#}
+            {% set menu = knp_menu_get('admin_menu', [], { admin: roleAdmin}) %}
+            {{ knp_menu_render(menu) }}
         {% endblock %}
     </nav>
 

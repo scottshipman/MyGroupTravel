@@ -17,14 +17,16 @@ services:
      app.menu_builder:
         class: AppBundle\Menu\MenuBuilder
         arguments: ["@knp_menu.factory"]
+        tags:
+          - { name: knp_menu.menu_builder, method: createAdminMenu, alias: admin_menu }
 
      # create different menu services by reproducing the following, replacing main with menu name
-     app.main_menu:
-        class: Knp\Menu\MenuItem # the service definition requires setting the class
-        factory: ["@app.menu_builder", createAdminMenu] # replace createMainMenu with method name from AppBundle/Menu/MenuBuilder.php
-        arguments: ["@request_stack"]
-        tags:
-            - { name: knp_menu.menu, alias: admin_menu } # The alias is what is used to retrieve the menu
+#     app.main_menu:
+#        class: Knp\Menu\MenuItem # the service definition requires setting the class
+#        factory: ["@app.menu_builder", createAdminMenu] # replace createMainMenu with method name from AppBundle/Menu/MenuBuilder.php
+#        #arguments: ["@request_stack", "options"]
+#        tags:
+#            - { name: knp_menu.menu, alias: admin_menu } # The alias is what is used to retrieve the menu
 
      twig.extension.intl:
          class: Twig_Extensions_Extension_Intl

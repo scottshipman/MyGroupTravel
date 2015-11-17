@@ -3,6 +3,7 @@
     // Color picker
     $('#tui_toolkit_brandbundle_brand_primaryColor').addClass('color_picker');
     $('#tui_toolkit_brandbundle_brand_secondaryColor').addClass('color_picker');
+    $('#tui_toolkit_brandbundle_brand_tertiaryColor').addClass('color_picker');
 
     $('input.color_picker').spectrum({
         preferredFormat: "rgb",

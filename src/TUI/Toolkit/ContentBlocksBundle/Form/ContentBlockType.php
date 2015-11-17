@@ -35,9 +35,12 @@ class ContentBlockType extends AbstractType
 
             // Dont show locked or hidden fields unless Brand role or higher
             if($securityContext->isGranted('ROLE_BRAND')) {
-              $builder->add('locked', 'checkbox', array(
-                'required' => FALSE
-              ));
+                if(strpos($options['action'], '/QuoteVersion/')===true) {
+                    // but no locked field for quotes, just tours
+                    $builder->add('locked', 'checkbox', array(
+                        'required' => FALSE
+                    ));
+                }
               // "Hidden" field is now hidden!
               $builder
                 ->add('hidden', 'hidden', array(

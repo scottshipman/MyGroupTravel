@@ -27,7 +27,10 @@ class BrandType extends AbstractType
               'label' => 'brand.form.label.s_color',
               'translation_domain'  => 'messages',
             ))
-            // ->add('hoverColor')
+            ->add('tertiaryColor','text', array(
+              'label' => 'brand.form.label.t_color',
+              'translation_domain'  => 'messages',
+            ))
             ->add('footerBody', 'ckeditor', array())
             ->add('media', 'hidden', array(
                 'required' => false,

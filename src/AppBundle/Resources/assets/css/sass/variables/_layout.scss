@@ -3,7 +3,7 @@ $fluid_width : 100%;
 
 // Page widths and gutters
 $page_width : 96%;
-$page_max_width : 1280px;
+$page_max_width : 1170px;
 $page_width_reset : (100% / $page_width) * 100%; // 104.1667%
 $page_gutter : (100% - $page_width) / 2; // 2%
 $page_gutter_reset : ($page_width_reset - 100%) / 2; // 2.0833%

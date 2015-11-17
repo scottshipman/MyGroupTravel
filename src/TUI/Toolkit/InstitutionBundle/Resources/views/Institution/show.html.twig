@@ -64,6 +64,8 @@
                 <i class="fa fa-pencil-square-o"></i> {% trans %}institution.actions.edit{% endtrans %}
             </a>
         </li>
-        <li onclick="return confirm('{% trans %}institution.actions.confirm{% endtrans %}')">{{ form(delete_form) }}</li>
+        {% if is_granted("ROLE_ADMIN") %}
+            <li onclick="return confirm('{% trans %}institution.actions.confirm{% endtrans %}')">{{ form(delete_form) }}</li>
+        {% endif %}
     </ul>
 {% endblock %}
