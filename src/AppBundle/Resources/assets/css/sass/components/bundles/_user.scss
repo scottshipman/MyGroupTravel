@@ -83,6 +83,40 @@
 
 }
 
+.profile-tab {
+  line-height: 3;
+  border-bottom: 1px solid grey;
+  opacity: .5;
+  display:block;
+  font-weight: 400;
+  font-size: 18px;
+  padding-left:1em;
+  cursor: pointer;
+}
+.profile-tab-header {
+  line-height: 3;
+  border-bottom: 1px solid grey;
+  opacity: .7;
+  display:block;
+  font-weight: 400;
+  font-size: 18px;
+}
+.profile-tabs {
+  padding: 1em 1em 1em 0;
+}
+.profile-details-card {
+  justify-content: flex-end;
+  padding:1em;
+  line-height: 1.5;
+  font-size:15px;
+  font-weight:200;
+}
+
+.profile-tab-active {
+  font-weight:600;
+  opacity: .8;
+}
+
 .profile-tour-details {
   position: relative;
 

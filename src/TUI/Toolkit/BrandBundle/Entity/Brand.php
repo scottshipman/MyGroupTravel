@@ -195,9 +195,12 @@ class Brand
      *
      * @return string
      */
-    public function getTertiaryColor()
-    {
-        return $this->tertiaryColor;
+    public function getTertiaryColor() {
+        if (empty($this->tertiaryColor)){
+            return 'rgb(211,211,211)';
+        } else {
+            return $this->tertiaryColor;
+        }
     }
 
     /**
@@ -246,6 +249,31 @@ class Brand
     public function getMedia()
     {
         return $this->media;
+    }
+
+    /**
+     * @var \TUI\Toolkit\MediaBundle\Entity\Media
+     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\MediaBundle\Entity\Media", cascade={"persist"}, fetch="LAZY")
+     * @ORM\JoinColumn(name="mediaEmail", referencedColumnName="id")
+     */
+    protected $mediaEmail;
+
+    /**
+     * @param  $mediaEmail
+     */
+    public function setMediaEmail($mediaEmail)
+    {
+        $this->mediaEmail = $mediaEmail;
+
+        return $mediaEmail;
+    }
+
+    /**
+     * @return MediaEmail
+     */
+    public function getMediaEmail()
+    {
+        return $this->mediaEmail;
     }
 
     /**

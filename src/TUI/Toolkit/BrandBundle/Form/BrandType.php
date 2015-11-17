@@ -36,7 +36,14 @@ class BrandType extends AbstractType
                 'required' => false,
                 'data_class' => 'TUI\Toolkit\MediaBundle\Entity\Media',
                 'attr' => array(
-                    'class' => 'media-placeholder',
+                    'class' => 'media-placeholder media-placeholder-primary',
+                )
+            ))
+            ->add('mediaEmail', 'hidden', array(
+                'required' => false,
+                'data_class' => 'TUI\Toolkit\MediaBundle\Entity\Media',
+                'attr' => array(
+                    'class' => 'media-placeholder media-placeholder-email',
                 )
             ))
         ;

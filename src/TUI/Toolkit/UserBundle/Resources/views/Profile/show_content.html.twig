@@ -1,25 +1,68 @@
 {% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
-<div class="profile-content">
+<div class="profile-content" xmlns="http://www.w3.org/1999/html">
 
-<div class="fos_user_user_show">
-    <div class="profile-details">
-        {# user details here #}
-        <p>{% trans %}user.profile.label.name{% endtrans %}: {% if user.honorific %}{{ user.honorific }} {% endif %}{{ user.firstName }} {{ user.lastName }}</p>
-        <p>{% trans %}user.profile.label.email{% endtrans %}: {{ user.email }}</p>
-        <p>{% trans %}user.profile.label.created{% endtrans %}: {{ user.created |date (format) }}</p>
-        <p><a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="/user/{{ user.id }}/edit"><i class="fa fa-pencil"></i> {% trans %}user.actions.edit_profile{% endtrans %}</a></p>
+    <div class="fos_user_user_show">
+        <div class="profile-details">
+            <div class="profile-details-card">
+                {# user details here #}
+                <h2 class="mdl-card__title-text">Account Details</h2>
+                <p>{% trans %}user.profile.label.name{% endtrans %}: {% if user.honorific %}{{ user.honorific }} {% endif %}{{ user.firstName }} {{ user.lastName }}</p>
+                <p>{% trans %}user.profile.label.email{% endtrans %}: {{ user.email }}</p>
+                <p>{% trans %}user.profile.label.created{% endtrans %}: {{ user.created |date (format) }}</p>
+                <p><a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="/user/{{ user.id }}/edit"><i class="fa fa-pencil"></i> {% trans %}user.actions.edit_profile{% endtrans %}</a></p>
+            </div>
+            {% if is_granted("ROLE_BRAND") %}
+            <div class="profile-tabs">
+                <div class="profile-tab-header myQuoteLink"><i class="fa fa-filter"></i> Filters </div>
+                <div id="profile-tab-all" class="profile-tab myQuoteLink profile-tab-active">All Recent </div>
+                <div id="profile-tab-quotes" class="profile-tab myQuoteLink">My Recent Quotes</div>
+                <div id="profile-tab-tours" class="profile-tab  myQuoteLink">My Recent Tours</div>
+            </div>
+            {% endif %}
+
+        </div>
+
+
+
+
+        <div class="profile-permissions">
+            {# list tours and quotes here #}
+            {% if is_granted("ROLE_BRAND") %}
+                {{ render(controller('TUIToolkitUserBundle:User:getQuotes', {'id' : user.id })) }}
+            {% endif %}
+
+            {{ render(controller('TUIToolkitUserBundle:User:getTours', {'id' : user.id })) }}
+        </div>
+
     </div>
 
-    <div class="profile-permissions">
-        {# list tours and quotes here #}
-        {% if is_granted("ROLE_BRAND") %}
-            {{ render(controller('TUIToolkitUserBundle:User:getQuotes', {'id' : user.id })) }}
-        {% endif %}
-
-        {{ render(controller('TUIToolkitUserBundle:User:getTours', {'id' : user.id })) }}
-    </div>
-
-    <div style="clear:both;"></div>
 </div>
 
-</div>
+{% if is_granted("ROLE_BRAND") %}
+    <script>
+        $(document).ready(function () {
+            $(document).on('click', '#profile-tab-all', function (e) {
+                $('.quote-cards').show();
+                $('.tour-cards').show();
+                $('#profile-tab-all').addClass('profile-tab-active');
+                $('#profile-tab-quotes').removeClass('profile-tab-active');
+                $('#profile-tab-tours').removeClass('profile-tab-active');
+
+            });
+            $(document).on('click', '#profile-tab-quotes', function (e) {
+                $('.quote-cards').show();
+                $('.tour-cards').hide();
+                $('#profile-tab-all').removeClass('profile-tab-active');
+                $('#profile-tab-quotes').addClass('profile-tab-active');
+                $('#profile-tab-tours').removeClass('profile-tab-active');
+            });
+            $(document).on('click', '#profile-tab-tours', function (e) {
+                $('.tour-cards').show();
+                $('.quote-cards').hide();
+                $('#profile-tab-all').removeClass('profile-tab-active');
+                $('#profile-tab-quotes').removeClass('profile-tab-active');
+                $('#profile-tab-tours').addClass('profile-tab-active');
+            });
+        });
+    </script>
+{% endif %}
