@@ -159,7 +159,7 @@ tour:
     edit:
         summary: Summary
         details: Details
-        schedule: Payment Schedule
+        schedule: Payment Schedule (Per Person Amounts)
         deadlines: Task Deadlines
         promotional_content: Upload Promotional Content
         no_assets: No assets uploaded.
