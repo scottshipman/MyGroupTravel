@@ -61,6 +61,8 @@ class UserController extends Controller
         // Attach the source to the grid
         $grid->setSource($source);
         $grid->setId('usergrid');
+        // set grid filter persistance so filters are remebered for whole session
+        $grid->setPersistence(true);
         $grid->hideColumns($hidden);
 
 
@@ -198,7 +200,9 @@ class UserController extends Controller
 
         // Attach the source to the grid
         $grid->setSource($source);
-        $grid->setId('usergrid');
+        $grid->setId('usergriddeleted');
+        // set grid filter persistance so filters are remebered for whole session
+        $grid->setPersistence(true);
         $grid->hideColumns($hidden);
 
         // Add action column

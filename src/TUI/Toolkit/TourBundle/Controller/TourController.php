@@ -103,6 +103,8 @@ class TourController extends Controller
         // Attach the source to the grid
         $grid->setSource($source);
         $grid->setId('tourgrid');
+        // set grid filter persistance so filters are remebered for whole session
+        $grid->setPersistence(true);
         $grid->hideColumns($hidden);
 
         // Add action column
@@ -274,7 +276,9 @@ class TourController extends Controller
 
         // Attach the source to the grid
         $grid->setSource($source);
-        $grid->setId('tourgrid');
+        $grid->setId('tourgriddeleted');
+        // set grid filter persistance so filters are remebered for whole session
+        $grid->setPersistence(true);
         $grid->hideColumns($hidden);
 
         // Add action column
