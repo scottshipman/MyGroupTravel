@@ -111,6 +111,7 @@ user:
             name: Name
             email: Email
             created: Created
+            account_details: My Account
         login:
             reset: Reset Password
             sign_in: Sign In
