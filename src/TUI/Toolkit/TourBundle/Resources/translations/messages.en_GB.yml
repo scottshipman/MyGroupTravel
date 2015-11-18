@@ -58,7 +58,7 @@ tour:
         print: Print
         pdf: PDF
         download_promo: Download Promo Materials
-        email_organizer: Email/Notify Organizer
+        email_organizer: Email/Notify Organiser
         add_header: Add Header Slideshow
         edit_tabs: Edit Tabs
         add_tab: Add New Tab
@@ -101,7 +101,7 @@ tour:
        price: Price Per Passenger
        name: Tour Name
        number: Tour Number
-       organizers: Organizers
+       organizers: Organisers
        number: Tour Number
        schedule: Passenger Payment Schedule
        footer:
@@ -181,7 +181,7 @@ tour:
         cancel: Cancel
 
     tour_summary:
-        signup: Sign Me Up
+        signup: Sign up
         expired: Expired
         departing: Departing:
         duration: Duration:
@@ -243,7 +243,7 @@ tour:
                 email: Email
                 enabled: Enabled
                 ba_lname: Primary Business Admin (Last Name)
-                o_lname: Organizer (Last Name)
+                o_lname: Organiser (Last Name)
         column:
             title:
                 last_login: Last Login
@@ -286,7 +286,7 @@ tour:
             online: Online Payment
             other: Other
         tour_summary:
-            expiration: Tour Expiration? (DD-MM-YYYY)
+            expiration: Tour Expiry Date? (DD-MM-YYYY)
             departure: Departure Date (DD-MM-YYYY)
             return: Return Date (DD-MM-YYYY)
             duration: Duration
@@ -300,7 +300,7 @@ tour:
         tour:
             placeholder: Select
             name: Tour Name
-            expiration: Quote Expiration? (DD-MM-YYYY)
+            expiration: Quote Expiry Date? (DD-MM-YYYY)
             sales_agent: Primary Business Admin
             second_contact: Other Business Admin
             destination: Destination

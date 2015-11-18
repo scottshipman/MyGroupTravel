@@ -56,10 +56,10 @@ registration:
 # Password resetting
 resetting:
     password_already_requested: The password for this user has already been requested within the last 24 hours.
-    check_email: An email has been sent to %email%. It contains a link you must click to reset your password.
+    check_email: We have sent an email to the address you provided which will allow you to reset your password.
     request:
-        invalid_username: The username or email address "%username%" does not exist.
-        username: "Username or email address"
+        invalid_username: The account for "%username%" cannot be found.
+        username: "Email address"
         submit: Reset password
     reset:
         submit: Change password

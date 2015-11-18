@@ -5,7 +5,7 @@ user:
         index: User Dashboard
         new: Create New User
         show: User
-        layout_auth: My Tours
+        layout_auth: Home
         layout_anon: User Login
         deleted: User Dashboard - Deleted
 
@@ -14,17 +14,17 @@ user:
         index: User
         new: Create New User
         show: User
-        layout_auth: My Tours
+        layout_auth: Home
         layout_anon: User Login
         deleted: User Dashboard - Deleted
 
     actions:
-        back: Back to the list
+        back: Back to the user dashboard
         edit: Edit
         update: Update
         create: Create
         delete: Delete
-        create_new: Create a New User
+        create_new: Create a new user
         password: Set Password
         edit_profile: Edit My Profile
         notify: Send User a Notification
@@ -97,14 +97,15 @@ user:
         phone: Phone Number
         media: Avatar
         password: Password
-        question: Please enter a Security Question.
-        question_prompt: Please answer your pre-selected Security Question.
-        answer: Your Security Question's answer.
-        terms_agree: I have read and agree to the %link_start%Terms of Service%link_end%
+        question: Please enter a security question.
+        question_prompt: Please answer your pre-selected security question.
+        answer: Your security question's answer.
+        terms_agree: I have read and agree to the %link_start%Terms of Use%link_end%
         resetting:
             submit: Submit
         activate:
             submit: Submit
+        resetlink: To edit your account password or security question
 
     profile:
         label:
@@ -115,10 +116,10 @@ user:
         login:
             reset: Reset Password
             sign_in: Sign In
-            forgot: Forgot Password?
+            forgot: Forgotten Password?
         my_quotes:
             institution: Institution
-            organizer: Organizer
+            organizer: Organiser
             salesAgent: Business Contact
             price: Price
             quote: Quote
@@ -127,9 +128,9 @@ user:
             no_price: N/A
 
     activate:
-        brand: "Its time to set up your account so you can start managing Tours. Just setup your password and security question and you'll be on your way."
-        organizer: "Its time to set up your account so you can start promoting your tour to passengers. Just setup your password and security question and you'll be on your way."
-        participant: "Its time to set up your account so you can manage your passenger data. Just setup your password and security question and you'll be on your way."
+        brand: "Please create a password and security question to finish setting up your account."
+        organizer: "It's time to set up your account. Just create a password and security question and you'll be on your way."
+        participant: "It's time to set up your account. Just create a password and security question and you'll be on your way."
 
 
 

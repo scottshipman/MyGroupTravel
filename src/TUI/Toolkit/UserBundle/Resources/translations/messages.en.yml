@@ -97,7 +97,7 @@ user:
         phone: Phone Number
         media: Avatar
         password: Password
-        question: Please enter a Security Question.
+        question: Please enter a ecurity Question.
         question_prompt: Please answer your pre-selected Security Question.
         answer: Your Security Question's answer.
         terms_agree: I have read and agree to the %link_start%Terms of Service%link_end%

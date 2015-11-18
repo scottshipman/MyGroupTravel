@@ -7,27 +7,27 @@ quote:
         show: Site View
         layout_auth: My Tours
         layout_anon: Quote Login
-        deleted: Quote Dashboard - Deleted
-        converted: Quote Dashboard - Converted
+        deleted: Quote Dashboard
+        converted: Quote Dashboard
 
     page_title:
         edit: Edit Quote
-        index: Quote Dashboard - Active
+        index: Quote Dashboard
         new: Create New Quote
         show: Site View
         layout_auth: My Tours
         layout_anon: Quote Login
-        deleted: Quote Dashboard - Deleted
-        converted: Quote Dashboard - Converted
+        deleted: Quote Dashboard
+        converted: Quote Dashboardd
 
     actions:
-        back: Back to the list
+        back: Back to the quotes dashboard
         back_dash: Back to the Dashboard
         back_show: Back to Show
         edit: Edit
         update: Update
-        create: Create
-        create_template: Create Template
+        create: Create quote
+        create_template: Create template
         delete: Delete
         create_new: Create a New Quote
         create_new_template: Create a new Template
@@ -86,7 +86,7 @@ quote:
         filters:
             title:
                 sales_agent: Primary Business Admin (last name)
-                organizer: Organizer (last name)
+                organizer: Organiser (last name)
                 createdby: Created By
                 owner: Template Owner
 
@@ -98,7 +98,7 @@ quote:
         deleted: Deleted Quotes
         current:  Current Quotes
         converted: Converted Quotes
-        alternate: Alternate Quotes
+        alternate: Alternative Quotes
 
     media:
         label: Click to upload
@@ -118,7 +118,7 @@ quote:
             institution_name: "Institution Name:"
             tour_name: "Tour Name:"
             quote_number: "Quote Number:"
-            organizer: "Organizer Name / Email:"
+            organizer: "Organiser Name / Email:"
             changes: "Additions:"
             cta: Edit your Quote
             link_text: "You can also paste the link below straight into your browser window:"
@@ -128,7 +128,7 @@ quote:
             institution_name: "Institution Name:"
             tour_name: "Tour Name:"
             quote_number: "Quote Number:"
-            organizer: "Organizer Name / Email:"
+            organizer: "Organiser Name / Email:"
             additions: "Additions:"
             cta: View Quote
             link_text: "You can also paste the link below straight into your browser window:"
@@ -156,7 +156,7 @@ quote:
             additional: Anything Else?
             submit: Submit
         summary:
-            expiry: Quote Expiration?
+            expiry: Quote Expiry Date
             departure: Departure Date
             return: Return Date
             duration: Duration
@@ -170,7 +170,7 @@ quote:
             welcomeMsg: Summary Message
         quote:
             secondaryContact: Other Business Admin
-            organizer: Organizer
+            organizer: Organiser
             institution: Institution
             salesAgent: Primary Business Admin
             salesAgentTemplate: Template Owner
@@ -181,7 +181,7 @@ quote:
             template: Convert to Template?
             quoteReference: Quote Details
             name: Quote Name
-            expiry: Quote Expiration?
+            expiry: Quote Expiry Date?
             departure: Departure Date
             return: Return Date
             duration: Duration
@@ -209,7 +209,7 @@ quote_site:
         price_person: "Price per person "
         expiry: "Quote valid until "
     quote_sibling:
-        intro: "Alternate quotes for "
+        intro: "Alternative quotes for "
         related: "Other Related Quotes for "
         default_name: this tour
         tour_name: Tour Name
@@ -227,15 +227,15 @@ quote_site:
         price_person: "Price per person: "
         expiry: "Quote valid until "
         actions:
-            like: Like Quote
+            like: Like quote
             expired: Expired
             converted: Converted
-            request_change: Request Changes
+            request_change: Request changes
             share: Share this quote with others
     site_pdf:
         quote_number: "Quote Number: "
-        alternate_quotes: Alternate Quotes
-        organizer: "Tour Organizer: "
+        alternate_quotes: Alternative Quotes
+        organizer: "Tour Organiser: "
         price_person: "Price per person: "
     site_prompt:
         quote_number: Enter your Quote Number
