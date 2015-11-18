@@ -30,10 +30,14 @@ use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+
 
 use Symfony\Component\EventDispatcher\EventDispatcher,
   Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken,
   Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
+use TUI\Toolkit\UserBundle\TUIToolkitUserBundle;
 
 /**
  * User controller.
@@ -249,6 +253,18 @@ class UserController extends Controller
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
+        //Check softdeleted users to make sure there are no duplicates
+        $formEmail = $form->getData()->getEmail();
+        $em = $this->getDoctrine()->getManager();
+        $filters = $em->getFilters();
+        $filters->disable('softdeleteable');
+        $existingUser = $em->getRepository('TUIToolkitUserBundle:User')->findOneByEmail($formEmail);
+        $filters->enable('softdeleteable');
+
+        if ($existingUser != null) {
+            $form['email']->addError(new FormError('This user exists and has been deleted.  Please contact and administrator to re-enable this user.'));
+        }
+
         if ($form->isValid()) {
             $entity->setUsername($entity->getEmail());
             $entity->setPassword('');
@@ -275,6 +291,18 @@ class UserController extends Controller
         $entity = new User();
         $form = $this->create_ajaxCreateForm($entity);
         $form->handleRequest($request);
+
+        //Check softdeleted users to make sure there are no duplicates
+        $formEmail = $form->getData()->getEmail();
+        $em = $this->getDoctrine()->getManager();
+        $filters = $em->getFilters();
+        $filters->disable('softdeleteable');
+        $existingUser = $em->getRepository('TUIToolkitUserBundle:User')->findOneByEmail($formEmail);
+        $filters->enable('softdeleteable');
+
+        if ($existingUser != null) {
+            $form['email']->addError(new FormError('This user exists and has been deleted.  Please contact and administrator to re-enable this user.'));
+        }
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -544,6 +572,17 @@ class UserController extends Controller
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
+
+        //Check softdeleted users to make sure there are no duplicates
+        $formEmail = $editForm->getData()->getEmail();
+        $filters = $em->getFilters();
+        $filters->disable('softdeleteable');
+        $existingUser = $em->getRepository('TUIToolkitUserBundle:User')->findOneByEmail($formEmail);
+        $filters->enable('softdeleteable');
+
+        if ($existingUser != null) {
+            $editForm['email']->addError(new FormError('This user exists and has been deleted.  Please contact and administrator to re-enable this user.'));
+        }
         if (Null != $editForm->getData()->getMedia()) {
             $fileId = $editForm->getData()->getMedia();
             $entities = $em->getRepository('MediaBundle:Media')
