@@ -66,9 +66,16 @@ class TourSiteController extends Controller
     $brand = $em->getRepository('BrandBundle:Brand')->findAll();
     $brand = $brand[0];
 
-    if ($securityContext->isGranted('ROLE_BRAND') || in_array('organizer', $permission) || in_array('assistant', $permission)){
+    if ($securityContext->isGranted('ROLE_BRAND')){
       $editable = TRUE;
-    }
+    };
+
+    if (isset($permission)){
+      if (in_array('organizer', $permission) || in_array('assistant', $permission)) {
+      $editable = TRUE;
+      }
+    };
+
     // get the content blocks to send to twig
     $items=array(); $tabs=array();
     $content = $entity->getContent();
@@ -192,7 +199,7 @@ class TourSiteController extends Controller
       // increment the view OR shareView on the record for anonymous viewers only
       $em = $this->getDoctrine()->getManager();
       $entity = $em->getRepository('TourBundle:Tour')->find($id);
-      if (not is_granted('IS_AUTHENTICATED_REMEMBERED')) {
+      if (FALSE === $securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
         if ($entity) {
 
           $entity->setViews($entity->getViews() + 1);
