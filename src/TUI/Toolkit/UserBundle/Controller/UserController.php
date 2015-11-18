@@ -439,6 +439,10 @@ class UserController extends Controller
      */
     public function editAction($id)
     {
+        if ($this->canEditUser($id) == false) {
+            throw new AccessDeniedException('You are not allowed to edit this user.');
+        }
+
         // set a session var for referrer to return user back to it
         $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null;
         $_SESSION['user_edit_return'] = $referer;
