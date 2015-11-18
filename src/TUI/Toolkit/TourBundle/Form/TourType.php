@@ -58,6 +58,10 @@ class TourType extends AbstractType
             'required' => false,
             'label' => 'tour.form.tour.tour_number',
           ))
+          ->add('displayName', 'text', array(
+            'required'  => false,
+            'label' => 'tour.form.tour.display_name',
+          ))
           ->add('currency', 'entity', array(
             'required' => false,
             'placeholder' => 'tour.form.tour.placeholder',
@@ -125,10 +129,6 @@ class TourType extends AbstractType
             'format' => $date_format,
           ))
           ->add('duration')
-          ->add('displayName', 'text', array(
-            'required'  => false,
-            'label' => 'tour.form.tour.display_name',
-          ))
           ->add('transportType', 'entity', array(
             'required' => false,
             'placeholder' => 'tour.form.tour.placeholder',

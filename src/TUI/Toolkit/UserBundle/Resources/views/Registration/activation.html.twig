@@ -14,10 +14,10 @@
     {{ form_row(form.plainPassword) }}
     {{ form_row(form.question) }}
     {{ form_row(form.answer) }}
-    {% if form.termsAgree is defined %}
+    {% if form.termsAgree is defined %}<div class="terms">
         {{ form_widget(form.termsAgree,{'label' : 'user.form.terms_agree'|trans|nl2br|replace
             ({'%link_start%' : '<a target="_blank" href="'~path('terms_of_service')~'">', '%link_end%' : '</a>'}) | raw}) }}
-    {% endif %}
+    </div>{% endif %}
 
        <div> {{ form_widget(form.submit) }}</div>
 
