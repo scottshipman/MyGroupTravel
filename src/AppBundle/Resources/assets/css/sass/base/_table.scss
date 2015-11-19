@@ -182,3 +182,20 @@ table {
   }
 
 }
+
+.show-table {
+
+   td.mdl-data-table__cell--non-numeric {
+    text-align: center;
+
+     &:before {
+       content: '';
+     }
+
+    @include breakpoint_tablet() {
+      text-align: right;
+    }
+
+  }
+  
+}
