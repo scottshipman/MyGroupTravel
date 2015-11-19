@@ -164,6 +164,7 @@ fos_user:
                 template:   TUIToolkitUserBundle:Resetting:reset.html.twig
 #            form:
 #                type: tui_user_resetting
+            token_ttl: 120  # reset can be done every 2 minutes
 
 
 knp_menu:
