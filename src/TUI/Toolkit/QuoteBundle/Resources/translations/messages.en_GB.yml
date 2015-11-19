@@ -29,8 +29,8 @@ quote:
         create: Create quote
         create_template: Create template
         delete: Delete
-        create_new: Create a New Quote
-        create_new_template: Create a new Template
+        create_new: Create a new quote
+        create_new_template: Create a new template
         prompt: Go
         change_request: Submit Change request
         accept_form: Go
@@ -75,10 +75,10 @@ quote:
         lock: This quote's lock has been toggled.
 
     grid:
-        no_result: There are no Quotes to show. Please check your filter settings and try again.
-        no_result-deleted: There are no Deleted Quotes to show. Please check your filter settings and try again.
-        no_result-converted: There are no Converted Quotes to show. Please check your filter settings and try again.
-        no_results-templates: There are no Templates to show. Please check your filter settings and try again.
+        no_result: There are no quotes to show. Please check your filter settings and try again.
+        no_results-deleted: There are no deleted quotes to show. Please check your filter settings and try again.
+        no_result-converted: There are no converted quotes to show. Please check your filter settings and try again.
+        no_results-templates: There are no templates to show. Please check your filter settings and try again.
         export: Quotes as CSV
         export_deleted: Deleted Quotes as CSV
         export_converted: Converted Quotes as CSV
@@ -141,7 +141,6 @@ quote:
             like: Like Quote
 
     form:
-
         prompt:
             quotenumber: Quote Number
         accept:

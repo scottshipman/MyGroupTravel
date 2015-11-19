@@ -25,8 +25,8 @@ user:
         create: Create
         delete: Delete
         create_new: Create a new user
-        password: Set Password
-        edit_profile: Edit My Profile
+        password: Set password
+        edit_profile: Edit my profile
         notify: Send User a Notification
         activate: Submit
         security: Reset Security Info
@@ -55,8 +55,9 @@ user:
         registration_notification: A Notification was sent to
 
     grid:
-        no_result: There are no Users to show. Please check your filter settings and try again.
-        no_result-deleted: There are no Deleted Users to show. Please check your filter settings and try again.
+        no_result: There are no users to show. Please check your filter settings and try again.
+        no_results-deleted: There are no deleted users to show. Please check your filter settings and try again.
+        no_data_message: There are no deleted users to show. Please check your filter settings and try again.
         export: Users as CSV
         export_deleted: Deleted Users as CSV
         filter:
@@ -98,11 +99,12 @@ user:
         media: Avatar
         password: Password
         question: Please enter a security question.
-        question_prompt: Please answer your pre-selected security question.
+        question_prompt: Please provide the answer to your security question.
         answer: Your security question's answer.
         terms_agree: I have read and agree to the %link_start%Terms of Use%link_end%
         resetting:
             submit: Submit
+            securityprompt: Please provide the answer to your security question:
         activate:
             submit: Submit
         resetlink: To edit your account password or security question

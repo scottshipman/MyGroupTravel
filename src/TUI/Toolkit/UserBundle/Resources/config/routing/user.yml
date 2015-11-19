@@ -62,7 +62,7 @@ user_registration_confirmation:
   defaults: {_controller: "TUIToolkitUserBundle:User:registerConfirmationTrigger" }
 
 user_password_reset:
-  path: §assword/reset/{token}
+  path: password/reset/{token}
   defaults: {_controller: "TUIToolkitUserBundle:User:resetPassword" }
 
 user_password_reset_submit:
