@@ -138,6 +138,11 @@
                             $('#content-blocks-' + blockId).addClass('site-content-blocks-size-half');
                         };
                         editBlock.html('');
+                        $('.flexslider').flexslider({
+                            directionNav: false,
+                            controlNav: false,
+                            smoothHeight: true
+                        });
                     });
                 } else {
                     window.location.hash = 'site-content';

@@ -61,6 +61,8 @@ class UserController extends Controller
         // Attach the source to the grid
         $grid->setSource($source);
         $grid->setId('usergrid');
+        // set grid filter persistance so filters are remebered for whole session
+        $grid->setPersistence(true);
         $grid->hideColumns($hidden);
 
 
@@ -198,7 +200,9 @@ class UserController extends Controller
 
         // Attach the source to the grid
         $grid->setSource($source);
-        $grid->setId('usergrid');
+        $grid->setId('usergriddeleted');
+        // set grid filter persistance so filters are remebered for whole session
+        $grid->setPersistence(true);
         $grid->hideColumns($hidden);
 
         // Add action column
@@ -435,6 +439,10 @@ class UserController extends Controller
      */
     public function editAction($id)
     {
+        if ($this->canEditUser($id) == false) {
+            throw new AccessDeniedException('You are not allowed to edit this user.');
+        }
+
         // set a session var for referrer to return user back to it
         $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null;
         $_SESSION['user_edit_return'] = $referer;

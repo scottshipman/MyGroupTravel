@@ -24,8 +24,7 @@ framework:
     csrf_protection: ~
     validation:      { enable_annotations: true }
     #serializer:      { enable_annotations: true }
-    templating:
-        engines: ['twig','php']
+    templating: { engines: ['twig', 'php'], assets_version: %cache_asset_version% }
         #assets_version: SomeVersionScheme
     default_locale:  "%locale%"
     trusted_hosts:   ~
@@ -36,8 +35,7 @@ framework:
     fragments:       ~
     http_method_override: true
     translator: ~
-    # asset_version used to bust cache on deployments. should be incremented during deployments using git tag number in paramters.yml by Jenkins
-    templating: { engines: ['twig'], assets_version: %cache_asset_version% }
+
 
 # Twig Configuration
 twig:
