@@ -101,9 +101,17 @@
                         $("#loader").css("display", "none");
                     });
                 }
-            } else { // on Edit/Show page
-                $("#dialog").html("");
-                $('#dialog').dialog('close');
+            } else { // on Quoteversion Edit/Show page
+                var blockId = {{ entity.id }};
+                var editBlock = $("#editable-content-blocks-" + blockId);
+                var previewBlock = $('#content-blocks-' + blockId);
+                editBlock.html('');
+                editBlock.hide();
+                previewBlock.show();
+                $('.content-block-actions').show();
+                $("#loader").css("display", "block");
+                window.location.reload(true);
+
 
             }
         });
