@@ -21,17 +21,17 @@
         <tbody>
         {% for entity in entities %}
             <tr>
-                <td class="mdl-data-table__cell--non-numeric">
+                <td class="mdl-data-table__cell--non-numeric" data-th="{% trans %}tripstatus.table.label.name{% endtrans %}">
                     <a href="{{ path('manage_tripstatus_show', { 'id': entity.id }) }}">{{ entity.name }}</a> ({{ entity.id }})
                 </td>
-                <td class="mdl-data-table__cell--non-numeric">
+                <td class="mdl-data-table__cell--non-numeric" data-th="{% trans %}tripstatus.table.label.visible{% endtrans %}">
                     {% if entity.visible == 1 %}
                         <i class="fa fa-check"></i>
                     {% else %}
                         <i class="fa fa-times"></i>
                     {% endif %}
                 </td>
-                <td class="mdl-data-table__cell--non-numeric cell-actions">
+                <td class="mdl-data-table__cell--non-numeric cell-actions" data-th="{% trans %}tripstatus.table.label.action{% endtrans %}">
                     <ul class="table-actions">
                         <li>
                             <a href="{{ path('manage_tripstatus_show', { 'id': entity.id }) }}" title="{% trans %}tripstatus.table.actions.view{% endtrans %}"><i class="fa fam-view"></i></a>
