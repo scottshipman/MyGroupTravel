@@ -15,6 +15,7 @@ use APY\DataGridBundle\Grid\Source\Entity;
 use APY\DataGridBundle\Grid\Export\CSVExport;
 use APY\DataGridBundle\Grid\Action\RowAction;
 use Doctrine\ORM\Query\ResultSetMapping;
+use Symfony\Component\Form\FormError;
 
 use DeepCopy\DeepCopy;
 use DeepCopy\Filter\Doctrine\DoctrineCollectionFilter;
@@ -612,6 +613,8 @@ class QuoteVersionController extends Controller
                 $organizer = array_shift($entities);
                 $form->getData()->getQuoteReference()->setOrganizer($organizer);
             }
+        }else {
+            $form['quoteReference']['organizer']->addError(new FormError($this->get('translator')->trans('quote.exception.organizer')));
         }
         //handling ajax request for SalesAgent same as we did with organizer
         $a_data = $form->getData()->getQuoteReference()->getSalesAgent();
@@ -624,30 +627,40 @@ class QuoteVersionController extends Controller
                 $salesAgent = array_shift($agentEntities);
                 $form->getData()->getQuoteReference()->setSalesAgent($salesAgent);
             }
+        }else {
+            $form['quoteReference']['salesAgent']->addError(new FormError($this->get('translator')->trans('quote.exception.salesagent')));
         }
 
         //handling ajax request for SecondaryContact same as we did with organizer
         $s_data = $form->getData()->getQuoteReference()->getSecondaryContact();
-        if (preg_match('/<+(.*?)>/', $s_data, $s_matches)) {
-            $secondEmail = $s_matches[1];
-            $secondEntities = $em->getRepository('TUIToolkitUserBundle:User')
-                ->findByEmail($secondEmail);
-            if (NULL !== $secondEntities) {
-                $secondAgent = array_shift($secondEntities);
-                $form->getData()
-                    ->getQuoteReference()
-                    ->setSecondaryContact($secondAgent);
+        if ( $s_data != null) {
+            if (preg_match('/<+(.*?)>/', $s_data, $s_matches)) {
+                $secondEmail = $s_matches[1];
+                $secondEntities = $em->getRepository('TUIToolkitUserBundle:User')
+                    ->findByEmail($secondEmail);
+                if (NULL !== $secondEntities) {
+                    $secondAgent = array_shift($secondEntities);
+                    $form->getData()
+                        ->getQuoteReference()
+                        ->setSecondaryContact($secondAgent);
+                }
+            } else {
+                $form['quoteReference']['secondaryContact']->addError(new FormError($this->get('translator')->trans('quote.exception.secondaryagent')));
             }
         }
 
         //Handling the request for institution a little different than we did for the other 2.
         $institutionParts = explode(' - ', $form->getData()->getQuoteReference()->getInstitution());
-        $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findBy(
-            array('name' => $institutionParts[0], 'city' => $institutionParts[1])
-        );
-        if (null !== $institutionEntities) {
-            $institution = array_shift($institutionEntities);
-            $form->getData()->getQuoteReference()->setInstitution($institution);
+        if (count($institutionParts) == 2 ) {
+            $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findBy(
+                array('name' => $institutionParts[0], 'city' => $institutionParts[1])
+            );
+            if (null !== $institutionEntities) {
+                $institution = array_shift($institutionEntities);
+                $form->getData()->getQuoteReference()->setInstitution($institution);
+            }
+        }else {
+            $form['quoteReference']['institution']->addError(new FormError($this->get('translator')->trans('quote.exception.institution')));
         }
 
         if ($form->isValid()) {

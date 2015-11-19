@@ -110,6 +110,10 @@ quote:
         expired: This quote has expired. Please contact
         duplicate_quotenumber: This quote number is already in user by another quote.
         prompt_error: The Quote Number did not match our records for this requested Quote. Please try again or consult our Sales Contact.
+        organizer: The organizer must exist in the system.
+        salesagent: The sales agent must exist in the system.
+        secondaryagent: The secondary contact must exist in the system.
+        institution: The institution must exist in the system.
 
     email:
         change_request:
