@@ -94,9 +94,13 @@ class QuoteVersionController extends Controller
         /* @var $grid \APY\DataGridBundle\Grid\Grid */
         $grid = $this->get('grid');
 
+
+
         // Attach the source to the grid
         $grid->setSource($source);
         $grid->setId('quoteversiongrid');
+        // set grid filter persistance so filters are remebered for whole session
+        $grid->setPersistence(true);
         $grid->hideColumns($hidden);
 
         // Add action column
@@ -252,7 +256,9 @@ class QuoteVersionController extends Controller
 
         // Attach the source to the grid
         $grid->setSource($source);
-        $grid->setId('quoteversiongrid');
+        $grid->setId('quoteversionconvertedgrid');
+        // set grid filter persistance so filters are remebered for whole session
+        $grid->setPersistence(true);
         $grid->hideColumns($hidden);
 
         // Add action column
@@ -384,7 +390,9 @@ class QuoteVersionController extends Controller
 
         // Attach the source to the grid
         $grid->setSource($source);
-        $grid->setId('quoteversiongrid');
+        $grid->setId('quoteversiondeletedgrid');
+        // set grid filter persistance so filters are remebered for whole session
+        $grid->setPersistence(true);
         $grid->hideColumns($hidden);
 
         // Add action column
@@ -510,7 +518,9 @@ class QuoteVersionController extends Controller
 
         // Attach the source to the grid
         $grid->setSource($source);
-        $grid->setId('quoteversiongrid');
+        $grid->setId('quoteversiontemplatesgrid');
+        // set grid filter persistance so filters are remebered for whole session
+        $grid->setPersistence(true);
         $grid->hideColumns($hidden);
 
         // Add action column

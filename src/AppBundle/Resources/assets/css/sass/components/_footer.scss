@@ -110,3 +110,30 @@
   }
 
 }
+
+// For brand users in CKEditor
+
+.footer-editor {
+  @include clear-fix();
+
+  .footer-block-left {
+    text-align: center;
+
+    @include breakpoint_tablet() {
+      float: left;
+      width: $column_total_width * 2;
+    }
+
+  }
+
+  .footer-block-left {
+    text-align: center;
+
+    @include breakpoint_tablet() {
+      float: right;
+      width: $column_total_width * 2;
+    }
+
+  }
+
+}
