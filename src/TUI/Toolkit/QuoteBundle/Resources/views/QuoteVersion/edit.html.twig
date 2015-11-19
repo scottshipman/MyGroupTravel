@@ -29,14 +29,14 @@
         {% if entity.isTemplate != true %}
             <li>
                 <a id="save-revision" onclick="submitQuoteForm();" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-                    <i class="fa fa-files-o"></i> Save as Alternative Quote
+                    <i class="fa fa-files-o"></i> {% trans %}quote.actions.save_as_alt{% endtrans %}
                 </a>
             </li>
         {% endif %}
     {% endif %}
     <li>
         <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quote') }}">
-            <i class="fa fa-arrow-circle-left"></i> Back to the list
+            <i class="fa fa-arrow-circle-left"></i> {% trans %}quote.actions.back{% endtrans %}
         </a>
     </li>
     {% if is_granted("ROLE_ADMIN") %}
