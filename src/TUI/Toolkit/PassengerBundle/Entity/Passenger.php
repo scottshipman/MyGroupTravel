@@ -92,7 +92,20 @@ class Passenger
     public function __construct()  {
     }
 
-
+    /**
+     * @Assert\Callback
+     */
+    public function isDobBeforeNow(ExecutionContextInterface $context)
+    {
+        $now = new \DateTime('now');
+        if ($this->getDateOfBirth() != NULL) {
+            if ($now >= $this->getDateOfBirth()) {
+                $context->buildViolation('Date of Birth must be in the past')
+                    ->atPath('dateOfBirth')
+                    ->addViolation();
+            }
+        }
+    }
 
     /**
      * @param  $fName
