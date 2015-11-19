@@ -614,7 +614,7 @@ class QuoteVersionController extends Controller
                 $form->getData()->getQuoteReference()->setOrganizer($organizer);
             }
         }else {
-            $form['quoteReference']['organizer']->addError(new FormError('The organizer must exist in the system.'));
+            $form['quoteReference']['organizer']->addError(new FormError($this->get('translator')->trans('quote.exception.organizer')));
         }
         //handling ajax request for SalesAgent same as we did with organizer
         $a_data = $form->getData()->getQuoteReference()->getSalesAgent();
@@ -628,7 +628,7 @@ class QuoteVersionController extends Controller
                 $form->getData()->getQuoteReference()->setSalesAgent($salesAgent);
             }
         }else {
-            $form['quoteReference']['salesAgent']->addError(new FormError('The sales agent must exist in the system.'));
+            $form['quoteReference']['salesAgent']->addError(new FormError($this->get('translator')->trans('quote.exception.salesagent')));
         }
 
         //handling ajax request for SecondaryContact same as we did with organizer
@@ -645,7 +645,7 @@ class QuoteVersionController extends Controller
                         ->setSecondaryContact($secondAgent);
                 }
             } else {
-                $form['quoteReference']['secondaryContact']->addError(new FormError('The secondary contact must exist in the system.'));
+                $form['quoteReference']['secondaryContact']->addError(new FormError($this->get('translator')->trans('quote.exception.secondaryagent')));
             }
         }
 
@@ -660,7 +660,7 @@ class QuoteVersionController extends Controller
                 $form->getData()->getQuoteReference()->setInstitution($institution);
             }
         }else {
-            $form['quoteReference']['institution']->addError(new FormError('The institution must exist in the system.'));
+            $form['quoteReference']['institution']->addError(new FormError($this->get('translator')->trans('quote.exception.institution')));
         }
 
         if ($form->isValid()) {
