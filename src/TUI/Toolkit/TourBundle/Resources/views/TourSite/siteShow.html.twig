@@ -44,30 +44,22 @@
     <div class="sub-header">
       <div class="sizer">
         <div class="inner">
-            {% if app.user %}
-                {% if entity.quoteReference.institution.media %}
-                    <div class="institution-logo">
-                        <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.quoteReference.institution.name }}">
-                    </div>
-                {% endif %}
-            {% elseif not app.user %}
-                {% if entity.quoteReference.institution.media %}
-                    <div class="institution-logo-with-brand">
-                        <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.quoteReference.institution.name }}">
-                    </div>
-                {% endif %}
-                {% if brand.media %}
-                    <div class="brand-logo">
-                        <img src="{{ asset( brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ brand.name }}">
-                    </div>
-                {% endif %}
+            {% if entity.quoteReference.institution.media %}
+                <div class="institution-logo-with-brand">
+                    <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.quoteReference.institution.name }}">
+                </div>
+            {% endif %}
+            {% if brand.media %}
+                <div class="brand-logo">
+                    <img src="{{ asset( brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ brand.name }}">
+                </div>
             {% endif %}
 
             {% if entity.quoteReference.institution %}
                 <div id="site-quote-name">{{ entity.quoteReference.institution.name }}</div>
             {% endif %}
 
-            <h2 class="{% if entity.quoteReference.institution.media %}has-school-logo{% endif %} {% if not app.user and brand.media %}has-brand-logo{% endif %}">
+            <h2 class="{% if entity.quoteReference.institution.media %}has-school-logo{% endif %} {% if brand.media %}has-brand-logo{% endif %}">
                 {% if entity.displayName %}
                     {{ entity.displayName }}
                 {% else %}
@@ -120,11 +112,14 @@
                         <div class="site-content-blocks-item">
                             <div class="status-preview-edit site-content-block-actions">
                                 <div class="edit-icons">
-                                    {% if entity.headerBlock.locked %}
+                                    {% if entity.headerBlock.locked and is_granted('ROLE_BRAND')%}
                                         <i id="lock-header-block" class="item-lock content-block-item-action fa fa-unlock-alt" title="Unlock" blockId="{{ entity.headerBlock.id }}"></i>
-                                    {% else %}
+                                    {% endif %}
+                                    {% if entity.headerBlock.locked is sameas(false) %}
                                         <i id="edit-header-block" class="content-block-item-action item-edit fa fa-pencil-square-o" title="Edit" blockId="{{ entity.headerBlock.id }}"></i>
-                                        <i id="lock-header-block" class="item-lock content-block-item-action fa fa-lock" title="Lock" blockId="{{ entity.headerBlock.id }}"></i>
+                                        {% if  is_granted('ROLE_BRAND')%}
+                                            <i id="lock-header-block" class="item-lock content-block-item-action fa fa-lock" title="Lock" blockId="{{ entity.headerBlock.id }}"></i>
+                                        {% endif %}
                                     {% endif %}
                                 </div>
                             </div>
@@ -203,10 +198,14 @@
                                         {# probably render a controller here by passing in item as id and have block entity returned #}
                                         <div class="move-icon"><i class="fa fa-arrows" title="Rearrange"></i></div>
                                         <div id="content-block-actions-{{ items[item].id }}" class="edit-icons {% if items[item].locked %}content-block-locked{% endif %}">
-                                            <i class="item-edit content-block-item-action fa fa-pencil-square-o" title="Edit" blockId="{{ items[item].id }}"></i>
-                                            <i class="item-resize content-block-item-action fa fa-arrows-h {{ size }}" title="Resize" blockId="{{ items[item].id }}"></i>
-                                            <i class="item-lock content-block-item-action fa {% if items[item].locked %}fa-unlock-alt{% else %}fa-lock{% endif %}" title="{% if items[item].locked %}Unlock{% else %}Lock{% endif %}" blockId="{{ items[item].id }}"></i>
-                                            <i class="item-delete content-block-item-action fa fa-trash-o" title="Delete" blockId = "{{ items[item].id }}"></i>
+                                            {% if items[item].locked is sameas(false) %}
+                                                <i class="item-edit content-block-item-action fa fa-pencil-square-o" title="Edit" blockId="{{ items[item].id }}"></i>
+                                                <i class="item-resize content-block-item-action fa fa-arrows-h {{ size }}" title="Resize" blockId="{{ items[item].id }}"></i>
+                                                <i class="item-delete content-block-item-action fa fa-trash-o" title="Delete" blockId = "{{ items[item].id }}"></i>
+                                            {% endif %}
+                                            {% if is_granted('ROLE_BRAND') %}
+                                                <i class="item-lock content-block-item-action fa {% if items[item].locked %}fa-unlock-alt{% else %}fa-lock{% endif %}" title="{% if items[item].locked %}Unlock{% else %}Lock{% endif %}" blockId="{{ items[item].id }}"></i>
+                                            {% endif %}
                                             {#
                                             {% if items[item].hidden %}
                                                 <i class="item-hide content-block-item-action fa fa-eye" title="Show"></i>

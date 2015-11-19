@@ -30,10 +30,14 @@ use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+
 
 use Symfony\Component\EventDispatcher\EventDispatcher,
   Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken,
   Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
+use TUI\Toolkit\UserBundle\TUIToolkitUserBundle;
 
 /**
  * User controller.
@@ -61,6 +65,8 @@ class UserController extends Controller
         // Attach the source to the grid
         $grid->setSource($source);
         $grid->setId('usergrid');
+        // set grid filter persistance so filters are remebered for whole session
+        $grid->setPersistence(true);
         $grid->hideColumns($hidden);
 
 
@@ -198,7 +204,9 @@ class UserController extends Controller
 
         // Attach the source to the grid
         $grid->setSource($source);
-        $grid->setId('usergrid');
+        $grid->setId('usergriddeleted');
+        // set grid filter persistance so filters are remebered for whole session
+        $grid->setPersistence(true);
         $grid->hideColumns($hidden);
 
         // Add action column
@@ -249,6 +257,18 @@ class UserController extends Controller
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
+        //Check softdeleted users to make sure there are no duplicates
+        $formEmail = $form->getData()->getEmail();
+        $em = $this->getDoctrine()->getManager();
+        $filters = $em->getFilters();
+        $filters->disable('softdeleteable');
+        $existingUser = $em->getRepository('TUIToolkitUserBundle:User')->findOneByEmail($formEmail);
+        $filters->enable('softdeleteable');
+
+        if ($existingUser != null) {
+            $form['email']->addError(new FormError('This user exists and has been deleted.  Please contact and administrator to re-enable this user.'));
+        }
+
         if ($form->isValid()) {
             $entity->setUsername($entity->getEmail());
             $entity->setPassword('');
@@ -275,6 +295,18 @@ class UserController extends Controller
         $entity = new User();
         $form = $this->create_ajaxCreateForm($entity);
         $form->handleRequest($request);
+
+        //Check softdeleted users to make sure there are no duplicates
+        $formEmail = $form->getData()->getEmail();
+        $em = $this->getDoctrine()->getManager();
+        $filters = $em->getFilters();
+        $filters->disable('softdeleteable');
+        $existingUser = $em->getRepository('TUIToolkitUserBundle:User')->findOneByEmail($formEmail);
+        $filters->enable('softdeleteable');
+
+        if ($existingUser != null) {
+            $form['email']->addError(new FormError('This user exists and has been deleted.  Please contact and administrator to re-enable this user.'));
+        }
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -322,7 +354,7 @@ class UserController extends Controller
                 'required' => false,
             ))
                 ->add('roles', 'choice', array(
-                    'choices' => array('ROLE_USER' => 'User', 'ROLE_CUSTOMER' => 'CUSTOMER', 'ROLE_BRAND' => 'BRAND', 'ROLE_ADMIN' => 'ADMIN',),
+                    'choices' => array('ROLE_CUSTOMER' => 'CUSTOMER', 'ROLE_BRAND' => 'BRAND', 'ROLE_ADMIN' => 'ADMIN',),
                     'multiple' => true,
                     'expanded' => TRUE,
                 ));
@@ -435,6 +467,10 @@ class UserController extends Controller
      */
     public function editAction($id)
     {
+        if ($this->canEditUser($id) == false) {
+            throw new AccessDeniedException('You are not allowed to edit this user.');
+        }
+
         // set a session var for referrer to return user back to it
         $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null;
         $_SESSION['user_edit_return'] = $referer;
@@ -493,7 +529,7 @@ class UserController extends Controller
             ))
                 ->add('roles', 'choice', array(
                     'choices' => array(
-                        'ROLE_USER' => 'User',
+                      //  'ROLE_USER' => 'User',
                         'ROLE_CUSTOMER' => 'CUSTOMER',
                         'ROLE_BRAND' => 'BRAND',
                         'ROLE_ADMIN' => 'ADMIN',
@@ -509,7 +545,7 @@ class UserController extends Controller
             ))
                 ->add('roles', 'choice', array(
                     'choices' => array(
-                        'ROLE_USER' => 'User',
+                     //   'ROLE_USER' => 'User',
                         'ROLE_CUSTOMER' => 'CUSTOMER',
                         'ROLE_BRAND' => 'BRAND',
                         'ROLE_ADMIN' => 'ADMIN',
@@ -544,6 +580,17 @@ class UserController extends Controller
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
+
+        //Check softdeleted users to make sure there are no duplicates
+        $formEmail = $editForm->getData()->getEmail();
+        $filters = $em->getFilters();
+        $filters->disable('softdeleteable');
+        $existingUser = $em->getRepository('TUIToolkitUserBundle:User')->findOneByEmail($formEmail);
+        $filters->enable('softdeleteable');
+
+        if ($existingUser != null) {
+            $editForm['email']->addError(new FormError('This user exists and has been deleted.  Please contact and administrator to re-enable this user.'));
+        }
         if (Null != $editForm->getData()->getMedia()) {
             $fileId = $editForm->getData()->getMedia();
             $entities = $em->getRepository('MediaBundle:Media')
@@ -1255,6 +1302,7 @@ class UserController extends Controller
         $securityContext = $this->get('security.context');
         if ($securityContext->isGranted('ROLE_BRAND')) {
             $today = new \DateTime();
+            $limit = $this->container->hasParameter('profile_query_limit') ? $this->container->getParameter('profile_query_limit') : 5;
             $qb = $this->getDoctrine()->getManager()->createQueryBuilder();
             $qb
                 ->select('qv', 'q')
@@ -1268,6 +1316,8 @@ class UserController extends Controller
             $qb->setParameter(1, $id);
             $qb->setParameter(2, $id);
             $qb->setParameter(3, $today->format($format));
+            $qb->orderBy('qv.created', 'DESC');
+            $qb->setMaxResults( $limit);
             $query = $qb->getQuery();
             $quotes = $query->getResult();
         } else {
@@ -1301,6 +1351,7 @@ class UserController extends Controller
         $tours = array();
         $securityContext = $this->get('security.context');
         if ($securityContext->isGranted('ROLE_BRAND')) {
+            $limit = $this->container->hasParameter('profile_query_limit') ? $this->container->getParameter('profile_query_limit') : 5;
             $qb = $this->getDoctrine()->getManager()->createQueryBuilder();
             $qb
                 ->select('t')
@@ -1309,6 +1360,8 @@ class UserController extends Controller
                 ->orWhere('t.secondaryContact = ?2');
             $qb->setParameter(1, $id);
             $qb->setParameter(2, $id);
+            $qb->orderBy('t.created', 'DESC');
+            $qb->setMaxResults( $limit);
             $query = $qb->getQuery();
             $tours = $query->getResult();
 

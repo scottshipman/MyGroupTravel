@@ -19,6 +19,7 @@
             <h3 class="mdl-card__title">{% trans %}tour.edit.summary{% endtrans %}</h3>
             {{ form_row(edit_form.tripStatus) }}
             {{ form_row(edit_form.name) }}
+            {{ form_row(edit_form.displayName) }}
             {{ form_row(edit_form.quoteNumber) }}
             {{ form_row(edit_form.tourNumber) }}
             {{ form_row(edit_form.expiryDate) }}
@@ -36,10 +37,10 @@
             {{ form_row(edit_form.departureDate) }}
             {{ form_row(edit_form.returnDate) }}
             {{ form_row(edit_form.duration) }}
-            {{ form_row(edit_form.transportType) }}
             {{ form_row(edit_form.boardBasis) }}
-            {{ form_row(edit_form.payingPlaces) }}
+            {{ form_row(edit_form.transportType) }}
             {{ form_row(edit_form.freePlaces) }}
+            {{ form_row(edit_form.payingPlaces) }}
             {{ form_row(edit_form.currency) }}
             {{ form_row(edit_form.pricePerson) }}
             <div class="form-row">

@@ -36,7 +36,6 @@ class SalesRep implements FixtureInterface, ContainerAwareInterface
     $user->setRoles(array('ROLE_BRAND'));
     $user->setFirstName('Zig');
     $user->setLastName('Zigler');
-    $user->setNickname('');
     $user->setDisplayName('');
 
     $userManager->persist($user);

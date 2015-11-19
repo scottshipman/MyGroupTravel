@@ -26,3 +26,6 @@ parameters:
     date_format:    dd-mm-yy
     user_system_email: noreply@toolkit.com
     user_system_name: TUI Toolkit System
+    # to bust cache on deployments, increment this version number
+    cache_asset_version: 1.1.9
+    profile_query_limit:    5

@@ -65,6 +65,7 @@
 			mask: true,
 			template: '<div></div>',
 			pathName: lang.pathName,
+			//embed_provider: 'https://noembed.com/embed?url={url}&callback={callback}',
 
 			/**
 			 * Response cache. This cache object will be shared between all instances of this widget.

@@ -17,7 +17,7 @@
                 <th class="mdl-data-table__cell--non-numeric">Division</th>
                 <th class="mdl-data-table__cell--non-numeric center">Primary color</th>
                 <th class="mdl-data-table__cell--non-numeric center">Secondary color</th>
-                {# <th class="mdl-data-table__cell--non-numeric">Special color</th> #}
+                <th class="mdl-data-table__cell--non-numeric center">Tertiary color</th>
                 <th class="mdl-data-table__cell--non-numeric center">Logo</th>
                 <th class="mdl-data-table__cell--non-numeric cell-actions">Actions</th>
             </tr>
@@ -25,19 +25,19 @@
         <tbody>
         {% for entity in entities %}
             <tr>
-                <td class="mdl-data-table__cell--non-numeric">
+                <td class="mdl-data-table__cell--non-numeric" data-th="Name (ID)">
                     <a href="{{ path('_manage_brand_show', { 'id': entity.id }) }}">{{ entity.name }}</a> ({{ entity.id }})
                 </td>
-                <td class="mdl-data-table__cell--non-numeric">{{ entity.division }}</td>
-                <td class="mdl-data-table__cell--non-numeric center" style="background-color: {{ entity.primaryColor }}"></td>
-                <td class="mdl-data-table__cell--non-numeric center" style="background-color: {{ entity.secondaryColor }}"></td>
-                {# <td class="mdl-data-table__cell--non-numeric center" style="background-color: {{ entity.hoverColor }}"></td> #}
-                <td class="mdl-data-table__cell--non-numeric center logo">
+                <td class="mdl-data-table__cell--non-numeric" data-th="Division">{{ entity.division }}</td>
+                <td class="mdl-data-table__cell--non-numeric center" data-th="Primary Color" style="background-color: {{ entity.primaryColor }}"></td>
+                <td class="mdl-data-table__cell--non-numeric center" data-th="Secondary Color"style="background-color: {{ entity.secondaryColor }}"></td>
+                <td class="mdl-data-table__cell--non-numeric center" data-th="Tertiary Color" style="background-color: {{ entity.tertiaryColor }}"></td>
+                <td class="mdl-data-table__cell--non-numeric center logo" data-th="Logo">
                     {% if entity.media %}
                         <img src="{{ asset(".." ~ entity.media.getRelativePath ~ "/" ~ entity.media.getHashedFilename ) }}" alt="{{ entity.name }}">
                     {% endif %}
                 </td>
-                <td class="mdl-data-table__cell--non-numeric cell-actions">
+                <td class="mdl-data-table__cell--non-numeric cell-actions" data-th="Actions">
                     <ul class="table-actions">
                         <li>
                             <a href="{{ path('_manage_brand_show', { 'id': entity.id }) }}" title="View"><i class="fa fam-view"></i></a>

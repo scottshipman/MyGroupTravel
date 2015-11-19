@@ -103,6 +103,8 @@ class TourController extends Controller
         // Attach the source to the grid
         $grid->setSource($source);
         $grid->setId('tourgrid');
+        // set grid filter persistance so filters are remebered for whole session
+        $grid->setPersistence(true);
         $grid->hideColumns($hidden);
 
         // Add action column
@@ -274,7 +276,9 @@ class TourController extends Controller
 
         // Attach the source to the grid
         $grid->setSource($source);
-        $grid->setId('tourgrid');
+        $grid->setId('tourgriddeleted');
+        // set grid filter persistance so filters are remebered for whole session
+        $grid->setPersistence(true);
         $grid->hideColumns($hidden);
 
         // Add action column
@@ -740,7 +744,8 @@ class TourController extends Controller
 
                 $zip = new \ZipArchive();
                 $fileName = $entity->getquoteNumber() . ".zip";
-                $zip->open("static/exports/" . $fileName, \ZipArchive::OVERWRITE);
+                $destination = "static/exports/" . $fileName;
+                $zip->open($destination, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
 
                 foreach ($collection as $c) {
                     $zip->addFromString($c->gethashedFilename(), file_get_contents($c->getfilepath() . "/" . $c->gethashedFilename()));

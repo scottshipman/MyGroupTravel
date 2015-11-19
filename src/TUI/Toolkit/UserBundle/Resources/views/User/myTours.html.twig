@@ -6,7 +6,7 @@
         {% if dtg.days < 1 %} {%  set dtgFinal = 0  %} {% else %} {% set dtgFinal = dtg.days %}{% endif %}
     {% else %} {% set dtgFinal = 'n/a' %}
     {% endif %}
-    <div class="tour-edit mdl-card mdl-shadow--2dp">
+    <div class="tour-edit mdl-card mdl-shadow--2dp tour-cards">
         {% set bgpath = ' ' %}
         {% if tour.headerBlock is defined and tour.headerBlock != null %}
             {% if tour.headerBlock.mediaWrapper is defined and tour.headerBlock.mediaWrapper != null %}
@@ -35,7 +35,7 @@
                 <a href="{{ tourEdit }}" tourid="{{ tour.id }}" class="profile-tour-edit"><i class="profile-quote-edit-link fa fa-pencil"></i> Edit</a>
             {% endif %}
 
-            <span class="date-span">{% if tour.departureDate and tour.returnDate %}{{ tour.departureDate|date(format)  }} - {{ tour.departureDate|date(format)  }} | {% endif %}{% if tour.destination %}{{ tour.destination }}{% endif %}</span>
+            <span class="date-span">{% if tour.departureDate and tour.returnDate %}{{ tour.departureDate|date(format)  }} - {{ tour.returnDate|date(format)  }} | {% endif %}{% if tour.destination %}{{ tour.destination }}{% endif %}</span>
         </div>
 
         <div class="mdl-card__supporting-text profile-tour-details">
@@ -50,7 +50,11 @@
                    </div>
                </li>
                <li>
-                   <div class="profile-list-item item-2">{{ dtgFinal }}<br /><label>{% trans %}user.profile.my_quotes.days{% endtrans %}</label> </div>
+                   {% if is_granted('ROLE_BRAND') %}
+                        <div class="profile-list-item item-2">{% if tour.institution %} {{  tour.institution.name }}{% endif %}<br /><label>{% trans %}user.profile.my_quotes.institution{% endtrans %}</label> </div>
+                    {% else %}
+                        <div class="profile-list-item item-2">{{ dtgFinal }}<br /><label>{% trans %}user.profile.my_quotes.days{% endtrans %}</label> </div>
+                   {% endif %}
                </li>
                <li>
                    <div class="profile-list-item item-3">

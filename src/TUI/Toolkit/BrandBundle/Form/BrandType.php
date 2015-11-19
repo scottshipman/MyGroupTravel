@@ -27,13 +27,23 @@ class BrandType extends AbstractType
               'label' => 'brand.form.label.s_color',
               'translation_domain'  => 'messages',
             ))
-            // ->add('hoverColor')
+            ->add('tertiaryColor','text', array(
+              'label' => 'brand.form.label.t_color',
+              'translation_domain'  => 'messages',
+            ))
             ->add('footerBody', 'ckeditor', array())
             ->add('media', 'hidden', array(
                 'required' => false,
                 'data_class' => 'TUI\Toolkit\MediaBundle\Entity\Media',
                 'attr' => array(
-                    'class' => 'media-placeholder',
+                    'class' => 'media-placeholder media-placeholder-primary',
+                )
+            ))
+            ->add('mediaEmail', 'hidden', array(
+                'required' => false,
+                'data_class' => 'TUI\Toolkit\MediaBundle\Entity\Media',
+                'attr' => array(
+                    'class' => 'media-placeholder media-placeholder-email',
                 )
             ))
         ;

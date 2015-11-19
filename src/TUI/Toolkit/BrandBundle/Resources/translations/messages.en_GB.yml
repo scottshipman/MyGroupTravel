@@ -36,3 +36,4 @@ brand:
         label:
             p_color: Primary color
             s_color: Secondary color
+            t_color: Tertiary color

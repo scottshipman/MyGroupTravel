@@ -12,9 +12,17 @@ use Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumbe
 use Gedmo\Mapping\Annotation as Gedmo;
 use APY\DataGridBundle\Grid\Mapping as GRID;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use TUI\Toolkit\UserBundle\Controller\UserController;
+
 
 /**
  * @ORM\Entity
+ * @UniqueEntity(
+ *     fields={"email"},
+ *     errorPath="email",
+ *     message="A user already exists for this email."
+ * )
  * @ORM\Table(name="fos_user",uniqueConstraints={@ORM\UniqueConstraint(name="email", columns={"email"})})
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
  * @GRID\Source(columns="id, lastName, firstName, fullname, displayName, email, enabled, roles, created, lastLogin", filterable=false, sortable=true)
@@ -114,7 +122,8 @@ class User extends BaseUser
         $this->enabled = false;
         $this->created = new \DateTime();
 
-        $this->roles = array('ROLE_USER', 'ROLE_CUSTOMER');
+        $this->roles = array('ROLE_CUSTOMER');
+
 
         /*      existing roles are:
                     super admin
@@ -134,6 +143,7 @@ class User extends BaseUser
   {
     return $this->firstName . ' ' . $this->lastName . ' <'. $this->email . '>';
   }
+
 
     /**
      * @var \TUI\Toolkit\MediaBundle\Entity\Media
