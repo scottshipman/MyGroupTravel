@@ -88,6 +88,7 @@
                         });
                         $('.add-content-block').show(); // re-show ALL Add Block's for all tabs
                         $("#loader").css("display", "none");
+                        $('.noembed-meta-info').remove();
                     });
                 } else { // regular content block
                     var editBlock = $("#editable-content-blocks-" + blockID);
@@ -99,6 +100,7 @@
                         $('.add-content-block').show(); // re-show ALL Add Block's for all tabs
                         editBlock.html('');
                         $("#loader").css("display", "none");
+                        $('.noembed-meta-info').remove();
                     });
                 }
             } else { // on Quoteversion Edit/Show page
@@ -110,6 +112,7 @@
                 previewBlock.show();
                 $('.content-block-actions').show();
                 $("#loader").css("display", "block");
+                $('.noembed-meta-info').remove();
                 window.location.reload(true);
 
 
@@ -151,6 +154,7 @@
                             controlNav: false,
                             smoothHeight: true
                         });
+                        $('.noembed-meta-info').remove();
                     });
                 } else {
                     window.location.hash = 'site-content';

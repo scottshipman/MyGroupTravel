@@ -186,6 +186,7 @@ $(document).ready(function () {
         if ( toolkitBreakpointAllowDrag() ) {
             // Sorting not allowed on phone for content blocks
             $(".sortable-items").sortable("enable");
+            $('.noembed-meta-info').remove();
         };
     });
 
@@ -264,6 +265,7 @@ $(document).ready(function () {
             doMDLpopup(editBlock); // run the function to add appropriate MDL classes to form elements
             previewBlock.html('');
             $("#loader").css("display", "none");
+            $('.noembed-meta-info').remove();
         });
     });
 
