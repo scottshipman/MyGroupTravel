@@ -77,7 +77,7 @@ tour:
         payment_settings: Set up your payment settings
         next: Next
         promote: Promote Your Tour
-        personalize: Personalize your website
+        personalize: Personalise your website
 
     not_setup:
        get_started: Get Started
@@ -90,7 +90,7 @@ tour:
        how_to_pay: How do you want passengers to pay?
        preferred_payment: Select your preferred payment methods
        next: Next
-       personalize: Personalize your website
+       personalize: Personalise your website
        promote: Promote Your Tour
 
     show:
@@ -230,11 +230,11 @@ tour:
         warning:
             expired: This quote has expired. Please contact
             at: at
-        no_match:  The Quote Number did not match our records for this requested Quote. Please try again or consult your Sales Contact.
+        no_match:  The quote number did not match our records for this requested quote. Please try again or consult your sales contact.
 
     grid:
         no_result: There are no tours to show. Please check your filter settings and try again.
-        no_result-deleted: There are no Deleted Tours to show. Please check your filter settings and try again.
+        no_result-deleted: There are no deleted tours to show. Please check your filter settings and try again.
         export: Tours as CSV
         export_deleted: Deleted Tours as CSV
         filter:
@@ -286,7 +286,7 @@ tour:
             online: Online Payment
             other: Other
         tour_summary:
-            expiration: Tour Expiry Date? (DD-MM-YYYY)
+            expiration: Tour Expiry Date (DD-MM-YYYY)
             departure: Departure Date (DD-MM-YYYY)
             return: Return Date (DD-MM-YYYY)
             duration: Duration
@@ -300,7 +300,7 @@ tour:
         tour:
             placeholder: Select
             name: Tour Name
-            expiration: Quote Expiry Date? (DD-MM-YYYY)
+            expiration: Quote Expiry Date (DD-MM-YYYY)
             sales_agent: Primary Business Admin
             second_contact: Other Business Admin
             destination: Destination

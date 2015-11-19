@@ -5,7 +5,7 @@
 {% block title %}{{ title_label }} {% trans %}tour.title.show{% endtrans %} {{ entity.name }}{% endblock %}
 {% block page_title %}{{ title_label }}
     {% if entity.isComplete == false and entity.setupComplete == false %}
-        {% trans %}tour.title.new_tour{% endtrans %}
+        {% trans %}tour.title.show{% endtrans %} {{ entity.name }}
     {% else %}
         {% trans %}tour.title.show{% endtrans %} {{ entity.name }}
     {% endif %}
