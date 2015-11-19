@@ -35,7 +35,7 @@
                 <a href="{{ tourEdit }}" tourid="{{ tour.id }}" class="profile-tour-edit"><i class="profile-quote-edit-link fa fa-pencil"></i> Edit</a>
             {% endif %}
 
-            <span class="date-span">{% if tour.departureDate and tour.returnDate %}{{ tour.departureDate|date(format)  }} - {{ tour.departureDate|date(format)  }} | {% endif %}{% if tour.destination %}{{ tour.destination }}{% endif %}</span>
+            <span class="date-span">{% if tour.departureDate and tour.returnDate %}{{ tour.departureDate|date(format)  }} - {{ tour.returnDate|date(format)  }} | {% endif %}{% if tour.destination %}{{ tour.destination }}{% endif %}</span>
         </div>
 
         <div class="mdl-card__supporting-text profile-tour-details">
