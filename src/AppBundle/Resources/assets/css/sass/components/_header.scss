@@ -24,11 +24,6 @@
     clear: both;
     @include clear-fix();
 
-    h1 {
-      margin: 0;
-      @include inline-block-vertical();
-    }
-
     .user_0 & {
       text-align: center;
     }
@@ -37,14 +32,20 @@
       text-align: left;
     }
 
-    .title-menu-drop {
-      position: relative;
-      margin: (((56px * 1.35) - 32px) / 2) 0;
-    }
-
     .title-actions {
       float: left;
       max-width: 100%;
+    }
+
+    h1 {
+      margin: 0;
+      @include inline-block-vertical();
+    }
+
+    .title-menu-drop {
+      float: right;
+      position: relative;
+      margin: (((56px * 1.35) - 32px) / 2) 0;
     }
 
   }
