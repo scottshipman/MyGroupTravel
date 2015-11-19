@@ -340,21 +340,35 @@ class QuoteVersion
       }
     }
 
-    /**
-     * @Assert\Callback
-     */
-    public function isExpiryBeforeNow(ExecutionContextInterface $context)
-    {
-      $now = new \DateTime('now');
-      if ($this->getExpiryDate() != NULL) {
-        if ($now >= $this->getExpiryDate()) {
-          $context->buildViolation('The expiry date must be in the future.')
-              ->atPath('expiryDate')
-              ->addViolation();
-        }
+  /**
+   * @Assert\Callback
+   */
+  public function isDepartureBeforeReturn(ExecutionContextInterface $context)
+  {
+    if ($this->getDepartureDate() != NULL) {
+      if ($this->getDepartureDate() >= $this->getReturnDate()) {
+        $context->buildViolation('The departure date must be before the return date.')
+            ->atPath('departureDate')
+            ->addViolation();
       }
     }
+  }
 
+
+  /**
+   * @Assert\Callback
+   */
+  public function isExpiryBeforeNow(ExecutionContextInterface $context)
+  {
+    $now = new \DateTime('now');
+    if ($this->getExpiryDate() != NULL) {
+      if ($now >= $this->getExpiryDate()) {
+        $context->buildViolation('The expiry date must be in the future.')
+            ->atPath('expiryDate')
+            ->addViolation();
+      }
+    }
+  }
 
     public function getId()
     {
