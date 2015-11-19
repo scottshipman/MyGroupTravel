@@ -144,21 +144,6 @@ class User extends BaseUser
     return $this->firstName . ' ' . $this->lastName . ' <'. $this->email . '>';
   }
 
-//  /**
-//   * @Assert\Callback
-//   */
-//  public function doesEmailExist(ExecutionContextInterface $context)
-//  {
-//    $userEmail = $this->getEmail();
-//    if ($userEmail != NULL) {
-////      $existingUser = $this->getDoctrine()->getManager()->getRepository('BrandBundle:Brand')->findOneByEmail($userEmail);
-//      if ($existingUser != null) {
-//        $context->buildViolation('This user already exists.')
-//            ->atPath('email')
-//            ->addViolation();
-//      }
-//    }
-//  }
 
     /**
      * @var \TUI\Toolkit\MediaBundle\Entity\Media
