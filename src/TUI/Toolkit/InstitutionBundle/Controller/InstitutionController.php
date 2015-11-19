@@ -37,6 +37,8 @@ class InstitutionController extends Controller
         // Attach the source to the grid
         $grid->setSource($source);
         $grid->setId('institutiongrid');
+        // set grid filter persistance so filters are remebered for whole session
+        $grid->setPersistence(true);
         $grid->hideColumns($hidden);
 
         // Add action column
@@ -99,7 +101,9 @@ class InstitutionController extends Controller
 
         // Attach the source to the grid
         $grid->setSource($source);
-        $grid->setId('institutiongrid');
+        $grid->setId('institutiongriddeleted');
+        // set grid filter persistance so filters are remebered for whole session
+        $grid->setPersistence(true);
         $grid->hideColumns($hidden);
 
         // Add action column
