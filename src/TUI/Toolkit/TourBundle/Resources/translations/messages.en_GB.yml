@@ -65,6 +65,7 @@ tour:
         add_block: Add Block
         save: Save
         submit: Submit
+        back_to_tours: Back to tours
 
     menu:
         my_tours: My Tours
@@ -83,12 +84,12 @@ tour:
        get_started: Get Started
        signup: Sign Up
        payment_settings: Set up your payment settings
-       how_much: How much do you want ot charge each passenger?
-       pass_price: This will be the per passenger price shown on the tour prmotional website.  You can increase the price or reduce it if you are fundraising
+       how_much: How much do you want to charge each passenger?
+       pass_price: This will be the per-passenger price shown on the tour promotional website.  You can increase the price, or reduce it if you are fundraising.
        amounts_and_dates: Set payment amounts and due dates
-       suggested_price: This is the suggested per passenger deposit price.  You can increase the price or reduce it if you are fundraising.
+       suggested_price: This is the suggested per-passenger deposit price.  You can increase the price, or reduce it if you are fundraising.
        how_to_pay: How do you want passengers to pay?
-       preferred_payment: Select your preferred payment methods
+       preferred_payment: Select your preferred payment methods.
        next: Next
        personalize: Personalise your website
        promote: Promote Your Tour
@@ -108,6 +109,9 @@ tour:
             intro: Business Administrator Contact:
             intro_org: Your Contact:
             price: Price per person:
+       price_based_on_payingandfree: Based on <strong>%payingplaces%</strong> paying and <strong>%freeplaces%</strong> free places.
+       price_based_on_payingonly: Based on <strong>%payingplaces%</strong> paying places
+       price_based_on_freeonly: Based on <strong>%freeplaces%</strong> free places
 
     contact_organizer:
         name: Tour Name:
@@ -159,12 +163,13 @@ tour:
     edit:
         summary: Summary
         details: Details
-        schedule: Payment Schedule (Per Person Amounts)
+        schedule: Payment Schedule (Per Person)
         deadlines: Task Deadlines
-        promotional_content: Upload Promotional Content
+        promotional_content: Upload promotional content
         no_assets: No assets uploaded.
-        promo_assets: Upload Promotional Assets
-        cannot_upload: Cannot Upload Any More Assets
+        promo_assets: Upload promotional assets
+        cannot_upload: Cannot upload any more assets
+        totalprice: Total Price
 
     pdf:
         quoteNumber: Quote Number:
@@ -279,11 +284,11 @@ tour:
             value: Amount
             date: Due Date (DD-MM-YYYY)
         tour_setup:
-            price: Price Per Person
+            price: Price per Person
             cash: Cash / Cheque
             instructions: Optional payment instructions
-            bank: Bank Transfer
-            online: Online Payment
+            bank: Bank transfer
+            online: Online payment
             other: Other
         tour_summary:
             expiration: Tour Expiry Date (DD-MM-YYYY)
@@ -313,6 +318,14 @@ tour:
             passport_date: Passport Info Due Date (DD-MM-YYYY)
             medical_date: Medical Info Due Date (DD-MM-YYYY)
             dietary_date: Dietary Info Due Date (DD-MM-YYYY)
+            trip_status: Trip Status
+            quote_number: Quote Number
+            transport_type: Transport Type
+            paying_places: Paying Places
+            free_places: Free Places
+            price_per_person: Price per Person
+            add_payment: Add a Payment
+
 
 
     payment_task:
