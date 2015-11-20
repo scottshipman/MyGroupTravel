@@ -583,14 +583,17 @@ class UserController extends Controller
 
         //Check softdeleted users to make sure there are no duplicates
         $formEmail = $editForm->getData()->getEmail();
-        $filters = $em->getFilters();
-        $filters->disable('softdeleteable');
-        $existingUser = $em->getRepository('TUIToolkitUserBundle:User')->findOneByEmail($formEmail);
-        $filters->enable('softdeleteable');
+        if ( $formEmail != $entity->getEmail() ) {
+            $filters = $em->getFilters();
+            $filters->disable('softdeleteable');
+            $existingUser = $em->getRepository('TUIToolkitUserBundle:User')->findOneByEmail($formEmail);
+            $filters->enable('softdeleteable');
 
-        if ($existingUser != null) {
-            $editForm['email']->addError(new FormError('This user exists and has been deleted.  Please contact and administrator to re-enable this user.'));
+            if ($existingUser != null) {
+                $editForm['email']->addError(new FormError('This user exists and has been deleted.  Please contact and administrator to re-enable this user.'));
+            }
         }
+
         if (Null != $editForm->getData()->getMedia()) {
             $fileId = $editForm->getData()->getMedia();
             $entities = $em->getRepository('MediaBundle:Media')
