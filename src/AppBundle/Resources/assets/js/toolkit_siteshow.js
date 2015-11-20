@@ -46,6 +46,7 @@ $(document).ready(function () {
                     data: $('#ajax_passenger_form').serialize(),
                     contentType: "application/x-www-form-urlencoded",
                 }).success(function (response) {
+                    $("#loader").show();
                     window.location.reload(true);
                 }).error(function (response) {
                     var parsed = $.parseJSON(response.responseText);
