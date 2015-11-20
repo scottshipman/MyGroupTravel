@@ -50,7 +50,7 @@
             <li><label>{% trans %}tour.show.price{% endtrans %}</label><strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong></li>
             <li>
                 <label>{% trans %}tour.show.schedule{% endtrans %}</label>
-                {% for payment in passenger_payment_tasks %}
+                {% for payment in payment_tasks %}
                     {# render(controller('TourBundle:PaymentTask:showList', { 'id': payment.id } )) #}
                     <ul class="payment-task-list">
                         <li>
