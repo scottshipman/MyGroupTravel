@@ -1142,6 +1142,8 @@ class QuoteVersionController extends Controller
                     ->getQuoteReference()
                     ->setSalesAgent($salesAgent);
             }
+        }else {
+            $editForm['quoteReference']['salesAgent']->addError(new FormError($this->get('translator')->trans('quote.exception.salesagent')));
         }
 
         //Dont handle ajax request on template
@@ -1157,21 +1159,27 @@ class QuoteVersionController extends Controller
                     $organizer = array_shift($entities);
                     $editForm->getData()->getQuoteReference()->setOrganizer($organizer);
                 }
+            }else {
+                $editForm['quoteReference']['organizer']->addError(new FormError($this->get('translator')->trans('quote.exception.organizer')));
             }
 
             //handling ajax request for SecondaryContact same as we did with organizer
             $s_data = $editForm->getData()
                 ->getQuoteReference()
                 ->getSecondaryContact();
-            if (preg_match('/<+(.*?)>/', $s_data, $s_matches)) {
-                $secondEmail = $s_matches[1];
-                $secondEntities = $em->getRepository('TUIToolkitUserBundle:User')
-                    ->findByEmail($secondEmail);
-                if (NULL !== $secondEntities) {
-                    $secondAgent = array_shift($secondEntities);
-                    $editForm->getData()
-                        ->getQuoteReference()
-                        ->setSecondaryContact($secondAgent);
+            if ( $s_data != null) {
+                if (preg_match('/<+(.*?)>/', $s_data, $s_matches)) {
+                    $secondEmail = $s_matches[1];
+                    $secondEntities = $em->getRepository('TUIToolkitUserBundle:User')
+                        ->findByEmail($secondEmail);
+                    if (NULL !== $secondEntities) {
+                        $secondAgent = array_shift($secondEntities);
+                        $editForm->getData()
+                            ->getQuoteReference()
+                            ->setSecondaryContact($secondAgent);
+                    }
+                } else {
+                    $editForm['quoteReference']['secondaryContact']->addError(new FormError($this->get('translator')->trans('quote.exception.secondaryagent')));
                 }
             }
 
@@ -1179,18 +1187,22 @@ class QuoteVersionController extends Controller
             $institutionParts = explode(' - ', $editForm->getData()
                 ->getQuoteReference()
                 ->getInstitution());
-            $institutionEntities = $em->getRepository('InstitutionBundle:Institution')
-                ->findBy(
-                    array(
-                        'name' => $institutionParts[0],
-                        'city' => $institutionParts[1]
-                    )
-                );
-            if (NULL !== $institutionEntities) {
-                $institution = array_shift($institutionEntities);
-                $editForm->getData()
-                    ->getQuoteReference()
-                    ->setInstitution($institution);
+            if (count($institutionParts) == 2 ) {
+                $institutionEntities = $em->getRepository('InstitutionBundle:Institution')
+                    ->findBy(
+                        array(
+                            'name' => $institutionParts[0],
+                            'city' => $institutionParts[1]
+                        )
+                    );
+                if (NULL !== $institutionEntities) {
+                    $institution = array_shift($institutionEntities);
+                    $editForm->getData()
+                        ->getQuoteReference()
+                        ->setInstitution($institution);
+                }
+            }else {
+                $editForm['quoteReference']['institution']->addError(new FormError($this->get('translator')->trans('quote.exception.institution')));
             }
         }
 
