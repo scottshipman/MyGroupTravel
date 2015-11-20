@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 
 /**
@@ -92,7 +93,20 @@ class Passenger
     public function __construct()  {
     }
 
-
+    /**
+     * @Assert\Callback
+     */
+    public function isDobBeforeNow(ExecutionContextInterface $context)
+    {
+        $now = new \DateTime('now');
+        if ($this->getDateOfBirth() != NULL) {
+            if ($now >= $this->getDateOfBirth()) {
+                $context->buildViolation('Date of Birth must be in the past')
+                    ->atPath('dateOfBirth')
+                    ->addViolation();
+            }
+        }
+    }
 
     /**
      * @param  $fName

@@ -24,9 +24,7 @@ framework:
     csrf_protection: ~
     validation:      { enable_annotations: true }
     #serializer:      { enable_annotations: true }
-    templating:
-        engines: ['twig','php']
-        #assets_version: SomeVersionScheme
+    templating: { engines: ['twig', 'php'] }
     default_locale:  "%locale%"
     trusted_hosts:   ~
     trusted_proxies: ~
@@ -36,8 +34,7 @@ framework:
     fragments:       ~
     http_method_override: true
     translator: ~
-    # asset_version used to bust cache on deployments. should be incremented during deployments using git tag number in paramters.yml by Jenkins
-    templating: { engines: ['twig'], assets_version: %cache_asset_version% }
+
 
 # Twig Configuration
 twig:
@@ -166,6 +163,7 @@ fos_user:
                 template:   TUIToolkitUserBundle:Resetting:reset.html.twig
 #            form:
 #                type: tui_user_resetting
+            token_ttl: 120  # reset can be done every 2 minutes
 
 
 knp_menu:

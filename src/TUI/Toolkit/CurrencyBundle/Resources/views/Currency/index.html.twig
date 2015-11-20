@@ -22,10 +22,10 @@
         <tbody>
         {% for entity in entities %}
             <tr>
-                <td class="mdl-data-table__cell--non-numeric"><a href="{{ path('manage_currency_show', { 'id': entity.id }) }}">{{ entity.code }}</a> ({{ entity.id }})</td>
-                <td class="mdl-data-table__cell--non-numeric">{{ entity.htmlSymbol }}</td>
-                <td class="mdl-data-table__cell--non-numeric">{{ entity.name }}</td>
-                <td class="mdl-data-table__cell--non-numeric cell-actions">
+                <td class="mdl-data-table__cell--non-numeric" data-th="{% trans %}currency.table.label.code{% endtrans %}"><a href="{{ path('manage_currency_show', { 'id': entity.id }) }}">{{ entity.code }}</a> ({{ entity.id }})</td>
+                <td class="mdl-data-table__cell--non-numeric" data-th="{% trans %}currency.table.label.symbol{% endtrans %}">{{ entity.htmlSymbol }}</td>
+                <td class="mdl-data-table__cell--non-numeric" data-th="{% trans %}currency.table.label.name{% endtrans %}">{{ entity.name }}</td>
+                <td class="mdl-data-table__cell--non-numeric cell-actions" data-th="{% trans %}currency.table.label.action{% endtrans %}">
                     <ul class="table-actions">
                         <li>
                             <a href="{{ path('manage_currency_show', { 'id': entity.id }) }}" title="{% trans %}currency.table.actions.view{% endtrans %}"><i class="fa fam-view"></i></a>
