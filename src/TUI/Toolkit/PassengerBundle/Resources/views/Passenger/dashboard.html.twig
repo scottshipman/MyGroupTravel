@@ -26,11 +26,9 @@
 {% endblock %}
 
 {% block back_link %}
-    {% if is_granted("ROLE_BRAND") %}
+
         <a class="back-link" href="{{ path('manage_tour_show', { 'id': tour.id }) }}"><i class="fa fa-arrow-left"></i> {% trans %}passenger.actions.back{% endtrans %}</a>
-    {% else %}
-        <a class="back-link" href="/"><i class="fa fa-arrow-left"></i> {% trans %}passenger.actions.back{% endtrans %}</a>
-    {% endif %}
+
 {% endblock %}
 
 {% block body -%}
