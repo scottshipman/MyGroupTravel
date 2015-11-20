@@ -75,50 +75,69 @@
 .request-changes {
 
   h4 {
-    width: 51%;
-    float: left;
+    width: 100%;
+    position: relative;
+    display: block;
+    text-align: center;
+    //float: left;
     font-weight: bold;
     margin-bottom: 5px;
   }
 
   ul {
-    width: 50%;
-    float: left;
+    //width: 50%;
+    float: right;
     margin-bottom: 5px;
+    list-style: none;
+    font-size: 16px;
+    margin-right: 20px;
+    margin-top: 10px;
+    padding: 0;
   }
 
-  #tui_toolkit_quotebundle_quotechangerequest,
-  #tui_toolkit_quotebundle_quoteaccept,
-  {
-
-    div:nth-child(1) {
-      width: 51%;
-      float: left;
-
-      .mdl-form-wrap {
-        padding: 0;
-
-        label:nth-child(1) > span {
-          font-weight: bold;
-        }
-
-      }
-    }
-
-    div:nth-child(2) {
-
-      .mdl-textfield {
-        width: 250px;
-      }
-
-    }
-
-    #tui_toolkit_quotebundle_quotechangerequest_submit,
-    #tui_toolkit_quotebundle_quoteaccept_submit {
-      float: left;
-    }
-
+  img {
+    position: relative;
+    display: inline-block;
+    margin: 0 auto;
+    max-width: 250px;
   }
+
+  .mdl-textfield {
+    width: 100%;
+  }
+
+  //#tui_toolkit_quotebundle_quotechangerequest,
+  //#tui_toolkit_quotebundle_quoteaccept,
+  //{
+
+    //div:nth-child(1) {
+    //  width: 51%;
+    //  float: left;
+    //
+    //  .mdl-form-wrap {
+    //    padding: 0;
+    //
+    //    label:nth-child(1) > span {
+    //      font-weight: bold;
+    //    }
+    //
+    //  }
+    //}
+
+    //div:nth-child(2) {
+    //
+    //  .mdl-textfield {
+    //    width: 250px;
+    //  }
+    //
+    //}
+    //
+    //#tui_toolkit_quotebundle_quotechangerequest_submit,
+    //#tui_toolkit_quotebundle_quoteaccept_submit {
+    //  float: left;
+    //}
+
+  //}
 
 }
 
@@ -182,7 +201,7 @@
 
   @include breakpoint_tablet() {
 
-    width: 55%;
+    width: 100%;
     margin: 0 auto;
     position: relative;
     display: block;

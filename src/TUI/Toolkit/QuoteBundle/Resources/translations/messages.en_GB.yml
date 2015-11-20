@@ -103,6 +103,13 @@ quote:
     media:
         label: Click to upload
 
+    modals:
+        message:
+            accept: If you like this quote or want to add something to the quote add your message and press go.
+            changes: If you would like to make some changes to the quote, you can choose from the options below and send a message to the sales agent.
+            change_request: Changes I would like to make
+            add: Anything you would like to add?
+
     exception:
         access: You do not have the ability to edit this Quote's information.
         convert: Cannot convert the quote because it is already converted.

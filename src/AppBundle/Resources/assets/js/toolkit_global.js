@@ -18,11 +18,27 @@ var toolkitBreakpointAllowDrag = function() {
 
 var toolkitStandardPopup = function(title, loadLink) {
     $("#dialog").html("");
-    $("#dialog").dialog("option", "title", "Loading...").dialog("open");
+    $("#loader").show();
+    //$("#dialog").dialog("option", "title", "Loading...").dialog("open");
     $("#dialog").load(loadLink, function () {
         $(this).dialog("option", "title", title);
         doMDLpopup($(this));
+        $(".ui-dialog").addClass("mdl-card");
+        $(".ui-dialog-titlebar").addClass("mdl-card__title mdl-color--primary mdl-color-text--primary-contrast");
+        $(".ui-dialog-title").addClass("mdl-card__title-text");
+        $(".ui-dialog-titlebar-close").append('<i class="material-icons mdl-color-text--primary-contrast">close</i>').css({"background": "inherit", "border": "none"});
+        $(".ui-button-icon-primary").css({"display": "none"});
+        $(".ui-button-text").css({"display":"none"});
+        $(this).find('input[type="submit"]:not(.cancel), button').each(function () {
+            //$(this).html("");
+            //$(this).append('<i class="material-icons mdl-color-text--primary-contrast">send</i>');
+            //$(this).addClass("mdl-button mdl-button--fab mdl-js-button mdl-js-ripple-effect");
+            $(this).css({"float": "right"});
+        });
+        $("#dialog").dialog("open");
+        $("#loader").hide();
     });
+
 };
 
 var toolkitStaticPopup = function(title, loadContent) {

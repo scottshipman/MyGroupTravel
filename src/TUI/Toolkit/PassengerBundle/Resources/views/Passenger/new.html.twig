@@ -3,20 +3,21 @@
 {% block body -%}
 
     <div class="signup-form">
-        {% if tour is defined and tour != null %}
-            <div class="form-header">
-                {% if tour.headerBlock is defined and tour.headerBlock != null %}
-                    <div class="tour-image-wrapper">
-                        <img class="tour-image" src="{{ asset( tour.headerBlock.mediaWrapper[0].media[0].getRelativePath ~ "/" ~ tour.headerBlock.mediaWrapper[0].media[0].getHashedFilename ) | imagine_filter('modalImage')}}"/>
-                    </div>
-                {% endif %}
-                <div class="tour-copy">
-                    <h3 class="tour-title">{{ tour.name }}</h3>
-                    <span class="tour-dates">{{ tour.departureDate|date(shortFormat) }} - {{ tour.returnDate|date(format) }}</span><br /><br />
-                    <span class="tour-price">{% if tour.currency %}{{ tour.currency.htmlSymbol | raw }}{% endif %}{% if tour.pricePersonPublic != null %}{{ tour.pricePersonPublic }}{% endif %}<span class="price-copy">/per person</span></span>
-                </div>
-            </div>
-        {% endif %}
+        {#{% if tour is defined and tour != null %}#}
+            {#<div class="form-header">#}
+                {#{% if tour.headerBlock is defined and tour.headerBlock != null %}#}
+                    {#<div class="tour-image-wrapper">#}
+                        {#<img class="tour-image" src="{{ asset( tour.headerBlock.mediaWrapper[0].media[0].getRelativePath ~ "/" ~ tour.headerBlock.mediaWrapper[0].media[0].getHashedFilename ) | imagine_filter('modalImage')}}"/>#}
+                    {#</div>#}
+                {#{% endif %}#}
+                {#<div class="tour-copy">#}
+                    {#<h3 class="tour-title">{{ tour.name }}</h3>#}
+                    {#<span class="tour-dates">{{ tour.departureDate|date(shortFormat) }} - {{ tour.returnDate|date(format) }}</span><br /><br />#}
+                    {#<span class="tour-price">{% if tour.currency %}{{ tour.currency.htmlSymbol | raw }}{% endif %}{% if tour.pricePersonPublic != null %}{{ tour.pricePersonPublic }}{% endif %}<span class="price-copy">/per person</span></span>#}
+                {#</div>#}
+            {#</div>#}
+        {#{% endif %}#}
+        <p style="text-align: center">{% trans %}passenger.modals.message{% endtrans %}</p>
 
         {{ form_start(form) }}
 

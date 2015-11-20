@@ -137,6 +137,10 @@ a {
   color: <?php echo $primary ?>;
 }
 
+.mdl-color--primary {
+  background: <?php echo $primary ?> !important;
+}
+
 .mdl-button--raised.mdl-button--colored,
 .mdl-button--raised.mdl-button--colored:hover {
   background-color: <?php echo $secondary ?>;
