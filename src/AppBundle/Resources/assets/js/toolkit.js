@@ -43,7 +43,7 @@
         modal: true,
         width: '620px',
         height: 'auto',
-        draggable: true,
+        draggable: false,
         resizable: false,
         title: 'Loading...',
         autoOpen: false,

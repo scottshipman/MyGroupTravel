@@ -22,19 +22,14 @@ $(document).ready(function () {
     $(document).on('click', '#accept-quote', function (e) {
         e.preventDefault();
         var entityId = $('.site-show').attr('entityId');
-        toolkitStandardPopup( "Like this quote", "/quote/view/accepted/form/" + entityId );
+        toolkitStandardPopup( "I like this quote, what's next?", "/quote/view/accepted/form/" + entityId );
     });
 
     // Tour Sign Up popup
     $(document).on('click', '#accept-tour', function (e) {
         e.preventDefault();
         var entityId = $('.site-show').attr('entityId');
-        $("#dialog").html("");
-        $("#dialog").dialog("option", "title", "Sign Up");
-        $("#dialog").dialog("open");
         toolkitStandardPopup("Sign Up", '/passenger/new/' + entityId, function () {
-            //$(this).dialog("option", "title", "Sign Up");
-            doMDLpopup($('#dialog'));// run the function to add appropriate MDL classes to form elements
             $('#ajax_passenger_form').on('submit', function(e) {
 
                 var formAction = $(this).attr('action');

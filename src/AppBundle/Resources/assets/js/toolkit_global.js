@@ -18,7 +18,8 @@ var toolkitBreakpointAllowDrag = function() {
 
 var toolkitStandardPopup = function(title, loadLink) {
     $("#dialog").html("");
-    $("#dialog").dialog("option", "title", "Loading...").dialog("open");
+    $("#loader").show();
+    //$("#dialog").dialog("option", "title", "Loading...").dialog("open");
     $("#dialog").load(loadLink, function () {
         $(this).dialog("option", "title", title);
         doMDLpopup($(this));
@@ -34,7 +35,10 @@ var toolkitStandardPopup = function(title, loadLink) {
             //$(this).addClass("mdl-button mdl-button--fab mdl-js-button mdl-js-ripple-effect");
             $(this).css({"float": "right"});
         });
+        $("#dialog").dialog("open");
+        $("#loader").hide();
     });
+
 };
 
 var toolkitStaticPopup = function(title, loadContent) {
