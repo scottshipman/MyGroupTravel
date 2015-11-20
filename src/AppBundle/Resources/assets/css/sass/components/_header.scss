@@ -50,6 +50,16 @@
       margin: (((56px * 1.35) - 32px) / 2) 0;
     }
 
+    .material-icons {
+      font-size: 36px;
+      width: 32px;
+      line-height: 32px;
+      position: absolute;
+      left: 0;
+      top: 0;
+      transform: translate(-2px, 0);
+    }
+
   }
 
 }
