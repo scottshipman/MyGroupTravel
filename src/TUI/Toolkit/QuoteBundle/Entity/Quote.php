@@ -95,7 +95,7 @@ class Quote
   /**
    * @var string
    *
-   * @ORM\Column(name="destination", type="string")
+   * @ORM\Column(name="destination", type="string", nullable=true)
    * @GRID\Column(title="Destination", filterable=true, operatorsVisible=false, sortable=true, export=true)
    */
   private $destination;

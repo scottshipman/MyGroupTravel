@@ -1,22 +1,25 @@
 {%  if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
 {% block body -%}
     <div class="request-changes">
-        <h4>{{ entity.name }}</h4>
-        <ul>
-            <li>{% trans %}quote_site.accepted.quote_number{% endtrans %} {{ entity.quoteNumber }}</li>
-            <li>{% trans %}quote_site.accepted.departing{% endtrans %} {{ entity.departureDate|date(format) }}</li>
-            <li>{% trans %}quote_site.accepted.duration{% endtrans %} {{ entity.duration }}</li>
-            <li>{% trans %}quote_site.accepted.returning{% endtrans %} {{ entity.returnDate|date(format) }}</li>
-            <li>{% trans %}quote_site.accepted.price_person{% endtrans %} {% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</li>
-            <li>Based on {{ entity.payingPlaces }} paying plus {{ entity.freePlaces }} free places</li>
-            <li><strong>{% trans %}quote_site.accepted.expiry{% endtrans %} {{ entity.expiryDate|date(format) }}</strong></li>
-        </ul>
-        {% if entity.headerBlock %}
-            <img src="{{ asset( entity.headerBlock.mediaWrapper[0].media[0].getRelativePath ~ "/" ~ entity.headerBlock.mediaWrapper[0].media[0].getHashedFilename ) | imagine_filter('modalImage')}}"/>
-        {% endif %}
+        <p style="text-align: center">{% trans %}quote.modals.message.accept{% endtrans %}</p>
+        {#<h4 style="margin-top: 10px" class="mdl-card__title-text">{{ entity.name }}</h4>#}
+        {#<ul>#}
+            {#<li>{% trans %}quote_site.accepted.quote_number{% endtrans %} {{ entity.quoteNumber }}</li>#}
+            {#<li>{% trans %}quote_site.accepted.departing{% endtrans %} {{ entity.departureDate|date(format) }}</li>#}
+            {#<li>{% trans %}quote_site.accepted.duration{% endtrans %} {{ entity.duration }}</li>#}
+            {#<li>{% trans %}quote_site.accepted.returning{% endtrans %} {{ entity.returnDate|date(format) }}</li>#}
+            {#<li>{% trans %}quote_site.accepted.price_person{% endtrans %} {% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</li>#}
+            {#<li>Based on {{ entity.payingPlaces }} paying plus {{ entity.freePlaces }} free places</li>#}
+            {#<li><strong>{% trans %}quote_site.accepted.expiry{% endtrans %} {{ entity.expiryDate|date(format) }}</strong></li>#}
+        {#</ul>#}
+        {#{% if entity.headerBlock %}#}
+            {#<img src="{{ asset( entity.headerBlock.mediaWrapper[0].media[0].getRelativePath ~ "/" ~ entity.headerBlock.mediaWrapper[0].media[0].getHashedFilename ) | imagine_filter('modalImage')}}"/>#}
+        {#{% endif %}#}
+        <h4 style="margin-top: 10px" class="mdl-card__title-text">{% trans %}quote.modals.message.add{% endtrans %}</h4>
         {{ form_start(accept_form) }}
         {{ form_widget(accept_form.additional) }}
         <div style="clear: both"></div>
+        {{ form_widget(accept_form.submit) }}
         {{ form_rest(accept_form) }}
     </div>
 {% endblock %}

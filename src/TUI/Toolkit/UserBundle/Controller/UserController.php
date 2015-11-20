@@ -583,14 +583,17 @@ class UserController extends Controller
 
         //Check softdeleted users to make sure there are no duplicates
         $formEmail = $editForm->getData()->getEmail();
-        $filters = $em->getFilters();
-        $filters->disable('softdeleteable');
-        $existingUser = $em->getRepository('TUIToolkitUserBundle:User')->findOneByEmail($formEmail);
-        $filters->enable('softdeleteable');
+        if ( $formEmail != $entity->getEmail() ) {
+            $filters = $em->getFilters();
+            $filters->disable('softdeleteable');
+            $existingUser = $em->getRepository('TUIToolkitUserBundle:User')->findOneByEmail($formEmail);
+            $filters->enable('softdeleteable');
 
-        if ($existingUser != null) {
-            $editForm['email']->addError(new FormError('This user exists and has been deleted.  Please contact and administrator to re-enable this user.'));
+            if ($existingUser != null) {
+                $editForm['email']->addError(new FormError('This user exists and has been deleted.  Please contact and administrator to re-enable this user.'));
+            }
         }
+
         if (Null != $editForm->getData()->getMedia()) {
             $fileId = $editForm->getData()->getMedia();
             $entities = $em->getRepository('MediaBundle:Media')
@@ -1438,10 +1441,6 @@ class UserController extends Controller
         }
 
         if ($this->get('security.context')->isGranted('ROLE_BRAND')) {
-            $em = $this->getDoctrine()->getManager();
-            $targetUser = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
-            $roles = $targetUser->getRoles();
-            $intersect = count(array_intersect($roles, array('ROLE_ADMIN', 'ROLE_BRAND', 'ROLE_SUPER_ADMIN')));
             if(count(array_intersect($roles, array('ROLE_ADMIN', 'ROLE_BRAND', 'ROLE_SUPER_ADMIN'))) > 0) {
                 if ($id != $curUser->getId()){
                     return FALSE;
@@ -1453,7 +1452,11 @@ class UserController extends Controller
             }
         }
 
-        return FALSE;
+        if ($id != $curUser->getId()){
+            return FALSE;
+        } else {
+            return TRUE;
+        }
     }
 
     public function getWelcomeMessageAction($token)
