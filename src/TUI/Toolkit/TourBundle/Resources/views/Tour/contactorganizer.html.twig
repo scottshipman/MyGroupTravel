@@ -13,11 +13,21 @@
         {#</div>#}
         {#<div style="clear: both"></div>#}
         <h3>{% trans %}tour.contact_organizer.share{% endtrans %}</h3>
-        <div class="input"><input style="width:70%; padding:.25em; margin:1em;" type="text" id="share_url" name="share_url" value="{{ app.request.getSchemeAndHttpHost() }}/tour/view/{{ entity.id }}/{{ entity.quoteNumber }}" readonly="readonly">
-            <a href="#" id="copy-button" data-clipboard-target="share_url" title="Click to copy Tour URL" class="not-full mdl-button mdl-js-button mdl-button--raised mdl-button--colored"><i class="fa fa-sign-in fa-stack"></i></a></div>
+        <div class="input">
+            <input style="width: 70%; height: 36px; margin: 1em 0;" type="text" id="share_url" name="share_url" value="{{ app.request.getSchemeAndHttpHost() }}/tour/view/{{ entity.id }}/{{ entity.quoteNumber }}" readonly="readonly">
+            <a href="#" id="share_button" data-clipboard-target="share_url" title="Click to copy Tour URL" class="not-full mdl-button mdl-js-button mdl-button--raised mdl-button--colored copy-button"><i class="fa fa-sign-in fa-stack"></i></a>
+        </div>
+        {% if user.confirmationToken %}
+            <h3>{% trans %}tour.contact_organizer.signup{% endtrans %}</h3>
+            <div class="input">
+                <input style="width: 70%; height: 36px; margin: 1em 0;" type="text" id="signup_url" name="signup_url" value="{{ absolute_url("/user/register/confirm/" ~ user.confirmationToken) }}" readonly="readonly">
+                <a href="#" id="signup_button" data-clipboard-target="signup_url" title="Click to copy Signup URL" class="not-full mdl-button mdl-js-button mdl-button--raised mdl-button--colored copy-button"><i class="fa fa-sign-in fa-stack"></i></a>
+            </div>
+        {% endif %}
         <div class="message">
             <h3>{% trans %}tour.contact_organizer.message{% endtrans %}</h3>
-            <h4>{% trans %}tour.contact_organizer.to{% endtrans %}</h4><p><strong>{{ entity.organizer.firstName }} {{ entity.organizer.lastName }} ({{ entity.organizer.email }})</strong></p>
+            <h4>{% trans %}tour.contact_organizer.to{% endtrans %}</h4>
+            <p><strong>{{ entity.organizer.firstName }} {{ entity.organizer.lastName }} ({{ entity.organizer.email }})</strong></p>
             <h4>{% trans %}tour.contact_organizer.message_text{% endtrans %}</h4>
             {{ form(notify_form) }}
         </div>
@@ -26,15 +36,19 @@
         $(document).ready(function () {
             // Copy to Clipboard
             ZeroClipboard.config({swfPath: "//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf"});
-            var client = new ZeroClipboard(document.getElementById("copy-button"));
-            client.on('aftercopy', function (event) {
-                $('#copy-button').css('background-color', 'green');
+            var shareButton = new ZeroClipboard(document.getElementById("share_button"));
+            shareButton.on('aftercopy', function (event) {
+                $('#share_button').css('background-color', 'green');
             });
-            //remove the CopytoClipboard button if not Flash
+            var signupButton = new ZeroClipboard(document.getElementById("signup_button"));
+            signupButton.on('aftercopy', function (event) {
+                $('#signup_button').css('background-color', 'green');
+            });
+            // Remove the CopytoClipboard button if not Flash
             if (navigator.mimeTypes["application/x-shockwave-flash"] == undefined) {
-                $("#copy-button").addClass('hidden');
-                $('share_url').css('width', '80%');
-            }
+                $(".copy-button").addClass('hidden');
+                $('.input input').css('width', '80%');
+            };
         });
     </script>
 {% endblock %}
