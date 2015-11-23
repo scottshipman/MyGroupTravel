@@ -31,7 +31,7 @@
     {% if is_granted("ROLE_BRAND") %}
         <a class="back-link" href="{{ path('manage_tour') }}"><i class="fa fa-arrow-left"></i> {% trans %}tour.actions.back_to_tours{% endtrans %}</a>
     {% else %}
-        <a class="back-link" href="/"><i class="fa fa-arrow-left"></i> {% trans %}tour.title.back{% endtrans %}</a>
+        <a class="back-link" href="/"><i class="fa fa-arrow-left"></i> {% trans %}tour.actions.home{% endtrans %}</a>
     {% endif %}
 {% endblock %}
 
@@ -61,7 +61,7 @@
             <li><label>{% trans %}tour.show.price{% endtrans %}</label><strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong></li>
             <li>
                 <label>{% trans %}tour.show.schedule{% endtrans %}</label>
-                {% for payment in passenger_payment_tasks %}
+                {% for payment in payment_tasks %}
                     {# render(controller('TourBundle:PaymentTask:showList', { 'id': payment.id } )) #}
                     <ul class="payment-task-list">
                         <li>

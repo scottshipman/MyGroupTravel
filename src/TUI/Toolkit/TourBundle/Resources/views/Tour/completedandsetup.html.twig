@@ -62,7 +62,7 @@
                                 <li>
                                     <div class="profile-list-item item-1 tour-dashboard">
                                         <span class="date-span">{% if entity.currency %}<p id="currency" style="display: inline; font-size: inherit;">{{ entity.currency.htmlSymbol | raw }}</p>{% endif %}{{ paymentTask.value * entity.payingPlaces }}</span>
-                                        <label>{{ paymentTask.name|capitalize }} {% trans %}tour.dashboard.due{% endtrans %} {{ paymentTask.dueDate|date(shortFormat) }}</label>
+                                        <label>{{ paymentTask.name }} {% trans %}tour.dashboard.due{% endtrans %} {{ paymentTask.dueDate|date(shortFormat) }}</label>
                                     </div>
                                 </li>
                         {% endif %}
@@ -180,7 +180,7 @@
                 {% if "now"|date(compareFormat) < paymentTask.dueDate|date(compareFormat)  %}
                     <div class="tour-edit mdl-card mdl-shadow--2dp">
                         <div class="mdl-card__title">
-                            <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.pay{% endtrans %} {{ paymentTask.name|capitalize }} {% trans %}tour.dashboard.to{% endtrans %} {{ brand.name|capitalize }} {{ paymentTask.dueDate|date(shortFormat) }}</h3>
+                            <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.pay{% endtrans %} {{ paymentTask.name }} {% trans %}tour.dashboard.to{% endtrans %} {{ brand.name }} {{ paymentTask.dueDate|date(shortFormat) }}</h3>
                         </div>
                         <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
                             <ul>
@@ -461,7 +461,7 @@
         {% for paymentTask in entity.paymentTasksPassenger if paymentTask.paidDate != null %}
             <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
                 <div class="mdl-card__title">
-                    <h3 class="mdl-card__title-text">Collect {{ entity.payingPlaces }} {{ paymentTask.name|capitalize }} Payments</h3>
+                    <h3 class="mdl-card__title-text">Collect {{ entity.payingPlaces }} {{ paymentTask.name }} Payments</h3>
                     <span class="tour-dashboard-cta"><i class="fa fa-check"></i></span>
                 </div>
             </div>

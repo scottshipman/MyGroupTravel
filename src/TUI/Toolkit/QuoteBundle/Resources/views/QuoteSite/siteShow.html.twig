@@ -273,6 +273,9 @@
 
     <script>
         $(document).ready(function () {
+            // hide any youtube embedd metainfo
+            $('.noembed-meta-info').remove();
+
             // Remove the CopytoClipboard button if not Flash
             if (navigator.mimeTypes["application/x-shockwave-flash"] == undefined) {
                 $("#copy-button").addClass('hidden');

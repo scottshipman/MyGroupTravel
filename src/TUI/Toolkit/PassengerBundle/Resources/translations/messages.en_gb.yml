@@ -37,6 +37,9 @@ passenger:
         delete: Passenger deleted -
         restore: Passenger Restored -
 
+    modals:
+        message: As a parent, you can sign up your child/children for the tour below.
+
     labels:
         passengers_for: Passengers For
         waitlist: Wait List

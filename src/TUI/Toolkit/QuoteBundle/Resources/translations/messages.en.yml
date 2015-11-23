@@ -103,6 +103,13 @@ quote:
     media:
         label: Click to upload
 
+    modals:
+        message:
+            accept: If you like this quote or want to add something to the quote add your message and press go.
+            changes: If you would like to make some changes to the quote, you can choose from the options below and send a message to the sales agent.
+            change_request: Changes I would like to make
+            add: Anything you would like to add?
+
     exception:
         access: You do not have the ability to edit this Quote's information.
         convert: Cannot convert the quote because it is already converted.
@@ -110,6 +117,10 @@ quote:
         expired: This quote has expired. Please contact
         duplicate_quotenumber: This quote number is already in user by another quote.
         prompt_error: The Quote Number did not match our records for this requested Quote. Please try again or consult our Sales Contact.
+        organizer: The organizer must exist in the system.
+        salesagent: The sales agent must exist in the system.
+        secondaryagent: The secondary contact must exist in the system.
+        institution: The institution must exist in the system.
 
     email:
         change_request:

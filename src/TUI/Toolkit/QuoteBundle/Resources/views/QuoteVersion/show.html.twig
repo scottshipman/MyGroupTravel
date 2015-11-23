@@ -255,7 +255,7 @@
                             <i class="fa fa-arrows{{ editable }}"></i> {{ items[item].title }}
                             {# probably render a controller here by passing in item as id and have block entity returned #}
                             <div id="content-block-actions-{{ item }}" class="content-block-actions {% if items[item].locked %}content-block-locked{% endif %}{{ editable }}">
-                                <i class="item-edit content-block-item-action fa fa-pencil-square-o" title="Edit"></i>
+                                <i class="item-edit content-block-item-action fa fa-pencil-square-o" itemid = "{{ item }}" title="Edit"></i>
                                 <i class="item-delete content-block-item-action fa fa-trash-o" title="Delete" blockID="{{ item }}"></i>
                                 {#
                                 {% if items[item].hidden %}
@@ -264,7 +264,9 @@
                                 #}
                              </div>
                          </div>
+                        <div id="editable-content-blocks-{{ item }}" style="display:none; border: 1px dotted grey;padding:3em;"></div>
                        {% endfor %}
+
              </div>
          </div>
            {% endfor %}
@@ -408,7 +410,7 @@
                            '<i class="fa fa-arrows"></i> ' + title +
                            {# probably render a controller here by passing in item as id and have block entity returned #}
                         '<div id="content-block-actions-' + id + '" class="content-block-actions">' +
-                        '<i class="item-edit content-block-item-action fa fa-pencil-square-o" title="Edit"></i> ' +
+                        '<i itemid = "' + id + '" class="item-edit content-block-item-action fa fa-pencil-square-o" title="Edit"></i> ' +
                         '<i class="item-delete content-block-item-action fa fa-trash-o" title="Delete" blockId="' + id + '"></i> ' +
                         {# '<i class="item-hide content-block-item-action fa fa-ban"></i>' + #}
                         '</div></div>'
@@ -419,12 +421,42 @@
             });
 
             // edit a content block
+
+               // Edit a content block
+               $(".item-edit").on('click', function () {
+                   var t = $(this);
+                   var entityClass="QuoteVersion";
+                   var entityId = {{ entity.id }};
+                   $("#loader").css("display", "block");
+                   var blockId = t.attr('itemid');
+                   var editBlock = $("#editable-content-blocks-" + blockId);
+                   var originalDiv = $('#content-blocks-' + blockId);
+                   editBlock.html('');
+                   editBlock.load('/ajax/contentblocks/' + blockId + '/edit/' + entityId + '/' + entityClass, function () {
+                       doMDLpopup(editBlock); // run the function to add appropriate MDL classes to form elements
+                       originalDiv.hide();
+                       editBlock.show();
+                       $("#loader").css("display", "none");
+                       $('.content-block-actions').hide();
+                       $('.editable-tab').editable('disable');
+                       $(".sortable-tabs").sortable('disable');
+                       $(".sortable-items").sortable('disable');
+
+
+
+                   });
+
+               });
+
+
+            /* This old edit method caused conflict with jquery-ui dialog and ckeditor
             $(".item-edit").on('click', function(e){
+
                 // todo Get item.id and item.name
                 var actionParent = $(this).parent().attr('id');
                 var block = actionParent.substring(22);
                 toolkitStandardPopup( "Edit Content Block", "/ajax/contentblocks/" + block + "/edit/" + {{ entity.id}} + "/QuoteVersion" );
-            });
+            });*/
 
 
             // delete a content block

@@ -3,15 +3,15 @@
 
 {#{{ dump() }}#}
     <div class="notify-organizer">
-        <div class="left-column">
-            <p>{% trans %}tour.contact_organizer.name{% endtrans %} <strong>{{ entity.name }}</strong></p>
-            <p>{% trans %}tour.contact_organizer.reference{% endtrans %} <strong>{{ entity.quoteNumber }}</strong></p>
-        </div>
-        <div class="right-column">
-            <p>{% trans %}tour.contact_organizer.institution{% endtrans %} <strong>{{ entity.institution.name }}</strong></p>
-            <p>{% trans %}tour.contact_organizer.destination{% endtrans %} <strong>{{ entity.destination }}</strong></p>
-        </div>
-        <div style="clear: both"></div>
+        {#<div class="left-column">#}
+            {#<p>{% trans %}tour.contact_organizer.name{% endtrans %} <strong>{{ entity.name }}</strong></p>#}
+            {#<p>{% trans %}tour.contact_organizer.reference{% endtrans %} <strong>{{ entity.quoteNumber }}</strong></p>#}
+        {#</div>#}
+        {#<div class="right-column">#}
+            {#<p>{% trans %}tour.contact_organizer.institution{% endtrans %} <strong>{{ entity.institution.name }}</strong></p>#}
+            {#<p>{% trans %}tour.contact_organizer.destination{% endtrans %} <strong>{{ entity.destination }}</strong></p>#}
+        {#</div>#}
+        {#<div style="clear: both"></div>#}
         <h3>{% trans %}tour.contact_organizer.share{% endtrans %}</h3>
         <div class="input"><input style="width:70%; padding:.25em; margin:1em;" type="text" id="share_url" name="share_url" value="{{ app.request.getSchemeAndHttpHost() }}/tour/view/{{ entity.id }}/{{ entity.quoteNumber }}" readonly="readonly">
             <a href="#" id="copy-button" data-clipboard-target="share_url" title="Click to copy Tour URL" class="not-full mdl-button mdl-js-button mdl-button--raised mdl-button--colored"><i class="fa fa-sign-in fa-stack"></i></a></div>
