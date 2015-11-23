@@ -32,11 +32,6 @@
       <div class="sizer">
         <div class="inner">
             {% if entity.isTemplate == 0 %}{# no Institutions on Templates #}
-                {% if entity.quoteReference.institution.media %}
-                    <div class="institution-logo-with-brand">
-                        <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.quoteReference.institution.name }}">
-                    </div>
-                {% endif %}
                 {% if brand.media %}
                     <div class="brand-logo">
                         <img src="{{ asset( brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ brand.name }}">
@@ -47,13 +42,13 @@
             {% if entity.quoteReference.institution %}
                 <div id="site-quote-name">{{ entity.quoteReference.institution.name }}</div>
 
-            <h2 class="{% if entity.quoteReference.institution.media %}has-school-logo{% endif %} {% if brand.media %}has-brand-logo{% endif %}">
-                {% if entity.displayName %}
-                    {{ entity.displayName }}
-                {% else %}
-                    {{ entity.quoteReference.name }}{% if is_granted("ROLE_BRAND") %}, {{ entity.name }}{% endif %}
-                {% endif %}
-            </h2>
+                <h2 class="{% if brand.media %}has-brand-logo{% endif %}">
+                    {% if entity.displayName %}
+                        {{ entity.displayName }}
+                    {% else %}
+                        {{ entity.quoteReference.name }}{% if is_granted("ROLE_BRAND") %}, {{ entity.name }}{% endif %}
+                    {% endif %}
+                </h2>
             {% endif %}
 
             {% if entity.quoteNumber %}
@@ -69,7 +64,14 @@
         <h3 style="color: red;">{% trans %}quote.actions.is_locked{% endtrans %}</h3>
     {% endif %}
 
-    <ul class="record_actions">
+    <ul class="record_actions quote-actions{% if entity.quoteReference.institution.media %} has-logo{% endif %}">
+
+        {% if entity.quoteReference.institution.media %}
+            <div class="institution-logo-action">
+                <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.quoteReference.institution.name }}">
+            </div>
+        {% endif %}
+
         {% if (entity.locked is sameas(false)) and (is_granted("ROLE_BRAND")) %}
             {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
                 <li>
