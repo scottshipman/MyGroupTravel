@@ -126,29 +126,29 @@ tour:
         no_payments: No payments due at this time
         na: N/A
         signups: Sign-ups
-        days: Days To Go
-        passport_data: Collect Passport Data By
-        passenger_data: Collect Passenger Data By
+        days: Days to departure
+        passport_data: Collect passport data by
+        passenger_data: Collect passenger data by
         collecting: Collecting
         outstanding: Outstanding
-        medical_data: Collect Medical Data By
-        dietary_data: Collect Dietary Data By
-        booking_form: Download Booking Form
+        medical_data: Collect medical data By
+        dietary_data: Collect dietary data By
+        booking_form: Download booking form
         booking_form_copy: Download the booking form, complete it, and send it in with the correct deposit
         download: Download
         todo: ToDo
         completed: Completed
-        completed_passport_data: Collect Passport Data
-        completed_passenger_data: Collect Passenger Data
-        completed_medical_data: Collect Medical Data
-        completed_dietary_data: Collect Dietary Data
+        completed_passport_data: Collect passport data
+        completed_passenger_data: Collect passenger data
+        completed_medical_data: Collect medical data
+        completed_dietary_data: Collect dietary data
         sign_up: Sign Up
         passengers: Passengers
         views: Views
-        accepted_of: Accepted Of
+        accepted_of: Accepted of
         waitlist: Waitlist
         collect: Collect
-        payments_by: Payments By
+        payments_by: Payments by
         paid: Paid
         unpaid: Unpaid
         pay: Pay
