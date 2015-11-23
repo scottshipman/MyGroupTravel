@@ -5,7 +5,7 @@
 {% block title %}{{ title_label }} {% trans %}tour.title.show{% endtrans %} {{ entity.name }}{% endblock %}
 {% block page_title %}{{ title_label }}
     {% if entity.isComplete == false and entity.setupComplete == false %}
-        {% trans %}tour.title.new_tour{% endtrans %}
+        {% trans %}tour.title.show{% endtrans %} {{ entity.name }}
     {% else %}
         {% trans %}tour.title.show{% endtrans %} {{ entity.name }}
     {% endif %}
@@ -122,7 +122,7 @@
     <ul class="mdl-card__actions record_actions">
         <li>
             <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_tour') }}">
-                <i class="fa fa-arrow-circle-left"></i> {% trans %}tour.actions.back{% endtrans %}
+                <i class="fa fa-arrow-circle-left"></i> {% trans %}tour.actions.back_to_tours{% endtrans %}
             </a>
         </li>
         {% if delete_form is defined %}
@@ -136,7 +136,7 @@
         var $collectionHolder;
 
         // setup an "add a tag" link
-        var $addPaymentTaskLink = $('<a href="#" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add_tag_link" title="Add a Payment"><i class="fa fa-plus"></i>Add Payment</a>');
+        var $addPaymentTaskLink = $('<a href="#" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add_tag_link" title="{% trans %}tour.form.tour.add_payment{% endtrans %}"><i class="fa fa-plus"></i>{% trans %}tour.form.tour.add_payment{% endtrans %}</a>');
         var $newLinkDiv = $('<div></div>').append($addPaymentTaskLink);
 
         $( document ).ready(function() {

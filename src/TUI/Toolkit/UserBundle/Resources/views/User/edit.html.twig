@@ -1,6 +1,6 @@
 {% extends '::base.html.twig' %}
-{% block title %}{% trans %}user.title.edit{% endtrans %} '{{ entity.username }}'{% endblock %}
-{% block page_title %}{% trans %}user.page_title.edit{% endtrans %} '{{ entity.username }}'{% endblock %}
+{% block title %}{% trans %}user.title.edit{% endtrans %}{% endblock %}
+{% block page_title %}{% trans %}user.page_title.edit{% endtrans %}{% endblock %}
 
 
 
@@ -45,7 +45,7 @@
     </div>
     {% if app.user.id == entity.id %}
         <div id="security-edit-link">
-            To Edit your account password or Security Question, <a href="{{ path('user_security_reset', {'id' : entity.id}) }}">click here</a>.
+            {% trans %}user.form.resetlink{% endtrans %}, <a href="{{ path('user_security_reset', {'id' : entity.id}) }}">click here</a>.
         </div>
     {% endif %}
     {{ form_widget(edit_form) }}

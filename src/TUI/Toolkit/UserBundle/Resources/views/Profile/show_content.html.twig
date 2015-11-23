@@ -5,7 +5,7 @@
         <div class="profile-details">
             <div class="profile-details-card">
                 {# user details here #}
-                <h2 class="mdl-card__title-text">Account Details</h2>
+                <h2 class="mdl-card__title-text">{%  trans %}user.profile.label.account_details{% endtrans %}</h2>
                 <p>{% trans %}user.profile.label.name{% endtrans %}: {% if user.honorific %}{{ user.honorific }} {% endif %}{{ user.firstName }} {{ user.lastName }}</p>
                 <p>{% trans %}user.profile.label.email{% endtrans %}: {{ user.email }}</p>
                 <p>{% trans %}user.profile.label.created{% endtrans %}: {{ user.created |date (format) }}</p>

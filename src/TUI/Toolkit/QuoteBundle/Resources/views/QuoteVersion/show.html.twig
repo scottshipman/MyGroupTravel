@@ -21,9 +21,9 @@
 
 {% block back_link %}
     {% if is_granted("ROLE_BRAND") %}
-        <a class="back-link" href="{{ path('manage_quote') }}"><i class="fa fa-arrow-left"></i> Back to the List</a>
+        <a class="back-link" href="{{ path('manage_quote') }}"><i class="fa fa-arrow-left"></i> {% trans %}quote.actions.back{% endtrans %}</a>
     {% else %}
-        <a class="back-link" href="/"><i class="fa fa-arrow-left"></i> Back to Dashboard</a>
+        <a class="back-link" href="/"><i class="fa fa-arrow-left"></i> {% trans %}quote.actions.back_dash{% endtrans %}</a>
     {% endif %}
 {% endblock %}
 
@@ -74,13 +74,13 @@
             {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
                 <li>
                     <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quoteversion_edit', { 'id': entity.id }) }}">
-                        <i class="fa fa-pencil-square-o"> </i> Edit
+                        <i class="fa fa-pencil-square-o"> </i> {% trans %}quote.actions.edit{% endtrans %}
                     </a>
                 </li>
             {% else %}
                 <li>
                     <a class="accepted-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-                        <i class="fa fa-paper-plane-o"> </i> Converted
+                        <i class="fa fa-paper-plane-o"> </i> {% trans %}quote.actions.converted{% endtrans %}
                     </a>
                 </li>
             {% endif %}
@@ -91,11 +91,11 @@
         <li>
             {% if entity.quoteNumber %}
                 <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('quote_site_show', { 'id': entity.id, 'quoteNumber': entity.quoteNumber }) }}">
-                    <i class="fa fam-preview"></i> Preview
+                    <i class="fa fam-preview"></i> {% trans %}quote.actions.preview{% endtrans %}
                 </a>
             {% else %}
                 <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('quote_site_action_show', { 'id': entity.id }) }}">
-                    <i class="fa fam-preview"></i> Preview
+                    <i class="fa fam-preview"></i> {% trans %}quote.actions.preview{% endtrans %}
                 </a>
             {% endif %}
         </li>
@@ -103,11 +103,11 @@
         <li>
         {% if (entity.locked is sameas(false)) %}
             <a id="quoteLock" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-            <i class="fa fa-lock"></i> Lock
+            <i class="fa fa-lock"></i> {% trans %}quote.actions.lock{% endtrans %}
         {% else %}
             {% if is_granted("ROLE_ADMIN") %}
                 <a id="quoteLock" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-                <i class="fa fa-unlock"></i> Unlock
+                <i class="fa fa-unlock"></i> {% trans %}quote.actions.unlock{% endtrans %}
             {% endif %}
         {% endif %}
             </a>
@@ -115,65 +115,65 @@
         {% if entity.isTemplate == 0 %} {# no Quotelinks for templates needed #}
             <li>
                 <a id="generate-link" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-                    <i class="fa fa-sign-in"></i> Generate quote link
+                    <i class="fa fa-sign-in"></i> {% trans %}quote.actions.generate_quote_link{% endtrans %}
                 </a>
             </li>
             <li>
                 {% if (entity.converted is sameas(false) and entity.quoteReference.converted is sameas(false)) %}
                 <a id="convert-quote" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_quote_convert', { 'id': entity.id }) }}" onclick="return confirm('{% trans %}quote.actions.confirm{% endtrans %}')">
-                    <i class="fa fa-paper-plane"></i> Convert to Tour
+                    <i class="fa fa-paper-plane"></i> {% trans %}quote.actions.convert_to_tour{% endtrans %}
                 </a>
                 {% endif %}
             </li>
         {% endif %}
     </ul>
-    <h3>Summary</h3>
+    <h3>{% trans %}quote.show.summary.summary_title{% endtrans %}</h3>
 
     <table class="record_properties">
         <tbody>
             <tr>
-                <th>Institution</th><td>{% if entity.quoteReference.institution %}{{ entity.quoteReference.institution.name }}{% endif %}</td>
-                <th>Tour Name</th><td>{% if entity.quoteReference.name %}{{ entity.quoteReference.name }}{% endif %}</td>
+                <th>{% trans %}quote.show.summary.institution{% endtrans %}</th><td>{% if entity.quoteReference.institution %}{{ entity.quoteReference.institution.name }}{% endif %}</td>
+                <th>{% trans %}quote.show.summary.tour_name{% endtrans %}</th><td>{% if entity.quoteReference.name %}{{ entity.quoteReference.name }}{% endif %}</td>
             </tr>
             <tr>
-                <th>Destination</th><td>{% if entity.quoteReference.destination %}{{ entity.quoteReference.destination }}{% endif %}</td>
-                <th>Quote Number</th><td>{% if entity.quoteNumber %}{{ entity.quoteNumber }}{% endif %}</td>
+                <th>{% trans %}quote.show.summary.destination{% endtrans %}</th><td>{% if entity.quoteReference.destination %}{{ entity.quoteReference.destination }}{% endif %}</td>
+                <th>{% trans %}quote.show.summary.quote_number{% endtrans %}</th><td>{% if entity.quoteNumber %}{{ entity.quoteNumber }}{% endif %}</td>
             </tr>
         </tbody>
     </table>
     <hr>
 
-    <h3>Details</h3>
+    <h3>{% trans %}quote.show.details.details_title{% endtrans %}</h3>
     <table class="record_properties">
         <tbody>
             <tr>
-                <th>Departure</th>
+                <th>{% trans %}quote.show.details.departure{% endtrans %}</th>
                 <td>{% if entity.departureDate %}{{ entity.departureDate|date(format) }}{% endif %}</td>
-                <th>Priced per person</th>
+                <th>{% trans %}quote.show.details.price_pp{% endtrans %}</th>
                 <td>{% if entity.pricePerson %}{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %} {{ entity.pricePerson }}{% endif %}</td>
             </tr>
             <tr>
-                <th>Return</th>
+                <th>{% trans %}quote.show.details.return{% endtrans %}</th>
                 <td>{% if entity.returnDate %}{{ entity.returnDate|date(format) }}{% endif %}</td>
-                <th>Board Basis</th>
+                <th>{% trans %}quote.show.details.board_basis{% endtrans %}</th>
                 <td>{% if entity.boardBasis %}{{ entity.boardBasis.name }}{% endif %}</td>
             </tr>
             <tr>
-                <th>Duration</th>
+                <th>{% trans %}quote.show.details.duration{% endtrans %}</th>
                 <td>{% if entity.duration %}{{ entity.duration }}{% endif %}</td>
-                <th>Transport</th>
+                <th>{% trans %}quote.show.details.transport{% endtrans %}</th>
                 <td>{% if entity.transportType %}{{ entity.transportType.name }}{% endif %}</td>
             </tr>
             <tr>
-                <th>Paying places</th>
+                <th>{% trans %}quote.show.details.paying_places{% endtrans %}</th>
                 <td>{% if entity.payingPlaces  %}{{ entity.payingPlaces  }}{% endif %}</td>
-                <th>Free places</th>
+                <th>{% trans %}quote.show.details.free_places{% endtrans %}</th>
                 <td>{% if entity.freePlaces  %}{{ entity.freePlaces  }}{% endif %}</td>
             </tr>
             <tr>
-                <th>Quote Name</th>
+                <th>{% trans %}quote.show.details.quote_name{% endtrans %}</th>
                 <td>{% if entity.name  %}{{ entity.name  }}{% endif %}</td>
-                <th>Expiry Date</th>
+                <th>{% trans %}quote.show.details.expiry_date{% endtrans %}</th>
                 <td>{% if entity.expiryDate  %}{{ entity.expiryDate|date(format) }}{% endif %}</td>
             </tr>
         </tbody>
@@ -184,7 +184,7 @@
         <table>
             <tbody>
             <tr>
-                <th>Organizer</th><td>{% if entity.quoteReference.organizer %}{{ entity.quoteReference.organizer.firstName }} {{ entity.quoteReference.organizer.lastName }} {{ entity.quoteReference.organizer.email }}{% endif %}
+                <th>{% trans %}quote.show.details.organizer{% endtrans %}</th><td>{% if entity.quoteReference.organizer %}{{ entity.quoteReference.organizer.firstName }} {{ entity.quoteReference.organizer.lastName }} {{ entity.quoteReference.organizer.email }}{% endif %}
                     {% if entity.quoteReference.organizer %}<a href="{{ path('user_edit', { 'id': entity.quoteReference.organizer.id }) }}" title = "Edit this User's account information"><i class="fa fa-pencil-square-o"></i></a>{% endif %}
                 </td>
             </tr>
@@ -197,10 +197,10 @@
     <table>
         <tbody>
         <tr>
-            <th>Primary Business Administrator</th><td>{% if entity.quoteReference.salesAgent %}{{ entity.quoteReference.salesAgent.firstName }} {{ entity.quoteReference.salesAgent.lastName }} {{ entity.quoteReference.salesAgent.email }}{% endif %}</td>
+            <th>{% trans %}quote.show.details.primary_business_admin{% endtrans %}</th><td>{% if entity.quoteReference.salesAgent %}{{ entity.quoteReference.salesAgent.firstName }} {{ entity.quoteReference.salesAgent.lastName }} {{ entity.quoteReference.salesAgent.email }}{% endif %}</td>
         </tr>
         <tr>
-            <th>Other Business Administrator</th><td>{% if entity.quoteReference.secondaryContact %}{{ entity.quoteReference.secondaryContact.firstName }} {{ entity.quoteReference.secondaryContact.lastName }} {{ entity.quoteReference.secondaryContact.email }}{% endif %}</td>
+            <th>{% trans %}quote.show.details.other_business_admin{% endtrans %}</th><td>{% if entity.quoteReference.secondaryContact %}{{ entity.quoteReference.secondaryContact.firstName }} {{ entity.quoteReference.secondaryContact.lastName }} {{ entity.quoteReference.secondaryContact.email }}{% endif %}</td>
         </tr>
         </tbody>
     </table>
@@ -208,15 +208,15 @@
 {% if entity.locked == 0%}
     {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
         <hr>
-        <h3>Header Content</h3>
+        <h3>{% trans %}quote.show.header_content.header_content_title{% endtrans %}</h3>
 
             {% if entity.headerBlock %}
                 <a id="edit-headerBlock" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-                    <i class="fa fa-pencil-square-o"></i> Edit Header Content
+                    <i class="fa fa-pencil-square-o"></i> {% trans %}quote.show.header_content.edit{% endtrans %}
                 </a>
             {% else %}
                 <a id="add-headerBlock" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-                    <i class="fa fa-plus-circle"></i> Add Header Content
+                    <i class="fa fa-plus-circle"></i> {% trans %}quote.show.header_content.add{% endtrans %}
                 </a>
             {% endif %}
     {% endif %}
@@ -226,11 +226,11 @@
 
    {# {{ dump(entity) }} #}
 
-    <h3>Tour Information</h3>
+    <h3>{% trans %}quote.show.tour_information.tour_information_title{% endtrans %}</h3>
 
     {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
         <a id="add-new-tab" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-            <i class="fa fa-plus-circle"></i>  Add New Tab
+            <i class="fa fa-plus-circle"></i>  {% trans %}quote.show.tour_information.add_tab{% endtrans %}
         </a>
     {% endif %}
 
@@ -242,9 +242,9 @@
                 <i class="content-block-tab-handle fa fa-arrows{{ editable }}"></i>
                 <h4 id="tab-label-{{ tab }}" class="editable-tab">{{ data[0] }}</h4>
                 {% if data[1] | length < 1 %}
-                    <span class="tab-delete icon-label{{ editable }}"><i class="content-block-tab-actions fa fa-trash-o"></i> Delete Tab</span>
+                    <span class="tab-delete icon-label{{ editable }}"><i class="content-block-tab-actions fa fa-trash-o"></i> {% trans %}quote.show.tour_information.delete_tab{% endtrans %}</span>
                 {% endif %}
-                <span class="tab-new icon-label{{ editable }}"><i class="content-block-tab-actions fa fa-plus-circle"></i> Add Content</span>
+                <span class="tab-new icon-label{{ editable }}"><i class="content-block-tab-actions fa fa-plus-circle"></i> {% trans %}quote.show.tour_information.add_content{% endtrans %}</span>
             </span>
 
 
@@ -351,13 +351,13 @@
 
                // Add a headerBlock to a site
                $("#add-headerBlock").on('click', function(){
-                  toolkitStandardPopup( "Add Header Content", "/manage/headerblock/header/new/" + {{ entity.id}} + "/QuoteVersion" );
+                  toolkitStandardPopup( "{% trans %}quote.show.header_content.add{% endtrans %}", "/manage/headerblock/header/new/" + {{ entity.id}} + "/QuoteVersion" );
                });
 
                {% if entity.headerBlock %}
                    // Edit the headerBlock for a site
                    $("#edit-headerBlock").on('click', function(){
-                       toolkitStandardPopup( "Edit Header Content", "/manage/headerblock/" + {{ entity.headerBlock.id }} + "/header/edit/" + {{ entity.id}} + "/QuoteVersion" );
+                       toolkitStandardPopup( "{% trans %}quote.show.header_content.edit{% endtrans %}", "/manage/headerblock/" + {{ entity.headerBlock.id }} + "/header/edit/" + {{ entity.id}} + "/QuoteVersion" );
                    });
                {% endif %}
 
@@ -462,7 +462,7 @@
             // delete a content block
                $(document).on('click', '.item-delete', function(e){
                 // todo Get item.id and item.name
-                if (confirm('Are you sure you want to remove this item? Warning: this can not be undone.')) {
+                if (confirm('{% trans %}quote.actions.delete_warning{% endtrans %}')) {
                     var blockId = $(this).attr('blockId');
                     $.ajax({
                         method:'DELETE',
