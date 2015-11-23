@@ -99,7 +99,7 @@ tour:
        name: Tour Name
        number: Tour Number
        organizers: Organizers
-       number: Tour Number
+       number: Tour Reference
        schedule: Passenger Payment Schedule
        footer:
             intro: Business Administrator Contact:
