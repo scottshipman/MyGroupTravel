@@ -1300,6 +1300,8 @@ class TourController extends Controller
             $tokenGenerator = $this->container->get('fos_user.util.token_generator');
             // Get some user info
             $user->setConfirmationToken($tokenGenerator->generateToken());
+        }elseif ($entity->getOrganizer()->isEnabled() == true){
+            $user = $entity->getOrganizer();
         };
 
         return $this->render('TourBundle:Tour:contactorganizer.html.twig', array(
