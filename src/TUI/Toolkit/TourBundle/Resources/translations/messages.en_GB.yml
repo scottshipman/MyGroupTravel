@@ -55,13 +55,14 @@ tour:
         print: Print
         pdf: PDF
         download_promo: Download Promo Materials
-        email_organizer: Email/Notify Organizer
+        email_organizer: Email/Notify Organiser
         add_header: Add Header Slideshow
         edit_tabs: Edit Tabs
         add_tab: Add New Tab
         add_block: Add Block
         save: Save
         submit: Submit
+        back_to_tours: Back to tours
 
     menu:
         my_tours: My Tours
@@ -74,20 +75,20 @@ tour:
         payment_settings: Set up your payment settings
         next: Next
         promote: Promote Your Tour
-        personalize: Personalize your website
+        personalize: Personalise your website
 
     not_setup:
        get_started: Get Started
        signup: Sign Up
        payment_settings: Set up your payment settings
-       how_much: How much do you want ot charge each passenger?
-       pass_price: This will be the per passenger price shown on the tour prmotional website.  You can increase the price or reduce it if you are fundraising
+       how_much: How much do you want to charge each passenger?
+       pass_price: This will be the per-passenger price shown on the tour promotional website.  You can increase the price, or reduce it if you are fundraising.
        amounts_and_dates: Set payment amounts and due dates
-       suggested_price: This is the suggested per passenger deposit price.  You can increase the price or reduce it if you are fundraising.
+       suggested_price: This is the suggested per-passenger deposit price.  You can increase the price, or reduce it if you are fundraising.
        how_to_pay: How do you want passengers to pay?
-       preferred_payment: Select your preferred payment methods
+       preferred_payment: Select your preferred payment methods.
        next: Next
-       personalize: Personalize your website
+       personalize: Personalise your website
        promote: Promote Your Tour
 
     show:
@@ -98,13 +99,16 @@ tour:
        price: Price Per Passenger
        name: Tour Name
        number: Tour Number
-       organizers: Organizers
+       organizers: Organisers
        number: Tour Number
        schedule: Passenger Payment Schedule
        footer:
             intro: Business Administrator Contact:
             intro_org: Your Contact:
             price: Price per person:
+       price_based_on_payingandfree: Based on <strong>%payingplaces%</strong> paying and <strong>%freeplaces%</strong> free places.
+       price_based_on_payingonly: Based on <strong>%payingplaces%</strong> paying places
+       price_based_on_freeonly: Based on <strong>%freeplaces%</strong> free places
 
     contact_organizer:
         name: Tour Name:
@@ -122,29 +126,29 @@ tour:
         no_payments: No payments due at this time
         na: N/A
         signups: Sign-ups
-        days: Days To Go
-        passport_data: Collect Passport Data By
-        passenger_data: Collect Passenger Data By
+        days: Days to departure
+        passport_data: Collect passport data by
+        passenger_data: Collect passenger data by
         collecting: Collecting
         outstanding: Outstanding
-        medical_data: Collect Medical Data By
-        dietary_data: Collect Dietary Data By
-        booking_form: Download Booking Form
+        medical_data: Collect medical data By
+        dietary_data: Collect dietary data By
+        booking_form: Download booking form
         booking_form_copy: Download the booking form, complete it, and send it in with the correct deposit
         download: Download
-        todo: ToDo
+        todo: To do
         completed: Completed
-        completed_passport_data: Collect Passport Data
-        completed_passenger_data: Collect Passenger Data
-        completed_medical_data: Collect Medical Data
-        completed_dietary_data: Collect Dietary Data
+        completed_passport_data: Collect passport data
+        completed_passenger_data: Collect passenger data
+        completed_medical_data: Collect medical data
+        completed_dietary_data: Collect dietary data
         sign_up: Sign Up
         passengers: Passengers
         views: Views
-        accepted_of: Accepted Of
+        accepted_of: Accepted of
         waitlist: Waitlist
         collect: Collect
-        payments_by: Payments By
+        payments_by: Payments by
         paid: Paid
         unpaid: Unpaid
         pay: Pay
@@ -156,12 +160,13 @@ tour:
     edit:
         summary: Summary
         details: Details
-        schedule: Payment Schedule (Per Person Amounts)
+        schedule: Payment Schedule (Per Person)
         deadlines: Task Deadlines
-        promotional_content: Upload Promotional Content
+        promotional_content: Upload promotional content
         no_assets: No assets uploaded.
-        promo_assets: Upload Promotional Assets
-        cannot_upload: Cannot Upload Any More Assets
+        promo_assets: Upload promotional assets
+        cannot_upload: Cannot upload any more assets
+        totalprice: Total Price
 
     pdf:
         quoteNumber: Quote Number:
@@ -178,7 +183,7 @@ tour:
         cancel: Cancel
 
     tour_summary:
-        signup: Sign Me Up
+        signup: Sign up
         expired: Expired
         departing: Departing:
         duration: Duration:
@@ -227,11 +232,11 @@ tour:
         warning:
             expired: This quote has expired. Please contact
             at: at
-        no_match:  The Quote Number did not match our records for this requested Quote. Please try again or consult your Sales Contact.
+        no_match:  The quote number did not match our records for this requested quote. Please try again or consult your sales contact.
 
     grid:
         no_result: There are no tours to show. Please check your filter settings and try again.
-        no_result-deleted: There are no Deleted Tours to show. Please check your filter settings and try again.
+        no_result-deleted: There are no deleted tours to show. Please check your filter settings and try again.
         export: Tours as CSV
         export_deleted: Deleted Tours as CSV
         filter:
@@ -240,7 +245,7 @@ tour:
                 email: Email
                 enabled: Enabled
                 ba_lname: Primary Business Admin (Last Name)
-                o_lname: Organizer (Last Name)
+                o_lname: Organiser (Last Name)
         column:
             title:
                 last_login: Last Login
@@ -276,14 +281,14 @@ tour:
             value: Amount
             date: Due Date (DD-MM-YYYY)
         tour_setup:
-            price: Price Per Person
+            price: Price per Person
             cash: Cash / Cheque
             instructions: Optional payment instructions
-            bank: Bank Transfer
-            online: Online Payment
+            bank: Bank transfer
+            online: Online payment
             other: Other
         tour_summary:
-            expiration: Tour Expiration? (DD-MM-YYYY)
+            expiration: Tour Expiry Date (DD-MM-YYYY)
             departure: Departure Date (DD-MM-YYYY)
             return: Return Date (DD-MM-YYYY)
             duration: Duration
@@ -297,7 +302,7 @@ tour:
         tour:
             placeholder: Select
             name: Tour Name
-            expiration: Quote Expiration? (DD-MM-YYYY)
+            expiration: Quote Expiry Date (DD-MM-YYYY)
             sales_agent: Primary Business Admin
             second_contact: Other Business Admin
             destination: Destination
@@ -310,6 +315,14 @@ tour:
             passport_date: Passport Info Due Date (DD-MM-YYYY)
             medical_date: Medical Info Due Date (DD-MM-YYYY)
             dietary_date: Dietary Info Due Date (DD-MM-YYYY)
+            trip_status: Trip Status
+            quote_number: Quote Number
+            transport_type: Transport Type
+            paying_places: Paying Places
+            free_places: Free Places
+            price_per_person: Price per Person
+            add_payment: Add a Payment
+
 
 
     payment_task:

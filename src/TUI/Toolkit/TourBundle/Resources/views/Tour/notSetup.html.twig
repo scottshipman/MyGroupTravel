@@ -47,8 +47,8 @@
                     {{ form_widget(setup_form.bankTransferPaymentDescription) }}
                     {{ form_widget(setup_form.onlinePayment, {'label' : 'tour.form.tour_setup.online'|trans}) }}
                     {{ form_widget(setup_form.onlinePaymentDescription) }}
-                    {{ form_widget(setup_form.otherPayment) }}
-                    {{ form_widget(setup_form.otherPaymentDescription, {'label' : 'tour.form.tour_setup.other'|trans}) }}
+                    {{ form_widget(setup_form.otherPayment, {'label' : 'tour.form.tour_setup.other'|trans}) }}
+                    {{ form_widget(setup_form.otherPaymentDescription) }}
                 </div>
             </li>
         </ol>
@@ -75,7 +75,7 @@
     var $collectionHolder;
 
     // setup an "add a tag" link
-    var $addPaymentTaskLink = $('<a href="#" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add_tag_link" title="Add a Payment"><i class="fa fa-plus"></i>Add Payment</a>');
+    var $addPaymentTaskLink = $('<a href="#" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add_tag_link" title="{% trans %}tour.form.tour.add_payment{% endtrans %}"><i class="fa fa-plus"></i>{% trans %}tour.form.tour.add_payment{% endtrans %}</a>');
     var $newLinkDiv = $('<div></div>').append($addPaymentTaskLink);
 
     $( document ).ready(function() {
