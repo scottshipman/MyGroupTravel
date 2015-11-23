@@ -6,7 +6,7 @@
    {{ form_start(form) }}
 
         {{ form_errors(form) }}
-    <div>Please Provide the answer to you preset Security Question:</div>
+    <div>{% trans %}user.form.resetting.securityprompt{% endtrans %}</div>
         {{ form_widget(form.answerConfirm, {'label' : question }) }}
         {{ form_row(form.plainPassword) }}
 

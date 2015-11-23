@@ -230,7 +230,7 @@
                         <option selected="selected" value="{{key}}">{{ export.title|trans }}</option>
                     {% endfor %}
                 </select>
-                <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"><i class="fa fa-download"></i>{{  ' Export to CSV'|trans }}</button>
+                <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"><i class="fa fa-download"></i> {% trans %}app.csv_button{% endtrans %}</button>
             {% endspaceless %}
         </div>
     {% endif %}

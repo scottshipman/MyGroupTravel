@@ -539,9 +539,9 @@ class QuoteVersionController extends Controller
         $grid->addRowAction($editAction);
         $showAction = new RowAction('View', 'manage_quote_show');
         $grid->addRowAction($showAction);
-        $cloneAction = new RowAction('Clone Quote from Template', 'manage_quote_clone');
+        $cloneAction = new RowAction('Create quote from template', 'manage_quote_clone');
         $grid->addRowAction($cloneAction);
-        $convertAction = new RowAction('Duplicate Template', 'manage_quote_clonetemplate');
+        $convertAction = new RowAction('Duplicate template', 'manage_quote_clonetemplate');
         $grid->addRowAction($convertAction);
         $deleteAction = new RowAction('Delete', 'manage_quote_quick_delete');
         $deleteAction->setRole('ROLE_ADMIN');

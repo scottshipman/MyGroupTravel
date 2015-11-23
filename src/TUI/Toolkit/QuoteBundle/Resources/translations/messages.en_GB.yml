@@ -4,39 +4,40 @@ quote:
         edit: Edit Quote
         index: Quote Dashboard
         new: Create New Quote
-        show: Site View
+        show: Site Preview
         layout_auth: My Tours
         layout_anon: Quote Login
-        deleted: Quote Dashboard - Deleted
-        converted: Quote Dashboard - Converted
+        deleted: Quote Dashboard
+        converted: Quote Dashboard
 
     page_title:
         edit: Edit Quote
-        index: Quote Dashboard - Active
+        index: Quote Dashboard
         new: Create New Quote
-        show: Site View
+        show: Site Preview
         layout_auth: My Tours
         layout_anon: Quote Login
-        deleted: Quote Dashboard - Deleted
-        converted: Quote Dashboard - Converted
+        deleted: Quote Dashboard
+        converted: Quote Dashboardd
 
     actions:
-        back: Back to the list
-        back_dash: Back to the Dashboard
-        back_show: Back to Show
+        back: Back to the quotes dashboard
+        back_dash: Back to dashboard
+        back_show: Back to quote details
+        save_as_alt: Save as alternative quote
         edit: Edit
         update: Update
-        create: Create
-        create_template: Create Template
+        create: Create quote
+        create_template: Create template
         delete: Delete
-        create_new: Create a New Quote
-        create_new_template: Create a new Template
+        create_new: Create a new quote
+        create_new_template: Create a new template
         prompt: Go
-        change_request: Submit Change request
+        change_request: Submit change request
         accept_form: Go
         clone: Save as Clone
         restore: Restore
-        edit_mode: Switch to Edit Mode
+        edit_mode: Switch to edit mode
         print: Print
         pdf: PDF
         add_header: Add Header Slideshow
@@ -45,6 +46,13 @@ quote:
         is_locked: This quote is locked
         save: Save Quote
         confirm: Are you sure? This action cannot be undone.
+        converted: Converted
+        preview: Preview
+        lock: Lock
+        unlock: Unlock
+        generate_quote_link: Generate quote link
+        convert_to_tour: Convert to tour
+        delete_warning: Are you sure you want to remove this item? Warning: this can not be undone.
 
 
     table:
@@ -75,10 +83,10 @@ quote:
         lock: This quote's lock has been toggled.
 
     grid:
-        no_result: There are no Quotes to show. Please check your filter settings and try again.
-        no_result-deleted: There are no Deleted Quotes to show. Please check your filter settings and try again.
-        no_result-converted: There are no Converted Quotes to show. Please check your filter settings and try again.
-        no_results-templates: There are no Templates to show. Please check your filter settings and try again.
+        no_result: There are no quotes to show. Please check your filter settings and try again.
+        no_results-deleted: There are no deleted quotes to show. Please check your filter settings and try again.
+        no_result-converted: There are no converted quotes to show. Please check your filter settings and try again.
+        no_results-templates: There are no templates to show. Please check your filter settings and try again.
         export: Quotes as CSV
         export_deleted: Deleted Quotes as CSV
         export_converted: Converted Quotes as CSV
@@ -86,7 +94,7 @@ quote:
         filters:
             title:
                 sales_agent: Primary Business Admin (last name)
-                organizer: Organizer (last name)
+                organizer: Organiser (last name)
                 createdby: Created By
                 owner: Template Owner
 
@@ -98,7 +106,7 @@ quote:
         deleted: Deleted Quotes
         current:  Current Quotes
         converted: Converted Quotes
-        alternate: Alternate Quotes
+        alternate: Alternative Quotes
 
     media:
         label: Click to upload
@@ -129,7 +137,7 @@ quote:
             institution_name: "Institution Name:"
             tour_name: "Tour Name:"
             quote_number: "Quote Number:"
-            organizer: "Organizer Name / Email:"
+            organizer: "Organiser Name / Email:"
             changes: "Additions:"
             cta: Edit your Quote
             link_text: "You can also paste the link below straight into your browser window:"
@@ -139,20 +147,19 @@ quote:
             institution_name: "Institution Name:"
             tour_name: "Tour Name:"
             quote_number: "Quote Number:"
-            organizer: "Organizer Name / Email:"
+            organizer: "Organiser Name / Email:"
             additions: "Additions:"
             cta: View Quote
             link_text: "You can also paste the link below straight into your browser window:"
 
     footer:
-        salesAgent: "Your Contact: "
+        salesAgent: "Your contact: "
         price_person: "Price per person: "
         actions:
             expired: Expired
             like: Like Quote
 
     form:
-
         prompt:
             quotenumber: Quote Number
         accept:
@@ -167,7 +174,7 @@ quote:
             additional: Anything Else?
             submit: Submit
         summary:
-            expiry: Quote Expiration?
+            expiry: Quote Expiry Date
             departure: Departure Date
             return: Return Date
             duration: Duration
@@ -181,7 +188,7 @@ quote:
             welcomeMsg: Summary Message
         quote:
             secondaryContact: Other Business Admin
-            organizer: Organizer
+            organizer: Organiser
             institution: Institution
             salesAgent: Primary Business Admin
             salesAgentTemplate: Template Owner
@@ -192,7 +199,7 @@ quote:
             template: Convert to Template?
             quoteReference: Quote Details
             name: Quote Name
-            expiry: Quote Expiration?
+            expiry: Quote Expiry Date
             departure: Departure Date
             return: Return Date
             duration: Duration
@@ -204,6 +211,39 @@ quote:
             pricePerson: Price per Person
             currency: Currency
             welcomeMsg: Summary Message
+    show:
+        summary:
+          summary_title: Summary
+          institution: Institution
+          tour_name: Tour Name
+          destination: Destination
+          quote_number: Quote Number
+        details:
+          details_title: Details
+          departure: Departure
+          price_pp: Price per Person
+          return: Return
+          board_basis: Board Basis
+          duration: Duration
+          transport: Transport
+          paying_places: Paying Places
+          free_places: Free Places
+          quote_name: Quote Name
+          expiry_date: Expiry Date
+          organizer: Organiser
+          primary_business_admin: Primary Business Admin
+          other_business_admin: Other Business Admin
+        header_content:
+          header_content_title: Header Content
+          add: Add header content
+          edit: Edit header content
+        tour_information:
+          tour_information_title: Tour Information
+          add_tab: Add new tab
+          delete_tab: Delete tab
+          add_content: Add content
+
+
 quote_site:
     accepted:
         quote_number: "Quote Number "
@@ -220,7 +260,7 @@ quote_site:
         price_person: "Price per person "
         expiry: "Quote valid until "
     quote_sibling:
-        intro: "Alternate quotes for "
+        intro: "Alternative quotes for "
         related: "Other Related Quotes for "
         default_name: this tour
         tour_name: Tour Name
@@ -236,17 +276,20 @@ quote_site:
         board_basis: "Board basis: "
         transport: "Transport: "
         price_person: "Price per person: "
+        price_based_on_payingandfree: Based on <strong>%payingplaces%</strong> paying and <strong>%freeplaces%</strong> free places.
+        price_based_on_payingonly: Based on <strong>%payingplaces%</strong> paying places
+        price_based_on_freeonly: Based on <strong>%freeplaces%</strong> free places
         expiry: "Quote valid until "
         actions:
-            like: Like Quote
+            like: Like quote
             expired: Expired
             converted: Converted
-            request_change: Request Changes
+            request_change: Request changes
             share: Share this quote with others
     site_pdf:
         quote_number: "Quote Number: "
-        alternate_quotes: Alternate Quotes
-        organizer: "Tour Organizer: "
+        alternate_quotes: Alternative Quotes
+        organizer: "Tour Organiser: "
         price_person: "Price per person: "
     site_prompt:
         quote_number: Enter your Quote Number

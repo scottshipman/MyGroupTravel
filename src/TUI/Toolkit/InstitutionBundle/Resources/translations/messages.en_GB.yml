@@ -70,6 +70,6 @@ institution:
               address2: Address 2
               city: City
               state: State
-              county: COunty
-              post_code: ZipCode
+              county: County
+              post_code: Postcode
               country: Country

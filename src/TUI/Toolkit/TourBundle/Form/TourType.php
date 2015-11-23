@@ -52,8 +52,12 @@ class TourType extends AbstractType
                 ->where('t.visible = TRUE' )
                 ->orderBy('t.id', 'ASC');
             },
+            'label' => 'tour.form.tour.trip_status',
           ))
-          ->add('quoteNumber')
+          ->add('quoteNumber', 'text', array(
+            'required' => false,
+            'label' => 'tour.form.tour.quote_number',
+          ))
           ->add('tourReference', 'text', array(
             'required' => false,
             'label' => 'tour.form.tour.tour_number',
@@ -139,6 +143,7 @@ class TourType extends AbstractType
               return $er->createQueryBuilder('t')
                 ->orderBy('t.name', 'ASC');
             },
+            'label' => 'tour.form.tour.transport_type'
           ))
           ->add('boardBasis', 'entity', array(
             'label' => 'tour.form.tour.board',
@@ -151,9 +156,15 @@ class TourType extends AbstractType
                 ->orderBy('b.name', 'ASC');
             },
           ))
-          ->add('payingPlaces')
-          ->add('freePlaces')
-          ->add('pricePerson')
+          ->add('payingPlaces', 'integer', array(
+            'label' => 'tour.form.tour.paying_places',
+          ))
+          ->add('freePlaces', 'integer', array(
+            'label' => 'tour.form.tour.free_places',
+          ))
+          ->add('pricePerson', 'integer', array(
+            'label' => 'tour.form.tour.price_per_person',
+          ))
           ->add('paymentTasks', 'collection', array(
             'type' => new PaymentTaskType($this->locale),
             'allow_add'    => true,

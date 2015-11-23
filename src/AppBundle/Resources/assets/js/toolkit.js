@@ -89,7 +89,7 @@
                 var label = $("label[for='" + event.target.id + "']");
                 var text = label.text().trim();
                 if (ui.content.length == 0) {
-                    alert('No suggested results  found for ' + text);
+                    alert('No suggested results found for ' + text);
                     $(this).val('');
                 }
 
