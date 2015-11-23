@@ -17,10 +17,10 @@
             <input style="width: 70%; height: 36px; margin: 1em 0;" type="text" id="share_url" name="share_url" value="{{ app.request.getSchemeAndHttpHost() }}/tour/view/{{ entity.id }}/{{ entity.quoteNumber }}" readonly="readonly">
             <a href="#" id="share_button" data-clipboard-target="share_url" title="Click to copy Tour URL" class="not-full mdl-button mdl-js-button mdl-button--raised mdl-button--colored copy-button"><i class="fa fa-sign-in fa-stack"></i></a>
         </div>
-        {% if user.confirmationToken %}
+        {% if organizer.confirmationToken %}
             <h3>{% trans %}tour.contact_organizer.signup{% endtrans %}</h3>
             <div class="input">
-                <input style="width: 70%; height: 36px; margin: 1em 0;" type="text" id="signup_url" name="signup_url" value="{{ absolute_url("/user/register/confirm/" ~ user.confirmationToken) }}" readonly="readonly">
+                <input style="width: 70%; height: 36px; margin: 1em 0;" type="text" id="signup_url" name="signup_url" value="{{ absolute_url("/user/register/confirm/" ~ organizer.confirmationToken) }}" readonly="readonly">
                 <a href="#" id="signup_button" data-clipboard-target="signup_url" title="Click to copy Signup URL" class="not-full mdl-button mdl-js-button mdl-button--raised mdl-button--colored copy-button"><i class="fa fa-sign-in fa-stack"></i></a>
             </div>
         {% endif %}
