@@ -147,6 +147,7 @@ class Tour
      * @ORM\JoinColumn(name="institution", referencedColumnName="id")
      * @ORM\ManyToOne(targetEntity="TUI\Toolkit\InstitutionBundle\Entity\Institution", cascade={"all"}, fetch="EAGER")
      * @GRID\Column(field="institution.name", title="Institution", filterable=true, operatorsVisible=false, export=true)
+     * @GRID\Column(field="institution.city", title="Institution City", filterable=false, operatorsVisible=false, export=true)
      */
     private $institution;
 

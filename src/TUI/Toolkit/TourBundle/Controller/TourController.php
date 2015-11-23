@@ -51,6 +51,7 @@ class TourController extends Controller
         // hide columns from the screen display
         $hidden = array(
             'quoteReference.id',
+            'institution.city',
             'institution.name',
             'deleted',
             'locked',
@@ -725,7 +726,7 @@ class TourController extends Controller
         }
 
         //Handling the request for institution a little different than we did for the other 2.
-        $institutionParts = explode(' - ', $editForm->getData()->getQuoteReference()->getInstitution());
+        $institutionParts = explode(' - ', $editForm->getData()->getInstitution());
         if (count($institutionParts) == 2 ) {
             $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findBy(
                 array('name' => $institutionParts[0], 'city' => $institutionParts[1])
