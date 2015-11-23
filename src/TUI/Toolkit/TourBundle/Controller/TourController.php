@@ -1294,14 +1294,15 @@ class TourController extends Controller
         $date_format = $this->container->getParameter('date_format');
 
         // Get some user info
-        if ($entity->getOrganizer()->isEnabled() == false) {
-            $user = $entity->getOrganizer();
-            // Create token
-            $tokenGenerator = $this->container->get('fos_user.util.token_generator');
-            // Get some user info
-            $user->setConfirmationToken($tokenGenerator->generateToken());
-        }elseif ($entity->getOrganizer()->isEnabled() == true){
-            $user = $entity->getOrganizer();
+        if ($entity->getOrganizer()) {
+            $organizer = $entity->getOrganizer();
+
+            if ($organizer->isEnabled() == false) {
+                // Create token
+                $tokenGenerator = $this->container->get('fos_user.util.token_generator');
+                // Get some user info
+                $organizer->setConfirmationToken($tokenGenerator->generateToken());
+            }
         };
 
         return $this->render('TourBundle:Tour:contactorganizer.html.twig', array(
@@ -1309,7 +1310,7 @@ class TourController extends Controller
             'entity' => $entity,
             'locale' => $locale,
             'date_format' => $date_format,
-            'user' => $user,
+            'organizer' => $organizer,
         ));
     }
 
