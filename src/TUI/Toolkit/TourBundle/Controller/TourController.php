@@ -1293,12 +1293,21 @@ class TourController extends Controller
         $locale = $this->container->getParameter('locale');
         $date_format = $this->container->getParameter('date_format');
 
+        // Get some user info
+        if ($entity->getOrganizer()->isEnabled() == false) {
+            $user = $entity->getOrganizer();
+            // Create token
+            $tokenGenerator = $this->container->get('fos_user.util.token_generator');
+            // Get some user info
+            $user->setConfirmationToken($tokenGenerator->generateToken());
+        };
 
         return $this->render('TourBundle:Tour:contactorganizer.html.twig', array(
             'notify_form' => $notifyForm->createView(),
             'entity' => $entity,
             'locale' => $locale,
             'date_format' => $date_format,
+            'user' => $user,
         ));
     }
 
