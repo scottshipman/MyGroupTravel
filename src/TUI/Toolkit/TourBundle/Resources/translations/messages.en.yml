@@ -114,6 +114,7 @@ tour:
         institution: Institution:
         destination: Destination:
         share: Share this Tour with others
+        signup: Share the signup link with the Tour Organizer
         message: Your Message
         to: To:
         message_text: Message Text:
