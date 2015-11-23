@@ -201,7 +201,7 @@ a {
 }
 
 .content-block h2 {
-  color: <?php echo hsl_rgb(hsl_text(rgb_hsl($secondaryArray), 0.25)) ?>;;
+  color: <?php echo $primary ?>;
 }
 
 .add-content-block {
