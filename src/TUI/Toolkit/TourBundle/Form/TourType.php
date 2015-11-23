@@ -54,7 +54,7 @@ class TourType extends AbstractType
             },
           ))
           ->add('quoteNumber')
-          ->add('tourNumber', 'text', array(
+          ->add('tourReference', 'text', array(
             'required' => false,
             'label' => 'tour.form.tour.tour_number',
           ))
