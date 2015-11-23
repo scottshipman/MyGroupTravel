@@ -7,6 +7,7 @@ app:
       wrong-file: The image must be in either JPG or PNG format. Please upload a JPG or PNG instead.
       no-file: You may be attempting to hack our server. We’re on to you; expect a knock on the door sometime soon.
       move-error: Error moving uploaded file. Check the script is granted Read/Write/Modify permissions.
+  csv_button: Export
 
 
   tui_drawer:
@@ -16,3 +17,5 @@ app:
 # add generic App level messages in the following format
 #  'original text' : new text
 
+# Global/generic phrasing for e.g. Datagrids where the key name is the value.
+Organizer: Organiser

@@ -54,7 +54,7 @@ class MenuBuilder
 
       $menu['Company']->addChild('Brands', array('route' => '_manage_brand'))
           ->setLinkAttribute('class', 'mdl-navigation__link');
-      $menu['Company']->addChild('Terms of Service', array('route' => '_manage_brand_terms'))
+      $menu['Company']->addChild('Terms of Use', array('route' => '_manage_brand_terms'))
           ->setLinkAttribute('class', 'mdl-navigation__link');
 
       $menu->addChild('Tools')

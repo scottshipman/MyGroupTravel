@@ -29,7 +29,7 @@
 
 {% block back_link %}
     {% if is_granted("ROLE_BRAND") %}
-        <a class="back-link" href="{{ path('manage_tour') }}"><i class="fa fa-arrow-left"></i> {% trans %}tour.actions.back{% endtrans %}</a>
+        <a class="back-link" href="{{ path('manage_tour') }}"><i class="fa fa-arrow-left"></i> {% trans %}tour.actions.back_to_tours{% endtrans %}</a>
     {% else %}
         <a class="back-link" href="/"><i class="fa fa-arrow-left"></i> {% trans %}tour.actions.home{% endtrans %}</a>
     {% endif %}
@@ -46,7 +46,18 @@
             <li><label>{% trans %}tour.show.name{% endtrans %}</label><strong>{{ entity.name}}</strong></li>
             <li><label>{% trans %}tour.show.number{% endtrans %}</label><strong>{{ entity.tourNumber}}</strong></li>
             <li><label>{% trans %}tour.show.departure{% endtrans %}</label><strong>{{ entity.departureDate|date(format) }}</strong></li>
-            <li><label>{% trans %}tour.show.passengers{% endtrans %}</label><strong>{{ entity.payingPlaces }} paying passengers {% if entity.freePlaces > 0 %} and {{ entity.freePlaces }} free passengers{% endif %}</strong></li>
+
+            <li>
+                <label>{% trans %}tour.show.passengers{% endtrans %}</label>
+                {%  if (entity.payingPlaces) and (entity.freePlaces) %}
+                    {{ 'tour.show.price_based_on_payingandfree'|trans({'%payingplaces%' : entity.payingPlaces, '%freeplaces%' : entity.freePlaces})|raw }}
+                {% elseif (entity.payingPlaces) and (entity.freePlaces is empty or entity.freePlaces == 0) %}
+                    {{ 'tour.show.price_based_on_payingonly'|trans({'%payingplaces%' : quote.payingPlaces})|raw }}
+                {% elseif (entity.payingPlaces|default is empty) and (entity.freePlaces) %}
+                    {{ 'tour.show.price_based_on_freeonly'|trans({'%freeplaces%' : entity.freePlaces})|raw }}
+                {%  endif %}
+            </li>
+
             <li><label>{% trans %}tour.show.price{% endtrans %}</label><strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong></li>
             <li>
                 <label>{% trans %}tour.show.schedule{% endtrans %}</label>

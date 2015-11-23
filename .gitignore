@@ -58,3 +58,5 @@
 #scripts
 /scripts/image-urls.txt
 
+# DB snapshots
+/db/*

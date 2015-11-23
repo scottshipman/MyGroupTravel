@@ -15,7 +15,7 @@ $(document).ready(function () {
     $(document).on('click', '#change-request', function (e) {
         e.preventDefault();
         var entityId = $('.site-show').attr('entityId');
-        toolkitStandardPopup( "I'd prefer to make some changes", "/quote/view/change-request/form/" + entityId );
+        toolkitStandardPopup( "I'd like to make some changes", "/quote/view/change-request/form/" + entityId );
     });
 
     // Accept quote popup
