@@ -384,7 +384,7 @@
 
 {% endif %}
 
-    <h5>{% trans %}tour.dashboard.completed{% endtrans %}</h5>
+    <h5 id="completed-title">{% trans %}tour.dashboard.completed{% endtrans %}</h5>
 
     {#Passport Data completed#}
     {% if entity.passportDate != null %}
@@ -534,6 +534,13 @@ $(document).ready(function() {
         $("#dietary-progress > .ui-progressbar-value").animate({
             width: dietPercent + "%"
         }, 1500).html('<p style="margin: -2px 0 1em; font-size: 15px;"class="mdl-color-text--primary-contrast">' + Math.round(dietPercent) + "% Completed" + '</p>').css({"background": "{{ brand.primaryColor }}"});
+    });
+
+    $(document).ready(function () {
+
+        if ($("#completed-title").next().is('script')) {
+            $("#completed-title").css({"display": "none"});
+        }
     });
 
 });
