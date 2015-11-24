@@ -126,6 +126,7 @@ tour:
         na: N/A
         signups: Sign-ups
         days: Days To Go
+        expiry: Days to expiry
         passport_data: Collect Passport Data By
         passenger_data: Collect Passenger Data By
         collecting: Collecting
