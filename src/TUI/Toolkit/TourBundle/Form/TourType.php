@@ -58,7 +58,7 @@ class TourType extends AbstractType
             'required' => false,
             'label' => 'tour.form.tour.quote_number',
           ))
-          ->add('tourNumber', 'text', array(
+          ->add('tourReference', 'text', array(
             'required' => false,
             'label' => 'tour.form.tour.tour_number',
           ))
@@ -118,6 +118,7 @@ class TourType extends AbstractType
           ->add('destination', 'genemu_jqueryautocomplete_entity', array(
             'class' => 'TUI\Toolkit\QuoteBundle\Entity\Quote',
             'property' => 'destination',
+            'required' => false,
             'label'   => 'tour.form.tour.destination',
           ))
           ->add('departureDate', 'genemu_jquerydate', array(

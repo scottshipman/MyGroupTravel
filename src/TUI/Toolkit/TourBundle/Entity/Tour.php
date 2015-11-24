@@ -18,7 +18,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @UniqueEntity(fields={"quoteNumber"}, message="This Quote Number already exists on another Tour.", ignoreNull=true)
  *
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
- * @GRID\Source(columns="id, institution_full, institution.name, institution.city, name, quoteNumber, tripStatus.name, created, destination, quoteReference.id, organizer_full, salesAgent_full, salesAgent_name, salesAgent.firstName, salesAgent.lastName,  salesAgent.email, organizer.firstName, organizer.lastName, organizer.email, views, deleted, locked,  tourNumber, duration, displayName, expiryDate, transportType.name, boardBasis.name, freePlaces, payingPlaces, departureDate, returnDate, pricePerson,  pricePersonPublic, currency.name, status, passengerDate, passportDate, medicalDate, dietaryDate, cashPayment, cashPaymentDescription, bankTransferPayment, bankTransferPaymentDescription, onlinePayment, onlinePaymentDescription, otherPayment, otherPaymentDescription", filterable=false, sortable=true)
+ * @GRID\Source(columns="id, institution_full, institution.name, institution.city, name, quoteNumber, tripStatus.name, created, destination, quoteReference.id, organizer_full, salesAgent_full, salesAgent_name, salesAgent.firstName, salesAgent.lastName,  salesAgent.email, organizer.firstName, organizer.lastName, organizer.email, views, deleted, locked,  tourReference, duration, displayName, expiryDate, transportType.name, boardBasis.name, freePlaces, payingPlaces, departureDate, returnDate, pricePerson,  pricePersonPublic, currency.name, status, passengerDate, passportDate, medicalDate, dietaryDate, cashPayment, cashPaymentDescription, bankTransferPayment, bankTransferPaymentDescription, onlinePayment, onlinePaymentDescription, otherPayment, otherPaymentDescription", filterable=false, sortable=true)
  * @GRID\Column(id="organizer_full", type="join", columns = {"organizer.firstName", "organizer.lastName", "organizer.email"}, title="Organizer", export=false, filterable=false, operatorsVisible=false)
  * @GRID\Column(id="salesAgent_full",  type="join", columns = {"salesAgent.firstName", "salesAgent.lastName", "salesAgent.email"}, title="Primary Business Admin", export=false, filterable=false, operatorsVisible=false)
  * @GRID\Column(id="salesAgent_name",  type="join", columns = {"salesAgent.firstName", "salesAgent.lastName"}, title="Primary Business Admin", export=false, filterable=false, operatorsVisible=false)
@@ -49,10 +49,10 @@ class Tour
     /**
      * @var integer
      *
-     * @ORM\Column(name="tour_number", type="integer", nullable=true)
-     * @GRID\Column(field="tourNumber", title="Tour Number", export=true)
+     * @ORM\Column(name="tour_reference", type="string", nullable=true)
+     * @GRID\Column(field="tourReference", title="Tour Reference", export=true)
      */
-    private $tourNumber;
+    private $tourReference;
 
     /**
      * @var string
@@ -154,7 +154,7 @@ class Tour
     /**
      * @var string
      *
-     * @ORM\Column(name="destination", type="string")
+     * @ORM\Column(name="destination", type="string", nullable=true)
      * @GRID\Column(title="Destination", filterable=false, operatorsVisible=false, sortable=true, export=true)
      */
     private $destination;
@@ -1082,26 +1082,26 @@ class Tour
     }
 
     /**
-     * Set TourNumber
+     * Set tourReference
      *
-     * @param integer $tourNumber
+     * @param integer $tourReference
      * @return Tour
      */
-    public function setTourNumber($tourNumber)
+    public function setTourReference($tourReference)
     {
-      $this->tourNumber = $tourNumber;
+      $this->tourReference = $tourReference;
 
       return $this;
     }
 
     /**
-     * Get tourNumber
+     * Get tourReference
      *
      * @return integer
      */
-    public function getTourNumber()
+    public function getTourReference()
     {
-      return $this->tourNumber;
+      return $this->tourReference;
     }
 
     /**

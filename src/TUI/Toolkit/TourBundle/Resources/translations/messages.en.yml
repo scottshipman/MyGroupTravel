@@ -99,9 +99,9 @@ tour:
        passengers: Number Of Passengers
        price: Price Per Passenger
        name: Tour Name
-       number: Tour Number
+       number: Tour Reference
        organizers: Organizers
-       number: Tour Number
+       number: Tour Reference
        schedule: Passenger Payment Schedule
        footer:
             intro: Business Administrator Contact:
