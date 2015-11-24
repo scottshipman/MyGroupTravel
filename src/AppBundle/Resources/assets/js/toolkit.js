@@ -23,17 +23,10 @@
 
     //trim double spaces from concatenated table cells
     if ($('.mdl-data-table').length > 0) {
-
         $("td").each(function() {
             var $this = $(this);
             $this.html($this.html().replace(/&nbsp;/g, ''));
         });
-        //var str = $('.grid-column-organizer_full').html();
-        //str.replace(/ +/g," ");
-        //console.log(str);
-        //while (str.indexOf('  ') != -1) {
-        //    str.replace('  ', ' ');
-        //}
     }
 
 
