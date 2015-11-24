@@ -337,8 +337,8 @@
                 <i class="fa fa-calendar-times-o"></i> {% trans %}quote.footer.actions.expired{% endtrans %}
             </a>
         {% else %}
-            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
-               href="{{ path('quote_site_quote_accepted', { 'id': entity.id }) }}">
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" id="accept-quote"
+               href="#">
                 <i class="fa fa-thumbs-o-up"> </i> {% trans %}quote.footer.actions.like{% endtrans %}
             </a>
         {% endif %}
