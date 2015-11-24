@@ -42,11 +42,6 @@
     <div class="sub-header">
       <div class="sizer">
         <div class="inner">
-            {% if entity.quoteReference.institution.media %}
-                <div class="institution-logo-with-brand">
-                    <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.quoteReference.institution.name }}">
-                </div>
-            {% endif %}
             {% if brand.media %}
                 <div class="brand-logo">
                     <img src="{{ asset( brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ brand.name }}">
@@ -57,7 +52,7 @@
                 <div id="site-quote-name">{{ entity.quoteReference.institution.name }}</div>
             {% endif %}
 
-            <h2 class="{% if entity.quoteReference.institution.media %}has-school-logo{% endif %} {% if brand.media %}has-brand-logo{% endif %}">
+            <h2 class="{% if brand.media %}has-brand-logo{% endif %}">
                 {% if entity.displayName %}
                     {{ entity.displayName }}
                 {% else %}
@@ -76,31 +71,41 @@
 {% block body -%}
     <div id="tour-version-{{ entity.id }}" class="site-show mode-toggle mode-preview" entityId="{{ entity.id }}" entityType="tour" entityClass="tour" entityPath="tour">
 
-        <a href="javascript:window.print()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
-            <i class="fa fa-print"></i> {% trans %}tour.actions.print{% endtrans %}
-        </a>
+        <div class="quote-actions{% if entity.quoteReference.institution.media %} has-logo{% endif %}">
 
-        <a href="/tour/print/{{ entity.id }}/{{ entity.quoteNumber }}.pdf" target="_blank" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
-            <i class="fa fa-file-pdf-o"></i> {% trans %}tour.actions.pdf{% endtrans %}
-        </a>
+            {% if entity.quoteReference.institution.media %}
+                <div class="institution-logo-action">
+                    <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.quoteReference.institution.name }}">
+                </div>
+            {% endif %}
 
-        {% if collection != NULL and editable == true %}
-        <a href="/tour/view/export/{{ entity.id }}/{{ entity.quoteNumber }}.zip" target="_blank" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions promo-assets">
-            <i class="fa fa-download"></i> {% trans %}tour.actions.download_promo{% endtrans %}
-        </a>
-        {% endif %}
+            <a href="javascript:window.print()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
+                <i class="fa fa-print"></i> {% trans %}tour.actions.print{% endtrans %}
+            </a>
 
-        {% if is_granted("ROLE_BRAND") %}
-            <a href="#" id="notify-organizer" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions"><i class="fa fa-envelope"></i> {% trans %}tour.actions.email_organizer{% endtrans %}</a>
-        {% endif %}
+            <a href="/tour/print/{{ entity.id }}/{{ entity.quoteNumber }}.pdf" target="_blank" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
+                <i class="fa fa-file-pdf-o"></i> {% trans %}tour.actions.pdf{% endtrans %}
+            </a>
 
-        {% if warning | length >0 %}
-            <div id="site-warning">
-                {% for message in warning %}
-                    <p>{{ message }}</p>
-                {% endfor %}
-            </div>
-        {% endif %}
+            {% if collection != NULL and editable == true %}
+            <a href="/tour/view/export/{{ entity.id }}/{{ entity.quoteNumber }}.zip" target="_blank" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions promo-assets">
+                <i class="fa fa-download"></i> {% trans %}tour.actions.download_promo{% endtrans %}
+            </a>
+            {% endif %}
+
+            {% if is_granted("ROLE_BRAND") %}
+                <a href="#" id="notify-organizer" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions"><i class="fa fa-envelope"></i> {% trans %}tour.actions.email_organizer{% endtrans %}</a>
+            {% endif %}
+
+            {% if warning | length >0 %}
+                <div id="site-warning">
+                    {% for message in warning %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+        </div>
 
         <div id="site-header" class="quote-view-site-header">
             {# render the slideshow using the controller/twig with headerbock.id as param #}
