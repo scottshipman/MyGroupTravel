@@ -73,13 +73,10 @@ $(document).ready(function () {
 
     // Edit tabs popup
     $("#edit-tabs").on('click', function (e) {
+        e.preventDefault();
         var entityId = $('.site-show').attr('entityId');
         var entityPath = $('.site-show').attr('entityPath');
-        $("#dialog").html("");
-        $("#dialog").dialog("open");
-        $("#dialog").load('/manage/' + entityPath + '/show/tabs/' + entityId, function () {
-            $(this).dialog("option", "title", "Rearrange Tabs");
-            doMDLpopup($('#dialog')); // run the function to add appropriate MDL classes to form elements
+        toolkitStandardPopup("Rearrange Tabs", "/manage/" + entityPath + "/show/tabs/" + entityId, function () {
             $(".modal-sortable-tabs").sortable("enable");
         });
     });
