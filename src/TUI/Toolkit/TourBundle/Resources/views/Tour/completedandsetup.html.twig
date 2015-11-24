@@ -84,7 +84,11 @@
                 <li>
                     <div class="profile-list-item item-3 tour-dashboard">
                         <span class="date-span">{{ dtgFinal }}</span>
+                        {% if entity.tripStatus.name == "Provisional" %}
+                        <label>{% trans %}tour.dashboard.expiry{% endtrans %}</label>
+                        {% else %}
                         <label>{% trans %}tour.dashboard.days{% endtrans %}</label>
+                        {% endif %}
                     </div>
                 </li>
             </ul>
