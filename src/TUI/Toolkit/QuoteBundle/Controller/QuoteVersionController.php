@@ -555,6 +555,12 @@ class QuoteVersionController extends Controller
         // institution
         $institution = $grid->getColumn('institution_full');
         $institution->setFilterable(false);
+        //institution name
+        $institutionName = $grid->getColumn('quoteReference.institution.name');
+        $institutionName->setFilterable(false);
+        //destination
+        $destination = $grid->getColumn('quoteReference.destination');
+        $destination->setFilterable(true);
         // organizer
         $organizer = $grid->getColumn('organizer_full');
         $organizer->setFilterable(false);
