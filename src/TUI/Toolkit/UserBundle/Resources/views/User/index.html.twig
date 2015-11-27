@@ -20,6 +20,12 @@
     {{ grid_search(grid, 'AppBundle:Grid:grid.html.twig') }}
     {{ grid(grid, 'AppBundle:Grid:grid.html.twig') }}
 
-
+    {%  if is_granted("ROLE_ADMIN") %}
+        <script>
+            $(document).ready(function () {
+                $('#grid_usergrid > div.grid_footer > div.exports').css({"display": "block"});
+            });
+        </script>
+    {% endif %}
 
 {% endblock %}

@@ -306,3 +306,8 @@
   }
 
 }
+
+//hide user grid export from brand users and below
+#grid_usergrid > div.grid_footer > div.exports {
+  display: none;
+}
