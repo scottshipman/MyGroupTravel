@@ -40,6 +40,12 @@
                     $(this).parent().removeClass('is-dirty');
                 }
             });
+
+            //use translation for the ckeditor welcome msg field
+            $('#tui_toolkit_quotebundle_quoteversion_welcomeMsg').each( function() {
+                var label = $(this).prev();
+                label.html("{% trans %}quote.form.quote_version.welcomeMsg{% endtrans %}").css({"position": "static"});
+            });
         });
     </script>
 {% endblock %}
