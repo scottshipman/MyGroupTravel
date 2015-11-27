@@ -39,6 +39,7 @@ passenger:
 
     modals:
         message: As a parent, you can sign up your child/children for the tour below.
+        dob: Date of Birth
 
     labels:
         passengers_for: Passengers For
