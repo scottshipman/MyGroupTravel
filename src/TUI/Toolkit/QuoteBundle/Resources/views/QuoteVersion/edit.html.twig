@@ -15,6 +15,7 @@
     {% if template is empty or edit_form.quoteReference.organizer is defined %}{{ form_row(edit_form.quoteReference.organizer) }}{% endif %}
     {{ form_row(edit_form.quoteReference.salesAgent) }}
     {% if template is empty or edit_form.quoteReference.secondaryContact is defined %}{{ form_row(edit_form.quoteReference.secondaryContact) }}{% endif %}
+    {{ form_widget(edit_form.welcomeMsg, {'label' : 'tour.form.tour_setup.cash'|trans}) }}
     {{ form_rest(edit_form) }}
 
     {{ form_end(edit_form) }}
@@ -59,6 +60,12 @@
             $( ".hasDatepicker" ).datepicker( "option", "dateFormat", "dd-mm-yy" );
             $( ".hasDatepicker" ).change(function(){
                 $(this).parent().addClass('is-dirty');
+            });
+
+            //use translation for the ckeditor welcome msg field
+            $('#tui_toolkit_quotebundle_quoteversion_welcomeMsg').each( function() {
+            var label = $(this).prev();
+                label.html("{% trans %}quote.form.quote_version.welcomeMsg{% endtrans %}").css({"position": "static"});
             });
         });
     </script>
