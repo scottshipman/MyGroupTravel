@@ -52,7 +52,7 @@
                 {%  if (entity.payingPlaces) and (entity.freePlaces) %}
                     {{ 'tour.show.price_based_on_payingandfree'|trans({'%payingplaces%' : entity.payingPlaces, '%freeplaces%' : entity.freePlaces})|raw }}
                 {% elseif (entity.payingPlaces) and (entity.freePlaces is empty or entity.freePlaces == 0) %}
-                    {{ 'tour.show.price_based_on_payingonly'|trans({'%payingplaces%' : quote.payingPlaces})|raw }}
+                    {{ 'tour.show.price_based_on_payingonly'|trans({'%payingplaces%' : entity.payingPlaces})|raw }}
                 {% elseif (entity.payingPlaces|default is empty) and (entity.freePlaces) %}
                     {{ 'tour.show.price_based_on_freeonly'|trans({'%freeplaces%' : entity.freePlaces})|raw }}
                 {%  endif %}
