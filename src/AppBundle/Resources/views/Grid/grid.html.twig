@@ -222,7 +222,7 @@
 
 {# --------------------------------------------------- grid_exports ------------------------------------------------- #}
 {% block grid_exports %}
-    {%  if is_granted("ROLE_ADMIN") %}
+    {%  if is_granted("ROLE_BRAND") %}
         <div class="exports" style="float:right">
             {% spaceless %}
                 <select style="display: none;" name="{{grid.hash}}[{{ constant('APY\\DataGridBundle\\Grid\\Grid::REQUEST_QUERY_EXPORT') }}]">
