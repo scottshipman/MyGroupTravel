@@ -63,8 +63,16 @@ class TourSiteController extends Controller
 
 
     //Get all brand stuff
-    $brand = $em->getRepository('BrandBundle:Brand')->findAll();
-    $brand = $brand[0];
+    $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+    // look for a configured brand
+    if($brand_id = $this->container->getParameter('brand_id')){
+      $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+    }
+
+    if(!$brand) {
+      $brand = $default_brand;
+    }
 
     if ($securityContext->isGranted('ROLE_BRAND')){
       $editable = TRUE;

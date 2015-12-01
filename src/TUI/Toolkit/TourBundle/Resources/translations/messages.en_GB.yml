@@ -103,8 +103,8 @@ tour:
        number: Tour Reference
        schedule: Passenger Payment Schedule
        footer:
-            intro: Business Contact:
-            intro_org: Your Contact:
+            intro: Your Contact:
+            intro_org: Contact:
             price: Price per person:
        price_based_on_payingandfree: Based on <strong>%payingplaces%</strong> paying and <strong>%freeplaces%</strong> free places.
        price_based_on_payingonly: Based on <strong>%payingplaces%</strong> paying places

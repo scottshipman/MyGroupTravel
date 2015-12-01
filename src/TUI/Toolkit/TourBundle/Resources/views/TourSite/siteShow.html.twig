@@ -308,14 +308,10 @@
 
 
 {% block footer_left %}
-    {% if editable==true %}
+    {% if editable==true and app.user.email != entity.salesAgent.email%} {# Show Sales Agent Info to an Organizer#}
         {% if entity.salesAgent %}
             <span class="intro">
-                {% if app.user.email == entity.organizer.email %}
-                    {% trans %}tour.show.footer.intro{% endtrans %}
-                {% else %}
-                    {% trans %}tour.show.footer.intro_org{% endtrans %}
-                {% endif %}
+                    {{ brand.name }} {% trans %}tour.show.footer.intro_org{% endtrans %}
             </span>
             {% if entity.salesAgent.media %}
                 <span class="tui-image-avatar"><img src="{{ asset( entity.salesAgent.media.getRelativePath ~ "/" ~ entity.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.salesAgent.username }}"></span>
@@ -334,14 +330,10 @@
                 <a href="mailto:{{ entity.salesAgent.email }}">{{ entity.salesAgent.email }}</a>
             </span>
         {% endif %}
-    {% else %}
+    {% else %} {# Show organizer info to everyone but organizers #}
         {% if entity.organizer %}
             <span class="intro">
-                {% if app.user and app.user.email == entity.organizer.email %}
                     {% trans %}tour.show.footer.intro{% endtrans %}
-                {% else %}
-                    {% trans %}tour.show.footer.intro_org{% endtrans %}
-                {% endif %}
             </span>
             {% if entity.organizer.media %}
                 <span class="tui-image-avatar"><img src="{{ asset( entity.organizer.media.getRelativePath ~ "/" ~ entity.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.organizer.username }}"></span>
