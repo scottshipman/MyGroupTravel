@@ -36,13 +36,12 @@
 {% block body -%}
 
     <div class="tour-show-wrapper">
-
         <div class="tour-show-left-column">
             <ul class="tour-show-submenu">
                 <li><strong>{% trans %}tour.show.summary{% endtrans %}</strong></li>
                 <li><label>{% trans %}tour.show.institution{% endtrans %}</label><strong>{{ entity.institution.name }}</strong></li>
                 <li><label>{% trans %}tour.show.name{% endtrans %}</label><strong>{{ entity.name}}</strong></li>
-                <li><label>{% trans %}tour.show.number{% endtrans %}</label><strong>{{ entity.tourNumber}}</strong></li>
+                <li><label>{% trans %}tour.show.number{% endtrans %}</label><strong>{{ entity.tourReference }}</strong></li>
                 <li><label>{% trans %}tour.show.departure{% endtrans %}</label><strong>{{ entity.departureDate|date(format) }}</strong></li>
                 <li><label>{% trans %}tour.show.passengers{% endtrans %}</label><strong>{{ entity.payingPlaces }} paying passengers {% if entity.freePlaces > 0 %} and {{ entity.freePlaces }} free passengers{% endif %}</strong></li>
                 <li><label>{% trans %}tour.show.price{% endtrans %}</label><strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong></li>
