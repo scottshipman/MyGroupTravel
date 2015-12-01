@@ -104,7 +104,7 @@ tour:
        number: Tour Reference
        schedule: Passenger Payment Schedule
        footer:
-            intro: Business Administrator Contact:
+            intro: Business Contact:
             intro_org: Your Contact:
             price: Price per person:
 
