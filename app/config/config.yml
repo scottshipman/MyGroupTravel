@@ -281,6 +281,14 @@ genemu_form:
     autocomplete: ~
     image: ~
 
+knp_snappy:
+    pdf:
+        enabled:    true
+        binary:     /usr/bin/wkhtmltopdf #"\"C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe\"" for Windows users
+        options:    []
+knp_snappy:
+    temporary_folder: %kernel.cache_dir%/snappy
+
 trsteel_ckeditor:
     class: Trsteel\CkeditorBundle\Form\Type\CkeditorType
     transformers:  ['tuihtmlpurifier'] #['html_purifier']

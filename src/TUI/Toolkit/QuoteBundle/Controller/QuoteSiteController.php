@@ -501,6 +501,18 @@ class QuoteSiteController extends Controller
         $headerBlock = NULL;
       }
 
+        //brand stuff
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
+
       // send warning messages
       $warningMsg = array();
       if($entity[0]->getExpiryDate() < date($date_format)){
@@ -523,18 +535,29 @@ class QuoteSiteController extends Controller
         'header' => $headerBlock,
         'editable' =>  $editable,
         'path' => $path,
-        'alternate' => $alternate
+        'alternate' => $alternate,
+        'brand' => $brand,
+        'warning' => NULL,
+        'related' => NULL,
       );
 
-      $html = $this->renderView( 'QuoteBundle:QuoteSite:sitePDF.html.twig', $data );
+//        $html = $this->renderView('MyBundle:Foo:bar.html.twig', array(
+//            'some'  => $vars
+//        ));
+        $quoteNumber = $entity[0]->getQuoteNumber();
+      $html = $this->renderView( 'QuoteBundle:QuoteSite:siteShow.html.twig', $data );
 
-      $dompdf = new \DOMPDF();
-      $dompdf->set_base_path($path . '/');
-      $dompdf->load_html($html);
-      $dompdf->render();
+//      $dompdf = new \DOMPDF();
+//      $dompdf->set_base_path($path . '/');
+//      $dompdf->load_html($html);
+//      $dompdf->render();
 
-      return new Response($dompdf->output(), 200, array(
-          'Content-Type' => 'application/pdf'
+//        return $this->get('knp_snappy.pdf')->generate($path, '/static/exports/file.pdf');
+      return new Response($this->get('knp_snappy.pdf')->getOutputFromHtml($html),
+          200,
+          array(
+          'Content-Type' => 'application/pdf',
+          'Content-Disposition'   => 'attachment; filename="' . $quoteNumber . '.pdf"'
       ));
     }
 
