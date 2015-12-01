@@ -48,11 +48,11 @@
                 </div>
             {% endif %}
 
-            {% if entity.quoteReference.institution %}
-                <div id="site-quote-name">{{ entity.quoteReference.institution.name }}</div>
+            {% if entity.institution %}
+                <div id="site-quote-name">{{ entity.institution.name }}</div>
             {% endif %}
 
-            <h2 class="{% if brand.media %}has-brand-logo{% endif %}">
+            <h2 class="editable-tour-name mode-toggle mode-preview {% if brand.media %}has-brand-logo{% endif %}">
                 {% if entity.displayName %}
                     {{ entity.displayName }}
                 {% else %}
@@ -71,11 +71,11 @@
 {% block body -%}
     <div id="tour-version-{{ entity.id }}" class="site-show mode-toggle mode-preview" entityId="{{ entity.id }}" entityType="tour" entityClass="tour" entityPath="tour">
 
-        <div class="quote-actions{% if entity.quoteReference.institution.media %} has-logo{% endif %}">
+        <div class="quote-actions{% if entity.institution.media %} has-logo{% endif %}">
 
-            {% if entity.quoteReference.institution.media %}
+            {% if entity.institution.media %}
                 <div class="institution-logo-action">
-                    <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.quoteReference.institution.name }}">
+                    <img src="{{ asset( entity.institution.media.getRelativePath ~ "/" ~ entity.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.institution.name }}">
                 </div>
             {% endif %}
 
@@ -258,6 +258,36 @@
 
             {# Only place javascript below that deals with editing so it only loads when it needs to #}
             {% if editable %}
+
+                // Edit Tour Display Name
+                $(".editable-tour-name").editable(function(value, settings) {
+                        return(value);
+                        }, {
+                        width: '70%',
+                        data: function(string) {return $.trim(string)},
+                        tooltip: 'Click to edit Tour name...',
+                        cssclass : 'editable-tourname-input',
+                        callback : function(value, settings) {
+                            // do ajax call here to update display name
+                            // on success of ajax call, update dom
+                            $.ajax({
+                                 url: "/tour/view/update/name/{{ entity.id }}",
+                                 type: 'POST',
+                                 headers: {
+                                 "Pragma": "no-cache",
+                                 "Expires": -1,
+                                 "Cache-Control": "no-cache"
+                                 },
+                                 data: {'value' : value},
+                                 contentType: "application/x-www-form-urlencoded",
+                                 }).success(function (response) {
+                                 }).error(function (response) {
+                                     var something = $.parseJSON(response.responseText);
+                                 });
+                        }
+                });
+
+
 
                 // Promote Popup
                 $(document).on('click', '#promote-tour', function (e) {

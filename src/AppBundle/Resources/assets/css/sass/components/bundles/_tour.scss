@@ -197,3 +197,23 @@
     display: inline-block;
   }
 }
+
+/* jeditable tour name css */
+.editable-tourname-input {
+  display: inline;
+  input {
+    color: #1c160d;
+    font-weight: normal;
+    font-size: 35px;
+  }
+}
+
+.editable-tour-name.mode-edit:after {
+  //border: 1px solid white;
+  font-family: FontAwesome;
+  content: "\f044";
+  font-size: 25px;
+  display: inline;
+
+}
+
