@@ -413,7 +413,30 @@ class TourSiteController extends Controller
     ));
   }
 
+  /**
+   * Edit the Display Name on a Tour from jEditable.
+   *
+   */
+  public function updateTourDisplayNameAction($id) {
 
+    $value=htmlspecialchars($_POST['value']);
+    $em = $this->getDoctrine()->getManager();
+    $entity = $em->getRepository('TourBundle:Tour')->find($id);
+    if (!$entity) {
+      throw $this->createNotFoundException('Unable to find Tour entity while jediting Tour Display Name.');
+    }
+
+    $entity->setDisplayName($value);
+    $em->persist($entity);
+    $em->flush();
+
+    $responseContent =  json_encode(array('success'=> $value));
+    return new Response($responseContent,
+        Response::HTTP_OK,
+        array('content-type' => 'application/json')
+    );
+
+  }
 }
 
 

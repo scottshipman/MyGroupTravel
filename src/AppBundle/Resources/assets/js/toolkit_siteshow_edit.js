@@ -50,6 +50,7 @@ $(document).ready(function () {
     // Toggle between preview and edit mode for content blocks and tabs
     $('#link-preview-edit').on('click', function (e) {
         e.preventDefault();
+        $(".editable-tour-name").editable("enable");
         var t = $('.mode-toggle');
         if (t.hasClass('mode-preview')) {
             // Switch to edit mode
@@ -64,6 +65,7 @@ $(document).ready(function () {
         } else {
             // Switch to preview mode
             t.addClass('mode-preview').removeClass('mode-edit');
+            $(".editable-tour-name").editable("disable");
             $(this).html('Switch to Edit Mode');
             $(".sortable-items").sortable("disable");
             $('.add-content-block').hide() // hide ALL Add Block's for all tabs
@@ -435,6 +437,7 @@ $(document).ready(function () {
 
     // Disable drag-and-drop on page load b/c the default is preview mode
     $(".sortable-items").sortable("disable");
+    $(".editable-tour-name").editable("disable");
 
     // Check whether the page should be in edit mode
     if ( window.location.hash.substr(1) === 'mode-edit' ) {
