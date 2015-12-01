@@ -288,6 +288,9 @@
             };
 
             // Copy to Clipboard
+            $("#copy-button").on('click', function(e) {
+                e.preventDefault();
+            });
             ZeroClipboard.config({swfPath: "//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf"});
             var client = new ZeroClipboard(document.getElementById("copy-button"));
             client.on('aftercopy', function (event) {
