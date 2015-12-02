@@ -66,12 +66,13 @@
         <h3 style="color: red;">{% trans %}quote.actions.is_locked{% endtrans %}</h3>
     {% endif %}
 
-    <ul class="record_actions quote-actions{% if entity.quoteReference.institution.media %} has-logo{% endif %}">
-
-        {% if entity.quoteReference.institution.media %}
-            <div class="institution-logo-action">
-                <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.quoteReference.institution.name }}">
-            </div>
+    <ul class="record_actions quote-actions{% if entity.quoteReference.institution %}{% if entity.quoteReference.institution.media %} has-logo{% endif %}{% endif %}">
+        {% if entity.quoteReference.institution %}
+            {% if entity.quoteReference.institution.media %}
+                <div class="institution-logo-action">
+                    <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.quoteReference.institution.name }}">
+                </div>
+            {% endif %}
         {% endif %}
 
         {% if (entity.locked is sameas(false)) and (is_granted("ROLE_BRAND")) %}
