@@ -285,7 +285,14 @@ knp_snappy:
     pdf:
         enabled:    true
         binary:     /usr/bin/wkhtmltopdf #"\"C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe\"" for Windows users
-        options:    []
+        options:
+                viewport-size: 1100
+                orientation: landscape
+                margin-left: 0
+                margin-right: 0
+                margin-top: 0
+                margin-bottom: 0
+
 knp_snappy:
     temporary_folder: %kernel.cache_dir%/snappy
 
