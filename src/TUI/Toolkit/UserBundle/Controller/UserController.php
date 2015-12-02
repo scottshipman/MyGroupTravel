@@ -1374,7 +1374,9 @@ class UserController extends Controller
             $permissions = $em->getRepository('PermissionBundle:Permission')->findBy(array('user' => $id, 'class' => 'tour'));
             // this only returns pointers to tours, so loop through and build tours array
             foreach ($permissions as $permission) {
-                $tours[] = $em->getRepository('TourBundle:Tour')->find($permission->getObject());
+                if ($object = $em->getRepository('TourBundle:Tour')->find($permission->getObject())) {
+                    $tours[] = $object;
+                }
             }
         }
 

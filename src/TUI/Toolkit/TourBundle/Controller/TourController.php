@@ -527,6 +527,18 @@ class TourController extends Controller
             }
         }
 
+        //Get all brand stuff
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
+
 
         $deleteForm = $this->createDeleteForm($id);
 
@@ -539,6 +551,7 @@ class TourController extends Controller
             'items' => $items,
             'tabs' => $tabs,
             'editable' => $editable,
+            'brand' => $brand,
         ));
     }
 
