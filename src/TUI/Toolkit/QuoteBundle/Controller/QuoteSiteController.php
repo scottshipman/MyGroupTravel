@@ -515,9 +515,11 @@ class QuoteSiteController extends Controller
 
       // send warning messages
       $warningMsg = array();
-      if($entity[0]->getExpiryDate() < date($date_format)){
-        $warningMsg[] = $this->get('translator')->trans('quote.exception.expired') . " $entity>getQuoteReference()->getSalesAgent()->getFirstName()   $entity>getQuoteReference()->getSalesAgent()->getLasttName()  at $entity>getQuoteReference()->getSalesAgent()->getEmail()";
-      }
+        if ($entity[0]->getExpiryDate() != null) {
+            if ($entity[0]->getExpiryDate() < date($date_format)) {
+                $warningMsg[] = $this->get('translator')->trans('quote.exception.expired') . " $entity>getQuoteReference()->getSalesAgent()->getFirstName()   $entity>getQuoteReference()->getSalesAgent()->getLasttName()  at $entity>getQuoteReference()->getSalesAgent()->getEmail()";
+            }
+        }
 
       $request = $this->getRequest();
       $path = $request->getScheme() . '://' . $request->getHttpHost();
@@ -545,14 +547,14 @@ class QuoteSiteController extends Controller
 //            'some'  => $vars
 //        ));
         $quoteNumber = $entity[0]->getQuoteNumber();
-      $html = $this->renderView( 'QuoteBundle:QuoteSite:siteShow.html.twig', $data );
+      $html = $this->renderView( 'QuoteBundle:QuoteSite:quotePDF.html.twig', $data );
 
 //      $dompdf = new \DOMPDF();
 //      $dompdf->set_base_path($path . '/');
 //      $dompdf->load_html($html);
 //      $dompdf->render();
 
-//        return $this->get('knp_snappy.pdf')->generate($path, '/static/exports/file.pdf');
+//        return $this->get('knp_snappy.pdf')->generate('http://toolkit.travelbound.co.uk/quote/view/21/a', '/srv/www/Toolkit/web/static/exports/file.pdf');
       return new Response($this->get('knp_snappy.pdf')->getOutputFromHtml($html),
           200,
           array(

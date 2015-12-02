@@ -1,0 +1,225 @@
+<head>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+    {# Google Material Design (Lite) Stuff #}
+    <script src="//storage.googleapis.com/code.getmdl.io/1.0.0/material.min.js"></script>
+    <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet"
+          href="//fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+
+    {# Dropzone and Flexslider CSS #}
+    {#{% stylesheets filter='cssrewrite' '@AppBundle/Resources/assets/css/flexslider.css' '@AppBundle/Resources/assets/css/dropzone.css' %}#}
+    {#<link rel="stylesheet" href="{{ asset_url }}">#}
+    {#{% endstylesheets %}#}
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.7.0/spectrum.min.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.6.1/spectrum.min.css">
+
+    <link rel="stylesheet" href="//storage.googleapis.com/code.getmdl.io/1.0.0/material.indigo-pink.min.css">
+
+    {% stylesheets filter="compass" "@AppBundle/Resources/assets/css/sass/main.scss" %}
+    <link rel="stylesheet" type="text/css" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+
+    {{ render(controller('BrandBundle:Default:colors')) }}
+
+</head>
+
+{% block title %}
+    {% if is_granted("ROLE_BRAND") %}
+        {% trans %}quote.title.show{% endtrans %}
+    {% else %}
+        {{ entity.quoteReference.name }}, {{ entity.name }}
+    {% endif %}
+{% endblock %}
+
+{% block page_title %}
+    <span>{% trans %}quote.page_title.show{% endtrans %}</span>
+{% endblock %}
+
+{% block sub_header %}
+    <div class="sub-header">
+        <div class="sizer">
+            <div class="inner">
+                {% if entity.isTemplate == 0 %}{# no Institutions on Templates #}
+                    {% if brand.media %}
+                        <div class="brand-logo">
+                            <img src="{{ absolute_url(asset( brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename )) }}">
+                        </div>
+                    {% endif %}
+                {% endif %}
+
+                {% if entity.quoteReference.institution %}
+                    <div id="site-quote-name">{{ entity.quoteReference.institution.name }}</div>
+                {% endif %}
+
+                <h2 class="{% if brand.media %}has-brand-logo{% endif %}">
+                    {% if entity.displayName %}
+                        {{ entity.displayName }}
+                    {% else %}
+                        {{ entity.quoteReference.name }}{% if is_granted("ROLE_BRAND") %}, {{ entity.name }}{% endif %}
+                    {% endif %}
+                </h2>
+
+                {% if entity.quoteNumber %}
+                    <div>Quote Number: {{ entity.quoteNumber }}</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body -%}
+    {% if (entity.locked is sameas(true)) and (is_granted("ROLE_BRAND"))  %}
+        <h3 style="color: red;">{% trans %}quote.actions.is_locked{% endtrans %}</h3>
+    {% endif %}
+
+<div id="quote-version-{{ entity.id }}" class="site-show mode-toggle mode-preview" entityId="{{ entity.id }}" entityType="quote" entityClass="QuoteVersion" entityPath="quoteversion">
+
+    <div class="quote-actions{% if entity.quoteReference.institution.media %} has-logo{% endif %}">
+
+        {% if entity.quoteReference.institution.media %}
+            <div class="institution-logo-action">
+                <img src="{{ absolute_url(asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename )) }}">
+            </div>
+        {% endif %}
+
+    </div>
+
+    <div id="site-header" class="quote-view-site-header">
+        {# render the slideshow using the controller/twig with headerbock.id as param #}
+        <div id="site-header-slideshow">
+            {% if entity.headerBlock %}
+                {% if editable %}
+                    <div class="site-content-blocks-item">
+                        <div class="status-preview-edit site-content-block-actions">
+                            <div class="edit-icons">
+                                <i id="edit-header-block" class="content-block-item-action item-edit fa fa-pencil-square-o" title="{% trans %}quote.actions.edit{% endtrans %}" blockId="{{ entity.headerBlock.id }}"></i>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                <div id="site-header-slideshow-content">
+                    {{ render(controller('ContentBlocksBundle:HeaderBlock:show', {'id':  entity.headerBlock.id  })) }}
+                </div>
+            {% else %}
+                {% if editable %}
+                    <div id="site-header-slideshow-content">
+                        <a id="add-header-content" href="#" class="status-preview-edit mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                            <i class="fa fa-plus-circle"></i> {% trans %}quote.actions.add_header{% endtrans %}
+                        </a>
+                    </div>
+                {% endif %}
+            {% endif %}
+        </div>
+
+        <div id="site-header-summary">
+            {% if editable %}
+                <div class="site-content-blocks-item">
+                    <div class="status-preview-edit site-content-block-actions">
+                        <div class="edit-icons">
+                            {% if entity.locked == 0 %}
+                                <i id="edit-header-summary" class="content-block-item-action item-edit fa fa-pencil-square-o" title="Edit"></i>
+                            {% endif %}
+
+                            {% if entity.locked %}
+                                <i action="unlock" id="lock-header-summary"class="content-block-item-action fa fa-unlock-alt" title="Unlock"></i>
+                            {% else %}
+                                <i action="lock" id="lock-header-summary" class="content-block-item-action fa fa-lock" title="Lock"></i>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            <div id="site-header-summary-content">
+                {{ render(controller('QuoteBundle:QuoteSite:showSummary', {'id':  entity.id  })) }}
+            </div>
+        </div>
+
+    </div>{# end site header #}
+
+    {# RENDER THE CONTENT BLOCKS HERE #}
+
+    <a id="site-content"></a>
+
+    <div id="content-wrapper" class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+        <div id="content-blocks-wrapper" class="content-block-tabs-bar mdl-tabs__tab-bar">
+            {# render the tabs #}
+            {% set activeTab = 'is-active' %}
+            {% for tab, data in entity.content %}
+                <a id="tab-{{ tab }}" href="#tabs-drawer-{{ tab }}" class="view-tab site-content-blocks-tab mdl-tabs__tab {{ activeTab }}" tabId="{{ tab }}"><span class="tab-name">{{ data[0] }}</span></a>
+                {% set activeTab = '' %}
+            {% endfor %}
+
+            {% if editable or not entity.hideAlt %}
+                {% if alternate or related %}
+                    <a id="tab-alternate-quotes" href="#tabs-drawer-alternate-quotes" class="site-content-blocks-tab mdl-tabs__tab {{ activeTab }}">{% trans %}quote.tabs.alternate{% endtrans %}</a>
+                {% endif %}
+            {% endif %}
+
+        </div>
+
+        {# render the tabs' content #}
+        {% set activeTab = 'is-active' %}
+        {% for tab, data in entity.content %}
+            <div id="tabs-drawer-{{ tab }}" class="mdl-tabs__panel content-blocks-drawer {{ activeTab }}">
+                <div class="sortable-items">
+                    {% for item in data[1] %}
+                        {% if items[item].doubleWidth == 1 %}
+                            {% set size = 'full' %}
+                        {% else %}
+                            {% set size = 'half' %}
+                        {% endif %}
+                        <div id="content-blocks-{{ items[item].id }}" class="site-content-blocks site-content-blocks-item site-content-blocks-size-{{ size }}" blockId="{{ items[item].id }}">
+                            <div class="inner-wrapper move-cursor">
+                                {# render the actual content block #}
+                                <div id="previewable-content-blocks-{{ items[item].id }}">
+                                    {{ render(controller('ContentBlocksBundle:ContentBlock:show', {'id':  items[item].id  })) }}
+                                </div>
+
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div><!-- sortable-items -->
+            </div>
+            {% set activeTab = '' %}
+        {% endfor %}
+
+        {% if alternate or related %}
+            {% if editable or not entity.hideAlt %}
+                {% set quoteID = entity.quoteReference.id %}
+                <div id="tabs-drawer-alternate-quotes" class="mdl-tabs__panel content-blocks-drawer {{ activeTab }}">
+                    {% if editable %}
+                        <div class="site-content-block-actions status-preview-edit alt-tab-actions">
+                            <div class="edit-icons">
+                                <i class="alt-hide content-block-item-action fa {% if entity.hideAlt %}fa-eye-slash{% else %}fa-eye{% endif %}" hide="{% if entity.hideAlt %}true{% else %}false{% endif %}" title="{% if entity.hideAlt %}Only visible to Brand Administrators{% else %}Visible to Everyone{% endif %}"></i>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if alternate %}
+                        <div class="site-content-blocks site-content-blocks-item site-content-blocks-size-full">
+                            <div class="inner-wrapper">
+                                {{ render(controller('QuoteBundle:QuoteSite:getQuoteSiblings', {'id':  quoteID  })) }}
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if related %}
+                        <div class="site-content-blocks site-content-blocks-item site-content-blocks-size-full">
+                            <div class="inner-wrapper">
+                                {{ render(controller('QuoteBundle:QuoteSite:getRelatedQuotes', {'id':  quoteID  })) }}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% endif %}
+
+    </div>
+</div><!-- view-mode -->
+{% endblock %}
