@@ -861,7 +861,7 @@ class TourController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('manage_tour_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'button', array(
+            ->add('submit', 'submit', array(
                 'label' => $this->get('translator')->trans('tour.actions.delete'),
                 'attr' => array(
                     'class' => 'delete-btn'
