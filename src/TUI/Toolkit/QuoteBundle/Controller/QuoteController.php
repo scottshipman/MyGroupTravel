@@ -141,7 +141,7 @@ class QuoteController extends Controller
         $qb->select('u')
             ->from('TUIToolkitUserBundle:User', 'u')
             ->where(
-                $qb->expr()->like('CONCAT(u.firstName, u.lastName, u.email)', ':term')
+                $qb->expr()->like('CONCAT(u.firstName, \' \', u.lastName, \' \', u.email)', ':term')
             )
             ->andWhere('u.roles LIKE :role')
             ->setParameters(array('role' => $role, 'term' => '%' . $term . '%'))
