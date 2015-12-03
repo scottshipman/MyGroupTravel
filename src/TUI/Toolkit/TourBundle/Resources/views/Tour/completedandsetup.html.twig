@@ -34,6 +34,8 @@
 
 {% set dtg  = date(entity.departureDate).diff(date("now")) %}
 {% if dtg.days < 1 %} {%  set dtgFinal = 0  %} {% else %} {% set dtgFinal = dtg.days %}{% endif %}
+{% set dte  = date(entity.expiryDate).diff(date("now")) %}
+{% if dte.days < 1 %} {%  set dteFinal = 0  %} {% else %} {% set dteFinal = dte.days %}{% endif %}
 
 {% set signup = waitlist + accepted %}{% if signup >= entity.payingPlaces %}{% set signupPercent = 100 %}{% elseif signup < entity.payingPlaces %}{% set signupPercent = (signup/entity.payingPlaces) * 100 %}{% endif %}
 
@@ -83,7 +85,11 @@
                 </li>
                 <li>
                     <div class="profile-list-item item-3 tour-dashboard">
+                        {% if entity.tripStatus.name == "Provisional" %}
+                        <span class="date-span">{{ dteFinal }}</span>
+                        {% else %}
                         <span class="date-span">{{ dtgFinal }}</span>
+                        {%  endif %}
                         {% if entity.tripStatus.name == "Provisional" %}
                         <label>{% trans %}tour.dashboard.expiry{% endtrans %}</label>
                         {% else %}
