@@ -105,6 +105,8 @@ user:
             submit: Submit
         activate:
             submit: Submit
+        error:
+            deleted: This user exists and has been deleted.  Please contact and administrator to re-enable this user.
 
     profile:
         label:

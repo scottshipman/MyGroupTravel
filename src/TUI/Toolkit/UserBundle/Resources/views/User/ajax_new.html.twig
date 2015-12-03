@@ -1,7 +1,10 @@
 {#  {% extends '::modal-base.html.twig' %} #}
 
 {% block body -%}
-{{ form(form) }}
+    {{ form_start(form) }}
+    <div class="form-errors">{{ form_errors(form) }}</div>
+    {{ form_rest(form) }}
+    {{ form_end(form) }}
     <script>
         // wait for the DOM to be loaded
         $(document).ready(function() {
@@ -21,6 +24,11 @@
                     elem.parent().removeClass('is-invalid');
                     // add the value to the field
                     elem.val(response);
+                },
+                error : function (response) {
+                    console.log(response);
+                    $('#dialog').html(response.responseText);
+                    doMDLpopup($("#dialog"));
                 }
             })
         });
