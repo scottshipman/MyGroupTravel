@@ -266,7 +266,7 @@ class UserController extends Controller
         $filters->enable('softdeleteable');
 
         if ($existingUser != null) {
-            $form['email']->addError(new FormError('This user exists and has been deleted.  Please contact and administrator to re-enable this user.'));
+            $form['email']->addError(new FormError($this->get('translator')->trans('user.form.error.deleted')));
         }
 
         if ($form->isValid()) {
@@ -305,30 +305,34 @@ class UserController extends Controller
         $filters->enable('softdeleteable');
 
         if ($existingUser != null) {
-            $form['email']->addError(new FormError('This user exists and has been deleted.  Please contact and administrator to re-enable this user.'));
+            if ($existingUser->getDeleted() != null) {
+                $form->addError(new FormError($this->get('translator')->trans('user.form.error.deleted')));
+
+            } else {
+                return new Response($existingUser);
+            }
         }
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            if ($em->getRepository('TUIToolkitUserBundle:User')->findByEmail($entity->getEmail())) {
-                $existingUser = $em->getRepository('TUIToolkitUserBundle:User')->findByEmail($entity->getEmail());
-                $existingUser = $existingUser[0];
-                return new Response($existingUser);
-
-            } else {
                 $entity->setPassword('');
                 $entity->setUsername($entity->getEmail());
                 $em->persist($entity);
                 $em->flush();
 
                 return new Response($entity);
-            }
+
         }
 
-        return $this->render('TUIToolkitUserBundle:User:ajax_new.html.twig', array(
+
+        $response = new Response($this->renderView('TUIToolkitUserBundle:User:ajax_new.html.twig', array(
             'entity' => $entity,
             'form' => $form->createView(),
-        ));
+        )));
+        $response->headers->set('Content-Type', 'text/html');
+        $response->setStatusCode('406');
+
+        return $response;
     }
 
 
@@ -590,7 +594,7 @@ class UserController extends Controller
             $filters->enable('softdeleteable');
 
             if ($existingUser != null) {
-                $editForm['email']->addError(new FormError('This user exists and has been deleted.  Please contact and administrator to re-enable this user.'));
+                $editForm['email']->addError(new FormError($this->get('translator')->trans('user.form.error.deleted')));
             }
         }
 
