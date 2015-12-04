@@ -40,6 +40,8 @@ class QuoteSiteController extends Controller
     $alternate=FALSE;
     $related=FALSE;
     $editable = false;
+    $share = strpos($_SERVER['REQUEST_URI'], 'share') !== FALSE ? TRUE : FALSE ;
+
     $permission = array();
     // TODO if user is allowed to edit then set $editable to true
     // if organizer or if brand or higher (check permission table for organizer)
@@ -171,6 +173,7 @@ class QuoteSiteController extends Controller
       'alternate' => $alternate,
       'related'  => $related,
       'brand' => $brand,
+      'share' => $share,
     ));
   }
 
