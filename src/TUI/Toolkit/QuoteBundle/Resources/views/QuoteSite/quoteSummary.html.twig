@@ -18,34 +18,34 @@
     {% if quote.expiryDate %}<li>{% trans %}quote_site.quote_summary.expiry{% endtrans %} <strong>{{ quote.expiryDate|date(format) }}</strong></li>{% endif %}
     <ul class="quote-site-actions">
         {% if  share is sameas(false) %}
-        <li>
-            {% if (quote.converted is sameas(false)) and (quote.quoteReference.converted is sameas(false)) %}
-                {% if date(quote.expiryDate) < date('now') %}
-                    <a class="expired-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+            <li>
+                {% if (quote.converted is sameas(false)) and (quote.quoteReference.converted is sameas(false)) %}
+                    {% if date(quote.expiryDate) < date('now') %}
+                        <a class="expired-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+                           href="#">
+                            <i class="fa fa-calendar-times-o"></i> {% trans %}quote_site.quote_summary.actions.expired{% endtrans %}
+                        </a>
+                    {% else %}
+                        <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+                           id="accept-quote" href="#">
+                            <i class="fa fa-thumbs-o-up"> </i> {% trans %}quote_site.quote_summary.actions.like{% endtrans %}
+                        </a>
+                    {% endif %}
+                {% endif %}
+            </li>
+            <li>
+                {% if (quote.converted is sameas(true)) and (quote.quoteReference.converted is sameas(true)) %}
+                    <a class="accepted-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
                        href="#">
-                        <i class="fa fa-calendar-times-o"></i> {% trans %}quote_site.quote_summary.actions.expired{% endtrans %}
+                        <i class="fa fa-bullhorn"></i> {% trans %}quote_site.quote_summary.actions.converted{% endtrans %}
                     </a>
                 {% else %}
                     <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
-                       id="accept-quote" href="#">
-                        <i class="fa fa-thumbs-o-up"> </i> {% trans %}quote_site.quote_summary.actions.like{% endtrans %}
+                       id="change-request" href="#">
+                        <i class="fa fa-bullhorn"></i> {% trans %}quote_site.quote_summary.actions.request_change{% endtrans %}
                     </a>
                 {% endif %}
-            {% endif %}
-        </li>
-        <li>
-            {% if (quote.converted is sameas(true)) and (quote.quoteReference.converted is sameas(true)) %}
-                <a class="accepted-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
-                   href="#">
-                    <i class="fa fa-bullhorn"></i> {% trans %}quote_site.quote_summary.actions.converted{% endtrans %}
-                </a>
-            {% else %}
-                <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
-                   id="change-request" href="#">
-                    <i class="fa fa-bullhorn"></i> {% trans %}quote_site.quote_summary.actions.request_change{% endtrans %}
-                </a>
-            {% endif %}
-        </li>
+            </li>
         {% endif %}
         <li class="share-text">
 
