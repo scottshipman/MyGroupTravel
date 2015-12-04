@@ -555,6 +555,12 @@ class QuoteVersionController extends Controller
         // institution
         $institution = $grid->getColumn('institution_full');
         $institution->setFilterable(false);
+        //institution name
+        $institutionName = $grid->getColumn('quoteReference.institution.name');
+        $institutionName->setFilterable(false);
+        //destination
+        $destination = $grid->getColumn('quoteReference.destination');
+        $destination->setFilterable(true);
         // organizer
         $organizer = $grid->getColumn('organizer_full');
         $organizer->setFilterable(false);
@@ -1445,7 +1451,7 @@ class QuoteVersionController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('manage_quote_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'button', array(
+            ->add('submit', 'submit', array(
                 'label' => $this->get('translator')->trans('quote.actions.delete'),
                 'attr' => array(
                     'class' => 'delete-btn'

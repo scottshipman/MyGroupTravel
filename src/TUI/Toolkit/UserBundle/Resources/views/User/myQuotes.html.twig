@@ -41,11 +41,13 @@
                 </div>
             </li>
             <li>
-                <div class="profile-list-item item-2">{{ quote.quoteReference.institution.name}}<br /><label>{% trans %}user.profile.my_quotes.institution{% endtrans %}</label></div>
+                {% if quote.quoteReference.institution %}
+                    <div class="profile-list-item item-2">{{ quote.quoteReference.institution.name}}<br /><label>{% trans %}user.profile.my_quotes.institution{% endtrans %}</label></div>
+                {% endif %}
             </li>
             <li>
                 <div class="profile-list-item item-3">
-                    {% if quote.quoteReference.organizer.id == app.user.id %}
+                    {% if quote.quoteReference.organizer and quote.quoteReference.organizer.id == app.user.id %}
                         {% if quote.quoteReference.salesAgent.media %}
                             <span class="tui-image-avatar">
                                 <img src="{{ asset( quote.quoteReference.salesAgent.media.getRelativePath ~ "/" ~ quote.quoteReference.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ quote.quoteReference.salesAgent.username }}">
@@ -57,7 +59,7 @@
 
                         {% endif %}
                         {{ quote.quoteReference.salesAgent.firstName }} {{ tour.salesAgent.lastName }} <br /> {{ quote.quoteReference.salesAgent.email }}<br /><label>{% trans %}user.profile.my_quotes.salesAgent{% endtrans %}</label>
-                    {% else %}
+                    {% elseif quote.quoteReference.organizer %}
                         {% if quote.quoteReference.organizer.media %}
                             <span class="tui-image-avatar">
                                     <img src="{{ asset( quote.quoteReference.organizer.media.getRelativePath ~ "/" ~ quote.quoteReference.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ quote.quoteReference.organizer.username }}"></span>

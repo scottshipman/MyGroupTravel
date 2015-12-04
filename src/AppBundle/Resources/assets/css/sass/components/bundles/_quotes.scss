@@ -77,12 +77,14 @@
     width: 120px;
     height: 100%;
     @include inline-block-vertical();
+    margin-bottom: $element-bottom / 2;
 
     @include breakpoint_phone() {
       display: block;
       position: absolute;
       top: 0;
       right: $column_gutter_width;
+      margin-bottom: 0;
 
       img {
         @include vertical-align();
@@ -98,6 +100,45 @@
       margin-right: 120px + 12px;
     }
 
+  }
+
+}
+
+.quote-actions {
+  position: relative;
+  margin: $element-bottom 0;
+
+  &.has-logo {
+
+    @include breakpoint_phone() {
+      margin: ($element-bottom * 1.5) 0;
+      padding-right: 120px + 12px;
+    }
+
+  }
+
+  .institution-logo-action {
+    display: block;
+    width: 120px;
+    height: 100%;
+    margin-bottom: $element-bottom / 2;
+
+    @include breakpoint_phone() {
+      position: absolute;
+      top: 0;
+      right: 0;
+      margin-bottom: 0;
+
+      img {
+        @include vertical-align();
+      }
+
+    }
+
+  }
+
+  .button-row {
+    margin-bottom: 0;
   }
 
 }
@@ -333,14 +374,14 @@
   width: 100%;
 
   @include breakpoint_tablet() {
-    padding: 12px 16px;
+    padding: 10px;
     float: left;
     width: auto;
     max-width: (1/8) * 100%;
   }
 
   @include breakpoint_desktop() {
-    padding: 12px 24px;
+    padding: 10px;
   }
 
 }

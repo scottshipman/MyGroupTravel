@@ -3,20 +3,6 @@
 
 {#{{ dump() }}#}
     <div class="notify-organizer">
-        {#<div class="left-column">#}
-            {#<p>{% trans %}tour.contact_organizer.name{% endtrans %} <strong>{{ entity.name }}</strong></p>#}
-            {#<p>{% trans %}tour.contact_organizer.reference{% endtrans %} <strong>{{ entity.quoteNumber }}</strong></p>#}
-        {#</div>#}
-        {#<div class="right-column">#}
-            {#<p>{% trans %}tour.contact_organizer.institution{% endtrans %} <strong>{{ entity.institution.name }}</strong></p>#}
-            {#<p>{% trans %}tour.contact_organizer.destination{% endtrans %} <strong>{{ entity.destination }}</strong></p>#}
-        {#</div>#}
-        {#<div style="clear: both"></div>#}
-        <h3>{% trans %}tour.contact_organizer.share{% endtrans %}</h3>
-        <div class="input">
-            <input style="width: 70%; height: 36px; margin: 1em 0;" type="text" id="share_url" name="share_url" value="{{ app.request.getSchemeAndHttpHost() }}/tour/view/{{ entity.id }}/{{ entity.quoteNumber }}" readonly="readonly">
-            <a href="#" id="share_button" data-clipboard-target="share_url" title="Click to copy Tour URL" class="not-full mdl-button mdl-js-button mdl-button--raised mdl-button--colored copy-button"><i class="fa fa-sign-in fa-stack"></i></a>
-        </div>
         {% if organizer.confirmationToken %}
             <h3>{% trans %}tour.contact_organizer.signup{% endtrans %}</h3>
             <div class="input">
@@ -30,6 +16,13 @@
             <p><strong>{{ entity.organizer.firstName }} {{ entity.organizer.lastName }} ({{ entity.organizer.email }})</strong></p>
             <h4>{% trans %}tour.contact_organizer.message_text{% endtrans %}</h4>
             {{ form(notify_form) }}
+        </div>
+        <hr>
+        <h3 style="text-align: center">Or</h3>
+        <h3>{% trans %}tour.contact_organizer.share{% endtrans %}</h3>
+        <div class="input">
+            <input style="width: 70%; height: 36px; margin: 1em 0;" type="text" id="share_url" name="share_url" value="{{ app.request.getSchemeAndHttpHost() }}/tour/view/{{ entity.id }}/{{ entity.quoteNumber }}" readonly="readonly">
+            <a href="#" id="share_button" data-clipboard-target="share_url" title="Click to copy Tour URL" class="not-full mdl-button mdl-js-button mdl-button--raised mdl-button--colored copy-button"><i class="fa fa-sign-in fa-stack"></i></a>
         </div>
     </div>
     <script>

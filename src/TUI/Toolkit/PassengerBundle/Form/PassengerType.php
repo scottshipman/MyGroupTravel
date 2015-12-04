@@ -49,6 +49,9 @@ class PassengerType extends AbstractType
             ->add('dateOfBirth', 'birthday', array(
                 'format' => $date_format,
                 'required' => true,
+                'attr' => array(
+                    'class' => 'dateOfBirth',
+                ),
                 'years' => range(date('Y') - 30, date('Y') - 1)
             ))
             ->add('gender', 'choice', array(

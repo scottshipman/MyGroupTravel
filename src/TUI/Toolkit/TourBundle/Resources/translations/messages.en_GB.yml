@@ -67,7 +67,8 @@ tour:
     menu:
         my_tours: My Tours
         preview: Preview Tour
-        payments: Edit Payments
+        payments: Edit Payment Setup
+        brand_edit: Edit Tour Details
 
     not_completed:
         get_started: Get Started
@@ -98,13 +99,13 @@ tour:
        passengers: Number Of Passengers
        price: Price Per Passenger
        name: Tour Name
-       number: Tour Number
+       number: Tour Reference
        organizers: Organisers
-       number: Tour Number
+       number: Tour Reference
        schedule: Passenger Payment Schedule
        footer:
-            intro: Business Administrator Contact:
-            intro_org: Your Contact:
+            intro: Your Contact:
+            intro_org: Contact:
             price: Price per person:
        price_based_on_payingandfree: Based on <strong>%payingplaces%</strong> paying and <strong>%freeplaces%</strong> free places.
        price_based_on_payingonly: Based on <strong>%payingplaces%</strong> paying places
@@ -127,7 +128,8 @@ tour:
         no_payments: No payments due at this time
         na: N/A
         signups: Sign-ups
-        days: Days to departure
+        days: Days until deadline
+        expiry: Days to expiry
         passport_data: Collect passport data by
         passenger_data: Collect passenger data by
         collecting: Collecting
@@ -157,6 +159,7 @@ tour:
         the_deadline: The deadline for
         has_passed: has passed.  If you have any questions please contact
         operations_team: in our operations team.
+        departure: Days until departure
 
     edit:
         summary: Summary

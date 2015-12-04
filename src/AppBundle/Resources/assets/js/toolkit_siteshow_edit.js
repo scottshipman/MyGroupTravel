@@ -50,6 +50,7 @@ $(document).ready(function () {
     // Toggle between preview and edit mode for content blocks and tabs
     $('#link-preview-edit').on('click', function (e) {
         e.preventDefault();
+        $(".editable-tour-name").editable("enable");
         var t = $('.mode-toggle');
         if (t.hasClass('mode-preview')) {
             // Switch to edit mode
@@ -64,6 +65,7 @@ $(document).ready(function () {
         } else {
             // Switch to preview mode
             t.addClass('mode-preview').removeClass('mode-edit');
+            $(".editable-tour-name").editable("disable");
             $(this).html('Switch to Edit Mode');
             $(".sortable-items").sortable("disable");
             $('.add-content-block').hide() // hide ALL Add Block's for all tabs
@@ -73,13 +75,10 @@ $(document).ready(function () {
 
     // Edit tabs popup
     $("#edit-tabs").on('click', function (e) {
+        e.preventDefault();
         var entityId = $('.site-show').attr('entityId');
         var entityPath = $('.site-show').attr('entityPath');
-        $("#dialog").html("");
-        $("#dialog").dialog("open");
-        $("#dialog").load('/manage/' + entityPath + '/show/tabs/' + entityId, function () {
-            $(this).dialog("option", "title", "Rearrange Tabs");
-            doMDLpopup($('#dialog')); // run the function to add appropriate MDL classes to form elements
+        toolkitStandardPopup("Rearrange Tabs", "/manage/" + entityPath + "/show/tabs/" + entityId, function () {
             $(".modal-sortable-tabs").sortable("enable");
         });
     });
@@ -109,17 +108,24 @@ $(document).ready(function () {
             $('#ajax_headerblock_layout_form').ajaxForm({
                 success: function (response) {
                     // redraw the area by loading a twig file
-                    $('#site-header-slideshow-content').load('/manage/headerblock/header/show/' + blockId, function () {
+                    if ($(".site-show").attr('page-type') == "show") {
+                        $("#loader").css("display", "block");
                         $('#site-header-editForm').empty();
                         $('#site-header-editForm').hide();
-                        $('#site-header-slideshow').show();
-                        $('.item-edit').show();
-                        $('.flexslider').flexslider({
-                            directionNav: false,
-                            controlNav: false,
-                            smoothHeight: true
+                        window.location.reload(true);
+                    }else {
+                        $('#site-header-slideshow-content').load('/manage/headerblock/header/show/' + blockId, function () {
+                            $('#site-header-editForm').empty();
+                            $('#site-header-editForm').hide();
+                            $('#site-header-slideshow').show();
+                            $('.item-edit').show();
+                            $('.flexslider').flexslider({
+                                directionNav: false,
+                                controlNav: false,
+                                smoothHeight: true
+                            });
                         });
-                    });
+                    }
                 }
             });
         });
@@ -127,6 +133,7 @@ $(document).ready(function () {
 
     // Add header block in layout mode
     $("#add-header-content").on('click', function (e) {
+        e.preventDefault();
         var entityId = $('.site-show').attr('entityId');
         var entityClass = $('.site-show').attr('entityClass');
         $("#loader").css("display", "block");
@@ -142,28 +149,36 @@ $(document).ready(function () {
             $('#ajax_contentblocks_form').ajaxForm({
                 success: function (response) {
                     var blockId = response["id"];
-                    // redraw the area by loading a twig file
-                    $('#site-header-slideshow-content').load('/manage/headerblock/header/show/' + blockId, function () {
+                    //just hide the content block when on the quote show page
+                    if ($(".site-show").attr('page-type') == "show") {
+                        $("#loader").css("display", "block");
                         $('#site-header-editForm').empty();
                         $('#site-header-editForm').hide();
-                        $('#site-header-slideshow').show();
-                        $('.item-edit').show();
-                        $('.flexslider').flexslider({
-                            directionNav: false,
-                            controlNav: false,
-                            smoothHeight: true
+                        window.location.reload(true);
+                    }else {
+                        // redraw the area by loading a twig file
+                        $('#site-header-slideshow-content').load('/manage/headerblock/header/show/' + blockId, function () {
+                            $('#site-header-editForm').empty();
+                            $('#site-header-editForm').hide();
+                            $('#site-header-slideshow').show();
+                            $('.item-edit').show();
+                            $('.flexslider').flexslider({
+                                directionNav: false,
+                                controlNav: false,
+                                smoothHeight: true
+                            });
+                            $('#site-header-slideshow').prepend(
+                                '<div class="site-content-blocks-item">' +
+                                '<div class="status-preview-edit site-content-block-actions">' +
+                                '<div class="edit-icons">' +
+                                '<i id="edit-header-block" class="content-block-item-action fa fa-pencil-square-o" title="Edit"></i>' +
+                                '<i id="lock-header-block" class="content-block-item-action fa fa-lock" title="Lock"></i>' +
+                                '</div>' +
+                                '</div>' +
+                                '</div>'
+                            );
                         });
-                        $('#site-header-slideshow').prepend(
-                            '<div class="site-content-blocks-item">' +
-                            '<div class="status-preview-edit site-content-block-actions">' +
-                            '<div class="edit-icons">' +
-                            '<i id="edit-header-block" class="content-block-item-action fa fa-pencil-square-o" title="Edit"></i>' +
-                            '<i id="lock-header-block" class="content-block-item-action fa fa-lock" title="Lock"></i>' +
-                            '</div>' +
-                            '</div>' +
-                            '</div>'
-                        );
-                    });
+                    }
                 }
             });
         });
@@ -422,6 +437,7 @@ $(document).ready(function () {
 
     // Disable drag-and-drop on page load b/c the default is preview mode
     $(".sortable-items").sortable("disable");
+    $(".editable-tour-name").editable("disable");
 
     // Check whether the page should be in edit mode
     if ( window.location.hash.substr(1) === 'mode-edit' ) {

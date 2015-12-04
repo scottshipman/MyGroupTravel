@@ -36,7 +36,6 @@
 {% endblock %}
 
 {% block body -%}
-
     <div class="tour-show-wrapper">
 
     <div class="tour-show-left-column">
@@ -44,7 +43,7 @@
             <li><strong>{% trans %}tour.show.summary{% endtrans %}</strong></li>
             <li><label>{% trans %}tour.show.institution{% endtrans %}</label><strong>{{ entity.institution.name }}</strong></li>
             <li><label>{% trans %}tour.show.name{% endtrans %}</label><strong>{{ entity.name}}</strong></li>
-            <li><label>{% trans %}tour.show.number{% endtrans %}</label><strong>{{ entity.tourNumber}}</strong></li>
+            <li><label>{% trans %}tour.show.number{% endtrans %}</label><strong>{{ entity.tourReference}}</strong></li>
             <li><label>{% trans %}tour.show.departure{% endtrans %}</label><strong>{{ entity.departureDate|date(format) }}</strong></li>
 
             <li>
@@ -52,7 +51,7 @@
                 {%  if (entity.payingPlaces) and (entity.freePlaces) %}
                     {{ 'tour.show.price_based_on_payingandfree'|trans({'%payingplaces%' : entity.payingPlaces, '%freeplaces%' : entity.freePlaces})|raw }}
                 {% elseif (entity.payingPlaces) and (entity.freePlaces is empty or entity.freePlaces == 0) %}
-                    {{ 'tour.show.price_based_on_payingonly'|trans({'%payingplaces%' : quote.payingPlaces})|raw }}
+                    {{ 'tour.show.price_based_on_payingonly'|trans({'%payingplaces%' : entity.payingPlaces})|raw }}
                 {% elseif (entity.payingPlaces|default is empty) and (entity.freePlaces) %}
                     {{ 'tour.show.price_based_on_freeonly'|trans({'%freeplaces%' : entity.freePlaces})|raw }}
                 {%  endif %}
@@ -152,14 +151,10 @@
 
 
 {% block footer_left %}
-    {% if editable==true %}
+    {% if editable==true and app.user.email != entity.salesAgent.email%} {# Show Sales Agent Info to an Organizer#}
         {% if entity.salesAgent %}
             <span class="intro">
-                {% if app.user.email == entity.organizer.email %}
-                    {% trans %}tour.show.footer.intro_org{% endtrans %}
-                {% else %}
-                    {% trans %}tour.show.footer.intro{% endtrans %}
-                {% endif %}
+                    {{ brand.name }} {% trans %}tour.show.footer.intro_org{% endtrans %}
             </span>
             {% if entity.salesAgent.media %}
                 <span class="tui-image-avatar"><img src="{{ asset( entity.salesAgent.media.getRelativePath ~ "/" ~ entity.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.salesAgent.username }}"></span>
@@ -178,14 +173,10 @@
                 <a href="mailto:{{ entity.salesAgent.email }}">{{ entity.salesAgent.email }}</a>
             </span>
         {% endif %}
-    {% else %}
+    {% else %} {# Show organizer info to everyone but organizers #}
         {% if entity.organizer %}
             <span class="intro">
-                {% if app.user.email == entity.organizer.email %}
-                    {% trans %}tour.show.footer.intro_org{% endtrans %}
-                {% else %}
                     {% trans %}tour.show.footer.intro{% endtrans %}
-                {% endif %}
             </span>
             {% if entity.organizer.media %}
                 <span class="tui-image-avatar"><img src="{{ asset( entity.organizer.media.getRelativePath ~ "/" ~ entity.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.organizer.username }}"></span>

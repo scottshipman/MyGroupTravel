@@ -141,6 +141,10 @@ a {
   background: <?php echo $primary ?> !important;
 }
 
+.mdl-spinner__layer {
+  border-color: <?php echo $secondary ?> !important;
+}
+
 .mdl-button--raised.mdl-button--colored,
 .mdl-button--raised.mdl-button--colored:hover {
   background-color: <?php echo $secondary ?>;
@@ -201,7 +205,7 @@ a {
 }
 
 .content-block h2 {
-  color: <?php echo hsl_rgb(hsl_text(rgb_hsl($secondaryArray), 0.25)) ?>;;
+  color: <?php echo $primary ?>;
 }
 
 .add-content-block {

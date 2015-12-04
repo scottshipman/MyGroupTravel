@@ -33,11 +33,6 @@
       <div class="sizer">
         <div class="inner">
             {% if entity.isTemplate == 0 %}{# no Institutions on Templates #}
-                {% if entity.quoteReference.institution.media %}
-                    <div class="institution-logo-with-brand">
-                        <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.quoteReference.institution.name }}">
-                    </div>
-                {% endif %}
                 {% if brand.media %}
                     <div class="brand-logo">
                         <img src="{{ asset( brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ brand.name }}">
@@ -49,7 +44,7 @@
                 <div id="site-quote-name">{{ entity.quoteReference.institution.name }}</div>
             {% endif %}
 
-            <h2 class="{% if entity.quoteReference.institution %}{% if entity.quoteReference.institution.media %}has-school-logo{% endif %}{% endif %} {% if brand.media %}has-brand-logo{% endif %}">
+            <h2 class="{% if brand.media %}has-brand-logo{% endif %}">
                 {% if entity.displayName %}
                     {{ entity.displayName }}
                 {% else %}
@@ -69,23 +64,36 @@
     {% if (entity.locked is sameas(true)) and (is_granted("ROLE_BRAND"))  %}
         <h3 style="color: red;">{% trans %}quote.actions.is_locked{% endtrans %}</h3>
     {% endif %}
+
     <div id="quote-version-{{ entity.id }}" class="site-show mode-toggle mode-preview" entityId="{{ entity.id }}" entityType="quote" entityClass="QuoteVersion" entityPath="quoteversion">
 
-        <a href="javascript:window.print()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
-            <i class="fa fa-print"></i> {% trans %}quote.actions.print{% endtrans %}
-        </a>
+        <div class="quote-actions{% if entity.quoteReference.institution %}{% if entity.quoteReference.institution.media %} has-logo{% endif %}{% endif %}">
 
-        <a href="/quote/print/{{ entity.id }}/{{ entity.quoteNumber }}.pdf" target="_blank" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
-            <i class="fa fa-file-pdf-o"></i> {% trans %}quote.actions.pdf{% endtrans %}
-        </a>
+            {% if entity.quoteReference.institution %}
+                {% if entity.quoteReference.institution.media %}
+                    <div class="institution-logo-action">
+                        <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.quoteReference.institution.name }}">
+                    </div>
+                {% endif %}
+            {% endif %}
 
-        {% if warning | length >0 %}
-            <div id="site-warning">
-                {% for message in warning %}
-                    <p>{{ message }}</p>
-                {% endfor %}
-            </div>
-        {% endif %}
+            <a href="javascript:window.print()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
+                <i class="fa fa-print"></i> {% trans %}quote.actions.print{% endtrans %}
+            </a>
+
+            <a href="/quote/print/{{ entity.id }}/{{ entity.quoteNumber }}.pdf" target="_blank" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
+                <i class="fa fa-file-pdf-o"></i> {% trans %}quote.actions.pdf{% endtrans %}
+            </a>
+
+            {% if warning | length >0 %}
+                <div id="site-warning">
+                    {% for message in warning %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+        </div>
 
         <div id="site-header" class="quote-view-site-header">
             {# render the slideshow using the controller/twig with headerbock.id as param #}
@@ -282,6 +290,9 @@
             };
 
             // Copy to Clipboard
+            $("#copy-button").on('click', function(e) {
+                e.preventDefault();
+            });
             ZeroClipboard.config({swfPath: "//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf"});
             var client = new ZeroClipboard(document.getElementById("copy-button"));
             client.on('aftercopy', function (event) {
@@ -325,16 +336,18 @@
 
                 <strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong>{% endif %}</span>
     </div>
-    {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
-        {% if date(entity.expiryDate) < date('now') %}
-            <a class="expired-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-                <i class="fa fa-calendar-times-o"></i> {% trans %}quote.footer.actions.expired{% endtrans %}
-            </a>
-        {% else %}
-            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
-               href="{{ path('quote_site_quote_accepted', { 'id': entity.id }) }}">
-                <i class="fa fa-thumbs-o-up"> </i> {% trans %}quote.footer.actions.like{% endtrans %}
-            </a>
+    {% if  share is sameas(false) %}
+        {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
+            {% if date(entity.expiryDate) < date('now') %}
+                <a class="expired-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+                    <i class="fa fa-calendar-times-o"></i> {% trans %}quote.footer.actions.expired{% endtrans %}
+                </a>
+            {% else %}
+                <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" id="accept-quote"
+                   href="#">
+                    <i class="fa fa-thumbs-o-up"> </i> {% trans %}quote.footer.actions.like{% endtrans %}
+                </a>
+            {% endif %}
         {% endif %}
     {% endif %}
 {% endblock %}

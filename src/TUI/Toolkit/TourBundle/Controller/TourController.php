@@ -51,6 +51,7 @@ class TourController extends Controller
         // hide columns from the screen display
         $hidden = array(
             'quoteReference.id',
+            'institution.city',
             'institution.name',
             'deleted',
             'locked',
@@ -63,7 +64,7 @@ class TourController extends Controller
             'salesAgent.email',
             'destination',
             'created',
-            'tourNumber',
+            'tourReference',
             'id',
             'duration',
             'displayName',
@@ -227,7 +228,7 @@ class TourController extends Controller
           'salesAgent.email',
           'destination',
           'created',
-          'tourNumber',
+          'tourReference',
           'id',
           'duration',
           'displayName',
@@ -509,7 +510,7 @@ class TourController extends Controller
             $blockCount = count($blocks);
             if (!empty($blocks)) {
                 if ($blockCount <= 1) {
-                    $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($blocks[0]);
+                    $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find(reset($blocks));
                     if (!$blockObj) {
                         throw $this->createNotFoundException('Unable to find Content Block entity.');
                     }
@@ -526,6 +527,18 @@ class TourController extends Controller
             }
         }
 
+        //Get all brand stuff
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
+
 
         $deleteForm = $this->createDeleteForm($id);
 
@@ -538,6 +551,7 @@ class TourController extends Controller
             'items' => $items,
             'tabs' => $tabs,
             'editable' => $editable,
+            'brand' => $brand,
         ));
     }
 
@@ -725,7 +739,7 @@ class TourController extends Controller
         }
 
         //Handling the request for institution a little different than we did for the other 2.
-        $institutionParts = explode(' - ', $editForm->getData()->getQuoteReference()->getInstitution());
+        $institutionParts = explode(' - ', $editForm->getData()->getInstitution());
         if (count($institutionParts) == 2 ) {
             $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findBy(
                 array('name' => $institutionParts[0], 'city' => $institutionParts[1])
@@ -847,7 +861,7 @@ class TourController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('manage_tour_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'button', array(
+            ->add('submit', 'submit', array(
                 'label' => $this->get('translator')->trans('tour.actions.delete'),
                 'attr' => array(
                     'class' => 'delete-btn'
@@ -1174,6 +1188,18 @@ class TourController extends Controller
         $locale = $this->container->getParameter('locale');
         $setupForm = $this->createTourSetupForm($entity);
 
+        //brand stuff
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
+
         $passenger_payment_tasks = $entity->getPaymentTasksPassenger();
 
 
@@ -1182,6 +1208,7 @@ class TourController extends Controller
             'setup_form' => $setupForm->createView(),
             'date_format' => $date_format,
             'locale' => $locale,
+            'brand' => $brand,
             'passenger_payment_tasks' => $passenger_payment_tasks,
         ));
 
