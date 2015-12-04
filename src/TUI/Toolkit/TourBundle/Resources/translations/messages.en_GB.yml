@@ -67,7 +67,8 @@ tour:
     menu:
         my_tours: My Tours
         preview: Preview Tour
-        payments: Edit Payments
+        payments: Edit Payment Setup
+        brand_edit: Edit Tour Details
 
     not_completed:
         get_started: Get Started
