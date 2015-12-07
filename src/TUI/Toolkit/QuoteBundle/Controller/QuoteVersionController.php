@@ -399,6 +399,8 @@ class QuoteVersionController extends Controller
         // Add action column
         $restoreAction = new RowAction('Restore', 'manage_quote_restore');
         $grid->addRowAction($restoreAction);
+
+        //Add hard delete action
         $deleteAction = new RowAction('Delete', 'manage_quote_hard_delete');
         $deleteAction->setRole('ROLE_BRAND');
         $deleteAction->setConfirm(true);
