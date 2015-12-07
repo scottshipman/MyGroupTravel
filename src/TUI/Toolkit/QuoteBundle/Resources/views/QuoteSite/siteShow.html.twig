@@ -67,12 +67,14 @@
 
     <div id="quote-version-{{ entity.id }}" class="site-show mode-toggle mode-preview" entityId="{{ entity.id }}" entityType="quote" entityClass="QuoteVersion" entityPath="quoteversion">
 
-        <div class="quote-actions{% if entity.quoteReference.institution.media %} has-logo{% endif %}">
+        <div class="quote-actions{% if entity.quoteReference.institution %}{% if entity.quoteReference.institution.media %} has-logo{% endif %}{% endif %}">
 
-            {% if entity.quoteReference.institution.media %}
-                <div class="institution-logo-action">
-                    <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.quoteReference.institution.name }}">
-                </div>
+            {% if entity.quoteReference.institution %}
+                {% if entity.quoteReference.institution.media %}
+                    <div class="institution-logo-action">
+                        <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.quoteReference.institution.name }}">
+                    </div>
+                {% endif %}
             {% endif %}
 
             <a href="javascript:window.print()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
@@ -334,16 +336,18 @@
 
                 <strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong>{% endif %}</span>
     </div>
-    {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
-        {% if date(entity.expiryDate) < date('now') %}
-            <a class="expired-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-                <i class="fa fa-calendar-times-o"></i> {% trans %}quote.footer.actions.expired{% endtrans %}
-            </a>
-        {% else %}
-            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" id="accept-quote"
-               href="#">
-                <i class="fa fa-thumbs-o-up"> </i> {% trans %}quote.footer.actions.like{% endtrans %}
-            </a>
+    {% if  share is sameas(false) %}
+        {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
+            {% if date(entity.expiryDate) < date('now') %}
+                <a class="expired-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+                    <i class="fa fa-calendar-times-o"></i> {% trans %}quote.footer.actions.expired{% endtrans %}
+                </a>
+            {% else %}
+                <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" id="accept-quote"
+                   href="#">
+                    <i class="fa fa-thumbs-o-up"> </i> {% trans %}quote.footer.actions.like{% endtrans %}
+                </a>
+            {% endif %}
         {% endif %}
     {% endif %}
 {% endblock %}

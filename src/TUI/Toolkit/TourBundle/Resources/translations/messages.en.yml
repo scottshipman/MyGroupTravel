@@ -68,7 +68,8 @@ tour:
     menu:
         my_tours: My Tours
         preview: Preview Tour
-        payments: Edit Payments
+        payments: Edit Payment Setup
+        brand_edit: Edit Tour Details
 
     not_completed:
         get_started: Get Started
@@ -125,7 +126,7 @@ tour:
         no_payments: No payments due at this time
         na: N/A
         signups: Sign-ups
-        days: Days To Go
+        days: Days until deadline
         expiry: Days to expiry
         passport_data: Collect Passport Data By
         passenger_data: Collect Passenger Data By
@@ -156,6 +157,7 @@ tour:
         the_deadline: The deadline for
         has_passed: has passed.  If you have any questions please contact
         operations_team: in our operations team.
+        departure: Days until departure
 
     edit:
         summary: Summary
