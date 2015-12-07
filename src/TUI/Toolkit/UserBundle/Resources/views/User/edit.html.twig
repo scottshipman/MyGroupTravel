@@ -58,7 +58,20 @@
                 <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('user') }}">
                     <i class="fa fa-arrow-circle-left"></i> {% trans %}user.actions.back{% endtrans %}</a>
             </li>
-            {% if delete_form %}<li>{{ form(delete_form) }}</li>{% endif %}
+            {% if delete_form %}
+                <li>{{ form(delete_form) }}</li>
+                <script>
+                    $( document ).ready(function() {
+                        var deleteButton = $('.fa-trash-o').parent('button#form_submit');
+                        deleteButton.on('click', function (e) {
+                            e.preventDefault();
+                            if (confirm('{% trans %}user.form.delete.prompt{% endtrans %}')) {
+                                deleteButton.parents('form').submit();
+                            }
+                        });
+                    });
+                </script>
+            {% endif %}
         </ul>
     {% endif %}
 

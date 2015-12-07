@@ -92,6 +92,17 @@
         {% endif %}
         {% if is_granted("ROLE_ADMIN") %}
             <li>{{ form(delete_form) }}</li>
+            <script>
+                $( document ).ready(function() {
+                    var deleteButton = $('.fa-trash-o').parent('button#form_submit');
+                    deleteButton.on('click', function (e) {
+                        e.preventDefault();
+                        if (confirm('{% trans %}quote.form.delete.prompt{% endtrans %}')) {
+                            deleteButton.parents('form').submit();
+                        }
+                    });
+                });
+            </script>
         {% endif %}
         <li>
             {% if entity.quoteNumber %}
