@@ -25,6 +25,11 @@ manage_tour_quick_delete:
     defaults: { _controller: "TourBundle:Tour:quickdelete" }
     methods:  [POST, DELETE, GET]
 
+manage_tour_hard_delete:
+    path:     /{id}/hard_delete
+    defaults: { _controller: "TourBundle:Tour:harddelete" }
+    methods:  [POST, DELETE, GET]
+
 manage_tour_active:
     path:     /active
     defaults: { _controller: "TourBundle:Tour:index" }

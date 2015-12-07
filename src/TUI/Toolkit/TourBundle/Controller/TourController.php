@@ -891,6 +891,29 @@ class TourController extends Controller
         return $this->redirect($this->generateUrl('manage_tour'));
     }
 
+    /**
+     * hard Deletes Tour entity.
+     *
+     */
+    public function harddeleteAction(Request $request, $id)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        // dont forget to disable softdelete filter so doctrine can *find* the deleted entity
+        $filters = $em->getFilters();
+        $filters->disable('softdeleteable');
+
+        $tour = $em->getRepository('TourBundle:Tour')->find($id);
+        if (!$tour) {
+            throw $this->createNotFoundException('Unable to find Tour entity in order to delete it using ajax.');
+        }
+        $em->remove($tour);
+        $em->flush();
+        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.delete'). ' ' . $tour->getName());
+
+        return $this->redirect($this->generateUrl('manage_tour'));
+    }
+
 
     /**
      * Creates a form to Restore a deleted Tour entity by id.
