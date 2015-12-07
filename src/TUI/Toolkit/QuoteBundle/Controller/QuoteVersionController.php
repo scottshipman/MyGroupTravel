@@ -124,13 +124,14 @@ class QuoteVersionController extends Controller
         $cloneAction = new RowAction('Clone to new Quote', 'manage_quote_clone');
         $grid->addRowAction($cloneAction);
         $deleteAction = new RowAction('Delete', 'manage_quote_quick_delete');
-        $deleteAction->setRole('ROLE_BRAND');
         $deleteAction->setConfirm(true);
         $deleteAction->manipulateRender(
             function ($action, $row) { // business rule is only admins can edit locked quotes
                 if ($row->getField('quoteReference.salesAgent.email') == true) {
                     $agentEmail = $this->get('security.context')->getToken()->getUser()->getEmail();
                     if ($row->getField('quoteReference.salesAgent.email') == $agentEmail and $this->get('security.authorization_checker')->isGranted('ROLE_BRAND')) {
+                        return $action;
+                    }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
                         return $action;
                     }
                 }
@@ -279,13 +280,14 @@ class QuoteVersionController extends Controller
         $cloneAction = new RowAction('Clone', 'manage_quote_clone');
         $grid->addRowAction($cloneAction);
         $deleteAction = new RowAction('Delete', 'manage_quote_quick_delete');
-        $deleteAction->setRole('ROLE_BRAND');
         $deleteAction->setConfirm(true);
         $deleteAction->manipulateRender(
             function ($action, $row) { // business rule is only admins can edit locked quotes
                 if ($row->getField('quoteReference.salesAgent.email') == true) {
                     $agentEmail = $this->get('security.context')->getToken()->getUser()->getEmail();
                     if ($row->getField('quoteReference.salesAgent.email') == $agentEmail and $this->get('security.authorization_checker')->isGranted('ROLE_BRAND')) {
+                        return $action;
+                    }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
                         return $action;
                     }
                 }
@@ -566,13 +568,14 @@ class QuoteVersionController extends Controller
         $convertAction = new RowAction('Duplicate template', 'manage_quote_clonetemplate');
         $grid->addRowAction($convertAction);
         $deleteAction = new RowAction('Delete', 'manage_quote_quick_delete');
-        $deleteAction->setRole('ROLE_BRAND');
         $deleteAction->setConfirm(true);
         $deleteAction->manipulateRender(
             function ($action, $row) { // business rule is only admins can edit locked quotes
                 if ($row->getField('quoteReference.salesAgent.email') == true) {
                     $agentEmail = $this->get('security.context')->getToken()->getUser()->getEmail();
                     if ($row->getField('quoteReference.salesAgent.email') == $agentEmail and $this->get('security.authorization_checker')->isGranted('ROLE_BRAND')) {
+                        return $action;
+                    }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
                         return $action;
                     }
                 }
