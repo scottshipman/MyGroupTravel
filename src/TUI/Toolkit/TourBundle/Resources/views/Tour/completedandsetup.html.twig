@@ -33,14 +33,14 @@
 
 {# calculate Days to Go for Departure Date #}
 {% if  entity.departureDate and date(entity.departureDate) > date("now") %}
-    {% set dtgFinal  = date(entity.departureDate).diff(date("now")) %}
+    {% set dtgFinal  = date(entity.departureDate).diff(date("now")).days %}
 {% else  %}
     {%  set dtgFinal = 0  %}
 {% endif %}
 
 {# calculate Days Until Expiration #}
 {% if  entity.expiryDate and date(entity.expiryDate) > date("now") %}
-    {% set dteFinal  = date(entity.expiryDate).diff(date("now")) %}
+    {% set dteFinal  = date(entity.expiryDate).diff(date("now")).days %}
 {% else %}
     {%  set dteFinal = 0  %}
 {% endif %}

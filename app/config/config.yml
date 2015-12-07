@@ -369,7 +369,7 @@ trsteel_ckeditor:
 app:
     html_purifier:
         config:
-            HTML.AllowedAttributes: 'alt, src, href, target, colspan, class, style, action, allowfullscreen, frameborder, height, width'
+            HTML.AllowedAttributes: 'alt, src, href, target, colspan, class, style, action, allowfullscreen, frameborder, height, width, border, cellpadding, cellspacing'
             Attr.AllowedFrameTargets: '_blank, _self, _parent, _top'
            # HTML.AllowedElements: ''
             HTML.SafeIframe: true
