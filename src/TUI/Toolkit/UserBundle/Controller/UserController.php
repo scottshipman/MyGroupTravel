@@ -948,13 +948,18 @@ class UserController extends Controller
         $filters = $em->getFilters();
         $filters->disable('softdeleteable');
 
-        $user = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
-        if (!$user) {
+        $entity = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
+        if (!$entity) {
             throw $this->createNotFoundException('Unable to find User entity in order to delete it using ajax.');
         }
-        $em->remove($user);
-        $em->flush();
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.delete'). ' ' . $user->getUserName());
+        if ($this->canDeleteUser($entity->getId())) {
+            $em->remove($entity);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.delete') . $entity->getUsername());
+        } else {
+            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('user.flash.cant_delete'));
+            return $this->redirect($this->generateUrl('user'));
+        }
 
         return $this->redirect($this->generateUrl('user'));
     }
