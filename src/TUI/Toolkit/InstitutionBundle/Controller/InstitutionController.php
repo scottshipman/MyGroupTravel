@@ -110,6 +110,12 @@ class InstitutionController extends Controller
         $restoreAction = new RowAction('Restore', 'manage_institution_restore');
         $grid->addRowAction($restoreAction);
 
+        //Add hard delete action
+        $deleteAction = new RowAction('Delete', 'manage_institution_hard_delete');
+        $deleteAction->setRole('ROLE_BRAND');
+        $deleteAction->setConfirm(true);
+        $grid->addRowAction($deleteAction);
+
         //manipulate the Columns
         /*      $column = $grid->getColumn('lastLogin');
               $column->setTitle('Last Login');*/
@@ -459,6 +465,36 @@ class InstitutionController extends Controller
         $em->remove($entity);
         $em->flush();
         $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('institution.flash.delete') . $entity->getname());
+
+        return $this->redirect($this->generateUrl('manage_institution'));
+    }
+
+    /**
+     * hard Deletes Institution entity.
+     *
+     */
+    public function harddeleteAction(Request $request, $id)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        // dont forget to disable softdelete filter so doctrine can *find* the deleted entity
+        $filters = $em->getFilters();
+        $filters->disable('softdeleteable');
+
+        $entity = $em->getRepository('InstitutionBundle:Institution')->find($id);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find an Institution entity with id:.' . $id);
+        }
+
+        $quotes = $em->getRepository('QuoteBundle:Quote')->findOneBy(array('institution' => $entity->getId()));
+        if($quotes){
+            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('institution.flash.cant_delete'));
+            return $this->redirect($this->generateUrl('manage_institution'));
+        }
+
+        $em->remove($entity);
+        $em->flush();
+        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.delete'). ' ' . $entity->getName());
 
         return $this->redirect($this->generateUrl('manage_institution'));
     }
