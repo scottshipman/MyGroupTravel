@@ -15,7 +15,6 @@
     {% if template is empty or edit_form.quoteReference.organizer is defined %}{{ form_row(edit_form.quoteReference.organizer) }}{% endif %}
     {{ form_row(edit_form.quoteReference.salesAgent) }}
     {% if template is empty or edit_form.quoteReference.secondaryContact is defined %}{{ form_row(edit_form.quoteReference.secondaryContact) }}{% endif %}
-    {{ form_widget(edit_form.welcomeMsg, {'label' : 'tour.form.tour_setup.cash'|trans}) }}
     {{ form_rest(edit_form) }}
 
     {{ form_end(edit_form) }}
