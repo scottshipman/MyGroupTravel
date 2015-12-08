@@ -213,6 +213,12 @@ class UserController extends Controller
         $restoreAction = new RowAction('Restore', 'user_restore');
         $grid->addRowAction($restoreAction);
 
+        //Add hard delete action
+        $deleteAction = new RowAction('Delete', 'user_hard_delete');
+        $deleteAction->setRole('ROLE_BRAND');
+        $deleteAction->setConfirm(true);
+        $grid->addRowAction($deleteAction);
+
         //Get locale for date time and other purposes
         $locale = $this->container->getParameter('locale');
 
@@ -925,6 +931,34 @@ class UserController extends Controller
       } else {
           $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('user.flash.cant_delete'));
           return $this->redirect($this->generateUrl('user'));
+        }
+
+        return $this->redirect($this->generateUrl('user'));
+    }
+
+    /**
+     * hard Deletes User entity.
+     *
+     */
+    public function harddeleteAction(Request $request, $id)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        // dont forget to disable softdelete filter so doctrine can *find* the deleted entity
+        $filters = $em->getFilters();
+        $filters->disable('softdeleteable');
+
+        $entity = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find User entity in order to delete it using ajax.');
+        }
+        if ($this->canDeleteUser($entity->getId())) {
+            $em->remove($entity);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.delete') . $entity->getUsername());
+        } else {
+            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('user.flash.cant_delete'));
+            return $this->redirect($this->generateUrl('user'));
         }
 
         return $this->redirect($this->generateUrl('user'));
