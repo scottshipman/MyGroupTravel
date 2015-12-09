@@ -201,11 +201,11 @@
                                         {# probably render a controller here by passing in item as id and have block entity returned #}
                                         <div class="move-icon"><i class="fa fa-arrows" title="Rearrange"></i></div>
                                         <div id="content-block-actions-{{ items[item].id }}" class="edit-icons {% if items[item].locked %}content-block-locked{% endif %}">
-                                            {% if items[item].locked is sameas(false) %}
+                                            {#{% if items[item].locked is sameas(false) %}#}
                                                 <i class="item-edit content-block-item-action fa fa-pencil-square-o" title="Edit" blockId="{{ items[item].id }}"></i>
                                                 <i class="item-resize content-block-item-action fa fa-arrows-h {{ size }}" title="Resize" blockId="{{ items[item].id }}"></i>
                                                 <i class="item-delete content-block-item-action fa fa-trash-o" title="Delete" blockId = "{{ items[item].id }}"></i>
-                                            {% endif %}
+                                            {#{% endif %}#}
                                             {% if is_granted('ROLE_BRAND') %}
                                                 <i class="item-lock content-block-item-action fa {% if items[item].locked %}fa-unlock-alt{% else %}fa-lock{% endif %}" title="{% if items[item].locked %}Unlock{% else %}Lock{% endif %}" blockId="{{ items[item].id }}"></i>
                                             {% endif %}
