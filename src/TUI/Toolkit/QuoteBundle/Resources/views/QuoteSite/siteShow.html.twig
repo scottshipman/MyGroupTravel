@@ -35,7 +35,7 @@
             {% if entity.isTemplate == 0 %}{# no Institutions on Templates #}
                 {% if brand.media %}
                     <div class="brand-logo">
-                        <img src="{{ asset( brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ brand.name }}">
+                        <img src="{{ ( brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ brand.name }}">
                     </div>
                 {% endif %}
             {% endif %}
@@ -72,7 +72,7 @@
             {% if entity.quoteReference.institution %}
                 {% if entity.quoteReference.institution.media %}
                     <div class="institution-logo-action">
-                        <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.quoteReference.institution.name }}">
+                        <img src="{{ ( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.quoteReference.institution.name }}">
                     </div>
                 {% endif %}
             {% endif %}
@@ -312,7 +312,7 @@
         <span class="intro">{% trans %}quote.footer.salesAgent{% endtrans %}</span>
         {% if entity.quoteReference.salesAgent.media %}
             <span class="tui-image-avatar"><img
-                        src="{{ asset( entity.quoteReference.salesAgent.media.getRelativePath ~ "/" ~ entity.quoteReference.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}"
+                        src="{{ ( entity.quoteReference.salesAgent.media.getRelativePath ~ "/" ~ entity.quoteReference.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}"
                         alt="{{ entity.quoteReference.salesAgent.username }}"></span>
         {% elseif entity.quoteReference.salesAgent.firstName and entity.quoteReference.salesAgent.lastName %}
             <span class="tui-text-avatar mdl-typography--headline">{{ entity.quoteReference.salesAgent.firstName[:1] }}{{ entity.quoteReference.salesAgent.lastName[:1] }}</span>

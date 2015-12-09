@@ -13,7 +13,7 @@
             {#<li><strong>{% trans %}quote_site.accepted.expiry{% endtrans %} {{ entity.expiryDate|date(format) }}</strong></li>#}
         {#</ul>#}
         {#{% if entity.headerBlock %}#}
-            {#<img src="{{ asset( entity.headerBlock.mediaWrapper[0].media[0].getRelativePath ~ "/" ~ entity.headerBlock.mediaWrapper[0].media[0].getHashedFilename ) | imagine_filter('modalImage')}}"/>#}
+            {#<img src="{{ ( entity.headerBlock.mediaWrapper[0].media[0].getRelativePath ~ "/" ~ entity.headerBlock.mediaWrapper[0].media[0].getHashedFilename ) | imagine_filter('modalImage')}}"/>#}
         {#{% endif %}#}
         <h4 style="margin-top: 10px" class="mdl-card__title-text">{% trans %}quote.modals.message.add{% endtrans %}</h4>
         {{ form_start(accept_form) }}

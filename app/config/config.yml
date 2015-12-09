@@ -24,7 +24,7 @@ framework:
     csrf_protection: ~
     validation:      { enable_annotations: true }
     #serializer:      { enable_annotations: true }
-    templating: { engines: ['twig', 'php'] }
+    templating: { engines: ['twig', 'php'], assets_version: %cache_asset_version%, assets_version_format: "%%s?v=%%s" }
     default_locale:  "%locale%"
     trusted_hosts:   ~
     trusted_proxies: ~

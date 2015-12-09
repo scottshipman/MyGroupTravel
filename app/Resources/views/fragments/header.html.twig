@@ -1,7 +1,7 @@
 {% if not is_granted("ROLE_BRAND") %}
 <div class="tui-drawer-header">
     {% if app.user.media %}
-        <span id="accbtn-user" class="tui-image-avatar"><img src="{{ asset( app.user.media.getRelativePath ~ "/" ~ app.user.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ app.user.username }}"></span>
+        <span id="accbtn-user" class="tui-image-avatar"><img src="{{ ( app.user.media.getRelativePath ~ "/" ~ app.user.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ app.user.username }}"></span>
     {% elseif app.user.firstName and app.user.lastName %}
         <span id="accbtn-user" class="tui-text-avatar mdl-typography--headline">{{ app.user.firstName[:1] }}{{ app.user.lastName[:1] }}</span>
     {% else %}
