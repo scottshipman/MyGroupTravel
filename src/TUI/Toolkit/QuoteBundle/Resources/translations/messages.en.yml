@@ -230,6 +230,7 @@ quote_site:
         departing: Departure date
         created: Date created
         price_person: Price per person
+        quote_name: Quote Name
     quote_summary:
         departing: "Departing: "
         duration: "Duration: "
