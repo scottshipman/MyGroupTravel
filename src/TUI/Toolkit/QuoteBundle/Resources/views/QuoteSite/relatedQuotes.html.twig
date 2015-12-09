@@ -6,6 +6,7 @@
     <thead>
         <tr>
             <th>{% trans %}quote_site.quote_sibling.tour_name{% endtrans %}</th>
+            <th>{% trans %}quote_site.quote_sibling.quote_name{% endtrans %}</th>
             <th>{% trans %}quote_site.quote_sibling.quote_number{% endtrans %}</th>
             <th>{% trans %}quote_site.quote_sibling.departing{% endtrans %}</th>
             <th>{% trans %}quote_site.quote_sibling.created{% endtrans %}</th>
@@ -15,6 +16,7 @@
     <tbody>
     {% for entity in entities%}
         <tr id="alt~{{ entity.id }}~{{ entity.quoteNumber }}" class="{{ zebra }} alt-quote" quote="{{ entity.id }}" quotenumber="{{ entity.quoteNumber }}">
+            <td>{% if entity.quoteReference.name %}{{ entity.quoteReference.name }}{% endif %}</td>
             <td>{% if entity.name %}{{ entity.name }}{% endif %}</td>
             <td>{% if entity.quoteNumber %}{{ entity.quoteNumber }}{% endif %}</td>
             <td>{% if entity.departureDate %}{{ entity.departureDate|date(format) }}{% endif %} </td>
@@ -26,4 +28,5 @@
     {% endfor %}
     </tbody>
 </table>
+    {{ dump() }}
 </div>

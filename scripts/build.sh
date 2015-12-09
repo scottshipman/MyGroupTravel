@@ -43,6 +43,10 @@ then
   
   [ -f app/config/parameters.yml ] && rm -rf app/config/parameters.yml
   cp ../../config/parameters.yml app/config/parameters.yml
+
+  echo " - Busting Caches"
+  
+  echo -e "\n    `date +"cache_asset_version: %Y%m%d%H%M%s"`" >> app/config/parameters.yml
 fi
 
 echo $'\n============================================='

@@ -50,7 +50,7 @@
                     {% if quote.quoteReference.organizer and quote.quoteReference.organizer.id == app.user.id %}
                         {% if quote.quoteReference.salesAgent.media %}
                             <span class="tui-image-avatar">
-                                <img src="{{ asset( quote.quoteReference.salesAgent.media.getRelativePath ~ "/" ~ quote.quoteReference.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ quote.quoteReference.salesAgent.username }}">
+                                <img src="{{ ( quote.quoteReference.salesAgent.media.getRelativePath ~ "/" ~ quote.quoteReference.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ quote.quoteReference.salesAgent.username }}">
                             </span>
                         {% elseif quote.quoteReference.salesAgent.firstName and tour.salesAgent.lastName %}
                             <span class="tui-text-avatar mdl-typography--headline">{{ quote.quoteReference.salesAgent.firstName[:1] }}{{ quote.quoteReference.salesAgent.lastName[:1] }}</span>
@@ -62,7 +62,7 @@
                     {% elseif quote.quoteReference.organizer %}
                         {% if quote.quoteReference.organizer.media %}
                             <span class="tui-image-avatar">
-                                    <img src="{{ asset( quote.quoteReference.organizer.media.getRelativePath ~ "/" ~ quote.quoteReference.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ quote.quoteReference.organizer.username }}"></span>
+                                    <img src="{{ ( quote.quoteReference.organizer.media.getRelativePath ~ "/" ~ quote.quoteReference.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ quote.quoteReference.organizer.username }}"></span>
                         {% elseif quote.quoteReference.organizer.firstName and quote.quoteReference.organizer.lastName %}
                             <span class="tui-text-avatar mdl-typography--headline">{{ quote.quoteReference.organizer.firstName[:1] }}{{ quote.quoteReference.organizer.lastName[:1] }}</span>
                         {% else %}

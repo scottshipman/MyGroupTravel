@@ -307,6 +307,7 @@ class QuoteSiteController extends Controller
         $locale = $this->container->getParameter('locale');
         $date_format = $this->container->getParameter('date_format');
 
+        $toArray = array();
         $changeForm = $this->createChangeRequestFormAction($id);
         $changeForm->handleRequest($request);
         $changes = $changeForm->get('changes')->getData();
@@ -317,8 +318,14 @@ class QuoteSiteController extends Controller
         $entity = $entity[0];
         $departure = $entity->getDepartureDate();
         $tourName = $entity->getName();
-        $salesAgent = $entity->getQuoteReference()->getSalesAgent();
-        $agentEmail = $salesAgent->getEmail();
+        if ($entity->getQuoteReference()->getSalesAgent()) {
+            $agentEmail = $entity->getQuoteReference()->getSalesAgent()->getEmail();
+            $toArray[] = $agentEmail;
+        }
+        if ($entity->getQuoteReference()->getSecondaryContact()) {
+            $secondaryAgent = $entity->getQuoteReference()->getSecondaryContact()->getEmail();
+            $toArray[] = $secondaryAgent;
+        }
 
         //brand stuff
         $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
@@ -351,7 +358,11 @@ class QuoteSiteController extends Controller
                     )
                 ), 'text/html');
 
-        $this->get('mailer')->send($message);
+        foreach($toArray as $user) {
+            $message->setTo($user);
+            $this->get('mailer')->send($message);
+        }
+
 
         $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.change_request') . ' '. $tourName);
 

@@ -80,22 +80,30 @@
 
     $( document ).ready(function() {
 
-        //To expose the payment type description fields
-        $('.payment-types').find('.mdl-textfield').each( function() {
-//            if ($(".mdl-checkbox__input").parent().hasClass("is-checked")) {
-//                $(this).next().css({"display": "inline-block"})
-//            }
-            $(".mdl-checkbox").change(function()
-            {
-                if ($(".mdl-checkbox__input").parent().hasClass("is-checked")) {
-                    $(this).next().css({"display": "inline-block"})
-                }
-                else if (!$(".mdl-checkbox__input").parent().hasClass("is-checked")){
-                    $(this).next().css({"display": "none"})
+        //To expose the payment type description fields if there is already a value there
+        $('.mdl-checkbox').each( function() {
+            var something = $(this).next().children(":first");
+            console.log(something);
+            if ($(this).next().children(":first").val().length > 0) {
+                $(this).next().css({"display": "inline-block"});
+            }
 
-                }
-            });
         });
+
+        //toggle showing and hiding text fields based on input
+        $('.mdl-checkbox').on( 'change', 'input:checkbox', function() {
+
+            if ($(this).parent().hasClass("is-checked")) {
+                $(this).parent().next().css({"display": "inline-block"});
+
+            }else if (!$(this).parent().hasClass("is-checked")){
+                $(this).parent().next().css({"display": "none"});
+                $(this).parent().next().children(":first").val('');
+
+            }
+
+        });
+        
 
         $( ".hasDatepicker" ).datepicker( "option", "dateFormat", "{{ date_format }}" );
         $( ".hasDatepicker" ).change(function(){

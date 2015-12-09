@@ -16,7 +16,7 @@
     {#</div>#}
 
         {#{% if entity.headerBlock %}#}
-            {#<img src="{{ asset( entity.headerBlock.mediaWrapper[0].media[0].getRelativePath ~ "/" ~ entity.headerBlock.mediaWrapper[0].media[0].getHashedFilename ) | imagine_filter('modalImage')}}"/>#}
+            {#<img src="{{ ( entity.headerBlock.mediaWrapper[0].media[0].getRelativePath ~ "/" ~ entity.headerBlock.mediaWrapper[0].media[0].getHashedFilename ) | imagine_filter('modalImage')}}"/>#}
         {#{% endif %}#}
         <h4 style="margin-top: 10px" class="mdl-card__title-text">{% trans %}quote.modals.message.change_request{% endtrans %}</h4>
         {{ form_start(change_request_form) }}
