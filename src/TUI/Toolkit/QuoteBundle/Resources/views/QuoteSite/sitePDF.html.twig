@@ -15,7 +15,7 @@
         {{ entity.quoteReference.institution.name }}
 
         {% if entity.quoteReference.institution.media %}
-            <img id="site-school-logo" src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.quoteReference.institution.name }}">
+            <img id="site-school-logo" src="{{ ( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.quoteReference.institution.name }}">
         {% endif %}
     {% endif %}
 {% endblock %}
@@ -35,7 +35,7 @@
                 {% for mediaWrapper in entity.headerBlock.mediaWrapper %}
                     {% if loop.first %}
                         {% for media in mediaWrapper.media %}
-                            <img src="{{ asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) | imagine_filter('slideShow') }}">
+                            <img src="{{ ( media.getRelativePath ~ "/" ~ media.getHashedFilename ) | imagine_filter('slideShow') }}">
                         {% endfor %}
                     {% endif %}
                 {% endfor %}

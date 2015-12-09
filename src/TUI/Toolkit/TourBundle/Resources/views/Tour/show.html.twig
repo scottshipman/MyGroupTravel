@@ -82,7 +82,7 @@
         <div class="tour-edit-organizer-left">
             <label>{% trans %}tour.show.organizers{% endtrans %}</label><br>
             {% if entity.organizer.media %}
-                <img class="tui-image-avatar" src="{{ asset( entity.organizer.media.getRelativePath ~ "/" ~ entity.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.organizer.username }}">
+                <img class="tui-image-avatar" src="{{ ( entity.organizer.media.getRelativePath ~ "/" ~ entity.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.organizer.username }}">
             {% elseif entity.organizer.firstName and entity.organizer.lastName %}
                 <span class="tui-text-avatar mdl-typography--headline">{{ entity.organizer.firstName[:1] }}{{ entity.organizer.lastName[:1] }}</span>
             {% else %}
@@ -157,7 +157,7 @@
                     {{ brand.name }} {% trans %}tour.show.footer.intro_org{% endtrans %}
             </span>
             {% if entity.salesAgent.media %}
-                <span class="tui-image-avatar"><img src="{{ asset( entity.salesAgent.media.getRelativePath ~ "/" ~ entity.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.salesAgent.username }}"></span>
+                <span class="tui-image-avatar"><img src="{{ ( entity.salesAgent.media.getRelativePath ~ "/" ~ entity.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.salesAgent.username }}"></span>
             {% elseif entity.salesAgent.firstName and entity.salesAgent.lastName %}
                 <span class="tui-text-avatar mdl-typography--headline">{{ entity.salesAgent.firstName[:1] }}{{ entity.salesAgent.lastName[:1] }}</span>
             {% else %}
@@ -179,7 +179,7 @@
                     {% trans %}tour.show.footer.intro{% endtrans %}
             </span>
             {% if entity.organizer.media %}
-                <span class="tui-image-avatar"><img src="{{ asset( entity.organizer.media.getRelativePath ~ "/" ~ entity.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.organizer.username }}"></span>
+                <span class="tui-image-avatar"><img src="{{ ( entity.organizer.media.getRelativePath ~ "/" ~ entity.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.organizer.username }}"></span>
             {% elseif entity.organizer.firstName and entity.organizer.lastName %}
                 <span class="tui-text-avatar mdl-typography--headline">{{ entity.organizer.firstName[:1] }}{{ entity.organizer.lastName[:1] }}</span>
             {% else %}
