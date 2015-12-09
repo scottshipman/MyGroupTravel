@@ -546,18 +546,11 @@ class QuoteSiteController extends Controller
         'related' => NULL,
       );
 
-//        $html = $this->renderView('MyBundle:Foo:bar.html.twig', array(
-//            'some'  => $vars
-//        ));
-        $quoteNumber = $entity[0]->getQuoteNumber();
+
+      $quoteNumber = $entity[0]->getQuoteNumber();
       $html = $this->renderView( 'QuoteBundle:QuoteSite:quotePDF.html.twig', $data );
 
-//      $dompdf = new \DOMPDF();
-//      $dompdf->set_base_path($path . '/');
-//      $dompdf->load_html($html);
-//      $dompdf->render();
 
-//        return $this->get('knp_snappy.pdf')->generate('http://toolkit.travelbound.co.uk/quote/view/21/a', '/srv/www/Toolkit/web/static/exports/file.pdf');
       return new Response($this->get('knp_snappy.pdf')->getOutputFromHtml($html),
           200,
           array(
