@@ -5,7 +5,7 @@
                 {% for mediaWrapper in entity.mediaWrapper %}
                     {% for media in mediaWrapper.media %}
                     <li>
-                        <span class="inner-list" style="background-image: url('{{ asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) | imagine_filter('slideShow') }}')" title="{{ mediaWrapper.title }}"></span>
+                        <span class="inner-list" style="background-image: url('{{ ( media.getRelativePath ~ "/" ~ media.getHashedFilename ) | imagine_filter('slideShow') }}')" title="{{ mediaWrapper.title }}"></span>
                     </li>
                     {% endfor %}
                 {% endfor %}

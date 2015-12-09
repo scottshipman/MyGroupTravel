@@ -7,7 +7,7 @@
             {#<div class="form-header">#}
                 {#{% if tour.headerBlock is defined and tour.headerBlock != null %}#}
                     {#<div class="tour-image-wrapper">#}
-                        {#<img class="tour-image" src="{{ asset( tour.headerBlock.mediaWrapper[0].media[0].getRelativePath ~ "/" ~ tour.headerBlock.mediaWrapper[0].media[0].getHashedFilename ) | imagine_filter('modalImage')}}"/>#}
+                        {#<img class="tour-image" src="{{ ( tour.headerBlock.mediaWrapper[0].media[0].getRelativePath ~ "/" ~ tour.headerBlock.mediaWrapper[0].media[0].getHashedFilename ) | imagine_filter('modalImage')}}"/>#}
                     {#</div>#}
                 {#{% endif %}#}
                 {#<div class="tour-copy">#}
