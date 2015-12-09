@@ -25,7 +25,7 @@ use TUI\Toolkit\UserBundle\Controller\UserController;
  * )
  * @ORM\Table(name="fos_user",uniqueConstraints={@ORM\UniqueConstraint(name="email", columns={"email"})})
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
- * @GRID\Source(columns="id, lastName, firstName, fullname, displayName, email, enabled, roles, created, lastLogin", filterable=false, sortable=true)
+ * @GRID\Source(columns="id, lastName, firstName, fullname, displayName, email, enabled, roles, rolesString, created, lastLogin", filterable=false, sortable=true, exportable=true,)
  * @GRID\Column(id="fullname", type="join", title="Name", columns={"firstName", "lastName"}, filterable=false, operatorsVisible=false)
  */
 class User extends BaseUser
@@ -113,6 +113,11 @@ class User extends BaseUser
 
     protected $answer = null;
 
+  /**
+   * @ORM\Column(type="string", nullable=true)
+   * @GRID\Column(title="Role", filterable=true, operatorsVisible=false, export=true, sortable=false)
+   */
+  protected $rolesString = null;
 
     public function __construct()
     {
@@ -123,6 +128,7 @@ class User extends BaseUser
         $this->created = new \DateTime();
 
         $this->roles = array('ROLE_CUSTOMER');
+        $this->rolesString = implode(', ', $this->roles);
 
 
         /*      existing roles are:
@@ -138,6 +144,23 @@ class User extends BaseUser
 
         */
     }
+
+
+  /**
+   * @param string $rolesString
+   */
+  public function setRolesString($rolesString)
+  {
+    $this->rolesString = $rolesString;
+  }
+
+  /**
+   * @return string
+   */
+  public function getRolesString()
+  {
+    return $this->rolesString;
+  }
 
   public function __toString()
   {
