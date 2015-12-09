@@ -25,6 +25,7 @@ use TUI\Toolkit\UserBundle\Form\SecurityType;
 use TUI\Toolkit\MediaBundle\Form\MediaType;
 use APY\DataGridBundle\Grid\Source\Entity;
 use APY\DataGridBundle\Grid\Export\CSVExport;
+use APY\DataGridBundle\Grid\Export\ExcelExport;
 use APY\DataGridBundle\Grid\Action\RowAction;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\FOSUserEvents;
@@ -54,7 +55,7 @@ class UserController extends Controller
     public function indexAction(Request $request)
     {
         // list hidden columns
-        $hidden = array();
+        $hidden = array('roles');
 
         // Creates simple grid based on your entity (ORM)
         $source = new Entity('TUIToolkitUserBundle:User');
@@ -71,12 +72,13 @@ class UserController extends Controller
 
 
         // add roles filter
-        $column = $grid->getColumn('roles');
-        $column->setFilterable(true);
-        $column->setTitle($this->get('translator')->trans('user.grid.filter.title.role'));
-        $column->setFilterType('select');
-        $column->setOperatorsVisible(false);
-        $column->setExport('false');
+//        $column = $grid->getColumn('roles');
+//        $column->setFilterable(true);
+//        $column->setTitle($this->get('translator')->trans('user.grid.filter.title.role'));
+//        $column->setFilterType('select');
+//        $column->setOperatorsVisible(false);
+//        $column->setExport('false');
+
 
         // add email filter
         $column = $grid->getColumn('email');
@@ -169,6 +171,9 @@ class UserController extends Controller
 
         // Export of the grid
         $grid->addExport(new CSVExport($this->get('translator')->trans('user.grid.export'), "currentUsers", array('delimiter' => ','), "UTF-8", "ROLE_ADMIN"));
+
+        //Testing PHPEXcell2003 export
+        //$grid->addExport(new ExcelExport($this->get('translator')->trans('user.grid.export'), "currentUsers", array('delimiter' => ','), "UTF-8", "ROLE_ADMIN"));
 
         // Manage the grid redirection, exports and the response of the controller
         return $grid->getGridResponse('TUIToolkitUserBundle:User:index.html.twig');
@@ -278,6 +283,7 @@ class UserController extends Controller
         if ($form->isValid()) {
             $entity->setUsername($entity->getEmail());
             $entity->setPassword('');
+            $entity->setRolesString(implode(', ', $roles));
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
@@ -323,6 +329,7 @@ class UserController extends Controller
             $em = $this->getDoctrine()->getManager();
                 $entity->setPassword('');
                 $entity->setUsername($entity->getEmail());
+                $entity->setRolesString(implode(', ', $roles));
                 $em->persist($entity);
                 $em->flush();
 
@@ -618,6 +625,8 @@ class UserController extends Controller
 
         if ($editForm->isValid()) {
             $entity->setUsername($editForm->getData()->getEmail());
+            $roles = $entity->getRoles();
+            $entity->setRolesString(implode(', ', $roles));
             $em->flush();
             $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.save') . $entity->getUsername());
 
