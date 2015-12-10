@@ -1,7 +1,7 @@
 {%  if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
 {% block body -%}
     <div class="request-changes">
-        <p style="text-align: center">{% trans %}quote.modals.message.changes{% endtrans %}</p>
+        <p style="text-align: center">{{ "quote.modals.message.changes" | trans ({'%brand%' : brand.name}) }}</p>
         {#<h4 class="mdl-card__title-text">{{ entity.name }}</h4>#}
     {#<div>#}
         {#<ul>#}
@@ -18,7 +18,7 @@
         {#{% if entity.headerBlock %}#}
             {#<img src="{{ ( entity.headerBlock.mediaWrapper[0].media[0].getRelativePath ~ "/" ~ entity.headerBlock.mediaWrapper[0].media[0].getHashedFilename ) | imagine_filter('modalImage')}}"/>#}
         {#{% endif %}#}
-        <h4 style="margin-top: 10px" class="mdl-card__title-text">{% trans %}quote.modals.message.change_request{% endtrans %}</h4>
+        <h4 style="margin-top: 10px" class="mdl-card__title-text">{{ "quote.modals.message.change_request" | trans }}</h4>
         {{ form_start(change_request_form) }}
             {{ form_widget(change_request_form.changes[0], {'label' : 'quote.form.changes.choices.numbers'|trans}) }}
             {{ form_widget(change_request_form.changes[1], {'label' : 'quote.form.changes.choices.reduce_price'|trans}) }}

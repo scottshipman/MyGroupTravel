@@ -292,6 +292,17 @@ class QuoteSiteController extends Controller
         $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
         $locale = $this->container->getParameter('locale');
         $date_format = $this->container->getParameter('date_format');
+        //brand stuff
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
 
 
         return $this->render('QuoteBundle:QuoteSite:changeRequest.html.twig', array(
@@ -299,6 +310,7 @@ class QuoteSiteController extends Controller
             'entity' => $entity,
             'locale' => $locale,
             'date_format' => $date_format,
+            'brand' => $brand,
         ));
     }
 

@@ -33,7 +33,7 @@ passenger:
             edit: Edit
 
     flash:
-        save: Passenger Saved
+        save: "Thanks for signing up. A copy of the form has been emailed to you, and the tour organiser will be in touch."
         delete: Passenger deleted -
         restore: Passenger Restored -
 
