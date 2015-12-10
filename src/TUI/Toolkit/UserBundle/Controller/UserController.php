@@ -1043,7 +1043,7 @@ class UserController extends Controller
 
         $message = \Swift_Message::newInstance()
             ->setSubject($this->get('translator')->trans('user.email.password_reset.subject'))
-            ->setFrom($this->container->getParameter('user_system_email'))
+            ->setFrom(array($this->container->getParameter('user_system_email') => $this->container->getParameter('user_system_name')))
             ->setTo($userEmail)
             ->setBody(
                 $this->renderView(
@@ -1112,10 +1112,9 @@ class UserController extends Controller
             $brand = $default_brand;
         }
 
-
         $message = \Swift_Message::newInstance()
             ->setSubject($this->get('translator')->trans('user.email.password_reset.subject'))
-            ->setFrom($this->container->getParameter('user_system_email'))
+            ->setFrom(array($this->container->getParameter('user_system_email') => $this->container->getParameter('user_system_name')))
             ->setTo($username)
             ->setBody(
                 $this->renderView(
