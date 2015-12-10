@@ -37,7 +37,7 @@ quote:
         accept_form: Go
         clone: Save as Clone
         restore: Restore
-        edit_mode: Switch to edit mode
+        edit_mode: Switch to Edit Mode
         print: Print
         pdf: PDF
         add_header: Add Header Slideshow
