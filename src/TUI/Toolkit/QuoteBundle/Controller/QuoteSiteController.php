@@ -40,6 +40,8 @@ class QuoteSiteController extends Controller
     $alternate=FALSE;
     $related=FALSE;
     $editable = false;
+    $share = strpos($_SERVER['REQUEST_URI'], 'share') !== FALSE ? TRUE : FALSE ;
+
     $permission = array();
     // TODO if user is allowed to edit then set $editable to true
     // if organizer or if brand or higher (check permission table for organizer)
@@ -171,6 +173,7 @@ class QuoteSiteController extends Controller
       'alternate' => $alternate,
       'related'  => $related,
       'brand' => $brand,
+      'share' => $share,
     ));
   }
 
@@ -304,6 +307,7 @@ class QuoteSiteController extends Controller
         $locale = $this->container->getParameter('locale');
         $date_format = $this->container->getParameter('date_format');
 
+        $toArray = array();
         $changeForm = $this->createChangeRequestFormAction($id);
         $changeForm->handleRequest($request);
         $changes = $changeForm->get('changes')->getData();
@@ -314,8 +318,14 @@ class QuoteSiteController extends Controller
         $entity = $entity[0];
         $departure = $entity->getDepartureDate();
         $tourName = $entity->getName();
-        $salesAgent = $entity->getQuoteReference()->getSalesAgent();
-        $agentEmail = $salesAgent->getEmail();
+        if ($entity->getQuoteReference()->getSalesAgent()) {
+            $agentEmail = $entity->getQuoteReference()->getSalesAgent()->getEmail();
+            $toArray[] = $agentEmail;
+        }
+        if ($entity->getQuoteReference()->getSecondaryContact()) {
+            $secondaryAgent = $entity->getQuoteReference()->getSecondaryContact()->getEmail();
+            $toArray[] = $secondaryAgent;
+        }
 
         //brand stuff
         $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
@@ -348,7 +358,11 @@ class QuoteSiteController extends Controller
                     )
                 ), 'text/html');
 
-        $this->get('mailer')->send($message);
+        foreach($toArray as $user) {
+            $message->setTo($user);
+            $this->get('mailer')->send($message);
+        }
+
 
         $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.change_request') . ' '. $tourName);
 
@@ -501,11 +515,25 @@ class QuoteSiteController extends Controller
         $headerBlock = NULL;
       }
 
+        //brand stuff
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
+
       // send warning messages
       $warningMsg = array();
-      if($entity[0]->getExpiryDate() < date($date_format)){
-        $warningMsg[] = $this->get('translator')->trans('quote.exception.expired') . " $entity>getQuoteReference()->getSalesAgent()->getFirstName()   $entity>getQuoteReference()->getSalesAgent()->getLasttName()  at $entity>getQuoteReference()->getSalesAgent()->getEmail()";
-      }
+        if ($entity[0]->getExpiryDate() != null) {
+            if ($entity[0]->getExpiryDate() < date($date_format)) {
+                $warningMsg[] = $this->get('translator')->trans('quote.exception.expired') . " $entity>getQuoteReference()->getSalesAgent()->getFirstName()   $entity>getQuoteReference()->getSalesAgent()->getLasttName()  at $entity>getQuoteReference()->getSalesAgent()->getEmail()";
+            }
+        }
 
       $request = $this->getRequest();
       $path = $request->getScheme() . '://' . $request->getHttpHost();
@@ -523,18 +551,22 @@ class QuoteSiteController extends Controller
         'header' => $headerBlock,
         'editable' =>  $editable,
         'path' => $path,
-        'alternate' => $alternate
+        'alternate' => $alternate,
+        'brand' => $brand,
+        'warning' => NULL,
+        'related' => NULL,
       );
 
-      $html = $this->renderView( 'QuoteBundle:QuoteSite:sitePDF.html.twig', $data );
 
-      $dompdf = new \DOMPDF();
-      $dompdf->set_base_path($path . '/');
-      $dompdf->load_html($html);
-      $dompdf->render();
+      $quoteNumber = $entity[0]->getQuoteNumber();
+      $html = $this->renderView( 'QuoteBundle:QuoteSite:quotePDF.html.twig', $data );
 
-      return new Response($dompdf->output(), 200, array(
-          'Content-Type' => 'application/pdf'
+
+      return new Response($this->get('knp_snappy.pdf')->getOutputFromHtml($html),
+          200,
+          array(
+          'Content-Type' => 'application/pdf',
+          'Content-Disposition'   => 'attachment; filename="' . $quoteNumber . '.pdf"'
       ));
     }
 

@@ -25,6 +25,7 @@ use TUI\Toolkit\UserBundle\Form\SecurityType;
 use TUI\Toolkit\MediaBundle\Form\MediaType;
 use APY\DataGridBundle\Grid\Source\Entity;
 use APY\DataGridBundle\Grid\Export\CSVExport;
+use APY\DataGridBundle\Grid\Export\ExcelExport;
 use APY\DataGridBundle\Grid\Action\RowAction;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\FOSUserEvents;
@@ -54,7 +55,7 @@ class UserController extends Controller
     public function indexAction(Request $request)
     {
         // list hidden columns
-        $hidden = array();
+        $hidden = array('roles');
 
         // Creates simple grid based on your entity (ORM)
         $source = new Entity('TUIToolkitUserBundle:User');
@@ -71,12 +72,13 @@ class UserController extends Controller
 
 
         // add roles filter
-        $column = $grid->getColumn('roles');
-        $column->setFilterable(true);
-        $column->setTitle($this->get('translator')->trans('user.grid.filter.title.role'));
-        $column->setFilterType('select');
-        $column->setOperatorsVisible(false);
-        $column->setExport('false');
+//        $column = $grid->getColumn('roles');
+//        $column->setFilterable(true);
+//        $column->setTitle($this->get('translator')->trans('user.grid.filter.title.role'));
+//        $column->setFilterType('select');
+//        $column->setOperatorsVisible(false);
+//        $column->setExport('false');
+
 
         // add email filter
         $column = $grid->getColumn('email');
@@ -170,6 +172,9 @@ class UserController extends Controller
         // Export of the grid
         $grid->addExport(new CSVExport($this->get('translator')->trans('user.grid.export'), "currentUsers", array('delimiter' => ','), "UTF-8", "ROLE_ADMIN"));
 
+        //Testing PHPEXcell2003 export
+        //$grid->addExport(new ExcelExport($this->get('translator')->trans('user.grid.export'), "currentUsers", array('delimiter' => ','), "UTF-8", "ROLE_ADMIN"));
+
         // Manage the grid redirection, exports and the response of the controller
         return $grid->getGridResponse('TUIToolkitUserBundle:User:index.html.twig');
 
@@ -212,6 +217,12 @@ class UserController extends Controller
         // Add action column
         $restoreAction = new RowAction('Restore', 'user_restore');
         $grid->addRowAction($restoreAction);
+
+        //Add hard delete action
+        $deleteAction = new RowAction('Delete', 'user_hard_delete');
+        $deleteAction->setRole('ROLE_BRAND');
+        $deleteAction->setConfirm(true);
+        $grid->addRowAction($deleteAction);
 
         //Get locale for date time and other purposes
         $locale = $this->container->getParameter('locale');
@@ -266,12 +277,13 @@ class UserController extends Controller
         $filters->enable('softdeleteable');
 
         if ($existingUser != null) {
-            $form['email']->addError(new FormError('This user exists and has been deleted.  Please contact and administrator to re-enable this user.'));
+            $form['email']->addError(new FormError($this->get('translator')->trans('user.form.error.deleted')));
         }
 
         if ($form->isValid()) {
             $entity->setUsername($entity->getEmail());
             $entity->setPassword('');
+            $entity->setRolesString(implode(', ', $roles));
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
@@ -305,30 +317,35 @@ class UserController extends Controller
         $filters->enable('softdeleteable');
 
         if ($existingUser != null) {
-            $form['email']->addError(new FormError('This user exists and has been deleted.  Please contact and administrator to re-enable this user.'));
+            if ($existingUser->getDeleted() != null) {
+                $form->addError(new FormError($this->get('translator')->trans('user.form.error.deleted')));
+
+            } else {
+                return new Response($existingUser);
+            }
         }
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            if ($em->getRepository('TUIToolkitUserBundle:User')->findByEmail($entity->getEmail())) {
-                $existingUser = $em->getRepository('TUIToolkitUserBundle:User')->findByEmail($entity->getEmail());
-                $existingUser = $existingUser[0];
-                return new Response($existingUser);
-
-            } else {
                 $entity->setPassword('');
                 $entity->setUsername($entity->getEmail());
+                $entity->setRolesString(implode(', ', $roles));
                 $em->persist($entity);
                 $em->flush();
 
                 return new Response($entity);
-            }
+
         }
 
-        return $this->render('TUIToolkitUserBundle:User:ajax_new.html.twig', array(
+
+        $response = new Response($this->renderView('TUIToolkitUserBundle:User:ajax_new.html.twig', array(
             'entity' => $entity,
             'form' => $form->createView(),
-        ));
+        )));
+        $response->headers->set('Content-Type', 'text/html');
+        $response->setStatusCode('406');
+
+        return $response;
     }
 
 
@@ -590,7 +607,7 @@ class UserController extends Controller
             $filters->enable('softdeleteable');
 
             if ($existingUser != null) {
-                $editForm['email']->addError(new FormError('This user exists and has been deleted.  Please contact and administrator to re-enable this user.'));
+                $editForm['email']->addError(new FormError($this->get('translator')->trans('user.form.error.deleted')));
             }
         }
 
@@ -608,6 +625,8 @@ class UserController extends Controller
 
         if ($editForm->isValid()) {
             $entity->setUsername($editForm->getData()->getEmail());
+            $roles = $entity->getRoles();
+            $entity->setRolesString(implode(', ', $roles));
             $em->flush();
             $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.save') . $entity->getUsername());
 
@@ -921,6 +940,34 @@ class UserController extends Controller
       } else {
           $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('user.flash.cant_delete'));
           return $this->redirect($this->generateUrl('user'));
+        }
+
+        return $this->redirect($this->generateUrl('user'));
+    }
+
+    /**
+     * hard Deletes User entity.
+     *
+     */
+    public function harddeleteAction(Request $request, $id)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        // dont forget to disable softdelete filter so doctrine can *find* the deleted entity
+        $filters = $em->getFilters();
+        $filters->disable('softdeleteable');
+
+        $entity = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find User entity in order to delete it using ajax.');
+        }
+        if ($this->canDeleteUser($entity->getId())) {
+            $em->remove($entity);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.delete') . $entity->getUsername());
+        } else {
+            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('user.flash.cant_delete'));
+            return $this->redirect($this->generateUrl('user'));
         }
 
         return $this->redirect($this->generateUrl('user'));
@@ -1373,7 +1420,9 @@ class UserController extends Controller
             $permissions = $em->getRepository('PermissionBundle:Permission')->findBy(array('user' => $id, 'class' => 'tour'));
             // this only returns pointers to tours, so loop through and build tours array
             foreach ($permissions as $permission) {
-                $tours[] = $em->getRepository('TourBundle:Tour')->find($permission->getObject());
+                if ($object = $em->getRepository('TourBundle:Tour')->find($permission->getObject())) {
+                    $tours[] = $object;
+                }
             }
         }
 

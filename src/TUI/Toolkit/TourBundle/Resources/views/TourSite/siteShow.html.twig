@@ -44,19 +44,19 @@
         <div class="inner">
             {% if brand.media %}
                 <div class="brand-logo">
-                    <img src="{{ asset( brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ brand.name }}">
+                    <img src="{{ ( brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ brand.name }}">
                 </div>
             {% endif %}
 
-            {% if entity.quoteReference.institution %}
-                <div id="site-quote-name">{{ entity.quoteReference.institution.name }}</div>
+            {% if entity.institution %}
+                <div id="site-quote-name">{{ entity.institution.name }}</div>
             {% endif %}
 
-            <h2 class="{% if brand.media %}has-brand-logo{% endif %}">
+            <h2 class="editable-tour-name mode-toggle mode-preview {% if brand.media %}has-brand-logo{% endif %}">
                 {% if entity.displayName %}
                     {{ entity.displayName }}
                 {% else %}
-                    {{ entity.quoteReference.name }}{% if is_granted("ROLE_BRAND") %}, {{ entity.name }}{% endif %} {#{% if entity.quoteNumber %}({{ entity.quoteNumber }}){% endif %}#}
+                    {{ entity.name }}
                 {% endif %}
             </h2>
 
@@ -71,11 +71,11 @@
 {% block body -%}
     <div id="tour-version-{{ entity.id }}" class="site-show mode-toggle mode-preview" entityId="{{ entity.id }}" entityType="tour" entityClass="tour" entityPath="tour">
 
-        <div class="quote-actions{% if entity.quoteReference.institution.media %} has-logo{% endif %}">
+        <div class="quote-actions{% if entity.institution.media %} has-logo{% endif %}">
 
-            {% if entity.quoteReference.institution.media %}
+            {% if entity.institution.media %}
                 <div class="institution-logo-action">
-                    <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.quoteReference.institution.name }}">
+                    <img src="{{ ( entity.institution.media.getRelativePath ~ "/" ~ entity.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.institution.name }}">
                 </div>
             {% endif %}
 
@@ -201,11 +201,9 @@
                                         {# probably render a controller here by passing in item as id and have block entity returned #}
                                         <div class="move-icon"><i class="fa fa-arrows" title="Rearrange"></i></div>
                                         <div id="content-block-actions-{{ items[item].id }}" class="edit-icons {% if items[item].locked %}content-block-locked{% endif %}">
-                                            {% if items[item].locked is sameas(false) %}
                                                 <i class="item-edit content-block-item-action fa fa-pencil-square-o" title="Edit" blockId="{{ items[item].id }}"></i>
                                                 <i class="item-resize content-block-item-action fa fa-arrows-h {{ size }}" title="Resize" blockId="{{ items[item].id }}"></i>
                                                 <i class="item-delete content-block-item-action fa fa-trash-o" title="Delete" blockId = "{{ items[item].id }}"></i>
-                                            {% endif %}
                                             {% if is_granted('ROLE_BRAND') %}
                                                 <i class="item-lock content-block-item-action fa {% if items[item].locked %}fa-unlock-alt{% else %}fa-lock{% endif %}" title="{% if items[item].locked %}Unlock{% else %}Lock{% endif %}" blockId="{{ items[item].id }}"></i>
                                             {% endif %}
@@ -259,6 +257,36 @@
             {# Only place javascript below that deals with editing so it only loads when it needs to #}
             {% if editable %}
 
+                // Edit Tour Display Name
+                $(".editable-tour-name").editable(function(value, settings) {
+                        return(value);
+                        }, {
+                        width: '70%',
+                        data: function(string) {return $.trim(string)},
+                        tooltip: 'Click to edit Tour name...',
+                        cssclass : 'editable-tourname-input',
+                        callback : function(value, settings) {
+                            // do ajax call here to update display name
+                            // on success of ajax call, update dom
+                            $.ajax({
+                                 url: "/tour/view/update/name/{{ entity.id }}",
+                                 type: 'POST',
+                                 headers: {
+                                 "Pragma": "no-cache",
+                                 "Expires": -1,
+                                 "Cache-Control": "no-cache"
+                                 },
+                                 data: {'value' : value},
+                                 contentType: "application/x-www-form-urlencoded",
+                                 }).success(function (response) {
+                                 }).error(function (response) {
+                                     var something = $.parseJSON(response.responseText);
+                                 });
+                        }
+                });
+
+
+
                 // Promote Popup
                 $(document).on('click', '#promote-tour', function (e) {
                     e.preventDefault();
@@ -308,17 +336,13 @@
 
 
 {% block footer_left %}
-    {% if editable==true %}
+    {% if editable==true and app.user.email != entity.salesAgent.email%} {# Show Sales Agent Info to an Organizer#}
         {% if entity.salesAgent %}
             <span class="intro">
-                {% if app.user.email == entity.organizer.email %}
-                    {% trans %}tour.show.footer.intro{% endtrans %}
-                {% else %}
-                    {% trans %}tour.show.footer.intro_org{% endtrans %}
-                {% endif %}
+                    {{ brand.name }} {% trans %}tour.show.footer.intro_org{% endtrans %}
             </span>
             {% if entity.salesAgent.media %}
-                <span class="tui-image-avatar"><img src="{{ asset( entity.salesAgent.media.getRelativePath ~ "/" ~ entity.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.salesAgent.username }}"></span>
+                <span class="tui-image-avatar"><img src="{{ ( entity.salesAgent.media.getRelativePath ~ "/" ~ entity.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.salesAgent.username }}"></span>
             {% elseif entity.salesAgent.firstName and entity.salesAgent.lastName %}
                 <span class="tui-text-avatar mdl-typography--headline">{{ entity.salesAgent.firstName[:1] }}{{ entity.salesAgent.lastName[:1] }}</span>
             {% else %}
@@ -334,17 +358,13 @@
                 <a href="mailto:{{ entity.salesAgent.email }}">{{ entity.salesAgent.email }}</a>
             </span>
         {% endif %}
-    {% else %}
+    {% else %} {# Show organizer info to everyone but organizers #}
         {% if entity.organizer %}
             <span class="intro">
-                {% if app.user and app.user.email == entity.organizer.email %}
                     {% trans %}tour.show.footer.intro{% endtrans %}
-                {% else %}
-                    {% trans %}tour.show.footer.intro_org{% endtrans %}
-                {% endif %}
             </span>
             {% if entity.organizer.media %}
-                <span class="tui-image-avatar"><img src="{{ asset( entity.organizer.media.getRelativePath ~ "/" ~ entity.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.organizer.username }}"></span>
+                <span class="tui-image-avatar"><img src="{{ ( entity.organizer.media.getRelativePath ~ "/" ~ entity.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.organizer.username }}"></span>
             {% elseif entity.organizer.firstName and entity.organizer.lastName %}
                 <span class="tui-text-avatar mdl-typography--headline">{{ entity.organizer.firstName[:1] }}{{ entity.organizer.lastName[:1] }}</span>
             {% else %}

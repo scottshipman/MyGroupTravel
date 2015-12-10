@@ -24,7 +24,7 @@ framework:
     csrf_protection: ~
     validation:      { enable_annotations: true }
     #serializer:      { enable_annotations: true }
-    templating: { engines: ['twig', 'php'] }
+    templating: { engines: ['twig', 'php'], assets_version: %cache_asset_version%, assets_version_format: "%%s?v=%%s" }
     default_locale:  "%locale%"
     trusted_hosts:   ~
     trusted_proxies: ~
@@ -141,6 +141,7 @@ doctrine_migrations:
 swiftmailer:
     transport: "%mailer_transport%"
     host:      "%mailer_host%"
+    port:      "%mailer_port%"
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
@@ -280,6 +281,21 @@ genemu_form:
     autocomplete: ~
     image: ~
 
+knp_snappy:
+    pdf:
+        enabled:    true
+        binary:     /usr/local/bin/wkhtmltopdf #"\"C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe\"" for Windows users
+        options:
+                viewport-size: 1100
+                orientation: landscape
+                margin-left: 0
+                margin-right: 0
+                margin-top: 0
+                margin-bottom: 0
+
+knp_snappy:
+    temporary_folder: %kernel.cache_dir%/snappy
+
 trsteel_ckeditor:
     class: Trsteel\CkeditorBundle\Form\Type\CkeditorType
     transformers:  ['tuihtmlpurifier'] #['html_purifier']
@@ -353,7 +369,7 @@ trsteel_ckeditor:
 app:
     html_purifier:
         config:
-            HTML.AllowedAttributes: 'alt, src, href, target, colspan, class, style, action, allowfullscreen, frameborder, height, width'
+            HTML.AllowedAttributes: 'alt, src, href, target, colspan, class, style, action, allowfullscreen, frameborder, height, width, border, cellpadding, cellspacing'
             Attr.AllowedFrameTargets: '_blank, _self, _parent, _top'
            # HTML.AllowedElements: ''
             HTML.SafeIframe: true

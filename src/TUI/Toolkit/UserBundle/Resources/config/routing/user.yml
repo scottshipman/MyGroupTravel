@@ -44,6 +44,11 @@ user_quick_delete:
     defaults: { _controller: "TUIToolkitUserBundle:User:quickdelete" }
     methods:  [POST, DELETE, GET]
 
+user_hard_delete:
+    path:     /{id}/hard_delete
+    defaults: { _controller: "TUIToolkitUserBundle:User:harddelete" }
+    methods: [POST, DELETE, GET]
+
 user_deleted:
     path:     /deleted
     defaults: { _controller: "TUIToolkitUserBundle:User:deleted" }

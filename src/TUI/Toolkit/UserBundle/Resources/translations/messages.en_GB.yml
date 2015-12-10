@@ -108,6 +108,10 @@ user:
         activate:
             submit: Submit
         resetlink: To edit your account password or security question
+        error:
+            deleted: This user exists and has been deleted.  Please contact and administrator to re-enable this user.
+        delete:
+            prompt: "Are you sure you wish to delete this user?"
 
     profile:
         label:

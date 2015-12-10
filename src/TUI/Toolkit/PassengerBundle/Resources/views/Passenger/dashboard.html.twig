@@ -47,7 +47,7 @@
             <div class="tour-edit-organizer-left">
                 <label>{% trans %}tour.show.organizers{% endtrans %}</label><br>
                 {% if tour.organizer.media %}
-                    <img class="tui-image-avatar" src="{{ asset( tour.organizer.media.getRelativePath ~ "/" ~ tour.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ tour.organizer.username }}">
+                    <img class="tui-image-avatar" src="{{ ( tour.organizer.media.getRelativePath ~ "/" ~ tour.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ tour.organizer.username }}">
                 {% elseif tour.organizer.firstName and tour.organizer.lastName %}
                     <span class="tui-text-avatar mdl-typography--headline">{{ tour.organizer.firstName[:1] }}{{ tour.organizer.lastName[:1] }}</span>
                 {% else %}

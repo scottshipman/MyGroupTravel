@@ -42,6 +42,17 @@
     {% if is_granted("ROLE_ADMIN") %}
         {% if delete_form is defined %}
             <li>{{ form(delete_form) }}</li>
+            <script>
+                $( document ).ready(function() {
+                    var deleteButton = $('.fa-trash-o').parent('button#form_submit');
+                    deleteButton.on('click', function (e) {
+                        e.preventDefault();
+                        if (confirm('{% trans %}quote.form.delete.prompt{% endtrans %}')) {
+                            deleteButton.parents('form').submit();
+                        }
+                    });
+                });
+            </script>
         {% endif %}
     {% endif %}
 
@@ -59,6 +70,12 @@
             $( ".hasDatepicker" ).datepicker( "option", "dateFormat", "dd-mm-yy" );
             $( ".hasDatepicker" ).change(function(){
                 $(this).parent().addClass('is-dirty');
+            });
+
+            //use translation for the ckeditor welcome msg field
+            $('#tui_toolkit_quotebundle_quoteversion_welcomeMsg').each( function() {
+            var label = $(this).prev();
+                label.html("{% trans %}quote.form.quote_version.welcomeMsg{% endtrans %}").css({"position": "static"});
             });
         });
     </script>

@@ -61,7 +61,7 @@
                        {% if tour.organizer.id == app.user.id %}
                             {% if tour.salesAgent.media %}
                                 <span class="tui-image-avatar">
-                                    <img src="{{ asset( tour.salesAgent.media.getRelativePath ~ "/" ~ tour.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ tour.salesAgent.username }}"></span>
+                                    <img src="{{ ( tour.salesAgent.media.getRelativePath ~ "/" ~ tour.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ tour.salesAgent.username }}"></span>
                             {% elseif tour.salesAgent.firstName and tour.salesAgent.lastName %}
                                 <span class="tui-text-avatar mdl-typography--headline">{{ tour.salesAgent.firstName[:1] }}{{ tour.salesAgent.lastName[:1] }}</span>
                             {% else %}
@@ -72,7 +72,7 @@
                         {% else %}
                             {% if tour.organizer.media %}
                                 <span class="tui-image-avatar">
-                                    <img src="{{ asset( tour.organizer.media.getRelativePath ~ "/" ~ tour.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ tour.organizer.username }}"></span>
+                                    <img src="{{ ( tour.organizer.media.getRelativePath ~ "/" ~ tour.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ tour.organizer.username }}"></span>
                             {% elseif tour.organizer.firstName and tour.organizer.lastName %}
                                 <span class="tui-text-avatar mdl-typography--headline">{{ tour.organizer.firstName[:1] }}{{ tour.organizer.lastName[:1] }}</span>
                             {% else %}

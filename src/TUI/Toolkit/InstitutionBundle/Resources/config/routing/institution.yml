@@ -43,6 +43,11 @@ manage_institution_quick_delete:
     defaults: { _controller: "InstitutionBundle:Institution:quickdelete" }
     methods:  [POST, DELETE, GET]
 
+manage_institution_hard_delete:
+    path:     /{id}/hard_delete
+    defaults: { _controller: "InstitutionBundle:Institution:harddelete" }
+    methods:  [POST, DELETE, GET]
+
 manage_institution_restore:
     path:     /{id}/restore
     defaults: { _controller: "InstitutionBundle:Institution:restore" }

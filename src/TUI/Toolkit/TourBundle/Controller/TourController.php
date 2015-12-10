@@ -3,6 +3,7 @@
 namespace TUI\Toolkit\TourBundle\Controller;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Proxies\__CG__\TUI\Toolkit\TourBundle\Entity\PaymentTask;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -510,7 +511,7 @@ class TourController extends Controller
             $blockCount = count($blocks);
             if (!empty($blocks)) {
                 if ($blockCount <= 1) {
-                    $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($blocks[0]);
+                    $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find(reset($blocks));
                     if (!$blockObj) {
                         throw $this->createNotFoundException('Unable to find Content Block entity.');
                     }
@@ -527,6 +528,18 @@ class TourController extends Controller
             }
         }
 
+        //Get all brand stuff
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
+
 
         $deleteForm = $this->createDeleteForm($id);
 
@@ -539,6 +552,7 @@ class TourController extends Controller
             'items' => $items,
             'tabs' => $tabs,
             'editable' => $editable,
+            'brand' => $brand,
         ));
     }
 
@@ -783,11 +797,28 @@ class TourController extends Controller
                 $zip->close();
                 $em->flush();
             }
+
+          // sync payment tasks for instution and passengers if still Not Setup complete
+            if ($entity->getSetupComplete() == FALSE && $entity->getIsComplete() == FALSE) {
+                // Step 1 purge existing passenger payment schedules
+                $this->purgePassengerPaymentSchedule($entity->getPaymentTasksPassenger(), $entity->getId());
+                $entity->setPaymentTasksPassenger(null);
+            }
+
+            $passengerPaymentTasksStorage = array();
+
           // loop through payment tasks and set type to institution
             foreach($editForm->getData()->getPaymentTasks() as $paymentTask){
               $paymentTask->setType('institution');
+                if ($entity->getSetupComplete() == FALSE && $entity->getIsComplete() == FALSE) {
+                    // Tour has not been setup by Organizer so sync Passenger payments with Institution Payments as Default values
+                    // Step 2 copy values over for each Institution payment task.
+                    $newPaymentTaskPassenger = $this->syncPassengerPaymentDefaults($paymentTask);
+                    $passengerPaymentTasksStorage[] = $newPaymentTaskPassenger;
+                }
             }
-
+            $entity->setPaymentTasksPassenger($passengerPaymentTasksStorage);
+            $em->persist($entity);
             $em->flush();
             $permission = $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
             $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tour.flash.save') . $entity->getName());
@@ -807,6 +838,44 @@ class TourController extends Controller
             'delete_form' => $deleteForm->createView(),
             'date_format' => $date_format,
         ));
+    }
+
+    /**
+     * Purge a Tour's passenger payment schedule for institutions to a Passenger
+     *
+     * @param paymentTasksPassenger - the Tours existing passenger payment task array collection
+     */
+
+    public function purgePassengerPaymentSchedule($paymentTasksPassenger, $entity) {
+        if ($paymentTasksPassenger->count() >= 1 ){
+            $em = $this->getDoctrine()->getManager();
+            $tasks=$paymentTasksPassenger->toArray();
+            foreach($tasks as $task) {
+                $em->remove($task);
+            }
+            $em->flush();
+        }
+
+
+    }
+
+
+    /**
+     * Syncronize a Tour's payment schedule for institutions to a Passenger
+     *
+     * @param paymentTask - the payment object to look for and create/update
+     * return new paymentTaskPassenger object
+     */
+
+    public function syncPassengerPaymentDefaults($paymentTask) {
+        $em = $this->getDoctrine()->getManager();
+        $newPassengerPaymentTask = clone $paymentTask;
+        $newPassengerPaymentTask->setType('passenger');
+        $newPassengerPaymentTask->setId(null);
+        $em->persist($newPassengerPaymentTask);
+        $em->flush($newPassengerPaymentTask);
+        return $newPassengerPaymentTask;
+
     }
 
 
@@ -848,7 +917,7 @@ class TourController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('manage_tour_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'button', array(
+            ->add('submit', 'submit', array(
                 'label' => $this->get('translator')->trans('tour.actions.delete'),
                 'attr' => array(
                     'class' => 'delete-btn'
@@ -874,6 +943,29 @@ class TourController extends Controller
         $em->remove($tour);
         $em->flush();
         $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tour.flash.delete') . $tour->getName());
+
+        return $this->redirect($this->generateUrl('manage_tour'));
+    }
+
+    /**
+     * hard Deletes Tour entity.
+     *
+     */
+    public function harddeleteAction(Request $request, $id)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        // dont forget to disable softdelete filter so doctrine can *find* the deleted entity
+        $filters = $em->getFilters();
+        $filters->disable('softdeleteable');
+
+        $tour = $em->getRepository('TourBundle:Tour')->find($id);
+        if (!$tour) {
+            throw $this->createNotFoundException('Unable to find Tour entity in order to delete it using ajax.');
+        }
+        $em->remove($tour);
+        $em->flush();
+        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.delete'). ' ' . $tour->getName());
 
         return $this->redirect($this->generateUrl('manage_tour'));
     }
@@ -1175,6 +1267,18 @@ class TourController extends Controller
         $locale = $this->container->getParameter('locale');
         $setupForm = $this->createTourSetupForm($entity);
 
+        //brand stuff
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
+
         $passenger_payment_tasks = $entity->getPaymentTasksPassenger();
 
 
@@ -1183,6 +1287,7 @@ class TourController extends Controller
             'setup_form' => $setupForm->createView(),
             'date_format' => $date_format,
             'locale' => $locale,
+            'brand' => $brand,
             'passenger_payment_tasks' => $passenger_payment_tasks,
         ));
 

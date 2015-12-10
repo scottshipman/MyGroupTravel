@@ -29,20 +29,19 @@
     {% if is_granted("ROLE_BRAND") %}
         <a class="back-link" href="{{ path('manage_tour') }}"><i class="fa fa-arrow-left"></i> {% trans %}tour.title.back_list{% endtrans %}</a>
     {% else %}
-        <a class="back-link" href="/"><i class="fa fa-arrow-left"></i> {% trans %}tour.actions.back_dashboard{% endtrans %}</a>
+        <a class="back-link" href="{{ path('manage_tour_show', { 'id': entity.id }) }}"><i class="fa fa-arrow-left"></i> {% trans %}tour.actions.back_dashboard{% endtrans %}</a>
     {% endif %}
 {% endblock %}
 
 {% block body -%}
 
     <div class="tour-show-wrapper">
-
         <div class="tour-show-left-column">
             <ul class="tour-show-submenu">
                 <li><strong>{% trans %}tour.show.summary{% endtrans %}</strong></li>
                 <li><label>{% trans %}tour.show.institution{% endtrans %}</label><strong>{{ entity.institution.name }}</strong></li>
                 <li><label>{% trans %}tour.show.name{% endtrans %}</label><strong>{{ entity.name}}</strong></li>
-                <li><label>{% trans %}tour.show.number{% endtrans %}</label><strong>{{ entity.tourNumber}}</strong></li>
+                <li><label>{% trans %}tour.show.number{% endtrans %}</label><strong>{{ entity.tourReference }}</strong></li>
                 <li><label>{% trans %}tour.show.departure{% endtrans %}</label><strong>{{ entity.departureDate|date(format) }}</strong></li>
                 <li><label>{% trans %}tour.show.passengers{% endtrans %}</label><strong>{{ entity.payingPlaces }} paying passengers {% if entity.freePlaces > 0 %} and {{ entity.freePlaces }} free passengers{% endif %}</strong></li>
                 <li><label>{% trans %}tour.show.price{% endtrans %}</label><strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong></li>
@@ -70,7 +69,7 @@
             <div class="tour-edit-organizer-left">
                 <label>{% trans %}tour.show.organizers{% endtrans %}</label><br>
                 {% if entity.organizer.media %}
-                    <img class="tui-image-avatar" src="{{ asset( entity.organizer.media.getRelativePath ~ "/" ~ entity.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.organizer.username }}">
+                    <img class="tui-image-avatar" src="{{ ( entity.organizer.media.getRelativePath ~ "/" ~ entity.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.organizer.username }}">
                 {% elseif entity.organizer.firstName and entity.organizer.lastName %}
                     <span class="tui-text-avatar mdl-typography--headline">{{ entity.organizer.firstName[:1] }}{{ entity.organizer.lastName[:1] }}</span>
                 {% else %}
@@ -127,23 +126,26 @@
 
 
 {% block footer_left %}
-    {% if entity.organizer %}
-        <span class="intro">{% trans %}tour.show.footer.intro{% endtrans %}</span>
-        {% if entity.organizer.media %}
-            <span class="tui-image-avatar"><img src="{{ asset( entity.organizer.media.getRelativePath ~ "/" ~ entity.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.organizer.username }}"></span>
-        {% elseif entity.organizer.firstName and entity.organizer.lastName %}
-            <span class="tui-text-avatar mdl-typography--headline">{{ entity.organizer.firstName[:1] }}{{ entity.organizer.lastName[:1] }}</span>
+    {% if entity.salesAgent %}
+        <span class="intro">
+                    {{ brand.name }} {% trans %}tour.show.footer.intro_org{% endtrans %}
+            </span>
+        {% if entity.salesAgent.media %}
+            <span class="tui-image-avatar"><img src="{{ ( entity.salesAgent.media.getRelativePath ~ "/" ~ entity.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.salesAgent.username }}"></span>
+        {% elseif entity.salesAgent.firstName and entity.salesAgent.lastName %}
+            <span class="tui-text-avatar mdl-typography--headline">{{ entity.salesAgent.firstName[:1] }}{{ entity.salesAgent.lastName[:1] }}</span>
         {% else %}
-            <span class="tui-text-avatar mdl-typography--headline">{{ entity.organizer.username[:1] }}</span>
+            <span class="tui-text-avatar mdl-typography--headline">{{ entity.salesAgent.username[:1] }}</span>
         {% endif %}
         <span class="agent">
-            {% if entity.organizer.displayName %}
-                {{ entity.organizer.displayName }}
-            {% else %}
-                {{ entity.organizer.firstName }} {{ entity.organizer.lastName }}
-            {% endif %}
+                {% if entity.salesAgent.displayName %}
+                    {{ entity.salesAgent.displayName }}
+                {% else %}
+                    {{ entity.salesAgent.firstName }} {{ entity.salesAgent.lastName }}
+                {% endif %}
             <br>
-            <a href="mailto:{{ entity.organizer.email }}">{{ entity.organizer.email }}</a></span>
+                <a href="mailto:{{ entity.salesAgent.email }}">{{ entity.salesAgent.email }}</a>
+            </span>
     {% endif %}
 {% endblock %}
 

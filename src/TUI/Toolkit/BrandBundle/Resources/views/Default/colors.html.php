@@ -141,8 +141,16 @@ a {
   background: <?php echo $primary ?> !important;
 }
 
+.mdl-spinner__layer {
+  border-color: <?php echo $secondary ?> !important;
+}
+
 .mdl-button--raised.mdl-button--colored,
-.mdl-button--raised.mdl-button--colored:hover {
+.mdl-button--raised.mdl-button--colored:hover,
+.mdl-button--raised.mdl-button--colored:active,
+.mdl-button--raised.mdl-button--colored:focus,
+.mdl-button--raised.mdl-button--colored:focus:not(:active),
+.mdl-button--raised.mdl-button--colored:visited {
   background-color: <?php echo $secondary ?>;
   color: <?php echo color_contrast($secondaryArray) ?>;
 }

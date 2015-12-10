@@ -68,6 +68,18 @@ class PaymentTask
     }
 
     /**
+     * Set iD
+     *
+     * @param id
+     * @return PaymentTask
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
      * Set string
      *
      * @param string $string

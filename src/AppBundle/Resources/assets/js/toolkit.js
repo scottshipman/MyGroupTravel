@@ -21,6 +21,15 @@
         $('.login-block').removeClass('login-block');
     }
 
+    //trim double spaces from concatenated table cells
+    if ($('.mdl-data-table').length > 0) {
+        $("td").each(function() {
+            var $this = $(this);
+            $this.html($this.html().replace(/&nbsp;/g, ''));
+        });
+    }
+
+
 
     // *
     // "Add New" Link and Dialog modal for New Quote form

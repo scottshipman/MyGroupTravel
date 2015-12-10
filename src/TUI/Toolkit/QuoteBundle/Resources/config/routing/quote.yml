@@ -33,6 +33,11 @@ manage_quote_quick_delete:
     defaults: { _controller: "QuoteBundle:QuoteVersion:quickdelete" }
     methods:  [POST, DELETE, GET]
 
+manage_quote_hard_delete:
+    path:     /{id}/hard_delete
+    defaults: { _controller: "QuoteBundle:QuoteVersion:harddelete" }
+    methods: [POST, DELETE, GET]
+
 manage_quote_active:
     path:     /active
     defaults: { _controller: "QuoteBundle:QuoteVersion:index" }

@@ -26,7 +26,12 @@ var toolkitStandardPopup = function(title, loadLink) {
         $(".ui-dialog").addClass("mdl-card");
         $(".ui-dialog-titlebar").addClass("mdl-card__title mdl-color--primary mdl-color-text--primary-contrast");
         $(".ui-dialog-title").addClass("mdl-card__title-text");
-        $(".ui-dialog-titlebar-close").append('<i class="material-icons mdl-color-text--primary-contrast">close</i>').css({"background": "inherit", "border": "none"});
+        if ($(".ui-dialog-titlebar-close").children('#mdl-close').length < 1 ) {
+            $(".ui-dialog-titlebar-close").append('<i id="mdl-close" class="material-icons mdl-color-text--primary-contrast">close</i>').css({
+                "background": "inherit",
+                "border": "none"
+            });
+        }
         $(".ui-button-icon-primary").css({"display": "none"});
         $(".ui-button-text").css({"display":"none"});
         $(this).find('input[type="submit"]:not(.cancel), button').each(function () {

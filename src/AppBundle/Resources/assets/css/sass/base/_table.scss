@@ -133,6 +133,8 @@ table {
 
         &.mdl-data-table__cell--non-numeric {
           text-align: left;
+          max-width: 200px;
+          word-wrap: break-word;
         }
 
         &:first-of-type {

@@ -86,7 +86,7 @@ class Quote
     /**
      * @var integer
      * @ORM\JoinColumn(name="institution", referencedColumnName="id")
-     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\InstitutionBundle\Entity\Institution", cascade={"all"}, fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\InstitutionBundle\Entity\Institution", cascade={"persist"}, fetch="EAGER")
      * @GRID\Column(field="institution.name", title="Institution", filterable=true, operatorsVisible=false, export=true)
      */
     private $institution;

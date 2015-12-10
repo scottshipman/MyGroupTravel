@@ -34,7 +34,7 @@
             {% if entity.isTemplate == 0 %}{# no Institutions on Templates #}
                 {% if brand.media %}
                     <div class="brand-logo">
-                        <img src="{{ asset( brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ brand.name }}">
+                        <img src="{{ ( brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ brand.name }}">
                     </div>
                 {% endif %}
             {% endif %}
@@ -60,16 +60,19 @@
 {% endblock %}
 
 {% block body -%}
-    {% if (entity.locked is sameas(true)) %}
+<div id="quote-version-{{ entity.id }}" class="site-show" page-type="show" entityId="{{ entity.id }}" entityType="quote" entityClass="QuoteVersion" entityPath="quoteversion"></div>
+
+{% if (entity.locked is sameas(true)) %}
         <h3 style="color: red;">{% trans %}quote.actions.is_locked{% endtrans %}</h3>
     {% endif %}
 
-    <ul class="record_actions quote-actions{% if entity.quoteReference.institution.media %} has-logo{% endif %}">
-
-        {% if entity.quoteReference.institution.media %}
-            <div class="institution-logo-action">
-                <img src="{{ asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.quoteReference.institution.name }}">
-            </div>
+    <ul class="record_actions quote-actions{% if entity.quoteReference.institution %}{% if entity.quoteReference.institution.media %} has-logo{% endif %}{% endif %}">
+        {% if entity.quoteReference.institution %}
+            {% if entity.quoteReference.institution.media %}
+                <div class="institution-logo-action">
+                    <img src="{{ ( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ entity.quoteReference.institution.name }}">
+                </div>
+            {% endif %}
         {% endif %}
 
         {% if (entity.locked is sameas(false)) and (is_granted("ROLE_BRAND")) %}
@@ -89,6 +92,17 @@
         {% endif %}
         {% if is_granted("ROLE_ADMIN") %}
             <li>{{ form(delete_form) }}</li>
+            <script>
+                $( document ).ready(function() {
+                    var deleteButton = $('.fa-trash-o').parent('button#form_submit');
+                    deleteButton.on('click', function (e) {
+                        e.preventDefault();
+                        if (confirm('{% trans %}quote.form.delete.prompt{% endtrans %}')) {
+                            deleteButton.parents('form').submit();
+                        }
+                    });
+                });
+            </script>
         {% endif %}
         <li>
             {% if entity.quoteNumber %}
@@ -213,14 +227,23 @@
         <h3>{% trans %}quote.show.header_content.header_content_title{% endtrans %}</h3>
 
             {% if entity.headerBlock %}
-                <a id="edit-headerBlock" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-                    <i class="fa fa-pencil-square-o"></i> {% trans %}quote.show.header_content.edit{% endtrans %}
-                </a>
+                <div id="header-block-content-item" blockId="{{ entity.headerBlock.id }}">
+                    <a id="edit-header-block" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+                        <i class="fa fa-pencil-square-o"></i> {% trans %}quote.show.header_content.edit{% endtrans %}
+                    </a>
+                </div>
             {% else %}
-                <a id="add-headerBlock" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-                    <i class="fa fa-plus-circle"></i> {% trans %}quote.show.header_content.add{% endtrans %}
-                </a>
+                <div id="site-header-slideshow-content">
+                    <a id="add-header-content" href="#" class="status-preview-edit mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                        <i class="fa fa-plus-circle"></i> {% trans %}quote.actions.add_header{% endtrans %}
+                    </a>
+                </div>
+                {#<a id="add-headerBlock" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">#}
+                    {#<i class="fa fa-plus-circle"></i> {% trans %}quote.show.header_content.add{% endtrans %}#}
+                {#</a>#}
+                {#<div id="headerblock-form"></div>#}
             {% endif %}
+        <div id="site-header-editForm" style="display:none; width: 100%; margin-top: 5px;"></div>
     {% endif %}
     <hr>
 
@@ -276,6 +299,15 @@
 
 {% endif %}
        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.js"></script>
+        {% javascripts '@toolkit_siteshow' %}
+            <script type="text/javascript" src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+
+        {#{% if editable %}#}
+            {% javascripts '@toolkit_siteshow_edit' %}
+                <script type="text/javascript" src="{{ asset_url }}"></script>
+            {% endjavascripts %}
+        {#{% endif %}#}
        <script>
            $(document).ready(function() {
 
@@ -352,14 +384,60 @@
 
 
                // Add a headerBlock to a site
-               $("#add-headerBlock").on('click', function(){
-                  toolkitStandardPopup( "{% trans %}quote.show.header_content.add{% endtrans %}", "/manage/headerblock/header/new/" + {{ entity.id}} + "/QuoteVersion" );
+               $("#add-headerBlock").on('click', function () {
+                   var t = $(this);
+                   var entityClass="QuoteVersion";
+                   var entityId = {{ entity.id }};
+                   $("#loader").css("display", "block");
+                   var blockId = t.attr('itemid');
+                   var editBlock = $("#editable-content-blocks-" + blockId);
+                   var originalDiv = $('#content-blocks-' + blockId);
+                   editBlock.html('');
+                   editBlock.load("/manage/headerblock/header/new/" + entityId + entityClass, function () {
+                       doMDLpopup(editBlock); // run the function to add appropriate MDL classes to form elements
+                       originalDiv.hide();
+                       editBlock.show();
+                       $("#loader").css("display", "none");
+                       $('.content-block-actions').hide();
+                       $('.editable-tab').editable('disable');
+                       $(".sortable-tabs").sortable('disable');
+                       $(".sortable-items").sortable('disable');
+
+
+
+                   });
+
+
+                   {#toolkitStandardPopup( "{% trans %}quote.show.header_content.add{% endtrans %}", "/manage/headerblock/header/new/" + {{ entity.id}} + "/QuoteVersion" );#}
                });
 
                {% if entity.headerBlock %}
                    // Edit the headerBlock for a site
                    $("#edit-headerBlock").on('click', function(){
-                       toolkitStandardPopup( "{% trans %}quote.show.header_content.edit{% endtrans %}", "/manage/headerblock/" + {{ entity.headerBlock.id }} + "/header/edit/" + {{ entity.id}} + "/QuoteVersion" );
+                       var t = $(this);
+                       var entityClass="QuoteVersion";
+                       var entityId = {{ entity.id }};
+                       var headerBlockId = {{ entity.headerBlock.id }};
+                       $("#loader").css("display", "block");
+//                       var blockId = t.attr('itemid');
+                       var editBlock = $("#headerblock-form");
+//                       var originalDiv = $('#content-blocks-' + blockId);
+                       editBlock.html('');
+                       editBlock.load("/manage/headerblock/" + headerBlockId + "/header/edit/" + entityId + entityClass, function () {
+                           doMDLpopup(editBlock); // run the function to add appropriate MDL classes to form elements
+//                           originalDiv.hide();
+                           console.log("something");
+                           editBlock.show();
+                           $("#loader").css("display", "none");
+                           $('.content-block-actions').hide();
+                           $('.editable-tab').editable('disable');
+                           $(".sortable-tabs").sortable('disable');
+                           $(".sortable-items").sortable('disable');
+
+
+
+                       });
+                       {#toolkitStandardPopup( "{% trans %}quote.show.header_content.edit{% endtrans %}", "/manage/headerblock/" + {{ entity.headerBlock.id }} + "/header/edit/" + {{ entity.id}} + "/QuoteVersion" );#}
                    });
                {% endif %}
 
@@ -513,7 +591,7 @@
     {% if entity.quoteReference.salesAgent %}
         <span class="intro">Primary Business Contact:</span>
         {% if entity.quoteReference.salesAgent.media %}
-            <span class="tui-image-avatar"><img src="{{ asset( entity.quoteReference.salesAgent.media.getRelativePath ~ "/" ~ entity.quoteReference.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.quoteReference.salesAgent.username }}"></span>
+            <span class="tui-image-avatar"><img src="{{ ( entity.quoteReference.salesAgent.media.getRelativePath ~ "/" ~ entity.quoteReference.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.quoteReference.salesAgent.username }}"></span>
         {% elseif entity.quoteReference.salesAgent.firstName and entity.quoteReference.salesAgent.lastName %}
             <span class="tui-text-avatar mdl-typography--headline">{{ entity.quoteReference.salesAgent.firstName[:1] }}{{ entity.quoteReference.salesAgent.lastName[:1] }}</span>
         {% else %}
