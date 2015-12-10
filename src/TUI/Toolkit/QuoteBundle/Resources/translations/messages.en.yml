@@ -106,7 +106,7 @@ quote:
     modals:
         message:
             accept: If you like this quote or want to add something to the quote add your message and press go.
-            changes: If you would like to make some changes to the quote, you can choose from the options below and send a message to the sales agent.
+            changes: If you would like to make some changes to the quote, you can choose from the options below and send a message to the your %brand% contact.
             change_request: Changes I would like to make
             add: Anything you would like to add?
 
@@ -163,7 +163,7 @@ quote:
                 numbers: Our numbers have changed
                 reduce_price: Need advice on how to reduce price
                 dates: Can we look at different dates?
-                destination: Where else can you recomend?
+                destination: Where else can you recommend?
             additional: Anything Else?
             submit: Submit
         summary:
