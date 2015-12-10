@@ -87,7 +87,7 @@ user:
         registration:
             subject: Toolkit Registration Confirmation
         password_reset:
-            subject: Toolkit Password Reset
+            subject: Password Reset
             action: Set Password
     form:
         honorific: Title
