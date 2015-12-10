@@ -56,7 +56,7 @@ tour:
         edit_mode: Switch to Edit Mode
         print: Print
         pdf: PDF
-        download_promo: Download Promo Materials
+        download_promo: Download Documents
         email_organizer: Email/Notify Organizer
         email_the_organizer: Email The Organizer
         add_header: Add Header Slideshow
@@ -165,10 +165,10 @@ tour:
         details: Details
         schedule: Payment Schedule (Per Person Amounts)
         deadlines: Task Deadlines
-        promotional_content: Upload Promotional Content
-        no_assets: No assets uploaded.
-        promo_assets: Upload Promotional Assets
-        cannot_upload: Cannot Upload Any More Assets
+        promotional_content: Upload Documents
+        no_assets: No documents uploaded.
+        promo_assets: Upload Documents
+        cannot_upload: Cannot Upload Any More Documents
 
     pdf:
         quoteNumber: Quote Number:
