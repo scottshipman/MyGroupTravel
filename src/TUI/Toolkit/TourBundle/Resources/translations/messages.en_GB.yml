@@ -54,7 +54,7 @@ tour:
         edit_mode: Switch to Edit Mode
         print: Print
         pdf: PDF
-        download_promo: Download Promo Materials
+        download_promo: Download Documents
         email_organizer: Email/Notify Organiser
         add_header: Add Header Slideshow
         edit_tabs: Edit Tabs
@@ -166,10 +166,10 @@ tour:
         details: Details
         schedule: Payment Schedule (Per Person)
         deadlines: Task Deadlines
-        promotional_content: Upload promotional content
-        no_assets: No assets uploaded.
-        promo_assets: Upload promotional assets
-        cannot_upload: Cannot upload any more assets
+        promotional_content: Upload Documents
+        no_assets: No documents uploaded.
+        promo_assets: Upload Documents
+        cannot_upload: Cannot Upload Any More Documents
         totalprice: Total Price
 
     pdf:
