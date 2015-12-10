@@ -324,7 +324,7 @@
                 var entityId = {{ entity.id }};
                 $(document).on('click', "#notify-organizer", function (e) {
                     e.preventDefault();
-                    toolkitStandardPopup( "Email the organizer", "/manage/tour/notify/organizers/form/" + entityId );
+                    toolkitStandardPopup( "{% trans %}tour.actions.email_the_organizer{% endtrans %}", "/manage/tour/notify/organizers/form/" + entityId );
                 });
             }
         });
