@@ -1248,12 +1248,24 @@ class TourController extends Controller
         $date_format = $this->container->getParameter('date_format');
         $locale = $this->container->getParameter('locale');
         $setupForm = $this->createTourSetupForm($entity);
+        //brand stuff
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
 
         return $this->render('TourBundle:Tour:notSetup.html.twig', array(
             'entity' => $entity,
             'setup_form' => $setupForm->createView(),
             'date_format' => $date_format,
             'locale' => $locale,
+            'brand' => $brand,
         ));
 
     }

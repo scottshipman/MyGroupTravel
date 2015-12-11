@@ -86,7 +86,7 @@ tour:
        how_much: How much do you want to charge each passenger?
        pass_price: This will be the per-passenger price shown on the tour promotional website.  You can increase the price, or reduce it if you are fundraising.
        amounts_and_dates: Set payment amounts and due dates
-       suggested_price: This is the suggested per-passenger deposit price.  You can increase the price, or reduce it if you are fundraising.
+       suggested_price: Use this section to set the schedule for your passengers' payments. We suggest setting deadlines 1 week before any payments owed to brand.
        how_to_pay: How do you want passengers to pay?
        preferred_payment: Select your preferred payment methods.
        next: Next

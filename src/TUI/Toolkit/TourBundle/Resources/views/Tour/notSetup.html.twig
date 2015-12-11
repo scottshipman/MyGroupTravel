@@ -25,7 +25,7 @@
 
             <li>
                 <strong>{% trans %}tour.not_setup.amounts_and_dates{% endtrans %}</strong>
-                <p>{% trans %}tour.not_setup.suggested_price{% endtrans %}</p>
+                <p>{{ "tour.not_setup.suggested_price" | trans({'brand' : brand.name}) }}</p>
                 <div style="margin-bottom: 20px" class="paymenttasks" data-prototype="{{ form_widget(setup_form.paymentTasksPassenger.vars.prototype)|e }}">
                 {# iterate over each existing paymenttask and render its  fields:  #}
                     {% for paymentTaskPassenger in setup_form.paymentTasksPassenger %}
