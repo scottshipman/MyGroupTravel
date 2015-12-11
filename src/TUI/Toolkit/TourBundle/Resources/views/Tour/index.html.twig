@@ -29,7 +29,7 @@
             if($("a[title='Email']").length) {
                 $(document).on('click', "a[title='Email']", function (e) {
                     e.preventDefault();
-                    toolkitStandardPopup( "Email the organizer", $(this).attr('href') );
+                    toolkitStandardPopup( "{% trans %}tour.actions.email_the_organizer{% endtrans %}", $(this).attr('href') );
                 });
             }
         });
