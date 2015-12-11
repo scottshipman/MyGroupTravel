@@ -60,25 +60,27 @@
             </li>
 
             <li><label>{% trans %}tour.show.price{% endtrans %}</label><strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong></li>
-            <li>
-                <label>{% trans %}tour.show.schedule{% endtrans %}</label>
-                {% for payment in payment_tasks %}
-                    {# render(controller('TourBundle:PaymentTask:showList', { 'id': payment.id } )) #}
-                    <ul class="payment-task-list">
-                        <li>
-                            <strong>{{ payment.name }}</strong>
-                        </li>
-                        <li>
-                            <label>{% trans %}tour.page_title.payment_task.show.value{% endtrans %}</label>
-                            <strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ payment.value }}</strong>
-                        </li>
-                        <li>
-                            <label>{% trans %}tour.page_title.payment_task.show.duedate{% endtrans %}</label>
-                            <strong>{{ payment.dueDate|date(format) }}</strong>
-                        </li>
-                    </ul>
-                {% endfor %}
-            </li>
+            {% if payment_tasks is not empty %}
+                <li>
+                    <label>{% trans %}tour.show.schedule{% endtrans %}</label>
+                    {% for payment in payment_tasks %}
+                        {# render(controller('TourBundle:PaymentTask:showList', { 'id': payment.id } )) #}
+                        <ul class="payment-task-list">
+                            <li>
+                                <strong>{{ payment.name }}</strong>
+                            </li>
+                            <li>
+                                <label>{% trans %}tour.page_title.payment_task.show.value{% endtrans %}</label>
+                                <strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ payment.value }}</strong>
+                            </li>
+                            <li>
+                                <label>{% trans %}tour.page_title.payment_task.show.duedate{% endtrans %}</label>
+                                <strong>{{ payment.dueDate|date(format) }}</strong>
+                            </li>
+                        </ul>
+                    {% endfor %}
+                </li>
+            {% endif %}
         </ul>
 
         <div class="tour-edit-organizer-left">
