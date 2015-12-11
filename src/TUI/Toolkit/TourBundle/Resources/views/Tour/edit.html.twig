@@ -301,10 +301,9 @@
                 e.preventDefault();
                 if ($paymentFormDiv.get(0).tagName =='UL') {
                     if (confirm('Are you sure you want to remove this payment? You must click Update for changes to be saved.')) {
-
+                        $paymentFormDiv.remove();
                     }
                 } else {
-                    $paymentFormDiv.remove();
                 }
             });
         }
