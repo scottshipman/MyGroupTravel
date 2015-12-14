@@ -55,7 +55,7 @@ registration:
 
 # Password resetting
 resetting:
-    password_already_requested: The password for this user has already been requested within the last 24 hours.
+    password_already_requested: The password for this user has already been requested within the last 2 minutes.
     check_email: We have sent an email to the address you provided which will allow you to reset your password.
     request:
         invalid_username: The account for "%username%" cannot be found.

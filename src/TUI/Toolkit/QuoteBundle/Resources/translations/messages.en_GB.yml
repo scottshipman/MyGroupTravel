@@ -37,7 +37,7 @@ quote:
         accept_form: Go
         clone: Save as Clone
         restore: Restore
-        edit_mode: Switch to edit mode
+        edit_mode: Switch to Edit Mode
         print: Print
         pdf: PDF
         add_header: Add Header Slideshow
@@ -114,7 +114,7 @@ quote:
     modals:
         message:
             accept: If you like this quote or want to add something to the quote add your message and press go.
-            changes: If you would like to make some changes to the quote, you can choose from the options below and send a message to the sales agent.
+            changes: If you would like to make some changes to the quote, you can choose from the options below and send a message to the your %brand% contact.
             change_request: Changes I would like to make
             add: Anything you would like to add?
 
@@ -170,7 +170,7 @@ quote:
                 numbers: Our numbers have changed
                 reduce_price: Need advice on how to reduce price
                 dates: Can we look at different dates?
-                destination: Where else can you recomend?
+                destination: Where else can you recommend?
             additional: Anything Else?
             submit: Submit
         summary:
@@ -211,6 +211,8 @@ quote:
             pricePerson: Price per Person
             currency: Currency
             welcomeMsg: Summary Message
+        delete:
+            prompt: "Are you sure you wish to delete this quote?"
     show:
         summary:
           summary_title: Summary
@@ -268,6 +270,7 @@ quote_site:
         departing: Departure date
         created: Date created
         price_person: Price per person
+        quote_name: Quote Name
     quote_summary:
         departing: "Departing: "
         duration: "Duration: "

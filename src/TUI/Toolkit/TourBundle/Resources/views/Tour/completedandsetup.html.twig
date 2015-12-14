@@ -227,7 +227,7 @@
                         </div>
                         <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
                             <div class="mdl-card__supporting-text">
-                                <p style="font-size: inherit;">{% trans %}tour.dashboard.the_deadline{% endtrans %} {{ paymentTask.name }}{% trans %}tour.dashboard.has_passed{% endtrans %}  {{ entity.salesAgent.firstName|capitalize }} {{ entity.salesAgent.lastName|capitalize }} {% trans %}tour.dashboard.operations_team{% endtrans %} </p>
+                                <p style="font-size: inherit;">{% trans %}tour.dashboard.the_deadline{% endtrans %} {{ paymentTask.name }} {% trans %}tour.dashboard.has_passed{% endtrans %}  {{ entity.salesAgent.firstName|capitalize }} {{ entity.salesAgent.lastName|capitalize }}.</p>
                             </div>
                         </div>
                     </div>
@@ -492,9 +492,9 @@
 
 //Only allow users to download promo assets when there are some
 {% if entity.media != NULL %}
-    var something = '<a href="/tour/view/export/{{ entity.id }}/{{ entity.quoteNumber }}.zip" target="_blank" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions"> <i class="fa fa-download"></i> Download Promo Materials</a>';
+    var something = '<a href="/tour/view/export/{{ entity.id }}/{{ entity.quoteNumber }}.zip" target="_blank" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions"> <i class="fa fa-download"></i> Download Documents</a>';
 {% else %}
-    var something = '<a class="expired-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#"><i class="fa fa-download"></i> Download Promo Materials </a>';
+    var something = '<a class="expired-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#"><i class="fa fa-download"></i> Download Documents </a>';
 {% endif %}
 
 //Percentage Bars

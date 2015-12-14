@@ -48,10 +48,27 @@ var toolkitStandardPopup = function(title, loadLink) {
 
 var toolkitStaticPopup = function(title, loadContent) {
     $("#dialog").html("");
-    $("#dialog").dialog("option", "title", "Loading...");
     $("#dialog").html(loadContent);
-    $("#dialog").dialog("option", "title", title).dialog("open");
+    $("#dialog").dialog("option", "title", title);
     doMDLpopup($("#dialog"));
+    $(".ui-dialog").addClass("mdl-card");
+    $(".ui-dialog-titlebar").addClass("mdl-card__title mdl-color--primary mdl-color-text--primary-contrast");
+    $(".ui-dialog-title").addClass("mdl-card__title-text");
+    if ($(".ui-dialog-titlebar-close").children('#mdl-close').length < 1 ) {
+        $(".ui-dialog-titlebar-close").append('<i id="mdl-close" class="material-icons mdl-color-text--primary-contrast">close</i>').css({
+            "background": "inherit",
+            "border": "none"
+        });
+    }
+    $(".ui-button-icon-primary").css({"display": "none"});
+    $(".ui-button-text").css({"display":"none"});
+    $(this).find('input[type="submit"]:not(.cancel), button').each(function () {
+        //$(this).html("");
+        //$(this).append('<i class="material-icons mdl-color-text--primary-contrast">send</i>');
+        //$(this).addClass("mdl-button mdl-button--fab mdl-js-button mdl-js-ripple-effect");
+        $(this).css({"float": "right"});
+    });
+    $("#dialog").dialog("open");
 };
 
 /**

@@ -15,7 +15,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Table()
  * @ORM\Entity
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
- * @GRID\Source(columns="id, location, name, city, county, state, country", filterable=false, sortable=true)
+ * @GRID\Source(columns="id, name, location, city, county, state, country", filterable=false, sortable=true)
  * @GRID\Column(id="location", type="join", title="Location", columns={"city", "county", "state", "country"}, filterable=true, operatorsVisible=false)
  * @UniqueEntity(
  *    fields={"name", "address1", "city", "county"},

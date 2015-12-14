@@ -137,9 +137,10 @@ class PassengerController extends Controller
             $qb->select('p')
                 ->from('PassengerBundle:Passenger', 'p')
                 ->where($qb->expr()->andX(
-                    $qb->expr()->eq('p.status', '?1')
+                    $qb->expr()->eq('p.status', '?1'),
+                    $qb->expr()->eq('p.tourReference', '?2')
                 ));
-            $qb->setParameters(array(1 => 'waitlist' ));
+            $qb->setParameters(array(1 => 'waitlist', 2 => $tourId));
             $query = $qb->getQuery();
             $waitList = $query->getScalarResult();
 

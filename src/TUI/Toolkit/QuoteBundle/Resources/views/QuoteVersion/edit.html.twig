@@ -15,7 +15,6 @@
     {% if template is empty or edit_form.quoteReference.organizer is defined %}{{ form_row(edit_form.quoteReference.organizer) }}{% endif %}
     {{ form_row(edit_form.quoteReference.salesAgent) }}
     {% if template is empty or edit_form.quoteReference.secondaryContact is defined %}{{ form_row(edit_form.quoteReference.secondaryContact) }}{% endif %}
-    {{ form_widget(edit_form.welcomeMsg, {'label' : 'tour.form.tour_setup.cash'|trans}) }}
     {{ form_rest(edit_form) }}
 
     {{ form_end(edit_form) }}
@@ -43,6 +42,17 @@
     {% if is_granted("ROLE_ADMIN") %}
         {% if delete_form is defined %}
             <li>{{ form(delete_form) }}</li>
+            <script>
+                $( document ).ready(function() {
+                    var deleteButton = $('.fa-trash-o').parent('button#form_submit');
+                    deleteButton.on('click', function (e) {
+                        e.preventDefault();
+                        if (confirm('{% trans %}quote.form.delete.prompt{% endtrans %}')) {
+                            deleteButton.parents('form').submit();
+                        }
+                    });
+                });
+            </script>
         {% endif %}
     {% endif %}
 

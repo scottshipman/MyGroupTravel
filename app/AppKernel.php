@@ -30,6 +30,7 @@ class AppKernel extends Kernel
             new Liip\ImagineBundle\LiipImagineBundle(),
             new FM\ElfinderBundle\FMElfinderBundle(),
             new Eo\HoneypotBundle\EoHoneypotBundle(),
+            new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
 
 
 

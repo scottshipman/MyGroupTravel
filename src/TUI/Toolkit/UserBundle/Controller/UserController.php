@@ -25,6 +25,7 @@ use TUI\Toolkit\UserBundle\Form\SecurityType;
 use TUI\Toolkit\MediaBundle\Form\MediaType;
 use APY\DataGridBundle\Grid\Source\Entity;
 use APY\DataGridBundle\Grid\Export\CSVExport;
+use APY\DataGridBundle\Grid\Export\ExcelExport;
 use APY\DataGridBundle\Grid\Action\RowAction;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\FOSUserEvents;
@@ -54,7 +55,7 @@ class UserController extends Controller
     public function indexAction(Request $request)
     {
         // list hidden columns
-        $hidden = array();
+        $hidden = array('roles');
 
         // Creates simple grid based on your entity (ORM)
         $source = new Entity('TUIToolkitUserBundle:User');
@@ -71,12 +72,13 @@ class UserController extends Controller
 
 
         // add roles filter
-        $column = $grid->getColumn('roles');
-        $column->setFilterable(true);
-        $column->setTitle($this->get('translator')->trans('user.grid.filter.title.role'));
-        $column->setFilterType('select');
-        $column->setOperatorsVisible(false);
-        $column->setExport('false');
+//        $column = $grid->getColumn('roles');
+//        $column->setFilterable(true);
+//        $column->setTitle($this->get('translator')->trans('user.grid.filter.title.role'));
+//        $column->setFilterType('select');
+//        $column->setOperatorsVisible(false);
+//        $column->setExport('false');
+
 
         // add email filter
         $column = $grid->getColumn('email');
@@ -170,6 +172,9 @@ class UserController extends Controller
         // Export of the grid
         $grid->addExport(new CSVExport($this->get('translator')->trans('user.grid.export'), "currentUsers", array('delimiter' => ','), "UTF-8", "ROLE_ADMIN"));
 
+        //Testing PHPEXcell2003 export
+        //$grid->addExport(new ExcelExport($this->get('translator')->trans('user.grid.export'), "currentUsers", array('delimiter' => ','), "UTF-8", "ROLE_ADMIN"));
+
         // Manage the grid redirection, exports and the response of the controller
         return $grid->getGridResponse('TUIToolkitUserBundle:User:index.html.twig');
 
@@ -212,6 +217,12 @@ class UserController extends Controller
         // Add action column
         $restoreAction = new RowAction('Restore', 'user_restore');
         $grid->addRowAction($restoreAction);
+
+        //Add hard delete action
+        $deleteAction = new RowAction('Delete', 'user_hard_delete');
+        $deleteAction->setRole('ROLE_BRAND');
+        $deleteAction->setConfirm(true);
+        $grid->addRowAction($deleteAction);
 
         //Get locale for date time and other purposes
         $locale = $this->container->getParameter('locale');
@@ -272,6 +283,7 @@ class UserController extends Controller
         if ($form->isValid()) {
             $entity->setUsername($entity->getEmail());
             $entity->setPassword('');
+            $entity->setRolesString(implode(', ', $roles));
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
@@ -317,6 +329,7 @@ class UserController extends Controller
             $em = $this->getDoctrine()->getManager();
                 $entity->setPassword('');
                 $entity->setUsername($entity->getEmail());
+                $entity->setRolesString(implode(', ', $roles));
                 $em->persist($entity);
                 $em->flush();
 
@@ -612,6 +625,8 @@ class UserController extends Controller
 
         if ($editForm->isValid()) {
             $entity->setUsername($editForm->getData()->getEmail());
+            $roles = $entity->getRoles();
+            $entity->setRolesString(implode(', ', $roles));
             $em->flush();
             $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.save') . $entity->getUsername());
 
@@ -930,6 +945,34 @@ class UserController extends Controller
         return $this->redirect($this->generateUrl('user'));
     }
 
+    /**
+     * hard Deletes User entity.
+     *
+     */
+    public function harddeleteAction(Request $request, $id)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        // dont forget to disable softdelete filter so doctrine can *find* the deleted entity
+        $filters = $em->getFilters();
+        $filters->disable('softdeleteable');
+
+        $entity = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find User entity in order to delete it using ajax.');
+        }
+        if ($this->canDeleteUser($entity->getId())) {
+            $em->remove($entity);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.delete') . $entity->getUsername());
+        } else {
+            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('user.flash.cant_delete'));
+            return $this->redirect($this->generateUrl('user'));
+        }
+
+        return $this->redirect($this->generateUrl('user'));
+    }
+
 
     /**
      * Edits an existing User entity.
@@ -1047,7 +1090,7 @@ class UserController extends Controller
 
         $message = \Swift_Message::newInstance()
             ->setSubject($this->get('translator')->trans('user.email.password_reset.subject'))
-            ->setFrom($this->container->getParameter('user_system_email'))
+            ->setFrom(array($this->container->getParameter('user_system_email') => $this->container->getParameter('user_system_name')))
             ->setTo($userEmail)
             ->setBody(
                 $this->renderView(
@@ -1116,10 +1159,9 @@ class UserController extends Controller
             $brand = $default_brand;
         }
 
-
         $message = \Swift_Message::newInstance()
             ->setSubject($this->get('translator')->trans('user.email.password_reset.subject'))
-            ->setFrom($this->container->getParameter('user_system_email'))
+            ->setFrom(array($this->container->getParameter('user_system_email') => $this->container->getParameter('user_system_name')))
             ->setTo($username)
             ->setBody(
                 $this->renderView(

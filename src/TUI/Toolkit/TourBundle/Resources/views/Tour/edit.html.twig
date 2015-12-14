@@ -301,10 +301,9 @@
                 e.preventDefault();
                 if ($paymentFormDiv.get(0).tagName =='UL') {
                     if (confirm('Are you sure you want to remove this payment? You must click Update for changes to be saved.')) {
-
+                        $paymentFormDiv.remove();
                     }
                 } else {
-                    $paymentFormDiv.remove();
                 }
             });
         }
@@ -333,7 +332,7 @@
         $(document).on('click', '#promo-assets-upload', function (e) {
             e.preventDefault();
             var div = $("#dropzone-dialog");
-            toolkitStaticPopup("Upload Promotional Assets", "");
+            toolkitStaticPopup("{% trans %}tour.edit.promo_assets{% endtrans %}", "");
             $("#dialog").append(div);
             div.show();
             $("#dropzone_form").css({

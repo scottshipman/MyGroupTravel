@@ -54,8 +54,9 @@ tour:
         edit_mode: Switch to Edit Mode
         print: Print
         pdf: PDF
-        download_promo: Download Promo Materials
-        email_organizer: Email/Notify Organiser
+        download_promo: Download Documents
+        email_organizer: Email/Notify Organizer
+        email_the_organizer: Email The Organiser
         add_header: Add Header Slideshow
         edit_tabs: Edit Tabs
         add_tab: Add New Tab
@@ -85,7 +86,7 @@ tour:
        how_much: How much do you want to charge each passenger?
        pass_price: This will be the per-passenger price shown on the tour promotional website.  You can increase the price, or reduce it if you are fundraising.
        amounts_and_dates: Set payment amounts and due dates
-       suggested_price: This is the suggested per-passenger deposit price.  You can increase the price, or reduce it if you are fundraising.
+       suggested_price: Use this section to set the schedule for your passengers' payments. We suggest setting deadlines 1 week before any payments owed to brand.
        how_to_pay: How do you want passengers to pay?
        preferred_payment: Select your preferred payment methods.
        next: Next
@@ -166,10 +167,10 @@ tour:
         details: Details
         schedule: Payment Schedule (Per Person)
         deadlines: Task Deadlines
-        promotional_content: Upload promotional content
-        no_assets: No assets uploaded.
-        promo_assets: Upload promotional assets
-        cannot_upload: Cannot upload any more assets
+        promotional_content: Upload Documents
+        no_assets: No documents uploaded.
+        promo_assets: Upload Documents
+        cannot_upload: Cannot Upload Any More Documents
         totalprice: Total Price
 
     pdf:
@@ -267,7 +268,7 @@ tour:
         registration:
             subject: Toolkit Registration Confirmation
         password_reset:
-            subject: Toolkit Password Reset
+            subject: Password Reset
             action: Set Password
         setup:
             subject: Set Up Your Tour
