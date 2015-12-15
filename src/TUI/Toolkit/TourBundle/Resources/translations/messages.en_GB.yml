@@ -55,7 +55,7 @@ tour:
         print: Print
         pdf: PDF
         download_promo: Download Documents
-        email_organizer: Email/Notify Organizer
+        email_organizer: Email/Notify Organiser
         email_the_organizer: Email The Organiser
         add_header: Add Header Slideshow
         edit_tabs: Edit Tabs
