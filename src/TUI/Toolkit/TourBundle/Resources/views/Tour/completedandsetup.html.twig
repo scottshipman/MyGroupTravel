@@ -96,7 +96,7 @@
                     {# if there is no expiry, show day till departure #}
                     <div class="profile-list-item item-3 tour-dashboard">
                         {% if entity.tripStatus.name == "Provisional" %}
-                            {% if entity.expiryDate and dteFinal = 0 %}
+                            {% if entity.expiryDate and dteFinal<1 %}
                                 <span class="date-span" style="align-content: "color:red;">Expired</span>
                                 <label>{% trans %}tour.dashboard.expiry{% endtrans %}</label>
                             {% endif %}
