@@ -32,15 +32,16 @@
 {% endif %}
 
 {# calculate Days to Go for Departure Date #}
-{% if  entity.departureDate and date(entity.departureDate) > date("now") %}
-    {% set dtgFinal  = date(entity.departureDate).diff(date("now")).days %}
+{% if  entity.departureDate and date(entity.departureDate) > date("now - 1 day") %}
+    {% set dtgFinal  = date(entity.departureDate).diff(date("now - 1 day")).days %}
 {% else  %}
     {%  set dtgFinal = 0  %}
 {% endif %}
 
 {# calculate Days Until Expiration #}
-{% if  entity.expiryDate and date(entity.expiryDate) > date("now") %}
-    {% set dteFinal  = date(entity.expiryDate).diff(date("now")).days %}
+
+{% if  entity.expiryDate and entity.expiryDate | date  > "now - 1 day"|date %}
+    {% set dteFinal  = date(entity.expiryDate).diff(date("now - 1 day")).days %}
 {% else %}
     {%  set dteFinal = 0  %}
 {% endif %}
@@ -95,9 +96,9 @@
                     {# if Provisional and not yet expired, show days till expired, else show days to departure #}
                     {# if there is no expiry, show day till departure #}
                     <div class="profile-list-item item-3 tour-dashboard">
-                        {% if entity.tripStatus.name == "Provisional" %}
-                            {% if entity.expiryDate and dteFinal<1 %}
-                                <span class="date-span" style="align-content: "color:red;">Expired</span>
+                        {% if entity.tripStatus.name == "Provisional" and entity.expiryDate %}
+                            {% if dteFinal<1 %}
+                                <span class="date-span" style="color:red;"><i class="fa fa-exclamation-circle"> Expired</i></span>
                                 <label>{% trans %}tour.dashboard.expiry{% endtrans %}</label>
                             {% endif %}
                             {% if dteFinal > 0 %}
