@@ -3,11 +3,14 @@
     {% if entity.layoutType %}
         {% if entity.layoutType.name == 'image_top' or entity.layoutType.name == 'image_left' %}
             <div class="content-block-media">
-                {% for mediaWrapper in entity.mediaWrapper %}
-                    {% for media in mediaWrapper.media %}
-                    <img class="block-image-stacked" src="{{ app.request.uriForPath( asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) ) }}" title="{{ mediaWrapper.title }}" alt="{{ mediaWrapper.title }}">
+                {% if entity.isSlideshow!=1 %}
+                    {% for mediaWrapper in entity.mediaWrapper %}
+                        {% for media in mediaWrapper.media %}
+                            <img class="block-image-stacked" src="{{ app.request.uriForPath( ( media.getRelativePath ~ "/" ~ media.getHashedFilename ) ) }}" title="{{ mediaWrapper.title }}" alt="{{ mediaWrapper.title }}">{% endfor %}
                     {% endfor %}
-                {% endfor %}
+                {% else %}
+                    <img class="block-image-stacked" src="{{ absolute_url(( entity.mediaWrapper[0].media[0].getRelativePath ~ "/" ~ entity.mediaWrapper[0].media[0].getHashedFilename )) }}">
+                {% endif %}
             </div>
         {% endif %}
     {% endif %}
@@ -19,11 +22,15 @@
     {% if entity.layoutType %}
         {% if entity.layoutType.name == 'image_bottom' or entity.layoutType.name == 'image_right' %}
             <div class="content-block-media">
-                {% for mediaWrapper in entity.mediaWrapper %}
-                    {% for media in mediaWrapper.media %}
-                        <img class="block-image-stacked" src="{{ app.request.uriForPath( asset( media.getRelativePath ~ "/" ~ media.getHashedFilename ) ) }}" title="{{ mediaWrapper.title }}" alt="{{ mediaWrapper.title }}">
+                {% if entity.isSlideshow!=1 %}
+                    {% for mediaWrapper in entity.mediaWrapper %}
+                        {% for media in mediaWrapper.media %}
+                            <img class="block-image-stacked" src="{{ app.request.uriForPath( ( media.getRelativePath ~ "/" ~ media.getHashedFilename ) ) }}" title="{{ mediaWrapper.title }}" alt="{{ mediaWrapper.title }}">
+                        {% endfor %}
                     {% endfor %}
-                {% endfor %}
+                {% else %}
+                    <img class="block-image-stacked" src="{{ absolute_url(( entity.mediaWrapper[0].media[0].getRelativePath ~ "/" ~ entity.mediaWrapper[0].media[0].getHashedFilename )) }}">
+                {% endif %}
             </div>
         {% endif %}
     {% endif %}

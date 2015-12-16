@@ -55,7 +55,7 @@ tour:
         print: Print
         pdf: PDF
         download_promo: Download Documents
-        email_organizer: Email/Notify Organizer
+        email_organizer: Email/Notify Organiser
         email_the_organizer: Email The Organiser
         add_header: Add Header Slideshow
         edit_tabs: Edit Tabs
@@ -129,7 +129,7 @@ tour:
         no_payments: No payments due at this time
         na: N/A
         signups: Sign-ups
-        days: Days until deadline
+        days: Days until Departure
         expiry: Days to expiry
         passport_data: Collect passport data by
         passenger_data: Collect passenger data by

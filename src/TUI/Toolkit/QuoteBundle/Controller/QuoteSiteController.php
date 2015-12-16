@@ -461,7 +461,7 @@ class QuoteSiteController extends Controller
         }
 
         $message = \Swift_Message::newInstance()
-            ->setSubject($this->get('translator')->trans('quote.email.liked.subject') . ' ' . $quoteNumber)
+            ->setSubject($quoteNumber . ' ' . $this->get('translator')->trans('quote.email.liked.subject'))
             ->setFrom($this->container->getParameter('user_system_email'))
             ->setBody(
                 $this->renderView(
@@ -578,7 +578,7 @@ class QuoteSiteController extends Controller
           200,
           array(
           'Content-Type' => 'application/pdf',
-          'Content-Disposition'   => 'attachment; filename="' . $quoteNumber . '.pdf"'
+          'Content-Disposition'   => 'attachment; filename="' . $quoteNumber . '.pdf"',
       ));
     }
 

@@ -134,7 +134,7 @@ quote:
             cta: Edit your Quote
             link_text: "You can also paste the link below straight into your browser window:"
         liked:
-            subject: Someone has like the Quote with Quote Number -
+            subject: has been liked.
         accepted:
             institution_name: "Institution Name:"
             tour_name: "Tour Name:"
