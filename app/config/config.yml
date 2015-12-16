@@ -292,6 +292,7 @@ knp_snappy:
                 margin-right: 0
                 margin-top: 0
                 margin-bottom: 0
+                load-media-error-handling: ignore
 
 knp_snappy:
     temporary_folder: %kernel.cache_dir%/snappy

@@ -578,7 +578,7 @@ class QuoteSiteController extends Controller
           200,
           array(
           'Content-Type' => 'application/pdf',
-          'Content-Disposition'   => 'attachment; filename="' . $quoteNumber . '.pdf"'
+          'Content-Disposition'   => 'attachment; filename="' . $quoteNumber . '.pdf"',
       ));
     }
 

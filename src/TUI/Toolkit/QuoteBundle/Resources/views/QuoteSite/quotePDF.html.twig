@@ -1,6 +1,7 @@
 <html class="pdf">
 <head>
 
+    <base href="http://toolkit.dev/">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -30,6 +31,12 @@
 
     {{ render(controller('BrandBundle:Default:colors')) }}
 
+    <style>
+        .content-block h2 {
+            font-size: 22px;;
+        }
+    </style>
+
 </head>
 
 {% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
@@ -40,8 +47,8 @@
             <div class="inner">
                 {% if entity.isTemplate == 0 %}{# no Institutions on Templates #}
                         <div style="position: absolute; display: inline-block; right: 1em;">
-                        {% if brand.media %}<img style="padding-right: 15px" src="{{ absolute_url(asset( brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) | imagine_filter('thumbnail') ) }}">{% endif %}
-                        {% if entity.quoteReference.institution.media %}<img src="{{ absolute_url(asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnail') ) }}">{% endif %}
+                        {% if brand.media %}<img style="padding-right: 15px" src="{{ absolute_url(( brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) | imagine_filter('thumbnail') ) }}">{% endif %}
+                        {% if entity.quoteReference.institution.media %}<img src="{{ absolute_url(( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnail') ) }}">{% endif %}
                         </div>
                 {% endif %}
 
@@ -97,7 +104,7 @@
                             <ul class="slides" style="list-style: none">
                                 {% if entity.headerBlock %}
                                             <li>
-                                                <span class="inner-list" style="background-image: url('{{ absolute_url(asset( entity.headerBlock.mediaWrapper[0].media[0].getRelativePath ~ "/" ~ entity.headerBlock.mediaWrapper[0].media[0].getHashedFilename )) }}')"></span>
+                                                <span class="inner-list" style="background-image: url('{{ absolute_url(( entity.headerBlock.mediaWrapper[0].media[0].getRelativePath ~ "/" ~ entity.headerBlock.mediaWrapper[0].media[0].getHashedFilename )) }}')"></span>
                                             </li>
                                 {% endif %}
                             </ul>
@@ -154,9 +161,9 @@
         {# render the tabs' content #}
         {% for tab, data in entity.content %}
             <p style="page-break-after:always;"></p>
-        <div id="content-blocks-wrapper" class="mdl-tabs__tab-bar">
-            <h2 class="mdl-tabs__tab is-active" style="font-size: 30px; position:relative; text-align: center; display: block; margin: 0 auto;">{{ data[0] }}</h2>
-        </div>
+            <div id="content-blocks-wrapper" class="">
+                <h2 class="mdl-tabs__tab is-active" style="float:none; font-size: 30px; position:relative; text-align: center; display: block; margin: 0 auto;">{{ data[0] }}</h2>
+            </div>
             <div id="tabs-drawer-{{ tab }}" class="content-blocks-drawer">
                 <div class="sortable-items">
                     {% for item in data[1] %}
@@ -200,7 +207,7 @@
                     <span class="intro">{% trans %}quote.footer.salesAgent{% endtrans %}</span>
                     {% if entity.quoteReference.salesAgent.media %}
                         <span class="tui-image-avatar"><img
-                                    src="{{ asset( entity.quoteReference.salesAgent.media.getRelativePath ~ "/" ~ entity.quoteReference.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}"
+                                    src="{{ ( entity.quoteReference.salesAgent.media.getRelativePath ~ "/" ~ entity.quoteReference.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}"
                                     alt="{{ entity.quoteReference.salesAgent.username }}"></span>
                     {% elseif entity.quoteReference.salesAgent.firstName and entity.quoteReference.salesAgent.lastName %}
                         <span class="tui-text-avatar mdl-typography--headline">{{ entity.quoteReference.salesAgent.firstName[:1] }}{{ entity.quoteReference.salesAgent.lastName[:1] }}</span>

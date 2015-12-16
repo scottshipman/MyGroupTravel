@@ -169,6 +169,13 @@ class ContentBlockController extends Controller
 
         $entity = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($id);
 
+        // if the content block is rendered in PDF, set a flag
+        // cant find a better way to know other than redirect url at the moment
+        if (strpos($_SERVER['REDIRECT_URL'], 'quote/print') === false) {
+            $print = false;
+        } else {
+            $print = true;
+        }
 
 
         if (!$entity) {
@@ -180,6 +187,7 @@ class ContentBlockController extends Controller
         return $this->render('ContentBlocksBundle:ContentBlock:show.html.twig', array(
             'entity' => $entity,
             'collection' => $collection,
+            'print' => $print,
         ));
     }
 
