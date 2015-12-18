@@ -428,6 +428,34 @@ class QuoteVersionController extends Controller
         $deleteAction = new RowAction('Delete', 'manage_quote_hard_delete');
         $deleteAction->setRole('ROLE_BRAND');
         $deleteAction->setConfirm(true);
+        $deleteAction->manipulateRender(
+            function ($action, $row) { // business rule is only admins can edit locked quotes
+                if ($row->getField('converted') == TRUE) {
+                    $em = $this->getDoctrine()->getManager();
+                    $tours = $em->getRepository('TourBundle:Tour')->findBy(array("quoteVersionReference" => $row->getField('id')));
+                    if ($tours) {
+                        return null;
+                    }
+                }
+                if ($row->getField('quoteReference.salesAgent.email') == TRUE) {
+                    $agentEmail = $this->get('security.context')
+                        ->getToken()
+                        ->getUser()
+                        ->getEmail();
+                    if ($row->getField('quoteReference.salesAgent.email') == $agentEmail and $this->get('security.authorization_checker')
+                            ->isGranted('ROLE_BRAND')
+                    ) {
+                        return $action;
+                    }
+                    elseif ($this->get('security.authorization_checker')
+                        ->isGranted('ROLE_ADMIN')
+                    ) {
+                        return $action;
+                    }
+                }
+                return null;
+            }
+        );
         $grid->addRowAction($deleteAction);
 
         // add business admin last name filter
