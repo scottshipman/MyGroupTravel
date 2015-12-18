@@ -38,7 +38,9 @@ if ( typeof CKEDITOR != 'undefined' ) {
                 "name": "Green Heading",
                 "element": "p",
                 "styles": {"margin": "0 0 15px", "padding": "0", "color": "#92b73e", "font-size": "18px"}
-            }
+            },
+            { "name" : "Float Left", "element" : "p", "styles" : { "float" : "left", "width" : "50%" } },
+            { "name" : "Float Right          ", "element" : "p", "styles" : { "float" : "right", "width" : "50%" } }
 
         ];
 
