@@ -570,7 +570,7 @@ class QuoteSiteController extends Controller
       );
 
 
-      $quoteNumber = $entity[0]->getQuoteNumber();
+      $fileNameFinal = $entity[0]->getQuoteNumber()? $entity[0]->getQuoteNumber() : 'template-' . $id;
       $html = $this->renderView( 'QuoteBundle:QuoteSite:quotePDF.html.twig', $data );
 
 
@@ -578,7 +578,7 @@ class QuoteSiteController extends Controller
           200,
           array(
           'Content-Type' => 'application/pdf',
-          'Content-Disposition'   => 'attachment; filename="' . $quoteNumber . '.pdf"',
+          'Content-Disposition'   => 'attachment; filename="' . $fileNameFinal . '.pdf"',
       ));
     }
 
