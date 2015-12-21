@@ -176,9 +176,9 @@ quote:
             additional: Anything Else?
             submit: Submit
         summary:
-            expiry: Quote Expiry Date
-            departure: Departure Date
-            return: Return Date
+            expiry: Quote Expiry Date (DD-MM-YYYY)
+            departure: Departure Date (DD-MM-YYYY)
+            return: Return Date (DD-MM-YYYY)
             duration: Duration
             display_name: Display Name
             boardBasis: Board Basis
