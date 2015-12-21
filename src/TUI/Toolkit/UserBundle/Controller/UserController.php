@@ -710,10 +710,22 @@ class UserController extends Controller
         $setForm = $this->createActivateUserForm($user);
         $setForm->handleRequest($request);
 
+        //Encoder factory for hashing security questions
+        $factory = $this->get('security.encoder_factory');
+        $user_manager = $this->get('fos_user.user_manager');
+        $userObject = $user_manager->loadUserByUsername($user->getUsername());
+        $encoder = $factory->getEncoder($userObject);
+        
         if ($setForm->isValid()) {
+
+            //Do some manipulation for encoding the security answer
+            $answer = $setForm->getData()->getAnswer();
+            $answer = trim((strtolower($answer)));
+            $answerHash = $encoder->encodePassword($answer, $user->getSalt());
+
             $user->setPassword($setForm->getData()->getPlainPassword());
             $user->setQuestion($setForm->getData()->getQuestion());
-            $user->setAnswer($setForm->getData()->getAnswer());
+            $user->setAnswer($answerHash);
             $user->setEnabled(true);
             $user->setConfirmationToken(null);
             $em->persist($user);
@@ -808,9 +820,18 @@ class UserController extends Controller
         $token = $user->getConfirmationToken();
         $question = $user->getQuestion();
 
+        //Encoder factory for hashing security questions
+        $factory = $this->get('security.encoder_factory');
+        $user_manager = $this->get('fos_user.user_manager');
+        $userObject = $user_manager->loadUserByUsername($user->getUsername());
+        $encoder = $factory->getEncoder($userObject);
+
         if ($setForm->isValid()) {
             $answer = $setForm['answerConfirm']->getData();
-            if(trim(strtolower($answer)) == trim(strtolower($user->getAnswer()))) {
+            $answer = trim((strtolower($answer)));
+            $answerHash = $encoder->encodePassword($answer, $user->getSalt());
+            $old_answer = $user->getAnswer();
+            if($answerHash == $old_answer) {
 
 
                 $user->setPassword($setForm->getData()->getPlainPassword());
@@ -1268,15 +1289,22 @@ class UserController extends Controller
             throw $this->createNotFoundException('Unable to find User entity when submitting security info changes.');
         }
 
-
-
         $question = $entity->getQuestion();
         $securityForm = $this->createSecurityForm($entity);
         $securityForm->handleRequest($request);
 
+        //Encoder factory for hashing security questions
+        $factory = $this->get('security.encoder_factory');
+        $user_manager = $this->get('fos_user.user_manager');
+        $user = $user_manager->loadUserByUsername($entity->getUsername());
+        $encoder = $factory->getEncoder($user);
+
         if ($securityForm->isValid()) {
             $answer = $securityForm['originalAnswer']->getData();
-            if(trim(strtolower($answer)) == trim(strtolower($entity->getAnswer()))) {
+            $answer = trim((strtolower($answer)));
+            $answerHash = $encoder->encodePassword($answer, $user->getSalt());
+            $old_answer = $entity->getAnswer();
+            if($answerHash == $old_answer) {
                 // $entity->setUsername($securityForm->getData()->getEmail());
                 $fields = array();
                 $pw = $securityForm['plainPassword']->getData();
@@ -1292,7 +1320,9 @@ class UserController extends Controller
                     $fields[] = 'Security Question';
                 }
                 if (!empty($newAnswer)){
-                    $entity->setAnswer($newAnswer);
+                    $newAnswerHash = $encoder->encodePassword($newAnswer, $user->getSalt());
+//                    $hash = $this->$factory->getEncoder($user)->encodePassword($newAnswer, null);
+                    $entity->setAnswer($newAnswerHash);
                     $fields[] = 'Security Answer';
                 }
                 $em->persist($entity);
