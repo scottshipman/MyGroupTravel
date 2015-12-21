@@ -283,7 +283,7 @@ class UserController extends Controller
         if ($form->isValid()) {
             $entity->setUsername($entity->getEmail());
             $entity->setPassword('');
-            $entity->setRolesString(implode(', ', $roles));
+            $entity->setRolesString(implode(', ', $entity->getRoles()));
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
@@ -715,7 +715,7 @@ class UserController extends Controller
         $user_manager = $this->get('fos_user.user_manager');
         $userObject = $user_manager->loadUserByUsername($user->getUsername());
         $encoder = $factory->getEncoder($userObject);
-        
+
         if ($setForm->isValid()) {
 
             //Do some manipulation for encoding the security answer
