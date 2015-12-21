@@ -429,3 +429,7 @@ fm_elfinder:
                         upload_allow: ['image/png', 'image/jpg', 'image/jpeg']
                         upload_deny: ['all']
                         upload_max_size: 32M
+
+#GtmBundle
+gtm:
+    id: "%google_tag_manager%"

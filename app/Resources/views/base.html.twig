@@ -46,6 +46,10 @@
 
     {{ render(controller('BrandBundle:Default:colors')) }}
 
+    {#Google Tag Manager#}
+    {% include "GtmBundle:Gtm:gtm.html.twig" %}
+
+
 </head>
 
 <body class="user_{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}{{ app.user.id }}{% else %}0{% endif %}">
