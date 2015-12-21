@@ -85,7 +85,7 @@ quote:
     grid:
         no_result: There are no quotes to show. Please check your filter settings and try again.
         no_results-deleted: There are no deleted quotes to show. Please check your filter settings and try again.
-        no_result-converted: There are no converted quotes to show. Please check your filter settings and try again.
+        no_results-converted: There are no converted quotes to show. Please check your filter settings and try again.
         no_results-templates: There are no templates to show. Please check your filter settings and try again.
         export: Quotes as CSV
         export_deleted: Deleted Quotes as CSV
