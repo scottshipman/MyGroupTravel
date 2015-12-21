@@ -18,7 +18,7 @@ quote:
         layout_auth: My Tours
         layout_anon: Quote Login
         deleted: Quote Dashboard
-        converted: Quote Dashboardd
+        converted: Quote Dashboard
 
     actions:
         back: Back to the quotes dashboard
