@@ -117,6 +117,8 @@ quote:
             changes: If you would like to make some changes to the quote, you can choose from the options below and send a message to the your %brand% contact.
             change_request: Changes I would like to make
             add: Anything you would like to add?
+            promote: Copy and paste this link into your email and send it to your customer:
+
 
     exception:
         access: You do not have the ability to edit this Quote's information.
