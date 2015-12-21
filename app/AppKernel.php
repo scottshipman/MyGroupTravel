@@ -31,6 +31,7 @@ class AppKernel extends Kernel
             new FM\ElfinderBundle\FMElfinderBundle(),
             new Eo\HoneypotBundle\EoHoneypotBundle(),
             new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
+            new Evheniy\GtmBundle\GtmBundle(),
 
 
 

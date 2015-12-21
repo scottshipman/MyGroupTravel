@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "58b38e25180ee2cde54211368f28e294",
-    "content-hash": "f3c66769f97c06e6f6a51a3a32a8740d",
+    "hash": "586d71b15c176896411ed68c006e6b3e",
+    "content-hash": "2b93541f4423167f9c5a68b35710ffab",
     "packages": [
         {
             "name": "apy/datagrid-bundle",
             "version": "2.2.16",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Abhoryo/APYDataGridBundle.git",
+                "url": "https://github.com/APY/APYDataGridBundle.git",
                 "reference": "08f109cd25acaec99d3b700653dd33e77012b61f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Abhoryo/APYDataGridBundle/zipball/08f109cd25acaec99d3b700653dd33e77012b61f",
+                "url": "https://api.github.com/repos/APY/APYDataGridBundle/zipball/08f109cd25acaec99d3b700653dd33e77012b61f",
                 "reference": "08f109cd25acaec99d3b700653dd33e77012b61f",
                 "shasum": ""
             },
@@ -1377,6 +1377,55 @@
             "time": "2014-06-02 22:22:55"
         },
         {
+            "name": "evheniy/gtm-bundle",
+            "version": "1.7.0",
+            "target-dir": "Evheniy/GtmBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/evheniy/GtmBundle.git",
+                "reference": "719aee4b5abc80850c67167b837f3769fedd56af"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/evheniy/GtmBundle/zipball/719aee4b5abc80850c67167b837f3769fedd56af",
+                "reference": "719aee4b5abc80850c67167b837f3769fedd56af",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0",
+                "symfony/symfony": ">=2.3"
+            },
+            "require-dev": {
+                "satooshi/php-coveralls": "dev-master"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "Evheniy\\GtmBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "evheniy",
+                    "homepage": "https://github.com/evheniy"
+                }
+            ],
+            "description": "The GtmBundle adds the ability to add Google Tag Manager code to your application.",
+            "keywords": [
+                "google",
+                "gtm",
+                "latest",
+                "manager",
+                "symfony",
+                "tag"
+            ],
+            "time": "2015-12-02 11:50:14"
+        },
+        {
             "name": "ezyang/htmlpurifier",
             "version": "v4.7.0",
             "source": {
@@ -1430,7 +1479,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/45d6f40178216a840885b4ca6d7de9e67068568a",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/e39b040e272c72f0a090c67d802e1d3b2d0b0313",
                 "reference": "d5b28c367d393f9d9fbc48c4138b2a74d51c0c83",
                 "shasum": ""
             },

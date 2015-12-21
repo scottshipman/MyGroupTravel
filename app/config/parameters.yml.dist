@@ -28,3 +28,4 @@ parameters:
     user_system_name: TUI Toolkit System
     profile_query_limit:    5
     cache_asset_version: 1
+    google_tag_manager: GTM-xxx
