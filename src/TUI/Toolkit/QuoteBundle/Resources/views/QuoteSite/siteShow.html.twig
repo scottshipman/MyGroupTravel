@@ -41,10 +41,10 @@
             {% endif %}
 
             {% if entity.quoteReference.institution %}
-                <div id="site-quote-name">{{ entity.quoteReference.institution.name }}</div>
+                <div style="font-size:45px;" id="site-quote-name">{{ entity.quoteReference.institution.name }}</div>
             {% endif %}
 
-            <h2 class="{% if brand.media %}has-brand-logo{% endif %}">
+            <h2 style="font-size: 14px;" class="{% if brand.media %}has-brand-logo{% endif %}">
                 {% if entity.displayName %}
                     {{ entity.displayName }}
                 {% else %}
