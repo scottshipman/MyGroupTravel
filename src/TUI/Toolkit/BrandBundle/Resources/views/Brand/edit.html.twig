@@ -71,6 +71,10 @@
                 "background-image": "url(" + bUrl1 + ")"
             });
             $("#tui_toolkit_brandbundle_brand_media").val('{{ entity.media.id }}');
+            $(document).on('click', '.media-placeholder-image.image-1', function(e) {
+                $("#tui_toolkit_brandbundle_brand_media").val('');
+                console.log($("#tui_toolkit_brandbundle_brand_media").val());
+            });
         {% endif %}
         {% if entity.mediaEmail %}
             var bUrl2 = '{{ asset(".." ~ entity.mediaEmail.getRelativePath ~ "/" ~ entity.mediaEmail.getHashedFilename ) }}';
@@ -78,6 +82,10 @@
                 "background-image": "url(" + bUrl2 + ")"
             });
             $("#tui_toolkit_brandbundle_brand_mediaEmail").val('{{ entity.mediaEmail.id }}');
+            $(document).on('click', '.media-placeholder-image.image-2', function(e) {
+                $("#tui_toolkit_brandbundle_brand_mediaEmail").val('');
+                console.log($("#tui_toolkit_brandbundle_brand_mediaEmail").val());
+            });
         {% endif %}
 
         // Dropzone manipulation
