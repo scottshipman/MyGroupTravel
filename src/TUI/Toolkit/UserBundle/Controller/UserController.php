@@ -833,7 +833,6 @@ class UserController extends Controller
             $old_answer = $user->getAnswer();
             if($answerHash == $old_answer) {
 
-
                 $user->setPassword($setForm->getData()->getPlainPassword());
                 $user->setConfirmationToken(null);
                 $em->persist($user);
@@ -851,6 +850,28 @@ class UserController extends Controller
 
                 $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.password') . ' ' . $user->getEmail());
                 return $this->redirect($this->generateUrl('fos_user_profile_show'));
+            } else if(trim(strtolower($answer)) == trim(strtolower($user->getAnswer()))) {
+
+                //Set the security question answer to a hashed value if it isn't already
+                $user->setAnswer($answerHash);
+                $user->setPassword($setForm->getData()->getPlainPassword());
+                $user->setConfirmationToken(null);
+                $em->persist($user);
+                $em->flush();
+
+                $token = new UsernamePasswordToken($user, $user->getPassword(),
+                    "public", $user->getRoles());
+
+                $this->get("security.context")->setToken($token);
+
+                // Trigger login event
+                $loginEvent = new InteractiveLoginEvent($request, $token);
+                $this->get("event_dispatcher")
+                    ->dispatch("security.interactive_login", $loginEvent);
+
+                $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.password') . ' ' . $user->getEmail());
+                return $this->redirect($this->generateUrl('fos_user_profile_show'));
+
             } else {
                 $setForm->addError(new FormError('Your security answer did not match our records. Please try again, or contact your application\'s contact.'));
             }
@@ -1323,6 +1344,41 @@ class UserController extends Controller
                     $newAnswerHash = $encoder->encodePassword($newAnswer, $user->getSalt());
 //                    $hash = $this->$factory->getEncoder($user)->encodePassword($newAnswer, null);
                     $entity->setAnswer($newAnswerHash);
+                    $fields[] = 'Security Answer';
+                }
+                $em->persist($entity);
+                $em->flush();
+
+                if(count($fields) == 0) {
+                    $msg = "No data was changed.";
+                } else {
+                    $msg = $this->get('translator')
+                            ->trans('user.flash.save') . $entity->getUsername() .  ' for the fields: ' . implode(', ', $fields);
+                }
+
+                $this->get('session')
+                    ->getFlashBag()
+                    ->add('notice', $msg);
+
+
+                return $this->redirect('/profile');
+            } else if(trim(strtolower($answer)) == trim(strtolower($entity->getAnswer()))) {
+                // $entity->setUsername($securityForm->getData()->getEmail());
+                $fields = array();
+                $pw = $securityForm['plainPassword']->getData();
+                $newQuestion = $securityForm['newQuestion']->getData();
+                $newAnswer = $securityForm['newAnswer']->getData();
+
+                if (!empty($pw)){
+                    $entity->setPassword($pw);
+                    $fields[] = 'Password';
+                }
+                if (!empty($newQuestion)){
+                    $entity->setQuestion($newQuestion);
+                    $fields[] = 'Security Question';
+                }
+                if (!empty($newAnswer)){
+                    $entity->setAnswer($newAnswer);
                     $fields[] = 'Security Answer';
                 }
                 $em->persist($entity);
