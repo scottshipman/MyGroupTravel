@@ -41,10 +41,10 @@
             {% endif %}
 
             {% if entity.quoteReference.institution %}
-                <div style="font-size:45px;" id="site-quote-name">{{ entity.quoteReference.institution.name }}</div>
+                <div style="font-size:20px;" id="site-quote-name">{{ entity.quoteReference.institution.name }}</div>
             {% endif %}
 
-            <h2 style="font-size: 14px;" class="{% if brand.media %}has-brand-logo{% endif %}">
+            <h2 style="font-size: 30px;" class="{% if brand.media %}has-brand-logo{% endif %}">
                 {% if entity.displayName %}
                     {{ entity.displayName }}
                 {% else %}
@@ -53,7 +53,7 @@
             </h2>
 
             {% if entity.quoteNumber %}
-                <div>Quote Number: {{ entity.quoteNumber }}</div>
+                <div style="font-size: 12px;">Quote Number: {{ entity.quoteNumber }}</div>
             {% endif %}
         </div>
       </div>
