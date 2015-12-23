@@ -283,7 +283,7 @@ class UserController extends Controller
         if ($form->isValid()) {
             $entity->setUsername($entity->getEmail());
             $entity->setPassword('');
-            $entity->setRolesString(implode(', ', $roles));
+            $entity->setRolesString(implode(', ', $entity->getRoles()));
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
@@ -710,10 +710,22 @@ class UserController extends Controller
         $setForm = $this->createActivateUserForm($user);
         $setForm->handleRequest($request);
 
+        //Encoder factory for hashing security questions
+        $factory = $this->get('security.encoder_factory');
+        $user_manager = $this->get('fos_user.user_manager');
+        $userObject = $user_manager->loadUserByUsername($user->getUsername());
+        $encoder = $factory->getEncoder($userObject);
+
         if ($setForm->isValid()) {
+
+            //Do some manipulation for encoding the security answer
+            $answer = $setForm->getData()->getAnswer();
+            $answer = trim((strtolower($answer)));
+            $answerHash = $encoder->encodePassword($answer, $user->getSalt());
+
             $user->setPassword($setForm->getData()->getPlainPassword());
             $user->setQuestion($setForm->getData()->getQuestion());
-            $user->setAnswer($setForm->getData()->getAnswer());
+            $user->setAnswer($answerHash);
             $user->setEnabled(true);
             $user->setConfirmationToken(null);
             $em->persist($user);
@@ -808,10 +820,18 @@ class UserController extends Controller
         $token = $user->getConfirmationToken();
         $question = $user->getQuestion();
 
+        //Encoder factory for hashing security questions
+        $factory = $this->get('security.encoder_factory');
+        $user_manager = $this->get('fos_user.user_manager');
+        $userObject = $user_manager->loadUserByUsername($user->getUsername());
+        $encoder = $factory->getEncoder($userObject);
+
         if ($setForm->isValid()) {
             $answer = $setForm['answerConfirm']->getData();
-            if(trim(strtolower($answer)) == trim(strtolower($user->getAnswer()))) {
-
+            $answer = trim((strtolower($answer)));
+            $answerHash = $encoder->encodePassword($answer, $user->getSalt());
+            $old_answer = $user->getAnswer();
+            if($answerHash == $old_answer) {
 
                 $user->setPassword($setForm->getData()->getPlainPassword());
                 $user->setConfirmationToken(null);
@@ -830,6 +850,28 @@ class UserController extends Controller
 
                 $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.password') . ' ' . $user->getEmail());
                 return $this->redirect($this->generateUrl('fos_user_profile_show'));
+            } else if(trim(strtolower($answer)) == trim(strtolower($user->getAnswer()))) {
+
+                //Set the security question answer to a hashed value if it isn't already
+                $user->setAnswer($answerHash);
+                $user->setPassword($setForm->getData()->getPlainPassword());
+                $user->setConfirmationToken(null);
+                $em->persist($user);
+                $em->flush();
+
+                $token = new UsernamePasswordToken($user, $user->getPassword(),
+                    "public", $user->getRoles());
+
+                $this->get("security.context")->setToken($token);
+
+                // Trigger login event
+                $loginEvent = new InteractiveLoginEvent($request, $token);
+                $this->get("event_dispatcher")
+                    ->dispatch("security.interactive_login", $loginEvent);
+
+                $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.password') . ' ' . $user->getEmail());
+                return $this->redirect($this->generateUrl('fos_user_profile_show'));
+
             } else {
                 $setForm->addError(new FormError('Your security answer did not match our records. Please try again, or contact your application\'s contact.'));
             }
@@ -1268,15 +1310,59 @@ class UserController extends Controller
             throw $this->createNotFoundException('Unable to find User entity when submitting security info changes.');
         }
 
-
-
         $question = $entity->getQuestion();
         $securityForm = $this->createSecurityForm($entity);
         $securityForm->handleRequest($request);
 
+        //Encoder factory for hashing security questions
+        $factory = $this->get('security.encoder_factory');
+        $user_manager = $this->get('fos_user.user_manager');
+        $user = $user_manager->loadUserByUsername($entity->getUsername());
+        $encoder = $factory->getEncoder($user);
+
         if ($securityForm->isValid()) {
             $answer = $securityForm['originalAnswer']->getData();
-            if(trim(strtolower($answer)) == trim(strtolower($entity->getAnswer()))) {
+            $answer = trim((strtolower($answer)));
+            $answerHash = $encoder->encodePassword($answer, $user->getSalt());
+            $old_answer = $entity->getAnswer();
+            if($answerHash == $old_answer) {
+                // $entity->setUsername($securityForm->getData()->getEmail());
+                $fields = array();
+                $pw = $securityForm['plainPassword']->getData();
+                $newQuestion = $securityForm['newQuestion']->getData();
+                $newAnswer = $securityForm['newAnswer']->getData();
+
+                if (!empty($pw)){
+                    $entity->setPassword($pw);
+                    $fields[] = 'Password';
+                }
+                if (!empty($newQuestion)){
+                    $entity->setQuestion($newQuestion);
+                    $fields[] = 'Security Question';
+                }
+                if (!empty($newAnswer)){
+                    $newAnswerHash = $encoder->encodePassword($newAnswer, $user->getSalt());
+//                    $hash = $this->$factory->getEncoder($user)->encodePassword($newAnswer, null);
+                    $entity->setAnswer($newAnswerHash);
+                    $fields[] = 'Security Answer';
+                }
+                $em->persist($entity);
+                $em->flush();
+
+                if(count($fields) == 0) {
+                    $msg = "No data was changed.";
+                } else {
+                    $msg = $this->get('translator')
+                            ->trans('user.flash.save') . $entity->getUsername() .  ' for the fields: ' . implode(', ', $fields);
+                }
+
+                $this->get('session')
+                    ->getFlashBag()
+                    ->add('notice', $msg);
+
+
+                return $this->redirect('/profile');
+            } else if(trim(strtolower($answer)) == trim(strtolower($entity->getAnswer()))) {
                 // $entity->setUsername($securityForm->getData()->getEmail());
                 $fields = array();
                 $pw = $securityForm['plainPassword']->getData();
