@@ -406,6 +406,16 @@ liip_imagine:
             filters:
                 strip: ~
                 thumbnail: { size: [1600, 900], mode: inset }
+        smallBlock:
+            quality: 100
+            filters:
+                relative_resize:  { widen: 500 }
+
+        largeBlock:
+            quality: 100
+            filters:
+                relative_resize: { widen: 1000 }
+
         modalImage:
             quality: 100
             filters:
