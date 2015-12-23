@@ -70,7 +70,7 @@
                     <div class="paying-passengers-title"><h3>{% trans %}passenger.labels.add_paying{% endtrans %}</h3></div> <div class="passenger-count"><p style="color: {{ brand.primaryColor }}" class="spots-remaining">{{ spotsRemaining }}</p><p class="spots-remaining-copy"><strong>{% trans %}passenger.labels.remaining{% endtrans %}</strong></p></div>
                     <p class="passenger-dashboard-copy">{% trans %}passenger.labels.welcome{% endtrans %}</p>
                     <div style="clear: both"></div>
-                    <a id="invite-passengers" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="#">{% trans %}passenger.labels.invite{% endtrans %}</a>
+                    <a id="invite-passengers" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="#"><i class="fa fa-users"></i>{% trans %}passenger.labels.invite{% endtrans %}</a>
                     <a id="accept-tour" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="#"><i class="fa fa-user-plus"></i>{% trans %}passenger.labels.add{% endtrans %}</a>
                 </div>
                 {% for passenger in waitlistobjects %}
