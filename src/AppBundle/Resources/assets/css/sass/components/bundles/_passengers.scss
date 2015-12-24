@@ -35,3 +35,19 @@
 .passenger-form div.new_passenger > div > div:nth-child(5) {
   display: none;
 }
+
+.passenger-removed {
+    -webkit-transition: max-height 1s;
+    -moz-transition: max-height 1s;
+    -ms-transition: max-height 1s;
+    -o-transition: max-height 1s;
+    transition: max-height 1s;
+    overflow: hidden;
+    // "height: 0" not work with css transitions
+    max-height: 0 !important;
+    //padding: 0;
+}
+
+.passenger-info {
+  max-height: 200px;
+}

@@ -19,15 +19,15 @@
         <i class="material-icons">arrow_drop_down</i>
     </button>
     {% embed "PassengerBundle:Passenger:passengerMenu.html.twig" %}
-            {% block tour_dashboard_link %}
-                <li><a href="{{ path('manage_tour_show', { 'id': tour.id }) }}" class="mdl-menu__item">{% trans %}tour.title.index{% endtrans %}</a></li>
-            {% endblock %}
+        {% block tour_dashboard_link %}
+            <li><a href="{{ path('manage_tour_show', { 'id': tour.id }) }}" class="mdl-menu__item">{% trans %}tour.title.index{% endtrans %}</a></li>
+        {% endblock %}
     {% endembed %}
 {% endblock %}
 
 {% block back_link %}
 
-        <a class="back-link" href="{{ path('manage_tour_show', { 'id': tour.id }) }}"><i class="fa fa-arrow-left"></i> {% trans %}passenger.actions.back{% endtrans %}</a>
+    <a class="back-link" href="{{ path('manage_tour_show', { 'id': tour.id }) }}"><i class="fa fa-arrow-left"></i> {% trans %}passenger.actions.back{% endtrans %}</a>
 
 {% endblock %}
 
@@ -38,9 +38,9 @@
         <div class="tour-show-left-column">
             <ul class="tour-show-submenu">
                 <li><strong>{% trans %}passenger.labels.passengers_for{% endtrans %} {{ tour.name|capitalize }}</strong></li>
-                <li><strong>{% trans %}passenger.labels.accepted{% endtrans %} ({{ accepted|length }})</strong></li>
-                <li><strong>{% trans %}passenger.labels.waitlist{% endtrans %} ({{ waitlistobjects|length }})</strong></li>
-                <li><strong>{% trans %}passenger.labels.free{% endtrans %}</strong></li>
+                <li><a style="color: {{ brand.secondaryColor }}; text-decoration: none;" href="{{ path('manage_accepted_passenger_dashboard', { 'tourId': tour.id }) }}"><strong>{% trans %}passenger.labels.accepted{% endtrans %} ({{ acceptedobjects|length }})</strong></a></li>
+                <li><a style="color: {{ brand.primaryColor }}; text-decoration: none;" href="{{ path('manage_waitlist_passenger_dashboard', { 'tourId': tour.id }) }}"><strong>{% trans %}passenger.labels.waitlist{% endtrans %} ({{ waitlistobjects|length }})</strong></a></li>
+                <li><a style="color: {{ brand.primaryColor }}; text-decoration: none;" href="{{ path('manage_free_passenger_dashboard', { 'tourId': tour.id}) }}"><strong>{% trans %}passenger.labels.free{% endtrans %} ({{ freeobjects|length }})</strong></a></li>
                 {#<li><strong><a href="#">Organisers</a></strong></li>#}
             </ul>
 
@@ -63,7 +63,7 @@
             <div class="waitlist tour-edit mdl-card mdl-shadow--2dp">
 
                 <div class="mdl-card__title">
-                    <h3 class="mdl-card__title-text">{% trans %}passenger.labels.passenger_list{% endtrans %}</h3>
+                    <h3 class="mdl-card__title-text">{% trans %}passenger.labels.accepted{% endtrans %}</h3>
                 </div>
 
                 <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
@@ -73,9 +73,9 @@
                     <a id="invite-passengers" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="#"><i class="fa fa-users"></i>{% trans %}passenger.labels.invite{% endtrans %}</a>
                     <a id="accept-tour" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="#"><i class="fa fa-user-plus"></i>{% trans %}passenger.labels.add{% endtrans %}</a>
                 </div>
-                {% for passenger in waitlistobjects %}
-                    <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
-                        <p style="display: inline-block"><strong>{{ passenger[0].p_fName }}</strong></p> <p style="display: inline-block"><strong>{{ passenger[0].p_lName }}</strong></p> <p style="display: inline-block"><strong><a href="mailto:{{ passenger[1].email }}">{{ passenger[1].email }}</a></strong></p>
+                {% for passenger in acceptedobjects %}
+                    <div class="mdl-card__supporting-text mdl-card--border completed-task expired-quote" style="color:grey;">
+                        <p style="display: inline-block"><strong>{{ passenger[0].p_fName }}</strong></p> <p style="display: inline-block"><strong>{{ passenger[0].p_lName }}</strong></p> <p style="display: inline-block"><strong><a style="color:{{ brand.secondaryColor }}" href="mailto:{{ passenger[1].email }}">{{ passenger[1].email }}</a></strong></p>
                         <label style="display: block">Signed up on {{ passenger[0].p_signUpDate|date(format) }}</label>
                     </div>
                 {% endfor %}

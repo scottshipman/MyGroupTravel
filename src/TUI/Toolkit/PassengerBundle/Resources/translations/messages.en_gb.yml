@@ -44,6 +44,8 @@ passenger:
     labels:
         passengers_for: Passengers For
         waitlist: Wait List
+        accepted: Accepted
+        free: Free
         passenger_list: Passenger List
         add_paying: Add Paying Passengers
         remaining: Remaining
