@@ -17,10 +17,15 @@ $(document).ready(function () {
         }).done(function (response) {
             var remainingSpots = response[4] - response[1];
             $("#loader").css("display", "none");
+            $("#plus").css("display", "none");
+            $("#check").css("display", "block");
             //t.parent().transition({ opacity: 0 });
-            t.parent().addClass("passenger-removed");
-            t.parent().css("opacity", "0");
-            t.parent().css("padding", "0");
+            function collapse() {
+                t.parent().addClass("passenger-removed");
+                t.parent().css("opacity", "0");
+                t.parent().css("padding", "0");
+            }
+            setTimeout(collapse, 2000);
             $("#accepted").html('(' + response[1] + ')');
             $("#waitlist").html('(' + response[2] + ')');
             $("#free").html('(' + response[3] + ')');

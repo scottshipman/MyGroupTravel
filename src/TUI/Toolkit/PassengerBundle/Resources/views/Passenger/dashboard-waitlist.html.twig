@@ -76,7 +76,8 @@
                 {% for passenger in waitlistobjects %}
                     <div class="mdl-card__supporting-text mdl-card--border passenger-info" passenger="{{ passenger[0].p_id }}" tour="{{ tour.id }}">
                         <p style="display: inline-block"><strong>{{ passenger[0].p_fName }}</strong></p> <p style="display: inline-block"><strong>{{ passenger[0].p_lName }}</strong></p> <p style="display: inline-block"><strong><a style="color:{{ brand.secondaryColor }}" href="mailto:{{ passenger[1].email }}">{{ passenger[1].email }}</a></strong></p>
-                        <i class="material-icons passenger-supporting-icon convert">add_circle_outline</i>
+                        <i id="plus" class="material-icons passenger-supporting-icon convert">add_circle_outline</i>
+                        <i id="check" style="color: green; display: none;" class="material-icons passenger-supporting-icon">check</i>
                         <label style="display: block">Signed up on {{ passenger[0].p_signUpDate|date(format) }}</label>
                     </div>
                 {% endfor %}
