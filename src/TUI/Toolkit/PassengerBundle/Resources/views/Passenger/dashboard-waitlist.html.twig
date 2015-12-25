@@ -38,9 +38,9 @@
         <div class="tour-show-left-column">
             <ul class="tour-show-submenu">
                 <li><strong>{% trans %}passenger.labels.passengers_for{% endtrans %} {{ tour.name|capitalize }}</strong></li>
-                <li><a style="color: {{ brand.primaryColor }}; text-decoration: none;" href="{{ path('manage_accepted_passenger_dashboard', { 'tourId': tour.id }) }}"><strong>{% trans %}passenger.labels.accepted{% endtrans %} ({{ acceptedobjects|length }})</strong></a></li>
-                <li><a style="color: {{ brand.secondaryColor }}; text-decoration: none;" href="{{ path('manage_waitlist_passenger_dashboard', { 'tourId': tour.id }) }}"><strong>{% trans %}passenger.labels.waitlist{% endtrans %} ({{ waitlistobjects|length }})</strong></a></li>
-                <li><a style="color: {{ brand.primaryColor }}; text-decoration: none;" href="{{ path('manage_free_passenger_dashboard', { 'tourId': tour.id}) }}"><strong>{% trans %}passenger.labels.free{% endtrans %} ({{ freeobjects|length }})</strong></a></li>
+                <li><a style="color: {{ brand.primaryColor }}; text-decoration: none;" href="{{ path('manage_accepted_passenger_dashboard', { 'tourId': tour.id }) }}"><strong>{% trans %}passenger.labels.accepted{% endtrans %} <span id="accepted">({{ acceptedobjects|length }})</span></strong></a></li>
+                <li><a style="color: {{ brand.secondaryColor }}; text-decoration: none;" href="{{ path('manage_waitlist_passenger_dashboard', { 'tourId': tour.id }) }}"><strong>{% trans %}passenger.labels.waitlist{% endtrans %} <span id="waitlist">({{ waitlistobjects|length }})</span></strong></a></li>
+                <li><a style="color: {{ brand.primaryColor }}; text-decoration: none;" href="{{ path('manage_free_passenger_dashboard', { 'tourId': tour.id}) }}"><strong>{% trans %}passenger.labels.free{% endtrans %} <span id="free">({{ freeobjects|length }})</span></strong></a></li>
                 {#<li><strong><a href="#">Organisers</a></strong></li>#}
             </ul>
 
@@ -74,9 +74,9 @@
                     <a id="accept-tour" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="#"><i class="fa fa-user-plus"></i>{% trans %}passenger.labels.add{% endtrans %}</a>
                 </div>
                 {% for passenger in waitlistobjects %}
-                    <div class="mdl-card__supporting-text mdl-card--border completed-task expired-quote passenger-info" passenger="{{ passenger[0].p_id }}" tour="{{ tour.id }}" "style="color:grey;">
+                    <div class="mdl-card__supporting-text mdl-card--border passenger-info" passenger="{{ passenger[0].p_id }}" tour="{{ tour.id }}">
                         <p style="display: inline-block"><strong>{{ passenger[0].p_fName }}</strong></p> <p style="display: inline-block"><strong>{{ passenger[0].p_lName }}</strong></p> <p style="display: inline-block"><strong><a style="color:{{ brand.secondaryColor }}" href="mailto:{{ passenger[1].email }}">{{ passenger[1].email }}</a></strong></p>
-                        <i style="float: right; font-size: 48px; display: inline;" class="material-icons md-48 convert">add_circle_outline</i>
+                        <i class="material-icons passenger-supporting-icon convert">add_circle_outline</i>
                         <label style="display: block">Signed up on {{ passenger[0].p_signUpDate|date(format) }}</label>
                     </div>
                 {% endfor %}

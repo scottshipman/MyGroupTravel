@@ -74,10 +74,16 @@
                     <a id="accept-tour" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="#"><i class="fa fa-user-plus"></i>{% trans %}passenger.labels.add{% endtrans %}</a>
                 </div>
                 {% for passenger in acceptedobjects %}
-                    <div class="mdl-card__supporting-text mdl-card--border completed-task expired-quote" style="color:grey;">
-                        <p style="display: inline-block"><strong>{{ passenger[0].p_fName }}</strong></p> <p style="display: inline-block"><strong>{{ passenger[0].p_lName }}</strong></p> <p style="display: inline-block"><strong><a style="color:{{ brand.secondaryColor }}" href="mailto:{{ passenger[1].email }}">{{ passenger[1].email }}</a></strong></p>
-                        <label style="display: block">Signed up on {{ passenger[0].p_signUpDate|date(format) }}</label>
-                    </div>
+                    <a class ="dashboard-titles" href="{{ path('manage_passenger_show', { 'id': passenger[0].p_id }) }}">
+                        <div class="mdl-card__supporting-text mdl-card--border" passenger="{{ passenger[0].p_id }}" tour="{{ tour.id }}" style="color:grey;">
+                            <div style="float: left;">
+                            <p style="display: inline-block"><strong>{{ passenger[0].p_fName }}</strong></p> <p style="display: inline-block"><strong>{{ passenger[0].p_lName }}</strong></p> <p style="display: inline-block; color:{{ brand.secondaryColor }}"><strong>{{ passenger[1].email }}</strong></p>
+                            <label style="display: block">Signed up on {{ passenger[0].p_signUpDate|date(format) }}</label>
+                            </div>
+                            <i class="material-icons passenger-supporting-icon">arrow_forward</i>
+                            {#<i style="color: grey; float:right; margin-top: 20px; display: inline-block;" class="fa fa-arrow-right"></i>#}
+                        </div>
+                    </a>
                 {% endfor %}
                 </div>
         </div>

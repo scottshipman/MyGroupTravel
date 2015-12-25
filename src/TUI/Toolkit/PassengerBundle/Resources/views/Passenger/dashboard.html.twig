@@ -38,9 +38,9 @@
         <div class="tour-show-left-column">
             <ul class="tour-show-submenu">
                 <li><strong>{% trans %}passenger.labels.passengers_for{% endtrans %} {{ tour.name|capitalize }}</strong></li>
-                <li><strong>{% trans %}passenger.labels.accepted{% endtrans %} ({{ accepted|length }})</strong></li>
-                <li><strong>{% trans %}passenger.labels.waitlist{% endtrans %} ({{ waitlistobjects|length }})</strong></li>
-                <li><strong>{% trans %}passenger.labels.free{% endtrans %}</strong></li>
+                <li><a style="color: {{ brand.primaryColor }}; text-decoration: none;" href="{{ path('manage_accepted_passenger_dashboard', { 'tourId': tour.id }) }}"><strong>{% trans %}passenger.labels.accepted{% endtrans %} ({{ acceptedobjects|length }})</strong></a></li>
+                <li><a style="color: {{ brand.primaryColor }}; text-decoration: none;" href="{{ path('manage_waitlist_passenger_dashboard', { 'tourId': tour.id }) }}"><strong>{% trans %}passenger.labels.waitlist{% endtrans %} ({{ waitlistobjects|length }})</strong></a></li>
+                <li><a style="color: {{ brand.primaryColor }}; text-decoration: none;" href="{{ path('manage_free_passenger_dashboard', { 'tourId': tour.id}) }}"><strong>{% trans %}passenger.labels.free{% endtrans %} ({{ freeobjects|length }})</strong></a></li>
                 {#<li><strong><a href="#">Organisers</a></strong></li>#}
             </ul>
 
