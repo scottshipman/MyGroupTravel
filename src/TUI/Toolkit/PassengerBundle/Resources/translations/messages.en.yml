@@ -43,6 +43,7 @@ passenger:
 
     labels:
         passengers_for: Passengers For
+        passenger_for: Passenger For
         waitlist: Wait List
         accepted: Accepted
         free: Free
