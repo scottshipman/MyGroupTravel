@@ -1,0 +1,30 @@
+passport:
+    path:     /
+    defaults: { _controller: "PassengerBundle:Passport:index" }
+
+passport_show:
+    path:     /{id}/show
+    defaults: { _controller: "PassengerBundle:Passport:show" }
+
+passport_new:
+    path:     /new
+    defaults: { _controller: "PassengerBundle:Passport:new" }
+
+passport_create:
+    path:     /create
+    defaults: { _controller: "PassengerBundle:Passport:create" }
+    methods:  POST
+
+passport_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "PassengerBundle:Passport:edit" }
+
+passport_update:
+    path:     /{id}/update
+    defaults: { _controller: "PassengerBundle:Passport:update" }
+    methods:  [POST, PUT]
+
+passport_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "PassengerBundle:Passport:delete" }
+    methods:  [POST, DELETE]

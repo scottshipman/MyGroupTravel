@@ -1,0 +1,26 @@
+{% block body -%}
+    <div class="passport-form">
+
+        {{ form_start(form) }}
+        {{ form_widget(form.passportNumber) }}
+        {{ form_widget(form.passportFirstName) }}
+        {{ form_widget(form.passportLastName) }}
+        {{ form_widget(form.passportNationality) }}
+        <label style="display: block; color:rgba(0,0,0,.26);">Date of Issue</label>
+        {{ form_widget(form.passportDateOfIssue) }}
+        <label style="display: block; color:rgba(0,0,0,.26);">Date of Expiry</label>
+        {{ form_widget(form.passportDateOfExpiry) }}
+        {{ form_rest(form) }}
+        {{ form_end(form) }}
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            var tourId = $('.site-show').attr('entityId');
+            var passengerId = $('.site-show').attr('passengerId');
+            console.log(tourId);
+            $('#tui_toolkit_passengerbundle_passport_passengerReference').val(passengerId);
+            $()
+        });
+    </script>
+{% endblock %}
