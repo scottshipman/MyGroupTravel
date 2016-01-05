@@ -1,22 +1,22 @@
 passenger_emergency:
     resource: "@PassengerBundle/Resources/config/routing/emergency.yml"
-    prefix:   /emergency
+    prefix:   /passenger/emergency
 
 passenger_passport:
     resource: "@PassengerBundle/Resources/config/routing/passport.yml"
-    prefix:   /manage/passenger/passport
+    prefix:   /passenger/passport
 
 passenger_dietary:
     resource: "@PassengerBundle/Resources/config/routing/dietary.yml"
-    prefix:   /manage/passenger/dietary
+    prefix:   /passenger/dietary
 
 passenger_medical:
     resource: "@PassengerBundle/Resources/config/routing/medical.yml"
-    prefix:   /manage/passenger/medical
+    prefix:   /passenger/medical
 
 passenger_manage_passenger:
     resource: "@PassengerBundle/Resources/config/routing/passenger.yml"
-    prefix:   /manage/passenger
+    prefix:   /passenger
 
 passenger_homepage:
     path:     /hello/{name}
