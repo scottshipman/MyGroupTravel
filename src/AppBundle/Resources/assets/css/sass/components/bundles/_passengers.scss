@@ -51,3 +51,128 @@
 .passenger-info {
   max-height: 200px;
 }
+
+.mdl-card__supporting-text {
+
+  .passenger-supporting-icon {
+    color: grey;
+    float:right;
+    margin-top: 15px;
+    display: inline-block;
+    font-size: 22px;
+  }
+
+}
+
+.medical-form {
+  max-height: 0;
+  opacity: 0;
+  margin-left: 20px;
+  -webkit-transition: max-height 1s;
+  -moz-transition: max-height 1s;
+  -ms-transition: max-height 1s;
+  -o-transition: max-height 1s;
+  transition: max-height 1s;
+  overflow: hidden;
+  max-height: 0px;
+  opacity: 1;
+
+  &.expanded {
+    -webkit-transition: max-height 1s;
+    -moz-transition: max-height 1s;
+    -ms-transition: max-height 1s;
+    -o-transition: max-height 1s;
+    transition: max-height 1s;
+    overflow: hidden;
+    max-height: 500px !important;
+    //padding: 0;
+    opacity: 1;
+  }
+}
+
+.dietary-form {
+  max-height: 0;
+  opacity: 0;
+  margin-left: 20px;
+  -webkit-transition: max-height 1s;
+  -moz-transition: max-height 1s;
+  -ms-transition: max-height 1s;
+  -o-transition: max-height 1s;
+  transition: max-height 1s;
+  overflow: hidden;
+  max-height: 0px;
+  opacity: 1;
+
+  &.expanded {
+    -webkit-transition: max-height 1s;
+    -moz-transition: max-height 1s;
+    -ms-transition: max-height 1s;
+    -o-transition: max-height 1s;
+    transition: max-height 1s;
+    overflow: hidden;
+    max-height: 300px !important;
+    //padding: 0;
+    opacity: 1;
+  }
+}
+
+.passport-form {
+  max-height: 0;
+  opacity: 0;
+  margin-left: 20px;
+  -webkit-transition: max-height 1s;
+  -moz-transition: max-height 1s;
+  -ms-transition: max-height 1s;
+  -o-transition: max-height 1s;
+  transition: max-height 1s;
+  overflow: hidden;
+  max-height: 0px;
+  opacity: 1;
+
+  &.expanded {
+    -webkit-transition: max-height 1s;
+    -moz-transition: max-height 1s;
+    -ms-transition: max-height 1s;
+    -o-transition: max-height 1s;
+    transition: max-height 1s;
+    overflow: hidden;
+    max-height: 500px !important;
+    //padding: 0;
+    opacity: 1;
+  }
+
+   .mdl-selectfield {
+    width: auto !important;
+  }
+}
+
+.emergency-form {
+  max-height: 0;
+  opacity: 0;
+  margin-left: 20px;
+  -webkit-transition: max-height 1s;
+  -moz-transition: max-height 1s;
+  -ms-transition: max-height 1s;
+  -o-transition: max-height 1s;
+  transition: max-height 1s;
+  overflow: hidden;
+  max-height: 0px;
+  opacity: 1;
+
+  &.expanded {
+    -webkit-transition: max-height 1s;
+    -moz-transition: max-height 1s;
+    -ms-transition: max-height 1s;
+    -o-transition: max-height 1s;
+    transition: max-height 1s;
+    overflow: hidden;
+    max-height: 400px !important;
+    //padding: 0;
+    opacity: 1;
+  }
+}
+
+//Overwrite min-height for cards on the passengers profile
+.mdl-card {
+  min-height:160px;
+}

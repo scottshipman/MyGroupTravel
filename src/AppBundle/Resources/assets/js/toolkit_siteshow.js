@@ -29,7 +29,7 @@ $(document).ready(function () {
     $(document).on('click', '#accept-tour', function (e) {
         e.preventDefault();
         var entityId = $('.site-show').attr('entityId');
-        toolkitStandardPopup("Sign Up", '/passenger/new/' + entityId, function () {
+        toolkitStandardPopup("Sign Up", '/manage/passenger/new/' + entityId, function () {
             $('#ajax_passenger_form').on('submit', function(e) {
 
                 var formAction = $(this).attr('action');
