@@ -66,15 +66,15 @@
                     <h3 class="mdl-card__title-text">{% trans %}passenger.labels.free{% endtrans %}</h3>
                 </div>
 
-                <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
-                    <div class="paying-passengers-title"><h3>{% trans %}passenger.labels.add_paying{% endtrans %}</h3></div> <div class="passenger-count"><p style="color: {{ brand.primaryColor }}" class="spots-remaining">{{ spotsRemaining }}</p><p class="spots-remaining-copy"><strong>{% trans %}passenger.labels.remaining{% endtrans %}</strong></p></div>
-                    <p class="passenger-dashboard-copy">{% trans %}passenger.labels.welcome{% endtrans %}</p>
-                    <div style="clear: both"></div>
-                    <a id="invite-passengers" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="#"><i class="fa fa-users"></i>{% trans %}passenger.labels.invite{% endtrans %}</a>
-                    <a id="accept-tour" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="#"><i class="fa fa-user-plus"></i>{% trans %}passenger.labels.add{% endtrans %}</a>
-                </div>
+                {#<div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">#}
+                    {#<div class="paying-passengers-title"><h3>{% trans %}passenger.labels.add_paying{% endtrans %}</h3></div> <div class="passenger-count"><p style="color: {{ brand.primaryColor }}" class="spots-remaining">{{ spotsRemaining }}</p><p class="spots-remaining-copy"><strong>{% trans %}passenger.labels.remaining{% endtrans %}</strong></p></div>#}
+                    {#<p class="passenger-dashboard-copy">{% trans %}passenger.labels.welcome{% endtrans %}</p>#}
+                    {#<div style="clear: both"></div>#}
+                    {#<a id="invite-passengers" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="#"><i class="fa fa-users"></i>{% trans %}passenger.labels.invite{% endtrans %}</a>#}
+                    {#<a id="accept-tour" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="#"><i class="fa fa-user-plus"></i>{% trans %}passenger.labels.add{% endtrans %}</a>#}
+                {#</div>#}
                 {% for passenger in acceptedobjects %}
-                    <div class="mdl-card__supporting-text mdl-card--border completed-task expired-quote" style="color:grey;">
+                    <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
                         <p style="display: inline-block"><strong>{{ passenger[0].p_fName }}</strong></p> <p style="display: inline-block"><strong>{{ passenger[0].p_lName }}</strong></p> <p style="display: inline-block"><strong><a style="color:{{ brand.secondaryColor }}" href="mailto:{{ passenger[1].email }}">{{ passenger[1].email }}</a></strong></p>
                         <label style="display: block">Signed up on {{ passenger[0].p_signUpDate|date(format) }}</label>
                     </div>

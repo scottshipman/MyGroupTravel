@@ -94,6 +94,9 @@ class PassengerController extends Controller
                 $em->flush();
             }
 
+            $parentPermission = $this->get("permission.set_permission")->setPermission($tourId, 'tour', $user, 'parent');
+
+
             $newPassengers = array();
             foreach ($form->get('passengers') as $passenger) {
                 //do more stuff

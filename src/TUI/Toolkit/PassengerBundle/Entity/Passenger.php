@@ -81,6 +81,34 @@ class Passenger
      */
     protected $tourReference;
 
+    /**
+     * @var \TUI\Toolkit\PassengerBundle\Entity\Medical
+     * @ORM\OneToOne(targetEntity="TUI\Toolkit\PassengerBundle\Entity\Medical")
+     * @ORM\JoinColumn(name="medical", referencedColumnName="id")
+     */
+    protected $medicalReference;
+
+    /**
+     * @var \TUI\Toolkit\PassengerBundle\Entity\Dietary
+     * @ORM\OneToOne(targetEntity="TUI\Toolkit\PassengerBundle\Entity\Dietary")
+     * @ORM\JoinColumn(name="dietary", referencedColumnName="id")
+     */
+    protected $dietaryReference;
+
+    /**
+     * @var \TUI\Toolkit\PassengerBundle\Entity\Passport
+     * @ORM\OneToOne(targetEntity="TUI\Toolkit\PassengerBundle\Entity\Passport")
+     * @ORM\JoinColumn(name="passport", referencedColumnName="id")
+     */
+    protected $passportReference;
+
+    /**
+     * @var \TUI\Toolkit\PassengerBundle\Entity\Emergency
+     * @ORM\OneToOne(targetEntity="TUI\Toolkit\PassengerBundle\Entity\Emergency")
+     * @ORM\JoinColumn(name="emergency", referencedColumnName="id")
+     */
+    protected $emergencyReference;
+
 
     /**
      * @var string
@@ -199,6 +227,90 @@ class Passenger
     public function getTourReference()
     {
         return $this->tourReference;
+    }
+
+    /**
+ * @param $medicalReference
+ * @return $this
+ *
+ */
+    public function setMedicalReference($medicalReference) {
+
+        $this->medicalReference = $medicalReference;
+
+        return $this;
+
+    }
+
+    /**
+     * @return Medical
+     *
+     */
+    public function getMedicalReference() {
+        return $this->medicalReference;
+    }
+
+    /**
+     * @param $dietaryReference
+     * @return $this
+     *
+     */
+    public function setDietaryReference($dietaryReference) {
+
+        $this->dietaryReference = $dietaryReference;
+
+        return $this;
+
+    }
+
+    /**
+     * @return Dietary
+     *
+     */
+    public function getDietaryReference() {
+        return $this->dietaryReference;
+    }
+
+    /**
+     * @param $passportReference
+     * @return $this
+     *
+     */
+    public function setPassportReference($passportReference) {
+
+        $this->passportReference = $passportReference;
+
+        return $this;
+
+    }
+
+    /**
+     * @return Passport
+     *
+     */
+    public function getPassportReference() {
+        return $this->passportReference;
+    }
+
+    /**
+     * @param $emergencyReference
+     * @return $this
+     *
+     */
+    public function setEmergencyReference($emergencyReference) {
+
+        $this->emergencyReference = $emergencyReference;
+
+        return $this;
+
+    }
+
+    /**
+     * @return Emergency
+     *
+     */
+    public function getEmergencyReference() {
+        return $this->emergencyReference;
     }
 
     /**
