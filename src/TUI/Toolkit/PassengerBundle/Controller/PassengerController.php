@@ -497,6 +497,7 @@ class PassengerController extends Controller
         }
 
         return $this->render('PassengerBundle:Passenger:dashboard.html.twig', array(
+            'entity' => $tour, // just to re-use the tour menu which relies on a variable called entity
             'tour' => $tour,
             'waitlistobjects' => $waitListObjects,
             'acceptedobjects' => $acceptedObjects,
