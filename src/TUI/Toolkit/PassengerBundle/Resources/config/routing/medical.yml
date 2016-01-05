@@ -1,0 +1,30 @@
+medical:
+    path:     /
+    defaults: { _controller: "PassengerBundle:Medical:index" }
+
+medical_show:
+    path:     /{id}/show
+    defaults: { _controller: "PassengerBundle:Medical:show" }
+
+medical_new:
+    path:     /new
+    defaults: { _controller: "PassengerBundle:Medical:new" }
+
+medical_create:
+    path:     /create
+    defaults: { _controller: "PassengerBundle:Medical:create" }
+    methods:  POST
+
+medical_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "PassengerBundle:Medical:edit" }
+
+medical_update:
+    path:     /{id}/update
+    defaults: { _controller: "PassengerBundle:Medical:update" }
+    methods:  [POST, PUT]
+
+medical_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "PassengerBundle:Medical:delete" }
+    methods:  [POST, DELETE]
