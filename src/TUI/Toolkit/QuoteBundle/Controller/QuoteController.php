@@ -293,6 +293,28 @@ class QuoteController extends Controller
       $em->persist($tour);
       $em->flush();
 
+     // stub out passenger record and parent permission for passenger for organizer
+        $organizer = $tour->getOrganizer();
+        $newPassenger = new Passenger();
+        //$newPassenger->setDateOfBirth(); // we dont know what this is here
+        $newPassenger->setFName($organizer->getFirstName());
+        //$newPassenger->setGender(); // we dont know what this is here
+        $newPassenger->setLName($organizer->getLastName);
+        $newPassenger->setStatus("waitlist");
+        $newPassenger->setSignUpDate(new \DateTime());
+        $newPassenger->setTourReference($tour);
+        $newPassenger->setFree(FALSE);
+        $em->persist($newPassenger);
+        $em->flush();
+
+        $permission = new Permission();
+        $permission->setClass('passenger');
+        $permission->setObject($newPassenger->getId());
+        $permission->setGrants('parent');
+        $permission->setUser($organizer);
+        $em->persist($permission);
+        $em->flush();
+
       return $this->redirect($this->generateUrl('manage_tour_edit', array('id' => $tour->getId())));
 
     }

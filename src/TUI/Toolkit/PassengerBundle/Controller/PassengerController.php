@@ -476,7 +476,9 @@ class PassengerController extends Controller
 
         //Get organizer list
         $organizers = $this->get("passenger.actions")->getOrganizers($tourId);
+        array_unshift($organizers, $tour->getOrganizer());
         $organizersCount = count($organizers);
+        $organizersObjects = $this->addOrganizerPassengers($organizers, $em);
 
         //brand stuff
         $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
@@ -497,7 +499,7 @@ class PassengerController extends Controller
             'acceptedcount' => $acceptedCount,
             'freecount' => $freeCount,
             'organizerscount' => $organizersCount,
-            'organizerobjects' => $organizers,
+            'organizerobjects' => $organizersObjects,
             'brand' => $brand,
             'passengers' => $passengers
         ));
@@ -523,12 +525,46 @@ class PassengerController extends Controller
             $isOrganizer = $this->get("permission.set_permission")->getUser('assistant', $object, 'tour') ? TRUE : FALSE;
             $isOrganizer = $this->get("permission.set_permission")->getUser('organizer', $object, 'tour') ? TRUE : $isOrganizer;
 
-            $parentObject = $em->getRepository('TUIToolkitUserBundle:User')->find($parent[1]);
+            if (!empty($parent)){
+                $parentObject = $em->getRepository('TUIToolkitUserBundle:User')->find($parent[1]);
+            } else {
+                $parentObject = "";
+            }
             $combinedObjects[]= array($passenger, $parentObject, $isOrganizer);
              }
 
             return $combinedObjects;
         }
+
+    /**
+     * Helper function to build array of organizer, passenger and boolean organizer flag
+     * @param organizerList, entity manager
+     * @return array
+     *
+     */
+    public function addOrganizerPassengers($organizers, $em)
+    {
+        $combinedObjects = array();
+
+        if (empty($organizers)) {
+            return NULL;
+        }
+
+        foreach($organizers as $organizer) {
+            $user = $organizer->getId();
+            $passenger = $this->get("permission.set_permission")->getObject('parent', $user, 'passenger');
+            $isOrganizer = TRUE;
+
+            if (!empty($passenger)){
+                $passengerObject = $em->getRepository('PassengerBundle:Passenger')->find($passenger['object']);
+            } else {
+                $passengerObject = "";
+            }
+            $combinedObjects[]= array($passengerObject, $organizer, $isOrganizer);
+        }
+
+        return $combinedObjects;
+    }
 
     /**
      * Getting the parent passenger dashboard
@@ -563,210 +599,7 @@ class PassengerController extends Controller
         ));
     }
 
-    /**
-     * Get Waitlist Passengers dashboard
-     * @param $tourId
-     * @return Response
-     *
-     */
 
-    public function getWaitlistPassengerDashboardAction($tourId)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
-
-        //Get Waitlist Passengers
-        $waitList = $this->get("passenger.actions")->getPassengerStatus('waitlist', $tourId);
-
-        $waitListObjects = array();
-
-        foreach($waitList as $passenger) {
-            $object = $passenger['p_id'];
-            $parent = $this->get("permission.set_permission")->getUser('parent', $object, 'passenger');
-            $parentObject = $em->getRepository('TUIToolkitUserBundle:User')->find($parent[1]);
-            $waitListObjects[]= array($passenger, $parentObject);
-        }
-
-        //Get accepted passengers
-        $accepted = $this->get("passenger.actions")->getPassengerStatus('accepted', $tourId);
-
-        $acceptedObjects = array();
-        foreach($accepted as $passenger) {
-            $object = $passenger['p_id'];
-            $parent = $this->get("permission.set_permission")->getUser('parent', $object, 'passenger');
-            $parentObject = $em->getRepository('TUIToolkitUserBundle:User')->find($parent[1]);
-            $acceptedObjects[]= array($passenger, $parentObject);
-        }
-
-        //Get free passengers
-        $free = $this->get("passenger.actions")->getPassengerStatus('free', $tourId);
-
-        $freeObjects = array();
-        foreach($free as $passenger) {
-            $object = $passenger['p_id'];
-            $parent = $this->get("permission.set_permission")->getUser('parent', $object, 'passenger');
-            $parentObject = $em->getRepository('TUIToolkitUserBundle:User')->find($parent[1]);
-            $freeObjects[]= array($passenger, $parentObject);
-        }
-
-        //Get organizer list
-        $organizers = $this->get("passenger.actions")->getOrganizers($tourId);
-
-
-        //brand stuff
-        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
-
-        // look for a configured brand
-        if($brand_id = $this->container->getParameter('brand_id')){
-            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
-        }
-
-        if(!$brand) {
-            $brand = $default_brand;
-        }
-
-        return $this->render('PassengerBundle:Passenger:dashboard-waitlist.html.twig', array(
-            'tour' => $tour,
-            'acceptedobjects' => $acceptedObjects,
-            'waitlistobjects' => $waitListObjects,
-            'freeobjects' => $freeObjects,
-            'organizerobjects' => $organizers,
-            'brand' => $brand,
-        ));
-    }
-
-    /**
-     * Accepted Passengers dashboard
-     * @param $tourId
-     * @return Response
-     *
-     */
-
-    public function getAcceptedPassengerDashboardAction($tourId)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
-
-        //Get Waitlist Passengers
-        $waitList = $this->get("passenger.actions")->getPassengerStatus('waitlist', $tourId);
-
-        $waitListObjects = array();
-
-        foreach($waitList as $passenger) {
-            $object = $passenger['p_id'];
-            $parent = $this->get("permission.set_permission")->getUser('parent', $object, 'passenger');
-            $parentObject = $em->getRepository('TUIToolkitUserBundle:User')->find($parent[1]);
-            $waitListObjects[]= array($passenger, $parentObject);
-        }
-
-        //Get accepted passengers
-        $accepted = $this->get("passenger.actions")->getPassengerStatus('accepted', $tourId);
-
-        $acceptedObjects = array();
-        foreach($accepted as $passenger) {
-            $object = $passenger['p_id'];
-            $parent = $this->get("permission.set_permission")->getUser('parent', $object, 'passenger');
-            $parentObject = $em->getRepository('TUIToolkitUserBundle:User')->find($parent[1]);
-            $acceptedObjects[]= array($passenger, $parentObject);
-        }
-
-        //Get free passengers
-        $free = $this->get("passenger.actions")->getPassengerStatus('free', $tourId);
-
-        $freeObjects = array();
-        foreach($free as $passenger) {
-            $object = $passenger['p_id'];
-            $parent = $this->get("permission.set_permission")->getUser('parent', $object, 'passenger');
-            $parentObject = $em->getRepository('TUIToolkitUserBundle:User')->find($parent[1]);
-            $freeObjects[]= array($passenger, $parentObject);
-        }
-
-        //brand stuff
-        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
-
-        // look for a configured brand
-        if($brand_id = $this->container->getParameter('brand_id')){
-            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
-        }
-
-        if(!$brand) {
-            $brand = $default_brand;
-        }
-
-        return $this->render('PassengerBundle:Passenger:dashboard-accepted.html.twig', array(
-            'tour' => $tour,
-            'acceptedobjects' => $acceptedObjects,
-            'waitlistobjects' => $waitListObjects,
-            'freeobjects' => $freeObjects,
-            'brand' => $brand,
-        ));
-    }
-
-    /**
-     * Free passengers dashboard
-     * @param $tourId
-     * @return Response
-     */
-
-    public function getFreePassengerDashboardAction($tourId)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
-
-        //Get Waitlist Passengers
-        $waitList = $this->get("passenger.actions")->getPassengerStatus('waitlist', $tourId);
-
-        $waitListObjects = array();
-
-        foreach($waitList as $passenger) {
-            $object = $passenger['p_id'];
-            $parent = $this->get("permission.set_permission")->getUser('parent', $object, 'passenger');
-            $parentObject = $em->getRepository('TUIToolkitUserBundle:User')->find($parent[1]);
-            $waitListObjects[]= array($passenger, $parentObject);
-        }
-
-        //Get accepted passengers
-        $accepted = $this->get("passenger.actions")->getPassengerStatus('accepted', $tourId);
-
-        $acceptedObjects = array();
-        foreach($accepted as $passenger) {
-            $object = $passenger['p_id'];
-            $parent = $this->get("permission.set_permission")->getUser('parent', $object, 'passenger');
-            $parentObject = $em->getRepository('TUIToolkitUserBundle:User')->find($parent[1]);
-            $acceptedObjects[]= array($passenger, $parentObject);
-        }
-
-        //Get free passengers
-        $free = $this->get("passenger.actions")->getPassengerStatus('free', $tourId);
-
-        $freeObjects = array();
-        foreach($free as $passenger) {
-            $object = $passenger['p_id'];
-            $parent = $this->get("permission.set_permission")->getUser('parent', $object, 'passenger');
-            $parentObject = $em->getRepository('TUIToolkitUserBundle:User')->find($parent[1]);
-            $freeObjects[]= array($passenger, $parentObject);
-        }
-
-        //brand stuff
-        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
-
-        // look for a configured brand
-        if($brand_id = $this->container->getParameter('brand_id')){
-            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
-        }
-
-        if(!$brand) {
-            $brand = $default_brand;
-        }
-
-        return $this->render('PassengerBundle:Passenger:dashboard-free.html.twig', array(
-            'tour' => $tour,
-            'acceptedobjects' => $acceptedObjects,
-            'waitlistobjects' => $waitListObjects,
-            'freeobjects' => $freeObjects,
-            'brand' => $brand,
-        ));
-    }
 
     public function moveToAcceptedAction(Request $request, $tourId, $passengerId)
     {
