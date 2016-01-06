@@ -30,18 +30,6 @@ manage_passenger_dashboard:
     path: /{tourId}/passengers
     defaults: { _controller: "PassengerBundle:Passenger:getPassengerDashboard" }
 
-manage_waitlist_passenger_dashboard:
-    path: /{tourId}/waitlist/passengers
-    defaults: { _controller: "PassengerBundle:Passenger:getWaitlistPassengerDashboard" }
-
-manage_accepted_passenger_dashboard:
-    path: /{tourId}/accepted/passengers
-    defaults: { _controller: "PassengerBundle:Passenger:getAcceptedPassengerDashboard" }
-
-manage_free_passenger_dashboard:
-    path: /{tourId}/free/passengers
-    defaults: { _controller: "PassengerBundle:Passenger:getFreePassengerDashboard" }
-
 manage_ajax_move_to_accepted:
     path: /move/accepted/{tourId}/{passengerId}
     defaults: { _controller: "PassengerBundle:Passenger:moveToAccepted" }
@@ -50,6 +38,9 @@ manage_ajax_move_to_accepted:
 manage_ajax_move_to_wailist:
     path: /move/waitlist/{tourId}/{passengerId}
     defaults: { _controller: "PassengerBundle:Passenger:moveToWaitlist" }
+manage_ajax_waitlist_accepted_change:
+    path: /waitlist/accepted/{tourId}/{passengerId}
+    defaults: { _controller: "PassengerBundle:Passenger:waitlistToAccepted" }
     methods:  [POST, PUT]
 
 manage_tour_edit_payments:

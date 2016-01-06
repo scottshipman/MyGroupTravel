@@ -117,6 +117,13 @@ class Passenger
      */
     protected $status;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="free", type="boolean")
+     */
+    protected $free;
+
 
     public function __construct()  {
     }
@@ -320,7 +327,7 @@ class Passenger
     {
         $this->status = $status;
 
-        return $status;
+        return $this;
     }
 
     /**
@@ -329,5 +336,23 @@ class Passenger
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * @param  $free
+     */
+    public function setFree($free)
+    {
+        $this->free = $free;
+
+        return $this;
+    }
+
+    /**
+     * @return free
+     */
+    public function getFree()
+    {
+        return $this->free;
     }
 }

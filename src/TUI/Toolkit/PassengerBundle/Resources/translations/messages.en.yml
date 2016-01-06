@@ -47,6 +47,7 @@ passenger:
         waitlist: Wait List
         accepted: Accepted
         free: Free
+        organizer: Organizers
         passenger_list: Passenger List
         add_paying: Add Paying Passengers
         remaining: Remaining

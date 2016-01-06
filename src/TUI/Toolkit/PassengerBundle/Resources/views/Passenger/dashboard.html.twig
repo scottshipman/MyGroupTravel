@@ -1,6 +1,6 @@
 {% extends '::site-base.html.twig' %}
 {% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
-{% set spotsRemaining = tour.payingPlaces - acceptedobjects|length %}
+{% set spotsRemaining = tour.payingPlaces - acceptedcount %}
 
 {% block title %}
     {% if is_granted("ROLE_BRAND") %}
@@ -18,7 +18,7 @@
     <button id="tour-title-drop" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-menu-drop">
         <i class="material-icons">arrow_drop_down</i>
     </button>
-    {% embed "PassengerBundle:Passenger:passengerMenu.html.twig" %}
+    {% embed "TourBundle:Tour:tourMenu.html.twig" %}
             {% block tour_dashboard_link %}
                 <li><a href="{{ path('manage_tour_show', { 'id': tour.id }) }}" class="mdl-menu__item">{% trans %}tour.title.index{% endtrans %}</a></li>
             {% endblock %}
@@ -38,10 +38,10 @@
         <div class="tour-show-left-column">
             <ul class="tour-show-submenu">
                 <li><strong>{% trans %}passenger.labels.passengers_for{% endtrans %} {{ tour.name|capitalize }}</strong></li>
-                <li><a style="color: {{ brand.primaryColor }}; text-decoration: none;" href="{{ path('manage_accepted_passenger_dashboard', { 'tourId': tour.id }) }}"><strong>{% trans %}passenger.labels.accepted{% endtrans %}<span id="accepted">({{ acceptedobjects|length }})</span></strong></a></li>
-                <li><a style="color: {{ brand.primaryColor }}; text-decoration: none;" href="{{ path('manage_waitlist_passenger_dashboard', { 'tourId': tour.id }) }}"><strong>{% trans %}passenger.labels.waitlist{% endtrans %}<span id="waitlist">({{ waitlistobjects|length }})</span></strong></a></li>
-                <li><a style="color: {{ brand.primaryColor }}; text-decoration: none;" href="{{ path('manage_free_passenger_dashboard', { 'tourId': tour.id}) }}"><strong>{% trans %}passenger.labels.free{% endtrans %} <span id="free">({{ freeobjects|length }})</span></strong></a></li>
-                {#<li><strong><a href="#">Organisers</a></strong></li>#}
+                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" id="showAccepted"><strong>{% trans %}passenger.labels.accepted{% endtrans %} ({{ acceptedcount }})</strong></a></li>
+                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" id="showWaitlist"><strong>{% trans %}passenger.labels.waitlist{% endtrans %} ({{ waitlistcount }})</strong></a></li>
+                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" id="showFree"><strong>{% trans %}passenger.labels.free{% endtrans %} ({{ freecount }})</strong></a></li>
+                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" id="showOrganizers"><strong>{% trans %}passenger.labels.organizer{% endtrans %} ({{ organizerscount }})</strong></a></li>
             </ul>
 
             <div class="tour-edit-organizer-left">
@@ -74,7 +74,7 @@
                     <a id="accept-tour" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="#"><i class="fa fa-user-plus"></i>{% trans %}passenger.labels.add{% endtrans %}</a>
                 </div>
             </div>
-                {% for passenger in waitlistobjects %}
+                {% for passenger in passengers %}
                     <div class="waitlist tour-edit mdl-shadow--2dp" style="background-color:white; margin-bottom: 0;">
                         <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
                             <div style="float: left; color: grey;">
@@ -90,51 +90,7 @@
 
                     </div>
                 {% endfor %}
-                {% for passenger in acceptedobjects %}
-                    <div class="waitlist tour-edit mdl-shadow--2dp" style="overflow: visible; background-color:white; margin-bottom: 0;">
-                        <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
-                            <div style="float: left; color: grey;">
-                                <p style="display: inline-block"><strong>{{ passenger[0].p_fName }}</strong></p> <p style="display: inline-block"><strong>{{ passenger[0].p_lName }}</strong></p> <p style="display: inline-block"><strong><a href="mailto:{{ passenger[1].email }}">{{ passenger[1].email }}</a></strong></p>
-                                <label style="display: block">Signed up on {{ passenger[0].p_signUpDate|date(format) }}</label>
-                            </div>
-                            <button style="position: absolute; right: 20px; color:grey; margin-top:10px;" id="passenger-actions-menu-drop-{{ passenger[0].p_id }}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
-                                <i class="material-icons">more_vert</i>
-                            </button>
-                            {% embed "PassengerBundle:Passenger:passengerActionsMenu.html.twig" %}{% endembed %}
-                           {#{% embed "PassengerBundle:Passenger:passengerActionsMenu.html.twig" %}{% endembed %}#}
-                        </div>
-                    </div>
-                {% endfor %}
-                {% for passenger in freeobjects %}
-                    <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
-                        <div style="float: left; color: grey;">
-                            <p style="display: inline-block"><strong>{{ passenger[0].p_fName }}</strong></p> <p style="display: inline-block"><strong>{{ passenger[0].p_lName }}</strong></p> <p style="display: inline-block"><strong><a href="mailto:{{ passenger[1].email }}">{{ passenger[1].email }}</a></strong></p>
-                            <label style="display: block">Signed up on {{ passenger[0].p_signUpDate|date(format) }}</label>
-                        </div>
-                        <button style="position: absolute; right: 20px; color:grey; margin-top:10px;" id="passenger-actions-menu-drop" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon passenger-menu-drop">
-                            <i class="material-icons">more_vert</i>
-                        </button>
-                        {#{% embed "PassengerBundle:Passenger:passengerActionsMenu.html.twig" %}{% endembed %}#}
-                    </div>
-                {% endfor %}
-                <div style="clear:both; height:100px;"></div>
-                </div>
-        </div>
-
-            {#{% if entity.SetupComplete == true and entity.isComplete == true %}#}
-
-                {#{{ render(controller('TourBundle:Tour:getTourCompletedAndSetup', { 'id': entity.id } )) }}#}
-
-            {#{% elseif entity.SetupComplete == true and entity.isComplete == false %}#}
-
-                {#{{ render(controller('TourBundle:Tour:getTourNotCompletedAndSetup', { 'id': entity.id } )) }}#}
-
-            {#{% elseif entity.SetupComplete == false %}#}
-
-                {#{{ render(controller('TourBundle:Tour:getTourNotSetup', { 'id': entity.id } )) }}#}
-
-            {#{% endif %}#}
-
+            </div>
         </div>
 
     </div>
@@ -177,6 +133,32 @@
                         $('share_url').css('width', '80%');
                     };
 
+                });
+
+                $(document).on('click', '.passenger-filter', function (e){
+                    e.preventDefault();
+                    var elemID = this.id;
+                    switch(elemID) {
+                        case 'showAccepted':
+                            $('.free, .organizers, .waitlist').slideUp(400);
+                            $('.accepted').slideDown(400);
+                            break;
+                        case 'showWaitlist':
+                            $('.accepted, .organizers, .free').slideUp(400);
+                            $('.waitlist').slideDown(400);
+                            break;
+                        case 'showFree':
+                            $('.accepted, .waitlist, .organizers').slideUp(400);
+                            $('.free').slideDown(400);
+                            break;
+                        case 'showOrganizers':
+                            $('.accepted, .waitlist, .free').slideUp(400);
+                            $('.organizers').slideDown(400);
+                            break;
+                        default:
+                            // do nothing
+                            break;
+                    }
                 });
 
         });
