@@ -34,7 +34,7 @@ $(document).ready(function () {
             t.html("Move To Waitlist");
             t.removeClass('move-to-accepted');
             t.addClass('move-to-waitlist');
-        });
+            });
     });
 
     $(document).on('click', 'a.move-to-waitlist', function (e) {
@@ -74,7 +74,8 @@ $(document).ready(function () {
         });
     });
 
-    $('#medical').click(function() {
+    $('#medical').click(function(e) {
+        e.preventDefault();
         $('.medical-form').addClass('expanded');
         $('#medical-close').css({
             "color": "grey",
@@ -85,7 +86,8 @@ $(document).ready(function () {
         $('#medical').css("display", "none");
     });
 
-    $('#medical-close').click(function() {
+    $('#medical-close').click(function(e) {
+        e.preventDefault();
         $('.medical-form').removeClass('expanded');
         $('#medical').css({
             "color": "grey",
@@ -168,7 +170,8 @@ $(document).ready(function () {
         })
     });
 
-    $('#dietary').click(function() {
+    $('#dietary').click(function(e) {
+        e.preventDefault();
         $('.dietary-form').addClass('expanded');
         $('#dietary-close').css({
             "color": "grey",
@@ -179,7 +182,8 @@ $(document).ready(function () {
         $('#dietary').css("display", "none");
     });
 
-    $('#dietary-close').click(function() {
+    $('#dietary-close').click(function(e) {
+        e.preventDefault();
         $('.dietary-form').removeClass('expanded');
         $('#dietary').css({
             "color": "grey",
@@ -229,7 +233,8 @@ $(document).ready(function () {
         })
     });
 
-    $('#passport').click(function() {
+    $('#passport').click(function(e) {
+        e.preventDefault();
         $('.passport-form').addClass('expanded');
         $('#passport-close').css({
             "color": "grey",
@@ -240,7 +245,8 @@ $(document).ready(function () {
         $('#passport').css("display", "none");
     });
 
-    $('#passport-close').click(function() {
+    $('#passport-close').click(function(e) {
+        e.preventDefault();
         $('.passport-form').removeClass('expanded');
         $('#passport').css({
             "color": "grey",
@@ -288,7 +294,8 @@ $(document).ready(function () {
         })
     });
 
-    $('#emergency').click(function() {
+    $('#emergency').click(function(e) {
+        e.preventDefault();
         $('.emergency-form').addClass('expanded');
         $('#emergency-close').css({
             "color": "grey",
@@ -299,7 +306,8 @@ $(document).ready(function () {
         $('#emergency').css("display", "none");
     });
 
-    $('#emergency-close').click(function() {
+    $('#emergency-close').click(function(e) {
+        e.preventDefault();
         $('.emergency-form').removeClass('expanded');
         $('#emergency').css({
             "color": "grey",
