@@ -38,10 +38,10 @@
         <div class="tour-show-left-column">
             <ul class="tour-show-submenu">
                 <li><strong>{% trans %}passenger.labels.passengers_for{% endtrans %} {{ tour.name|capitalize }}</strong></li>
-                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" id="showAccepted"><strong>{% trans %}passenger.labels.accepted{% endtrans %} ({{ acceptedcount }})</strong></a></li>
-                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" id="showWaitlist"><strong>{% trans %}passenger.labels.waitlist{% endtrans %} ({{ waitlistcount }})</strong></a></li>
-                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" id="showFree"><strong>{% trans %}passenger.labels.free{% endtrans %} ({{ freecount }})</strong></a></li>
-                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" id="showOrganizers"><strong>{% trans %}passenger.labels.organizer{% endtrans %} ({{ organizerscount }})</strong></a></li>
+                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" id="showAccepted"><strong>{% trans %}passenger.labels.accepted{% endtrans %} <span id="acceptedPassengers">({{ acceptedcount - freecount }})</span></strong></a></li>
+                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" id="showWaitlist"><strong>{% trans %}passenger.labels.waitlist{% endtrans %} <span id="waitlistPassengers">({{ waitlistcount }})</span></strong></a></li>
+                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" id="showFree"><strong>{% trans %}passenger.labels.free{% endtrans %} <span id="freePassengers">({{ freecount }})</span></strong></a></li>
+                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" id="showOrganizers"><strong>{% trans %}passenger.labels.organizer{% endtrans %} <span id="organizerPassengers">({{ organizerscount }})</span></strong></a></li>
             </ul>
 
             <div class="tour-edit-organizer-left">
@@ -63,7 +63,7 @@
             <div class="tour-edit mdl-card mdl-shadow--2dp" style="margin-bottom: 0; box-shadow: none;">
 
                 <div class="mdl-card__title">
-                    <h3 class="mdl-card__title-text">{% trans %}passenger.labels.passenger_list{% endtrans %}</h3>
+                    <h3 id="card-title" class="mdl-card__title-text">{% trans %}passenger.labels.passenger_list{% endtrans %}</h3>
                 </div>
 
                 <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
@@ -75,10 +75,13 @@
                 </div>
             </div>
                 {% for passenger in passengers %}
-                {% if passenger[0].p_free == 1 %}{% set freeClass = 'free' %} {% else %} {% set freeClass = 'paid' %} {% endif %}
-                    <div class="{{ passenger[0].p_status }} {{ freeClass }}tour-edit mdl-shadow--2dp" style="background-color:white; margin-bottom: 0;">
+                {% set status = passenger[0].p_status %}
+                {% if passenger[0].p_free == 1 %}{% set freeClass = 'free' %}{% set status = '' %} {% else %} {% set freeClass = '' %} {% endif %}
+                    <div class="{{ status }} {{ freeClass }} tour-edit mdl-shadow--2dp" style="background-color:white; margin-bottom: 0;" passenger="{{ passenger[0].p_id }}">
                         <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
                             <div style="float: left; color: grey;">
+                                <i class="material-icons" style="font-size: 52px; display: inline-block;">account_circle</i>
+
                                 <p style="display: inline-block"><strong>{{ passenger[0].p_fName }}</strong></p> <p style="display: inline-block"><strong>{{ passenger[0].p_lName }}</strong></p> <p style="display: inline-block"><strong><a href="mailto:{{ passenger[1].email }}">{{ passenger[1].email }}</a></strong></p>
                                 <label style="display: block">Signed up on {{ passenger[0].p_signUpDate|date(format) }}</label>
                             </div>
@@ -88,9 +91,9 @@
                             {% embed "PassengerBundle:Passenger:passengerActionsMenu.html.twig" %}{% endembed %}
                            {#{% embed "PassengerBundle:Passenger:passengerActionsMenu.html.twig" %}{% endembed %}#}
                         </div>
-
                     </div>
                 {% endfor %}
+                <div style="clear: both; height: 150px;"></div>
             </div>
         </div>
 
@@ -143,18 +146,38 @@
                         case 'showAccepted':
                             $('.free, .organizers, .waitlist').slideUp(400);
                             $('.accepted').slideDown(400);
+                            $('#showAccepted').css("color", "{{ brand.secondaryColor }}");
+                            $('#showWaitlist').css("color", "{{ brand.primaryColor }}");
+                            $('#showFree').css("color", "{{ brand.primaryColor }}");
+                            $('#showOrganizers').css("color", "{{ brand.primaryColor }}");
+                            $('#card-title').html('Accepted');
                             break;
                         case 'showWaitlist':
                             $('.accepted, .organizers, .free').slideUp(400);
                             $('.waitlist').slideDown(400);
+                            $('#showAccepted').css("color", "{{ brand.primaryColor }}");
+                            $('#showWaitlist').css("color", "{{ brand.secondaryColor }}");
+                            $('#showFree').css("color", "{{ brand.primaryColor }}");
+                            $('#showOrganizers').css("color", "{{ brand.primaryColor }}");
+                            $('#card-title').html('Wait list');
                             break;
                         case 'showFree':
                             $('.accepted, .waitlist, .organizers').slideUp(400);
                             $('.free').slideDown(400);
+                            $('#showAccepted').css("color", "{{ brand.primaryColor }}");
+                            $('#showWaitlist').css("color", "{{ brand.primaryColor }}");
+                            $('#showFree').css("color", "{{ brand.secondaryColor }}");
+                            $('#showOrganizers').css("color", "{{ brand.primaryColor }}");
+                            $('#card-title').html('Free');
                             break;
                         case 'showOrganizers':
                             $('.accepted, .waitlist, .free').slideUp(400);
                             $('.organizers').slideDown(400);
+                            $('#showAccepted').css("color", "{{ brand.primaryColor }}");
+                            $('#showWaitlist').css("color", "{{ brand.primaryColor }}");
+                            $('#showFree').css("color", "{{ brand.primaryColor }}");
+                            $('#showOrganizers').css("color", "{{ brand.secondaryColor }}");
+                            $('#card-title').html('Organisers');
                             break;
                         default:
                             // do nothing
