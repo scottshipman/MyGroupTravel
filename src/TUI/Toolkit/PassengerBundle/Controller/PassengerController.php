@@ -106,6 +106,7 @@ class PassengerController extends Controller
                 $newPassenger->setGender($passenger->get('gender')->getData());
                 $newPassenger->setLName($passenger->get('lName')->getData());
                 $newPassenger->setStatus("waitlist");
+                $newPassenger->setFree(false);
                 $newPassenger->setSignUpDate(new \DateTime());
                 $newPassenger->setTourReference($tour);
                 $em->persist($newPassenger);
