@@ -54,6 +54,6 @@ variables available to this twig:
 
 
     {# render the Invite organizer form #}
-
+    {{ render(controller( 'PassengerBundle:Passenger:inviteOrganizer', {'tourId' : tour.id} )) }}
 
 </div>

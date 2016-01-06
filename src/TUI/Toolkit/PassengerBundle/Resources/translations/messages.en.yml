@@ -27,6 +27,7 @@ passenger:
         notify: Send User a Notification
         activate: Submit
         security: Reset Security Info
+        invite: Invite
 
         actions:
             view: View

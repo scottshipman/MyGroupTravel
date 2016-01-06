@@ -725,4 +725,28 @@ class PassengerController extends Controller
             array('content-type' => 'application/json')
         );
     }
+
+    public function inviteOrganizerAction(Request $request, $tourId)
+    {
+
+    }
+
+    /**
+     * Creates a form to create a Medical entity.
+     *
+     * @param Medical $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createInviteForm(Medical $entity)
+    {
+        $form = $this->createForm(new InviteOrganizerType($tourId), null, array(
+            'action' => $this->generateUrl('invite_organizer'),
+            'method' => 'POST',
+        ));
+
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('passenger.actions.invite')));
+
+        return $form;
+    }
 }
