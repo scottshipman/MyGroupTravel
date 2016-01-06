@@ -313,7 +313,7 @@ tour:
             display_name: Display Name
             board: Board Basis
             tour_number: Tour Number
-            passenger_date: Passenger Info Due Date (DD-MM-YYYY)
+            passenger_date: Emergency Contact Due Date (DD-MM-YYYY)
             passport_date: Passport Info Due Date (DD-MM-YYYY)
             medical_date: Medical Info Due Date (DD-MM-YYYY)
             dietary_date: Dietary Info Due Date (DD-MM-YYYY)
