@@ -477,7 +477,9 @@ class PassengerController extends Controller
 
         //Get organizer list
         $organizers = $this->get("passenger.actions")->getOrganizers($tourId);
+        array_unshift($organizers, $tour->getOrganizer());
         $organizersCount = count($organizers);
+        $organizersObjects = $this->addOrganizerPassengers($organizers, $em);
 
         //brand stuff
         $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
@@ -498,7 +500,7 @@ class PassengerController extends Controller
             'acceptedcount' => $acceptedCount,
             'freecount' => $freeCount,
             'organizerscount' => $organizersCount,
-            'organizerobjects' => $organizers,
+            'organizerobjects' => $organizersObjects,
             'brand' => $brand,
             'passengers' => $passengers
         ));
@@ -524,12 +526,46 @@ class PassengerController extends Controller
             $isOrganizer = $this->get("permission.set_permission")->getUser('assistant', $object, 'tour') ? TRUE : FALSE;
             $isOrganizer = $this->get("permission.set_permission")->getUser('organizer', $object, 'tour') ? TRUE : $isOrganizer;
 
-            $parentObject = $em->getRepository('TUIToolkitUserBundle:User')->find($parent[1]);
+            if (!empty($parent)){
+                $parentObject = $em->getRepository('TUIToolkitUserBundle:User')->find($parent[1]);
+            } else {
+                $parentObject = "";
+            }
             $combinedObjects[]= array($passenger, $parentObject, $isOrganizer);
              }
 
             return $combinedObjects;
         }
+
+    /**
+     * Helper function to build array of organizer, passenger and boolean organizer flag
+     * @param organizerList, entity manager
+     * @return array
+     *
+     */
+    public function addOrganizerPassengers($organizers, $em)
+    {
+        $combinedObjects = array();
+
+        if (empty($organizers)) {
+            return NULL;
+        }
+
+        foreach($organizers as $organizer) {
+            $user = $organizer->getId();
+            $passenger = $this->get("permission.set_permission")->getObject('parent', $user, 'passenger');
+            $isOrganizer = TRUE;
+
+            if (!empty($passenger)){
+                $passengerObject = $em->getRepository('PassengerBundle:Passenger')->find($passenger['object']);
+            } else {
+                $passengerObject = "";
+            }
+            $combinedObjects[]= array($passengerObject, $organizer, $isOrganizer);
+        }
+
+        return $combinedObjects;
+    }
 
     /**
      * Getting the parent passenger dashboard

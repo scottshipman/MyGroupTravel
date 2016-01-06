@@ -54,6 +54,9 @@ passenger:
         welcome: Welcome to the passenger dashboard.  Here you can invite, add, and manage all of your passengers.
         invite: Invite Passengers
         add: Add Passenger
+        primary-organizer: Primary Organiser
+        invite-pending: Invited - Not yet responded.
+        invite-accepted: Accepted Invitation.
 
     emails:
         thank_you: Thank you for your submission

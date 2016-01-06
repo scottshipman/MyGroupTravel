@@ -60,7 +60,7 @@ class PassengerService
         $statusExpr = $status == 'free' ? 'p.free' : 'p.status';
         $status = $status == 'free' ? 1 : $status;
 
-        //Query builder for free passengers
+        //Query builder for passengers
         $em = $this->em;
         $qb = $em->createQueryBuilder();
         $qb->select('p')
@@ -75,6 +75,7 @@ class PassengerService
             ));
             $qb->setParameter(2,  $status);
         }
+        $qb->orderBy('p.signUpDate', 'DESC');
         $query = $qb->getQuery();
         $result = $query->getScalarResult();
 

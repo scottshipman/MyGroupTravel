@@ -176,3 +176,30 @@
 .mdl-card {
   min-height:160px;
 }
+
+.organizer-free {
+  color: blue;
+  margin-left: 1em;
+  &:after {
+    content: "Free";
+
+  }
+}
+
+.organizer-accepted {
+  color: green;
+  margin-left: 1em;
+  &:after {
+    content: "Accepted";
+
+  }
+}
+
+.organizer-waitlist {
+  color: gold;
+  margin-left: 1em;
+  &:after {
+    content: 'Waitlist';
+
+  }
+}

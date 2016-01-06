@@ -131,5 +131,33 @@ class PermissionService
 
   }
 
+  /**
+   * Parameters - User ID; Class; Grants
+   *
+   * @return Object ID
+   */
+  public function getObject($grants, $user, $class) {
+    // return user based on grants, object and class
+    $em = $this->em;
+    $qb = $em->createQueryBuilder();
+    $qb->select('p.object')
+        ->from('PermissionBundle:Permission', 'p')
+        ->where($qb->expr()->andX(
+            $qb->expr()->eq('p.grants', '?1'),
+            $qb->expr()->eq('p.user', '?2'),
+            $qb->expr()->eq('p.class', '?3')
+        ));
 
+    $qb->setParameters(array(1 => $grants, 2 => $user, 3 => $class));
+    $query = $qb->getQuery();
+    $result = $query->getScalarResult();
+
+    if (!$result) {
+      return NULL;
+    }
+    else {
+      $object = $result[0];
+      return $object;
+    }
+  }
 }
