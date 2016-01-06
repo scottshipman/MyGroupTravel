@@ -1,6 +1,6 @@
 {% extends '::base.html.twig' %}
 {% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
-{% set spotsRemaining = tour.payingPlaces - acceptedobjects|length %}
+{% set spotsRemaining = tour.payingPlaces - acceptedcount %}
 
 {% block title %}
     {% if is_granted("ROLE_BRAND") %}
@@ -38,10 +38,10 @@
         <div class="tour-show-left-column">
             <ul class="tour-show-submenu">
                 <li><strong>{% trans %}passenger.labels.passengers_for{% endtrans %} {{ tour.name|capitalize }}</strong></li>
-                <li><a style="color: {{ brand.primaryColor }}; text-decoration: none;" href="{{ path('manage_accepted_passenger_dashboard', { 'tourId': tour.id }) }}"><strong>{% trans %}passenger.labels.accepted{% endtrans %} ({{ acceptedobjects|length }})</strong></a></li>
-                <li><a style="color: {{ brand.primaryColor }}; text-decoration: none;" href="{{ path('manage_waitlist_passenger_dashboard', { 'tourId': tour.id }) }}"><strong>{% trans %}passenger.labels.waitlist{% endtrans %} ({{ waitlistobjects|length }})</strong></a></li>
-                <li><a style="color: {{ brand.primaryColor }}; text-decoration: none;" href="{{ path('manage_free_passenger_dashboard', { 'tourId': tour.id}) }}"><strong>{% trans %}passenger.labels.free{% endtrans %} ({{ freeobjects|length }})</strong></a></li>
-                {#<li><strong><a href="#">Organisers</a></strong></li>#}
+                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" id="showAccepted"><strong>{% trans %}passenger.labels.accepted{% endtrans %} ({{ acceptedcount }})</strong></a></li>
+                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" id="showWaitlist"><strong>{% trans %}passenger.labels.waitlist{% endtrans %} ({{ waitlistcount }})</strong></a></li>
+                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" id="showFree"><strong>{% trans %}passenger.labels.free{% endtrans %} ({{ freecount }})</strong></a></li>
+                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" id="showOrganizers"><strong>{% trans %}passenger.labels.organizer{% endtrans %} ({{ organizerscount }})</strong></a></li>
             </ul>
 
             <div class="tour-edit-organizer-left">
@@ -73,41 +73,13 @@
                     <a id="invite-passengers" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="#"><i class="fa fa-users"></i>{% trans %}passenger.labels.invite{% endtrans %}</a>
                     <a id="accept-tour" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="#"><i class="fa fa-user-plus"></i>{% trans %}passenger.labels.add{% endtrans %}</a>
                 </div>
-                {% for passenger in waitlistobjects %}
+                {% for passenger in passengers %}
                     <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
                         <p style="display: inline-block"><strong>{{ passenger[0].p_fName }}</strong></p> <p style="display: inline-block"><strong>{{ passenger[0].p_lName }}</strong></p> <p style="display: inline-block"><strong><a href="mailto:{{ passenger[1].email }}">{{ passenger[1].email }}</a></strong></p>
                         <label style="display: block">Signed up on {{ passenger[0].p_signUpDate|date(format) }}</label>
                     </div>
                 {% endfor %}
-                {% for passenger in acceptedobjects %}
-                    <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
-                        <p style="display: inline-block"><strong>{{ passenger[0].p_fName }}</strong></p> <p style="display: inline-block"><strong>{{ passenger[0].p_lName }}</strong></p> <p style="display: inline-block"><strong><a href="mailto:{{ passenger[1].email }}">{{ passenger[1].email }}</a></strong></p>
-                        <label style="display: block">Signed up on {{ passenger[0].p_signUpDate|date(format) }}</label>
-                    </div>
-                {% endfor %}
-                {% for passenger in freeobjects %}
-                    <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
-                        <p style="display: inline-block"><strong>{{ passenger[0].p_fName }}</strong></p> <p style="display: inline-block"><strong>{{ passenger[0].p_lName }}</strong></p> <p style="display: inline-block"><strong><a href="mailto:{{ passenger[1].email }}">{{ passenger[1].email }}</a></strong></p>
-                        <label style="display: block">Signed up on {{ passenger[0].p_signUpDate|date(format) }}</label>
-                    </div>
-                {% endfor %}
-                </div>
-        </div>
-
-            {#{% if entity.SetupComplete == true and entity.isComplete == true %}#}
-
-                {#{{ render(controller('TourBundle:Tour:getTourCompletedAndSetup', { 'id': entity.id } )) }}#}
-
-            {#{% elseif entity.SetupComplete == true and entity.isComplete == false %}#}
-
-                {#{{ render(controller('TourBundle:Tour:getTourNotCompletedAndSetup', { 'id': entity.id } )) }}#}
-
-            {#{% elseif entity.SetupComplete == false %}#}
-
-                {#{{ render(controller('TourBundle:Tour:getTourNotSetup', { 'id': entity.id } )) }}#}
-
-            {#{% endif %}#}
-
+            </div>
         </div>
 
     </div>
@@ -146,6 +118,32 @@
                         $('share_url').css('width', '80%');
                     };
 
+                });
+
+                $(document).on('click', '.passenger-filter', function (e){
+                    e.preventDefault();
+                    var elemID = this.id;
+                    switch(elemID) {
+                        case 'showAccepted':
+                            $('.free, .organizers, .waitlist').slideUp(400);
+                            $('.accepted').slideDown(400);
+                            break;
+                        case 'showWaitlist':
+                            $('.accepted, .organizers, .free').slideUp(400);
+                            $('.waitlist').slideDown(400);
+                            break;
+                        case 'showFree':
+                            $('.accepted, .waitlist, .organizers').slideUp(400);
+                            $('.free').slideDown(400);
+                            break;
+                        case 'showOrganizers':
+                            $('.accepted, .waitlist, .free').slideUp(400);
+                            $('.organizers').slideDown(400);
+                            break;
+                        default:
+                            // do nothing
+                            break;
+                    }
                 });
 
         });

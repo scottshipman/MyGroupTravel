@@ -54,8 +54,11 @@ class PassengerService
 //
 //    }
 
-    public function getPassengerStatus($status, $tourId){
+    public function getPassengersByStatus($status, $tourId){
 
+        // special query case for free status for boolean field
+        $statusExpr = $status == 'free' ? 'p.free' : 'p.status';
+        $status = $status == 'free' ? 1 : $status;
 
         //Query builder for free passengers
         $em = $this->em;
@@ -63,10 +66,35 @@ class PassengerService
         $qb->select('p')
             ->from('PassengerBundle:Passenger', 'p')
             ->where($qb->expr()->andX(
-                $qb->expr()->eq('p.status', '?1'),
-                $qb->expr()->eq('p.tourReference', '?2')
+                $qb->expr()->eq('p.tourReference', '?1')
             ));
-        $qb->setParameters(array(1 => $status, 2 => $tourId ));
+        $qb->setParameter(1, $tourId );
+        if($status != 'all'){
+            $qb->andWhere($qb->expr()->andX(
+                $qb->expr()->eq($statusExpr, '?2')
+            ));
+            $qb->setParameter(2,  $status);
+        }
+        $query = $qb->getQuery();
+        $result = $query->getScalarResult();
+
+        return $result;
+    }
+
+    public function getOrganizers($tourId){
+
+
+        //Query builder for free passengers
+        $em = $this->em;
+        $qb = $em->createQueryBuilder();
+        $qb->select('p')
+            ->from('PermissionBundle:Permission', 'p')
+            ->where($qb->expr()->andX(
+                $qb->expr()->eq('p.class', '?1'),
+                $qb->expr()->eq('p.grants', '?2'),
+                $qb->expr()->eq('p.object', '?3')
+            ));
+        $qb->setParameters(array(1 => 'tour', 2 => 'assistant', 3 => $tourId ));
         $query = $qb->getQuery();
         $result = $query->getScalarResult();
 

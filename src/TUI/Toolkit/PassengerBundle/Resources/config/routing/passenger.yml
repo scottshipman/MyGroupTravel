@@ -32,8 +32,3 @@ manage_passenger_delete:
 manager_passenger_dashboard:
     path: /dashboard/{tourId}
     defaults: { _controller: "PassengerBundle:Passenger:getPassengerDashboard" }
-
-manage_waitlist_passenger_dashboard:
-    path: /dashboard/{tourId}/waitlist
-    defaults: { _controller: "PassengerBundle:Passenger:getWaitlistPassengerDashboard" }
-
