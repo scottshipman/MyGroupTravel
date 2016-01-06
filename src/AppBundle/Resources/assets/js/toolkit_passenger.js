@@ -17,24 +17,24 @@ $(document).ready(function () {
         }).done(function (response) {
             var remainingSpots = response[4] - response[1];
             $("#loader").css("display", "none");
-            //$("#plus").css("display", "none");
-            //$("#check").css("display", "block");
-            ////t.parent().transition({ opacity: 0 });
-            //function collapse() {
-            //    t.parent().addClass("passenger-removed");
-            //    t.parent().css("opacity", "0");
-            //    t.parent().css("padding", "0");
-            //}
-            //setTimeout(collapse, 2000);
-            t.attr("href", "#waitlist");
-            $("#accepted").html('(' + response[1] + ')');
-            $("#waitlist").html('(' + response[2] + ')');
-            $("#free").html('(' + response[3] + ')');
+            var passDiv = $('div[passenger="'+passengerId+'"]');
+            passDiv.addClass('accepted');
+            if (passDiv.hasClass('waitlist') || passDiv.hasClass('free')) {
+                passDiv.removeClass('waitlist', 'free');
+            }
+            passDiv.slideUp(400);
+            var realAccepted = response[1] - response[3];
+            $("#acceptedPassengers").html('(' + realAccepted + ')');
+            $("#waitlistPassengers").html('(' + response[2] + ')');
+            $("#freePassengers").html('(' + response[3] + ')');
             $(".spots-remaining").html(remainingSpots);
-            t.html("Move To Waitlist");
-            t.removeClass('move-to-accepted');
-            t.addClass('move-to-waitlist');
-        });
+            var acceptedLink = $('a.move-to-accepted').attr('passenger', passengerId);
+            acceptedLink.css("display", "none");
+            var waitlistLink = $('a.move-to-waitlist').attr('passenger', passengerId);
+            waitlistLink.css("display", "block");
+            var freeLink = $('a.move-to-free').attr('passenger', passengerId);
+            freeLink.css("display", "block");
+            });
     });
 
     $(document).on('click', 'a.move-to-waitlist', function (e) {
@@ -54,27 +54,65 @@ $(document).ready(function () {
         }).done(function (response) {
             var remainingSpots = response[4] - response[1];
             $("#loader").css("display", "none");
-            //$("#plus").css("display", "none");
-            //$("#check").css("display", "block");
-            ////t.parent().transition({ opacity: 0 });
-            //function collapse() {
-            //    t.parent().addClass("passenger-removed");
-            //    t.parent().css("opacity", "0");
-            //    t.parent().css("padding", "0");
-            //}
-            //setTimeout(collapse, 2000);
-            t.attr("href", "#accepted");
-            $("#accepted").html('(' + response[1] + ')');
-            $("#waitlist").html('(' + response[2] + ')');
-            $("#free").html('(' + response[3] + ')');
+            var passDiv = $('div[passenger="'+passengerId+'"]');
+            passDiv.addClass('waitlist');
+            if (passDiv.hasClass('accepted') || passDiv.hasClass('free')) {
+                passDiv.removeClass('accepted', 'free');
+            }
+            passDiv.slideUp(400);
+            var realAccepted = response[1] - response[3];
+            $("#acceptedPassengers").html('(' + realAccepted + ')');
+            $("#waitlistPassengers").html('(' + response[2] + ')');
+            $("#freePassengers").html('(' + response[3] + ')');
             $(".spots-remaining").html(remainingSpots);
-            t.html("Move To Accepted");
-            t.removeClass('move-to-waitlist');
-            t.addClass('move-to-accepted');
+            var acceptedLink = $('a.move-to-accepted').attr('passenger', passengerId);
+            acceptedLink.css("display", "block");
+            var waitlistLink = $('a.move-to-waitlist').attr('passenger', passengerId);
+            waitlistLink.css("display", "none");
+            var freeLink = $('a.move-to-free').attr('passenger', passengerId);
+            freeLink.css("display", "none");
         });
     });
 
-    $('#medical').click(function() {
+    $(document).on('click', 'a.move-to-free', function (e) {
+        var t = $(this);
+        e.preventDefault();
+        var passengerId = t.attr('passenger');
+        var tourId = t.attr('tour');
+        $("#loader").css("display", "block");;
+        $.ajax({
+            type: 'POST',
+            url: '/tour/dashboard/move/free/' + tourId + '/' + passengerId,
+            headers: {
+                "Pragma": "no-cache",
+                "Expires": -1,
+                "Cache-Control": "no-cache"
+            }
+        }).done(function (response) {
+            var remainingSpots = response[4] - response[1];
+            $("#loader").css("display", "none");
+            var passDiv = $('div[passenger="'+passengerId+'"]');
+            passDiv.addClass('free');
+            if (passDiv.hasClass('accepted') || passDiv.hasClass('waitlist')) {
+                passDiv.removeClass('accepted', 'waitlist');
+            }
+            passDiv.slideUp(400);
+            var realAccepted = response[1] - response[3];
+            $("#acceptedPassengers").html('(' + realAccepted + ')');
+            $("#waitlistPassengers").html('(' + response[2] + ')');
+            $("#freePassengers").html('(' + response[3] + ')');
+            $(".spots-remaining").html(remainingSpots);
+            var acceptedLink = $('a.move-to-accepted').attr('passenger', passengerId);
+            acceptedLink.css("display", "block");
+            var waitlistLink = $('a.move-to-waitlist').attr('passenger', passengerId);
+            waitlistLink.css("display", "block");
+            var freeLink = $('a.move-to-free').attr('passenger', passengerId);
+            freeLink.css("display", "none");
+        });
+    });
+
+    $('#medical').click(function(e) {
+        e.preventDefault();
         $('.medical-form').addClass('expanded');
         $('#medical-close').css({
             "color": "grey",
@@ -85,7 +123,8 @@ $(document).ready(function () {
         $('#medical').css("display", "none");
     });
 
-    $('#medical-close').click(function() {
+    $('#medical-close').click(function(e) {
+        e.preventDefault();
         $('.medical-form').removeClass('expanded');
         $('#medical').css({
             "color": "grey",
@@ -168,7 +207,8 @@ $(document).ready(function () {
         })
     });
 
-    $('#dietary').click(function() {
+    $('#dietary').click(function(e) {
+        e.preventDefault();
         $('.dietary-form').addClass('expanded');
         $('#dietary-close').css({
             "color": "grey",
@@ -179,7 +219,8 @@ $(document).ready(function () {
         $('#dietary').css("display", "none");
     });
 
-    $('#dietary-close').click(function() {
+    $('#dietary-close').click(function(e) {
+        e.preventDefault();
         $('.dietary-form').removeClass('expanded');
         $('#dietary').css({
             "color": "grey",
@@ -229,7 +270,8 @@ $(document).ready(function () {
         })
     });
 
-    $('#passport').click(function() {
+    $('#passport').click(function(e) {
+        e.preventDefault();
         $('.passport-form').addClass('expanded');
         $('#passport-close').css({
             "color": "grey",
@@ -240,7 +282,8 @@ $(document).ready(function () {
         $('#passport').css("display", "none");
     });
 
-    $('#passport-close').click(function() {
+    $('#passport-close').click(function(e) {
+        e.preventDefault();
         $('.passport-form').removeClass('expanded');
         $('#passport').css({
             "color": "grey",
@@ -288,7 +331,8 @@ $(document).ready(function () {
         })
     });
 
-    $('#emergency').click(function() {
+    $('#emergency').click(function(e) {
+        e.preventDefault();
         $('.emergency-form').addClass('expanded');
         $('#emergency-close').css({
             "color": "grey",
@@ -299,7 +343,8 @@ $(document).ready(function () {
         $('#emergency').css("display", "none");
     });
 
-    $('#emergency-close').click(function() {
+    $('#emergency-close').click(function(e) {
+        e.preventDefault();
         $('.emergency-form').removeClass('expanded');
         $('#emergency').css({
             "color": "grey",

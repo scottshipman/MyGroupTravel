@@ -59,7 +59,7 @@ class PassportType extends AbstractType
                 'attr' => array(
                     'class' => 'dateOfIssue',
                 ),
-                'years' => range(date('Y') - 30, date('Y') - 1)
+                'years' => range(date('Y') - 15, date('Y') - 1)
             ))
             ->add('passportDateOfExpiry', 'birthday', array(
                 'format' => $date_format,
@@ -67,7 +67,7 @@ class PassportType extends AbstractType
                 'attr' => array(
                     'class' => 'dateOfExpiry',
                 ),
-                'years' => range(date('Y') - 30, date('Y') - 1)
+                'years' => range(date('Y') - 15, date('Y') - 1)
             ))
             ->add('passengerReference', 'hidden', array(
                 'required' => false,
