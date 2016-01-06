@@ -38,10 +38,10 @@ manage_ajax_move_to_accepted:
 manage_ajax_move_to_wailist:
     path: /move/waitlist/{tourId}/{passengerId}
     defaults: { _controller: "PassengerBundle:Passenger:moveToWaitlist" }
-manage_ajax_waitlist_accepted_change:
-    path: /waitlist/accepted/{tourId}/{passengerId}
-    defaults: { _controller: "PassengerBundle:Passenger:waitlistToAccepted" }
-    methods:  [POST, PUT]
+
+manage_ajax_move_to_free:
+    path: /move/free/{tourId}/{passengerId}
+    defaults: { _controller: "PassengerBundle:Passenger:moveToFree" }
 
 manage_tour_edit_payments:
     path: /edit/payments/{id}
