@@ -1,14 +1,14 @@
 $(document).ready(function () {
-
     // Do the resize content block stuff - on the fly!
-    $('.convert').click(function () {
+    $(document).on('click', 'a.move-to-accepted', function (e) {
         var t = $(this);
-        var passengerId = t.parent().attr('passenger');
-        var tourId = t.parent().attr('tour');
-        //$("#loader").css("display", "block");
+        e.preventDefault();
+        var passengerId = t.attr('passenger');
+        var tourId = t.attr('tour');
+        $("#loader").css("display", "block");
         $.ajax({
             type: 'POST',
-            url: '/tour/dashboard/waitlist/accepted/' + tourId + '/' + passengerId,
+            url: '/tour/dashboard/move/accepted/' + tourId + '/' + passengerId,
             headers: {
                 "Pragma": "no-cache",
                 "Expires": -1,
@@ -17,20 +17,60 @@ $(document).ready(function () {
         }).done(function (response) {
             var remainingSpots = response[4] - response[1];
             $("#loader").css("display", "none");
-            $("#plus").css("display", "none");
-            $("#check").css("display", "block");
-            //t.parent().transition({ opacity: 0 });
-            function collapse() {
-                t.parent().addClass("passenger-removed");
-                t.parent().css("opacity", "0");
-                t.parent().css("padding", "0");
-            }
-            setTimeout(collapse, 2000);
+            //$("#plus").css("display", "none");
+            //$("#check").css("display", "block");
+            ////t.parent().transition({ opacity: 0 });
+            //function collapse() {
+            //    t.parent().addClass("passenger-removed");
+            //    t.parent().css("opacity", "0");
+            //    t.parent().css("padding", "0");
+            //}
+            //setTimeout(collapse, 2000);
+            t.attr("href", "#waitlist");
             $("#accepted").html('(' + response[1] + ')');
             $("#waitlist").html('(' + response[2] + ')');
             $("#free").html('(' + response[3] + ')');
             $(".spots-remaining").html(remainingSpots);
-            //t.parent().css("display", "none");
+            t.html("Move To Waitlist");
+            t.removeClass('move-to-accepted');
+            t.addClass('move-to-waitlist');
+        });
+    });
+
+    $(document).on('click', 'a.move-to-waitlist', function (e) {
+        var t = $(this);
+        e.preventDefault();
+        var passengerId = t.attr('passenger');
+        var tourId = t.attr('tour');
+        $("#loader").css("display", "block");;
+        $.ajax({
+            type: 'POST',
+            url: '/tour/dashboard/move/waitlist/' + tourId + '/' + passengerId,
+            headers: {
+                "Pragma": "no-cache",
+                "Expires": -1,
+                "Cache-Control": "no-cache"
+            }
+        }).done(function (response) {
+            var remainingSpots = response[4] - response[1];
+            $("#loader").css("display", "none");
+            //$("#plus").css("display", "none");
+            //$("#check").css("display", "block");
+            ////t.parent().transition({ opacity: 0 });
+            //function collapse() {
+            //    t.parent().addClass("passenger-removed");
+            //    t.parent().css("opacity", "0");
+            //    t.parent().css("padding", "0");
+            //}
+            //setTimeout(collapse, 2000);
+            t.attr("href", "#accepted");
+            $("#accepted").html('(' + response[1] + ')');
+            $("#waitlist").html('(' + response[2] + ')');
+            $("#free").html('(' + response[3] + ')');
+            $(".spots-remaining").html(remainingSpots);
+            t.html("Move To Accepted");
+            t.removeClass('move-to-waitlist');
+            t.addClass('move-to-accepted');
         });
     });
 

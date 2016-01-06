@@ -705,7 +705,7 @@ class PassengerController extends Controller
         ));
     }
 
-    public function waitlistToAcceptedAction(Request $request, $tourId, $passengerId)
+    public function moveToAcceptedAction(Request $request, $tourId, $passengerId)
     {
 
         $em = $this->getDoctrine()->getManager();
@@ -713,9 +713,7 @@ class PassengerController extends Controller
         $payingPlaces = $tour->getPayingPlaces();
         $passenger = $em->getRepository('PassengerBundle:Passenger')->find($passengerId);
 
-        if ( $passenger->getTourReference()->getId() == $tourId && $passenger->getStatus() == "waitlist") {
-            $passenger->setStatus("accepted");
-        }
+        $passenger->setStatus("accepted");
 
         $em->persist($passenger);
         $em->flush();
@@ -753,6 +751,69 @@ class PassengerController extends Controller
             $parentObject = $em->getRepository('TUIToolkitUserBundle:User')->find($parent[1]);
             $freeObjects[]= array($passenger, $parentObject);
         }
+
+        $data = array (
+            $passenger,
+            count($acceptedObjects),
+            count($waitListObjects),
+            count($freeObjects),
+            $payingPlaces,
+        );
+
+        $responseContent =  json_encode($data);
+        return new Response($responseContent,
+            Response::HTTP_OK,
+            array('content-type' => 'application/json')
+        );
+    }
+
+    public function moveToWaitlistAction(Request $request, $tourId, $passengerId)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
+        $payingPlaces = $tour->getPayingPlaces();
+        $passenger = $em->getRepository('PassengerBundle:Passenger')->find($passengerId);
+
+        $passenger->setStatus("waitlist");
+
+        $em->persist($passenger);
+        $em->flush();
+
+        //Get Waitlist Passengers
+        $waitList = $this->get("passenger.actions")->getPassengerStatus('waitlist', $tourId);
+
+        $waitListObjects = array();
+
+        foreach($waitList as $passenger) {
+            $object = $passenger['p_id'];
+            $parent = $this->get("permission.set_permission")->getUser('parent', $object, 'passenger');
+            $parentObject = $em->getRepository('TUIToolkitUserBundle:User')->find($parent[1]);
+            $waitListObjects[]= array($passenger, $parentObject);
+        }
+
+        //Get accepted passengers
+        $accepted = $this->get("passenger.actions")->getPassengerStatus('accepted', $tourId);
+
+        $acceptedObjects = array();
+        foreach($accepted as $passenger) {
+            $object = $passenger['p_id'];
+            $parent = $this->get("permission.set_permission")->getUser('parent', $object, 'passenger');
+            $parentObject = $em->getRepository('TUIToolkitUserBundle:User')->find($parent[1]);
+            $acceptedObjects[]= array($passenger, $parentObject);
+        }
+
+        //Get free passengers
+        $free = $this->get("passenger.actions")->getPassengerStatus('free', $tourId);
+
+        $freeObjects = array();
+        foreach($free as $passenger) {
+            $object = $passenger['p_id'];
+            $parent = $this->get("permission.set_permission")->getUser('parent', $object, 'passenger');
+            $parentObject = $em->getRepository('TUIToolkitUserBundle:User')->find($parent[1]);
+            $freeObjects[]= array($passenger, $parentObject);
+        }
+
 
         $data = array (
             $passenger,

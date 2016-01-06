@@ -1,4 +1,4 @@
-{% extends '::base.html.twig' %}
+{% extends '::site-base.html.twig' %}
 {% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
 {% set spotsRemaining = tour.payingPlaces - acceptedobjects|length %}
 
@@ -38,9 +38,9 @@
         <div class="tour-show-left-column">
             <ul class="tour-show-submenu">
                 <li><strong>{% trans %}passenger.labels.passengers_for{% endtrans %} {{ tour.name|capitalize }}</strong></li>
-                <li><a style="color: {{ brand.primaryColor }}; text-decoration: none;" href="{{ path('manage_accepted_passenger_dashboard', { 'tourId': tour.id }) }}"><strong>{% trans %}passenger.labels.accepted{% endtrans %} ({{ acceptedobjects|length }})</strong></a></li>
-                <li><a style="color: {{ brand.primaryColor }}; text-decoration: none;" href="{{ path('manage_waitlist_passenger_dashboard', { 'tourId': tour.id }) }}"><strong>{% trans %}passenger.labels.waitlist{% endtrans %} ({{ waitlistobjects|length }})</strong></a></li>
-                <li><a style="color: {{ brand.primaryColor }}; text-decoration: none;" href="{{ path('manage_free_passenger_dashboard', { 'tourId': tour.id}) }}"><strong>{% trans %}passenger.labels.free{% endtrans %} ({{ freeobjects|length }})</strong></a></li>
+                <li><a style="color: {{ brand.primaryColor }}; text-decoration: none;" href="{{ path('manage_accepted_passenger_dashboard', { 'tourId': tour.id }) }}"><strong>{% trans %}passenger.labels.accepted{% endtrans %}<span id="accepted">({{ acceptedobjects|length }})</span></strong></a></li>
+                <li><a style="color: {{ brand.primaryColor }}; text-decoration: none;" href="{{ path('manage_waitlist_passenger_dashboard', { 'tourId': tour.id }) }}"><strong>{% trans %}passenger.labels.waitlist{% endtrans %}<span id="waitlist">({{ waitlistobjects|length }})</span></strong></a></li>
+                <li><a style="color: {{ brand.primaryColor }}; text-decoration: none;" href="{{ path('manage_free_passenger_dashboard', { 'tourId': tour.id}) }}"><strong>{% trans %}passenger.labels.free{% endtrans %} <span id="free">({{ freeobjects|length }})</span></strong></a></li>
                 {#<li><strong><a href="#">Organisers</a></strong></li>#}
             </ul>
 
@@ -60,7 +60,7 @@
 
         <div class="tour-show-right-column">
 
-            <div class="waitlist tour-edit mdl-card mdl-shadow--2dp">
+            <div class="waitlist tour-edit mdl-card mdl-shadow--2dp" style="margin-bottom: 0; box-shadow: none;">
 
                 <div class="mdl-card__title">
                     <h3 class="mdl-card__title-text">{% trans %}passenger.labels.passenger_list{% endtrans %}</h3>
@@ -73,24 +73,51 @@
                     <a id="invite-passengers" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="#"><i class="fa fa-users"></i>{% trans %}passenger.labels.invite{% endtrans %}</a>
                     <a id="accept-tour" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="#"><i class="fa fa-user-plus"></i>{% trans %}passenger.labels.add{% endtrans %}</a>
                 </div>
+            </div>
                 {% for passenger in waitlistobjects %}
-                    <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
-                        <p style="display: inline-block"><strong>{{ passenger[0].p_fName }}</strong></p> <p style="display: inline-block"><strong>{{ passenger[0].p_lName }}</strong></p> <p style="display: inline-block"><strong><a href="mailto:{{ passenger[1].email }}">{{ passenger[1].email }}</a></strong></p>
-                        <label style="display: block">Signed up on {{ passenger[0].p_signUpDate|date(format) }}</label>
+                    <div class="waitlist tour-edit mdl-shadow--2dp" style="background-color:white; margin-bottom: 0;">
+                        <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
+                            <div style="float: left; color: grey;">
+                                <p style="display: inline-block"><strong>{{ passenger[0].p_fName }}</strong></p> <p style="display: inline-block"><strong>{{ passenger[0].p_lName }}</strong></p> <p style="display: inline-block"><strong><a href="mailto:{{ passenger[1].email }}">{{ passenger[1].email }}</a></strong></p>
+                                <label style="display: block">Signed up on {{ passenger[0].p_signUpDate|date(format) }}</label>
+                            </div>
+                            <button style="position: absolute; right: 20px; color:grey; margin-top:10px;" id="passenger-actions-menu-drop-{{ passenger[0].p_id }}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+                                <i class="material-icons">more_vert</i>
+                            </button>
+                            {% embed "PassengerBundle:Passenger:passengerActionsMenu.html.twig" %}{% endembed %}
+                           {#{% embed "PassengerBundle:Passenger:passengerActionsMenu.html.twig" %}{% endembed %}#}
+                        </div>
+
                     </div>
                 {% endfor %}
                 {% for passenger in acceptedobjects %}
-                    <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
-                        <p style="display: inline-block"><strong>{{ passenger[0].p_fName }}</strong></p> <p style="display: inline-block"><strong>{{ passenger[0].p_lName }}</strong></p> <p style="display: inline-block"><strong><a href="mailto:{{ passenger[1].email }}">{{ passenger[1].email }}</a></strong></p>
-                        <label style="display: block">Signed up on {{ passenger[0].p_signUpDate|date(format) }}</label>
+                    <div class="waitlist tour-edit mdl-shadow--2dp" style="overflow: visible; background-color:white; margin-bottom: 0;">
+                        <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
+                            <div style="float: left; color: grey;">
+                                <p style="display: inline-block"><strong>{{ passenger[0].p_fName }}</strong></p> <p style="display: inline-block"><strong>{{ passenger[0].p_lName }}</strong></p> <p style="display: inline-block"><strong><a href="mailto:{{ passenger[1].email }}">{{ passenger[1].email }}</a></strong></p>
+                                <label style="display: block">Signed up on {{ passenger[0].p_signUpDate|date(format) }}</label>
+                            </div>
+                            <button style="position: absolute; right: 20px; color:grey; margin-top:10px;" id="passenger-actions-menu-drop-{{ passenger[0].p_id }}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+                                <i class="material-icons">more_vert</i>
+                            </button>
+                            {% embed "PassengerBundle:Passenger:passengerActionsMenu.html.twig" %}{% endembed %}
+                           {#{% embed "PassengerBundle:Passenger:passengerActionsMenu.html.twig" %}{% endembed %}#}
+                        </div>
                     </div>
                 {% endfor %}
                 {% for passenger in freeobjects %}
                     <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
-                        <p style="display: inline-block"><strong>{{ passenger[0].p_fName }}</strong></p> <p style="display: inline-block"><strong>{{ passenger[0].p_lName }}</strong></p> <p style="display: inline-block"><strong><a href="mailto:{{ passenger[1].email }}">{{ passenger[1].email }}</a></strong></p>
-                        <label style="display: block">Signed up on {{ passenger[0].p_signUpDate|date(format) }}</label>
+                        <div style="float: left; color: grey;">
+                            <p style="display: inline-block"><strong>{{ passenger[0].p_fName }}</strong></p> <p style="display: inline-block"><strong>{{ passenger[0].p_lName }}</strong></p> <p style="display: inline-block"><strong><a href="mailto:{{ passenger[1].email }}">{{ passenger[1].email }}</a></strong></p>
+                            <label style="display: block">Signed up on {{ passenger[0].p_signUpDate|date(format) }}</label>
+                        </div>
+                        <button style="position: absolute; right: 20px; color:grey; margin-top:10px;" id="passenger-actions-menu-drop" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon passenger-menu-drop">
+                            <i class="material-icons">more_vert</i>
+                        </button>
+                        {#{% embed "PassengerBundle:Passenger:passengerActionsMenu.html.twig" %}{% endembed %}#}
                     </div>
                 {% endfor %}
+                <div style="clear:both; height:100px;"></div>
                 </div>
         </div>
 
@@ -115,6 +142,10 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.js"></script>
 
     {% javascripts '@toolkit_siteshow' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    {% javascripts '@toolkit_passenger' %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
@@ -150,4 +181,64 @@
 
         });
     </script>
+{% endblock %}
+
+{% block footer_left %}
+    {% if app.user.email != tour.salesAgent.email%} {# Show Sales Agent Info to an Organizer#}
+        {% if tour.salesAgent %}
+            <span class="intro">
+                    {{ brand.name }} {% trans %}tour.show.footer.intro_org{% endtrans %}
+            </span>
+            {% if tour.salesAgent.media %}
+                <span class="tui-image-avatar"><img src="{{ ( tour.salesAgent.media.getRelativePath ~ "/" ~ tour.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ tour.salesAgent.username }}"></span>
+            {% elseif tour.salesAgent.firstName and tour.salesAgent.lastName %}
+                <span class="tui-text-avatar mdl-typography--headline">{{ tour.salesAgent.firstName[:1] }}{{ tour.salesAgent.lastName[:1] }}</span>
+            {% else %}
+                <span class="tui-text-avatar mdl-typography--headline">{{ tour.salesAgent.username[:1] }}</span>
+            {% endif %}
+            <span class="agent">
+                {% if tour.salesAgent.displayName %}
+                    {{ tour.salesAgent.displayName }}
+                {% else %}
+                    {{ tour.salesAgent.firstName }} {{ tour.salesAgent.lastName }}
+                {% endif %}
+                <br>
+                <a href="mailto:{{ tour.salesAgent.email }}">{{ tour.salesAgent.email }}</a>
+            </span>
+        {% endif %}
+    {% else %} {# Show organizer info to everyone but organizers #}
+        {% if tour.organizer %}
+            <span class="intro">
+                    {% trans %}tour.show.footer.intro{% endtrans %}
+            </span>
+            {% if tour.organizer.media %}
+                <span class="tui-image-avatar"><img src="{{ ( tour.organizer.media.getRelativePath ~ "/" ~ tour.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ tour.organizer.username }}"></span>
+            {% elseif tour.organizer.firstName and tour.organizer.lastName %}
+                <span class="tui-text-avatar mdl-typography--headline">{{ tour.organizer.firstName[:1] }}{{ tour.organizer.lastName[:1] }}</span>
+            {% else %}
+                <span class="tui-text-avatar mdl-typography--headline">{{ tour.organizer.username[:1] }}</span>
+            {% endif %}
+            <span class="agent">
+                {% if tour.organizer.displayName %}
+                    {{ tour.organizer.displayName }}
+                {% else %}
+                    {{ tour.organizer.firstName }} {{ tour.organizer.lastName }}
+                {% endif %}
+                <br>
+                <a href="mailto:{{ tour.organizer.email }}">{{ tour.organizer.email }}</a>
+            </span>
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block footer_right %}
+    <div class="quote-info">
+        <span class="quote-label">{% trans %}tour.show.footer.price{% endtrans %}</span>
+
+        <span class="quote-price">
+            {% if tour.pricePerson %}
+                <strong>{% if tour.currency %}{{ tour.currency.htmlSymbol | raw }}{% endif %}{{ tour.pricePersonPublic }}</strong>
+            {% endif %}
+        </span>
+    </div>
 {% endblock %}
