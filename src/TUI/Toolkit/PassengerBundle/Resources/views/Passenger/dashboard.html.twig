@@ -75,8 +75,8 @@
                 </div>
             </div>
                 {% for passenger in passengers %}
-                {% if passenger[0].p_free == 1 %}{% set freeClass = 'free' %} {% endif %}
-                    <div class="{{ passenger[0].p_status }} tour-edit mdl-shadow--2dp" style="background-color:white; margin-bottom: 0;">
+                {% if passenger[0].p_free == 1 %}{% set freeClass = 'free' %} {% else %} {% set freeClass = 'paid' %} {% endif %}
+                    <div class="{{ passenger[0].p_status }} {{ freeClass }}tour-edit mdl-shadow--2dp" style="background-color:white; margin-bottom: 0;">
                         <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
                             <div style="float: left; color: grey;">
                                 <p style="display: inline-block"><strong>{{ passenger[0].p_fName }}</strong></p> <p style="display: inline-block"><strong>{{ passenger[0].p_lName }}</strong></p> <p style="display: inline-block"><strong><a href="mailto:{{ passenger[1].email }}">{{ passenger[1].email }}</a></strong></p>
