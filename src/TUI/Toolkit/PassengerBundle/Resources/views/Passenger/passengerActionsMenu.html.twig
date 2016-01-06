@@ -1,0 +1,19 @@
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="passenger-actions-menu-drop-{{ passenger[0].p_id }}">
+    <span>
+        <li><a href="{{ path('manage_passenger_show', { 'id': passenger[0].p_id }) }}" class="mdl-menu__item">View Passenger</a></li>
+        {% if passenger[0].p_status != "accepted" %}
+            <li><a href="#accepted" class="mdl-menu__item move-to-accepted" tour="{{ tour.id }}" passenger="{{ passenger[0].p_id }}">Move to Accepted</a></li>
+        {% endif %}
+        {% if passenger[0].p_status != "waitlist" %}
+            <li><a href="#" class="mdl-menu__item move-to-waitlist" tour="{{ tour.id }}" passenger="{{ passenger[0].p_id }}">Move to Wailist</a></li>
+        {% endif %}
+        {#{% block tour_dashboard_link %}{% endblock %}#}
+        {#<li><a href="{{ path('tour_site_action_show', { 'id': entity.id }) }}" class="mdl-menu__item">{% trans %}tour.menu.preview{% endtrans %}</a></li>#}
+        {#{%  if is_granted('ROLE_BRAND') %}#}
+            {#<li><a href="{{ path('manage_tour_edit', { 'id': entity.id }) }}" class="mdl-menu__item">{% trans %}tour.menu.brand_edit{% endtrans %}</a></li>#}
+        {#{% endif %}#}
+        {#<li><a href="{{ path('manage_tour_edit_payments', { 'id': entity.id }) }}" class="mdl-menu__item">{% trans %}tour.menu.payments{% endtrans %}</a></li>#}
+        {#<li><a href="{{ path('manage_passenger_dashboard', { 'tourId': entity.id }) }}" class="mdl-menu__item">{% trans %}passenger.title.index{% endtrans %}</a></li>#}
+
+    </span>
+</ul>

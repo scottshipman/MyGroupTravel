@@ -43,13 +43,20 @@ passenger:
 
     labels:
         passengers_for: Passengers For
+        passenger_for: Passenger For
         waitlist: Wait List
+        accepted: Accepted
+        free: Free
+        organizer: Organizers
         passenger_list: Passenger List
         add_paying: Add Paying Passengers
         remaining: Remaining
         welcome: Welcome to the passenger dashboard.  Here you can invite, add, and manage all of your passengers.
         invite: Invite Passengers
         add: Add Passenger
+        primary-organizer: Primary Organizer
+        invite-pending: Invited - Not yet responded.
+        invite-accepted: Accepted Invitation.
 
     emails:
         thank_you: Thank you for your submission

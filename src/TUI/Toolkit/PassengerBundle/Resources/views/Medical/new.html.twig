@@ -1,0 +1,17 @@
+
+{% block body -%}
+
+    <div class="medical-form">
+        {{ form(form) }}
+    </div>
+<script>
+    $(document).ready(function () {
+        var tourId = $('.site-show').attr('entityId');
+        var passengerId = $('.site-show').attr('passengerId');
+        console.log(tourId);
+       $('#tui_toolkit_passengerbundle_medical_passengerReference').val(passengerId);
+       $()
+    });
+</script>
+
+{% endblock %}

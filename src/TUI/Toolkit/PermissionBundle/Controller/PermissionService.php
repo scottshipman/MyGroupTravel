@@ -38,15 +38,16 @@ class PermissionService
         $qb->expr()->eq('p.class', '?2'),
         $qb->expr()->eq('p.grants', '?3')
       ));
+    $qb->setParameters(array(1 => $object, 2 => $class, 3 => $grants ));
     if($grants != 'organizer'){
       // business rule = only 1 organizer, multiple assistants,
       // so overwrite organizer by ommitting User in query when grant = organizer
       $qb->andWhere($qb->expr()->andX(
         $qb->expr()->eq('p.user', '?4')
       ));
-      $qb->setParameter(array(4 => $user));
+      $qb->setParameter(4,  $user);
     }
-    $qb->setParameters(array(1 => $object, 2 => $class, 3 => $grants ));
+//    $qb->setParameters(array(1 => $object, 2 => $class, 3 => $grants ));
     $query = $qb->getQuery();
     // there is only ever one organizer
     $result = $query->getOneOrNullResult();
@@ -130,5 +131,33 @@ class PermissionService
 
   }
 
+  /**
+   * Parameters - User ID; Class; Grants
+   *
+   * @return Object ID
+   */
+  public function getObject($grants, $user, $class) {
+    // return user based on grants, object and class
+    $em = $this->em;
+    $qb = $em->createQueryBuilder();
+    $qb->select('p.object')
+        ->from('PermissionBundle:Permission', 'p')
+        ->where($qb->expr()->andX(
+            $qb->expr()->eq('p.grants', '?1'),
+            $qb->expr()->eq('p.user', '?2'),
+            $qb->expr()->eq('p.class', '?3')
+        ));
 
+    $qb->setParameters(array(1 => $grants, 2 => $user, 3 => $class));
+    $query = $qb->getQuery();
+    $result = $query->getScalarResult();
+
+    if (!$result) {
+      return NULL;
+    }
+    else {
+      $object = $result[0];
+      return $object;
+    }
+  }
 }

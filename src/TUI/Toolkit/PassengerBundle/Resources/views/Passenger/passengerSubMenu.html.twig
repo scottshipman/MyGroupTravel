@@ -1,0 +1,14 @@
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="passenger-menu-drop">
+    <span>
+        <li>Something</li>
+        <li><a href="{{ path('_homepage') }}" class="mdl-menu__item">{% trans %}tour.menu.my_tours{% endtrans %}</a></li>
+        {% block tour_dashboard_link %}{% endblock %}
+        <li><a href="{{ path('tour_site_action_show', { 'id': entity.id }) }}" class="mdl-menu__item">{% trans %}tour.menu.preview{% endtrans %}</a></li>
+        {%  if is_granted('ROLE_BRAND') %}
+            <li><a href="{{ path('manage_tour_edit', { 'id': entity.id }) }}" class="mdl-menu__item">{% trans %}tour.menu.brand_edit{% endtrans %}</a></li>
+        {% endif %}
+        <li><a href="{{ path('manage_tour_edit_payments', { 'id': entity.id }) }}" class="mdl-menu__item">{% trans %}tour.menu.payments{% endtrans %}</a></li>
+        <li><a href="{{ path('manage_passenger_dashboard', { 'tourId': entity.id }) }}" class="mdl-menu__item">{% trans %}passenger.title.index{% endtrans %}</a></li>
+
+    </span>
+</ul>
