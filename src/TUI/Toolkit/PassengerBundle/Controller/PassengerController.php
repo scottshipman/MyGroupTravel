@@ -800,27 +800,58 @@ class PassengerController extends Controller
         );
     }
 
+    /**
+     * Create action for invite organizer.
+     *
+     * @param tourId
+     *
+     * @return twig with \Symfony\Component\Form\Form The form
+     */
     public function inviteOrganizerAction(Request $request, $tourId)
     {
+        $form  = $this->createInviteForm($tourId);
+        $foo='';
 
+        return $this->render('PassengerBundle:Passenger:inviteOrganizer.html.twig', array(
+            'tourId' => $tourId,
+            'form'   => $form->createView(),
+        ));
     }
 
     /**
-     * Creates a form to create a Medical entity.
+     * Creates a form to create a Invite Organizer form.
      *
-     * @param Medical $entity The entity
+     * @param tourId
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createInviteForm(Medical $entity)
+    private function createInviteForm($tourId)
     {
-        $form = $this->createForm(new InviteOrganizerType($tourId), null, array(
-            'action' => $this->generateUrl('invite_organizer'),
+        $form = $this->createForm(new InviteOrganizerType(), array(), array(
+            'action' => $this->generateUrl('invite_organizer_submit', array('tourId' => $tourId)),
             'method' => 'POST',
         ));
 
         $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('passenger.actions.invite')));
 
         return $form;
+    }
+
+
+    /**
+     * Process Invite Organizer request
+     *
+     * @param tourId
+     *
+     * @return ajax responce.
+     */
+    public function inviteOrganizerSubmitAction(Request $request, $tourId)
+    {
+        $form   = $this->createInviteForm($tourId);
+
+        return $this->render('PassengerBundle:Passenger:inviteOrganizer.html.twig', array(
+            'tourId' => $tourId,
+            'form'   => $form->createView(),
+        ));
     }
 }

@@ -15,7 +15,7 @@ class InviteOrganizerType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
+/*        $builder
             ->add('email', 'email', array(
                 'required' => true,
                 'mapped' => false,
@@ -28,7 +28,7 @@ class InviteOrganizerType extends AbstractType
                 'label' => 'user.form.invite.message',
                 'translation_domain'  => 'messages',
             ))
-            ;
+            ;*/
 
     }
 

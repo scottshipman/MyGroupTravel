@@ -10,9 +10,9 @@
 {% endif %}
 
 
-{% if entity.passengerDate != null %}
-    {% set passengerDtg  = date(entity.passengerDate).diff(date("now")) %}
-    {% set passengerTime  = date(entity.created.date).diff(date(entity.passengerDate))%}
+{% if entity.emergencyDate != null %}
+    {% set passengerDtg  = date(entity.emergencyDate).diff(date("now")) %}
+    {% set passengerTime  = date(entity.created.date).diff(date(entity.emergencyDate))%}
     {% set passengerPercent = ((passengerTime.days - passengerDtg.days)/passengerTime.days) * 100  %}
     {% if passengerDtg.days < 1 %} {%  set passengerDtgFinal = 0  %} {% else %} {% set passengerDtgFinal = passengerDtg.days %}{% endif %}
 {% endif %}
@@ -32,15 +32,14 @@
 {% endif %}
 
 {# calculate Days to Go for Departure Date #}
-{% if  entity.departureDate and date(entity.departureDate) > date("now - 1 day") %}
+{% if  entity.departureDate and entity.departureDate | date ('Y-m-d') > "now - 1 day" | date('Y-m-d') %}
     {% set dtgFinal  = date(entity.departureDate).diff(date("now - 1 day")).days %}
 {% else  %}
     {%  set dtgFinal = 0  %}
 {% endif %}
 
 {# calculate Days Until Expiration #}
-
-{% if  entity.expiryDate and entity.expiryDate | date  > "now - 1 day"|date %}
+{% if  entity.expiryDate and entity.expiryDate | date ('Y-m-d') > "now - 1 day" | date('Y-m-d') %}
     {% set dteFinal  = date(entity.expiryDate).diff(date("now - 1 day")).days %}
 {% else %}
     {%  set dteFinal = 0  %}
@@ -279,12 +278,12 @@
     {% endif %}
 
     {#Passenger Data info task#}
-    {% if entity.passengerDate != null %}
-        {% if "now"|date(compareFormat) < entity.passengerDate|date(compareFormat) %}
+    {% if entity.emergencyDate != null %}
+        {% if "now"|date(compareFormat) < entity.emergencyDate|date(compareFormat) %}
             <div class="tour-edit mdl-card mdl-shadow--2dp">
                 <a class ="dashboard-titles" href="#">
                     <div class="mdl-card__title">
-                        <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.passenger_data{% endtrans %} {{ entity.passengerDate|date(shortFormat) }}</h3>
+                        <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.passenger_data{% endtrans %} {{ entity.emergencyDate|date(shortFormat) }}</h3>
                         <span class="tour-dashboard-cta"><i class="fa fa-arrow-right"></i></span>
                     </div>
                 </a>
@@ -423,8 +422,8 @@
     {% endif %}
 
     {#Passenger Data completed#}
-    {% if entity.passengerDate != null %}
-        {% if "now"|date(compareFormat) > entity.passengerDate|date(compareFormat) %}
+    {% if entity.emergencyDate != null %}
+        {% if "now"|date(compareFormat) > entity.emergencyDate|date(compareFormat) %}
             <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
                 <div class="mdl-card__title">
                     <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.completed_passenger_data{% endtrans %}</h3>
