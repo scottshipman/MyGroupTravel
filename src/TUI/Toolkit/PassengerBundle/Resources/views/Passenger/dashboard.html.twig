@@ -167,8 +167,9 @@
                     var elemID = this.id;
                     switch(elemID) {
                         case 'showAccepted':
-                            $('.free, .organizers, .waitlist, .organizer-cta-card').slideUp(400);
-                            $('.accepted, .passenger-cta-card').slideDown(400);
+                            $('.free, .organizers, .waitlist, .organizer-cta-card').slideUp(400, function(){
+                                $('.accepted, .passenger-cta-card').slideDown(400);
+                            });
                             $('#showAccepted').css("color", "{{ brand.secondaryColor }}");
                             $('#showWaitlist').css("color", "{{ brand.primaryColor }}");
                             $('#showFree').css("color", "{{ brand.primaryColor }}");
@@ -176,8 +177,10 @@
                             $('#card-title').html('Accepted');
                             break;
                         case 'showWaitlist':
-                            $('.accepted, .organizers, .free, .organizer-cta-card').slideUp(400);
-                            $('.waitlist, .passenger-cta-card').slideDown(400);
+                            $('.accepted, .organizers, .free, .organizer-cta-card').slideUp(400, function(){
+                                $('.waitlist, .passenger-cta-card').slideDown(400);
+                            });
+
                             $('#showAccepted').css("color", "{{ brand.primaryColor }}");
                             $('#showWaitlist').css("color", "{{ brand.secondaryColor }}");
                             $('#showFree').css("color", "{{ brand.primaryColor }}");
@@ -185,8 +188,10 @@
                             $('#card-title').html('Wait list');
                             break;
                         case 'showFree':
-                            $('.accepted, .waitlist, .organizers,  .organizer-cta-card').slideUp(400);
-                            $('.free, .passenger-cta-card').slideDown(400);
+                            $('.accepted, .waitlist, .organizers,  .organizer-cta-card').slideUp(400, function(){
+                                $('.free, .passenger-cta-card').slideDown(400);
+                            });
+
                             $('#showAccepted').css("color", "{{ brand.primaryColor }}");
                             $('#showWaitlist').css("color", "{{ brand.primaryColor }}");
                             $('#showFree').css("color", "{{ brand.secondaryColor }}");
@@ -194,8 +199,10 @@
                             $('#card-title').html('Free');
                             break;
                         case 'showOrganizers':
-                            $('.accepted, .waitlist, .free,  .passenger-cta-card').slideUp(400);
-                            $('.organizers, .organizer-cta-card').slideDown(400);
+                            $('.accepted, .waitlist, .free,  .passenger-cta-card').slideUp(400, function(){
+                                $('.organizers, .organizer-cta-card').slideDown(400);
+                            });
+
                             $('#showAccepted').css("color", "{{ brand.primaryColor }}");
                             $('#showWaitlist').css("color", "{{ brand.primaryColor }}");
                             $('#showFree').css("color", "{{ brand.primaryColor }}");
