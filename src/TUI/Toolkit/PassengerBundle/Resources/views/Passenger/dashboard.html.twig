@@ -226,15 +226,17 @@
                 $('#ajax_invite_organizer').ajaxForm({
                     beforeSubmit: function(){
                         $('#loader').show();
+                        $('.errors').html('');
                     },
                     clearForm: true,
                     success : function (response) {
                         // display success message
-                        $('.errors').html('<span>An email invitation has been sent to ' + response[1] + ' ' + response[2] + ' [' + response[0] + ']</span>');
+                        $('.errors').html('<div id="invite-org-success" style="display:none;">An email invitation has been sent to ' + response[1] + ' ' + response[2] + '  at ' + response[0] + '.</div>');
+                        $('#invite-org-success').slideDown(400);
                         // increment organizer count
                         $('#organizerPassengers').html('(' + response[3] + ')')
                         // add an organizer card with waitlist and pending invite status
-                        $('#organizer-cards-wrapper').prepend('<div class="tour-edit mdl-shadow--2dp" style="background-color:white; margin-bottom: 0;"><div class="mdl-card__supporting-text mdl-card--border" style="color:grey;"><div style="float: left; color: grey;"><span class="tui-text-avatar mdl-typography--headline">Tt</span><p style="display: inline-block"><strong>' + response[1] + ' </strong></p><p style="display: inline-block"><strong>' + response[2] + ' </strong></p><p style="display: inline-block"><strong>(Invited - Not yet responded.)</strong></p><p style="display: inline-block" class="organizer-Not Travelling "></p><p><a href="' + response[0] + '">' + response[0] + '</a></p></div></div></div>');
+                        $('#organizer-cards-wrapper').prepend('<div class="tour-edit mdl-shadow--2dp" style="background-color:white; margin-bottom: 0;"><div class="mdl-card__supporting-text mdl-card--border" style="color:grey;"><div style="float: left; color: grey;"><span class="tui-text-avatar mdl-typography--headline">Tt</span><p style="display: inline-block"><strong>' + response[1] + '&nbsp;</strong></p><p style="display: inline-block"><strong>' + response[2] + '&nbsp;</strong></p><p style="display: inline-block"><strong>(Invited - Not yet responded.)</strong></p><p style="display: inline-block" class="organizer-Not Travelling "></p><p><a href="' + response[0] + '">' + response[0] + '</a></p></div></div></div>');
                         $('#loader').hide();
                     },
                     error : function (response) {
