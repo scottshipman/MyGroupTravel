@@ -14,7 +14,7 @@ variables available to this twig:
 #}
 
 
-<div class="organizers" style="display:none;">
+<div id="organizer-cards-wrapper" class="organizers" style="display:none;">
     {# loop and render all assistants #}
 
 
@@ -52,8 +52,5 @@ variables available to this twig:
         </div>
     {% endfor %}
 
-
-    {# render the Invite organizer form #}
-    {{ render(controller( 'PassengerBundle:Passenger:inviteOrganizer', {'tourId' : tour.id} )) }}
 
 </div>

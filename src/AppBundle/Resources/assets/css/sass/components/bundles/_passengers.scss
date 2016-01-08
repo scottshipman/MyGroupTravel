@@ -13,6 +13,12 @@
   float:left;
 }
 
+.organizer-dashboard-copy {
+  width: auto;
+  float:left;
+  margin-top: 1.5em;
+}
+
 .passenger-dashboard-buttons {
   display: inline-block;
   margin: 10px auto;
@@ -201,5 +207,11 @@
   &:after {
     content: 'Waitlist';
 
+  }
+}
+
+.invite-organizer-form {
+  &.mdl-textfield {
+    width: 80%;
   }
 }

@@ -559,7 +559,8 @@ class PassengerController extends Controller
             if (!empty($passenger)){
                 $passengerObject = $em->getRepository('PassengerBundle:Passenger')->find($passenger['object']);
             } else {
-                $passengerObject = "";
+                $passengerObject = new Passenger();
+                $passengerObject->setStatus('Not Travelling');
             }
             $combinedObjects[]= array($passengerObject, $organizer, $isOrganizer);
         }
@@ -827,10 +828,21 @@ class PassengerController extends Controller
      */
     private function createInviteForm($tourId)
     {
-        $form = $this->createForm(new InviteOrganizerType(), array(), array(
+        $data=array();
+        $form = $this->createFormBuilder($data, array(
             'action' => $this->generateUrl('invite_organizer_submit', array('tourId' => $tourId)),
             'method' => 'POST',
-        ));
+            'attr'  => array (
+                'id' => 'ajax_invite_organizer'
+            ),))
+            ->add('email', 'email', array('label' => $this->get('translator')->trans('passenger.form.invite.email')))
+            ->add('firstname', 'text', array('label' => $this->get('translator')->trans('passenger.form.invite.first')))
+            ->add('lastname', 'text', array('label' => $this->get('translator')->trans('passenger.form.invite.last')))
+            ->add('message', 'textarea', array('label' => $this->get('translator')->trans('passenger.form.invite.message')))
+            ->add('tourId', 'hidden', array(
+                'data' => $tourId,
+            ))
+            ->getForm();
 
         $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('passenger.actions.invite')));
 
@@ -843,15 +855,144 @@ class PassengerController extends Controller
      *
      * @param tourId
      *
+     *  1. Stub out a User
+     *  2. Send invite email
      * @return ajax responce.
      */
     public function inviteOrganizerSubmitAction(Request $request, $tourId)
     {
-        $form   = $this->createInviteForm($tourId);
+        $em = $this->getDoctrine()->getManager();
 
-        return $this->render('PassengerBundle:Passenger:inviteOrganizer.html.twig', array(
-            'tourId' => $tourId,
-            'form'   => $form->createView(),
-        ));
+        $form = $this->createInviteForm($tourId);
+        $form->handleRequest($request);
+        if($form->isValid()) {
+
+            $data = $form->getData();
+
+            $user = new User();
+            $user->setUsername($data['email']);
+            $user->setPassword('');
+            $user->setEmail($data['email']);
+            $user->setFirstName($data['firstname']);
+            $user->setLastName($data['lastname']);
+            $user->setRoles(array('ROLE_CUSTOMER'));
+
+
+            // Create token
+            $tokenGenerator = $this->container->get('fos_user.util.token_generator');
+            $user->setConfirmationToken($tokenGenerator->generateToken());
+
+            $em->persist($user);
+            $em->flush();
+
+            // create permission for new user as assistant
+            $assistant = new Permission();
+            $assistant->setUser($user);
+            $assistant->setClass('tour');
+            $assistant->setObject($tourId);
+            $assistant->setGrants('assistant');
+            $em->persist($assistant);
+            $em->flush();
+
+            //get current tour
+            $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
+
+            //brand stuff
+            $default_brand = $em->getRepository('BrandBundle:Brand')
+                ->findOneByName('ToolkitDefaultBrand');
+            // look for a configured brand
+            if ($brand_id = $this->container->getParameter('brand_id')) {
+                $brand = $em->getRepository('BrandBundle:Brand')
+                    ->find($brand_id);
+            }
+            if (!$brand) {
+                $brand = $default_brand;
+            }
+
+            //get current user in case they arent the primary organizer
+            $currUser = $this->get('security.context')->getToken()->getUser();
+
+            //get tour organizer
+            $organizer = $tour->getOrganizer();
+
+            //get organizer count to update on response
+            $organizers = $this->get("passenger.actions")->getOrganizers($tourId);
+            $organizersCount = count($organizers);
+
+            //Send email to the organizer if the organizer account the organizer account is enabled
+            $organizerEmail = $organizer->getEmail();
+            $currUserEmail = $currUser->getEmail();
+
+            $message = \Swift_Message::newInstance()
+                ->setSubject($this->get('translator')
+                    ->trans('passenger.emails.invite-organizer.organizer-subject'))
+                ->setFrom($this->container->getParameter('user_system_email'))
+                ->setTo(array($organizerEmail, $currUserEmail))
+                ->setBody(
+                    $this->renderView(
+                        'PassengerBundle:Emails:inviteOrganizerNotifyOrganizer.html.twig',
+                        array(
+                            'brand' => $brand,
+                            'tour' => $tour,
+                            'user' => $user,
+                            'currUser' => $currUser,
+                            'organizer' => $organizer,
+                            'message' => $data['message'],
+                        )
+                    ), 'text/html');
+            $this->get('mailer')->send($message);
+
+
+            //Send Email to whoever was invited
+            $newEmail = $user->getEmail();
+
+            $message = \Swift_Message::newInstance()
+                ->setSubject($this->get('translator')
+                    ->trans('passenger.emails.invite-organizer.new-user-subject'))
+                ->setFrom($this->container->getParameter('user_system_email'))
+                ->setTo($newEmail)
+                ->setBody(
+                    $this->renderView(
+                        'PassengerBundle:Emails:inviteOrganizerRegistrationEmail.html.twig',
+                        array(
+                            'brand' => $brand,
+                            'tour' => $tour,
+                            'user' => $user,
+                            'currUser' => $currUser,
+                            'organizer' => $organizer,
+                            'message' => $data['message'],
+                        )
+                    ), 'text/html');
+            $this->get('mailer')->send($message);
+
+            //return successful ajax response
+            $data = array(
+                $user->getEmail(),
+                $user->getFirstName(),
+                $user->getLastName(),
+                $organizersCount + 1,
+            );
+
+            $responseContent = json_encode($data);
+            return new Response($responseContent,
+                Response::HTTP_OK,
+                array('content-type' => 'application/json')
+            );
+        }
+
+// return an ajax error response
+      $errors = $form->getErrors(true, true);
+
+        $errorCollection = array();
+        foreach($errors as $error){
+            $errorCollection[] = $error->getMessage();
+        }
+
+        $array = array( 'status' => 400, 'errorMsg' => 'Bad Request', 'errorReport' => $errorCollection);
+
+        $response = new Response( json_encode( $array ) );
+        $response->headers->set( 'Content-Type', 'application/json' );
+
+        return $response;// data to return via JSON
     }
 }
