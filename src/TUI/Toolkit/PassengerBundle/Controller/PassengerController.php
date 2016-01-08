@@ -811,7 +811,6 @@ class PassengerController extends Controller
     public function inviteOrganizerAction(Request $request, $tourId)
     {
         $form  = $this->createInviteForm($tourId);
-        $foo='';
 
         return $this->render('PassengerBundle:Passenger:inviteOrganizer.html.twig', array(
             'tourId' => $tourId,
