@@ -584,7 +584,8 @@ class TourController extends Controller
             $blockCount = count($blocks);
             if (!empty($blocks)) {
                 if ($blockCount <= 1) {
-                    $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($blocks[0]);
+                    $blocks = array_shift($blocks);
+                    $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($blocks);
                     if (!$blockObj) {
                         throw $this->createNotFoundException('Unable to find Content Block entity.');
                     }
