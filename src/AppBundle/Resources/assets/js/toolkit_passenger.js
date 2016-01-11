@@ -372,31 +372,51 @@ $(document).ready(function () {
             data: $('#ajax_passenger_edit_form').serialize(),
             contentType: "application/x-www-form-urlencoded",
         }).success(function (response) {
+            var firstName = response[0];
+            var lastName = response[1]
+            var dob = response[2];
+            var gender = response[3];
+            var passengerId =  response[4];
             $("#loader").css("display", "none");
             //window.location.reload(true);
-            $(".passenger-form").removeClass('expanded');
-            $('#passenger').css({
+            $(".passenger-edit-form").removeClass('expanded');
+            $('#passenger-edit-actions-menu-drop-' + passengerId).css({
                 "color": "grey",
                 "position": "absolute",
                 "right": "15px",
                 "display": "inline-block"
             });
             $('#passenger-close').css("display", "none");
-            $('.-name').html(response[0]);
-            $('.emergency-relationship').html(response[1]);
-            $('.emergency-number').html(response[2]);
-            $('.emergency-email').html(response[3]);
+            $('#passenger-fname').html(firstName);
+            $('#passenger-lname').html(lastName);
+            $('#passenger-dob').html(dob);
+            $('#passenger-gender').html(gender);
+            var length = response.length;
+            if (length == 7) {
+                var imagePath = response[5] + '/' + response[6];
+                if ($('#passenger-avatar').is('img')) {
+                    $('#passenger-avatar').attr('src', imagePath);
+                }else if ($('#passenger-avatar').is('span')) {
+                    $('#passenger-avatar').replaceWith('<img style="float: left; margin-right: 15px;" id="passenger-avatar" class="tui-image-avatar" src="'+ imagePath +'">');
+                }
+            }else {
+                if ($('#passenger-avatar').is('img')) {
+                    $('#passenger-avatar').replaceWith('<span style="float: left; margin-right: 15px;" id="passenger-avatar" class="tui-text-avatar mdl-typography--headline">' + firstName.charAt(0) + lastName.charAt(0) + '</span>');
+                }else if ($('#passenger-avatar').is('span')){
+                    $('#passenger-avatar').html(response[0]);
+                }
+            }
             console.log(response);
 
         }).error(function (response) {
-            console.log(response.errorReport[0]);
+            console.log(response);
         })
     });
 
     $('#passenger').click(function(e) {
         e.preventDefault();
         var passenger = $(this).attr('passenger');
-        $('.passenger-form').addClass('expanded');
+        $('.passenger-edit-form').addClass('expanded');
         $('#passenger-close').css({
             "color": "grey",
             "position": "absolute",
@@ -409,7 +429,7 @@ $(document).ready(function () {
     $('#passenger-close').click(function(e) {
         e.preventDefault();
         var passenger = $(this).attr('passenger');
-        $('.passenger-form').removeClass('expanded');
+        $('.passenger-edit-form').removeClass('expanded');
         $('#passenger-edit-actions-menu-drop-' + passenger).css({
             "color": "grey",
             "position": "absolute",

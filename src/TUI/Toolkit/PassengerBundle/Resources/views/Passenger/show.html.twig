@@ -84,8 +84,8 @@
                             <span style="float: left; margin-right: 15px;" id="passenger-avatar" class="tui-text-avatar mdl-typography--headline">{{ entity.fName[:1] }}</span>
                         {% endif %}
                     <div class="passenger-details" style="display: inline-block;">
-                        <h3 style="margin-bottom: 10px; font-size: 35px; font-weight: 100;">{{ entity.fname }} {{ entity.lname }}</h3>
-                        <label style="display: block">{{ (age.days/365)|round(0, 'floor') }}, {{ entity.gender }}</label>
+                        <h3 style="margin-bottom: 10px; font-size: 35px; font-weight: 100;"><span id="passenger-fname">{{ entity.fname }}</span> <span id="passenger-lname">{{ entity.lname }}</span></h3>
+                        <label style="display: block"><span id="passenger-dob">{{ (age.days/365)|round(0, 'floor') }}</span>, <span id="passenger-gender">{{ entity.gender }}</span></label>
                     </div>
                         {{ render(controller( 'PassengerBundle:Passenger:edit', {'id' : entity.id} )) }}
                     <div style="clear: both"></div>

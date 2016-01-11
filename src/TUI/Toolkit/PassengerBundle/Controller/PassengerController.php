@@ -399,18 +399,51 @@ class PassengerController extends Controller
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
+        $media = $editForm->getData()->getMedia();
 
         //Get and set passenger media
-        if ($media = $editForm->getData()->getMedia() != null) {
-            //Get and set passenger media
-            $media = $editForm->getData()->getMedia();
-            $media = $em->getRepository('MediaBundle:Media')->find($media);
-            $entity->setMedia($media);
+        if ($media) {
+            if(is_object($media) and !$media->getId()){
+                $entity->setMedia(null);
+            }elseif(is_object($media) and $media->getId()){
+                $entity->setMedia($media);
+            }else {
+                $media = $em->getRepository('MediaBundle:Media')->find($media);
+                $entity->setMedia($media);
+            }
+        }
+        elseif (!$media){
+            $entity->setMedia(null);
         }
 
         if ($editForm->isValid()) {
             $em->flush();
-            return $this->redirect($this->generateUrl('manage_passenger_edit', array('id' => $id)));
+
+            $dob = $entity->getDateOfBirth()->format('Y');
+            $age = date_diff(date_create($dob), date_create('now'))->y;
+
+            $data = array (
+                $entity->getFName(),
+                $entity->getLName(),
+                $age,
+                $entity->getGender(),
+                $entity->getId(),
+            );
+
+
+            if ($entity->getMedia() != null) {
+                $data[] = $media->getRelativePath();
+                $data[] = $media->getHashedFileName();
+            }
+
+            $responseContent =  json_encode($data);
+            return new Response($responseContent,
+                Response::HTTP_OK,
+                array('content-type' => 'application/json')
+            );
+
+
+//            return $this->redirect($this->generateUrl('manage_passenger_edit', array('id' => $id)));
         }
 
         return $this->render('PassengerBundle:Passenger:edit.html.twig', array(
