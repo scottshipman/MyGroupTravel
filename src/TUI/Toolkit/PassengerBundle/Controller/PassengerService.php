@@ -23,37 +23,10 @@ class PassengerService
     }
 
     /**
-     * Parameters - Object ID; Class; User ID
-     *
-     * @return Grants
+     * @param $status
+     * @param $tourId
+     * @return array
      */
-
-
-//    public function getPermission($object, $class, $user){
-//        // return grants based on user, object and class
-//        $em = $this->em;
-//        $qb = $em->createQueryBuilder();
-//        $qb->select('p.grants')
-//            ->from('PermissionBundle:Permission', 'p')
-//            ->where($qb->expr()->andX(
-//                $qb->expr()->eq('p.object', '?1'),
-//                $qb->expr()->eq('p.class', '?2'),
-//                $qb->expr()->eq('p.user', '?3')
-//            ));
-//
-//        $qb->setParameters(array(1 => $object, 2 => $class, 3 => $user ));
-//        $query = $qb->getQuery();
-//        $result = $query->getScalarResult();
-//
-//        if(!$result){
-//            return Null;
-//        } else {
-//            $permission = array_column($result, 'grants');
-//            return $permission;
-//        }
-//
-//    }
-
     public function getPassengersByStatus($status, $tourId){
 
         // special query case for free status for boolean field
@@ -77,7 +50,7 @@ class PassengerService
         }
         $qb->orderBy('p.signUpDate', 'DESC');
         $query = $qb->getQuery();
-        $result = $query->getScalarResult();
+        $result = $query->getResult();
 
         return $result;
     }

@@ -355,4 +355,68 @@ $(document).ready(function () {
         $('#emergency-close').css("display", "none");
     });
 
+    $('#ajax_passenger_edit_form').on('submit', function(e) {
+
+        var formAction = $(this).attr('action');
+        var form = $(this);
+        $("#loader").css("display", "block");
+        e.preventDefault();
+        $.ajax({
+            url: formAction,
+            type: 'POST',
+            headers: {
+                "Pragma": "no-cache",
+                "Expires": -1,
+                "Cache-Control": "no-cache"
+            },
+            data: $('#ajax_passenger_edit_form').serialize(),
+            contentType: "application/x-www-form-urlencoded",
+        }).success(function (response) {
+            $("#loader").css("display", "none");
+            //window.location.reload(true);
+            $(".passenger-form").removeClass('expanded');
+            $('#passenger').css({
+                "color": "grey",
+                "position": "absolute",
+                "right": "15px",
+                "display": "inline-block"
+            });
+            $('#passenger-close').css("display", "none");
+            $('.-name').html(response[0]);
+            $('.emergency-relationship').html(response[1]);
+            $('.emergency-number').html(response[2]);
+            $('.emergency-email').html(response[3]);
+            console.log(response);
+
+        }).error(function (response) {
+            console.log(response.errorReport[0]);
+        })
+    });
+
+    $('#passenger').click(function(e) {
+        e.preventDefault();
+        var passenger = $(this).attr('passenger');
+        $('.passenger-form').addClass('expanded');
+        $('#passenger-close').css({
+            "color": "grey",
+            "position": "absolute",
+            "right": "15px",
+            "display": "inline-block"
+        });
+        $('#passenger-edit-actions-menu-drop-' + passenger).css("display", "none");
+    });
+
+    $('#passenger-close').click(function(e) {
+        e.preventDefault();
+        var passenger = $(this).attr('passenger');
+        $('.passenger-form').removeClass('expanded');
+        $('#passenger-edit-actions-menu-drop-' + passenger).css({
+            "color": "grey",
+            "position": "absolute",
+            "right": "15px",
+            "display": "inline-block"
+        });
+        $('#passenger-close').css("display", "none");
+    });
+
 });

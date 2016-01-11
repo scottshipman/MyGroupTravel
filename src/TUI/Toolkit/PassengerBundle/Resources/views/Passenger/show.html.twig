@@ -6,7 +6,7 @@
     {% if is_granted("ROLE_BRAND") %}
         {{ entity.fname }} {{ entity.lname }} {% trans %}passenger.title.show{% endtrans %}
     {% else %}
-        {{ tour.name }}
+        {{ entity.tourReference.name }}
     {% endif %}
 {% endblock %}
 
@@ -68,14 +68,26 @@
             <div class="waitlist tour-edit mdl-card mdl-shadow--2dp">
                 <div class="mdl-card__title">
                     <h3 style="float: left;" class="mdl-card__title-text">Passenger</h3>
+                    <button style="position: absolute; right: 20px; color:grey; margin-top:5px;" id="passenger-edit-actions-menu-drop-{{ entity.id }}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+                        <i class="material-icons">more_vert</i>
+                    </button>
+                    <a style="color: grey;" href="#"><i id="passenger-close" class="material-icons" passenger="{{ entity.id }}" style="display: none;">close</i></a>
+                    {% embed "PassengerBundle:Passenger:passengerSubMenu.html.twig" %}{% endembed %}
                     <div style="clear: both"></div>
                 </div>
                 <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
-                    <i class="material-icons" style="font-size: 52px; display: inline-block;">account_circle</i>
+                        {% if entity.media %}
+                            <img style="float: left; margin-right: 15px;" id="passenger-avatar" class="tui-image-avatar" src="{{ ( entity.media.getRelativePath ~ "/" ~ entity.media.getHashedFilename ) | imagine_filter('thumbnail') }}">
+                        {% elseif entity.fName and entity.lName %}
+                            <span style="float: left; margin-right: 15px;" id="passenger-avatar" class="tui-text-avatar mdl-typography--headline">{{ entity.fName[:1] }}{{ entity.lName[:1] }}</span>
+                        {% else %}
+                            <span style="float: left; margin-right: 15px;" id="passenger-avatar" class="tui-text-avatar mdl-typography--headline">{{ entity.fName[:1] }}</span>
+                        {% endif %}
                     <div class="passenger-details" style="display: inline-block;">
-                        <h3 style="margin: 0">{{ entity.fname }} {{ entity.lname }}</h3>
+                        <h3 style="margin-bottom: 10px; font-size: 35px; font-weight: 100;">{{ entity.fname }} {{ entity.lname }}</h3>
                         <label style="display: block">{{ (age.days/365)|round(0, 'floor') }}, {{ entity.gender }}</label>
                     </div>
+                        {{ render(controller( 'PassengerBundle:Passenger:edit', {'id' : entity.id} )) }}
                     <div style="clear: both"></div>
                 </div>
             </div>
@@ -89,8 +101,8 @@
                     <div class="mdl-card__supporting-text mdl-card--border">
                         <p style="display: inline; font-size:18px;" class="mdl-card__title-text"><i style="margin-right: 10px; color:grey; display: inline;"class="material-icons">local_hospital</i> Add Medical Information</p>
                         <label style="display: inline; margin-left:5px;">by {{ entity.tourReference.medicalDate|date(format) }}</label>
-                        <a style="color: grey;" href="#"><i id="medical" style="float:right;" class="material-icons">add_circle_outline</i></a>
-                        <a style="color: grey;" href="#"><i id="medical-close" class="material-icons" style="display: none;">close</i></a>
+                        <a style="color: grey;" href="#"><i id="medical" style="float:right; border-radius: 25px; border: 1px solid grey; padding:5px;" class="material-icons">add</i></a>
+                        <a style="color: grey;" href="#"><i id="medical-close" class="material-icons" style="display: none; border-radius: 25px; border: 1px solid grey; padding:5px;">close</i></a>
                         <div style="clear: both"></div>
                         {% if entity.medicalReference == null %}
                             {{ render(controller( 'PassengerBundle:Medical:new', {'passengerId' : entity.id} )) }}
@@ -101,8 +113,8 @@
                     <div class="mdl-card__supporting-text mdl-card--border">
                         <p style="display: inline; font-size:18px;" class="mdl-card__title-text"><i style="margin-right: 10px; color:grey;"class="material-icons">local_dining</i> Add Dietary Information</p>
                         <label style="display: inline; margin-left:5px;">by {{ entity.tourReference.dietaryDate|date(format) }}</label>
-                        <a style="color: grey;" href="#"><i id="dietary" style="float:right;" class="material-icons">add_circle_outline</i></a>
-                        <a style="color: grey;" href="#"><i id="dietary-close" class="material-icons" style="display: none;">close</i></a>
+                        <a style="color: grey;" href="#"><i id="dietary" style="float:right; border-radius: 25px; border: 1px solid grey; padding:5px;" class="material-icons">add</i></a>
+                        <a style="color: grey;" href="#"><i id="dietary-close" class="material-icons" style="display: none; border-radius: 25px; border: 1px solid grey; padding:5px;">close</i></a>
                         <div style="clear: both"></div>
                         {% if entity.dietaryReference == null %}
                             {{ render(controller( 'PassengerBundle:Dietary:new' )) }}
@@ -113,8 +125,8 @@
                     <div class="mdl-card__supporting-text mdl-card--border">
                         <p style="display: inline; font-size: 18px;" class="mdl-card__title-text"><i style="margin-right: 10px; color:grey;"class="material-icons">person_outline</i> Add Passport Information</p>
                         <label style="display: inline; margin-left:5px;">by {{ entity.tourReference.passportDate|date(format) }}</label>
-                        <a style="color: grey;" href="#"><i id="passport" style="float:right;" class="material-icons">add_circle_outline</i></a>
-                        <a style="color: grey;" href="#"><i id="passport-close" class="material-icons" style="display: none;">close</i></a>
+                        <a style="color: grey;" href="#"><i id="passport" style="float:right; border-radius: 25px; border: 1px solid grey; padding:5px;" class="material-icons">add</i></a>
+                        <a style="color: grey;" href="#"><i id="passport-close" class="material-icons" style="display: none; border-radius: 25px; border: 1px solid grey; padding:5px;">close</i></a>
                         <div style="clear: both"></div>
                         {% if entity.passportReference == null %}
                             {{ render(controller( 'PassengerBundle:Passport:new' )) }}
@@ -125,8 +137,8 @@
                     <div class="mdl-card__supporting-text mdl-card--border">
                         <p style="display: inline; font-size: 18px;" class="mdl-card__title-text"><i style="margin-right: 10px; color:grey;"class="material-icons">warning</i> Add Emergency Contact Information</p>
                         <label style="display: inline; margin-left:5px;">by {{ entity.tourReference.emergencyDate|date(format) }}</label>
-                        <a style="color: grey;" href="#"><i id="emergency" style="float:right;" class="material-icons">add_circle_outline</i></a>
-                        <a style="color: grey;" href="#"><i id="emergency-close" class="material-icons" style="display: none;">close</i></a>
+                        <a style="color: grey;" href="#"><i id="emergency" style="float:right; border-radius: 25px; border: 1px solid grey; padding:5px;" class="material-icons">add</i></a>
+                        <a style="color: grey;" href="#"><i id="emergency-close" class="material-icons" style="display: none; border-radius: 25px; border: 1px solid grey; padding:5px;">close</i></a>
                         <div style="clear: both"></div>
                         {% if entity.emergencyReference == null %}
                             {{ render(controller( 'PassengerBundle:Emergency:new' )) }}

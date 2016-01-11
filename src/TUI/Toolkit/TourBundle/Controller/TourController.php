@@ -1189,17 +1189,48 @@ class TourController extends Controller
           $brand = $default_brand;
         }
 
-        //get number of wait listed
-        $passengers = $em->getRepository('PassengerBundle:Passenger')->findByTourReference($entity);
-        $waitlist = 0;
-        $accepted = 0;
-        foreach ($passengers as $passenger) {
-            if ($passenger->getStatus() == "waitlist") {
-                $waitlist++;
+        //Get Waitlist Passengers
+        $waitListUsers = $this->get("passenger.actions")->getPassengersByStatus('waitlist', $id);
+        $waitlist = count($waitListUsers);
+
+        //Get Accepted Passengers
+        $acceptedUsers = $this->get("passenger.actions")->getPassengersByStatus('accepted', $id);
+        $accepted = count($acceptedUsers);
+
+        //Get free passengers
+        $free = $this->get("passenger.actions")->getPassengersByStatus('free', $id);
+        $free = count($free);
+
+        //Real Accepted Passenger Count
+        $accepted = $accepted - $free;
+
+        $completedPassengerData = array();
+
+        //Get Accepted Users with completed medical information
+        foreach ($acceptedUsers as $acceptedUser) {
+            $medical = array();
+            $dietary = array();
+            $emergency = array();
+            $passport = array();
+
+            if ($acceptedUser->getMedicalReference() != null) {
+                $medical[] = $acceptedUser;
             }
-            else if ($passenger->getStatus() == "accepted"){
-                $accepted++;
+            if ($acceptedUser->getDietaryReference() != null) {
+                $dietary[] = $acceptedUser;
             }
+            if ($acceptedUser->getEmergencyReference() != null) {
+                $emergency[] = $acceptedUser;
+            }
+            if ($acceptedUser->getPassportReference() != null) {
+                $passport[] = $acceptedUser;
+            }
+
+            $completedPassengerData['medical'] = $medical;
+            $completedPassengerData['dietary'] = $dietary;
+            $completedPassengerData['emergency'] = $emergency;
+            $completedPassengerData['passport'] = $passport;
+
         }
 
         return $this->render('TourBundle:Tour:completedandsetup.html.twig', array(
@@ -1210,6 +1241,7 @@ class TourController extends Controller
             'brand' => $brand,
             'waitlist' => $waitlist,
             'accepted' => $accepted,
+            'completedPassengerData' => $completedPassengerData,
         ));
 
     }

@@ -32,11 +32,10 @@
                         "width": "300px",
                         "height": "160px"
                     });
-                    $("#tui_toolkit_institutionbundle_institution_media").val('{{ entity.media.id }}');
+                    $("#tui_toolkit_passengerbundle_passenger_media").val('{{ entity.media.id }}');
 
                     $(document).on('click', '.media-placeholder-image', function(e) {
-                        $("#tui_toolkit_userbundle_user_media").val('');
-                        console.log($("#tui_toolkit_userbundle_user_media").val());
+                        $("#tui_toolkit_passengerbundle_passenger_media").val('');
                     });
                 });
             </script>

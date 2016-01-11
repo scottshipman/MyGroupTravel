@@ -109,6 +109,13 @@ class Passenger
      */
     protected $emergencyReference;
 
+    /**
+     * @var \TUI\Toolkit\MediaBundle\Entity\Media
+     * @ORM\OneToOne(targetEntity="TUI\Toolkit\MediaBundle\Entity\Media", cascade={"persist"}, fetch="LAZY")
+     * @ORM\JoinColumn(name="media", referencedColumnName="id")
+     */
+    protected $media;
+
 
     /**
      * @var string
@@ -237,15 +244,15 @@ class Passenger
     }
 
     /**
- * @param $medicalReference
- * @return $this
- *
- */
+      * @param $medicalReference
+      * @return $this
+      *
+      */
     public function setMedicalReference($medicalReference) {
 
         $this->medicalReference = $medicalReference;
 
-        return $this;
+        return $medicalReference;
 
     }
 
@@ -266,7 +273,7 @@ class Passenger
 
         $this->dietaryReference = $dietaryReference;
 
-        return $this;
+        return $dietaryReference;
 
     }
 
@@ -287,7 +294,7 @@ class Passenger
 
         $this->passportReference = $passportReference;
 
-        return $this;
+        return $passportReference;
 
     }
 
@@ -308,7 +315,7 @@ class Passenger
 
         $this->emergencyReference = $emergencyReference;
 
-        return $this;
+        return $emergencyReference;
 
     }
 
@@ -354,5 +361,23 @@ class Passenger
     public function getFree()
     {
         return $this->free;
+    }
+
+    /**
+     * @param  $media
+     */
+    public function setMedia($media)
+    {
+        $this->media = $media;
+
+        return $media;
+    }
+
+    /**
+     * @return Media
+     */
+    public function getMedia()
+    {
+        return $this->media;
     }
 }

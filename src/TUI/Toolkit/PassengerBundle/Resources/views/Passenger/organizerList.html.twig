@@ -18,39 +18,40 @@ variables available to this twig:
     {# loop and render all assistants #}
 
 
-    {% for organizer in organizerobjects %}
-        {% if tour.organizer.id == organizer[1].id %}
-            {% set orgLabel = 'passenger.labels.primary-organizer' | trans %}
-        {% else %}
-            {% if organizer[1].enabled is sameas(false) %}  {% set orgLabel = 'passenger.labels.invite-pending' | trans %}  {% endif %}
-            {% if organizer[1].enabled is sameas(true) %}  {% set orgLabel = 'passenger.labels.invite-accepted' | trans %}  {% endif %}
-        {% endif %}
-        {% set status =  'organizer-' ~ organizer[0].status %}
-        {% if organizer[0].free == 1 %}{% set freeClass = 'organizer-free' %}{% set status = '' %} {% else %} {% set freeClass = '' %} {% endif %}
-        <div class="tour-edit mdl-shadow--2dp" style="background-color:white; margin-bottom: 0;">
-            <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
-                <div style="float: left; color: grey;">
-                    {% if organizer[1].media %}
-                        <span class="tui-image-avatar"><img src="{{ ( organizer[1].media.getRelativePath ~ '/' ~ organizer[1].media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ organizer[1].username }}"></span>
-                    {% elseif organizer[1].firstName and tour.organizer.lastName %}
-                        <span class="tui-text-avatar mdl-typography--headline">{{ organizer[1].firstName[:1] }}{{ organizer[1].lastName[:1] }}</span>
-                    {% else %}
-                        <span class="tui-text-avatar mdl-typography--headline">{{ organizer[1].username[:1] }}</span>
-                    {% endif %}
-                    <p style="display: inline-block"><strong>{{ organizer[1].firstName }}</strong></p>
-                    <p style="display: inline-block"><strong>{{ organizer[1].lastName }}</strong></p>
-                    <p style="display: inline-block"><strong>({{ orgLabel }})</strong></p>
-                    <p style="display: inline-block" class="{{ status }} {{ freeClass }}"></p>
-                    <p><a href="mailto:{{ organizer[1].email}}">{{ organizer[1].email}}</a></p>
-                </div>
-                <button style="position: absolute; right: 20px; color:grey; margin-top:10px;" id="organizer-actions-menu-drop-{{ organizer[0].id }}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
-                    <i class="material-icons">more_vert</i>
-                </button>
-                {% embed "PassengerBundle:Passenger:organizerActionsMenu.html.twig" %}{% endembed %}
-            </div>
+    {#{% for organizer in organizerobjects %}#}
+        {#{% if tour.organizer.id == organizer[1].id %}#}
+            {#{% set orgLabel = 'passenger.labels.primary-organizer' | trans %}#}
+        {#{% else %}#}
+            {#{% if organizer[1].enabled is sameas(false) %}  {% set orgLabel = 'passenger.labels.invite-pending' | trans %}  {% endif %}#}
+            {#{% if organizer[1].enabled is sameas(true) %}  {% set orgLabel = 'passenger.labels.invite-accepted' | trans %}  {% endif %}#}
+        {#{% endif %}#}
+        {#{{ dump() }}#}
+        {#{% set status =  'organizer-' ~ organizer[0].status %}#}
+        {#{% if organizer[0].free == 1 %}{% set freeClass = 'organizer-free' %}{% set status = '' %} {% else %} {% set freeClass = '' %} {% endif %}#}
+        {#<div class="tour-edit mdl-shadow--2dp" style="background-color:white; margin-bottom: 0;">#}
+            {#<div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">#}
+                {#<div style="float: left; color: grey;">#}
+                    {#{% if organizer[1].media %}#}
+                        {#<span class="tui-image-avatar"><img src="{{ ( organizer[1].media.getRelativePath ~ '/' ~ organizer[1].media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ organizer[1].username }}"></span>#}
+                    {#{% elseif organizer[1].firstName and tour.organizer.lastName %}#}
+                        {#<span class="tui-text-avatar mdl-typography--headline">{{ organizer[1].firstName[:1] }}{{ organizer[1].lastName[:1] }}</span>#}
+                    {#{% else %}#}
+                        {#<span class="tui-text-avatar mdl-typography--headline">{{ organizer[1].username[:1] }}</span>#}
+                    {#{% endif %}#}
+                    {#<p style="display: inline-block"><strong>{{ organizer[1].firstName }}</strong></p>#}
+                    {#<p style="display: inline-block"><strong>{{ organizer[1].lastName }}</strong></p>#}
+                    {#<p style="display: inline-block"><strong>({{ orgLabel }})</strong></p>#}
+                    {#<p style="display: inline-block" class="{{ status }} {{ freeClass }}"></p>#}
+                    {#<p><a href="mailto:{{ organizer[1].email}}">{{ organizer[1].email}}</a></p>#}
+                {#</div>#}
+                {#<button style="position: absolute; right: 20px; color:grey; margin-top:10px;" id="organizer-actions-menu-drop-{{ organizer[0].id }}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">#}
+                    {#<i class="material-icons">more_vert</i>#}
+                {#</button>#}
+                {#{% embed "PassengerBundle:Passenger:organizerActionsMenu.html.twig" %}{% endembed %}#}
+            {#</div>#}
 
-        </div>
-    {% endfor %}
+        {#</div>#}
+    {#{% endfor %}#}
 
 
 </div>

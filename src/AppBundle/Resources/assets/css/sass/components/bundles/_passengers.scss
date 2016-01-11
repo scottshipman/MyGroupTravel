@@ -178,6 +178,41 @@
   }
 }
 
+.passenger-form {
+  max-height: 0;
+  opacity: 0;
+  margin-left: 20px;
+  -webkit-transition: max-height 1s;
+  -moz-transition: max-height 1s;
+  -ms-transition: max-height 1s;
+  -o-transition: max-height 1s;
+  transition: max-height 1s;
+  overflow: hidden;
+  max-height: 0px;
+  opacity: 1;
+
+  &.expanded {
+    -webkit-transition: max-height 1s;
+    -moz-transition: max-height 1s;
+    -ms-transition: max-height 1s;
+    -o-transition: max-height 1s;
+    transition: max-height 1s;
+    overflow: hidden;
+    max-height: 550px !important;
+    //padding: 0;
+    opacity: 1;
+    margin-top: 10px;
+  }
+
+  .mdl-textfield {
+    max-width: 250px;
+  }
+
+  .mdl-selectfield {
+    max-width: 100px;
+  }
+}
+
 //Overwrite min-height for cards on the passengers profile
 .mdl-card {
   min-height:160px;

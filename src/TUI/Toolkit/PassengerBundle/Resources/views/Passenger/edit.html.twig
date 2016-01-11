@@ -1,16 +1,58 @@
-{% extends '::base.html.twig' %}
-
 {% block body -%}
-    <h1>Passenger edit</h1>
 
-    {{ form(edit_form) }}
+<div class="passenger-form">
+    <div class="errors">
+        {{ form_errors(edit_form) }}
+    </div>
+    <div id="avatar-label" class="mdl-label-mimic">{% trans %}user.avatar.label{% endtrans %}
+        <div style="display:none;" id="dropzone-form-close"><i class="fa fa-times-circle"></i></div>
+    </div>
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('manage_passenger') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+
+    {{ render(controller('MediaBundle:Media:createDropzoneForm', {'context':'passenger'})) }}
+    {{ form_start(edit_form) }}
+
+
+    <div id="user_media" class="is-dirty mdl-textfield--floating-label">
+        {% if entity.media %}
+            <div class="media-placeholder-image edit">
+                <div id="overlay">
+                    <i class="fa fa-pencil-square-o fa-2x"></i>
+                </div>
+            </div>
+            <script>
+                $(document).ready(function () {
+                    var bUrl = '{{ asset(".." ~ entity.media.getRelativePath ~ "/" ~ entity.media.getHashedFilename ) }}';
+                    $(".media-placeholder-image").css({
+                        "background-image": "url(" + bUrl + ")",
+                        "background-position": "50%",
+                        "background-repeat": "no-repeat",
+                        "background-size": "contain",
+                        "width": "300px",
+                        "height": "160px"
+                    });
+                    $("#tui_toolkit_institutionbundle_institution_media").val('{{ entity.media.id }}');
+
+                    $(document).on('click', '.media-placeholder-image', function(e) {
+                        $("#tui_toolkit_userbundle_user_media").val('');
+                        console.log($("#tui_toolkit_userbundle_user_media").val());
+                    });
+                });
+            </script>
+        {% else %}
+            <span class="media-placeholder-image new">
+                <i class="fa fa-picture-o fa-3x"></i>
+                <span>{% trans %}user.media.label{% endtrans %}</span>
+            </span>
+        {% endif %}
+    </div>
+    {{ form_start(edit_form) }}
+    {{ form_widget(edit_form.fName) }}
+    {{ form_widget(edit_form.lName) }}
+    {{ form_widget(edit_form.dateOfBirth) }}
+    {{ form_widget(edit_form.gender) }}
+    <div style="display: none">{{ form_widget(edit_form.tourReference) }}</div>
+    {{ form_rest(edit_form) }}
+    {{ form_end(edit_form) }}
+</div>
 {% endblock %}

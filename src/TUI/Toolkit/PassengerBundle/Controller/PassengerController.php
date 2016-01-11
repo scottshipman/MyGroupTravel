@@ -302,6 +302,12 @@ class PassengerController extends Controller
             throw $this->createNotFoundException('Unable to find Passenger entity.');
         }
 
+        //Get the parent object of each passenger
+        $parent = $this->get("permission.set_permission")->getUser('parent', $id, 'passenger');
+        $parent = $em->getRepository('TUIToolkitUserBundle:User')->findById($parent[1]);
+        $parent = $parent[0];
+
+
         //brand stuff
         $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
 
@@ -319,6 +325,7 @@ class PassengerController extends Controller
         return $this->render('PassengerBundle:Passenger:show.html.twig', array(
             'entity' => $entity,
             'brand' => $brand,
+            'parent' => $parent,
             'delete_form' => $deleteForm->createView(),
         ));
     }
@@ -356,9 +363,18 @@ class PassengerController extends Controller
      */
     private function createEditForm(Passenger $entity)
     {
-        $form = $this->createForm(new PassengerType(), $entity, array(
+
+        $em = $this->getDoctrine()->getManager();
+
+        $tourId = $entity->getTourReference()->getId();
+
+        $locale = $this->container->getParameter('locale');
+        $form = $this->createForm(new PassengerType($locale, $tourId), $entity, array(
             'action' => $this->generateUrl('manage_passenger_update', array('id' => $entity->getId())),
             'method' => 'PUT',
+            'attr'  => array (
+                'id' => 'ajax_passenger_edit_form'
+            ),
         ));
 
         $form->add('submit', 'submit', array('label' => 'Update'));
@@ -384,9 +400,16 @@ class PassengerController extends Controller
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
+        //Get and set passenger media
+        if ($media = $editForm->getData()->getMedia() != null) {
+            //Get and set passenger media
+            $media = $editForm->getData()->getMedia();
+            $media = $em->getRepository('MediaBundle:Media')->find($media);
+            $entity->setMedia($media);
+        }
+
         if ($editForm->isValid()) {
             $em->flush();
-
             return $this->redirect($this->generateUrl('manage_passenger_edit', array('id' => $id)));
         }
 
@@ -416,6 +439,8 @@ class PassengerController extends Controller
 
             $em->remove($entity);
             $em->flush();
+
+            return $this->redirect($this->generateUrl('manage_passenger'));
         }
 
         return $this->redirect($this->generateUrl('manage_passenger'));
@@ -521,7 +546,7 @@ class PassengerController extends Controller
             }
 
             foreach($passengers as $passenger) {
-            $object = $passenger['p_id'];
+            $object = $passenger->getId();
             $parent = $this->get("permission.set_permission")->getUser('parent', $object, 'passenger');
             $isOrganizer = $this->get("permission.set_permission")->getUser('assistant', $object, 'tour') ? TRUE : FALSE;
             $isOrganizer = $this->get("permission.set_permission")->getUser('organizer', $object, 'tour') ? TRUE : $isOrganizer;
