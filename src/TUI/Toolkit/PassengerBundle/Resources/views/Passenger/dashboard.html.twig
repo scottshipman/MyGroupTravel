@@ -59,8 +59,8 @@
         </div>
 
         <div class="tour-show-right-column">
-
-            <div class="tour-edit mdl-card mdl-shadow--2dp" style="margin-bottom: 0; box-shadow: none;">
+            {# Passenger CTA Card #}
+            <div class="passenger-cta-card tour-edit mdl-card mdl-shadow--2dp" style="margin-bottom: 0; box-shadow: none;">
 
                 <div class="mdl-card__title">
                     <h3 id="card-title" class="mdl-card__title-text">{% trans %}passenger.labels.passenger_list{% endtrans %}</h3>
@@ -73,6 +73,24 @@
                     <a id="invite-passengers" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="#"><i class="fa fa-users"></i>{% trans %}passenger.labels.invite{% endtrans %}</a>
                     <a id="accept-tour" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="#"><i class="fa fa-user-plus"></i>{% trans %}passenger.labels.add{% endtrans %}</a>
                 </div>
+            </div>
+
+            {# Organizer CTA Card #}
+            <div class="organizer-cta-card organizers tour-edit mdl-card mdl-shadow--2dp" style="margin-bottom: 0; box-shadow: none; display:none;">
+
+                <div class="mdl-card__title">
+                    <h3 id="organizer-card-title" class="mdl-card__title-text">{% trans %}passenger.labels.passenger_list{% endtrans %}</h3>
+                </div>
+
+                <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
+                    <div class="paying-passengers-title"><h3>{% trans %}passenger.labels.add-organizer{% endtrans %}</h3></div>
+                    <div style="clear:both;">
+                        <a href="#" class="show-invite-form mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons"><i class="fa fa-users"> {% trans %}passenger.actions.invite-organizers{% endtrans %}</i></a>
+                     </div>
+                        {# render the Invite organizer form #}
+                         {{ render(controller( 'PassengerBundle:Passenger:inviteOrganizer', {'tourId' : tour.id} )) }}
+
+               </div>
             </div>
                 {% for passenger in passengers %}
                 {% set status = passenger[0].p_status %}
@@ -149,8 +167,9 @@
                     var elemID = this.id;
                     switch(elemID) {
                         case 'showAccepted':
-                            $('.free, .organizers, .waitlist').slideUp(400);
-                            $('.accepted').slideDown(400);
+                            $('.free, .organizers, .waitlist, .organizer-cta-card').slideUp(400, function(){
+                                $('.accepted, .passenger-cta-card').slideDown(400);
+                            });
                             $('#showAccepted').css("color", "{{ brand.secondaryColor }}");
                             $('#showWaitlist').css("color", "{{ brand.primaryColor }}");
                             $('#showFree').css("color", "{{ brand.primaryColor }}");
@@ -158,8 +177,10 @@
                             $('#card-title').html('Accepted');
                             break;
                         case 'showWaitlist':
-                            $('.accepted, .organizers, .free').slideUp(400);
-                            $('.waitlist').slideDown(400);
+                            $('.accepted, .organizers, .free, .organizer-cta-card').slideUp(400, function(){
+                                $('.waitlist, .passenger-cta-card').slideDown(400);
+                            });
+
                             $('#showAccepted').css("color", "{{ brand.primaryColor }}");
                             $('#showWaitlist').css("color", "{{ brand.secondaryColor }}");
                             $('#showFree').css("color", "{{ brand.primaryColor }}");
@@ -167,8 +188,10 @@
                             $('#card-title').html('Wait list');
                             break;
                         case 'showFree':
-                            $('.accepted, .waitlist, .organizers').slideUp(400);
-                            $('.free').slideDown(400);
+                            $('.accepted, .waitlist, .organizers,  .organizer-cta-card').slideUp(400, function(){
+                                $('.free, .passenger-cta-card').slideDown(400);
+                            });
+
                             $('#showAccepted').css("color", "{{ brand.primaryColor }}");
                             $('#showWaitlist').css("color", "{{ brand.primaryColor }}");
                             $('#showFree').css("color", "{{ brand.secondaryColor }}");
@@ -176,13 +199,15 @@
                             $('#card-title').html('Free');
                             break;
                         case 'showOrganizers':
-                            $('.accepted, .waitlist, .free').slideUp(400);
-                            $('.organizers').slideDown(400);
+                            $('.accepted, .waitlist, .free,  .passenger-cta-card').slideUp(400, function(){
+                                $('.organizers, .organizer-cta-card').slideDown(400);
+                            });
+
                             $('#showAccepted').css("color", "{{ brand.primaryColor }}");
                             $('#showWaitlist').css("color", "{{ brand.primaryColor }}");
                             $('#showFree').css("color", "{{ brand.primaryColor }}");
                             $('#showOrganizers').css("color", "{{ brand.secondaryColor }}");
-                            $('#card-title').html('Organisers');
+                            $('#organizer-card-title').html('Organisers');
                             break;
                         default:
                             // do nothing
@@ -190,8 +215,45 @@
                     }
                 });
 
+                // toggle invite form display
+                $(document).on('click', '.show-invite-form', function (e) {
+                    $('.organizer-form-container').slideDown(400);
+                    $('.show-invite-form').hide();
+
+
+                });
+                 $(document).on('click', '.hide-invite-form', function (e) {
+                    $('.organizer-form-container').slideUp(400);
+                    $('.show-invite-form').show();
+
+
+                });
+
+                // bind Invite Organizer form and provide a simple callback function
+                $('#ajax_invite_organizer').ajaxForm({
+                    beforeSubmit: function(){
+                        $('#loader').show();
+                        $('.errors').html('');
+                    },
+                    clearForm: true,
+                    success : function (response) {
+                        // display success message
+                        $('.errors').html('<div id="invite-org-success" style="display:none;">An email invitation has been sent to ' + response[1] + ' ' + response[2] + '  at ' + response[0] + '.</div>');
+                        $('#invite-org-success').slideDown(400);
+                        // increment organizer count
+                        $('#organizerPassengers').html('(' + response[3] + ')')
+                        // add an organizer card with waitlist and pending invite status
+                        $('#organizer-cards-wrapper').prepend('<div class="tour-edit mdl-shadow--2dp" style="background-color:white; margin-bottom: 0;"><div class="mdl-card__supporting-text mdl-card--border" style="color:grey;"><div style="float: left; color: grey;"><span class="tui-text-avatar mdl-typography--headline">Tt</span><p style="display: inline-block"><strong>' + response[1] + '&nbsp;</strong></p><p style="display: inline-block"><strong>' + response[2] + '&nbsp;</strong></p><p style="display: inline-block"><strong>(Invited - Not yet responded.)</strong></p><p style="display: inline-block" class="organizer-Not Travelling "></p><p><a href="' + response[0] + '">' + response[0] + '</a></p></div></div></div>');
+                        $('#loader').hide();
+                    },
+                    error : function (response) {
+                        console.log(response);
+
+                    },
+                });
         });
     </script>
+
 {% endblock %}
 
 {% block footer_left %}

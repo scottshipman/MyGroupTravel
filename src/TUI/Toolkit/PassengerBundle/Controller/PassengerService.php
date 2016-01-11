@@ -84,8 +84,8 @@ class PassengerService
 
     public function getOrganizers($tourId){
 
-
-        //Query builder for free passengers
+        $organizers=array();
+        //Query builder for organizers (assistants)
         $em = $this->em;
         $qb = $em->createQueryBuilder();
         $qb->select('p')
@@ -97,9 +97,15 @@ class PassengerService
             ));
         $qb->setParameters(array(1 => 'tour', 2 => 'assistant', 3 => $tourId ));
         $query = $qb->getQuery();
-        $result = $query->getScalarResult();
+        $results = $query->getResult();
 
-        return $result;
+        foreach($results as $result){
+            if($result->getUser())
+            {$organizers[] = $result->getUser();
+            }
+        }
+
+        return $organizers;
     }
 
 

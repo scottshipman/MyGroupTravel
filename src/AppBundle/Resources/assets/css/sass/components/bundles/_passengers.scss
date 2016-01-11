@@ -13,6 +13,12 @@
   float:left;
 }
 
+.organizer-dashboard-copy {
+  width: auto;
+  float:left;
+  margin-top: 1.5em;
+}
+
 .passenger-dashboard-buttons {
   display: inline-block;
   margin: 10px auto;
@@ -202,4 +208,18 @@
     content: 'Waitlist';
 
   }
+}
+
+.invite-organizer-form {
+  &.mdl-textfield {
+    width: 80%;
+  }
+}
+
+#invite-org-success {
+  margin: 1em;
+  background-color: green;
+  color:white;
+  padding: 1em;
+  font-size: .82em;
 }
