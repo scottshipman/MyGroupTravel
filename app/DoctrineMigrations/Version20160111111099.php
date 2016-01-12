@@ -104,7 +104,7 @@ class Version20160111111099 extends AbstractMigration implements ContainerAwareI
                 }
                 // no matching records, so create a passenger
                 if ($match ==  FALSE) {
-                    echo "... No Matching records found for this tour and organizer combo, so need to create records.\n"
+                    echo "... No Matching records found for this tour and organizer combo, so need to create records.\n";
                     $this->createOrganizerPassenger($organizer, $tour, $em);
                 }
             }
