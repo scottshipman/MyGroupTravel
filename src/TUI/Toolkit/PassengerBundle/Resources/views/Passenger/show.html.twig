@@ -145,7 +145,7 @@
                         {% endif %}
                     </div>
                 {% endif %}
-                {% if (entity.medicalReference != null and entity.dietaryReference != null and entity.passportReference != null and entity.emergencyReference != null) %}
+                {% if (entity.medicalReference != null and entity.dietaryReference != null and entity.passportReference != null and entity.emergencyReference != null) or (entity.tourReference.passportDate == null and entity.tourReference.emergencyDate == null and entity.tourReference.medicalDate == null and entity.tourReference.dietaryDate == null) %}
                     <div class="mdl-card__supporting-text mdl-card--border expired-quote">
                         <p class="mdl-card__title-text no-tasks">{{ entity.fName|capitalize }} {% trans %}passenger.actions.no_tasks{% endtrans %}</p>
                         <div class="clear"></div>
@@ -355,6 +355,17 @@
             </span>
         {% endif %}
     {% endif %}
+    <script>
+        $(document).ready(function () {
+            //Add the date of birth label
+            var labelText = "{% trans %}passenger.modals.dob{% endtrans %}";
+            var div = $('.dateOfBirth');
+            div.prepend('<label class="mdl-label-mimic dob">' + labelText + '</label><br/>');
+            $('.dob').css({"position": "relative", "font-size": "14px"});
+            div.css({"margin-top": "5px"});
+            $('#tui_toolkit_tourbundle_tourpassenger_passengers_"' + index + '"_dateOfBirth > div:nth-child(1)').css({"width": "100"});
+        });
+    </script>
 {% endblock %}
 
 {% block footer_right %}
