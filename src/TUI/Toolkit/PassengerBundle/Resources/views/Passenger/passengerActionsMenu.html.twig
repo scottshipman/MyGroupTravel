@@ -5,7 +5,7 @@
 
 <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="passenger-actions-menu-drop-{{ passengerId }}">
     <span>
-        <li><a href="{{ path('manage_passenger_show', { 'id': passengerId }) }}" class="mdl-menu__item">View Passenger</a></li>
+        <li><a href="{{ path('manage_passenger_show', { 'id': passengerId }) }}" class="mdl-menu__item">{% trans %}passenger.actions.view_passenger{% endtrans %}</a></li>
         {% if passengerStatus != "accepted" %}
             <li><a href="#accepted" style="display: block;"class="mdl-menu__item move-to-accepted" tour="{{ tourId }}" passenger="{{ passengerId }}">{% trans %}passenger.actions.move_accepted{% endtrans %}</a></li>
             <li><a href="#waitlist" style="display: none;" class="mdl-menu__item move-to-waitlist" tour="{{ tourId }}" passenger="{{ passengerId }}">{% trans %}passenger.actions.move_waitlist{% endtrans %}</a></li>
