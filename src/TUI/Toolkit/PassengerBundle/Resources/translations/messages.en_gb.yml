@@ -29,6 +29,11 @@ passenger:
         security: Reset Security Info
         invite: Invite
         invite-organizers: Invite Organisers
+        edit_passenger: Edit Passenger
+        send-notification: Send Notification
+        move_accepted: Move to Accepted
+        move_waitlist: Move to Waitlist
+        move_free: Move to Free
 
         actions:
             view: View

@@ -28,7 +28,12 @@ passenger:
         activate: Submit
         security: Reset Security Info
         invite: Invite
-        invite-organizers: Invite Organizers
+        invite-organizers: Invite Organisers
+        edit_passenger: Edit Passenger
+        send-notification: Send Notification
+        move_accepted: Move to Accepted
+        move_waitlist: Move to Waitlist
+        move_free: Move to Free
 
         actions:
             view: View
@@ -49,18 +54,18 @@ passenger:
         waitlist: Wait List
         accepted: Accepted
         free: Free
-        organizer: Organizers
+        organizer: Organisers
         passenger_list: Passenger List
         add_paying: Add Paying Passengers
         remaining: Remaining
         welcome: Welcome to the passenger dashboard.  Here you can invite, add, and manage all of your passengers.
         invite: Invite Passengers
         add: Add Passenger
-        primary-organizer: Primary Organizer
+        primary-organizer: Primary Organiser
         invite-pending: Invited - Not yet responded.
         invite-accepted: Accepted Invitation.
-        add-organizer: Manage Organizers
-        invite-text: Complete the form below to invite someone to help organize this tour.
+        add-organizer: Manage Organisers
+        invite-text: Complete the form below to invite someone to help organise this tour.
 
     emails:
         thank_you: Thank you for your submission
