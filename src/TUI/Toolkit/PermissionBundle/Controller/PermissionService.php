@@ -150,14 +150,13 @@ class PermissionService
 
     $qb->setParameters(array(1 => $grants, 2 => $user, 3 => $class));
     $query = $qb->getQuery();
-    $result = $query->getScalarResult();
+    $result = $query->getArrayResult();
 
     if (!$result) {
       return NULL;
     }
     else {
-      $object = $result[0];
-      return $object;
+      return $result;
     }
   }
 }

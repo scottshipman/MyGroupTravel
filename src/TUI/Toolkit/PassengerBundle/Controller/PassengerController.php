@@ -515,7 +515,7 @@ class PassengerController extends Controller
         $organizers = $this->get("passenger.actions")->getOrganizers($tourId);
         array_unshift($organizers, $tour->getOrganizer());
         $organizersCount = count($organizers);
-        $organizersObjects = $this->addOrganizerPassengers($organizers, $em);
+        $organizersObjects = $this->addOrganizerPassengers($organizers, $tourId, $em);
 
         //brand stuff
         $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
@@ -579,7 +579,7 @@ class PassengerController extends Controller
      * @return array
      *
      */
-    public function addOrganizerPassengers($organizers, $em)
+    public function addOrganizerPassengers($organizers, $tourId, $em)
     {
         $combinedObjects = array();
 
@@ -588,15 +588,28 @@ class PassengerController extends Controller
         }
 
         foreach($organizers as $organizer) {
+
+            $passengerObject = new Passenger();
+            $passengerObject->setStatus('Not Travelling');
+
             $user = $organizer->getId();
             $passenger = $this->get("permission.set_permission")->getObject('parent', $user, 'passenger');
             $isOrganizer = TRUE;
 
             if (!empty($passenger)){
-                $passengerObject = $em->getRepository('PassengerBundle:Passenger')->find($passenger['object']);
-            } else {
-                $passengerObject = new Passenger();
-                $passengerObject->setStatus('Not Travelling');
+                // could be more than one passenger object
+                foreach($passenger as $pax){
+                    $paxObject = $em->getRepository('PassengerBundle:Passenger')->find($pax['object']);
+                    if( $paxObject &&
+                        strtolower(trim($organizer->getFirstName())) == strtolower(trim($paxObject->getFName())) &&
+                        strtolower(trim($organizer->getLastName())) == strtolower(trim($paxObject->getLName())) &&
+                        $tourId == $paxObject->getTourReference()->getId())
+                    {
+                        $passengerObject = $paxObject;
+                        $break;
+                    }
+                }
+
             }
             $combinedObjects[]= array($passengerObject, $organizer, $isOrganizer);
         }
