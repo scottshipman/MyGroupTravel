@@ -228,7 +228,7 @@ class MedicalController extends Controller
 
         }
 
-        $errors = $this->get("passenger.actions")->getErrorMessages($form);
+        $errors = $this->get("passenger.actions")->getErrorMessages($editForm);
 
 
         $serializer = $this->container->get('jms_serializer');
