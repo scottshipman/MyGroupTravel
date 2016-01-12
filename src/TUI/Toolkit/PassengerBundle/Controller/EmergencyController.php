@@ -11,6 +11,9 @@ use TUI\Toolkit\PassengerBundle\Form\EmergencyType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+use Symfony\Component\Form\Form;
+
+
 /**
  * Emergency controller.
  *
@@ -207,24 +210,41 @@ class EmergencyController extends Controller
             );
 
 
-//            return $this->redirect($this->generateUrl('manage_passenger_show', array('id' => $passenger->getId())));
-
         }
 
-        $errors = $editForm->getErrors(true, true);
+        $errors = $this->get("passenger.actions")->getErrorMessages($editForm);
 
-        $errorCollection = array();
-        foreach($errors as $error){
-            $errorCollection[] = $error->getMessage();
-        }
 
-        $array = array( 'status' => 400, 'errorMsg' => 'Bad Request', 'errorReport' => $errorCollection);
+        $serializer = $this->container->get('jms_serializer');
+        $errors = $serializer->serialize($errors, 'json');
 
-        $response = new Response( json_encode( $array ) );
-        $response->headers->set( 'Content-Type', 'application/json' );
-
+        $response = new Response($errors);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setStatusCode('400');
         return $response;
     }
+
+    public function getErrorMessages(Form $form) {
+        $errors = array();
+
+        foreach ($form->getErrors() as $key => $error) {
+            if ($form->isRoot()) {
+                $errors['#'][] = $error->getMessage();
+            } else {
+                $errors[] = $error->getMessage();
+            }
+        }
+
+        foreach ($form->all() as $child) {
+            if (!$child->isValid()) {
+                $errors[$child->getName()] = $this->getErrorMessages($child);
+            }
+        }
+
+        return $errors;
+    }
+
+
     /**
      * Deletes a Emergency entity.
      *

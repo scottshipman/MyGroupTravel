@@ -39,26 +39,6 @@ class PassengerController extends Controller
         ));
     }
 
-    private function getErrorMessages(Form $form) {
-        $errors = array();
-
-        foreach ($form->getErrors() as $key => $error) {
-            if ($form->isRoot()) {
-                $errors['#'][] = $error->getMessage();
-            } else {
-                $errors[] = $error->getMessage();
-            }
-        }
-
-        foreach ($form->all() as $child) {
-            if (!$child->isValid()) {
-                $errors[$child->getName()] = $this->getErrorMessages($child);
-            }
-        }
-
-        return $errors;
-    }
-
     /**
      * Creates a new Passenger entity.
      *
@@ -222,13 +202,7 @@ class PassengerController extends Controller
             return $this->redirect($request->server->get('HTTP_REFERER'));
         }
 
-        $errors = $this->getErrorMessages($form);
-
-//        $template = $this->renderView('PassengerBundle:Passenger:new.html.twig', array(
-//            'entity' => $entity,
-//            'errors' => $errors,
-//            'form' => $form->createView(),
-//        ));
+        $errors = $this->get("passenger.actions")->getErrorMessages($form);
 
         $serializer = $this->container->get('jms_serializer');
         $errors = $serializer->serialize($errors, 'json');
@@ -444,13 +418,8 @@ class PassengerController extends Controller
 
         }
 
-        $errors = $this->getErrorMessages($editForm);
+        $errors = $this->get("passenger.actions")->getErrorMessages($editForm);
 
-//        $template = $this->renderView('PassengerBundle:Passenger:new.html.twig', array(
-//            'entity' => $entity,
-//            'errors' => $errors,
-//            'form' => $form->createView(),
-//        ));
 
         $serializer = $this->container->get('jms_serializer');
         $errors = $serializer->serialize($errors, 'json');
@@ -1046,19 +1015,15 @@ class PassengerController extends Controller
             );
         }
 
-// return an ajax error response
-      $errors = $form->getErrors(true, true);
+        $errors = $this->get("passenger.actions")->getErrorMessages($form);
 
-        $errorCollection = array();
-        foreach($errors as $error){
-            $errorCollection[] = $error->getMessage();
-        }
 
-        $array = array( 'status' => 400, 'errorMsg' => 'Bad Request', 'errorReport' => $errorCollection);
+        $serializer = $this->container->get('jms_serializer');
+        $errors = $serializer->serialize($errors, 'json');
 
-        $response = new Response( json_encode( $array ) );
-        $response->headers->set( 'Content-Type', 'application/json' );
-
-        return $response;// data to return via JSON
+        $response = new Response($errors);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setStatusCode('400');
+        return $response;
     }
 }

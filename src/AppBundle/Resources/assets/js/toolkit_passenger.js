@@ -169,8 +169,16 @@ $(document).ready(function () {
             $('.medical-conditions').html(response[2]);
             $('.medications').html(response[3]);
         }).error(function (response) {
-            console.log(response.errorReport[0]);
-        })
+            var parsed = $.parseJSON(response.responseText);
+            $.each(parsed, function(i, item) {
+                $.each(item, function(c, child) {
+                    var attribute = 'tui_toolkit_passengerbundle_medical_' + i;
+                    var Field = $("label[for='" + attribute +"']");
+                    var fieldParent = Field.parent();
+                    fieldParent.prepend('<p class="errors" style="color:red;">'+ child + '</p>');
+                });
+            });
+            $("#loader").css("display", "none");        })
     });
 
     $('#ajax_dietary_form').on('submit', function(e) {
@@ -203,7 +211,16 @@ $(document).ready(function () {
             $('.dietary-description').html(response);
 
         }).error(function (response) {
-            console.log(response.errorReport[0]);
+            var parsed = $.parseJSON(response.responseText);
+            $.each(parsed, function(i, item) {
+                $.each(item, function(c, child) {
+                    var attribute = 'tui_toolkit_passengerbundle_dietary_' + i;
+                    var Field = $("label[for='" + attribute +"']");
+                    var fieldParent = Field.parent();
+                    fieldParent.prepend('<p class="errors" style="color:red;">'+ child + '</p>');
+                });
+            });
+            $("#loader").css("display", "none");
         })
     });
 
@@ -266,8 +283,16 @@ $(document).ready(function () {
             $('.passport-dateOfExpiry').html(response[5]);
 
         }).error(function (response) {
-            console.log(response.errorReport[0]);
-        })
+            var parsed = $.parseJSON(response.responseText);
+            $.each(parsed, function(i, item) {
+                $.each(item, function(c, child) {
+                    var attribute = 'tui_toolkit_passengerbundle_passport_' + i;
+                    var Field = $("label[for='" + attribute +"']");
+                    var fieldParent = Field.parent();
+                    fieldParent.prepend('<p class="errors" style="color:red;">'+ child + '</p>');
+                });
+            });
+            $("#loader").css("display", "none");        })
     });
 
     $('#passport').click(function(e) {
@@ -327,7 +352,16 @@ $(document).ready(function () {
             $('.emergency-email').html(response[3]);
 
         }).error(function (response) {
-            console.log(response.errorReport[0]);
+            var parsed = $.parseJSON(response.responseText);
+            $.each(parsed, function(i, item) {
+                $.each(item, function(c, child) {
+                    var attribute = 'tui_toolkit_passengerbundle_emergency_' + i;
+                    var Field = $("label[for='" + attribute +"']");
+                    var fieldParent = Field.parent();
+                    fieldParent.prepend('<p class="errors" style="color:red;">'+ child + '</p>');
+                });
+            });
+            $("#loader").css("display", "none");
         })
     });
 
@@ -406,8 +440,6 @@ $(document).ready(function () {
                     $('#passenger-avatar').html(response[0]);
                 }
             }
-            console.log(response);
-
         }).error(function (response) {
             var parsed = $.parseJSON(response.responseText);
             $.each(parsed, function(i, item) {
