@@ -785,7 +785,7 @@ class UserController extends Controller
                 // if an organizer, a passenger record exists so just add a message
                 $baseurl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
                 $tourUrl = $baseurl . "/tour/dashboard/" . $setForm['tour']->getData()  . "passengers";
-                $tourLink = " <br><a href='$tourUrl'>$tourUrl</a>"
+                $tourLink = " <br><a href='$tourUrl'>$tourUrl</a>";
                 $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.register-organizer') . $tourLink);
             }
 
