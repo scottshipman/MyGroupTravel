@@ -25,7 +25,6 @@ variables available to this twig:
             {% if organizer[1].enabled is sameas(false) %}  {% set orgLabel = 'passenger.labels.invite-pending' | trans %}  {% endif %}
             {% if organizer[1].enabled is sameas(true) %}  {% set orgLabel = 'passenger.labels.invite-accepted' | trans %}  {% endif %}
         {% endif %}
-        {{ dump() }}
         {% set status =  'organizer-' ~ organizer[0].status %}
         {% if organizer[0].free == 1 %}{% set freeClass = 'organizer-free' %}{% set status = '' %} {% else %} {% set freeClass = '' %} {% endif %}
         <div class="tour-edit mdl-shadow--2dp" style="background-color:white; margin-bottom: 0;">
