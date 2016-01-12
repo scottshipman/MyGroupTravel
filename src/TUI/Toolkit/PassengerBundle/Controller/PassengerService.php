@@ -8,6 +8,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use TUI\Toolkit\PassengerBundle\Entity\Passenger;
 use TUI\Toolkit\PassengerBundle\Form\PassengerType;
 
+use Symfony\Component\Form\Form;
+
 /**
  * Permission Service controller.
  *
@@ -23,37 +25,10 @@ class PassengerService
     }
 
     /**
-     * Parameters - Object ID; Class; User ID
-     *
-     * @return Grants
+     * @param $status
+     * @param $tourId
+     * @return array
      */
-
-
-//    public function getPermission($object, $class, $user){
-//        // return grants based on user, object and class
-//        $em = $this->em;
-//        $qb = $em->createQueryBuilder();
-//        $qb->select('p.grants')
-//            ->from('PermissionBundle:Permission', 'p')
-//            ->where($qb->expr()->andX(
-//                $qb->expr()->eq('p.object', '?1'),
-//                $qb->expr()->eq('p.class', '?2'),
-//                $qb->expr()->eq('p.user', '?3')
-//            ));
-//
-//        $qb->setParameters(array(1 => $object, 2 => $class, 3 => $user ));
-//        $query = $qb->getQuery();
-//        $result = $query->getScalarResult();
-//
-//        if(!$result){
-//            return Null;
-//        } else {
-//            $permission = array_column($result, 'grants');
-//            return $permission;
-//        }
-//
-//    }
-
     public function getPassengersByStatus($status, $tourId){
 
         // special query case for free status for boolean field
@@ -77,7 +52,7 @@ class PassengerService
         }
         $qb->orderBy('p.signUpDate', 'DESC');
         $query = $qb->getQuery();
-        $result = $query->getScalarResult();
+        $result = $query->getResult();
 
         return $result;
     }
@@ -107,6 +82,27 @@ class PassengerService
 
         return $organizers;
     }
+
+    public function getErrorMessages(Form $form) {
+        $errors = array();
+
+        foreach ($form->getErrors() as $key => $error) {
+            if ($form->isRoot()) {
+                $errors['#'][] = $error->getMessage();
+            } else {
+                $errors[] = $error->getMessage();
+            }
+        }
+
+        foreach ($form->all() as $child) {
+            if (!$child->isValid()) {
+                $errors[$child->getName()] = $this->getErrorMessages($child);
+            }
+        }
+
+        return $errors;
+    }
+
 
 
 }

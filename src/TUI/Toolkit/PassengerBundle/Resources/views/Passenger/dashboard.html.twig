@@ -93,17 +93,22 @@
                </div>
             </div>
                 {% for passenger in passengers %}
-                {% set status = passenger[0].p_status %}
-                {% if passenger[0].p_free == 1 %}{% set freeClass = 'free' %}{% set status = '' %} {% else %} {% set freeClass = '' %} {% endif %}
-                    <div class="{{ status }} {{ freeClass }} tour-edit mdl-shadow--2dp" style="background-color:white; margin-bottom: 0;" passenger="{{ passenger[0].p_id }}">
+                {% set status = passenger[0].status %}
+                {% if passenger[0].free == 1 %}{% set freeClass = 'free' %}{% set status = '' %} {% else %} {% set freeClass = '' %} {% endif %}
+                    <div class="{{ status }} {{ freeClass }} tour-edit mdl-shadow--2dp" style="background-color:white; margin-bottom: 0;" passenger="{{ passenger[0].id }}">
                         <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
                             <div style="float: left; color: grey;">
-                                <i class="material-icons" style="font-size: 52px; display: inline-block;">account_circle</i>
-
-                                <p style="display: inline-block"><strong>{{ passenger[0].p_fName }}</strong></p> <p style="display: inline-block"><strong>{{ passenger[0].p_lName }}</strong></p> <p style="display: inline-block"><strong><a href="mailto:{{ passenger[1].email }}">{{ passenger[1].email }}</a></strong></p>
-                                <label style="display: block">Signed up on {{ passenger[0].p_signUpDate|date(format) }}</label>
+                            {% if passenger[0].media %}
+                                <img style="float: left; margin-right: 15px;" id="passenger-avatar" class="tui-image-avatar" src="{{ ( passenger[0].media.getRelativePath ~ "/" ~ passenger[0].media.getHashedFilename ) | imagine_filter('thumbnail') }}">
+                            {% elseif passenger[0].fName and passenger[0].lName %}
+                                <span style="float: left; margin-right: 15px;" id="passenger-avatar" class="tui-text-avatar mdl-typography--headline">{{ passenger[0].fName[:1] }}{{ passenger[0].lName[:1] }}</span>
+                            {% else %}
+                                <span style="float: left; margin-right: 15px;" id="passenger-avatar" class="tui-text-avatar mdl-typography--headline">{{ passenger[0].fName[:1] }}</span>
+                            {% endif %}
+                            <p style="display: inline-block"><strong>{{ passenger[0].fName }}</strong></p> <p style="display: inline-block"><strong>{{ passenger[0].lName }}</strong></p> <p style="display: inline-block"><strong><a href="mailto:{{ passenger[1].email }}">{{ passenger[1].email }}</a></strong></p>
+                            <label style="display: block">Signed up on {{ passenger[0].signUpDate|date(format) }}</label>
                             </div>
-                            <button style="position: absolute; right: 20px; color:grey; margin-top:10px;" id="passenger-actions-menu-drop-{{ passenger[0].p_id }}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+                            <button style="position: absolute; right: 20px; color:grey; margin-top:10px;" id="passenger-actions-menu-drop-{{ passenger[0].id }}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
                                 <i class="material-icons">more_vert</i>
                             </button>
                             {% embed "PassengerBundle:Passenger:passengerActionsMenu.html.twig" %}{% endembed %}

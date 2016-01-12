@@ -222,6 +222,18 @@ oneup_uploader:
                - image/jpg
             storage:
               directory: "%kernel.root_dir%/../web/static/uploads/media/institution"
+        passenger:
+            frontend: dropzone
+            namer: oneup_uploader.namer.uniqid
+            error_handler: oneup_uploader.error_handler.noop
+            enable_progress:      true
+            enable_cancelation:   true
+            storage:
+              directory: "%kernel.root_dir%/../web/static/uploads/media/passenger"
+            allowed_mimetypes:
+              - image/jpeg
+              - image/png
+              - image/jpg
         user:
             frontend: dropzone
             namer: oneup_uploader.namer.uniqid

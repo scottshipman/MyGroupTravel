@@ -1079,11 +1079,12 @@ class UserController extends Controller
         $em->persist($user);
         $em->flush();
 
-        $mailer->send($message);;
+        $mailer->send($message);
 
         $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.registration_notification') . ' ' .$user->getEmail());
 
-        return $this->redirect($this->generateUrl('user'));
+//        return $this->redirect($this->generateUrl('user'));
+      return $this->redirect($_SERVER['HTTP_REFERER']);
 
     }
 

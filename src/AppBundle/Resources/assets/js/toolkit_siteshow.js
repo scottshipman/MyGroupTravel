@@ -56,8 +56,8 @@ $(document).ready(function () {
                                 console.log(c);
                                 var task = c;
                                 $.each(child, function(f, field) {
-                                    var specificFrom = $('.new_passenger[task="'+task+'"]');
-                                    specificFrom.prepend('<p style="color:red;">'+ field + '</p>');
+                                    var specificForm = $('.new_passenger[task="'+task+'"]');
+                                    specificForm.prepend('<p style="color:red;">'+ field + '</p>');
                                 });
                             });
                         });

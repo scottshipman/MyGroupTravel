@@ -1,14 +1,9 @@
-<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="passenger-menu-drop">
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="passenger-edit-actions-menu-drop-{{ entity.id }}">
     <span>
-        <li>Something</li>
-        <li><a href="{{ path('_homepage') }}" class="mdl-menu__item">{% trans %}tour.menu.my_tours{% endtrans %}</a></li>
-        {% block tour_dashboard_link %}{% endblock %}
-        <li><a href="{{ path('tour_site_action_show', { 'id': entity.id }) }}" class="mdl-menu__item">{% trans %}tour.menu.preview{% endtrans %}</a></li>
-        {%  if is_granted('ROLE_BRAND') %}
-            <li><a href="{{ path('manage_tour_edit', { 'id': entity.id }) }}" class="mdl-menu__item">{% trans %}tour.menu.brand_edit{% endtrans %}</a></li>
+        <li><a id="passenger" href="#" class="mdl-menu__item" passenger="{{ entity.id }}">Edit Passenger</a></li>
+        {% if parent is defined and parent.enabled == false %}
+            <li><a id="passenger-delete" href="{{ path('user_registration_confirmation', { 'id': parent.id }) }}" class="mdl-menu__item">Send Notification</a></li>
         {% endif %}
-        <li><a href="{{ path('manage_tour_edit_payments', { 'id': entity.id }) }}" class="mdl-menu__item">{% trans %}tour.menu.payments{% endtrans %}</a></li>
-        <li><a href="{{ path('manage_passenger_dashboard', { 'tourId': entity.id }) }}" class="mdl-menu__item">{% trans %}passenger.title.index{% endtrans %}</a></li>
-
+        {#<li><a id="passenger-delete" href="{{ path('manage_passenger_delete', { 'id': entity.id }) }}" class="mdl-menu__item" onclick="return confirm('{% trans %}quote.actions.confirm{% endtrans %}')">Delete</a></li>#}
     </span>
 </ul>
