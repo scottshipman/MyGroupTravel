@@ -442,15 +442,24 @@ class PassengerController extends Controller
                 array('content-type' => 'application/json')
             );
 
-
-//            return $this->redirect($this->generateUrl('manage_passenger_edit', array('id' => $id)));
         }
 
-        return $this->render('PassengerBundle:Passenger:edit.html.twig', array(
-            'entity' => $entity,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        $errors = $this->getErrorMessages($editForm);
+
+//        $template = $this->renderView('PassengerBundle:Passenger:new.html.twig', array(
+//            'entity' => $entity,
+//            'errors' => $errors,
+//            'form' => $form->createView(),
+//        ));
+
+        $serializer = $this->container->get('jms_serializer');
+        $errors = $serializer->serialize($errors, 'json');
+
+        $response = new Response($errors);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setStatusCode('400');
+        return $response;
+
     }
 
     /**

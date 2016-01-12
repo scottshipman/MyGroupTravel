@@ -409,7 +409,16 @@ $(document).ready(function () {
             console.log(response);
 
         }).error(function (response) {
-            console.log(response);
+            var parsed = $.parseJSON(response.responseText);
+            $.each(parsed, function(i, item) {
+                $.each(item, function(c, child) {
+                    var attribute = 'tui_toolkit_passengerbundle_passenger_' + i;
+                    var Field = $("label[for='" + attribute +"']");
+                    var fieldParent = Field.parent();
+                    fieldParent.prepend('<p class="errors" style="color:red;">'+ child + '</p>');
+                });
+            });
+            $("#loader").css("display", "none");
         })
     });
 
