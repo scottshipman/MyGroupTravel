@@ -75,7 +75,8 @@ class Version20160111111099 extends AbstractMigration implements ContainerAwareI
             }
 
             elseif ($paxPermission) { // There is a parent grant for a passenger. Verify the passenger is the organizer for that tour
-               echo "Found Permission records:\n";
+               $match = FALSE;
+                echo "Found Permission records:\n";
                 //loop the results
                 foreach($paxPermission as $permission) {
                     $permission = array_values($permission);
@@ -89,16 +90,22 @@ class Version20160111111099 extends AbstractMigration implements ContainerAwareI
                         $tour->getId() == $passenger->getTourReference()->getId()
                     ) {
                         echo "...... Nothing to do. Found matching Passenger record with ID " . $passenger->getId() . "\n";
+                        $match = TRUE;
                     }
                     else {
                         if ($tour->getId() == $passenger->getTourReference()->getId()) {
                             // same tour but not a match, create a passenger record and permission record
                             echo "...... Tour ID and Organizer Name did not match for this Permission/Passenger record\n";
-                            $this->createOrganizerPassenger($organizer, $tour, $em);
+
                         } else {
                             echo "...... Unaffiliated tour for this passenger, moving on...\n";
                         }
                     }
+                }
+                // no matching records, so create a passenger
+                if ($match ==  FALSE) {
+                    echo "... No Matching records found for this tour and organizer combo, so need to create records.\n";
+                    $this->createOrganizerPassenger($organizer, $tour, $em);
                 }
             }
                 echo "\n";
