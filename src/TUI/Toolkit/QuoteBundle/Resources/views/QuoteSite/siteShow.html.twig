@@ -48,7 +48,7 @@
                 {% if entity.displayName %}
                     {{ entity.displayName }}
                 {% else %}
-                    {{ entity.quoteReference.name }}{% if is_granted("ROLE_BRAND") %}, {{ entity.name }}{% endif %}
+                    {{ entity.quoteReference.name }}, {{ entity.name }}
                 {% endif %}
             </h2>
 
