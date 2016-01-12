@@ -227,26 +227,17 @@ class MedicalController extends Controller
 //            return $this->redirect($this->generateUrl('manage_passenger_show', array('id' => $passenger->getId())));
 
         }
-        $errors = $editForm->getErrors(true, true);
 
-        $errorCollection = array();
-        foreach($errors as $error){
-            $errorCollection[] = $error->getMessage();
-        }
+        $errors = $this->get("passenger.actions")->getErrorMessages($editForm);
 
-        $array = array( 'status' => 400, 'errorMsg' => 'Bad Request', 'errorReport' => $errorCollection);
 
-        $response = new Response( json_encode( $array ) );
-        $response->headers->set( 'Content-Type', 'application/json' );
+        $serializer = $this->container->get('jms_serializer');
+        $errors = $serializer->serialize($errors, 'json');
 
-        return $response;// data to return via JSON
-//        return $this->redirect($this->generateUrl('manage_passenger_show', array('id' => $passenger->getId())));
-
-//        return $this->render('PassengerBundle:Medical:edit.html.twig', array(
-//            'entity'      => $entity,
-//            'edit_form'   => $editForm->createView(),
-//            'delete_form' => $deleteForm->createView(),
-//        ));
+        $response = new Response($errors);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setStatusCode('400');
+        return $response;
     }
     /**
      * Deletes a Medical entity.

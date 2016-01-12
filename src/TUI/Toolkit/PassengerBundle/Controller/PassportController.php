@@ -225,25 +225,17 @@ class PassportController extends Controller
 
         }
 
-        $errors = $editForm->getErrors(true, true);
 
-        $errorCollection = array();
-        foreach($errors as $error){
-            $errorCollection[] = $error->getMessage();
-        }
+        $errors = $this->get("passenger.actions")->getErrorMessages($editForm);
 
-        $array = array( 'status' => 400, 'errorMsg' => 'Bad Request', 'errorReport' => $errorCollection);
 
-        $response = new Response( json_encode( $array ) );
-        $response->headers->set( 'Content-Type', 'application/json' );
+        $serializer = $this->container->get('jms_serializer');
+        $errors = $serializer->serialize($errors, 'json');
 
+        $response = new Response($errors);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setStatusCode('400');
         return $response;
-
-//        return $this->render('PassengerBundle:Passport:edit.html.twig', array(
-//            'entity'      => $entity,
-//            'edit_form'   => $editForm->createView(),
-//            'delete_form' => $deleteForm->createView(),
-//        ));
     }
     /**
      * Deletes a Passport entity.

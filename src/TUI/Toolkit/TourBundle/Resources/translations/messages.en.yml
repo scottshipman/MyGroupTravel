@@ -130,8 +130,8 @@ tour:
         days: Days until deadline
         expiry: Days to expiry
         passport_data: Collect Passport Data By
-        passenger_data: Collect Passenger Data By
-        collecting: Collecting
+        passenger_data: Collect Emergency Contact Data By
+        collecting: Collected
         outstanding: Outstanding
         medical_data: Collect Medical Data By
         dietary_data: Collect Dietary Data By
@@ -141,7 +141,7 @@ tour:
         todo: To Do
         completed: Completed
         completed_passport_data: Collect Passport Data
-        completed_passenger_data: Collect Passenger Data
+        completed_passenger_data: Collect Emergency Contact Data
         completed_medical_data: Collect Medical Data
         completed_dietary_data: Collect Dietary Data
         sign_up: Sign Up

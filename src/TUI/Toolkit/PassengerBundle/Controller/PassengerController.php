@@ -39,26 +39,6 @@ class PassengerController extends Controller
         ));
     }
 
-    private function getErrorMessages(Form $form) {
-        $errors = array();
-
-        foreach ($form->getErrors() as $key => $error) {
-            if ($form->isRoot()) {
-                $errors['#'][] = $error->getMessage();
-            } else {
-                $errors[] = $error->getMessage();
-            }
-        }
-
-        foreach ($form->all() as $child) {
-            if (!$child->isValid()) {
-                $errors[$child->getName()] = $this->getErrorMessages($child);
-            }
-        }
-
-        return $errors;
-    }
-
     /**
      * Creates a new Passenger entity.
      *
@@ -222,13 +202,7 @@ class PassengerController extends Controller
             return $this->redirect($request->server->get('HTTP_REFERER'));
         }
 
-        $errors = $this->getErrorMessages($form);
-
-//        $template = $this->renderView('PassengerBundle:Passenger:new.html.twig', array(
-//            'entity' => $entity,
-//            'errors' => $errors,
-//            'form' => $form->createView(),
-//        ));
+        $errors = $this->get("passenger.actions")->getErrorMessages($form);
 
         $serializer = $this->container->get('jms_serializer');
         $errors = $serializer->serialize($errors, 'json');
@@ -302,6 +276,12 @@ class PassengerController extends Controller
             throw $this->createNotFoundException('Unable to find Passenger entity.');
         }
 
+        //Get the parent object of each passenger
+        $parent = $this->get("permission.set_permission")->getUser('parent', $id, 'passenger');
+        $parent = $em->getRepository('TUIToolkitUserBundle:User')->findById($parent[1]);
+        $parent = $parent[0];
+
+
         //brand stuff
         $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
 
@@ -319,6 +299,7 @@ class PassengerController extends Controller
         return $this->render('PassengerBundle:Passenger:show.html.twig', array(
             'entity' => $entity,
             'brand' => $brand,
+            'parent' => $parent,
             'delete_form' => $deleteForm->createView(),
         ));
     }
@@ -356,9 +337,18 @@ class PassengerController extends Controller
      */
     private function createEditForm(Passenger $entity)
     {
-        $form = $this->createForm(new PassengerType(), $entity, array(
+
+        $em = $this->getDoctrine()->getManager();
+
+        $tourId = $entity->getTourReference()->getId();
+
+        $locale = $this->container->getParameter('locale');
+        $form = $this->createForm(new PassengerType($locale, $tourId), $entity, array(
             'action' => $this->generateUrl('manage_passenger_update', array('id' => $entity->getId())),
             'method' => 'PUT',
+            'attr'  => array (
+                'id' => 'ajax_passenger_edit_form'
+            ),
         ));
 
         $form->add('submit', 'submit', array('label' => 'Update'));
@@ -383,18 +373,62 @@ class PassengerController extends Controller
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
+        $media = $editForm->getData()->getMedia();
+
+        //Get and set passenger media
+        if ($media) {
+            if(is_object($media) and !$media->getId()){
+                $entity->setMedia(null);
+            }elseif(is_object($media) and $media->getId()){
+                $entity->setMedia($media);
+            }else {
+                $media = $em->getRepository('MediaBundle:Media')->find($media);
+                $entity->setMedia($media);
+            }
+        }
+        elseif (!$media){
+            $entity->setMedia(null);
+        }
 
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('manage_passenger_edit', array('id' => $id)));
+            $dob = $entity->getDateOfBirth()->format('Y');
+            $age = date_diff(date_create($dob), date_create('now'))->y;
+
+            $data = array (
+                $entity->getFName(),
+                $entity->getLName(),
+                $age,
+                $entity->getGender(),
+                $entity->getId(),
+            );
+
+
+            if ($entity->getMedia() != null) {
+                $data[] = $media->getRelativePath();
+                $data[] = $media->getHashedFileName();
+            }
+
+            $responseContent =  json_encode($data);
+            return new Response($responseContent,
+                Response::HTTP_OK,
+                array('content-type' => 'application/json')
+            );
+
         }
 
-        return $this->render('PassengerBundle:Passenger:edit.html.twig', array(
-            'entity' => $entity,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        $errors = $this->get("passenger.actions")->getErrorMessages($editForm);
+
+
+        $serializer = $this->container->get('jms_serializer');
+        $errors = $serializer->serialize($errors, 'json');
+
+        $response = new Response($errors);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setStatusCode('400');
+        return $response;
+
     }
 
     /**
@@ -416,6 +450,8 @@ class PassengerController extends Controller
 
             $em->remove($entity);
             $em->flush();
+
+            return $this->redirect($this->generateUrl('manage_passenger'));
         }
 
         return $this->redirect($this->generateUrl('manage_passenger'));
@@ -521,7 +557,7 @@ class PassengerController extends Controller
             }
 
             foreach($passengers as $passenger) {
-            $object = $passenger['p_id'];
+            $object = $passenger->getId();
             $parent = $this->get("permission.set_permission")->getUser('parent', $object, 'passenger');
             $isOrganizer = $this->get("permission.set_permission")->getUser('assistant', $object, 'tour') ? TRUE : FALSE;
             $isOrganizer = $this->get("permission.set_permission")->getUser('organizer', $object, 'tour') ? TRUE : $isOrganizer;
@@ -992,19 +1028,15 @@ class PassengerController extends Controller
             );
         }
 
-// return an ajax error response
-      $errors = $form->getErrors(true, true);
+        $errors = $this->get("passenger.actions")->getErrorMessages($form);
 
-        $errorCollection = array();
-        foreach($errors as $error){
-            $errorCollection[] = $error->getMessage();
-        }
 
-        $array = array( 'status' => 400, 'errorMsg' => 'Bad Request', 'errorReport' => $errorCollection);
+        $serializer = $this->container->get('jms_serializer');
+        $errors = $serializer->serialize($errors, 'json');
 
-        $response = new Response( json_encode( $array ) );
-        $response->headers->set( 'Content-Type', 'application/json' );
-
-        return $response;// data to return via JSON
+        $response = new Response($errors);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setStatusCode('400');
+        return $response;
     }
 }

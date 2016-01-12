@@ -46,6 +46,20 @@ var toolkitStandardPopup = function(title, loadLink) {
 
 };
 
+var ajaxFormErrors = function(response, attribute){
+    var parsed = $.parseJSON(response.responseText);
+    $.each(parsed, function(i, item) {
+        $.each(item, function(c, child) {
+            var fullAttribute = attribute + i;
+            var Field = $("label[for='" + fullAttribute +"']");
+            var fieldParent = Field.parent();
+            fieldParent.prepend('<p class="errors" style="color:red;">'+ child + '</p>');
+        });
+    });
+    $("#loader").css("display", "none");
+};
+
+
 var toolkitStaticPopup = function(title, loadContent) {
     $("#dialog").html("");
     $("#dialog").html(loadContent);
