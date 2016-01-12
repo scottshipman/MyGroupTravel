@@ -23,7 +23,7 @@ variables available to this twig:
             {% set orgLabel = 'passenger.labels.primary-organizer' | trans %}
         {% else %}
             {% if organizer[1].enabled is sameas(false) %}  {% set orgLabel = 'passenger.labels.invite-pending' | trans %}  {% endif %}
-            {% if organizer[1].enabled is sameas(true) %}  {% set orgLabel = 'passenger.labels.invite-accepted' | trans %}  {% endif %}
+            {% if organizer[1].enabled is sameas(true) %}  {% set orgLabel = null %}  {% endif %}
         {% endif %}
         {% set status =  'organizer-' ~ organizer[0].status %}
         {% if organizer[0].free == 1 %}{% set freeClass = 'organizer-free' %}{% set status = '' %} {% else %} {% set freeClass = '' %} {% endif %}
@@ -39,7 +39,7 @@ variables available to this twig:
                     {% endif %}
                     <p style="display: inline-block"><strong>{{ organizer[1].firstName }}</strong></p>
                     <p style="display: inline-block"><strong>{{ organizer[1].lastName }}</strong></p>
-                    <p style="display: inline-block"><strong>({{ orgLabel }})</strong></p>
+                    {% if orgLabel is not sameas(NULL) %}<p style="display: inline-block"><strong>({{ orgLabel }})</strong></p>{% endif %}
                     <p style="display: inline-block" class="{{ status }} {{ freeClass }}"></p>
                     <p><a href="mailto:{{ organizer[1].email}}">{{ organizer[1].email}}</a></p>
                 </div>
