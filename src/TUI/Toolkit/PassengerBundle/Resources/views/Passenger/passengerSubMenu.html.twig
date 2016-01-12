@@ -4,6 +4,5 @@
         {% if parent is defined and parent.enabled == false %}
             <li><a id="passenger-delete" href="{{ path('user_registration_confirmation', { 'id': parent.id }) }}" class="mdl-menu__item">{% trans %}passenger.actions.send-notification{% endtrans %}</a></li>
         {% endif %}
-        {#<li><a id="passenger-delete" href="{{ path('manage_passenger_delete', { 'id': entity.id }) }}" class="mdl-menu__item" onclick="return confirm('{% trans %}quote.actions.confirm{% endtrans %}')">Delete</a></li>#}
     </span>
 </ul>
