@@ -73,6 +73,7 @@ passenger:
         invite-accepted: Accepted Invitation.
         add-organizer: Manage Organisers
         invite-text: Complete the form below to invite someone to help organise this tour.
+        assistant-organizer: Assistant Organiser
         tasks: Tasks
         medical_info: Medical Information
         doctor_name: Doctor's name:
