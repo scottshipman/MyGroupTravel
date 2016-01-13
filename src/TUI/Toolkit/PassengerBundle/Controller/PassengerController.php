@@ -558,16 +558,19 @@ class PassengerController extends Controller
 
             foreach($passengers as $passenger) {
             $object = $passenger->getId();
+            $tourId = $passenger->getTourReference()->getId();
             $parent = $this->get("permission.set_permission")->getUser('parent', $object, 'passenger');
-            $isOrganizer = $this->get("permission.set_permission")->getUser('assistant', $object, 'tour') ? TRUE : FALSE;
-            $isOrganizer = $this->get("permission.set_permission")->getUser('organizer', $object, 'tour') ? TRUE : $isOrganizer;
 
             if (!empty($parent)){
                 $parentObject = $em->getRepository('TUIToolkitUserBundle:User')->find($parent[1]);
             } else {
                 $parentObject = "";
             }
-            $combinedObjects[]= array($passenger, $parentObject, $isOrganizer);
+                $isOrganizer = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $parentObject)[0]=='organizer' ? TRUE : FALSE;
+                $isOrganizer = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $parentObject)[0]=='assistant' ? TRUE : $isOrganizer;
+
+
+                $combinedObjects[]= array($passenger, $parentObject, $isOrganizer);
              }
 
             return $combinedObjects;
@@ -590,7 +593,7 @@ class PassengerController extends Controller
         foreach($organizers as $organizer) {
 
             $passengerObject = new Passenger();
-            $passengerObject->setStatus('Not Travelling');
+            $passengerObject->setStatus('Pending Invite');
 
             $user = $organizer->getId();
             $passenger = $this->get("permission.set_permission")->getObject('parent', $user, 'passenger');

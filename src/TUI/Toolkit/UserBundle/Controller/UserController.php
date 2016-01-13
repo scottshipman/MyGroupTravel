@@ -15,7 +15,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Symfony\Component\Validator\Constraints\Null;
-use TUI\Toolkit\UserBundle\Entity\User;
+
+use TUI\Toolkit\PermissionBundle\Entity\Permission;
+use TUI\Toolkit\PassengerBundle\Entity\Passenger;
 use TUI\Toolkit\UserBundle\Form\ResettingFormType;
 use TUI\Toolkit\UserBundle\Form\UserType;
 use TUI\Toolkit\UserBundle\Form\AjaxuserType;
@@ -652,6 +654,7 @@ class UserController extends Controller
      */
     public function activateUserAction($token)
     {
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('TUIToolkitUserBundle:User')->findByConfirmationToken($token);
@@ -665,10 +668,16 @@ class UserController extends Controller
         }
         $setForm = $this->createActivateUserForm($entity[0]);
 
+        // Check if the User is an Organizer or Assistant to do funcky stuff
+        $tourOrganizer = $this->get("permission.set_permission")->getObject('organizer', $entity[0], 'tour');
+        $tourAssistant = $this->get("permission.set_permission")->getObject('assistant', $entity[0], 'tour');
+
         return $this->render('TUIToolkitUserBundle:Registration:activation.html.twig', array(
             'form' => $setForm->createView(),
             'user'  => $entity[0],
             'token' => $token,
+            'isOrganizer' => is_array($tourOrganizer) ? array_shift($tourOrganizer): $tourOrganizer,
+            'isAssistant' => is_array($tourAssistant) ? array_shift($tourAssistant) : $tourAssistant,
         ));
     }
 
@@ -680,7 +689,7 @@ class UserController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createActivateUserForm(User $entity)
+    private function createActivateUserForm($entity)
     {
         $form = $this->createForm(new ActivateUserType(), $entity, array(
             'action' => $this->generateUrl('activate_user_submit', array('id' => $entity->getId())),
@@ -746,6 +755,39 @@ class UserController extends Controller
           $loginEvent = new InteractiveLoginEvent($request, $token);
           $this->get("event_dispatcher")
             ->dispatch("security.interactive_login", $loginEvent);
+
+          // check if new user is an assistant or organizer, and allow them to edit their passenger record
+            if ($role = $setForm['role']->getData() ) {
+                // if an assistant, create a passenger record
+                $tour = $em->getRepository('TourBundle:Tour')->find($setForm['tour']->getData());
+                $newPassenger = new Passenger();
+                $newPassenger->setStatus("waitlist");
+                $newPassenger->setFree(false);
+                $newPassenger->setFName($user->getFirstName());
+                $newPassenger->setLName($user->getLastName());
+                $newPassenger->setTourReference($tour);
+                $newPassenger->setGender('undefined');
+                $newPassenger->setDateOfBirth(new \DateTime("1987-01-01"));
+                $newPassenger->setSignUpDate(new \DateTime("now"));
+
+                $em->persist($newPassenger);
+                $em->flush($newPassenger);
+
+                $newPermission = new Permission();
+                $newPermission->setUser($user);
+                $newPermission->setClass('passenger');
+                $newPermission->setGrants('parent');
+                $newPermission->setObject($newPassenger->getId());
+
+
+                $em->persist($newPermission);
+                $em->flush($newPermission);
+                // if an organizer, a passenger record exists so just add a message
+                $baseurl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
+                $tourUrl = $baseurl . "/tour/dashboard/" . $setForm['tour']->getData()  . "passengers";
+                $tourLink = " <br><a href='$tourUrl'>$tourUrl</a>";
+                $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.register-organizer') . $tourLink);
+            }
 
             return $this->redirect($this->generateUrl('fos_user_profile_show'));
         }
@@ -1618,10 +1660,15 @@ class UserController extends Controller
         if ($role =='organizer'){
           $msg = $this->get('translator')->trans('user.activate.organizer');
         }
+          if ($role =='assistant'){
+              $msg = $this->get('translator')->trans('user.activate.assistant');
+          }
+
         if ($role == 'participant' ){
           $msg = $this->get('translator')->trans('user.activate.participant');
         }
       }
+
       return $this->render('TUIToolkitUserBundle:Resetting:welcomeMessage.html.twig', array(
         'message' => $msg,
       ));

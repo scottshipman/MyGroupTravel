@@ -14,6 +14,16 @@
     {{ form_row(form.plainPassword) }}
     {{ form_row(form.question) }}
     {{ form_row(form.answer) }}
+    {% if isAssistant %}
+        {{ form_row(form.role, {value : 'assistant'}) }}
+         {{ form_row(form.tour, {value : isAssistant['object']}) }}
+    {% endif %}
+
+    {% if isOrganizer %}
+        {{ form_row(form.role, {value : 'organizer'}) }}
+        {{ form_row(form.tour, {value : isOrganizer['object']}) }}
+    {% endif %}
+
     {% if form.termsAgree is defined %}<div class="terms">
         {{ form_widget(form.termsAgree,{'label' : 'user.form.terms_agree'|trans|nl2br|replace
             ({'%link_start%' : '<a target="_blank" href="'~path('terms_of_service')~'">', '%link_end%' : '</a>'}) | raw}) }}

@@ -23,30 +23,47 @@ variables available to this twig:
             {% set orgLabel = 'passenger.labels.primary-organizer' | trans %}
         {% else %}
             {% if organizer[1].enabled is sameas(false) %}  {% set orgLabel = 'passenger.labels.invite-pending' | trans %}  {% endif %}
-            {% if organizer[1].enabled is sameas(true) %}  {% set orgLabel = 'passenger.labels.invite-accepted' | trans %}  {% endif %}
+            {% if organizer[1].enabled is sameas(true) %}  {% set orgLabel = 'passenger.labels.assistant-organizer' | trans %}  {% endif %}
         {% endif %}
-        {% set status =  'organizer-' ~ organizer[0].status %}
-        {% if organizer[0].free == 1 %}{% set freeClass = 'organizer-free' %}{% set status = '' %} {% else %} {% set freeClass = '' %} {% endif %}
+
+        {% if organizer[0].status == "accepted" %}
+            {% set statusicon =  '<a class="' ~ organizer[0].status ~ 'icon" title = "' ~ organizer[0].status ~ '"><i class="material-icons">verified_user</i></a>'%}
+        {% elseif  organizer[0].status == "Pending Invite"%}
+            {% set statusicon =  '<a class="' ~ organizer[0].status ~ 'icon" title = "' ~ organizer[0].status ~ '"><i class="material-icons">live_help</i></a>'%}
+        {% else %}
+            {% set statusicon = '<a class="' ~ organizer[0].status ~ 'icon" title = "' ~ organizer[0].status ~ '"><i class="material-icons">list</i></a>'%}
+        {% endif %}
+
+        {% if organizer[0].free == 1 %}
+            {% set freeicon = '<a class="freeicon" title = "Free"><i class="material-icons">money_off</i></a>' %}
+            {% set statusicon = '' %}
+        {% else %}
+            {% set freeicon = '' %}
+        {% endif %}
+
         <div class="tour-edit mdl-shadow--2dp" style="background-color:white; margin-bottom: 0;">
             <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
-                <div style="float: left; color: grey;">
+                <div style="float: left; color: grey;" class="pcardname">
                     {% if organizer[1].media %}
-                        <span class="tui-image-avatar"><img src="{{ ( organizer[1].media.getRelativePath ~ '/' ~ organizer[1].media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ organizer[1].username }}"></span>
+                        <span style="float: left; margin-right: 15px;" class="tui-image-avatar"><img src="{{ ( organizer[1].media.getRelativePath ~ '/' ~ organizer[1].media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ organizer[1].username }}"></span>
                     {% elseif organizer[1].firstName and tour.organizer.lastName %}
-                        <span class="tui-text-avatar mdl-typography--headline">{{ organizer[1].firstName[:1] }}{{ organizer[1].lastName[:1] }}</span>
+                        <span style="float: left; margin-right: 15px;" class="tui-text-avatar mdl-typography--headline">{{ organizer[1].firstName[:1] }}{{ organizer[1].lastName[:1] }}</span>
                     {% else %}
-                        <span class="tui-text-avatar mdl-typography--headline">{{ organizer[1].username[:1] }}</span>
+                        <span style="float: left; margin-right: 15px;" class="tui-text-avatar mdl-typography--headline">{{ organizer[1].username[:1] }}</span>
                     {% endif %}
-                    <p style="display: inline-block"><strong>{{ organizer[1].firstName }}</strong></p>
-                    <p style="display: inline-block"><strong>{{ organizer[1].lastName }}</strong></p>
-                    <p style="display: inline-block"><strong>({{ orgLabel }})</strong></p>
-                    <p style="display: inline-block" class="{{ status }} {{ freeClass }}"></p>
-                    <p><a href="mailto:{{ organizer[1].email}}">{{ organizer[1].email}}</a></p>
+                    <p style="display: inline-block;"><strong>{{ organizer[1].firstName }}</strong></p>
+                    <p style="display: inline-block;"><strong>{{ organizer[1].lastName }}</strong></p>
+                    <p style="display: inline-block;"><strong><a href="mailto:{{ organizer[1].email}}">{{ organizer[1].email}}</a></strong></p>
+                    <label style="display: inline-block;margin-left: 63px; min-width: 100%;">{{ statusicon | raw }} {{ freeicon | raw }}
+                        {% if orgLabel is not sameas(NULL) %}{{ orgLabel }}{% endif %}
+                    </label>
                 </div>
-                <button style="position: absolute; right: 20px; color:grey; margin-top:10px;" id="organizer-actions-menu-drop-{{ organizer[0].id }}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
-                    <i class="material-icons">more_vert</i>
-                </button>
-                {% embed "PassengerBundle:Passenger:organizerActionsMenu.html.twig" %}{% endembed %}
+                {#{% if  organizer[0].status != "Pending Invite"%}#}
+                    <button style="position: absolute; right: 20px; color:grey; margin-top:10px;" id="organizer-actions-menu-drop-{{ organizer[0].id }}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+                        <i class="material-icons">more_vert</i>
+                    </button>
+                    {% embed "PassengerBundle:Passenger:organizerActionsMenu.html.twig" %}{% endembed %}
+                {#{% endif %}#}
             </div>
 
         </div>

@@ -335,6 +335,22 @@
   }
 }
 
+.freeicon {
+  color: blue;
+}
+
+.waitlisticon {
+  color: gold;
+}
+
+.acceptedicon {
+  color: green;
+}
+
+.organizer-card {
+  color: orangered;
+}
+
 .invite-organizer-form {
   &.mdl-textfield {
     width: 80%;
