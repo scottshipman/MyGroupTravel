@@ -784,8 +784,8 @@ class UserController extends Controller
                 $em->flush($newPermission);
                 // if an organizer, a passenger record exists so just add a message
                 $baseurl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
-                $tourUrl = $baseurl . "/tour/dashboard/" . $setForm['tour']->getData()  . "passengers";
-                $tourLink = " <br><a href='$tourUrl'>$tourUrl</a>";
+                $tourUrl = $baseurl . "/tour/dashboard/" . $setForm['tour']->getData()  . "/passengers";
+                $tourLink = " <br><a style='color:white;' href='$tourUrl'>$tourUrl</a>";
                 $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.register-organizer') . $tourLink);
             }
 
