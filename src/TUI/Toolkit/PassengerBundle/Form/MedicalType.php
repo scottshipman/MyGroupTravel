@@ -39,19 +39,21 @@ class MedicalType extends AbstractType
         $builder
             ->add('doctorName', 'text', array(
                 'required' => false,
-                'label' => 'Doctors Name:',
+                'label' => 'passenger.labels.doctor_name',
             ))
             ->add('DoctorNumber', 'tel', array(
                 'required' => false,
-                'label' => 'Doctors Phone Number',
+                'label' => 'passenger.labels.doctor_number',
                 'default_region' => $defaultRegion,
                 'format' => $phoneFormat,
             ))
             ->add('conditions', 'text', array(
                 'required' => false,
+                'label' => 'passenger.labels.conditions',
             ))
             ->add('medications', 'text', array(
                 'required' => false,
+                'label' => 'passenger.labels.medication',
             ))
             ->add('passengerReference', 'hidden', array(
                 'required' => false,
@@ -59,11 +61,6 @@ class MedicalType extends AbstractType
                 'mapped' => false,
 
             ));
-//        ->add('tourReference', 'hidden', array(
-//            'required' => false,
-//            'mapped' => false,
-//            ));
-
 
     }
 

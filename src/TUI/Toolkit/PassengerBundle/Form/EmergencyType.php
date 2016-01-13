@@ -39,21 +39,21 @@ class EmergencyType extends AbstractType
         $builder
             ->add('emergencyName', 'text', array(
                 'required' => false,
-                'label' => 'Name:',
+                'label' => 'passenger.labels.emergency_name',
             ))
             ->add('emergencyRelationship', 'text', array(
                 'required' => false,
-                'label' => 'Relationship:',
+                'label' => 'passenger.labels.emergency_relationship',
             ))
             ->add('emergencyNumber', 'tel', array(
                 'required' => false,
-                'label' => 'Phone Number',
+                'label' => 'passenger.labels.emergency_number',
                 'default_region' => $defaultRegion,
                 'format' => $phoneFormat,
             ))
             ->add('emergencyEmail', 'email', array(
                 'required' => false,
-                'label' => 'Email:'
+                'label' => 'passenger.labels.emergency_email'
             ))
             ->add('passengerReference', 'hidden', array(
                 'required' => false,

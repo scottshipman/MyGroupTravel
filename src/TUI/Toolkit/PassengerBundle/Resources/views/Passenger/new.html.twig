@@ -39,7 +39,6 @@
         // setup an "add a tag" link
         var $addPassengerLink = $('<a href="#" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add_tag_link" title="Add a Passenger"><i class="fa fa-plus"></i>Add Passenger</a>');
         var $newLinkDiv = $('<div></div>').append($addPassengerLink);
-        $('#tui_toolkit_tourbundle_tourpassenger_passengers_0_dateOfBirth > div:nth-child(1)').css({"width": "100"});
 
 
         {#var tourId = {{ tourId }};#}
@@ -98,6 +97,8 @@
             div.prepend('<label class="mdl-label-mimic dob">' + labelText + '</label>');
             $('.dob').css({"top" : "-12px", "position": "absolute", "font-size" : "14px"});
             div.css({"margin-top" : "5px"});
+            $('#tui_toolkit_tourbundle_tourpassenger_passengers_"'+ index +'"_dateOfBirth > div:nth-child(1)').css({"width": "100"});
+
 
         }
 
