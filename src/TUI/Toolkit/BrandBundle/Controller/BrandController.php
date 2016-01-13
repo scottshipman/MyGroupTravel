@@ -69,7 +69,7 @@ class BrandController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('brand.flash.save') . $entity->getName());
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('brand.flash.save') . $entity->getName());
 
 
             return $this->redirect($this->generateUrl('_manage_brand_show', array('id' => $entity->getId())));
@@ -239,7 +239,7 @@ class BrandController extends Controller
 
         if ($editForm->isValid()) {
             $em->flush();
-            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('brand.flash.save') . $entity->getName());
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('brand.flash.save') . $entity->getName());
             return $this->redirect($this->generateUrl('_manage_brand_edit', array('id' => $id)));
         }
 
@@ -271,7 +271,7 @@ class BrandController extends Controller
 
             $em->remove($entity);
             $em->flush();
-            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('brand.flash.delete') . $entity->getName());
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('brand.flash.delete') . $entity->getName());
 
         }
 
@@ -378,7 +378,7 @@ class BrandController extends Controller
     if ($form->isValid()) {
       $em->persist($brand);
       $em->flush();
-      $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('brand.flash.terms') . $brand->getName());
+      $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('brand.flash.terms') . $brand->getName());
 
 
       return $this->redirect($this->generateUrl('_manage_brand_show', array('id' => $brand->getId())));

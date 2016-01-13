@@ -410,7 +410,7 @@ class TourController extends Controller
             $em->flush();
             // Create organizer permission
             $permission = $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
-            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tour.flash.save') . $entity->getName());
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.save') . $entity->getName());
 
             return $this->redirect($this->generateUrl('manage_tour'));
         }
@@ -822,7 +822,7 @@ class TourController extends Controller
             $em->persist($entity);
             $em->flush();
             $permission = $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
-            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tour.flash.save') . $entity->getName());
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.save') . $entity->getName());
             if ( $entity->getSetupComplete() == false and $entity->getIsComplete() == false) {
 
                 return $this->redirect($this->generateUrl('tour_site_show', array('id' => $entity->getId(), 'quoteNumber' => $entity->getQuoteNumber())));
@@ -899,7 +899,7 @@ class TourController extends Controller
 
             $em->remove($entity);
             $em->flush();
-            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tour.flash.delete') . $entity->getName());
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.delete') . $entity->getName());
 
         }
 
@@ -943,7 +943,7 @@ class TourController extends Controller
         }
         $em->remove($tour);
         $em->flush();
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tour.flash.delete') . $tour->getName());
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.delete') . $tour->getName());
 
         return $this->redirect($this->generateUrl('manage_tour'));
     }
@@ -966,7 +966,7 @@ class TourController extends Controller
         }
         $em->remove($tour);
         $em->flush();
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.delete'). ' ' . $tour->getName());
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('user.flash.delete'). ' ' . $tour->getName());
 
         return $this->redirect($this->generateUrl('manage_tour'));
     }
@@ -1009,7 +1009,7 @@ class TourController extends Controller
         $tour->setDeleted(NULL);
         $em->persist($tour);
         $em->flush();
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tour.flash.restore') . $tour->getName());
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.restore') . $tour->getName());
 
         return $this->redirect($this->generateUrl('manage_tour'));
     }
@@ -1038,7 +1038,7 @@ class TourController extends Controller
         $tour->setLocked($status);
         $em->persist($tour);
         $em->flush();
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tour.flash.lock'));
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.lock'));
 
         return new Response(json_encode((array)$tour));
 
@@ -1067,7 +1067,7 @@ class TourController extends Controller
         $tour->setLocked($status);
         $em->persist($tour);
         $em->flush();
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tour.flash.lock'));
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.lock'));
 
         return $this->redirect($this->generateUrl('manage_tour'));
 
@@ -1384,11 +1384,11 @@ class TourController extends Controller
         if ($setupForm->isValid()) {
             $em->flush();
             $permission = $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
-            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tour.flash.save') . $entity->getName());
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.save') . $entity->getName());
             return $this->redirect($this->generateUrl('manage_tour_show', array('id' => $id)));
         }
 
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tour.flash.not_saved') . $entity->getName());
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.not_saved') . $entity->getName());
         return $this->redirect($this->generateUrl('manage_tour_show', array('id' => $id)));
 
 
@@ -1549,7 +1549,7 @@ class TourController extends Controller
         $em->persist($entity);
         $em->flush();
         $this->get('mailer')->send($message);
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tour.flash.registration_notification') . " " . $organizerEmail);
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.registration_notification') . " " . $organizerEmail);
 
 
     return $this->redirect($this->generateUrl('manage_tour'));
