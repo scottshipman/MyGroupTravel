@@ -61,6 +61,7 @@ passenger:
         invite-accepted: Accepted Invitation.
         add-organizer: Manage Organisers
         invite-text: Complete the form below to invite someone to help organise this tour.
+        assistant-organizer: Assistant Organiser
 
     emails:
         thank_you: Thank you for your submission

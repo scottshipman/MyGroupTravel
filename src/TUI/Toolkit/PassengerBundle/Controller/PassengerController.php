@@ -593,7 +593,7 @@ class PassengerController extends Controller
         foreach($organizers as $organizer) {
 
             $passengerObject = new Passenger();
-            $passengerObject->setStatus('Not Travelling');
+            $passengerObject->setStatus('Pending Invite');
 
             $user = $organizer->getId();
             $passenger = $this->get("permission.set_permission")->getObject('parent', $user, 'passenger');
