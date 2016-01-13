@@ -277,9 +277,33 @@ class PassengerController extends Controller
         }
 
         //Get the parent object of each passenger
-        $parent = $this->get("permission.set_permission")->getUser('parent', $id, 'passenger');
-        $parent = $em->getRepository('TUIToolkitUserBundle:User')->findById($parent[1]);
-        $parent = $parent[0];
+        $parentId = $this->get("permission.set_permission")->getUser('parent', $id, 'passenger');
+        $parent = $em->getRepository('TUIToolkitUserBundle:User')->find($parentId[1]);
+
+            // is parent an organizer?
+            $parentRoles = $this->get("permission.set_permission")->getPermission($entity->getTourReference()->getId(), 'tour', $parent);
+            $isOrganizer=NULL;
+            if(in_array('assistant', $parentRoles)) {
+                $isOrganizer = $this->get('translator')->trans('passenger.labels.assistant-organizer');
+            }
+            if(in_array('organizer', $parentRoles)) {
+                $isOrganizer = $this->get('translator')->trans('passenger.labels.primary-organizer');
+            }
+
+
+        // check permissions for who can see passenger
+        $currUser = $this->get('security.context')->getToken()->getUser();
+        $currRole =  $this->get("permission.set_permission")->getPermission($entity->getTourReference()->getId(), 'tour', $currUser);
+        // is brand or admin
+        if(!$this->get('security.context')->isGranted('ROLE_BRAND')){
+            // is organizer or assistant of tour
+            if(!in_array('assistant', $currRole) && !in_array('organizer', $currRole)) {
+                // is parent of this passenger
+                if(!$parentId[1] == $currUser->getId()) {
+                    throw $this->createAccessDeniedException('You are not authorized to manage passengers for this tour!');
+                }
+            }
+        }
 
 
         //brand stuff
@@ -301,6 +325,7 @@ class PassengerController extends Controller
             'brand' => $brand,
             'parent' => $parent,
             'delete_form' => $deleteForm->createView(),
+            'isOrganizer' => $isOrganizer,
         ));
     }
 
@@ -486,10 +511,13 @@ class PassengerController extends Controller
         //check permissions first
         $currUser = $this->get('security.context')->getToken()->getUser();
         $currRole =  $this->get("permission.set_permission")->getPermission($tourId, 'tour', $currUser);
-        if(!in_array($currRole, array('assistant', 'organizer'))){
-            if($currRole == 'parent')
-            $this->denyAccessUnlessGranted(array('ROLE_ADMIN', 'ROLE_SUPERADMIN', 'ROLE_BRAND'), null, 'Unable to access this page!');
+
+        if(!$this->get('security.context')->isGranted('ROLE_BRAND')){
+            if(!in_array('assistant', $currRole) && !in_array('organizer', $currRole)) {
+                throw $this->createAccessDeniedException('You are not authorized to manage passengers for this tour!');
+            }
         }
+
 
 
         $em = $this->getDoctrine()->getManager();
