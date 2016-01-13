@@ -58,12 +58,12 @@ variables available to this twig:
                         {% if orgLabel is not sameas(NULL) %}{{ orgLabel }}{% endif %}
                     </label>
                 </div>
-                {% if  organizer[0].status != "Pending Invite"%}
+                {#{% if  organizer[0].status != "Pending Invite"%}#}
                     <button style="position: absolute; right: 20px; color:grey; margin-top:10px;" id="organizer-actions-menu-drop-{{ organizer[0].id }}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
                         <i class="material-icons">more_vert</i>
                     </button>
                     {% embed "PassengerBundle:Passenger:organizerActionsMenu.html.twig" %}{% endembed %}
-                {% endif %}
+                {#{% endif %}#}
             </div>
 
         </div>

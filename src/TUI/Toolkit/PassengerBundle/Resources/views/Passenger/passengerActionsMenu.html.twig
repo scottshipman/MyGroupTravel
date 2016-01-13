@@ -11,7 +11,7 @@
             <li><a href="#waitlist" style="display: none;" class="mdl-menu__item move-to-waitlist" tour="{{ tourId }}" passenger="{{ passengerId }}">{% trans %}passenger.actions.move_waitlist{% endtrans %}</a></li>
         {% endif %}
         {% if passengerStatus != "waitlist" %}
-            <li><a href="#accepted" style="display: none;"class="mdl-menu__item move-to-accepted" tour="{{ tourId }}" passenger="{{ passengerId }}">{% trans %}passenger.actions.move_accepted{% endtrans %}</a></li>
+            <li><a href="#accepted" style="display: none;" class="mdl-menu__item move-to-accepted" tour="{{ tourId }}" passenger="{{ passengerId }}">{% trans %}passenger.actions.move_accepted{% endtrans %}</a></li>
             <li><a href="#waitlist" style="display: block;" class="mdl-menu__item move-to-waitlist" tour="{{ tourId }}" passenger="{{ passengerId }}">{% trans %}passenger.actions.move_waitlist{% endtrans %}</a></li>
         {% endif %}
         {% if passengerStatus != "waitlist" and free == false %}
