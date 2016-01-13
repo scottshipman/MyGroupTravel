@@ -40,11 +40,11 @@ class PassengerType extends AbstractType
         $builder
             ->add('fName', 'text', array(
                 'required' => true,
-                'label' => 'First Name'
+                'label' => 'passenger.form.invite.first'
             ))
             ->add('lName', 'text', array(
                 'required' => true,
-                'label' => 'Last Name'
+                'label' => 'passenger.form.invite.last'
             ))
             ->add('dateOfBirth', 'birthday', array(
                 'format' => $date_format,
@@ -59,6 +59,7 @@ class PassengerType extends AbstractType
                     'Male' => 'Male',
                     'Female' => 'Female'
                 ),
+                'label' => 'passenger.form.invite.gender',
                 'required' => true,
             ))
             ->add('tourReference', 'entity', array(

@@ -39,19 +39,19 @@ class PassportType extends AbstractType
         $builder
             ->add('passportNumber', 'text', array(
                 'required' => false,
-                'label' => 'Passport Number:',
+                'label' => 'passenger.labels.passport_number',
             ))
             ->add('passportFirstName', 'text', array(
                 'required' => false,
-                'label' => 'First Name:',
+                'label' => 'passenger.labels.passport_first_name',
             ))
             ->add('passportLastName', 'text', array(
                 'required' => false,
-                'label' => 'Last Name:',
+                'label' => 'passenger.labels.passport_last_name',
             ))
             ->add('passportNationality', 'country', array(
                 'required' => false,
-                'label' => 'Nationality:',
+                'label' => 'passenger.labels.passport_nationality',
             ))
             ->add('passportDateOfIssue', 'birthday', array(
                 'format' => $date_format,

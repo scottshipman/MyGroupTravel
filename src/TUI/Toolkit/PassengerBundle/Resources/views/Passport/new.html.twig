@@ -6,9 +6,9 @@
         {{ form_widget(form.passportFirstName) }}
         {{ form_widget(form.passportLastName) }}
         {{ form_widget(form.passportNationality) }}
-        <label style="display: block; color:rgba(0,0,0,.26);">Date of Issue</label>
+        <label style="display: block; color:rgba(0,0,0,.26);">{% trans %}passenger.labels.passport_doi{% endtrans %}</label>
         {{ form_widget(form.passportDateOfIssue) }}
-        <label style="display: block; color:rgba(0,0,0,.26);">Date of Expiry</label>
+        <label style="display: block; color:rgba(0,0,0,.26);">{% trans %}passenger.labels.passport_doe{% endtrans %}</label>
         {{ form_widget(form.passportDateOfExpiry) }}
         {{ form_rest(form) }}
         {{ form_end(form) }}

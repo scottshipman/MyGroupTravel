@@ -28,7 +28,18 @@ passenger:
         activate: Submit
         security: Reset Security Info
         invite: Invite
-        invite-organizers: Invite Organizers
+        invite-organizers: Invite Organisers
+        edit_passenger: Edit Passenger
+        send-notification: Send Notification
+        move_accepted: Move to Accepted
+        move_waitlist: Move to Waitlist
+        move_free: Move to Free
+        view_passenger: View Passenger
+        add_medical: Add Medical Information
+        add_dietary: Add Dietary Information
+        add_passport: Add Passport Information
+        add_emergency: Add Emergency Contact Information
+        no_tasks: has no tasks
 
         actions:
             view: View
@@ -44,23 +55,45 @@ passenger:
         dob: Date of Birth
 
     labels:
+        passenger: Passenger
         passengers_for: Passengers For
         passenger_for: Passenger For
         waitlist: Wait List
         accepted: Accepted
         free: Free
-        organizer: Organizers
+        organizer: Organisers
         passenger_list: Passenger List
         add_paying: Add Paying Passengers
         remaining: Remaining
         welcome: Welcome to the passenger dashboard.  Here you can invite, add, and manage all of your passengers.
         invite: Invite Passengers
         add: Add Passenger
-        primary-organizer: Primary Organizer
+        primary-organizer: Primary Organiser
         invite-pending: Invited - Not yet responded.
         invite-accepted: Accepted Invitation.
-        add-organizer: Manage Organizers
-        invite-text: Complete the form below to invite someone to help organize this tour.
+        add-organizer: Manage Organisers
+        invite-text: Complete the form below to invite someone to help organise this tour.
+        tasks: Tasks
+        medical_info: Medical Information
+        doctor_name: Doctor's name:
+        doctor_number: Doctor's phone number:
+        conditions: Medical conditions and allergies:
+        medication: Medication:
+        dietary_info: Dietary Requirements
+        passport_info: Passport Details
+        passport_number: Passport number:
+        passport_first_name: First name:
+        passport_last_name: Last name:
+        passport_nationality: Nationality:
+        passport_doi: Date of issue:
+        passport_doe: Date of expiry:
+        emergency_info: Emergency Contact Information
+        emergency_name: Name:
+        emergency_relationship: Relationship:
+        emergency_telephone: Telephone:
+        emergency_email: Email:
+
+
 
     emails:
         thank_you: Thank you for your submission
@@ -75,3 +108,4 @@ passenger:
             first: First Name
             last: Last Name
             message: Message
+            gender: Gender
