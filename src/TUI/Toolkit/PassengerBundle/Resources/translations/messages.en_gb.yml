@@ -76,23 +76,23 @@ passenger:
         assistant-organizer: Assistant Organiser
         tasks: Tasks
         medical_info: Medical Information
-        doctor_name: Doctor's name:
-        doctor_number: Doctor's phone number:
-        conditions: Medical conditions and allergies:
-        medication: Medication:
+        doctor_name: Doctor's name
+        doctor_number: Doctor's phone number
+        conditions: Medical conditions and allergies
+        medication: Medication
         dietary_info: Dietary Requirements
         passport_info: Passport Details
-        passport_number: Passport number:
-        passport_first_name: First name:
-        passport_last_name: Last name:
-        passport_nationality: Nationality:
-        passport_doi: Date of issue:
-        passport_doe: Date of expiry:
+        passport_number: Passport number
+        passport_first_name: First name
+        passport_last_name: Last name
+        passport_nationality: Nationality
+        passport_doi: Date of issue
+        passport_doe: Date of expiry
         emergency_info: Emergency Contact Information
-        emergency_name: Name:
-        emergency_relationship: Relationship:
-        emergency_telephone: Telephone:
-        emergency_email: Email:
+        emergency_name: Name
+        emergency_relationship: Relationship
+        emergency_number: Telephone
+        emergency_email: Email
 
 
 
@@ -110,3 +110,15 @@ passenger:
             last: Last Name
             message: Message
             gender: Gender
+        error:
+            message:
+                dietary: The dietary information you input was not valid, please check:
+                medical: The medical information you input was not valid, please check:
+                emergency: The emergency contact information you input was not valid, please check:
+                passport: The passport information you input was not valid, please check:
+        success:
+            message:
+                dietary: Dietary information saved successfully
+                medical: Medical information saved successfully
+                emergency: Emergency contact information saved successfully
+                passport: Passport information saved successfully
