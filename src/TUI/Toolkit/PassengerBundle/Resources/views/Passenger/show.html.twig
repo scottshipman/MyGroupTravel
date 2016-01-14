@@ -65,6 +65,25 @@
         <div class="tour-show-right-column">
 
         {#Passenger Information Card#}
+                    {% if entity.status == "accepted" %}
+                        {% set statusicon =  '<a class="' ~ entity.status ~ 'icon" title = "' ~ entity.status ~ '"><i class="material-icons">verified_user</i></a>'%}
+                    {% else %}
+                        {% set statusicon = '<a class="' ~ entity.status ~ 'icon" title = "' ~ entity.status ~ '"><i class="material-icons">list</i></a>'%}
+                    {% endif %}
+
+                    {% if isOrganizer %}
+                        {% set organizericon = '<a class="organizer-card" title = "' ~ isOrganizer ~ '"><i class="material-icons">group_add</i></a>' %}
+                    {% else %}
+                        {% set organizericon = '' %}
+                    {% endif %}
+
+                    {% if entity.free == 1 %}
+                        {% set freeicon = '<a class="freeicon" title = "Free"><i class="material-icons">money_off</i></a>' %}
+                        {% set statusicon = '' %}
+                        {% set status = '' %}
+                    {% else %}
+                        {% set freeicon = '' %}
+                    {% endif %}
             <div class="waitlist tour-edit mdl-card mdl-shadow--2dp">
                 <div class="mdl-card__title">
                     <h3 class="mdl-card__title-text">{% trans %}passenger.labels.passenger{% endtrans %}</h3>
@@ -85,7 +104,11 @@
                         {% endif %}
                     <div class="passenger-details">
                         <h3><span id="passenger-fname">{{ entity.fname }}</span> <span id="passenger-lname">{{ entity.lname }}</span></h3>
-                        <label style="display: block"><span id="passenger-dob">{{ (age.days/365)|round(0, 'floor') }}</span>, <span id="passenger-gender">{{ entity.gender }}</span></label>
+                        <label style="display: block">
+                        {{ statusicon | raw }} {{ freeicon | raw }}{{ organizericon | raw }}
+                        <span id="passenger-dob">{{ 'passenger.form.invite.age' | trans }}: {{ (age.days/365)|round(0, 'floor') }}</span>
+                         {% if entity.gender != 'undefined' %}, <span id="passenger-gender">{{ 'passenger.form.invite.gender' | trans }}: {{ entity.gender }}</span>{% endif %}
+                         </label>
                     </div>
                         {{ render(controller( 'PassengerBundle:Passenger:edit', {'id' : entity.id} )) }}
                     <div class="clear"></div>
