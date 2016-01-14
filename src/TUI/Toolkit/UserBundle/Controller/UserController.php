@@ -358,7 +358,7 @@ class UserController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(User $entity)
+    private function createCreateForm($entity)
     {
         $locale = $this->container->getParameter('locale');
         $form = $this->createForm(new UserType($locale), $entity, array(
@@ -397,7 +397,7 @@ class UserController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function create_ajaxCreateForm(User $entity)
+    private function create_ajaxCreateForm($entity)
     {
         $locale = $this->container->getParameter('locale');
         $form = $this->createForm(new AjaxuserType($locale), $entity, array(
@@ -830,7 +830,7 @@ class UserController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createResetPasswordForm(User $entity)
+    private function createResetPasswordForm($entity)
     {
         $form = $this->createForm(new ResettingFormType(), $entity, array(
             'action' => $this->generateUrl('user_password_reset_submit', array('id' => $entity->getId())),
@@ -1327,7 +1327,7 @@ class UserController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createSecurityForm(User $entity)
+    private function createSecurityForm($entity)
     {
         $form = $this->createForm(new SecurityType(), $entity, array(
             'action' => $this->generateUrl('user_security_submit', array('id' => $entity->getId())),
