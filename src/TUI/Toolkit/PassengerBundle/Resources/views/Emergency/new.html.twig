@@ -2,6 +2,9 @@
 {% block body -%}
 
     <div class="emergency-form">
+        <div class="errors">
+            {{ form_errors(edit_form) }}
+        </div>
         {{ form(form) }}
     </div>
     <script>
