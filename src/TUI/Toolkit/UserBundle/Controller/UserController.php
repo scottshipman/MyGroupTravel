@@ -532,7 +532,7 @@ class UserController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createEditForm(User $entity)
+    private function createEditForm($entity)
     {
         $locale = $this->container->getParameter('locale');
         $form = $this->createForm(new UserType($locale), $entity, array(
