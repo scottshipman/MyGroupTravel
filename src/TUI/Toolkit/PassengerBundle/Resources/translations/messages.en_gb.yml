@@ -110,12 +110,15 @@ passenger:
             last: Last Name
             message: Message
             gender: Gender
+            age: Age
+
         error:
             message:
                 dietary: The dietary information you input was not valid, please check:
                 medical: The medical information you input was not valid, please check:
                 emergency: The emergency contact information you input was not valid, please check:
                 passport: The passport information you input was not valid, please check:
+
         success:
             message:
                 dietary: Dietary information saved successfully
