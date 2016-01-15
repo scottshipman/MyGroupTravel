@@ -1205,31 +1205,34 @@ class TourController extends Controller
         $accepted = $accepted - $free;
 
         $completedPassengerData = array();
+        $medical = array();
+        $dietary = array();
+        $emergency = array();
+        $passport = array();
+
+        $completedPassengerData = array('medical' => $medical, 'dietary' => $dietary, 'emergency' => $emergency, 'passport' => $passport);
+//        $completedPassengerData[, $medical['medical'], $dietary['dietary'], $emergency['emergency'], $passport['passport']);
 
         //Get Accepted Users with completed medical information
         foreach ($acceptedUsers as $acceptedUser) {
-            $medical = array();
-            $dietary = array();
-            $emergency = array();
-            $passport = array();
 
             if ($acceptedUser->getMedicalReference() != null) {
-                $medical[] = $acceptedUser;
+                $completedPassengerData['medical'] = $acceptedUser;
             }
             if ($acceptedUser->getDietaryReference() != null) {
-                $dietary[] = $acceptedUser;
+                $completedPassengerData['dietary'] = $acceptedUser;
             }
             if ($acceptedUser->getEmergencyReference() != null) {
-                $emergency[] = $acceptedUser;
+                $completedPassengerData['emergency'] = $acceptedUser;
             }
             if ($acceptedUser->getPassportReference() != null) {
-                $passport[] = $acceptedUser;
+                $completedPassengerData['passport'] = $acceptedUser;
             }
 
-            $completedPassengerData['medical'] = $medical;
-            $completedPassengerData['dietary'] = $dietary;
-            $completedPassengerData['emergency'] = $emergency;
-            $completedPassengerData['passport'] = $passport;
+//            $completedPassengerData['medical'] = $medical;
+//            $completedPassengerData['dietary'] = $dietary;
+//            $completedPassengerData['emergency'] = $emergency;
+//            $completedPassengerData['passport'] = $passport;
 
         }
 
@@ -1242,6 +1245,7 @@ class TourController extends Controller
             'waitlist' => $waitlist,
             'accepted' => $accepted,
             'completedPassengerData' => $completedPassengerData,
+            'medical' => $medical,
         ));
 
     }

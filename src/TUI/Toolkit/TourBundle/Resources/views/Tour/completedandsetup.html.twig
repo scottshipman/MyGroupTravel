@@ -2,29 +2,29 @@
 {% if 'en_GB' in locale %} {% set shortFormat = 'd M' %} {% else %} {% set format = 'M d' %} {% endif %}
 {% set compareFormat = 'Y-m-d' %}
 
-{% if entity.passportDate != null %}
+{% if entity.passportDate is defined and entity.passportDate != null %}
     {% set passDtg  = date(entity.passPortDate).diff(date("now")) %}
     {% set passTime  = date(entity.created.date).diff(date(entity.passPortDate))%}
     {% set passPercent = (completedPassengerData['passport']|length/entity.payingPlaces) * 100  %}
     {% if passDtg.days < 1 %} {%  set passDtgFinal = 0  %} {% else %} {% set passDtgFinal = passDtg.days %}{% endif %}
 {% endif %}
+{{ dump() }}
 
-
-{% if entity.emergencyDate != null %}
-    {% set passengerDtg  = date(entity.emergencyDate).diff(date("now")) %}
-    {% set passengerTime  = date(entity.created.date).diff(date(entity.emergencyDate))%}
-    {% set passengerPercent = (completedPassengerData['emergency']|length/entity.payingPlaces) * 100  %}
-    {% if passengerDtg.days < 1 %} {%  set passengerDtgFinal = 0  %} {% else %} {% set passengerDtgFinal = passengerDtg.days %}{% endif %}
+{% if entity.emergencyDate is defined and entity.emergencyDate != null %}
+    {% set emergencyDtg  = date(entity.emergencyDate).diff(date("now")) %}
+    {% set emergencyTime  = date(entity.created.date).diff(date(entity.emergencyDate))%}
+    {% set emergencyPercent = (completedPassengerData['emergency']|length/entity.payingPlaces) * 100  %}
+    {% if emergencyDtg.days < 1 %} {%  set emergecyDtgFinal = 0  %} {% else %} {% set emergencyDtgFinal = emergencyDtg.days %}{% endif %}
 {% endif %}
 
-{% if entity.medicalDate != null%}
+{% if entity.medicalDate is defined and entity.medicalDate != null%}
     {% set medDtg  = date(entity.medicalDate).diff(date("now")) %}
     {% set medTime  = date(entity.created.date).diff(date(entity.medicalDate))%}
     {% set medPercent = (completedPassengerData['medical']|length/entity.payingPlaces) * 100  %}
     {% if medDtg.days < 1 %} {%  set medDtgFinal = 0  %} {% else %} {% set medDtgFinal = medDtg.days %}{% endif %}
 {% endif %}
 
-{% if entity.dietaryDate != null%}
+{% if entity.dietaryDate is defined and entity.dietaryDate != null%}
     {% set dietDtg  = date(entity.dietaryDate).diff(date("now")) %}
     {% set dietTime  = date(entity.created.date).diff(date(entity.dietaryDate))%}
     {% set dietPercent = (completedPassengerData['dietary']|length/entity.payingPlaces) * 100  %}
@@ -126,7 +126,7 @@
                         <span class="tour-dashboard-cta"><i class="material-icons">arrow_forward</i></span>
                     </div>
                 </a>
-                <div id="signup-progress" class="progress-bar"></div>
+                <div id="signup-progress" class="mdl-progress mdl-js-progress" style="width: 100%;"></div>
                 <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
                     <ul>
                         <li>
@@ -240,7 +240,7 @@
     {% endif %}
 
     {#Passport Date info task#}
-    {% if entity.passportDate != null %}
+    {% if entity.passportDate is defined and entity.passportDate != null %}
         {% if (entity.payingPlaces - completedPassengerData['passport']|length)  > 0 %}
         <div class="tour-edit mdl-card mdl-shadow--2dp">
             {#<a class ="dashboard-titles" href="#">#}
@@ -249,7 +249,7 @@
                     <span class="tour-dashboard-cta"></span>
                 </div>
             {#</a>#}
-            <div id="passport-progress" class="progress-bar"></div>
+            <div id="passport-progress" class="mdl-progress mdl-js-progress" style="width: 100%;"></div>
             <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
                 <ul>
                     <li>
@@ -278,7 +278,7 @@
     {% endif %}
 
 {#Emergency Contact Data info task#}
-    {% if entity.emergencyDate != null %}
+    {% if entity.emergencyDate is defined and entity.emergencyDate != null %}
         {% if (entity.payingPlaces - completedPassengerData['emergency']|length)  > 0 %}
             <div class="tour-edit mdl-card mdl-shadow--2dp">
                 {#<a class ="dashboard-titles" href="#">#}
@@ -287,7 +287,7 @@
                         <span class="tour-dashboard-cta"></span>
                     </div>
                 {#</a>#}
-                <div id="passenger-progress" class="progress-bar"></div>
+                <div id="passenger-progress" class="mdl-progress mdl-js-progress" style="width: 100%;"></div>
                 <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
                     <ul>
                         <li>
@@ -304,7 +304,7 @@
                         </li>
                         <li>
                             <div class="profile-list-item item-3 tour-dashboard">
-                                <span class="date-span">{{ passengerDtgFinal }}</span>
+                                <span class="date-span">{{ emergencyDtgFinal }}</span>
                                 <label>{% trans %}tour.dashboard.days{% endtrans %}</label>
                             </div>
                         </li>
@@ -316,7 +316,7 @@
     {% endif %}
 
 {#Medical Date info task#}
-    {% if entity.medicalDate != null %}
+    {% if entity.medicalDate is defined and entity.medicalDate != null %}
         {% if (entity.payingPlaces - completedPassengerData['medical']|length)  > 0 %}
             <div class="tour-edit mdl-card mdl-shadow--2dp">
                 {#<a class ="dashboard-titles" href="#">#}
@@ -325,7 +325,7 @@
                         <span class="tour-dashboard-cta"></span>
                     </div>
                 {#</a>#}
-                <div id="medical-progress" class="progress-bar"></div>
+                <div id="medical-progress" class="mdl-progress mdl-js-progress" style="width: 100%;"></div>
                 <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
                     <ul>
                         <li>
@@ -354,7 +354,7 @@
     {% endif %}
 
     {#Dietary Date Task#}
-    {% if entity.dietaryDate != null %}
+    {% if entity.dietaryDate is defined and entity.dietaryDate != null %}
         {% if (entity.payingPlaces - completedPassengerData['dietary']|length)  > 0 %}
             <div class="tour-edit mdl-card mdl-shadow--2dp">
                 {#<a class ="dashboard-titles" href="#">#}
@@ -363,7 +363,7 @@
                         <span class="tour-dashboard-cta"></span>
                     </div>
                 {#</a>#}
-                <div id="dietary-progress" class="progress-bar"></div>
+                <div id="dietary-progress" class="mdl-progress mdl-js-progress" style="width: 100%;"></div>
                 <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
                     <ul>
                         <li>
@@ -409,7 +409,7 @@
     <h5 id="completed-title">{% trans %}tour.dashboard.completed{% endtrans %}</h5>
 
     {#Passport Data completed#}
-    {% if entity.passportDate != null %}
+    {% if entity.passportDate is defined and entity.passportDate != null %}
         {% if (entity.payingPlaces - completedPassengerData['passport']|length)  <= 0 %}
             <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
                  <div class="mdl-card__title">
@@ -421,7 +421,7 @@
     {% endif %}
 
     {#Emergency Data completed#}
-    {% if entity.emergencyDate != null %}
+    {% if entity.emergencyDate is defined and entity.emergencyDate != null %}
         {% if (entity.payingPlaces - completedPassengerData['emergency']|length)  <= 0 %}
             <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
                 <div class="mdl-card__title">
@@ -433,7 +433,7 @@
     {% endif %}
 
     {#Medical Data completed#}
-    {% if entity.medicalDate != null %}
+    {% if entity.medicalDate is defined and entity.medicalDate != null %}
         {% if (entity.payingPlaces - completedPassengerData['medical']|length)  <= 0 %}
             <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
                 <div class="mdl-card__title">
@@ -445,7 +445,7 @@
     {% endif %}
 
     {#Dietary Data completed#}
-    {% if entity.dietaryDate != null %}
+    {% if entity.dietaryDate is defined and entity.dietaryDate != null %}
         {% if (entity.payingPlaces - completedPassengerData['dietary']|length)  <= 0 %}
             <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
                 <div class="mdl-card__title">
@@ -500,61 +500,50 @@
     {% endif %}
     //Percentage Bars
     $(document).ready(function() {
-        var passPercent = {% if passPercent is defined %}{{ passPercent }}{% else %}""{% endif %};
-        var medPercent = {% if medPercent is defined %}{{ medPercent }}{% else %}""{% endif %};
-        var dietPercent = {% if dietPercent is defined %}{{ dietPercent }}{% else %}""{% endif %};
-        var passengerPercent = {% if passengerPercent is defined %}{{ passengerPercent }}{% else %}""{% endif %};
-        var signupPercent = {% if signupPercent is defined %}{{ signupPercent }}{% else %}""{% endif %};
-        //Passenger Sign Up Percentage
-        $(function() {
-            $("#signup-progress").progressbar({
-                value: 1
+
+        //Passenger Sign up progress bar
+        {% if signupPercent is defined %}
+            var signupPercent = {{ signupPercent }};
+            document.querySelector('#signup-progress').addEventListener('mdl-componentupgraded', function() {
+                this.MaterialProgress.setProgress(75);
             });
-            $("#signup-progress > .ui-progressbar-value").animate({
-                width: signupPercent + "%"
-            }, 1500).html('<p style="margin: -2px 0 1em; font-size: 15px;"class="mdl-color-text--primary-contrast">' + Math.round(signupPercent) + "% Completed" + '</p>').css({"background": "{{ brand.primaryColor }}"});
-        });
-        //Passport Data percentage
-        $(function() {
-            $("#passport-progress").progressbar({
-                value: 1
+        {% endif %}
+
+        //Emergency Contact Information progress bar
+        {% if emergencyPercent is defined %}
+            var emergencyPercent = {{ emergencyPercent }};
+            document.querySelector('#emergency-progress').addEventListener('mdl-componentupgraded', function() {
+                this.MaterialProgress.setProgress(75);
             });
-            $("#passport-progress > .ui-progressbar-value").animate({
-                width: passPercent + "%"
-            }, 1500).html('<p style="margin: -2px 0 1em; font-size: 15px;"class="mdl-color-text--primary-contrast">' + Math.round(passPercent) + "% Completed" + '</p>').css({"background": "{{ brand.primaryColor }}"});
-        });
-        //Passenger Data percentage
-        $(function() {
-            $("#passenger-progress").progressbar({
-                value: 1
+        {% endif %}
+
+        //Dietary Info progress bar
+        {% if dietPercent is defined %}
+            var dietPercent = {{ dietPercent }};
+            document.querySelector('#dietary-progress').addEventListener('mdl-componentupgraded', function() {
+                this.MaterialProgress.setProgress(75);
             });
-            $("#passenger-progress > .ui-progressbar-value").animate({
-                width: passengerPercent + "%"
-            }, 1500).html('<p style="margin: -2px 0 1em; font-size: 15px;"class="mdl-color-text--primary-contrast">' + Math.round(passengerPercent) + "% Completed" + '</p>').css({"background": "{{ brand.primaryColor }}"});
-        });
-        //Medical Data percentage
-        $(function() {
-            $("#medical-progress").progressbar({
-                value: 1
+        {% endif %}
+
+        //Medical Info Progress Bar
+        {% if medPercent is defined %}
+            var medPercent = {{ medPercent }};
+            document.querySelector('#medical-progress').addEventListener('mdl-componentupgraded', function() {
+                this.MaterialProgress.setProgress(75);
             });
-            $("#medical-progress > .ui-progressbar-value").animate({
-                width: medPercent + "%"
-            }, 1500).html('<p style="margin: -2px 0 1em; font-size: 15px;"class="mdl-color-text--primary-contrast">' + Math.round(medPercent) + "% Completed" + '</p>').css({"background": "{{ brand.primaryColor }}"});
-        });
-        //Dietary Data percentage
-        $(function() {
-            $("#dietary-progress").progressbar({
-                value: 1
+        {% endif %}
+
+        //Passport Info progress bar
+        {% if passPercent is defined %}
+            var passPercent = {{ passPercent }};
+            document.querySelector('#passport-progress').addEventListener('mdl-componentupgraded', function() {
+                this.MaterialProgress.setProgress(75);
             });
-            $("#dietary-progress > .ui-progressbar-value").animate({
-                width: dietPercent + "%"
-            }, 1500).html('<p style="margin: -2px 0 1em; font-size: 15px;"class="mdl-color-text--primary-contrast">' + Math.round(dietPercent) + "% Completed" + '</p>').css({"background": "{{ brand.primaryColor }}"});
-        });
-        $(document).ready(function () {
-            if ($("#completed-title").next().is('script')) {
-                $("#completed-title").css({"display": "none"});
-            }
-        });
+        {% endif %}
+
+        if ($("#completed-title").next().is('script')) {
+            $("#completed-title").css({"display": "none"});
+        }
     });
     // Promote Popup
     $(document).on('click', '#promote-tour', function (e) {
