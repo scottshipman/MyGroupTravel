@@ -87,7 +87,7 @@ class Version20160111111099 extends AbstractMigration implements ContainerAwareI
                     if ($passenger &&
                        /* strtolower(trim($organizer->getFirstName())) == strtolower(trim($passenger->getFName())) &&
                         strtolower(trim($organizer->getLastName())) == strtolower(trim($passenger->getLName())) &&*/
-                        $$passenger->getSelf == TRUE &&
+                        $passenger->getSelf() == TRUE &&
                         $tour->getId() == $passenger->getTourReference()->getId()
                     ) {
                         echo "...... Nothing to do. Found matching Passenger record with ID " . $passenger->getId() . "\n";
