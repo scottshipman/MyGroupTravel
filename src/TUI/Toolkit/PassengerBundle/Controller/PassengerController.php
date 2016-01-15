@@ -632,8 +632,9 @@ class PassengerController extends Controller
                 foreach($passenger as $pax){
                     $paxObject = $em->getRepository('PassengerBundle:Passenger')->find($pax['object']);
                     if( $paxObject &&
-                        strtolower(trim($organizer->getFirstName())) == strtolower(trim($paxObject->getFName())) &&
-                        strtolower(trim($organizer->getLastName())) == strtolower(trim($paxObject->getLName())) &&
+                        /*strtolower(trim($organizer->getFirstName())) == strtolower(trim($paxObject->getFName())) &&
+                        strtolower(trim($organizer->getLastName())) == strtolower(trim($paxObject->getLName())) &&*/
+                        $paxObject->getSelf == TRUE &&
                         $tourId == $paxObject->getTourReference()->getId())
                     {
                         $passengerObject = $paxObject;
