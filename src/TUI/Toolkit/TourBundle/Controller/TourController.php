@@ -1217,16 +1217,16 @@ class TourController extends Controller
         foreach ($acceptedUsers as $acceptedUser) {
 
             if ($acceptedUser->getMedicalReference() != null) {
-                $completedPassengerData['medical'] = $acceptedUser;
+                $completedPassengerData['medical'][] = $acceptedUser;
             }
             if ($acceptedUser->getDietaryReference() != null) {
-                $completedPassengerData['dietary'] = $acceptedUser;
+                $completedPassengerData['dietary'][] = $acceptedUser;
             }
             if ($acceptedUser->getEmergencyReference() != null) {
-                $completedPassengerData['emergency'] = $acceptedUser;
+                $completedPassengerData['emergency'][] = $acceptedUser;
             }
             if ($acceptedUser->getPassportReference() != null) {
-                $completedPassengerData['passport'] = $acceptedUser;
+                $completedPassengerData['passport'][] = $acceptedUser;
             }
 
 //            $completedPassengerData['medical'] = $medical;
