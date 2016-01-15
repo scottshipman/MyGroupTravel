@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "586d71b15c176896411ed68c006e6b3e",
-    "content-hash": "2b93541f4423167f9c5a68b35710ffab",
+    "hash": "2c28cf4ce111fa31de0af3fdf921d2cc",
+    "content-hash": "bc2f2ff89ba7056643cf3374b0d8a1de",
     "packages": [
         {
             "name": "apy/datagrid-bundle",
@@ -1479,7 +1479,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/e39b040e272c72f0a090c67d802e1d3b2d0b0313",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/6ccff96434c0ac7fee077d1dce90966341dfd278",
                 "reference": "d5b28c367d393f9d9fbc48c4138b2a74d51c0c83",
                 "shasum": ""
             },
@@ -3411,6 +3411,55 @@
                 "psr-3"
             ],
             "time": "2012-12-21 11:40:51"
+        },
+        {
+            "name": "ras/flash-alert-bundle",
+            "version": "2.1.1",
+            "target-dir": "Ras/Bundle/FlashAlertBundle/",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rasanga/FlashAlertBundle.git",
+                "reference": "7a374da80ec9509ae36d3177904efa62619ff5db"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rasanga/FlashAlertBundle/zipball/7a374da80ec9509ae36d3177904efa62619ff5db",
+                "reference": "7a374da80ec9509ae36d3177904efa62619ff5db",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3",
+                "symfony/symfony": ">=2.1",
+                "twig/twig": "~1.12"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "Ras\\Bundle\\FlashAlertBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Rasanga Perera",
+                    "email": "rasangaperera@gmail.com"
+                }
+            ],
+            "description": "FlashAlertBundle provides a simplified way to handle (add/display) Symfony flash messages. Client side scripts are written in pure JavaScript.",
+            "homepage": "http://rasanga.github.io/FlashAlertBundle/",
+            "keywords": [
+                "alert",
+                "bundle",
+                "feedback",
+                "flash",
+                "message",
+                "notification",
+                "symfony"
+            ],
+            "time": "2016-01-03 21:38:53"
         },
         {
             "name": "robloach/component-installer",

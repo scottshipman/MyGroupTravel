@@ -103,6 +103,21 @@ class PassengerService
         return $errors;
     }
 
+    public function getFlashErrorMessages($errors, $form, $translator){
+
+        $errorCollection = array();
+
+        foreach ($errors as $key => $error) {
+            $formLabel = $form->get($key)->getConfig()->getOption('label');
+            $translatedLabel = $translator->trans($formLabel);
+            $errorCollection[] = $translatedLabel;
+        }
+
+        $errorString = implode($errorCollection, ', ');
+
+        return $errorString;
+    }
+
 
 
 }

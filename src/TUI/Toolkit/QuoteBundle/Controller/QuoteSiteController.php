@@ -218,7 +218,7 @@ class QuoteSiteController extends Controller
       return $this->redirect($this->generateUrl('quote_site_show', array('id' => $id, 'quoteNumber' => $realQuoteNumber)));
     } else {
     //send back to form page
-      $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.exception.prompt_error'));
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('quote.exception.prompt_error'));
       return $this->redirect($this->generateUrl('quote_site_action_show', array('id' => $id)));
   }
 
@@ -376,7 +376,7 @@ class QuoteSiteController extends Controller
         }
 
 
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.change_request') . ' '. $tourName);
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('quote.flash.change_request') . ' '. $tourName);
 
         return $this->redirect($this->generateUrl('quote_site_show', array('id' => $id, "quoteNumber" => $entity->getQuoteNumber())));
 
@@ -485,7 +485,7 @@ class QuoteSiteController extends Controller
             $this->get('mailer')->send($message);
         }
 
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.liked') . ' ' . $tourName );
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('quote.flash.liked') . ' ' . $tourName );
 
         return $this->redirect($this->generateUrl('quote_site_show', array('id' => $id, "quoteNumber" => $entity->getQuoteNumber())));
 

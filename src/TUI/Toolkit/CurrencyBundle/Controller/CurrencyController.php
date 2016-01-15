@@ -43,7 +43,7 @@ class CurrencyController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-          $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('currency.flash.save'). $entity->getName());
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('currency.flash.save'). $entity->getName());
 
 
           return $this->redirect($this->generateUrl('manage_currency_show', array('id' => $entity->getId())));
@@ -173,7 +173,7 @@ class CurrencyController extends Controller
 
         if ($editForm->isValid()) {
             $em->flush();
-          $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('currency.flash.save'). $entity->getName());
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('currency.flash.save'). $entity->getName());
 
             return $this->redirect($this->generateUrl('manage_currency_edit', array('id' => $id)));
         }

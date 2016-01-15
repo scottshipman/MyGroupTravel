@@ -744,7 +744,7 @@ class QuoteVersionController extends Controller
             $em->flush();
             // Create organizer permission
             $permission = $this->get("permission.set_permission")->setPermission($entity->getQuoteReference()->getId(), 'quote', $entity->getQuoteReference()->getOrganizer(), 'organizer');
-            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.save') . ' ' . $entity->getName());
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('quote.flash.save') . ' ' . $entity->getName());
 
             return $this->redirect($this->generateUrl('manage_quote_show', array('id' => $entity->getId())));
         }
@@ -782,7 +782,7 @@ class QuoteVersionController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.save_template'). ' ' . $entity->getName());
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('quote.flash.save_template'). ' ' . $entity->getName());
 
             return $this->redirect($this->generateUrl('manage_quote_templates'));
         }
@@ -1319,10 +1319,10 @@ class QuoteVersionController extends Controller
                 $em->persist($new_entity);
                 $em->flush($new_entity);
                 $permission = $this->get("permission.set_permission")->setPermission($new_entity->getQuoteReference()->getId(), 'quote', $new_entity->getQuoteReference()->getOrganizer(), 'organizer');
-                $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.save') . ' ' . $new_entity->getName());
+                $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('quote.flash.save') . ' ' . $new_entity->getName());
                 return $this->redirect($this->generateUrl('manage_quote' . $route));
             }
-            $this->get('session')->getFlashBag()->add('error', $message);
+            $this->get('ras_flash_alert.alert_reporter')->addError($message);
             return $this->render('QuoteBundle:QuoteVersion:edit.html.twig', array(
                 'entity' => $entity,
                 'edit_form' => $editForm->createView(),
@@ -1349,7 +1349,7 @@ class QuoteVersionController extends Controller
 
             }
 
-            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.save') . ' ' . $entity->getName());
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('quote.flash.save') . ' ' . $entity->getName());
             return $this->redirect($this->generateUrl('manage_quote_show', array('id' => $entity->getId())));
         }
 
@@ -1470,7 +1470,7 @@ class QuoteVersionController extends Controller
             $em->persist($entity);
             $em->flush();
             $permission = $this->get("permission.set_permission")->setPermission($entity->getQuoteReference()->getId(), 'quote', $entity->getQuoteReference()->getOrganizer(), 'organizer');
-            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.save') . ' ' . $entity->getName());
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('quote.flash.save') . ' ' . $entity->getName());
 
 
             return $this->redirect($this->generateUrl('manage_quote_show', array('id' => $entity->getId())));
@@ -1504,7 +1504,7 @@ class QuoteVersionController extends Controller
 
             $em->remove($entity);
             $em->flush();
-            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.delete') . ' ' . $entity->getName());
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('quote.flash.delete') . ' ' . $entity->getName());
 
         }
 
@@ -1547,7 +1547,7 @@ class QuoteVersionController extends Controller
         }
         $em->remove($quoteVersion);
         $em->flush();
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.delete'). ' ' . $quoteVersion->getName());
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('quote.flash.delete'). ' ' . $quoteVersion->getName());
 
         return $this->redirect($this->generateUrl('manage_quote'));
     }
@@ -1570,7 +1570,7 @@ class QuoteVersionController extends Controller
         }
         $em->remove($quoteVersion);
         $em->flush();
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.delete'). ' ' . $quoteVersion->getName());
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('quote.flash.delete'). ' ' . $quoteVersion->getName());
 
         return $this->redirect($this->generateUrl('manage_quote'));
     }
@@ -1613,7 +1613,7 @@ class QuoteVersionController extends Controller
         $quoteVersion->setDeleted(NULL);
         $em->persist($quoteVersion);
         $em->flush();
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.restore'). ' ' . $quoteVersion->getName());
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('quote.flash.restore'). ' ' . $quoteVersion->getName());
 
         return $this->redirect($this->generateUrl('manage_quote'));
     }
@@ -1642,7 +1642,7 @@ class QuoteVersionController extends Controller
         $quoteVersion->setLocked($status);
         $em->persist($quoteVersion);
         $em->flush();
-        // $this->get('session')->getFlashBag()->add('notice', 'Quote Lock has been toggled ');
+        // $this->get('ras_flash_alert.alert_reporter')->addSuccess('Quote Lock has been toggled ');
 
         return new Response(json_encode((array)$quoteVersion));
 
@@ -1699,7 +1699,7 @@ class QuoteVersionController extends Controller
         $quoteVersion->setLocked($status);
         $em->persist($quoteVersion);
         $em->flush();
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.lock'));
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('quote.flash.lock'));
 
         return $this->redirect($this->generateUrl('manage_quote'));
 
