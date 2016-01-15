@@ -1,4 +1,4 @@
-{% if entity.tourReference %}{% set tourId = entity.tourReference.id %}{% else %}{% set tourId = entity.id %}{% endif %}
+{% if entity.tourReference is defined and entity.tourReference.id is defined %}{% set tourId = entity.tourReference.id %}{% else %}{% set tourId = entity.id %}{% endif %}
 {# Only logged-in can see this menu #}
 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
 <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="tour-title-drop">

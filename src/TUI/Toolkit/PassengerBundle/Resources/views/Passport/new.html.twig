@@ -1,6 +1,10 @@
 {% block body -%}
     <div class="passport-form">
 
+        <div class="errors">
+            {{ form_errors(form) }}
+        </div>
+
         {{ form_start(form) }}
         {{ form_widget(form.passportNumber) }}
         {{ form_widget(form.passportFirstName) }}

@@ -289,7 +289,7 @@ class UserController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.save') . $entity->getUsername());
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('user.flash.save') . $entity->getUsername());
 
             return $this->redirect($this->generateUrl('user_show', array('id' => $entity->getId())));
         }
@@ -358,7 +358,7 @@ class UserController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(User $entity)
+    private function createCreateForm($entity)
     {
         $locale = $this->container->getParameter('locale');
         $form = $this->createForm(new UserType($locale), $entity, array(
@@ -397,7 +397,7 @@ class UserController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function create_ajaxCreateForm(User $entity)
+    private function create_ajaxCreateForm($entity)
     {
         $locale = $this->container->getParameter('locale');
         $form = $this->createForm(new AjaxuserType($locale), $entity, array(
@@ -532,7 +532,7 @@ class UserController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createEditForm(User $entity)
+    private function createEditForm($entity)
     {
         $locale = $this->container->getParameter('locale');
         $form = $this->createForm(new UserType($locale), $entity, array(
@@ -630,7 +630,7 @@ class UserController extends Controller
             $roles = $entity->getRoles();
             $entity->setRolesString(implode(', ', $roles));
             $em->flush();
-            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.save') . $entity->getUsername());
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('user.flash.save') . $entity->getUsername());
 
             if (null !== $_SESSION['user_edit_return']) {
                 return $this->redirect($_SESSION['user_edit_return']);
@@ -786,7 +786,7 @@ class UserController extends Controller
                 $baseurl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
                 $tourUrl = $baseurl . "/tour/dashboard/" . $setForm['tour']->getData()  . "/passengers";
                 $tourLink = " <br><a style='color:white;' href='$tourUrl'>$tourUrl</a>";
-                $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.register-organizer') . $tourLink);
+                $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('user.flash.register-organizer') . $tourLink);
             }
 
             return $this->redirect($this->generateUrl('fos_user_profile_show'));
@@ -830,7 +830,7 @@ class UserController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createResetPasswordForm(User $entity)
+    private function createResetPasswordForm($entity)
     {
         $form = $this->createForm(new ResettingFormType(), $entity, array(
             'action' => $this->generateUrl('user_password_reset_submit', array('id' => $entity->getId())),
@@ -890,7 +890,7 @@ class UserController extends Controller
                 $this->get("event_dispatcher")
                     ->dispatch("security.interactive_login", $loginEvent);
 
-                $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.password') . ' ' . $user->getEmail());
+                $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('user.flash.password') . ' ' . $user->getEmail());
                 return $this->redirect($this->generateUrl('fos_user_profile_show'));
             } else if(trim(strtolower($answer)) == trim(strtolower($user->getAnswer()))) {
 
@@ -911,7 +911,7 @@ class UserController extends Controller
                 $this->get("event_dispatcher")
                     ->dispatch("security.interactive_login", $loginEvent);
 
-                $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.password') . ' ' . $user->getEmail());
+                $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('user.flash.password') . ' ' . $user->getEmail());
                 return $this->redirect($this->generateUrl('fos_user_profile_show'));
 
             } else {
@@ -952,9 +952,9 @@ class UserController extends Controller
             if ($this->canDeleteUser($entity->getId())) {
               $em->remove($entity);
               $em->flush();
-              $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.delete') . $id);
+              $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('user.flash.delete') . $id);
             } else {
-              $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.cant_delete'));
+              $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('user.flash.cant_delete'));
             }
 
 
@@ -998,7 +998,7 @@ class UserController extends Controller
         $entity->setDeleted(NULL);
         $em->persist($entity);
         $em->flush();
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.restore') . ' ' . $entity->getUsername());
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('user.flash.restore') . ' ' . $entity->getUsername());
 
         return $this->redirect($this->generateUrl('user'));
     }
@@ -1020,9 +1020,9 @@ class UserController extends Controller
       if ($this->canDeleteUser($entity->getId())) {
         $em->remove($entity);
         $em->flush();
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.delete') . $entity->getUsername());
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('user.flash.delete') . $entity->getUsername());
       } else {
-          $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('user.flash.cant_delete'));
+          $this->get('ras_flash_alert.alert_reporter')->addError($this->get('translator')->trans('user.flash.cant_delete'));
           return $this->redirect($this->generateUrl('user'));
         }
 
@@ -1048,9 +1048,9 @@ class UserController extends Controller
         if ($this->canDeleteUser($entity->getId())) {
             $em->remove($entity);
             $em->flush();
-            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.delete') . $entity->getUsername());
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('user.flash.delete') . $entity->getUsername());
         } else {
-            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('user.flash.cant_delete'));
+            $this->get('ras_flash_alert.alert_reporter')->addError($this->get('translator')->trans('user.flash.cant_delete'));
             return $this->redirect($this->generateUrl('user'));
         }
 
@@ -1123,7 +1123,7 @@ class UserController extends Controller
 
         $mailer->send($message);
 
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.registration_notification') . ' ' .$user->getEmail());
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('user.flash.registration_notification') . ' ' .$user->getEmail());
 
 //        return $this->redirect($this->generateUrl('user'));
       return $this->redirect($_SERVER['HTTP_REFERER']);
@@ -1194,7 +1194,7 @@ class UserController extends Controller
         $user->setPasswordRequestedAt(new \DateTime());
         $this->get('fos_user.user_manager')->updateUser($user);
 
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.registration_notification') . ' ' . $user->getEmail());
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('user.flash.registration_notification') . ' ' . $user->getEmail());
 
         return $this->redirect($this->generateUrl('user'));
 
@@ -1327,7 +1327,7 @@ class UserController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createSecurityForm(User $entity)
+    private function createSecurityForm($entity)
     {
         $form = $this->createForm(new SecurityType(), $entity, array(
             'action' => $this->generateUrl('user_security_submit', array('id' => $entity->getId())),
@@ -1573,22 +1573,22 @@ class UserController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
-            return TRUE;
-        }
-        $permissions = $em->getRepository('PermissionBundle:Permission')->findOneBy(array('user' => $id));
-        $primary_organizerq = $em->getRepository('QuoteBundle:Quote')->findOneBy(array('organizer' => $id));
-        $primary_adminq = $em->getRepository('QuoteBundle:Quote')->findOneBy(array('salesAgent' => $id));
-        $secondary_adminq = $em->getRepository('QuoteBundle:Quote')->findOneBy(array('secondaryContact' => $id));
-        $primary_organizert = $em->getRepository('TourBundle:Tour')->findOneBy(array('organizer' => $id));
-        $primary_admint = $em->getRepository('TourBundle:Tour')->findOneBy(array('salesAgent' => $id));
-        $secondary_admint = $em->getRepository('TourBundle:Tour')->findOneBy(array('secondaryContact' => $id));
 
-        if ($primary_organizerq || $primary_adminq || $secondary_adminq || $primary_organizert || $primary_admint || $secondary_admint || $permissions) {
-            //$this->get('session')->getFlashBag()->add('error', 'Unable to delete the User because they are associated with Quotes or Tours');
-            //return $this->redirect($this->generateUrl('user'));
-            return false;
-        } else {
-            return true;
+            $permissions = $em->getRepository('PermissionBundle:Permission')->findOneBy(array('user' => $id));
+            $primary_organizerq = $em->getRepository('QuoteBundle:Quote')->findOneBy(array('organizer' => $id));
+            $primary_adminq = $em->getRepository('QuoteBundle:Quote')->findOneBy(array('salesAgent' => $id));
+            $secondary_adminq = $em->getRepository('QuoteBundle:Quote')->findOneBy(array('secondaryContact' => $id));
+            $primary_organizert = $em->getRepository('TourBundle:Tour')->findOneBy(array('organizer' => $id));
+            $primary_admint = $em->getRepository('TourBundle:Tour')->findOneBy(array('salesAgent' => $id));
+            $secondary_admint = $em->getRepository('TourBundle:Tour')->findOneBy(array('secondaryContact' => $id));
+
+            if ($primary_organizerq || $primary_adminq || $secondary_adminq || $primary_organizert || $primary_admint || $secondary_admint || $permissions) {
+                //$this->get('session')->getFlashBag()->add('error', 'Unable to delete the User because they are associated with Quotes or Tours');
+                //return $this->redirect($this->generateUrl('user'));
+                return false;
+            } else {
+                return true;
+            }
         }
     }
 

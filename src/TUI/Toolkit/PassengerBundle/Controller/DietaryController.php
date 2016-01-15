@@ -55,16 +55,22 @@ class DietaryController extends Controller
             $em->persist($passenger);
             $em->flush();
 
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('passenger.form.success.message.dietary'));
+
             return $this->redirect($this->generateUrl('manage_passenger_show', array('id' => $passenger->getId())));
         }
+
+        $errorString = "";
+        $translator = $this->get('translator');
+        $errors = $this->get("passenger.actions")->getErrorMessages($form);
+
+        $errorString = $this->get("passenger.actions")->getFlashErrorMessages($errors, $form, $translator);
+
+        $this->get('ras_flash_alert.alert_reporter')->addError($this->get('translator')->trans('passenger.form.error.message.dietary')." ".$errorString);
 
         return $this->redirect($this->generateUrl('manage_passenger_show', array('id' => $reference)));
 
 
-//        return $this->render('PassengerBundle:Dietary:new.html.twig', array(
-//            'entity' => $entity,
-//            'form'   => $form->createView(),
-//        ));
     }
 
     /**

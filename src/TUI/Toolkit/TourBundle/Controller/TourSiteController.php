@@ -174,7 +174,7 @@ class TourSiteController extends Controller
       return $this->redirect($this->generateUrl('tour_site_show', array('id' => $id, 'quoteNumber' => $realQuoteNumber)));
     } else {
     //send back to form page
-      $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tour.flash.no_match'));
+      $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.no_match'));
       return $this->redirect($this->generateUrl('tour_site_action_show', array('id' => $id)));
   }
 

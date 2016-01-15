@@ -196,7 +196,8 @@ class PassengerController extends Controller
             }
 
             $em->flush();
-            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('passenger.flash.save'));
+//            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('passenger.flash.save'));
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('passenger.flash.save'));
 
 
             return $this->redirect($request->server->get('HTTP_REFERER'));
