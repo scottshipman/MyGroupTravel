@@ -887,6 +887,9 @@ class QuoteVersionController extends Controller
         }
 
 
+        //Get logger service for errors
+        $logger = $this->get('logger');
+
         // get the content blocks to send to twig
         $items = array();
         $tabs = array();
@@ -900,16 +903,21 @@ class QuoteVersionController extends Controller
                     $blocks = array_shift($blocks);
                     $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($blocks);
                     if (!$blockObj) {
-                        throw $this->createNotFoundException('Unable to find Content Block entity while compiling quote show admin screen.');
+                        $items[$blocks] = null;
+                        $logger->error('Content Block '.$blockObj. ' cannot be found');
+//                        throw $this->createNotFoundException('Unable to find Content Block entity while compiling quote show admin screen.');
+                    } else {
+                        $items[$blockObj->getId()] = $blockObj;
                     }
-                    $items[$blockObj->getId()] = $blockObj;
                 } else {
                     foreach ($blocks as $block) {
                         $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find((int)$block);
                         if (!$blockObj) {
-                            throw $this->createNotFoundException('Unable to find Content Block entity while compiling quote show admin screen.');
+                            $items[$block] = null;
+//                            throw $this->createNotFoundException('Unable to find Content Block entity while compiling quote show admin screen.');
+                        } else {
+                            $items[$blockObj->getId()] = $blockObj;
                         }
-                        $items[$blockObj->getId()] = $blockObj;
                     }
                 }
             }
@@ -947,6 +955,9 @@ class QuoteVersionController extends Controller
         }
 
 
+        //Get logger service for errors
+        $logger = $this->get('logger');
+
         // get the content blocks to send to twig
         $items = array();
         $tabs = array();
@@ -960,16 +971,21 @@ class QuoteVersionController extends Controller
                     $blocks = array_shift($blocks);
                     $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($blocks);
                     if (!$blockObj) {
-                        throw $this->createNotFoundException('Unable to find Content Block entity while compiling quote version tabs.');
+                        $items[$blocks] = null;
+                        $logger->error('Content Block '.$blockObj. ' cannot be found');
+//                        throw $this->createNotFoundException('Unable to find Content Block entity while compiling quote show admin screen.');
+                    } else {
+                        $items[$blockObj->getId()] = $blockObj;
                     }
-                    $items[$blockObj->getId()] = $blockObj;
                 } else {
                     foreach ($blocks as $block) {
                         $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find((int)$block);
                         if (!$blockObj) {
-                            throw $this->createNotFoundException('Unable to find Content Block entity while compiling quote version tabs.');
+                            $items[$block] = null;
+//                            throw $this->createNotFoundException('Unable to find Content Block entity while compiling quote show admin screen.');
+                        } else {
+                            $items[$blockObj->getId()] = $blockObj;
                         }
-                        $items[$blockObj->getId()] = $blockObj;
                     }
                 }
             }

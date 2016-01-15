@@ -55,10 +55,12 @@
                 <h2 class="pdf-tab-header">{{ data[0] }}</h2>
 
                 {% for item in data[1] %}
-                    {# render the actual content block #}
-                    <div class="pdf-content-block">
-                        {{ render(controller('ContentBlocksBundle:ContentBlock:show', {'id':  items[item].id })) }}
-                    </div>
+                    {% if items[item] != null %}
+                {# render the actual content block #}
+                        <div class="pdf-content-block">
+                            {{ render(controller('ContentBlocksBundle:ContentBlock:show', {'id':  items[item].id })) }}
+                        </div>
+                    {% endif %}
                 {% endfor %}
             </div>
         {% endfor %}

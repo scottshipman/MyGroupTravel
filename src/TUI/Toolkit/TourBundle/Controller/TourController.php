@@ -511,18 +511,23 @@ class TourController extends Controller
             $blockCount = count($blocks);
             if (!empty($blocks)) {
                 if ($blockCount <= 1) {
-                    $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find(reset($blocks));
+                    $blocks = array_shift($blocks);
+                    $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($blocks);
                     if (!$blockObj) {
-                        throw $this->createNotFoundException('Unable to find Content Block entity.');
+                        $items[$blocks] = null;
+//                        throw $this->createNotFoundException('Unable to find Content Block entity while compiling quote show admin screen.');
+                    } else {
+                        $items[$blockObj->getId()] = $blockObj;
                     }
-                    $items[$blockObj->getId()] = $blockObj;
                 } else {
                     foreach ($blocks as $block) {
                         $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find((int)$block);
                         if (!$blockObj) {
-                            throw $this->createNotFoundException('Unable to find Content Block entity.');
+                            $items[$block] = null;
+//                            throw $this->createNotFoundException('Unable to find Content Block entity while compiling quote show admin screen.');
+                        } else {
+                            $items[$blockObj->getId()] = $blockObj;
                         }
-                        $items[$blockObj->getId()] = $blockObj;
                     }
                 }
             }
@@ -574,6 +579,9 @@ class TourController extends Controller
         }
 
 
+        //Get logger service for errors
+        $logger = $this->get('logger');
+
         // get the content blocks to send to twig
         $items = array();
         $tabs = array();
@@ -587,16 +595,21 @@ class TourController extends Controller
                     $blocks = array_shift($blocks);
                     $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($blocks);
                     if (!$blockObj) {
-                        throw $this->createNotFoundException('Unable to find Content Block entity.');
+                        $items[$blocks] = null;
+                        $logger->error('Content Block '.$blockObj. ' cannot be found');
+//                        throw $this->createNotFoundException('Unable to find Content Block entity while compiling quote show admin screen.');
+                    } else {
+                        $items[$blockObj->getId()] = $blockObj;
                     }
-                    $items[$blockObj->getId()] = $blockObj;
                 } else {
                     foreach ($blocks as $block) {
                         $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find((int)$block);
                         if (!$blockObj) {
-                            throw $this->createNotFoundException('Unable to find Content Block entity.');
+                            $items[$block] = null;
+//                            throw $this->createNotFoundException('Unable to find Content Block entity while compiling quote show admin screen.');
+                        } else {
+                            $items[$blockObj->getId()] = $blockObj;
                         }
-                        $items[$blockObj->getId()] = $blockObj;
                     }
                 }
             }

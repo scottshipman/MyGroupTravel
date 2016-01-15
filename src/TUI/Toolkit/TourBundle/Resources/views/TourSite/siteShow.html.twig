@@ -189,52 +189,54 @@
                 <div id="tabs-drawer-{{ tab }}" class="mdl-tabs__panel content-blocks-drawer {{ activeTab }} ">
                     <div class="sortable-items">
                     {% for item in data[1] %}
-                        {% if items[item].doubleWidth == 1 %}
-                            {% set size = 'full' %}
-                        {% else %}
-                            {% set size = 'half' %}
-                        {% endif %}
-                        <div id="content-blocks-{{ items[item].id }}" class="site-content-blocks site-content-blocks-item site-content-blocks-size-{{ size }}" blockId="{{ items[item].id }}">
-                            <div class="inner-wrapper move-cursor">
-                                {% if editable %}
-                                    <div class="site-content-block-actions status-preview-edit">
-                                        {# probably render a controller here by passing in item as id and have block entity returned #}
-                                        <div class="move-icon"><i class="fa fa-arrows" title="Rearrange"></i></div>
-                                        <div id="content-block-actions-{{ items[item].id }}" class="edit-icons {% if items[item].locked %}content-block-locked{% endif %}">
-                                                <i class="item-edit content-block-item-action fa fa-pencil-square-o" title="Edit" blockId="{{ items[item].id }}"></i>
-                                                <i class="item-resize content-block-item-action fa fa-arrows-h {{ size }}" title="Resize" blockId="{{ items[item].id }}"></i>
-                                                <i class="item-delete content-block-item-action fa fa-trash-o" title="Delete" blockId = "{{ items[item].id }}"></i>
-                                            {% if is_granted('ROLE_BRAND') %}
-                                                <i class="item-lock content-block-item-action fa {% if items[item].locked %}fa-unlock-alt{% else %}fa-lock{% endif %}" title="{% if items[item].locked %}Unlock{% else %}Lock{% endif %}" blockId="{{ items[item].id }}"></i>
-                                            {% endif %}
-                                            {#
-                                            {% if items[item].hidden %}
-                                                <i class="item-hide content-block-item-action fa fa-eye" title="Show"></i>
-                                            {% else %}
-                                                <i class="item-hide content-block-item-action fa fa-ban" title="Hide"></i>
-                                            {% endif %}
-                                            #}
+                        {% if items[item] != null %}
+                            {% if items[item].doubleWidth == 1 %}
+                                {% set size = 'full' %}
+                            {% else %}
+                                {% set size = 'half' %}
+                            {% endif %}
+                            <div id="content-blocks-{{ items[item].id }}" class="site-content-blocks site-content-blocks-item site-content-blocks-size-{{ size }}" blockId="{{ items[item].id }}">
+                                <div class="inner-wrapper move-cursor">
+                                    {% if editable %}
+                                        <div class="site-content-block-actions status-preview-edit">
+                                            {# probably render a controller here by passing in item as id and have block entity returned #}
+                                            <div class="move-icon"><i class="fa fa-arrows" title="Rearrange"></i></div>
+                                            <div id="content-block-actions-{{ items[item].id }}" class="edit-icons {% if items[item].locked %}content-block-locked{% endif %}">
+                                                    <i class="item-edit content-block-item-action fa fa-pencil-square-o" title="Edit" blockId="{{ items[item].id }}"></i>
+                                                    <i class="item-resize content-block-item-action fa fa-arrows-h {{ size }}" title="Resize" blockId="{{ items[item].id }}"></i>
+                                                    <i class="item-delete content-block-item-action fa fa-trash-o" title="Delete" blockId = "{{ items[item].id }}"></i>
+                                                {% if is_granted('ROLE_BRAND') %}
+                                                    <i class="item-lock content-block-item-action fa {% if items[item].locked %}fa-unlock-alt{% else %}fa-lock{% endif %}" title="{% if items[item].locked %}Unlock{% else %}Lock{% endif %}" blockId="{{ items[item].id }}"></i>
+                                                {% endif %}
+                                                {#
+                                                {% if items[item].hidden %}
+                                                    <i class="item-hide content-block-item-action fa fa-eye" title="Show"></i>
+                                                {% else %}
+                                                    <i class="item-hide content-block-item-action fa fa-ban" title="Hide"></i>
+                                                {% endif %}
+                                                #}
+                                            </div>
                                         </div>
+                                    {% endif %}
+
+                                    {# render the actual content block #}
+                                    <div id="previewable-content-blocks-{{ items[item].id }}">
+                                        {{ render(controller('ContentBlocksBundle:ContentBlock:show', {'id':  items[item].id  })) }}
                                     </div>
-                                {% endif %}
 
-                                {# render the actual content block #}
-                                <div id="previewable-content-blocks-{{ items[item].id }}">
-                                    {{ render(controller('ContentBlocksBundle:ContentBlock:show', {'id':  items[item].id  })) }}
+                                    {# give a placeholder for the editable version #}
+                                    <div id="editable-content-blocks-{{ items[item].id }}"></div>
                                 </div>
-
-                                {# give a placeholder for the editable version #}
-                                <div id="editable-content-blocks-{{ items[item].id }}"></div>
                             </div>
-                        </div>
-                    {% endfor %}
-                    </div><!-- sortable-items -->
+                        {% endfor %}
+                        </div><!-- sortable-items -->
 
-                    <a id="add-content-block" tabId="{{ tab }}" href="#" class="add-content-block site-content-blocks-edit status-preview-edit"><i class="fa fa-plus-circle"></i> {% trans %}tour.actions.add_block{% endtrans %}</a>
+                        <a id="add-content-block" tabId="{{ tab }}" href="#" class="add-content-block site-content-blocks-edit status-preview-edit"><i class="fa fa-plus-circle"></i> {% trans %}tour.actions.add_block{% endtrans %}</a>
 
-                    <div id="content-block-editForm-{{ tab }}" class="add-content-block-form" style="display: none;"></div>
-                </div>
-                {% set activeTab = '' %}
+                        <div id="content-block-editForm-{{ tab }}" class="add-content-block-form" style="display: none;"></div>
+                    </div>
+                    {% set activeTab = '' %}
+                {% endif %}
             {% endfor %}
         </div>
     </div><!-- view-mode -->
