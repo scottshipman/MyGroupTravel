@@ -8,7 +8,6 @@
     {% set passPercent = (completedPassengerData['passport']|length/entity.payingPlaces) * 100  %}
     {% if passDtg.days < 1 %} {%  set passDtgFinal = 0  %} {% else %} {% set passDtgFinal = passDtg.days %}{% endif %}
 {% endif %}
-{{ dump() }}
 
 {% if entity.emergencyDate is defined and entity.emergencyDate != null %}
     {% set emergencyDtg  = date(entity.emergencyDate).diff(date("now")) %}
