@@ -634,7 +634,7 @@ class PassengerController extends Controller
                     if( $paxObject &&
                         /*strtolower(trim($organizer->getFirstName())) == strtolower(trim($paxObject->getFName())) &&
                         strtolower(trim($organizer->getLastName())) == strtolower(trim($paxObject->getLName())) &&*/
-                        $paxObject->getSelf == TRUE &&
+                        $paxObject->getSelf() == TRUE &&
                         $tourId == $paxObject->getTourReference()->getId())
                     {
                         $passengerObject = $paxObject;
