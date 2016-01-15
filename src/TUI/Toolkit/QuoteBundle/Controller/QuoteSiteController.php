@@ -98,6 +98,10 @@ class QuoteSiteController extends Controller
         $editable = TRUE;
       }
     }
+
+      //Get logger service for errors
+      $logger = $this->get('logger');
+
       // get the content blocks to send to twig
       $items = array();
       $tabs = array();
@@ -112,6 +116,7 @@ class QuoteSiteController extends Controller
                   $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($blocks);
                   if (!$blockObj) {
                       $items[$blocks] = null;
+                      $logger->error('Content Block '.$blocks. ' cannot be found');
 //                        throw $this->createNotFoundException('Unable to find Content Block entity while compiling quote show admin screen.');
                   } else {
                       $items[$blockObj->getId()] = $blockObj;
@@ -121,6 +126,7 @@ class QuoteSiteController extends Controller
                       $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find((int)$block);
                       if (!$blockObj) {
                           $items[$block] = null;
+                          $logger->error('Content Block '.$block. ' cannot be found');
 //                            throw $this->createNotFoundException('Unable to find Content Block entity while compiling quote show admin screen.');
                       } else {
                           $items[$blockObj->getId()] = $blockObj;
@@ -539,7 +545,7 @@ class QuoteSiteController extends Controller
                     $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($blocks);
                     if (!$blockObj) {
                         $items[$blocks] = null;
-                        $logger->error('Content Block '.$blockObj. ' cannot be found');
+                        $logger->error('Content Block '.$blocks. ' cannot be found');
 //                        throw $this->createNotFoundException('Unable to find Content Block entity while compiling quote show admin screen.');
                     } else {
                         $items[$blockObj->getId()] = $blockObj;
@@ -549,6 +555,7 @@ class QuoteSiteController extends Controller
                         $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find((int)$block);
                         if (!$blockObj) {
                             $items[$block] = null;
+                            $logger->error('Content Block '.$block. ' cannot be found');
 //                            throw $this->createNotFoundException('Unable to find Content Block entity while compiling quote show admin screen.');
                         } else {
                             $items[$blockObj->getId()] = $blockObj;

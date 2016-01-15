@@ -101,8 +101,7 @@ class TourSiteController extends Controller
           $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($blocks);
           if (!$blockObj) {
             $items[$blocks] = null;
-            $logger->error('Content Block '.$blockObj. ' cannot be found');
-//                        throw $this->createNotFoundException('Unable to find Content Block entity while compiling quote show admin screen.');
+            $logger->error('Content Block '.$blocks. ' cannot be found');
           } else {
             $items[$blockObj->getId()] = $blockObj;
           }
@@ -111,7 +110,7 @@ class TourSiteController extends Controller
             $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find((int)$block);
             if (!$blockObj) {
               $items[$block] = null;
-//                            throw $this->createNotFoundException('Unable to find Content Block entity while compiling quote show admin screen.');
+              $logger->error('Content Block '.$block. ' cannot be found');
             } else {
               $items[$blockObj->getId()] = $blockObj;
             }
@@ -286,8 +285,7 @@ class TourSiteController extends Controller
             $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($blocks);
             if (!$blockObj) {
               $items[$blocks] = null;
-              $logger->error('Content Block '.$blockObj. ' cannot be found');
-//                        throw $this->createNotFoundException('Unable to find Content Block entity while compiling quote show admin screen.');
+              $logger->error('Content Block '.$blocks. ' cannot be found');
             } else {
               $items[$blockObj->getId()] = $blockObj;
             }
@@ -296,7 +294,7 @@ class TourSiteController extends Controller
               $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find((int)$block);
               if (!$blockObj) {
                 $items[$block] = null;
-//                            throw $this->createNotFoundException('Unable to find Content Block entity while compiling quote show admin screen.');
+                $logger->error('Content Block '.$block. ' cannot be found');
               } else {
                 $items[$blockObj->getId()] = $blockObj;
               }
