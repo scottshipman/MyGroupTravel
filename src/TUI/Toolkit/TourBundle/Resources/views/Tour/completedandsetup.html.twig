@@ -287,7 +287,7 @@
                         <span class="tour-dashboard-cta"></span>
                     </div>
                 {#</a>#}
-                <div id="passenger-progress" class="mdl-progress mdl-js-progress" style="width: 100%;"></div>
+                <div id="emergency-progress" class="mdl-progress mdl-js-progress" style="width: 100%;"></div>
                 <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
                     <ul>
                         <li>
@@ -505,7 +505,7 @@
         {% if signupPercent is defined %}
             var signupPercent = {{ signupPercent }};
             document.querySelector('#signup-progress').addEventListener('mdl-componentupgraded', function() {
-                this.MaterialProgress.setProgress(75);
+                this.MaterialProgress.setProgress(signupPercent);
             });
         {% endif %}
 
@@ -513,7 +513,7 @@
         {% if emergencyPercent is defined %}
             var emergencyPercent = {{ emergencyPercent }};
             document.querySelector('#emergency-progress').addEventListener('mdl-componentupgraded', function() {
-                this.MaterialProgress.setProgress(75);
+                this.MaterialProgress.setProgress(emergencyPercent);
             });
         {% endif %}
 
@@ -521,7 +521,7 @@
         {% if dietPercent is defined %}
             var dietPercent = {{ dietPercent }};
             document.querySelector('#dietary-progress').addEventListener('mdl-componentupgraded', function() {
-                this.MaterialProgress.setProgress(75);
+                this.MaterialProgress.setProgress(dietPercent);
             });
         {% endif %}
 
@@ -529,17 +529,17 @@
         {% if medPercent is defined %}
             var medPercent = {{ medPercent }};
             document.querySelector('#medical-progress').addEventListener('mdl-componentupgraded', function() {
-                this.MaterialProgress.setProgress(75);
+                this.MaterialProgress.setProgress(medPercent);
             });
         {% endif %}
 
         //Passport Info progress bar
-        {% if passPercent is defined %}
+        {#{% if passPercent is defined %}#}
             var passPercent = {{ passPercent }};
             document.querySelector('#passport-progress').addEventListener('mdl-componentupgraded', function() {
-                this.MaterialProgress.setProgress(75);
+                this.MaterialProgress.setProgress(passPercent);
             });
-        {% endif %}
+        {#{% endif %}#}
 
         if ($("#completed-title").next().is('script')) {
             $("#completed-title").css({"display": "none"});
