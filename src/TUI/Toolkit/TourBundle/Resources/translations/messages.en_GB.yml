@@ -130,6 +130,7 @@ tour:
         na: N/A
         signups: Sign-ups
         days: Days until Departure
+        payment_due: Days until Payment Due
         expiry: Days to expiry
         passport_data: Collect passport data by
         passenger_data: Collect emergency contact data by
