@@ -284,10 +284,10 @@ class PassengerController extends Controller
             // is parent an organizer?
             $parentRoles = $this->get("permission.set_permission")->getPermission($entity->getTourReference()->getId(), 'tour', $parent);
             $isOrganizer=NULL;
-            if(in_array('assistant', $parentRoles)) {
+            if(is_array($parentRoles) && in_array('assistant', $parentRoles)) {
                 $isOrganizer = $this->get('translator')->trans('passenger.labels.assistant-organizer');
             }
-            if(in_array('organizer', $parentRoles)) {
+            if(is_array($parentRoles) && in_array('organizer', $parentRoles)) {
                 $isOrganizer = $this->get('translator')->trans('passenger.labels.primary-organizer');
             }
 
