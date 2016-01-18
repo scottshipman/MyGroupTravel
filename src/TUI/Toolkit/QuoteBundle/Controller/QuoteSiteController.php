@@ -98,22 +98,43 @@ class QuoteSiteController extends Controller
         $editable = TRUE;
       }
     }
-    // get the content blocks to send to twig
-    $items=array(); $tabs=array();
-    $content = $entity->getContent();
-    foreach($content as $tab => $data){
-      $tabs[$tab] = $data[0];
-      $blocks = isset($data[1]) ? $data[1] : array();
-      if(!empty($blocks)) {
-        foreach ($blocks as $block) {
-          $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find((int) $block);
-          if(!$blockObj){
-            throw $this->createNotFoundException('Unable to find Content Block entity while compiling the quote site.');
+
+      //Get logger service for errors
+      $logger = $this->get('logger');
+
+      // get the content blocks to send to twig
+      $items = array();
+      $tabs = array();
+      $content = $entity->getContent();
+      foreach ($content as $tab => $data) {
+          $tabs[$tab] = $data[0];
+          $blocks = isset($data[1]) ? $data[1] : array();
+          $blockCount = count($blocks);
+          if (!empty($blocks)) {
+              if ($blockCount <= 1) {
+                  $blocks = array_shift($blocks);
+                  $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($blocks);
+                  if (!$blockObj) {
+                      $items[$blocks] = null;
+                      $logger->error('Content Block '.$blocks. ' cannot be found');
+//                        throw $this->createNotFoundException('Unable to find Content Block entity while compiling quote show admin screen.');
+                  } else {
+                      $items[$blockObj->getId()] = $blockObj;
+                  }
+              } else {
+                  foreach ($blocks as $block) {
+                      $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find((int)$block);
+                      if (!$blockObj) {
+                          $items[$block] = null;
+                          $logger->error('Content Block '.$block. ' cannot be found');
+//                            throw $this->createNotFoundException('Unable to find Content Block entity while compiling quote show admin screen.');
+                      } else {
+                          $items[$blockObj->getId()] = $blockObj;
+                      }
+                  }
+              }
           }
-          $items[$blockObj->getId()] = $blockObj;
-        }
       }
-    }
 
     // get the content block that is the header block
     $header = $entity->getHeaderBlock();
@@ -502,25 +523,50 @@ class QuoteSiteController extends Controller
       $date_format = $this->container->getParameter('date_format');
 
       // Get all Quote versions referencing Parent Quote object
-      $entity = $em->getRepository('QuoteBundle:QuoteVersion')->findById($id);
+      $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
       if (!$entity) {
         throw $this->createNotFoundException('Unable to find QuoteVersion entity in order to display as PDF.');
       }
 
-      // get the content blocks to send to twig
-      $items=array();
-      $content = $entity[0]->getContent();
-      foreach($content as $tab){
-        foreach($tab[1] as $key=>$block){
-          $object=$em->getRepository('ContentBlocksBundle:ContentBlock')->find($block);
-          if($object != null){
-            $items[$block] = $object;
-          }
+        //Get logger service for errors
+        $logger = $this->get('logger');
+
+        // get the content blocks to send to twig
+        $items = array();
+        $tabs = array();
+        $content = $entity->getContent();
+        foreach ($content as $tab => $data) {
+            $tabs[$tab] = $data[0];
+            $blocks = isset($data[1]) ? $data[1] : array();
+            $blockCount = count($blocks);
+            if (!empty($blocks)) {
+                if ($blockCount <= 1) {
+                    $blocks = array_shift($blocks);
+                    $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($blocks);
+                    if (!$blockObj) {
+                        $items[$blocks] = null;
+                        $logger->error('Content Block '.$blocks. ' cannot be found');
+//                        throw $this->createNotFoundException('Unable to find Content Block entity while compiling quote show admin screen.');
+                    } else {
+                        $items[$blockObj->getId()] = $blockObj;
+                    }
+                } else {
+                    foreach ($blocks as $block) {
+                        $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find((int)$block);
+                        if (!$blockObj) {
+                            $items[$block] = null;
+                            $logger->error('Content Block '.$block. ' cannot be found');
+//                            throw $this->createNotFoundException('Unable to find Content Block entity while compiling quote show admin screen.');
+                        } else {
+                            $items[$blockObj->getId()] = $blockObj;
+                        }
+                    }
+                }
+            }
         }
-      }
 
       // get the content block that is the header block
-      $header = $entity[0]->getHeaderBlock();
+      $header = $entity->getHeaderBlock();
       if($header !=NULL){
         $headerBlock=$em->getRepository('ContentBlocksBundle:ContentBlock')->find($header);
       } else {
@@ -541,8 +587,8 @@ class QuoteSiteController extends Controller
 
       // send warning messages
       $warningMsg = array();
-        if ($entity[0]->getExpiryDate() != null) {
-            if ($entity[0]->getExpiryDate() < date($date_format)) {
+        if ($entity->getExpiryDate() != null) {
+            if ($entity->getExpiryDate() < date($date_format)) {
                 $warningMsg[] = $this->get('translator')->trans('quote.exception.expired') . " $entity>getQuoteReference()->getSalesAgent()->getFirstName()   $entity>getQuoteReference()->getSalesAgent()->getLasttName()  at $entity>getQuoteReference()->getSalesAgent()->getEmail()";
             }
         }
@@ -551,13 +597,13 @@ class QuoteSiteController extends Controller
       $path = $request->getScheme() . '://' . $request->getHttpHost();
 
       // prepare Alternate Quotes flag.
-      $versions = $em->getRepository('QuoteBundle:QuoteVersion')->findByQuoteReference($entity[0]->getQuoteReference());
+      $versions = $em->getRepository('QuoteBundle:QuoteVersion')->findByQuoteReference($entity->getQuoteReference());
       if(count($versions>1)){
         $alternate=TRUE;
       }
 
       $data = array(
-        'entity' => $entity[0],
+        'entity' => $entity,
         'locale' => $locale,
         'items' => $items,
         'header' => $headerBlock,
@@ -570,7 +616,7 @@ class QuoteSiteController extends Controller
       );
 
 
-      $fileNameFinal = $entity[0]->getQuoteNumber()? $entity[0]->getQuoteNumber() : 'template-' . $id;
+      $fileNameFinal = $entity->getQuoteNumber()? $entity->getQuoteNumber() : 'template-' . $id;
       $html = $this->renderView( 'QuoteBundle:QuoteSite:quotePDF.html.twig', $data );
 
 

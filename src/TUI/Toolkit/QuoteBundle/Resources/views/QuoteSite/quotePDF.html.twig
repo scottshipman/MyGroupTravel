@@ -103,9 +103,11 @@
                         <div class="flexslider">
                             <ul class="slides" style="list-style: none">
                                 {% if entity.headerBlock %}
-                                            <li>
-                                                <span class="inner-list" style="background-image: url('{{ absolute_url(( entity.headerBlock.mediaWrapper[0].media[0].getRelativePath ~ "/" ~ entity.headerBlock.mediaWrapper[0].media[0].getHashedFilename )) }}')"></span>
-                                            </li>
+                                    {% if entity.headerBlock.mediaWrapper %}
+                                            {#<li>#}
+                                                {#<span class="inner-list" style="background-image: url('{{ absolute_url(( entity.headerBlock.mediaWrapper[0].media[0].getRelativePath ~ "/" ~ entity.headerBlock.mediaWrapper[0].media[0].getHashedFilename )) }}')"></span>#}
+                                            {#</li>#}
+                                    {% endif %}
                                 {% endif %}
                             </ul>
                         </div>
@@ -160,30 +162,32 @@
 
         {# render the tabs' content #}
         {% for tab, data in entity.content %}
-            <p style="page-break-after:always;"></p>
-            <div id="content-blocks-wrapper" class="">
-                <h2 class="mdl-tabs__tab is-active" style="float:none; font-size: 30px; position:relative; text-align: center; display: block; margin: 0 auto;">{{ data[0] }}</h2>
-            </div>
-            <div id="tabs-drawer-{{ tab }}" class="content-blocks-drawer">
-                <div class="sortable-items">
-                    {% for item in data[1] %}
-                        {% if items[item].doubleWidth == 1 %}
-                            {% set size = 'full' %}
-                        {% else %}
-                            {% set size = 'half' %}
-                        {% endif %}
-                        <div id="content-blocks-{{ items[item].id }}" class="site-content-blocks site-content-blocks-item site-content-blocks-size-{{ size }}" blockId="{{ items[item].id }}">
-                            <div class="inner-wrapper move-cursor">
-                                {# render the actual content block #}
-                                <div id="previewable-content-blocks-{{ items[item].id }}">
-                                    {{ render(controller('ContentBlocksBundle:ContentBlock:show', {'id':  items[item].id  })) }}
-                                </div>
+                <p style="page-break-after:always;"></p>
+                    <div id="content-blocks-wrapper" class="">
+                        <h2 class="mdl-tabs__tab is-active" style="float:none; font-size: 30px; position:relative; text-align: center; display: block; margin: 0 auto;">{{ data[0] }}</h2>
+                    </div>
+                    <div id="tabs-drawer-{{ tab }}" class="content-blocks-drawer">
+                        <div class="sortable-items">
+                            {% for item in data[1] %}
+                                {% if items[item] != null %}
+                                    {% if items[item].doubleWidth == 1 %}
+                                        {% set size = 'full' %}
+                                    {% else %}
+                                        {% set size = 'half' %}
+                                    {% endif %}
+                                    <div id="content-blocks-{{ items[item].id }}" class="site-content-blocks site-content-blocks-item site-content-blocks-size-{{ size }}" blockId="{{ items[item].id }}">
+                                        <div class="inner-wrapper move-cursor">
+                                            {# render the actual content block #}
+                                            <div id="previewable-content-blocks-{{ items[item].id }}">
+                                                {{ render(controller('ContentBlocksBundle:ContentBlock:show', {'id':  items[item].id  })) }}
+                                            </div>
 
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div><!-- sortable-items -->
-            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div><!-- sortable-items -->
+                    </div>
         {% endfor %}
 
     </div>
