@@ -202,6 +202,14 @@ a {
   color: <?php echo color_contrast($secondaryArray) ?>;
 }
 
+.mdl-progress>.progressbar {
+  background-color: <?php echo $secondary ?>;
+}
+
+.mdl-progress>.bufferbar {
+ background-image: linear-gradient(to right,rgba(255,255,255,.7),rgba(255,255,255,.7)),linear-gradient(to right,<?php echo $secondary ?>,<?php echo $secondary ?>);
+}
+
 /* Custom MDL matching colors */
 .tui-text-avatar {
   background-color: <?php echo $primary ?>;

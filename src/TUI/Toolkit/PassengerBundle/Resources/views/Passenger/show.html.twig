@@ -191,12 +191,12 @@
                         {% endif %}
                         <div class="mdl-card__supporting-text mdl-card--border">
                             <label class="row-label">{% trans %}passenger.labels.doctor_name{% endtrans %}</label>
-                                <p class="row-content" class="doctor-name">{% if entity.medicalReference != null %}{{ entity.medicalReference.doctorName }}{% endif %}</p>
+                                <p class="doctor-name row-content">{% if entity.medicalReference != null %}{{ entity.medicalReference.doctorName }}{% endif %}</p>
                             <div class="clear"></div>
                         </div>
                         <div class="mdl-card__supporting-text mdl-card--border">
                             <label class="row-label">{% trans %}passenger.labels.doctor_number{% endtrans %}</label>
-                            <p class="doctors-number row-content">{% if entity.medicalReference != null and entity.medicalReference.doctorNumber != null%}{{ entity.medicalReference.doctorNumber.nationalNumber }}{% endif %}</p>
+                            <p id="doctors-number" class="doctors-number row-content">{% if entity.medicalReference != null and entity.medicalReference.doctorNumber != null%}{{ entity.medicalReference.doctorNumber.nationalNumber }}{% endif %}</p>
                             <div class="clear"></div>
                         </div>
                        <div class="mdl-card__supporting-text mdl-card--border">
@@ -303,7 +303,7 @@
                             <div class="clear"></div>
                         </div>
                         <div class="mdl-card__supporting-text mdl-card--border">
-                            <label class="row-label">{% trans %}passenger.labels.emergency_telephone{% endtrans %}</label>
+                            <label class="row-label">{% trans %}passenger.labels.emergency_number{% endtrans %}</label>
                             <p class="emergency-number row-content">{% if entity.emergencyReference != null and entity.emergencyReference.emergencyNumber != null%}{{ entity.emergencyReference.emergencyNumber.nationalNumber }}{% endif %}</p>
                             <div class="clear"></div>
                         </div>
@@ -386,7 +386,7 @@
             div.prepend('<label class="mdl-label-mimic dob">' + labelText + '</label><br/>');
             $('.dob').css({"position": "relative", "font-size": "14px"});
             div.css({"margin-top": "5px"});
-            $('#tui_toolkit_tourbundle_tourpassenger_passengers_"' + index + '"_dateOfBirth > div:nth-child(1)').css({"width": "100"});
+//            $('#tui_toolkit_tourbundle_tourpassenger_passengers_"' + index + '"_dateOfBirth > div:nth-child(1)').css({"width": "100"});
         });
     </script>
 {% endblock %}
