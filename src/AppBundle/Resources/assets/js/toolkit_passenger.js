@@ -407,7 +407,7 @@ $(document).ready(function () {
                 if ($('#passenger-avatar').is('img')) {
                     $('#passenger-avatar').replaceWith('<span style="float: left; margin-right: 15px;" id="passenger-avatar" class="tui-text-avatar mdl-typography--headline">' + firstName.charAt(0) + lastName.charAt(0) + '</span>');
                 }else if ($('#passenger-avatar').is('span')){
-                    $('#passenger-avatar').html(response[0]);
+                    $('#passenger-avatar').html(firstName.charAt(0) + lastName.charAt(0));
                 }
             }
         }).error(function (response) {
