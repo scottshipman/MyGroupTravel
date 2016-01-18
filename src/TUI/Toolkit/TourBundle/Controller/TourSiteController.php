@@ -84,19 +84,37 @@ class TourSiteController extends Controller
       }
     };
 
+    //Get logger service for errors
+    $logger = $this->get('logger');
+
     // get the content blocks to send to twig
-    $items=array(); $tabs=array();
+    $items = array();
+    $tabs = array();
     $content = $entity->getContent();
-    foreach($content as $tab => $data){
+    foreach ($content as $tab => $data) {
       $tabs[$tab] = $data[0];
       $blocks = isset($data[1]) ? $data[1] : array();
-      if(!empty($blocks)) {
-        foreach ($blocks as $block) {
-          $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find((int) $block);
-          if(!$blockObj){
-            throw $this->createNotFoundException('Unable to find Content Block entity.');
+      $blockCount = count($blocks);
+      if (!empty($blocks)) {
+        if ($blockCount <= 1) {
+          $blocks = array_shift($blocks);
+          $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($blocks);
+          if (!$blockObj) {
+            $items[$blocks] = null;
+            $logger->error('Content Block '.$blocks. ' cannot be found');
+          } else {
+            $items[$blockObj->getId()] = $blockObj;
           }
-          $items[$blockObj->getId()] = $blockObj;
+        } else {
+          foreach ($blocks as $block) {
+            $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find((int)$block);
+            if (!$blockObj) {
+              $items[$block] = null;
+              $logger->error('Content Block '.$block. ' cannot be found');
+            } else {
+              $items[$blockObj->getId()] = $blockObj;
+            }
+          }
         }
       }
     }
@@ -250,22 +268,40 @@ class TourSiteController extends Controller
       }
 
 
-        // get the content blocks to send to twig
-        $items=array(); $tabs=array();
-        $content = $entity->getContent();
-        foreach($content as $tab => $data){
-            $tabs[$tab] = $data[0];
-            $blocks = isset($data[1]) ? $data[1] : array();
-            if(!empty($blocks)) {
-                foreach ($blocks as $block) {
-                    $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find((int) $block);
-                    if(!$blockObj){
-                        throw $this->createNotFoundException('Unable to find Content Block entity.');
-                    }
-                    $items[$blockObj->getId()] = $blockObj;
-                }
+      //Get logger service for errors
+      $logger = $this->get('logger');
+
+      // get the content blocks to send to twig
+      $items = array();
+      $tabs = array();
+      $content = $entity->getContent();
+      foreach ($content as $tab => $data) {
+        $tabs[$tab] = $data[0];
+        $blocks = isset($data[1]) ? $data[1] : array();
+        $blockCount = count($blocks);
+        if (!empty($blocks)) {
+          if ($blockCount <= 1) {
+            $blocks = array_shift($blocks);
+            $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($blocks);
+            if (!$blockObj) {
+              $items[$blocks] = null;
+              $logger->error('Content Block '.$blocks. ' cannot be found');
+            } else {
+              $items[$blockObj->getId()] = $blockObj;
             }
+          } else {
+            foreach ($blocks as $block) {
+              $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find((int)$block);
+              if (!$blockObj) {
+                $items[$block] = null;
+                $logger->error('Content Block '.$block. ' cannot be found');
+              } else {
+                $items[$blockObj->getId()] = $blockObj;
+              }
+            }
+          }
         }
+      }
 
       // get the content block that is the header block
       $header = $entity->getHeaderBlock();

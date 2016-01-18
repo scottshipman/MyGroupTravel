@@ -13,13 +13,16 @@
 
                 <div id="tabs-drawer-{{ tab }}" class="modal-sortable-items content-blocks-drawer">
                     {%  for item in data[1] %}
-                        <div id="content-blocks-modal-{{ item }}" class="content-blocks content-blocks-item" blockId = "content-blocks-{{ item }}">
-                            <i class="fa fa-arrows"></i> {{ items[item].title }}
-                            {# probably render a controller here by passing in item as id and have block entity returned #}
-                            <div id="content-block-actions-{{ item }}" class="content-block-actions">
-                                <i class="modal-item-delete content-block-item-action fa fa-trash-o" blockId="{{ item }}"></i>
-                            </div>
-                        </div>
+                        {% if items[item] != null %}
+
+                            <div id="content-blocks-modal-{{ item }}" class="content-blocks content-blocks-item" blockId = "content-blocks-{{ item }}">
+                                    <i class="fa fa-arrows"></i> {{ items[item].title }}
+                                    {# probably render a controller here by passing in item as id and have block entity returned #}
+                                    <div id="content-block-actions-{{ item }}" class="content-block-actions">
+                                        <i class="modal-item-delete content-block-item-action fa fa-trash-o" blockId="{{ item }}"></i>
+                                    </div>
+                                </div>
+                        {% endif %}
                     {% endfor %}
                 </div>
             </div>

@@ -276,20 +276,22 @@
 
             <div id="tabs-drawer-{{ tab }}" class="sortable-items content-blocks-drawer">
                     {%  for item in data[1] %}
-                        <div id="content-blocks-{{ item }}" class="content-blocks content-blocks-item {% if items[item].locked %}content-block-locked{% endif %}{{ cursor }}">
-                            <i class="fa fa-arrows{{ editable }}"></i> {{ items[item].title }}
-                            {# probably render a controller here by passing in item as id and have block entity returned #}
-                            <div id="content-block-actions-{{ item }}" class="content-block-actions {% if items[item].locked %}content-block-locked{% endif %}{{ editable }}">
-                                <i class="item-edit content-block-item-action fa fa-pencil-square-o" itemid = "{{ item }}" title="Edit"></i>
-                                <i class="item-delete content-block-item-action fa fa-trash-o" title="Delete" blockID="{{ item }}"></i>
-                                {#
-                                {% if items[item].hidden %}
-                                    <i class="item-hide content-block-item-action fa fa-ban"></i>{% else %}<i class="item-hide content-block-item-action fa fa-eye"></i>
-                                {% endif %}
-                                #}
+                        {% if items[item] != null %}
+                            <div id="content-blocks-{{ item }}" class="content-blocks content-blocks-item {% if items[item].locked %}content-block-locked{% endif %}{{ cursor }}">
+                                <i class="fa fa-arrows{{ editable }}"></i> {{ items[item].title }}
+                                {# probably render a controller here by passing in item as id and have block entity returned #}
+                                <div id="content-block-actions-{{ item }}" class="content-block-actions {% if items[item].locked %}content-block-locked{% endif %}{{ editable }}">
+                                    <i class="item-edit content-block-item-action fa fa-pencil-square-o" itemid = "{{ item }}" title="Edit"></i>
+                                    <i class="item-delete content-block-item-action fa fa-trash-o" title="Delete" blockID="{{ item }}"></i>
+                                    {#
+                                    {% if items[item].hidden %}
+                                        <i class="item-hide content-block-item-action fa fa-ban"></i>{% else %}<i class="item-hide content-block-item-action fa fa-eye"></i>
+                                    {% endif %}
+                                    #}
+                                 </div>
                              </div>
-                         </div>
-                        <div id="editable-content-blocks-{{ item }}" style="display:none; border: 1px dotted grey;padding:3em;"></div>
+                            <div id="editable-content-blocks-{{ item }}" style="display:none; border: 1px dotted grey;padding:3em;"></div>
+                        {% endif %}
                        {% endfor %}
 
              </div>
