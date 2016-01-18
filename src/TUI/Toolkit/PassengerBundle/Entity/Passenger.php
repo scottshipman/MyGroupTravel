@@ -118,6 +118,13 @@ class Passenger
 
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="self", type="boolean")
+     */
+    protected $self;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="status", type="string")
@@ -133,6 +140,7 @@ class Passenger
 
 
     public function __construct()  {
+        $this->self = FALSE;
     }
 
     /**
@@ -370,7 +378,7 @@ class Passenger
     {
         $this->media = $media;
 
-        return $media;
+        return $this;
     }
 
     /**
@@ -379,5 +387,23 @@ class Passenger
     public function getMedia()
     {
         return $this->media;
+    }
+
+    /**
+     * @param  $self
+     */
+    public function setSelf($self)
+    {
+        $this->self = $self;
+
+        return $this;
+    }
+
+    /**
+     * @return self
+     */
+    public function getSelf()
+    {
+        return $this->self;
     }
 }

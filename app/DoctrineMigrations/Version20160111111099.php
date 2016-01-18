@@ -85,8 +85,9 @@ class Version20160111111099 extends AbstractMigration implements ContainerAwareI
                         ->find($permission[0]);
                     // all we have is name values to compare, so...
                     if ($passenger &&
-                        strtolower(trim($organizer->getFirstName())) == strtolower(trim($passenger->getFName())) &&
-                        strtolower(trim($organizer->getLastName())) == strtolower(trim($passenger->getLName())) &&
+                       /* strtolower(trim($organizer->getFirstName())) == strtolower(trim($passenger->getFName())) &&
+                        strtolower(trim($organizer->getLastName())) == strtolower(trim($passenger->getLName())) &&*/
+                        $passenger->getSelf() == TRUE &&
                         $tour->getId() == $passenger->getTourReference()->getId()
                     ) {
                         echo "...... Nothing to do. Found matching Passenger record with ID " . $passenger->getId() . "\n";
