@@ -1222,6 +1222,12 @@ class TourController extends Controller
         $free = $this->get("passenger.actions")->getPassengersByStatus('free', $id);
         $free = count($free);
 
+        //Get Organizers
+        $organizerCount = $this->get("permission.set_permission")->getUser('organizer', $entity->getId(), 'tour');
+        $assistantCount = $this->get("permission.set_permission")->getUser('assistant', $entity->getId(), 'tour');
+        $totalOrganizerCount = count($organizerCount) + count($assistantCount);
+
+
         //Real Accepted Passenger Count
         $accepted = $accepted - $free;
 
@@ -1267,6 +1273,7 @@ class TourController extends Controller
             'accepted' => $accepted,
             'completedPassengerData' => $completedPassengerData,
             'medical' => $medical,
+            'totalOrganizerCount' => $totalOrganizerCount,
         ));
 
     }
