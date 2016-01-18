@@ -167,6 +167,7 @@
 
         &.four-column {
           width: 50%;
+          height:100px;
 
           @include breakpoint_desktop() {
             width: 25%;
@@ -208,6 +209,7 @@
 
         &.four-column {
           width: 50%;
+          min-height:100px;
 
           @include breakpoint_desktop() {
             width: 25%;
@@ -244,6 +246,7 @@
 
         &.four-column {
           width: 50%;
+          height:100px;
 
           @include breakpoint_desktop() {
             width: 25%;
@@ -282,6 +285,7 @@
 
           &.four-column {
             width: 50%;
+            height:100px;
             border-left: 1px solid rgba(0, 0, 0, 0.1);
 
             @include breakpoint_desktop() {
