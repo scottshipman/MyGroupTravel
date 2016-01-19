@@ -69,7 +69,7 @@
                     {% for paymentTask in entity.paymentTasks if paymentTask.paidDate == null %}
                         {% if loop.first %}
                             <li>
-                                <div class="profile-list-item item-1 tour-dashboard">
+                                <div class="profile-list-item item-1 tour-dashboard four-column">
                                     <span class="date-span">{% if entity.currency %}<p id="currency" style="display: inline; font-size: inherit;">{{ entity.currency.htmlSymbol | raw }}</p>{% endif %}{{ paymentTask.value * entity.payingPlaces }}</span>
                                     <label>{{ paymentTask.name }} {% trans %}tour.dashboard.due{% endtrans %} {{ paymentTask.dueDate|date(shortFormat) }}</label>
                                 </div>
@@ -78,22 +78,29 @@
                     {% endfor %}
                 {% elseif entity.paymentTasks is empty  %}
                     <li>
-                        <div class="profile-list-item item-1 tour-dashboard">
+                        <div class="profile-list-item item-1 tour-dashboard four-column">
                             <span class="date-span">{% trans %}tour.dashboard.na{% endtrans %}</span>
                             <label>{% trans %}tour.dashboard.no_payments{% endtrans %}</label>
                         </div>
                     </li>
                 {% endif %}
                 <li>
-                    <div class="profile-list-item item-2 tour-dashboard">
-                        <span class="date-span">{{ accepted + waitlist }}/{{ entity.payingPlaces }}</span>
+                    <div class="profile-list-item item-2 tour-dashboard four-column">
+                        <span class="date-span">{{ (accepted + waitlist) - totalOrganizerCount }}</span>
                         <label>{% trans %}tour.dashboard.signups{% endtrans %}</label>
+                    </div>
+                </li>
+                <li>
+                    <div class="profile-list-item item-3 tour-dashboard four-column">
+                        <span class="date-span">{{ totalOrganizerCount }}</span>
+                        {#<label>{% trans %}%totalOrganizerCount%{% endtrans %}</label>#}
+                        <label>{% transchoice totalOrganizerCount %}{0} Organizers|{1} Organizer|]1,Inf[  Organizers}{% endtranschoice %}</label>
                     </div>
                 </li>
                 <li>
                     {# if Provisional and not yet expired, show days till expired, else show days to departure #}
                     {# if there is no expiry, show day till departure #}
-                    <div class="profile-list-item item-3 tour-dashboard">
+                    <div class="profile-list-item item-4 tour-dashboard four-column">
                         {% if entity.tripStatus.name == "Provisional" and entity.expiryDate %}
                             {% if dteFinal<1 %}
                                 <span class="date-span" style="color:red;"><i class="fa fa-exclamation-circle"> Expired</i></span>
@@ -539,12 +546,12 @@
         {% endif %}
 
         //Passport Info progress bar
-        {#{% if passPercent is defined %}#}
+        {% if passPercent is defined %}
             var passPercent = {{ passPercent }};
             document.querySelector('#passport-progress').addEventListener('mdl-componentupgraded', function() {
                 this.MaterialProgress.setProgress(passPercent);
             });
-        {#{% endif %}#}
+        {% endif %}
 
         if ($("#completed-title").next().is('script')) {
             $("#completed-title").css({"display": "none"});

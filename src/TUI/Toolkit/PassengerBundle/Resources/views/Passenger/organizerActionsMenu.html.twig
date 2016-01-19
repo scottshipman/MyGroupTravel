@@ -8,20 +8,25 @@
         {% if organizer[0].status != "Pending Invite" %}
             <li><a href="{{ path('manage_passenger_show', { 'id': organizerId }) }}" class="mdl-menu__item">View Passenger</a></li>
 
-            {% if organizerStatus != "accepted" %}
-                <li><a href="#accepted" style="display: block;"class="mdl-menu__item move-to-accepted" tour="{{ tourId }}" passenger="{{ organizerId }}">Move to Accepted</a></li>
-                <li><a href="#waitlist" style="display: none;" class="mdl-menu__item move-to-waitlist" tour="{{ tourId }}" passenger="{{ organizerId }}">Move to Waitlist</a></li>
+            {# Accepted Menu Item #}
+            {% if organizerStatus  == "waitlist" or free == TRUE %}
+                <li><a href="#accepted" style="display: block;"class="mdl-menu__item move-to-accepted" tour="{{ tourId }}" passenger="Move to {{ organizerId }}">Move to {{ "accepted" | paxLabel }}</a></li>
+            {% else %}
+                <li><a href="#accepted" style="display: none;"class="mdl-menu__item move-to-accepted" tour="{{ tourId }}" passenger="Move to {{ organizerId }}">Move to {{ "accepted" | paxLabel }}</a></li>
             {% endif %}
+
+            {# Waitlist Menu Item #}
             {% if organizerStatus != "waitlist" %}
-                <li><a href="#accepted" style="display: none;"class="mdl-menu__item move-to-accepted" tour="{{ tourId }}" passenger="{{ organizerId }}">Move to Accepted</a></li>
-                <li><a href="#waitlist" style="display: block;" class="mdl-menu__item move-to-waitlist" tour="{{ tourId }}" passenger="{{ organizerId }}">Move to Waitlist</a></li>
+                <li><a href="#waitlist" style="display: block;" class="mdl-menu__item move-to-waitlist" tour="{{ tourId }}" passenger="{{ organizerId }}">Move to {{ "waitlist" | paxLabel }}</a></li>
+            {%  else %}
+                <li><a href="#waitlist" style="display: none;" class="mdl-menu__item move-to-waitlist" tour="{{ tourId }}" passenger="{{ organizerId }}">Move to {{ "waitlist" | paxLabel }}</a></li>
             {% endif %}
-            {% if organizerStatus != "waitlist" and free == false %}
-                <li><a style="display: block;" href="#free" class="mdl-menu__item move-to-free" tour="{{ tourId }}" passenger="{{ organizerId }}">Move to Free</a></li>
-            {% elseif organizerStatus != "waitlist" and free == true %}
-                <li><a style="display: none;" href="#free" class="mdl-menu__item move-to-free" tour="{{ tourId }}" passenger="{{ organizerId }}">Move to Free</a></li>
-            {% elseif organizerStatus != "accepted" %}
-                <li><a style="display: none;" href="#free" class="mdl-menu__item move-to-free" tour="{{ tourId }}" passenger="{{ organizerId }}">Move to Free</a></li>
+
+            {# Free Menu Item #}
+            {% if free == false %}
+                <li><a style="display: block;" href="#free" class="mdl-menu__item move-to-free" tour="{{ tourId }}" passenger="{{ organizerId }}">Move to {{ "free" | paxLabel }}</a></li>
+            {% else %}
+             <li><a style="display: none;" href="#free" class="mdl-menu__item move-to-free" tour="{{ tourId }}" passenger="{{ organizerId }}">Move to {{ "free" | paxLabel }}</a></li>
             {% endif %}
         {% endif %}
     </span>

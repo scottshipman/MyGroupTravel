@@ -29,3 +29,9 @@ parameters:
     profile_query_limit:    5
     cache_asset_version: 1
     google_tag_manager: GTM-xxx
+
+    # Optional Passenger Status Labels
+    accepted_label: accepted
+    waitlist_label: waitlist
+    free_label: free
+    pending invite_label: pending Invite
