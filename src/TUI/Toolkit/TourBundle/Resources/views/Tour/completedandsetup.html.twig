@@ -136,21 +136,27 @@
                 <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
                     <ul>
                         <li>
-                            <div class="profile-list-item item-1 tour-dashboard">
+                            <div class="profile-list-item item-1 tour-dashboard four-column">
                                 <span class="date-span">{{ entity.views }}</span>
                                 <label>{% trans %}tour.dashboard.views{% endtrans %}</label>
                             </div>
                         </li>
                         <li>
-                            <div class="profile-list-item item-2 tour-dashboard">
+                            <div class="profile-list-item item-2 tour-dashboard four-column">
                                 <span class="date-span">{{ accepted }}</span>
-                                <label>{% trans %}tour.dashboard.accepted_of{% endtrans %} {{ entity.payingPlaces }}</label>
+                                <label>{{ "accepted" | paxLabel }} of {{ entity.payingPlaces }}</label>
                             </div>
                         </li>
                         <li>
-                            <div class="profile-list-item item-3 tour-dashboard">
+                            <div class="profile-list-item item-3 tour-dashboard four-column">
                                 <span class="date-span">{{ waitlist }}</span>
-                                <label>{% trans %}tour.dashboard.waitlist{% endtrans %}</label>
+                                <label>{{ "waitlist" | paxLabel }}</label>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="profile-list-item item-4 tour-dashboard four-column">
+                                <span class="date-span">{{ free }}</span>
+                                <label>{{ "free" | paxLabel }} of {{ entity.freePlaces }}</label>
                             </div>
                         </li>
                     </ul>
@@ -273,7 +279,7 @@
                     <li>
                         <div class="profile-list-item item-3 tour-dashboard">
                             <span class="date-span">{{ passDtgFinal }}</span>
-                            <label>{% trans %}tour.dashboard.days{% endtrans %}</label>
+                            <label>{% trans %}tour.dashboard.days_due{% endtrans %}</label>
                         </div>
                     </li>
                     <li>
@@ -311,7 +317,7 @@
                         <li>
                             <div class="profile-list-item item-3 tour-dashboard">
                                 <span class="date-span">{{ emergencyDtgFinal }}</span>
-                                <label>{% trans %}tour.dashboard.days{% endtrans %}</label>
+                                <label>{% trans %}tour.dashboard.days_due{% endtrans %}</label>
                             </div>
                         </li>
                         <li>
@@ -349,7 +355,7 @@
                         <li>
                             <div class="profile-list-item item-3 tour-dashboard">
                                 <span class="date-span">{{ medDtgFinal }}</span>
-                                <label>{% trans %}tour.dashboard.days{% endtrans %}</label>
+                                <label>{% trans %}tour.dashboard.days_due{% endtrans %}</label>
                             </div>
                         </li>
                         <li>
@@ -387,7 +393,7 @@
                         <li>
                             <div class="profile-list-item item-3 tour-dashboard">
                                 <span class="date-span">{{ dietDtgFinal }}</span>
-                                <label>{% trans %}tour.dashboard.days{% endtrans %}</label>
+                                <label>{% trans %}tour.dashboard.days_due{% endtrans %}</label>
                             </div>
                         </li>
                         <li>
