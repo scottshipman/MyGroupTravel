@@ -501,6 +501,9 @@ class TourController extends Controller
 
         $payment_tasks = $entity->getPaymentTasks();
 
+        //Get logger service for errors
+        $logger = $this->get('logger');
+
         // get the content blocks to send to twig
         $items = array();
         $tabs = array();
@@ -511,18 +514,23 @@ class TourController extends Controller
             $blockCount = count($blocks);
             if (!empty($blocks)) {
                 if ($blockCount <= 1) {
-                    $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find(reset($blocks));
+                    $blocks = array_shift($blocks);
+                    $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($blocks);
                     if (!$blockObj) {
-                        throw $this->createNotFoundException('Unable to find Content Block entity.');
+                        $items[$blocks] = null;
+                        $logger->error('Content Block '.$blocks. ' cannot be found');
+                    } else {
+                        $items[$blockObj->getId()] = $blockObj;
                     }
-                    $items[$blockObj->getId()] = $blockObj;
                 } else {
                     foreach ($blocks as $block) {
                         $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find((int)$block);
                         if (!$blockObj) {
-                            throw $this->createNotFoundException('Unable to find Content Block entity.');
+                            $items[$block] = null;
+                            $logger->error('Content Block '.$block. ' cannot be found');
+                        } else {
+                            $items[$blockObj->getId()] = $blockObj;
                         }
-                        $items[$blockObj->getId()] = $blockObj;
                     }
                 }
             }
@@ -574,6 +582,9 @@ class TourController extends Controller
         }
 
 
+        //Get logger service for errors
+        $logger = $this->get('logger');
+
         // get the content blocks to send to twig
         $items = array();
         $tabs = array();
@@ -587,16 +598,20 @@ class TourController extends Controller
                     $blocks = array_shift($blocks);
                     $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($blocks);
                     if (!$blockObj) {
-                        throw $this->createNotFoundException('Unable to find Content Block entity.');
+                        $items[$blocks] = null;
+                        $logger->error('Content Block '.$blocks. ' cannot be found');
+                    } else {
+                        $items[$blockObj->getId()] = $blockObj;
                     }
-                    $items[$blockObj->getId()] = $blockObj;
                 } else {
                     foreach ($blocks as $block) {
                         $blockObj = $em->getRepository('ContentBlocksBundle:ContentBlock')->find((int)$block);
                         if (!$blockObj) {
-                            throw $this->createNotFoundException('Unable to find Content Block entity.');
+                            $items[$block] = null;
+                            $logger->error('Content Block '.$block. ' cannot be found');
+                        } else {
+                            $items[$blockObj->getId()] = $blockObj;
                         }
-                        $items[$blockObj->getId()] = $blockObj;
                     }
                 }
             }
@@ -1080,6 +1095,9 @@ class TourController extends Controller
 
     public function cloneContentBlocks($content = array())
     {
+        //Get logger service for errors
+        $logger = $this->get('logger');
+
         $newContentArray = array();
         if (!empty($content) && $content != NULL) {
             foreach ($content as $tab => $blocks) {
@@ -1089,16 +1107,19 @@ class TourController extends Controller
                     $originalBlock = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($block);
 
                     if (!$originalBlock) {
-                        throw $this->createNotFoundException('Unable to find Content entity while cloning from quote to tour.');
+//                        $items[$blocks] = null;
+                        $logger->error('Content Block '.$originalBlock. ' cannot be found');
+//                        throw $this->createNotFoundException('Unable to find Content entity while cloning quote content.');
+                    } else {
+
+                        $newBlock = clone $originalBlock;
+                        $newBlock->setId(null);
+                        $em->persist($newBlock);
+                        $em->flush($newBlock);
+
+                        $newContentArray[$tab][0] = $blocks[0];
+                        $newContentArray[$tab][1][] = $newBlock->getID();
                     }
-
-                    $newBlock = clone $originalBlock;
-                    $newBlock->setId(null);
-                    $em->persist($newBlock);
-                    $em->flush($newBlock);
-
-                    $newContentArray[$tab][0] = $blocks[0];
-                    $newContentArray[$tab][1][] = $newBlock->getID();
                 }
             }
         }
@@ -1201,6 +1222,12 @@ class TourController extends Controller
         $free = $this->get("passenger.actions")->getPassengersByStatus('free', $id);
         $free = count($free);
 
+        //Get Organizers
+        $organizerCount = $this->get("permission.set_permission")->getUser('organizer', $entity->getId(), 'tour');
+        $assistantCount = $this->get("permission.set_permission")->getUser('assistant', $entity->getId(), 'tour');
+        $totalOrganizerCount = count($organizerCount) + count($assistantCount);
+
+
         //Real Accepted Passenger Count
         $accepted = $accepted - $free;
 
@@ -1246,6 +1273,7 @@ class TourController extends Controller
             'accepted' => $accepted,
             'completedPassengerData' => $completedPassengerData,
             'medical' => $medical,
+            'totalOrganizerCount' => $totalOrganizerCount,
         ));
 
     }
