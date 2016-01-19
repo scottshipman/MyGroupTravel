@@ -144,19 +144,19 @@
                         <li>
                             <div class="profile-list-item item-2 tour-dashboard four-column">
                                 <span class="date-span">{{ accepted }}</span>
-                                <label>Accepted of {{ entity.payingPlaces }}</label>
+                                <label>{{ "accepted" | paxLabel }} of {{ entity.payingPlaces }}</label>
                             </div>
                         </li>
                         <li>
                             <div class="profile-list-item item-3 tour-dashboard four-column">
                                 <span class="date-span">{{ waitlist }}</span>
-                                <label>Waitlist</label>
+                                <label>{{ "waitlist" | paxLabel }}</label>
                             </div>
                         </li>
                         <li>
                             <div class="profile-list-item item-4 tour-dashboard four-column">
                                 <span class="date-span">{{ free }}</span>
-                                <label>Free of {{ entity.freePlaces }}</label>
+                                <label>{{ "free" | paxLabel }} of {{ entity.freePlaces }}</label>
                             </div>
                         </li>
                     </ul>
