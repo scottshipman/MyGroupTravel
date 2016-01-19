@@ -38,9 +38,9 @@
         <div class="tour-show-left-column">
             <ul class="tour-show-submenu">
                 <li><strong>{% trans %}passenger.labels.passengers_for{% endtrans %} {{ tour.name|capitalize }}</strong></li>
-                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" id="showAccepted"><strong>{% trans %}passenger.labels.accepted{% endtrans %} <span id="acceptedPassengers">({{ acceptedcount - freecount }})</span></strong></a></li>
-                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" id="showWaitlist"><strong>{% trans %}passenger.labels.waitlist{% endtrans %} <span id="waitlistPassengers">({{ waitlistcount }})</span></strong></a></li>
-                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" id="showFree"><strong>{% trans %}passenger.labels.free{% endtrans %} <span id="freePassengers">({{ freecount }})</span></strong></a></li>
+                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" id="showAccepted"><strong>{{ "accepted" | paxLabel }} <span id="acceptedPassengers">({{ acceptedcount - freecount }})</span></strong></a></li>
+                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" id="showWaitlist"><strong>{{ "waitlist" | paxLabel }} <span id="waitlistPassengers">({{ waitlistcount }})</span></strong></a></li>
+                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" id="showFree"><strong>{{ "free" | paxLabel }} <span id="freePassengers">({{ freecount }})</span></strong></a></li>
                 <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" id="showOrganizers"><strong>{% trans %}passenger.labels.organizer{% endtrans %} <span id="organizerPassengers">({{ organizerscount }})</span></strong></a></li>
             </ul>
 
@@ -95,10 +95,10 @@
                 {% for passenger in passengers %}
 
                     {% if passenger[0].status == "accepted" %}
-                        {% set statusicon =  '<a class="' ~ passenger[0].status ~ 'icon" title = "' ~ passenger[0].status ~ '"><i class="material-icons">verified_user</i></a>'%}
+                        {% set statusicon =  '<a class="' ~ passenger[0].status ~ 'icon" title = "' ~ passenger[0].status | paxLabel ~ '"><i class="material-icons statusicon">verified_user</i></a>'%}
                         {% set status = 'accepted' %}
                     {% else %}
-                        {% set statusicon = '<a class="' ~ passenger[0].status ~ 'icon" title = "' ~ passenger[0].status ~ '"><i class="material-icons">list</i></a>'%}
+                        {% set statusicon = '<a class="' ~ passenger[0].status ~ 'icon" title = "' ~ passenger[0].status | paxLabel ~ '"><i class="material-icons statusicon">list</i></a>'%}
                         {% set status = 'waitlist' %}
                     {% endif %}
 
@@ -109,7 +109,8 @@
                     {% endif %}
 
                     {% if passenger[0].free == 1 %}
-                        {% set freeicon = '<a class="freeicon" title = "Free"><i class="material-icons">money_off</i></a>' %}
+                        {% set freeLabel = "free" | paxLabel %}
+                        {% set freeicon = '<a class="freeicon" title = "' ~ freeLabel ~ '"><i class="material-icons statusicon">money_off</i></a>' %}
                         {%  set freeClass = "free" %}
                         {% set statusicon = '' %}
                         {% set status = '' %}
@@ -162,6 +163,18 @@
     {% endjavascripts %}
 
     <script>
+
+        (function(passengerStatus, $, undefined) {
+            //Accepted Property
+            passengerStatus.accepted = "{{ 'accepted' | paxLabel }}";
+            //Waitlist Property
+            passengerStatus.waitlist = "{{ 'waitlist' | paxLabel }}";
+            //Free Property
+            passengerStatus.free = "{{ 'free' | paxLabel }}";
+
+
+        }( window.passengerStatus = window.passengerStatus || {}, jQuery ));
+
         $(document).ready(function () {
 
                 // Promote Popup
@@ -203,7 +216,7 @@
                             $('#showWaitlist').css("color", "{{ brand.primaryColor }}");
                             $('#showFree').css("color", "{{ brand.primaryColor }}");
                             $('#showOrganizers').css("color", "{{ brand.primaryColor }}");
-                            $('#card-title').html('Accepted');
+                            $('#card-title').html('{{ "accepted" | paxLabel }}');
                             break;
                         case 'showWaitlist':
                             $('.accepted, .organizers, .free, .organizer-cta-card').slideUp(400, function(){
@@ -214,7 +227,7 @@
                             $('#showWaitlist').css("color", "{{ brand.secondaryColor }}");
                             $('#showFree').css("color", "{{ brand.primaryColor }}");
                             $('#showOrganizers').css("color", "{{ brand.primaryColor }}");
-                            $('#card-title').html('Wait list');
+                            $('#card-title').html('{{ "waitlist" | paxLabel }}');
                             break;
                         case 'showFree':
                             $('.accepted, .waitlist, .organizers,  .organizer-cta-card').slideUp(400, function(){
@@ -225,7 +238,7 @@
                             $('#showWaitlist').css("color", "{{ brand.primaryColor }}");
                             $('#showFree').css("color", "{{ brand.secondaryColor }}");
                             $('#showOrganizers').css("color", "{{ brand.primaryColor }}");
-                            $('#card-title').html('Free');
+                            $('#card-title').html('{{ "free" | paxLabel }}');
                             break;
                         case 'showOrganizers':
                             $('.accepted, .waitlist, .free,  .passenger-cta-card').slideUp(400, function(){
@@ -236,7 +249,7 @@
                             $('#showWaitlist').css("color", "{{ brand.primaryColor }}");
                             $('#showFree').css("color", "{{ brand.primaryColor }}");
                             $('#showOrganizers').css("color", "{{ brand.secondaryColor }}");
-                            $('#organizer-card-title').html('Organisers');
+                            $('#organizer-card-title').html('{{ "passenger.labels.organizer" | trans }}');
                             break;
                         default:
                             // do nothing
@@ -272,7 +285,7 @@
                         // increment organizer count
                         $('#organizerPassengers').html('(' + response[3] + ')')
                         // add an organizer card with waitlist and pending invite status
-                        $('#organizer-cards-wrapper').prepend('<div class="tour-edit mdl-shadow--2dp" style="background-color:white; margin-bottom: 0;"><div class="mdl-card__supporting-text mdl-card--border" style="color:grey;"><div style="float: left; color: grey;"><span class="tui-text-avatar mdl-typography--headline">Tt</span><p style="display: inline-block"><strong>' + response[1] + '&nbsp;</strong></p><p style="display: inline-block"><strong>' + response[2] + '&nbsp;</strong></p><p style="display: inline-block"><strong>(Invited - Not yet responded.)</strong></p><p style="display: inline-block" class="organizer-Not Travelling "></p><p><a href="' + response[0] + '">' + response[0] + '</a></p></div></div></div>');
+                        $('#organizer-cards-wrapper').prepend('<div class="tour-edit mdl-shadow--2dp" style="background-color:white; margin-bottom: 0;"><div class="mdl-card__supporting-text mdl-card--border" style="color:grey;"><div style="float: left; color: grey;"><span class="tui-text-avatar mdl-typography--headline">' + response[1].charAt(0) + response[1].charAt(0) + '</span><p style="display: inline-block"><strong>' + response[1] + '&nbsp;</strong></p><p style="display: inline-block"><strong>' + response[2] + '&nbsp;</strong></p><p style="display: inline-block"><strong>(Invited - Not yet responded.)</strong></p><p style="display: inline-block" class="organizer-Not Travelling "></p><p><a href="' + response[0] + '">' + response[0] + '</a></p></div></div></div>');
                         $('#loader').hide();
                     },
                     error : function (response) {

@@ -34,6 +34,13 @@ $(document).ready(function () {
             waitlistLink.css("display", "block");
             var freeLink = $('a.move-to-free').attr('passenger', passengerId);
             freeLink.css("display", "block");
+            var statusIcon = passDiv.find("i.material-icons.statusicon");
+            console.log(statusIcon);
+                statusIcon.html('verified_user');
+                statusIcon.parent('a').attr("title", passengerStatus.accepted);
+                statusIcon.parent('a').removeClass('waitlisticon', 'freeicon');
+                statusIcon.parent('a').addClass('acceptedicon');
+
             });
     });
 
@@ -71,6 +78,11 @@ $(document).ready(function () {
             waitlistLink.css("display", "none");
             var freeLink = $('a.move-to-free').attr('passenger', passengerId);
             freeLink.css("display", "none");
+            var statusIcon = passDiv.find("i.material-icons.statusicon");
+            statusIcon.html('list');
+            statusIcon.parent('a').attr("title",  passengerStatus.waitlist);
+            statusIcon.parent('a').removeClass('acceptedicon', 'freeicon');
+            statusIcon.parent('a').addClass('waitlisticon');
         });
     });
 
@@ -108,6 +120,11 @@ $(document).ready(function () {
             waitlistLink.css("display", "block");
             var freeLink = $('a.move-to-free').attr('passenger', passengerId);
             freeLink.css("display", "none");
+            var statusIcon = passDiv.find("i.material-icons.statusicon");
+            statusIcon.html('money_off');
+            statusIcon.parent('a').attr("title",  passengerStatus.free);
+            statusIcon.parent('a').removeClass('acceptedicon', 'waitlisticon');
+            statusIcon.parent('a').addClass('freeicon');
         });
     });
 

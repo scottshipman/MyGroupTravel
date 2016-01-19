@@ -533,12 +533,12 @@
         {% endif %}
 
         //Passport Info progress bar
-        {#{% if passPercent is defined %}#}
+        {% if passPercent is defined %}
             var passPercent = {{ passPercent }};
             document.querySelector('#passport-progress').addEventListener('mdl-componentupgraded', function() {
                 this.MaterialProgress.setProgress(passPercent);
             });
-        {#{% endif %}#}
+        {% endif %}
 
         if ($("#completed-title").next().is('script')) {
             $("#completed-title").css({"display": "none"});

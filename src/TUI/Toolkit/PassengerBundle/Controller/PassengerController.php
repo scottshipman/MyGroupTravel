@@ -1072,4 +1072,12 @@ class PassengerController extends Controller
         $response->setStatusCode('400');
         return $response;
     }
+
+    public function getPassengerStatusLabel($status) {
+        if ($this->getParameter($status . "_label")) {
+            return $this->getParameter($status . "_label");
+        } else {
+            return ucfirst($status);
+        }
+    }
 }

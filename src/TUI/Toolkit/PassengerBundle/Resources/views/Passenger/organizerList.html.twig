@@ -27,21 +27,22 @@ variables available to this twig:
         {% endif %}
 
         {% if organizer[0].status == "accepted" %}
-            {% set statusicon =  '<a class="' ~ organizer[0].status ~ 'icon" title = "' ~ organizer[0].status ~ '"><i class="material-icons">verified_user</i></a>'%}
+            {% set statusicon =  '<a class="' ~ organizer[0].status ~ 'icon" title = "' ~ organizer[0].status | paxLabel ~ '"><i class="material-icons statusicon">verified_user</i></a>'%}
         {% elseif  organizer[0].status == "Pending Invite"%}
-            {% set statusicon =  '<a class="' ~ organizer[0].status ~ 'icon" title = "' ~ organizer[0].status ~ '"><i class="material-icons">live_help</i></a>'%}
+            {% set statusicon =  '<a class="' ~ organizer[0].status ~ 'icon" title = "' ~ organizer[0].status | paxLabel ~ '"><i class="material-icons">live_help</i></a>'%}
         {% else %}
-            {% set statusicon = '<a class="' ~ organizer[0].status ~ 'icon" title = "' ~ organizer[0].status ~ '"><i class="material-icons">list</i></a>'%}
+            {% set statusicon = '<a class="' ~ organizer[0].status ~ 'icon" title = "' ~ organizer[0].status  | paxLabel ~ '"><i class="material-icons statusicon">list</i></a>'%}
         {% endif %}
 
         {% if organizer[0].free == 1 %}
-            {% set freeicon = '<a class="freeicon" title = "Free"><i class="material-icons">money_off</i></a>' %}
+            {% set freelabel = "free" | paxLabel %}
+            {% set freeicon = '<a class="freeicon" title = "' ~ freelabel ~ '"><i class="material-icons statusicon">money_off</i></a>' %}
             {% set statusicon = '' %}
         {% else %}
             {% set freeicon = '' %}
         {% endif %}
 
-        <div class="tour-edit mdl-shadow--2dp" style="background-color:white; margin-bottom: 0;">
+        <div class="tour-edit mdl-shadow--2dp" style="background-color:white; margin-bottom: 0;" passenger="{{ organizer[0].id }}">
             <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
                 <div style="float: left; color: grey;" class="pcardname">
                     {% if organizer[1].media %}
