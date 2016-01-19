@@ -1271,6 +1271,7 @@ class TourController extends Controller
             'brand' => $brand,
             'waitlist' => $waitlist,
             'accepted' => $accepted,
+            'free' => $free,
             'completedPassengerData' => $completedPassengerData,
             'medical' => $medical,
             'totalOrganizerCount' => $totalOrganizerCount,
