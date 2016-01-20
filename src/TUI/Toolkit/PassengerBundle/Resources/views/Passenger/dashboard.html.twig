@@ -38,10 +38,10 @@
         <div class="tour-show-left-column">
             <ul class="tour-show-submenu">
                 <li><strong>{% trans %}passenger.labels.passengers_for{% endtrans %} {{ tour.name|capitalize }}</strong></li>
-                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" id="showAccepted"><strong>{{ "accepted" | paxLabel }} <span id="acceptedPassengers">({{ acceptedcount - freecount }})</span></strong></a></li>
-                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" id="showWaitlist"><strong>{{ "waitlist" | paxLabel }} <span id="waitlistPassengers">({{ waitlistcount }})</span></strong></a></li>
-                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" id="showFree"><strong>{{ "free" | paxLabel }} <span id="freePassengers">({{ freecount }})</span></strong></a></li>
-                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" id="showOrganizers"><strong>{% trans %}passenger.labels.organizer{% endtrans %} <span id="organizerPassengers">({{ organizerscount }})</span></strong></a></li>
+                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" data-id="showAccepted"><strong>{{ "accepted" | paxLabel }} <span id="acceptedPassengers">({{ acceptedcount - freecount }})</span></strong></a></li>
+                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" data-id="showWaitlist"><strong>{{ "waitlist" | paxLabel }} <span id="waitlistPassengers">({{ waitlistcount }})</span></strong></a></li>
+                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" data-id="showFree"><strong>{{ "free" | paxLabel }} <span id="freePassengers">({{ freecount }})</span></strong></a></li>
+                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" data-id="showOrganizers"><strong>{% trans %}passenger.labels.organizer{% endtrans %} <span id="organizerPassengers">({{ organizerscount }})</span></strong></a></li>
             </ul>
 
             <div class="tour-edit-organizer-left">
@@ -171,11 +171,18 @@
             passengerStatus.waitlist = "{{ 'waitlist' | paxLabel }}";
             //Free Property
             passengerStatus.free = "{{ 'free' | paxLabel }}";
+            //Organizer property
+            passengerStatus.organizer = "{{ 'passenger.labels.organizer' | trans }}";
 
 
         }( window.passengerStatus = window.passengerStatus || {}, jQuery ));
 
         $(document).ready(function () {
+            if( window.location.hash ) {
+                var hashFilter = window.location.hash;
+                // Fragment exists
+                filterPassengers(hashFilter.substring(1));
+            }
 
                 // Promote Popup
                 $(document).on('click', '#invite-passengers', function (e) {
@@ -206,55 +213,9 @@
 
                 $(document).on('click', '.passenger-filter', function (e){
                     e.preventDefault();
-                    var elemID = this.id;
-                    switch(elemID) {
-                        case 'showAccepted':
-                            $('.free, .organizers, .waitlist, .organizer-cta-card').slideUp(400, function(){
-                                $('.accepted, .passenger-cta-card').slideDown(400);
-                            });
-                            $('#showAccepted').css("color", "{{ brand.secondaryColor }}");
-                            $('#showWaitlist').css("color", "{{ brand.primaryColor }}");
-                            $('#showFree').css("color", "{{ brand.primaryColor }}");
-                            $('#showOrganizers').css("color", "{{ brand.primaryColor }}");
-                            $('#card-title').html('{{ "accepted" | paxLabel }}');
-                            break;
-                        case 'showWaitlist':
-                            $('.accepted, .organizers, .free, .organizer-cta-card').slideUp(400, function(){
-                                $('.waitlist, .passenger-cta-card').slideDown(400);
-                            });
-
-                            $('#showAccepted').css("color", "{{ brand.primaryColor }}");
-                            $('#showWaitlist').css("color", "{{ brand.secondaryColor }}");
-                            $('#showFree').css("color", "{{ brand.primaryColor }}");
-                            $('#showOrganizers').css("color", "{{ brand.primaryColor }}");
-                            $('#card-title').html('{{ "waitlist" | paxLabel }}');
-                            break;
-                        case 'showFree':
-                            $('.accepted, .waitlist, .organizers,  .organizer-cta-card').slideUp(400, function(){
-                                $('.free, .passenger-cta-card').slideDown(400);
-                            });
-
-                            $('#showAccepted').css("color", "{{ brand.primaryColor }}");
-                            $('#showWaitlist').css("color", "{{ brand.primaryColor }}");
-                            $('#showFree').css("color", "{{ brand.secondaryColor }}");
-                            $('#showOrganizers').css("color", "{{ brand.primaryColor }}");
-                            $('#card-title').html('{{ "free" | paxLabel }}');
-                            break;
-                        case 'showOrganizers':
-                            $('.accepted, .waitlist, .free,  .passenger-cta-card').slideUp(400, function(){
-                                $('.organizers, .organizer-cta-card').slideDown(400);
-                            });
-
-                            $('#showAccepted').css("color", "{{ brand.primaryColor }}");
-                            $('#showWaitlist').css("color", "{{ brand.primaryColor }}");
-                            $('#showFree').css("color", "{{ brand.primaryColor }}");
-                            $('#showOrganizers').css("color", "{{ brand.secondaryColor }}");
-                            $('#organizer-card-title').html('{{ "passenger.labels.organizer" | trans }}');
-                            break;
-                        default:
-                            // do nothing
-                            break;
-                    }
+                    var elemID = this.getAttribute('data-id');
+                    window.location.hash = elemID;
+                    filterPassengers(elemID);
                 });
 
                 // toggle invite form display
