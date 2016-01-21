@@ -57,6 +57,10 @@ class PassengerService
         return $result;
     }
 
+
+    /*
+     * Get Pending Invite Organizers
+     */
     public function getOrganizers($tourId){
 
         $organizers=array();
@@ -74,9 +78,11 @@ class PassengerService
         $query = $qb->getQuery();
         $results = $query->getResult();
 
-        foreach($results as $result){
-            if($result->getUser())
-            {$organizers[] = $result->getUser();
+        foreach($results as $result) {
+            if ($orgUser = $result->getUser()) {
+                if ($orgUser->isEnabled() == FALSE) {
+                    $organizers[] = $result->getUser();
+                }
             }
         }
 
