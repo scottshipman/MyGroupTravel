@@ -1653,7 +1653,7 @@ class UserController extends Controller
         $permission = $em->getRepository('PermissionBundle:Permission')->findBy(array('user' => $user[0]));
 
           if(empty($permission)) {
-              $role = 'participant';
+              $role = 'parent';
           } else {
              $role = $permission[0]->getGrants();
           }
@@ -1664,7 +1664,7 @@ class UserController extends Controller
               $msg = $this->get('translator')->trans('user.activate.assistant');
           }
 
-        if ($role == 'participant' ){
+        if ($role == 'parent' ){
           $msg = $this->get('translator')->trans('user.activate.participant');
         }
       }

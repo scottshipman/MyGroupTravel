@@ -1,6 +1,6 @@
 {% extends '::site-base.html.twig' %}
 {% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
-{% set spotsRemaining = tour.payingPlaces - acceptedcount %}
+{% set spotsRemaining = tour.payingPlaces - (statusCounts.passenger.accepted + statusCounts.organizer.accepted)  %}
 
 {% block title %}
     {% if is_granted("ROLE_BRAND") %}
@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block page_title %}
-    <span>{% trans %}passenger.page_title.index{% endtrans %}</span>
+    <span xmlns="http://www.w3.org/1999/html">{% trans %}passenger.page_title.index{% endtrans %}</span>
 {% endblock %}
 
 {% block page_title_menu %}
@@ -36,12 +36,22 @@
     <div class="tour-show-wrapper site-show" entityId="{{ tour.id }}">
 
         <div class="tour-show-left-column">
-            <ul class="tour-show-submenu">
-                <li><strong>{% trans %}passenger.labels.passengers_for{% endtrans %} {{ tour.name|capitalize }}</strong></li>
-                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" data-id="showAccepted"><strong>{{ "accepted" | paxLabel }} <span id="acceptedPassengers">({{ acceptedcount - freecount }})</span></strong></a></li>
-                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" data-id="showWaitlist"><strong>{{ "waitlist" | paxLabel }} <span id="waitlistPassengers">({{ waitlistcount }})</span></strong></a></li>
-                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" data-id="showFree"><strong>{{ "free" | paxLabel }} <span id="freePassengers">({{ freecount }})</span></strong></a></li>
-                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" data-id="showOrganizers"><strong>{% trans %}passenger.labels.organizer{% endtrans %} <span id="organizerPassengers">({{ organizerscount }})</span></strong></a></li>
+
+            <h3>{{ tour.name|capitalize }}</h3>
+            <a href="" style="float:right;" class="passenger-filter" data-id="showEveryone"><i class="material-icons md-18">undo</i> {% trans %} passenger.labels.show-everyone{% endtrans %}</a><br>
+            <div class="list-header" style="color: {{ brand.secondaryColor }}"><i class="material-icons">flight_takeoff</i> {% trans %} passenger.labels.passengers_for{% endtrans %}</div>
+            <ul class="tour-show-submenu list-indent">
+                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" data-id="showAllPassengers"><strong>{% trans %}passenger.labels.all-passengers{% endtrans %} <span id="allPassengers">({{ statusCounts.passenger.accepted + statusCounts.passenger.waitlist + statusCounts.passenger.free }})</span></strong></a></li>
+                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" data-id="showAcceptedPassengers"><strong>{{ "accepted" | paxLabel }} <span id="acceptedPassengers">({{ statusCounts.passenger.accepted }})</span></strong></a></li>
+                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" data-id="showWaitlistPassengers"><strong>{{ "waitlist" | paxLabel }} <span id="waitlistPassengers">({{ statusCounts.passenger.waitlist }})</span></strong></a></li>
+                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" data-id="showFreePassengers"><strong>{{ "free" | paxLabel }} <span id="freePassengers">({{ statusCounts.passenger.free}})</span></strong></a></li>
+            </ul>
+            <div class="list-header" style="color: {{ brand.secondaryColor }}"><i class="material-icons">group_add</i> {% trans %} passenger.labels.organizers_for{% endtrans %}</div>
+            <ul class="tour-show-submenu list-indent">
+                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" data-id="showAllOrganizers"><strong>{% trans %}passenger.labels.all-organizers{% endtrans %} <span id="allOrganizers">({{ statusCounts.organizer.accepted + statusCounts.organizer.waitlist + statusCounts.organizer.free }})</span></strong></a></li>
+                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" data-id="showAcceptedOrganizers"><strong>{{ "accepted" | paxLabel }} <span id="acceptedOrganizers">({{ statusCounts.organizer.accepted  }})</span></strong></a></li>
+                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" data-id="showWaitlistOrganizers"><strong>{{ "waitlist" | paxLabel }} <span id="waitlistOrganizers">({{ statusCounts.organizer.waitlist  }})</span></strong></a></li>
+                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" data-id="showFreeOrganizers"><strong>{{ "free" | paxLabel }} <span id="freeOrganizers">({{ statusCounts.organizer.free  }})</span></strong></a></li>
             </ul>
 
             <div class="tour-edit-organizer-left">
@@ -94,6 +104,7 @@
             </div>
                 {% for passenger in passengers %}
 
+                    {% set signedUp = 'Signed up on ' ~ passenger[0].signUpDate|date(format)  %}
                     {% if passenger[0].status == "accepted" %}
                         {% set statusicon =  '<a class="' ~ passenger[0].status ~ 'icon" title = "' ~ passenger[0].status | paxLabel ~ '"><i class="material-icons statusicon">verified_user</i></a>'%}
                         {% set status = 'accepted' %}
@@ -102,10 +113,21 @@
                         {% set status = 'waitlist' %}
                     {% endif %}
 
-                    {% if passenger[2] is sameas(TRUE) %}
+                    {% if passenger[2] is sameas(TRUE) %} {# is this an organizer? #}
                         {% set organizericon = '<a class="organizer-card" title = "Organizer"><i class="material-icons">group_add</i></a>' %}
+                        {% set paxClass = "organizers" %}
+                        {% if tour.organizer.id == passenger[1].id %}
+                            {% set signedUp = 'passenger.labels.primary-organizer' | trans %}
+                        {% else %}
+                            {% if passenger[1].enabled is sameas(false) %} {# Pending Invite #}
+                                {% set statusicon = '<a class="' ~ passenger[0].status ~ 'icon" title = "' ~ passenger[0].status | paxLabel ~ '"><i class="material-icons">live_help</i></a>' %}
+                                {% set signedUp = 'passenger.labels.invite-pending' | trans %}  {% endif %}
+                            {% if passenger[1].enabled is sameas(true) %}
+                                {% set signedUp = 'passenger.labels.assistant-organizer' | trans %}  {% endif %}
+                        {% endif %}
                     {% else %}
                         {% set organizericon = '' %}
+                        {% set paxClass = "passengers" %}
                     {% endif %}
 
                     {% if passenger[0].free == 1 %}
@@ -118,7 +140,7 @@
                         {% set freeClass = '' %}
                         {% set freeicon = '' %}
                     {% endif %}
-                    <div class="{{ status }} {{ freeClass }} tour-edit mdl-shadow--2dp" style="background-color:white; margin-bottom: 0;" passenger="{{ passenger[0].id }}">
+                    <div class="{{ status }} {{ freeClass }} {{ paxClass }} tour-edit mdl-shadow--2dp" style="background-color:white; margin-bottom: 0;" passenger="{{ passenger[0].id }}">
                         <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
                             <div style="float: left; color: grey;" class="pcardname">
                             {% if passenger[0].media %}
@@ -131,20 +153,21 @@
                             <p style="display: inline-block"><strong>{{ passenger[0].fName }}</strong></p>
                             <p style="display: inline-block"><strong>{{ passenger[0].lName }}</strong></p>
                             <p style="display: inline-block"><strong><a href="mailto:{{ passenger[1].email }}">{{ passenger[1].email }}</a></strong></p>
-                            <label style="display: inline-block; margin-left: 63px; min-width: 100%;">{{ statusicon | raw }} {{ freeicon | raw }}{{ organizericon | raw }}Signed up on {{ passenger[0].signUpDate|date(format) }}</label>
+                            <label style="display: inline-block; margin-left: 63px; min-width: 100%;">{{ statusicon | raw }} {{ freeicon | raw }}{{ organizericon | raw }} {{ signedUp }}</label>
                             </div>
-                            <button style="position: absolute; right: 20px; color:grey; margin-top:10px;" id="passenger-actions-menu-drop-{{ passenger[0].id }}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
-                                <i class="material-icons">more_vert</i>
-                            </button>
-                            {% embed "PassengerBundle:Passenger:passengerActionsMenu.html.twig" %}{% endembed %}
-                           {#{% embed "PassengerBundle:Passenger:passengerActionsMenu.html.twig" %}{% endembed %}#}
+                            {% if  passenger[0].status != "Pending Invite"%}
+                                <button style="position: absolute; right: 20px; color:grey; margin-top:10px;" id="passenger-actions-menu-drop-{{ passenger[0].id }}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+                                    <i class="material-icons">more_vert</i>
+                                </button>
+                                {% embed "PassengerBundle:Passenger:passengerActionsMenu.html.twig" %}{% endembed %}
+                            {% endif %}
                         </div>
 
                     </div>
                 {% endfor %}
 
                 <!-- render the organizers -->
-                {% embed "PassengerBundle:Passenger:organizerList.html.twig" %} {% endembed %}
+                {#{% embed "PassengerBundle:Passenger:organizerList.html.twig" %} {% endembed %}#}
 
                 <div style="clear: both; height: 150px;"></div>
             </div>
@@ -173,6 +196,13 @@
             passengerStatus.free = "{{ 'free' | paxLabel }}";
             //Organizer property
             passengerStatus.organizer = "{{ 'passenger.labels.organizer' | trans }}";
+            passengerStatus.passenger = "{{ 'passenger.labels.passenger' | trans }}";
+            passengerStatus.all = "{{ 'passenger.labels.passenger_list' | trans }}";
+
+            // Colors
+            passengerStatus.primaryColor = "{{ brand.primaryColor }}";
+            passengerStatus.secondaryColor = "{{ brand.secondaryColor }}";
+            passengerStatus.tertiaryColor = "{{ brand.tertiaryColor }}";
 
 
         }( window.passengerStatus = window.passengerStatus || {}, jQuery ));

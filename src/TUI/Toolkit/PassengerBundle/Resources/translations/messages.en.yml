@@ -56,13 +56,17 @@ passenger:
 
     labels:
         passenger: Passenger
-        passengers_for: Passengers For
+        show-everyone: Clear Filters
+        passengers_for: Passengers
+        organizers_for: Organizers
+        all-passengers: All Passengers
+        all-organizers: All Organizers
         passenger_for: Passenger For
         waitlist: Wait List
         accepted: Accepted
         free: Free
         organizer: Organisers
-        passenger_list: Passenger List
+        passenger_list: All Participants List
         add_paying: Add Paying Passengers
         remaining: Remaining
         welcome: Welcome to the passenger dashboard.  Here you can invite, add, and manage all of your passengers.
