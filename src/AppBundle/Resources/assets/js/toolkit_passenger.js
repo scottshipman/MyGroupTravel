@@ -85,13 +85,15 @@ function filterPassengers(elemID) {
         // response = 0 : passenger object
         //            1 : statusCounts (organizer=>accepted,waitlist,free; passenger=>accepted,waitlist,free)
         //            2 : payingPLaces (int)
-        //            3 : passengers array
+        //            3 : freePlaces (int)
+        //            4 : passengers array
 
 
         //$("#loader").css("display", "none");
         var passDiv = $('div[passenger="'+paxId+'"]');
         passDiv.slideUp(400);
-        var remainingSpots = response[2] - (response[1]['organizer']['accepted'] + response[1]['passenger']['accepted']);
+        var payingSpots = response[2] - (response[1]['organizer']['accepted'] + response[1]['passenger']['accepted']);
+        var freeSpots = response[3] - (response[1]['organizer']['free'] + response[1]['passenger']['free']);
         var organizerAll = (response[1]['organizer']['accepted'] + response[1]['organizer']['waitlist'] + response[1]['organizer']['free']);
         var passengerAll = (response[1]['passenger']['accepted'] + response[1]['passenger']['waitlist'] + response[1]['passenger']['free']);
         $("#allPassengers").html('(' + passengerAll + ')');
@@ -102,7 +104,8 @@ function filterPassengers(elemID) {
         $("#acceptedOrganizers").html('(' + response[1]['organizer']['accepted'] + ')');
         $("#waitlistOrganizers").html('(' + response[1]['organizer']['waitlist'] + ')');
         $("#freeOrganizers").html('(' + response[1]['organizer']['free'] + ')');
-        $(".spots-remaining").html(remainingSpots);
+        $(".payingspots-remaining").html(payingSpots);
+        $(".freespots-remaining").html(freeSpots);
         location.reload(true);
     }
 
