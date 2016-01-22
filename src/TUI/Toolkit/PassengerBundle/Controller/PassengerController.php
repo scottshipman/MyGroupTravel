@@ -522,32 +522,23 @@ class PassengerController extends Controller
             }
         }
 
-
-
         $em = $this->getDoctrine()->getManager();
         $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
-
-        //Get Waitlist Passengers
-        $waitList = $this->get("passenger.actions")->getPassengersByStatus('waitlist', $tourId);
-        $waitListCount = count($waitList);
-
-        //Get accepted passengers
-        $accepted = $this->get("passenger.actions")->getPassengersByStatus('accepted', $tourId);
-        $acceptedCount = count($accepted);
-
-        //Get free passengers
-        $free = $this->get("passenger.actions")->getPassengersByStatus('free', $tourId);
-        $freeCount = count($free);
 
         //combine all lists and get parents
         $all = $this->get("passenger.actions")->getPassengersByStatus('all', $tourId);
         $passengers = $this->addPassengerParents($all, $em);
 
-        //Get organizer list
+        // get counts of status for passengers and organizers
+        $participantCounts = $this->getParticipantCounts($passengers);
+
+        //Get Pending Invite organizer list (have no passenger object created yet so we'll fake it)
         $organizers = $this->get("passenger.actions")->getOrganizers($tourId);
-        array_unshift($organizers, $tour->getOrganizer());
-        $organizersCount = count($organizers);
+        //array_unshift($organizers, $tour->getOrganizer());
         $organizersObjects = $this->addOrganizerPassengers($organizers, $tourId, $em);
+
+        // merge all records
+        $passengers = array_merge($passengers, $organizersObjects);
 
         //brand stuff
         $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
@@ -564,11 +555,7 @@ class PassengerController extends Controller
         return $this->render('PassengerBundle:Passenger:dashboard.html.twig', array(
             'entity' => $tour, // just to re-use the tour menu which relies on a variable called entity
             'tour' => $tour,
-            'waitlistcount' => $waitListCount,
-            'acceptedcount' => $acceptedCount,
-            'freecount' => $freeCount,
-            'organizerscount' => $organizersCount,
-            'organizerobjects' => $organizersObjects,
+            'statusCounts' => $participantCounts,
             'brand' => $brand,
             'passengers' => $passengers
         ));
@@ -646,11 +633,58 @@ class PassengerController extends Controller
                     }
                 }
 
+            } else {
+                // need to add name data to fake passenger data
+                $passengerObject->setfName($organizer->getFirstName());
+                $passengerObject->setlname($organizer->getLastName());
+
             }
             $combinedObjects[]= array($passengerObject, $organizer, $isOrganizer);
         }
 
         return $combinedObjects;
+    }
+
+    /*
+     * Get a count for each passenger and organizer statuses
+     * @param $passengers an array of passenger and user objects, with a third param for isOrganizer
+     * call this after calling addPassengerParents to create combined array
+     */
+    public function getParticipantCounts($passengers)
+    {
+        $count=array(
+            'organizer'=>array(
+                'accepted' => 0,
+                'waitlist' => 0,
+                'free' => 0,
+            ),
+            'passenger' => array(
+                'accepted' => 0,
+                'waitlist' => 0,
+                'free' => 0,
+            ),
+        );
+
+        foreach($passengers as $passenger) {
+            //loop to see if organizer
+            if($passenger[2]===true){
+                $category = 'organizer';
+            } else {
+                $category = 'passenger';
+            }
+
+            if($passenger[0]->getStatus() == 'accepted' && $passenger[0]->getFree() == FALSE) {
+                $count[$category]['accepted'] ++;
+            }
+            if($passenger[0]->getStatus() == 'waitlist') {
+                $count[$category]['waitlist'] ++;
+            }
+            if($passenger[0]->getFree() == TRUE) {
+                $count[$category]['free'] ++;
+            }
+        }
+
+        return $count;
     }
 
     /**
@@ -707,25 +741,12 @@ class PassengerController extends Controller
         $em->persist($passenger);
         $em->flush();
 
-        //Get Waitlist Passengers
-        $waitList = $this->get("passenger.actions")->getPassengersByStatus('waitlist', $tourId);
-        $waitListCount = count($waitList);
-
-        //Get accepted passengers
-        $accepted = $this->get("passenger.actions")->getPassengersByStatus('accepted', $tourId);
-        $acceptedCount = count($accepted);
-
-        //Get free passengers
-        $free = $this->get("passenger.actions")->getPassengersByStatus('free', $tourId);
-        $freeCount = count($free);
-
         //combine all lists and get parents
         $all = $this->get("passenger.actions")->getPassengersByStatus('all', $tourId);
         $passengers = $this->addPassengerParents($all, $em);
 
-        //Get organizer list
-        $organizers = $this->get("passenger.actions")->getOrganizers($tourId);
-        $organizersCount = count($organizers);
+        // get counts of status for passengers and organizers
+        $participantCounts = $this->getParticipantCounts($passengers);
 
         //brand stuff
         $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
@@ -742,11 +763,8 @@ class PassengerController extends Controller
 
         $data = array (
             $passenger,
-            $acceptedCount,
-            $waitListCount,
-            $freeCount,
+            $participantCounts,
             $payingPlaces,
-            $organizersCount,
             $passengers,
         );
 
@@ -772,25 +790,12 @@ class PassengerController extends Controller
         $em->persist($passenger);
         $em->flush();
 
-        //Get Waitlist Passengers
-        $waitList = $this->get("passenger.actions")->getPassengersByStatus('waitlist', $tourId);
-        $waitListCount = count($waitList);
-
-        //Get accepted passengers
-        $accepted = $this->get("passenger.actions")->getPassengersByStatus('accepted', $tourId);
-        $acceptedCount = count($accepted);
-
-        //Get free passengers
-        $free = $this->get("passenger.actions")->getPassengersByStatus('free', $tourId);
-        $freeCount = count($free);
-
         //combine all lists and get parents
         $all = $this->get("passenger.actions")->getPassengersByStatus('all', $tourId);
         $passengers = $this->addPassengerParents($all, $em);
 
-        //Get organizer list
-        $organizers = $this->get("passenger.actions")->getOrganizers($tourId);
-        $organizersCount = count($organizers);
+        // get counts of status for passengers and organizers
+        $participantCounts = $this->getParticipantCounts($passengers);
 
         //brand stuff
         $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
@@ -807,11 +812,8 @@ class PassengerController extends Controller
 
         $data = array (
             $passenger,
-            $acceptedCount,
-            $waitListCount,
-            $freeCount,
+            $participantCounts,
             $payingPlaces,
-            $organizersCount,
             $passengers,
         );
 
@@ -836,25 +838,12 @@ class PassengerController extends Controller
         $em->persist($passenger);
         $em->flush();
 
-        //Get Waitlist Passengers
-        $waitList = $this->get("passenger.actions")->getPassengersByStatus('waitlist', $tourId);
-        $waitListCount = count($waitList);
-
-        //Get accepted passengers
-        $accepted = $this->get("passenger.actions")->getPassengersByStatus('accepted', $tourId);
-        $acceptedCount = count($accepted);
-
-        //Get free passengers
-        $free = $this->get("passenger.actions")->getPassengersByStatus('free', $tourId);
-        $freeCount = count($free);
-
         //combine all lists and get parents
         $all = $this->get("passenger.actions")->getPassengersByStatus('all', $tourId);
         $passengers = $this->addPassengerParents($all, $em);
 
-        //Get organizer list
-        $organizers = $this->get("passenger.actions")->getOrganizers($tourId);
-        $organizersCount = count($organizers);
+        // get counts of status for passengers and organizers
+        $participantCounts = $this->getParticipantCounts($passengers);
 
         //brand stuff
         $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
@@ -871,11 +860,8 @@ class PassengerController extends Controller
 
         $data = array (
             $passenger,
-            $acceptedCount,
-            $waitListCount,
-            $freeCount,
+            $participantCounts,
             $payingPlaces,
-            $organizersCount,
             $passengers,
         );
 
