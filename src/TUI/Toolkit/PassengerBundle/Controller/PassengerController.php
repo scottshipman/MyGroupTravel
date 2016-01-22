@@ -295,6 +295,9 @@ class PassengerController extends Controller
         // check permissions for who can see passenger
         $currUser = $this->get('security.context')->getToken()->getUser();
         $currRole =  $this->get("permission.set_permission")->getPermission($entity->getTourReference()->getId(), 'tour', $currUser);
+        if ($currRole == null) {
+            $currRole =  $this->get("permission.set_permission")->getPermission($entity->getTourReference()->getId(), 'passenger', $currUser);
+        }
         // is brand or admin
         if(!$this->get('security.context')->isGranted('ROLE_BRAND')){
             // is organizer or assistant of tour

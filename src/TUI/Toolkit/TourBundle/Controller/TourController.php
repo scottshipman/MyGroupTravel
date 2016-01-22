@@ -484,10 +484,17 @@ class TourController extends Controller
             $permission = $this->get("permission.set_permission")->getPermission($id, 'tour', $user->getId());
         }
 
-        if ($securityContext->isGranted('ROLE_BRAND') || in_array('organizer', $permission)) {
+        if ($permission == null && !$securityContext->isGranted('ROLE_BRAND')) {
+            throw $this->createAccessDeniedException('You are not authorized to view this tour!');
+        }
+
+        if ($securityContext->isGranted('ROLE_BRAND')) {
           $editable = TRUE;
         }
 
+        if ($permission != null && in_array(array('organizer', 'assistant'), $permission)) {
+            $editable = TRUE;
+        }
         $em = $this->getDoctrine()->getManager();
 
         $locale = $this->container->getParameter('locale');
