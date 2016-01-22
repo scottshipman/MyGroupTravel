@@ -53,7 +53,7 @@ registration:
             Regards,
             the Team.
 
-# Password resetting
+    # Password resetting
     password_already_requested: The password for this user has already been requested within the last 2 minutes.
     check_email: An email has been sent to %email%. It contains a link you must click to reset your password.
     request:
