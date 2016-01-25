@@ -189,7 +189,7 @@ class QuoteSiteController extends Controller
                 $relatedLength = $relatedLength + count($relatedVersions);
             }
         }
-        if ($relatedLength > 1) {
+        if ($relatedLength > 0) {
             $related = TRUE;
         }
     }
