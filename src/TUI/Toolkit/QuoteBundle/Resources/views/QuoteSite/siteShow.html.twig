@@ -239,14 +239,14 @@
                                 </div>
                             </div>
                         {% endif %}
-                        {% if alternate %}
+                        {% if alternate is sameas (true) %}
                             <div class="site-content-blocks site-content-blocks-item site-content-blocks-size-full">
                                 <div class="inner-wrapper">
                                     {{ render(controller('QuoteBundle:QuoteSite:getQuoteSiblings', {'id':  quoteID  })) }}
                                 </div>
                             </div>
                         {% endif %}
-                        {% if related %}
+                        {% if related is sameas (true) %}
                             <div class="site-content-blocks site-content-blocks-item site-content-blocks-size-full">
                                 <div class="inner-wrapper">
                                     {{ render(controller('QuoteBundle:QuoteSite:getRelatedQuotes', {'id':  quoteID  })) }}
