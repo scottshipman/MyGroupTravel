@@ -2,7 +2,11 @@
 
 <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="passenger-edit-actions-menu-drop-{{ passenger.id }}">
     <span>
+        {% if passengerObject is not defined %}
+        <li><a id ="passenger" href="#" class="mdl-menu__item" passenger="{{ passenger.id }}">{% trans %}passenger.actions.edit_passenger{% endtrans %}</a></li>
+        {% elseif passengerObject is defined %}
         <li><a href="{{ path('manage_passenger_show', { 'id': passenger.id }) }}" class="mdl-menu__item" passenger="{{ passenger.id }}">{% trans %}passenger.actions.edit_passenger{% endtrans %}</a></li>
+        {% endif %}
         {% if parent is defined and parent.enabled == false %}
             <li><a id="passenger-delete" href="{{ path('user_registration_confirmation', { 'id': parent.id }) }}" class="mdl-menu__item">{% trans %}passenger.actions.send-notification{% endtrans %}</a></li>
         {% elseif user is defined and user.enabled == false %}

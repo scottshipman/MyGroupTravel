@@ -10,6 +10,13 @@
     {%  set dtgFinal = 0  %}
 {% endif %}
 
+{# calculate Days Until Expiration #}
+{% if  tour.expiryDate and tour.expiryDate | date ('Y-m-d') > "now - 1 day" | date('Y-m-d') %}
+    {% set dteFinal  = date(tour.expiryDate).diff(date("now - 1 day")).days %}
+{% else %}
+    {%  set dteFinal = 0  %}
+{% endif %}
+
 {% block body -%}
 
 <div class="tour-show-wrapper site-show" entityId="{{ tour.id }}">
@@ -90,7 +97,7 @@
                     {# if there is no expiry, show day till departure #}
                     <div class="profile-list-item item-3 tour-dashboard three-column">
                         {% if tour.tripStatus.name == "Provisional" and tour.expiryDate %}
-                            {% if dteFinal<1 %}
+                            {% if dteFinal< 1 %}
                                 <span class="date-span" style="color:red;"><i class="fa fa-exclamation-circle"> Expired</i></span>
                                 <label>{% trans %}tour.dashboard.expiry{% endtrans %}</label>
                             {% endif %}

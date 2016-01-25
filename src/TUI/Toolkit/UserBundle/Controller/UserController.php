@@ -17,7 +17,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Validator\Constraints\Null;
 
 use TUI\Toolkit\PermissionBundle\Entity\Permission;
+use TUI\Toolkit\UserBundle\Entity\User;
 use TUI\Toolkit\PassengerBundle\Entity\Passenger;
+use TUI\Toolkit\TourBundle\Entity\Tour;
 use TUI\Toolkit\UserBundle\Form\ResettingFormType;
 use TUI\Toolkit\UserBundle\Form\UserType;
 use TUI\Toolkit\UserBundle\Form\AjaxuserType;
@@ -1527,7 +1529,6 @@ class UserController extends Controller
         // if user is brand or admin, list quotes where they are salesAgent or SecondaryContact
         // if user is customer, list quotes by Permission Entity
         $tours = array();
-        $parents = array();
         $data = array();
         $securityContext = $this->get('security.context');
         if ($securityContext->isGranted('ROLE_BRAND')) {
@@ -1549,7 +1550,6 @@ class UserController extends Controller
         } else {
             $em = $this->getDoctrine()->getManager();
             $permissions = $em->getRepository('PermissionBundle:Permission')->findBy(array('user' => $id, 'class' => 'tour'));
-            $passengers = $em->getRepository('PermissionBundle:Permission')->findBy(array('user' => $id, 'class' => 'passenger'));
             // this only returns pointers to tours, so loop through and build tours array
             foreach ($permissions as $permission) {
                 if ($object = $em->getRepository('TourBundle:Tour')->find($permission->getObject())) {
@@ -1558,43 +1558,69 @@ class UserController extends Controller
                     }
                 }
             }
-            foreach ($passengers as $passenger) {
-                if ($object = $em->getRepository('PassengerBundle:Passenger')->find($passenger->getObject())) {
-                    $completedTasks = array();
-                    $tour = $object->getTourReference();
-                    if (!in_array($tour, $parents)) {
-                        $parents[] = $tour;
-                    }
-                    $medical = $object->getMedicalReference();
-                    $dietary = $object->getDietaryReference();
-                    $emergency = $object->getEmergencyReference();
-                    $passport = $object->getPassportReference();
-                    if ($medical != null) {
-                        $medicalObject = $em->getRepository('PassengerBundle:Medical')->find($medical);
-                        $completedTasks[] = $medicalObject;
-                    }
-                    if ($dietary != null) {
-                        $completedTasks[] = $dietary;
-                    }
-                    if ($emergency != null) {
-                        $completedTasks[] = $emergency;
-                    }
-                    if($passport != null){
-                        $completedTasks[] = $passport;
-                    }
-                    $completedTasksCount = count($completedTasks);
-                    $data['completedTasksCount'] = $completedTasksCount;
-                    $data['completedTasks'] = $completedTasks;
-                    $data['passengerObjects'][] = $object;
-                }
-            }
         }
 
         $data['tours'] = $tours;
-        $data['parents'] = $parents;
         $data['locale'] = $locale;
 
         return $this->render('TUIToolkitUserBundle:User:myTours.html.twig', $data);
+    }
+
+
+    public function getToursWithPassengersAction($id){
+        $locale = $this->container->getParameter('locale');
+        // if user is brand or admin, list quotes where they are salesAgent or SecondaryContact
+        // if user is customer, list quotes by Permission Entity
+        $tours = array();
+        $parents = array();
+        $data = array();
+        $em = $this->getDoctrine()->getManager();
+        $permissions = $em->getRepository('PermissionBundle:Permission')->findBy(array('user' => $id, 'class' => 'tour'));
+        $passengers = $em->getRepository('PermissionBundle:Permission')->findBy(array('user' => $id, 'class' => 'passenger', 'grants' => 'parent'));
+        // this only returns pointers to tours, so loop through and build tours array
+        foreach ($permissions as $permission) {
+            if ($object = $em->getRepository('TourBundle:Tour')->find($permission->getObject())) {
+                if ($permission->getGrants() != "parent") {
+                    $tours[] = $object;
+                }
+            }
+        }
+        foreach ($passengers as $passenger) {
+
+            if ($object = $em->getRepository('PassengerBundle:Passenger')->find($passenger->getObject())) {
+                $completedTasks = array();
+                $tourId = $object->getTourReference()->getId();
+                $tour = $em->getRepository('TourBundle:Tour')->find($object->getTourReference()->getId());
+                if (!in_array($tour, $parents)) {
+                    $parents[] = $tour;
+                }
+                $medical = $object->getMedicalReference();
+                $dietary = $object->getDietaryReference();
+                $emergency = $object->getEmergencyReference();
+                $passport = $object->getPassportReference();
+                if ($medical != null) {
+                    $medicalObject = $medical;
+                    $completedTasks[] = $medicalObject;
+                }
+                if ($dietary != null) {
+                    $completedTasks[] = $dietary;
+                }
+                if ($emergency != null) {
+                    $completedTasks[] = $emergency;
+                }
+                if($passport != null){
+                    $completedTasks[] = $passport;
+                }
+                $completedTasksCount = count($completedTasks);
+                $data['completedTasksCount'] = $completedTasksCount;
+                $data['completedTasks'] = $completedTasks;
+                $data['passengerObjects'][] = $object;
+            }
+        }
+        $data['parents'] = $parents;
+        $data['locale'] = $locale;
+
+        return $this->render('TUIToolkitUserBundle:User:myToursWithPassengers.html.twig', $data);
     }
 
     public function getTourPassengersAction($tourId, $parentId){
