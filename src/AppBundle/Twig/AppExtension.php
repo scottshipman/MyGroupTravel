@@ -20,16 +20,30 @@ class AppExtension extends \Twig_Extension {
     public function getFilters() {
         return array(
             new \Twig_SimpleFilter('paxLabel', array($this, 'paxLabel')),
+            new \Twig_SimpleFilter('getRoles', array($this, 'getRoles')),
         );
     }
 
-
+    /*
+     * TWIG usage Ex: {{ 'waitlist' | paxLabel }}
+     */
     public function paxLabel($status) {
         if ($this->container->getParameter($status . "_label")) {
             return ucfirst($this->container->getParameter($status . "_label"));
         } else {
             return ucfirst($status);
         }
+    }
+
+    /*
+     * TWIG usage Ex: {% set role = 'tour' | getRoles(tour.id) %}
+     *            Ex2: {% if 'passenger' | getRoles(passenger.id)=='parent' %}
+     */
+    public function getRoles($class, $objectId) {
+        $user = $this->container->get('security.context')->getToken()->getUser();
+
+        $roles = $this->container->get("permission.set_permission")->getPermission($objectId, $class, $user);
+        return array_shift($roles);
     }
 
     public function getName()
