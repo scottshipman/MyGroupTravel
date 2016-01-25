@@ -235,18 +235,18 @@
                         {% if editable %}
                             <div class="site-content-block-actions status-preview-edit alt-tab-actions">
                                 <div class="edit-icons">
-                                    <i class="alt-hide content-block-item-action fa {% if entity.hideAlt %}fa-eye-slash{% else %}fa-eye{% endif %}" hide="{% if entity.hideAlt %}true{% else %}false{% endif %}" title="{% if entity.hideAlt %}Only visible to Brand Administrators{% else %}Visible to Everyone{% endif %}"></i>
+                               {{ alternate }} {{ related }}     <i class="alt-hide content-block-item-action fa {% if entity.hideAlt %}fa-eye-slash{% else %}fa-eye{% endif %}" hide="{% if entity.hideAlt %}true{% else %}false{% endif %}" title="{% if entity.hideAlt %}Only visible to Brand Administrators{% else %}Visible to Everyone{% endif %}"></i>
                                 </div>
                             </div>
                         {% endif %}
-                        {% if alternate %}
+                        {% if alternate is sameas (true) %}
                             <div class="site-content-blocks site-content-blocks-item site-content-blocks-size-full">
                                 <div class="inner-wrapper">
                                     {{ render(controller('QuoteBundle:QuoteSite:getQuoteSiblings', {'id':  quoteID  })) }}
                                 </div>
                             </div>
                         {% endif %}
-                        {% if related %}
+                        {% if related is sameas (true) %}
                             <div class="site-content-blocks site-content-blocks-item site-content-blocks-size-full">
                                 <div class="inner-wrapper">
                                     {{ render(controller('QuoteBundle:QuoteSite:getRelatedQuotes', {'id':  quoteID  })) }}

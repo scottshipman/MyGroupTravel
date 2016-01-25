@@ -179,7 +179,19 @@ class QuoteSiteController extends Controller
     $query = $qb->getQuery();
     $relatedQuotes = $query->getResult();
     if(count($relatedQuotes) > 1){
-      $related=TRUE;
+        // more than one Quote, now get count of quote versions that Arent current Quote
+        $relatedLength = 0;
+        foreach($relatedQuotes as $relatedQuote) {
+            $rqr = $relatedQuote->getID();
+            if ($rqr != $qr) {
+                $relatedVersions = $em->getRepository('QuoteBundle:QuoteVersion')
+                    ->findBy(array('quoteReference' => $relatedQuote));
+                $relatedLength = $relatedLength + count($relatedVersions);
+            }
+        }
+        if ($relatedLength > 1) {
+            $related = TRUE;
+        }
     }
 
 
