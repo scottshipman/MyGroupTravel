@@ -16,6 +16,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Symfony\Component\Validator\Constraints\Null;
 
+use TUI\Toolkit\UserBundle\Entity\User;
 use TUI\Toolkit\PermissionBundle\Entity\Permission;
 use TUI\Toolkit\UserBundle\Entity\User;
 use TUI\Toolkit\PassengerBundle\Entity\Passenger;

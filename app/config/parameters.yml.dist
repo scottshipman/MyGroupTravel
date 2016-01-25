@@ -34,4 +34,4 @@ parameters:
     accepted_label: accepted
     waitlist_label: waitlist
     free_label: free
-    pending invite_label: pending Invite
+    'pending invite_label': Pending Invite

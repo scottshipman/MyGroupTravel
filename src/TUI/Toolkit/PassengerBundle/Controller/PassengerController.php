@@ -733,6 +733,7 @@ class PassengerController extends Controller
         $em = $this->getDoctrine()->getManager();
         $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
         $payingPlaces = $tour->getPayingPlaces();
+        $freePlaces = $tour->getFreePlaces();
         $passenger = $em->getRepository('PassengerBundle:Passenger')->find($passengerId);
 
         $passenger->setStatus("accepted");
@@ -765,6 +766,7 @@ class PassengerController extends Controller
             $passenger,
             $participantCounts,
             $payingPlaces,
+            $freePlaces,
             $passengers,
         );
 
@@ -781,6 +783,7 @@ class PassengerController extends Controller
         $em = $this->getDoctrine()->getManager();
         $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
         $payingPlaces = $tour->getPayingPlaces();
+        $freePlaces = $tour->getFreePlaces();
         $passenger = $em->getRepository('PassengerBundle:Passenger')->find($passengerId);
 
         $passenger->setStatus("waitlist");
@@ -814,6 +817,7 @@ class PassengerController extends Controller
             $passenger,
             $participantCounts,
             $payingPlaces,
+            $freePlaces,
             $passengers,
         );
 
@@ -830,6 +834,7 @@ class PassengerController extends Controller
         $em = $this->getDoctrine()->getManager();
         $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
         $payingPlaces = $tour->getPayingPlaces();
+        $freePlaces = $tour->getFreePlaces();
         $passenger = $em->getRepository('PassengerBundle:Passenger')->find($passengerId);
 
         $passenger->setStatus("accepted");
@@ -862,6 +867,7 @@ class PassengerController extends Controller
             $passenger,
             $participantCounts,
             $payingPlaces,
+            $freePlaces,
             $passengers,
         );
 

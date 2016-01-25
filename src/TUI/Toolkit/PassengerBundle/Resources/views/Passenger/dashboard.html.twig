@@ -1,6 +1,7 @@
 {% extends '::site-base.html.twig' %}
 {% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
-{% set spotsRemaining = tour.payingPlaces - (statusCounts.passenger.accepted + statusCounts.organizer.accepted)  %}
+{% set payingSpotsRemaining = tour.payingPlaces - (statusCounts.passenger.accepted + statusCounts.organizer.accepted)  %}
+{% set freeSpotsRemaining = tour.freePlaces - (statusCounts.passenger.free + statusCounts.organizer.free)  %}
 
 {% block title %}
     {% if is_granted("ROLE_BRAND") %}
@@ -77,11 +78,21 @@
                 </div>
 
                 <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
-                    <div class="paying-passengers-title"><h3>{% trans %}passenger.labels.add_paying{% endtrans %}</h3></div> <div class="passenger-count"><p style="color: {{ brand.primaryColor }}" class="spots-remaining">{{ spotsRemaining }}</p><p class="spots-remaining-copy"><strong>{% trans %}passenger.labels.remaining{% endtrans %}</strong></p></div>
-                    <p class="passenger-dashboard-copy">{% trans %}passenger.labels.welcome{% endtrans %}</p>
-                    <div style="clear: both"></div>
-                    <a id="invite-passengers" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="#"><i class="fa fa-users"></i>{% trans %}passenger.labels.invite{% endtrans %}</a>
-                    <a id="accept-tour" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="#"><i class="fa fa-user-plus"></i>{% trans %}passenger.labels.add{% endtrans %}</a>
+                    <div style="float:left; width:80%" >
+                        <div class="paying-passengers-title"><h3>{% trans %}passenger.labels.add_paying{% endtrans %}</h3></div>
+                        <p class="passenger-dashboard-copy">{% trans %}passenger.labels.welcome{% endtrans %}</p>
+                        <div style="clear: both"></div>
+                        <a id="invite-passengers" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="#"><i class="fa fa-users"></i>{% trans %}passenger.labels.invite{% endtrans %}</a>
+                        <a id="accept-tour" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="#"><i class="fa fa-user-plus"></i>{% trans %}passenger.labels.add{% endtrans %}</a>
+                    </div>
+                    <div style="float:left;" class="passenger-count">
+                        {# Accepted/Paying Summary #}
+                        <p style="color: {{ brand.primaryColor }}" class="payingspots-remaining spots-remaining">{{ payingSpotsRemaining }}</p>
+                        <p class="spots-remaining-copy"><strong>{% trans %}passenger.labels.remaining{% endtrans %}<br>{{ 'accepted' | paxLabel }}</strong></p>
+                        {# Free Summary #}
+                        <p style="color: {{ brand.primaryColor }}; padding-top:.5em;" class="freespots-remaining spots-remaining">{{ freeSpotsRemaining }}</p>
+                        <p class="spots-remaining-copy"><strong>{% trans %}passenger.labels.remaining{% endtrans %}<br>{{ 'free' | paxLabel }}</strong></p>
+                    </div>
                 </div>
             </div>
 
@@ -93,12 +104,24 @@
                 </div>
 
                 <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
-                    <div class="paying-passengers-title"><h3>{% trans %}passenger.labels.add-organizer{% endtrans %}</h3></div>
-                    <div style="clear:both;">
-                        <a href="#" class="show-invite-form mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons"><i class="fa fa-users"> {% trans %}passenger.actions.invite-organizers{% endtrans %}</i></a>
-                     </div>
+                    <div style="float:left; width:80%" >
+                        <div class="paying-passengers-title"><h3>{% trans %}passenger.labels.add-organizer{% endtrans %}</h3></div>
+                        <div style="clear:both;">
+                            <a href="" class="show-invite-form mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons"><i class="fa fa-users"> {% trans %}passenger.actions.invite-organizers{% endtrans %}</i></a>
+                        </div>
+                    </div>
+                    <div style="float:left;" class="passenger-count">
+                        {# Accepted/Paying Summary #}
+                        <p style="color: {{ brand.primaryColor }}" class="payingspots-remaining spots-remaining">{{ payingSpotsRemaining }}</p>
+                        <p class="spots-remaining-copy"><strong>{% trans %}passenger.labels.remaining{% endtrans %}<br>{{ 'accepted' | paxLabel }}</strong></p>
+                        {# Free Summary #}
+                        <p style="color: {{ brand.primaryColor }}; padding-top:.5em;" class="freespots-remaining spots-remaining">{{ freeSpotsRemaining }}</p>
+                        <p class="spots-remaining-copy"><strong>{% trans %}passenger.labels.remaining{% endtrans %}<br>{{ 'free' | paxLabel }}</strong></p>
+                    </div>
                         {# render the Invite organizer form #}
+                        <div style="clear:both;">
                          {{ render(controller( 'PassengerBundle:Passenger:inviteOrganizer', {'tourId' : tour.id} )) }}
+                        </div>
 
                </div>
             </div>
@@ -250,12 +273,14 @@
 
                 // toggle invite form display
                 $(document).on('click', '.show-invite-form', function (e) {
+                    e.preventDefault();
                     $('.organizer-form-container').slideDown(400);
                     $('.show-invite-form').hide();
 
 
                 });
                  $(document).on('click', '.hide-invite-form', function (e) {
+                    e.preventDefault();
                     $('.organizer-form-container').slideUp(400);
                     $('.show-invite-form').show();
 
