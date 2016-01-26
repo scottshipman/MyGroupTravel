@@ -16,7 +16,8 @@
         </tr>
         <tr>
             <td class="mdl-data-table__cell--non-numeric th-mimic">{% trans %}user.table.label.phone{% endtrans %}</td>
-            <td class="mdl-data-table__cell--non-numeric">{% if entity.phoneNumber %}{{ entity.phoneNumber.nationalNumber }}{% endif %}</td>
+            {#<td class="mdl-data-table__cell--non-numeric">{% if entity.phoneNumber %}{{ entity.phoneNumber.nationalNumber }}{% endif %}</td>#}
+            <td class="mdl-data-table__cell--non-numeric">{% if entity.phoneNumber %}{{ entity.phoneNumber }}{% endif %}</td>
         </tr>
         <tr>
 
