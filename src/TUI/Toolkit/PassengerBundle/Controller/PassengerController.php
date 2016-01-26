@@ -296,16 +296,21 @@ class PassengerController extends Controller
         $currUser = $this->get('security.context')->getToken()->getUser();
         $currRole =  $this->get("permission.set_permission")->getPermission($entity->getTourReference()->getId(), 'tour', $currUser);
         if ($currRole == null) {
+            $tourid = $entity->getTourReference();
             $currRole =  $this->get("permission.set_permission")->getPermission($entity->getTourReference()->getId(), 'passenger', $currUser);
         }
+
         // is brand or admin
         if(!$this->get('security.context')->isGranted('ROLE_BRAND')){
             // is organizer or assistant of tour
-            if(!in_array('assistant', $currRole) && !in_array('organizer', $currRole)) {
+            if($currRole != null && !in_array('assistant', $currRole) && !in_array('organizer', $currRole)) {
                 // is parent of this passenger
                 if(!$parentId[1] == $currUser->getId()) {
                     throw $this->createAccessDeniedException('You are not authorized to manage passengers for this tour!');
                 }
+            } elseif ($currRole == null){
+                throw $this->createAccessDeniedException('You are not authorized to manage passengers for this tour!');
+
             }
         }
 

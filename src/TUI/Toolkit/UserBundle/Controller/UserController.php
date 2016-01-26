@@ -18,7 +18,6 @@ use Symfony\Component\Validator\Constraints\Null;
 
 use TUI\Toolkit\UserBundle\Entity\User;
 use TUI\Toolkit\PermissionBundle\Entity\Permission;
-use TUI\Toolkit\UserBundle\Entity\User;
 use TUI\Toolkit\PassengerBundle\Entity\Passenger;
 use TUI\Toolkit\TourBundle\Entity\Tour;
 use TUI\Toolkit\UserBundle\Form\ResettingFormType;
@@ -1557,6 +1556,7 @@ class UserController extends Controller
                     if ($permission->getGrants() != "parent") {
                         $tours[] = $object;
                     }
+
                 }
             }
         }
@@ -1572,29 +1572,19 @@ class UserController extends Controller
         $locale = $this->container->getParameter('locale');
         // if user is brand or admin, list quotes where they are salesAgent or SecondaryContact
         // if user is customer, list quotes by Permission Entity
-        $tours = array();
         $parents = array();
         $data = array();
         $em = $this->getDoctrine()->getManager();
-        $permissions = $em->getRepository('PermissionBundle:Permission')->findBy(array('user' => $id, 'class' => 'tour'));
         $passengers = $em->getRepository('PermissionBundle:Permission')->findBy(array('user' => $id, 'class' => 'passenger', 'grants' => 'parent'));
-        // this only returns pointers to tours, so loop through and build tours array
-        foreach ($permissions as $permission) {
-            if ($object = $em->getRepository('TourBundle:Tour')->find($permission->getObject())) {
-                if ($permission->getGrants() != "parent") {
-                    $tours[] = $object;
-                }
-            }
-        }
+
         foreach ($passengers as $passenger) {
 
             if ($object = $em->getRepository('PassengerBundle:Passenger')->find($passenger->getObject())) {
                 $completedTasks = array();
-                $tourId = $object->getTourReference()->getId();
-                $tour = $em->getRepository('TourBundle:Tour')->find($object->getTourReference()->getId());
-                if (!in_array($tour, $parents)) {
-                    $parents[] = $tour;
-                }
+                    $tour = $em->getRepository('TourBundle:Tour')->find($object->getTourReference()->getId());
+                    if (!in_array($tour, $parents)) {
+                        $parents[] = $tour;
+                    }
                 $medical = $object->getMedicalReference();
                 $dietary = $object->getDietaryReference();
                 $emergency = $object->getEmergencyReference();
@@ -1656,8 +1646,9 @@ class UserController extends Controller
         $passengerObjects = array();
         foreach ($passengers as $passenger) {
             $object = $em->getRepository('PassengerBundle:Passenger')->find($passenger->getObject());
-            $passengerObjects[] = $object;
-
+            if ($object->getTourReference()->getId() == $tourId) {
+                $passengerObjects[] = $object;
+            }
         }
 
         $completedTasksCount = '';
