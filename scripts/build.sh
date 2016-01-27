@@ -12,19 +12,19 @@ fi
 case "$1" in
   vm)
     application_env="dev"
-    composer_params=""
+    composer_params="--no-interaction"
     ;;
   dev)
     application_env="dev"
-    composer_params=""
+    composer_params="--no-interaction"
     ;;
   uat)
     application_env="prod"
-    composer_params="--optimize-autoloader"
+    composer_params="--no-interaction --optimize-autoloader"
     ;;
   prod)
     application_env="prod"
-    composer_params="--optimize-autoloader"
+    composer_params="--no-interaction --optimize-autoloader"
     ;;
 esac
 
