@@ -2,6 +2,7 @@
 
 
 {%  for parent in parents %}
+
     {% if app.user.id != parent.organizer.id and app.user.id != parent.salesAgent.id%}
         {% if parent.departureDate is defined %}
             {% set dtg  = date(parent.departureDate).diff(date("now")) %}
@@ -77,7 +78,13 @@
                         {% if is_granted('ROLE_BRAND') %}
                             <div class="profile-list-item item-2 tour-dashboard">{% if parent.institution %} {{  parent.institution.name }}{% endif %}<br /><label>{% trans %}user.profile.my_quotes.institution{% endtrans %}</label> </div>
                         {% else %}
-                            <div class="profile-list-item item-2 tour-dashboard">{{ completedTasksCount }}<br /><label>Tasks Complete</label> </div>
+                            {% for passengerObject in passengerObjects %}
+                                {% if passengerObject.tourReference.id == parent.id %}
+                                    {% set totalCompletedTasks =+ passengerObject.completedTasksCount %}
+                                    {% set totalPossibleTasks =+ passengerObject.possibleTasksCount %}
+                                    <div class="profile-list-item item-2 tour-dashboard">{{ totalCompletedTasks }}/{{ totalPossibleTasks }}<br /><label>Tasks Complete</label> </div>
+                                {% endif %}
+                            {% endfor %}
                         {% endif %}
                     </li>
                     <li>

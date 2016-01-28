@@ -1582,16 +1582,37 @@ class UserController extends Controller
             if ($object = $em->getRepository('PassengerBundle:Passenger')->find($passenger->getObject())) {
                 $completedTasks = array();
                     $tour = $em->getRepository('TourBundle:Tour')->find($object->getTourReference()->getId());
-                    if (!in_array($tour, $parents)) {
-                        $parents[] = $tour;
-                    }
+                //Find the possible Passenger Tasks for the tour
+                $possibleTasks = array();
+
+                $medicalTask = $tour->getMedicalDate();
+                $dietaryTask = $tour->getDietaryDate();
+                $emergencyTask = $tour->getEmergencyDate();
+                $passportTask = $tour->getPassportDate();
+
+                if ($tour->getMedicalDate() != null) {
+                    $possibleTasks[] = $medicalTask;
+                }
+                if ($tour->getDietaryDate() != null){
+                    $possibleTasks[] = $dietaryTask;
+                }
+                if ($tour->getEmergencyDate() != null) {
+                    $possibleTasks[] = $emergencyTask;
+                }
+                if ($tour->getPassportDate() != null){
+                    $possibleTasks[] = $passportTask;
+                }
+
+                if (!in_array($tour, $parents)) {
+                    $parents[] = $tour;
+                }
+                //Then find the tasks that the passengers have completed
                 $medical = $object->getMedicalReference();
                 $dietary = $object->getDietaryReference();
                 $emergency = $object->getEmergencyReference();
                 $passport = $object->getPassportReference();
                 if ($medical != null) {
-                    $medicalObject = $medical;
-                    $completedTasks[] = $medicalObject;
+                    $completedTasks[] = $medical;
                 }
                 if ($dietary != null) {
                     $completedTasks[] = $dietary;
@@ -1602,9 +1623,17 @@ class UserController extends Controller
                 if($passport != null){
                     $completedTasks[] = $passport;
                 }
+
+                //Grab counts of completed tasks
                 $completedTasksCount = count($completedTasks);
-                $data['completedTasksCount'] = $completedTasksCount;
-                $data['completedTasks'] = $completedTasks;
+                $object->completedTasks = $completedTasks;
+                $object->completedTasksCount = $completedTasksCount;
+
+                //Grab count of possible tasks
+                $possibleTasksCount = count($possibleTasks);
+                $object->possibleTasks = $possibleTasks;
+                $object->possibleTasksCount = $possibleTasksCount;
+
                 $data['passengerObjects'][] = $object;
             }
         }
