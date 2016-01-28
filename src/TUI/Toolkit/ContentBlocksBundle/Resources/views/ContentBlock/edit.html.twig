@@ -89,6 +89,7 @@
                         $('.add-content-block').show(); // re-show ALL Add Block's for all tabs
                         $("#loader").css("display", "none");
                         $('.noembed-meta-info').remove();
+                        $(".sortable-items").sortable("enable");
                     });
                 } else { // regular content block
                     var editBlock = $("#editable-content-blocks-" + blockID);
@@ -101,6 +102,7 @@
                         editBlock.html('');
                         $("#loader").css("display", "none");
                         $('.noembed-meta-info').remove();
+                        $(".sortable-items").sortable("enable");
                     });
                 }
             } else { // on Quoteversion Edit/Show page
