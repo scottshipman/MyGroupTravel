@@ -25,16 +25,16 @@ class AjaxuserType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-      switch (true){
-        case strstr($this->locale, 'en_GB'):
-          $phoneFormat = PhoneNumberFormat::NATIONAL;
-          $defaultRegion = 'GB';
-          break;
-        default:
-          $date_label = PhoneNumberFormat::NATIONAL;
-          $date_format = 'US';
-          break;
-      }
+//      switch (true){
+//        case strstr($this->locale, 'en_GB'):
+//          $phoneFormat = PhoneNumberFormat::NATIONAL;
+//          $defaultRegion = 'GB';
+//          break;
+//        default:
+//          $date_label = PhoneNumberFormat::NATIONAL;
+//          $date_format = 'US';
+//          break;
+     // }
       // todo: Add logic so you cant add any role greater than your own
         $builder
           ->add('honorific', 'choice', array(
@@ -67,13 +67,18 @@ class AjaxuserType extends AbstractType
             'required'  => true,
 
           ))
-          ->add('phoneNumber', 'tel', array(
-            'label' => 'user.form.phone',
-            'translation_domain'  => 'messages',
-            'required' => false,
-            'default_region' => $defaultRegion,
-            'format' => $phoneFormat
+          ->add('phoneNumber', 'text', array(
+              'label' => 'user.form.phone',
+              'translation_domain'  => 'messages',
+              'required' => false,
           ))
+//          ->add('phoneNumber', 'tel', array(
+//            'label' => 'user.form.phone',
+//            'translation_domain'  => 'messages',
+//            'required' => false,
+//            'default_region' => $defaultRegion,
+//            'format' => $phoneFormat
+//          ))
         ;
     }
 
