@@ -71,14 +71,13 @@
 
         <div class="tour-show-right-column">
             {# Passenger CTA Card #}
-            <div class="passenger-cta-card tour-edit mdl-card mdl-shadow--2dp" style="margin-bottom: 0; box-shadow: none;">
+            <div class="passenger-cta-card tour-edit mdl-card mdl-shadow--2dp passenger-dashboard-cta-card">
 
                 <div class="mdl-card__title">
                     <h3 id="card-title" class="mdl-card__title-text">{% trans %}passenger.labels.passenger_list{% endtrans %}</h3>
                 </div>
 
                 <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
-                    <div style="float:left;" >
                         <div class="paying-passengers-title"><h3>{% trans %}passenger.labels.add_paying{% endtrans %}</h3></div>
                         <div class="passenger-count">
                             {# Accepted/Paying Summary #}
@@ -96,7 +95,6 @@
                         <div style="clear: both"></div>
                         <a id="invite-passengers" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="#"><i class="fa fa-users"></i>{% trans %}passenger.labels.invite{% endtrans %}</a>
                         <a id="accept-tour" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="#"><i class="fa fa-user-plus"></i>{% trans %}passenger.labels.add{% endtrans %}</a>
-                    </div>
                 </div>
             </div>
 
