@@ -21,7 +21,7 @@ class AppExtension extends \Twig_Extension {
         return array(
             new \Twig_SimpleFilter('paxLabel', array($this, 'paxLabel')),
             new \Twig_SimpleFilter('getRoles', array($this, 'getRoles')),
-            new \Twig_SimpleFilter('class', array($this, 'getClass')),
+            new \Twig_SimpleFilter('getClass', array($this, 'getClass')),
         );
     }
 
