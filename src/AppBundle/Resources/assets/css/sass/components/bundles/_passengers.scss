@@ -9,8 +9,11 @@
 }
 
 .passenger-dashboard-copy {
-  width: 60%;
+  width: auto;
   float:left;
+  @include breakpoint_desktop() {
+    width: 60%;
+  }
 }
 
 .organizer-dashboard-copy {
@@ -25,10 +28,16 @@
 }
 
 .passenger-count {
-  float: right;
-  width: 20%;
+  float: left;
+  width: 100%;
   display: inline-block;
-  margin-top: 20px;
+
+  @include breakpoint_desktop() {
+    display: inline-block;
+    width: 170px;
+    float:right;
+    margin-top: 0;
+  }
 
   .spots-remaining {
     font-size: 60px;

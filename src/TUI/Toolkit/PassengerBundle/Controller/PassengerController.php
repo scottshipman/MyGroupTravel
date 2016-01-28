@@ -306,10 +306,10 @@ class PassengerController extends Controller
             if($currRole != null && !in_array('assistant', $currRole) && !in_array('organizer', $currRole)) {
                 // is parent of this passenger
                 if(!$parentId[1] == $currUser->getId()) {
-                    throw $this->createAccessDeniedException('You are not authorized to manage passengers for this tour!');
+                    throw $this->createAccessDeniedException('You are not authorized to manage this passenger!');
                 }
             } elseif ($currRole == null){
-                throw $this->createAccessDeniedException('You are not authorized to manage passengers for this tour!');
+                throw $this->createAccessDeniedException('You are not authorized to manage this passenger!');
 
             }
         }
@@ -540,7 +540,11 @@ class PassengerController extends Controller
         //Get Pending Invite organizer list (have no passenger object created yet so we'll fake it)
         $organizers = $this->get("passenger.actions")->getOrganizers($tourId);
         //array_unshift($organizers, $tour->getOrganizer());
+
         $organizersObjects = $this->addOrganizerPassengers($organizers, $tourId, $em);
+        if ($organizersObjects == null){
+            $organizersObjects = array();
+        }
 
         // merge all records
         $passengers = array_merge($passengers, $organizersObjects);

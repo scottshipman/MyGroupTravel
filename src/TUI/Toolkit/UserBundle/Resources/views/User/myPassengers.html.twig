@@ -17,6 +17,18 @@
     {%  set dteFinal = 0  %}
 {% endif %}
 
+{% block page_title %}
+    <span>{% trans %}passenger.page_title.index{% endtrans %}</span>
+{% endblock %}
+
+{% block page_title_menu %}
+
+{% endblock %}
+
+{% block back_link %}
+        <a class="back-link" href="/profile"><i class="fa fa-arrow-left"></i> Back To Profile</a>
+{% endblock %}
+
 {% block body -%}
 
 <div class="tour-show-wrapper site-show" entityId="{{ tour.id }}">

@@ -2,7 +2,7 @@
 
 
 {%  for parent in parents %}
-    {% if is_not_granted("ROLE_BRAND")app.user.id != parent.organizer.id and app.user.id != parent.salesAgent.id%}
+    {% if app.user.id != parent.organizer.id and app.user.id != parent.salesAgent.id%}
         {% if parent.departureDate is defined %}
             {% set dtg  = date(parent.departureDate).diff(date("now")) %}
             {% if dtg.days < 1 %} {%  set dtgFinal = 0  %} {% else %} {% set dtgFinal = dtg.days %}{% endif %}

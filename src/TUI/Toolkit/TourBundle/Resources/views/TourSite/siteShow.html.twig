@@ -9,10 +9,20 @@
 {% endblock %}
 
 {% block page_title %}
-    <span>{% trans %}tour.title.site_view{% endtrans %}</span>
+    {% if "tour" | getRoles(entity.id) == "parent" %}
+        <span style="display: none;">{% trans %}tour.title.site_view{% endtrans %}</span>
+
+    {% elseif "tour" | getRoles(entity.id) != "" or is_granted("ROLE_BRAND")%}
+            <span>{% trans %}tour.title.site_view{% endtrans %}</span>
+    {% endif %}
 {% endblock %}
 
+
 {% block page_title_menu %}
+    {% if "tour" | getRoles(entity.id) == "parent" %}
+
+    {% elseif "tour" | getRoles(entity.id) != "" or is_granted("ROLE_BRAND")%}
+
     <button id="tour-title-drop" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-menu-drop">
         <i class="material-icons">arrow_drop_down</i>
     </button>
@@ -23,11 +33,20 @@
             {% endblock %}
         {% endif %}
     {% endembed %}
+    {% endif %}
 {% endblock %}
 
 {% block back_link %}
 
-        <a class="back-link" href="{{ path('manage_tour_show', { 'id': entity.id }) }}"><i class="fa fa-arrow-left"></i> {% trans %}tour.actions.back_dashboard{% endtrans %}</a>
+{% if "tour" | getRoles(entity.id) == "parent" or  "tour" | getRoles(entity.id) == "" %}
+
+    <a class="back-link" href="/profile"><i class="fa fa-arrow-left"></i> Back To Home</a>
+
+{% elseif "tour" | getRoles(entity.id) != "" or is_granted("ROLE_BRAND") %}
+
+    <a class="back-link" href="{{ path('manage_tour_show', { 'id': entity.id }) }}"><i class="fa fa-arrow-left"></i> {% trans %}tour.actions.back_dashboard{% endtrans %}</a>
+
+{% endif %}
 
 {% endblock %}
 
