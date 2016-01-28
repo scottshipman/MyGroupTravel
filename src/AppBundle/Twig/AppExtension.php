@@ -44,6 +44,7 @@ class AppExtension extends \Twig_Extension {
         $user = $this->container->get('security.context')->getToken()->getUser();
 
         $roles = $this->container->get("permission.set_permission")->getPermission($objectId, $class, $user);
+        if ($roles == NULL) { $roles = array();}
         return array_shift($roles);
     }
 

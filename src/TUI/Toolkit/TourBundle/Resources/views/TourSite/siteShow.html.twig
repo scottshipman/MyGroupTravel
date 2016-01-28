@@ -10,7 +10,7 @@
 
 {% block page_title %}
     {% if "tour" | getRoles(entity.id) == "parent" %}
-        <span style="display: none;">{% trans %}tour.title.site_view{% endtrans %}</span>
+        <span>{% trans %}tour.title.site_view{% endtrans %}</span>
 
     {% elseif "tour" | getRoles(entity.id) != "" or is_granted("ROLE_BRAND")%}
             <span>{% trans %}tour.title.site_view{% endtrans %}</span>

@@ -89,21 +89,17 @@
 
                 {% block back_link %}{% endblock %}
 
-                  {% if class(entity) in ['tour', 'passenger', 'payment'] %}
-                      {% if "tour" | getRoles(entity.id) != "" or is_granted("ROLE_BRAND")%}
-                          <div class="page-title">
-                              <div class="link-preview-edit">{% block edit_link %}{% endblock %}</div>
+                  <div class="page-title">
+                      <div class="link-preview-edit">{% block edit_link %}{% endblock %}</div>
 
-                              <div class="title-actions">
-                                  <h1>{% block page_title %}{% endblock %}</h1>
+                      <div class="title-actions">
+                          <h1>{% block page_title %}{% endblock %}</h1>
 
-                                  {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                                      {% block page_title_menu %}{% endblock %}
-                                  {% endif %}
-                              </div>
-                          </div>
-                      {% endif %}
-                  {% endif %}
+                          {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                              {% block page_title_menu %}{% endblock %}
+                          {% endif %}
+                      </div>
+                  </div>
               </div>
             </div><!-- header -->
         {% endif %}

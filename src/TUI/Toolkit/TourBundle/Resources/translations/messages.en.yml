@@ -8,7 +8,7 @@ tour:
         show: Tour
         deleted: Tour Dashboard - Deleted
         restore: Restore
-        site_view: Site View
+        site_view: Tour Website
         back_list: Back to List
         back_dashboard: Back to Dashboard
         new_tour: New Tour

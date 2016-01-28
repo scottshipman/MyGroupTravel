@@ -1697,6 +1697,7 @@ class UserController extends Controller
         }
 
         return $this->render('TUIToolkitUserBundle:User:myPassengers.html.twig', array(
+            'entity' => $tour,
             'tour' => $tour,
             'user' => $user,
             'locale' => $locale,
