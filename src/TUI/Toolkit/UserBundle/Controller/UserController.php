@@ -360,7 +360,7 @@ class UserController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm($entity)
+    private function createCreateForm(User $entity)
     {
         $locale = $this->container->getParameter('locale');
         $form = $this->createForm(new UserType($locale), $entity, array(
@@ -399,7 +399,7 @@ class UserController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function create_ajaxCreateForm($entity)
+    private function create_ajaxCreateForm(User $entity)
     {
         $locale = $this->container->getParameter('locale');
         $form = $this->createForm(new AjaxuserType($locale), $entity, array(
@@ -534,7 +534,7 @@ class UserController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createEditForm($entity)
+    private function createEditForm(User $entity)
     {
         $locale = $this->container->getParameter('locale');
         $form = $this->createForm(new UserType($locale), $entity, array(
@@ -691,7 +691,7 @@ class UserController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createActivateUserForm($entity)
+    private function createActivateUserForm(User $entity)
     {
         $form = $this->createForm(new ActivateUserType(), $entity, array(
             'action' => $this->generateUrl('activate_user_submit', array('id' => $entity->getId())),
@@ -832,7 +832,7 @@ class UserController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createResetPasswordForm($entity)
+    private function createResetPasswordForm(User $entity)
     {
         $form = $this->createForm(new ResettingFormType(), $entity, array(
             'action' => $this->generateUrl('user_password_reset_submit', array('id' => $entity->getId())),
@@ -1329,7 +1329,7 @@ class UserController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createSecurityForm($entity)
+    private function createSecurityForm(User $entity)
     {
         $form = $this->createForm(new SecurityType(), $entity, array(
             'action' => $this->generateUrl('user_security_submit', array('id' => $entity->getId())),

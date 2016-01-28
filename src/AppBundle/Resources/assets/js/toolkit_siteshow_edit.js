@@ -197,10 +197,13 @@ $(document).ready(function () {
         }
         $('.item-edit').show();
         $(this).hide();
+        console.log('is draggable?');
         //$('.add-content-block').hide() // hide ALL Add Block's for all tabs
         if ( toolkitBreakpointAllowDrag() ) {
             // Sorting not allowed on phone for content blocks
+            console.log('about to enable sorting');
             $(".sortable-items").sortable("enable");
+            console.log('enabled sorting');
             $('.noembed-meta-info').remove();
         };
     });
@@ -281,6 +284,7 @@ $(document).ready(function () {
             previewBlock.html('');
             $("#loader").css("display", "none");
             $('.noembed-meta-info').remove();
+            $(".sortable-items").sortable("disable");
         });
     });
 

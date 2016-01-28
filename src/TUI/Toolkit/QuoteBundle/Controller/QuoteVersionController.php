@@ -1098,6 +1098,7 @@ class QuoteVersionController extends Controller
 
         $cloneForm = $this->createCloneForm($new_entity);
         $date_format = $this->container->getParameter('date_format');
+        $this->get('session')->set('cloneSourceId', $original_entity->getId());
 
         return $this->render('QuoteBundle:QuoteVersion:edit.html.twig', array(
             'entity' => $new_entity,
@@ -1144,6 +1145,7 @@ class QuoteVersionController extends Controller
 
         $cloneForm = $this->createCloneForm($new_entity);
         $date_format = $this->container->getParameter('date_format');
+        $this->get('session')->set('cloneSourceId', $original_entity->getId());
 
         return $this->render('QuoteBundle:QuoteVersion:edit.html.twig', array(
             'entity' => $new_entity,
@@ -1384,7 +1386,7 @@ class QuoteVersionController extends Controller
     public function cloneUpdateAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-
+        $logger = $this->get('logger');
         $entity = new QuoteVersion();
         $cloneform = $this->createCloneForm($entity);
         $cloneform->handleRequest($request);
@@ -1467,9 +1469,12 @@ class QuoteVersionController extends Controller
         //}
 
         // clone the content blocks, but first load the original entity since we never did that - only used form values
-        $pathArr = explode('/', $_SERVER['HTTP_REFERER']);
-        if (is_numeric($pathArr[5])) {
-            $originalEntity = $em->getRepository('QuoteBundle:QuoteVersion')->find($pathArr[5]);
+//        $pathArr = explode('/', $_SERVER['HTTP_REFERER']);
+//        if (is_numeric($pathArr[5])) {
+        $originalEntityId = $this->get('session')->get('cloneSourceId');
+        if($originalEntityId){
+            $originalEntity = $em->getRepository('QuoteBundle:QuoteVersion')->find($originalEntityId);
+            if($originalEntity) {
             $entity->setContent($this->cloneContentBlocks($originalEntity->getContent()));
 
             // And clone the Header block if it has one
@@ -1477,6 +1482,10 @@ class QuoteVersionController extends Controller
                 $headerBlock = $originalEntity->getHeaderBlock()->getId();
                 $entity->setHeaderBlock($this->cloneHeaderBlock($headerBlock));
             }
+        }
+        } else {
+
+            $logger->error('cloneSourceID session var appears to be invalid for cloning Content: ' . $originalEntityId);
         }
 
 
@@ -1753,6 +1762,8 @@ class QuoteVersionController extends Controller
                     }
                 }
             }
+        } else {
+            $logger->error('Content Block appears to be empty during QuoteVersion Clone process: ' . $content);
         }
 
         return $newContentArray;
