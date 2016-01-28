@@ -1581,7 +1581,7 @@ class UserController extends Controller
 
             if ($object = $em->getRepository('PassengerBundle:Passenger')->find($passenger->getObject())) {
                 $completedTasks = array();
-                    $tour = $em->getRepository('TourBundle:Tour')->find($object->getTourReference()->getId());
+                $tour = $em->getRepository('TourBundle:Tour')->find($object->getTourReference()->getId());
                 //Find the possible Passenger Tasks for the tour
                 $possibleTasks = array();
 
@@ -1624,7 +1624,7 @@ class UserController extends Controller
                     $completedTasks[] = $passport;
                 }
 
-                //Grab counts of completed tasks
+                //Grab counts of completed tasks for each passenger
                 $completedTasksCount = count($completedTasks);
                 $object->completedTasks = $completedTasks;
                 $object->completedTasksCount = $completedTasksCount;
@@ -1636,6 +1636,22 @@ class UserController extends Controller
 
                 $data['passengerObjects'][] = $object;
             }
+        }
+
+        foreach ($parents as $parent) {
+            $passengers = array();
+            $possible = '';
+            $completed = '';
+            foreach ($data['passengerObjects'] as $passengerObject) {
+                if ($passengerObject->getTourReference()->getId() == $parent->getId()) {
+                    $passengers[] = $passengerObject;
+                    $completed += $passengerObject->completedTasksCount;
+                    $possible += $passengerObject->possibleTasksCount;
+                }
+            }
+            $parent->passengers = $passengers;
+            $parent->possible = $possible;
+            $parent->completed = $completed;
         }
         $data['parents'] = $parents;
         $data['locale'] = $locale;
