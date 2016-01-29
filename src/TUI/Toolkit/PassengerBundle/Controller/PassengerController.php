@@ -235,7 +235,7 @@ class PassengerController extends Controller
             ),
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => 'Submit Sign-up Request'));
 
         return $form;
     }
