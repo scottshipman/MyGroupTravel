@@ -110,8 +110,8 @@ passenger:
     form:
         invite:
             email: Email
-            first: First Name
-            last: Last Name
+            first: Passenger's First Name
+            last: Passenger's Last Name
             message: Message
             gender: Gender
             age: Age
@@ -129,3 +129,8 @@ passenger:
                 medical: Medical information saved successfully
                 emergency: Emergency contact information saved successfully
                 passport: Passport information saved successfully
+
+    signupform:
+        fname: Parent/Guardian First Name
+        lname: Parent/Guardian Last Name
+        email: Parent/Guardian Email Address

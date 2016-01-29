@@ -40,11 +40,13 @@ class PassengerType extends AbstractType
         $builder
             ->add('fName', 'text', array(
                 'required' => true,
-                'label' => 'passenger.form.invite.first'
+                'label' => 'passenger.form.invite.first',
+                'required' => true,
             ))
             ->add('lName', 'text', array(
                 'required' => true,
-                'label' => 'passenger.form.invite.last'
+                'label' => 'passenger.form.invite.last',
+                'required' => true,
             ))
             ->add('dateOfBirth', 'birthday', array(
                 'format' => $date_format,
