@@ -4,7 +4,6 @@
 {%  for parent in parents %}
     {% set totalCompletedTasks =+ "" %}
     {% set totalPossibleTasks =+ "" %}
-    {{ dump(parent) }}
 
     {% if app.user.id != parent.organizer.id and app.user.id != parent.salesAgent.id%}
         {% if parent.departureDate is defined %}
