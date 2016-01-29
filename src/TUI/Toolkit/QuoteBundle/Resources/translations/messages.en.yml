@@ -73,6 +73,7 @@ quote:
         change_request: Your change request was successfully submitted for
         liked: Your Sales Contact has been notified that you liked this quote -
         lock: This quote's lock has been toggled.
+        soft_delete: "A quote already exists with this Quote Number, but has been deleted (archived). <br>Please ask an administrator to remove this Quote permanently, or undelete it for editing."
 
     grid:
         no_result: There are no Quotes to show. Please check your filter settings and try again.

@@ -405,8 +405,6 @@ class QuoteVersionController extends Controller
                 $query
                     //->andWhere($tableAlias . '.ts IS NULL')
                     ->andWhere($tableAlias . ".deleted IS NOT NULL");
-                $dql = $query->getDql();
-                $foo = '';
             }
         );
 
@@ -1490,6 +1488,31 @@ class QuoteVersionController extends Controller
 
 
         if ($cloneform->isValid()) {
+
+            //make sure there isnt a soft-deleted version of the quote ref first
+            // a sql error occurs because doctrine cant enforce constraint on soft-deleted item but SQL will
+            $filters = $em->getFilters();
+            $filters->disable('softdeleteable');
+            $qn = $cloneform->getData()->getQuoteNumber();
+            $query = $em->createQuery(
+                'select q
+                from QuoteBundle:QuoteVersion q
+                where q.quoteNumber = :qn')
+                ->setParameter('qn', $qn);
+            $deletedQuotes= $query->getResult();
+
+
+            if ($deletedQuotes) {
+                $filters->enable('softdeleteable');
+                $this->get('ras_flash_alert.alert_reporter')->addError(
+                    $this->get('translator')->trans('quote.flash.soft_delete') . ' <br>QuoteNumber: ' . $deletedQuotes[0]->getQuoteNumber() . ' - id # :' . $deletedQuotes[0]->getId() );
+                goto error;
+            }
+
+
+
+
+
             $em->persist($entity);
             $em->flush();
             $permission = $this->get("permission.set_permission")->setPermission($entity->getQuoteReference()->getId(), 'quote', $entity->getQuoteReference()->getOrganizer(), 'organizer');
@@ -1499,6 +1522,7 @@ class QuoteVersionController extends Controller
             return $this->redirect($this->generateUrl('manage_quote_show', array('id' => $entity->getId())));
         }
 
+        error:
         $date_format = $this->container->getParameter('date_format');
         return $this->render('QuoteBundle:QuoteVersion:edit.html.twig', array(
             'entity' => $entity,

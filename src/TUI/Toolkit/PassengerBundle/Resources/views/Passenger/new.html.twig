@@ -13,6 +13,7 @@
 
         <div id="guardian-form">
             <h5>Parent/Guardian</h5>
+            <span>Please provide contact information for parents or guardians of the passenger(s).</span>
             {{ form_widget(form.firstName) }}
             {{ form_widget(form.lastName) }}
             {{ form_widget(form.email) }}
@@ -46,7 +47,7 @@
         var $collectionHolder;
 
         // setup an "add a tag" link
-        var $addPassengerLink = $('<a href="#" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add_tag_link" title="Add a Passenger"><i class="fa fa-plus"></i>Add Passenger</a>');
+        var $addPassengerLink = $('<a href="#" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add_tag_link" title="Add Another Passenger"><i class="fa fa-plus"></i>Add Another Passenger</a>');
         var $newLinkDiv = $('<div></div>').append($addPassengerLink);
 
 
@@ -76,6 +77,8 @@
                 // add a new tag form (see next code block)
                 addPassengerForm($collectionHolder, $newLinkDiv);
             });
+
+            $addPassengerLink.trigger("click");
 
             //Bind the ajax form
             $('#ajax_passenger_form').on('submit', function(e) {
