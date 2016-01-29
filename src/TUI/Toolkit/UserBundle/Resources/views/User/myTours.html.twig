@@ -68,7 +68,9 @@
                                 <span class="tui-text-avatar mdl-typography--headline">{{ tour.salesAgent.username[:1] }}</span>
 
                             {% endif %}
-                        {{ tour.salesAgent.firstName }} {{ tour.salesAgent.lastName }} <br /> {{ tour.salesAgent.email }}<br /><label>{% trans %}user.profile.my_quotes.salesAgent{% endtrans %}</label>
+                        {{ tour.salesAgent.firstName }} {{ tour.salesAgent.lastName }} <br /> <a style="text-decoration: none;" href="mailto:{{ tour.salesAgent.email }}">{{ tour.salesAgent.email }}</a><br />
+                           <span style="margin-left:57px;"><tel>{{ tour.salesAgent.phoneNumber }}</tel></span>
+                           <label>{% trans %}user.profile.my_quotes.salesAgent{% endtrans %}</label>
                         {% else %}
                             {% if tour.organizer.media %}
                                 <span class="tui-image-avatar">
@@ -79,7 +81,9 @@
                                 <span class="tui-text-avatar mdl-typography--headline">{{ tour.organizer.username[:1] }}</span>
 
                             {% endif %}
-                             {{ tour.organizer.firstName }} {{ tour.organizer.lastName }}  <br /> {{ tour.organizer.email }}<br /><label>{% trans %}user.profile.my_quotes.organizer{% endtrans %}</label>
+                             {{ tour.organizer.firstName }} {{ tour.organizer.lastName }}  <br /> <a style="text-decoration: none;" href="mailto:{{ tour.organizer.email }}">{{ tour.organizer.email }}</a><br />
+                            <span style="margin-left:57px;"><tel>{{ tour.organizer.phoneNumber }}</tel></span>
+                            <label>{% trans %}user.profile.my_quotes.organizer{% endtrans %}</label>
                         {% endif %}
                    </div>
                </li>
