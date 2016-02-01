@@ -31,7 +31,13 @@
 
     {{ render(controller('BrandBundle:Default:colors')) }}
 
-    <style>
+    <style type="text/css" media="screen,print">
+        .break{
+            display: block;
+            clear: both;
+            page-break-after: always;
+        }
+
         .content-block h2 {
             font-size: 22px;;
         }
@@ -73,40 +79,22 @@
 {% endblock %}
 
 {% block body -%}
-    {% if (entity.locked is sameas(true)) and (is_granted("ROLE_BRAND"))  %}
-        <h3 style="color: red;">{% trans %}quote.actions.is_locked{% endtrans %}</h3>
-    {% endif %}
 <div id="quote-version-{{ entity.id }}" class="site-show" entityId="{{ entity.id }}" entityType="quote" entityClass="QuoteVersion" entityPath="quoteversion">
-
-        {#{% if entity.quoteReference.institution.media %}#}
-            {#<div style="position: absolute; display: inline-block; right: 1em; top: .5em">#}
-                {#<img src="{{ absolute_url(asset( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename )) }}">#}
-            {#</div>#}
-        {#{% endif %}#}
 
 
     <div id="site-header" class="quote-view-site-header">
         {# render the slideshow using the controller/twig with headerbock.id as param #}
         <div id="site-header-slideshow">
             {% if entity.headerBlock %}
-                {#{% if editable %}#}
-                    {#<div class="site-content-blocks-item">#}
-                        {#<div class="status-preview-edit site-content-block-actions">#}
-                            {#<div class="edit-icons">#}
-                                {#<i id="edit-header-block" class="content-block-item-action item-edit fa fa-pencil-square-o" title="{% trans %}quote.actions.edit{% endtrans %}" blockId="{{ entity.headerBlock.id }}"></i>#}
-                            {#</div>#}
-                        {#</div>#}
-                    {#</div>#}
-                {#{% endif %}#}
                 <div id="site-header-slideshow-content">
                     <div id="header-block-content-item" class="header-block-content-item content-block" blockId="{{ entity.id }}">
                         <div class="flexslider">
                             <ul class="slides" style="list-style: none">
                                 {% if entity.headerBlock %}
                                     {% if entity.headerBlock.mediaWrapper %}
-                                            {#<li>#}
-                                                {#<span class="inner-list" style="background-image: url('{{ absolute_url(( entity.headerBlock.mediaWrapper[0].media[0].getRelativePath ~ "/" ~ entity.headerBlock.mediaWrapper[0].media[0].getHashedFilename )) }}')"></span>#}
-                                            {#</li>#}
+                                            <li>
+                                                <span class="inner-list" style="background-image: url('{{ absolute_url(( entity.headerBlock.mediaWrapper[0].media[0].getRelativePath ~ "/" ~ entity.headerBlock.mediaWrapper[0].media[0].getHashedFilename )) }}')"></span>
+                                            </li>
                                     {% endif %}
                                 {% endif %}
                             </ul>
@@ -149,20 +137,10 @@
     <a id="site-content"></a>
 
     <div id="content-wrapper" class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
-        {#<div id="content-blocks-wrapper" class="content-block-tabs-bar mdl-tabs__tab-bar">#}
-            {#&#123;&#35; render the tabs &#35;&#125;#}
-            {#{% set activeTab = 'is-active' %}#}
-            {#{% for tab, data in entity.content %}#}
-                {#<a id="tab-{{ tab }}" href="#tabs-drawer-{{ tab }}" class="view-tab site-content-blocks-tab mdl-tabs__tab {{ activeTab }}" tabId="{{ tab }}"><span class="tab-name">{{ data[0] }}</span></a>#}
-                {#{% set activeTab = '' %}#}
-            {#{% endfor %}#}
-
-
-        {#</div>#}
 
         {# render the tabs' content #}
         {% for tab, data in entity.content %}
-                <p style="page-break-after:always;"></p>
+                <div class="break"></div>
                     <div id="content-blocks-wrapper" class="">
                         <h2 class="mdl-tabs__tab is-active" style="float:none; font-size: 30px; position:relative; text-align: center; display: block; margin: 0 auto;">{{ data[0] }}</h2>
                     </div>
@@ -230,7 +208,7 @@
             {% endblock %}
         </div>
         <div class="mdl-mini-footer__left-section footer-full-section">
-            <div class="footer-editor">{{ render(controller('BrandBundle:Default:footer')) }}</div>
+            <div class="footer-editor">{{ brand.footerBody|raw }}</div>
         </div>
     </div>
 </footer>

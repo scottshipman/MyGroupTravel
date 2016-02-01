@@ -317,6 +317,18 @@ class TourSiteController extends Controller
         $warningMsg[] = $this->get('translator')->trans('tour.flash.warning.expired') . " " . $entity->getQuoteReference()->getSalesAgent()->getFirstName() ." ".  $entity->getQuoteReference()->getSalesAgent()->getLastName() . " " .  $this->get('translator')->trans('tour.flash.warning.at') . " " . $entity->getQuoteReference()->getSalesAgent()->getEmail();
       }
 
+      //brand stuff
+      $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+      // look for a configured brand
+      if($brand_id = $this->container->getParameter('brand_id')){
+        $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+      }
+
+      if(!$brand) {
+        $brand = $default_brand;
+      }
+
       $request = $this->getRequest();
       $path = $request->getScheme() . '://' . $request->getHttpHost();
 
@@ -325,22 +337,24 @@ class TourSiteController extends Controller
         'locale' => $locale,
         'items' => $items,
         'header' => $headerBlock,
-        'editable' =>  $editable,
         'path' => $path,
-        'editable' => $editable
+        'editable' => $editable,
+        'brand' => $brand,
+
       );
 
-      $html = $this->renderView( 'TourBundle:TourSite:sitePDF.html.twig', $data );
+      $fileNameFinal = $entity->getQuoteNumber()? $entity->getQuoteNumber() : 'template-' . $id;
+      $html = $this->renderView( 'TourBundle:TourSite:tourPDF.html.twig', $data );
 
-      $dompdf = new \DOMPDF();
-      $dompdf->set_base_path($path . '/');
-      $dompdf->load_html($html);
-      $dompdf->render();
 
-      return new Response($dompdf->output(), 200, array(
-          'Content-Type' => 'application/pdf'
-      ));
+      return new Response($this->get('knp_snappy.pdf')->getOutputFromHtml($html),
+          200,
+          array(
+              'Content-Type' => 'application/pdf',
+              'Content-Disposition'   => 'attachment; filename="' . $fileNameFinal . '.pdf"',
+          ));
     }
+
 
 
   /**
