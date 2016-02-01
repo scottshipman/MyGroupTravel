@@ -478,14 +478,21 @@ class TourController extends Controller
         $editable = FALSE;
         $permission = array();
 
+        //Check to see if the user is allowed to view the dashboard
+
         $securityContext = $this->get('security.context');
         $user = $securityContext->getToken()->getUser();
         if ($user != 'anon.') {
             $permission = $this->get("permission.set_permission")->getPermission($id, 'tour', $user->getId());
         }
 
-        if ($securityContext->isGranted('ROLE_BRAND') || in_array('organizer', $permission)) {
-          $editable = TRUE;
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            if ($permission != null && !in_array('organizer', $permission) && !in_array('assistant', $permission)) {
+                throw $this->createAccessDeniedException('You are not authorized to view this tour!');
+            }
+            elseif ($permission == null ) {
+                throw $this->createAccessDeniedException('You are not authorized to view this tour!');
+            }
         }
 
         $em = $this->getDoctrine()->getManager();
@@ -1238,7 +1245,6 @@ class TourController extends Controller
         $passport = array();
 
         $completedPassengerData = array('medical' => $medical, 'dietary' => $dietary, 'emergency' => $emergency, 'passport' => $passport);
-//        $completedPassengerData[, $medical['medical'], $dietary['dietary'], $emergency['emergency'], $passport['passport']);
 
         //Get Accepted Users with completed medical information
         foreach ($acceptedUsers as $acceptedUser) {
@@ -1256,10 +1262,6 @@ class TourController extends Controller
                 $completedPassengerData['passport'][] = $acceptedUser;
             }
 
-//            $completedPassengerData['medical'] = $medical;
-//            $completedPassengerData['dietary'] = $dietary;
-//            $completedPassengerData['emergency'] = $emergency;
-//            $completedPassengerData['passport'] = $passport;
 
         }
 

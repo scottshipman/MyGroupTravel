@@ -19,6 +19,7 @@ use Symfony\Component\Validator\Constraints\Null;
 use TUI\Toolkit\UserBundle\Entity\User;
 use TUI\Toolkit\PermissionBundle\Entity\Permission;
 use TUI\Toolkit\PassengerBundle\Entity\Passenger;
+use TUI\Toolkit\TourBundle\Entity\Tour;
 use TUI\Toolkit\UserBundle\Form\ResettingFormType;
 use TUI\Toolkit\UserBundle\Form\UserType;
 use TUI\Toolkit\UserBundle\Form\AjaxuserType;
@@ -1528,6 +1529,7 @@ class UserController extends Controller
         // if user is brand or admin, list quotes where they are salesAgent or SecondaryContact
         // if user is customer, list quotes by Permission Entity
         $tours = array();
+        $data = array();
         $securityContext = $this->get('security.context');
         if ($securityContext->isGranted('ROLE_BRAND')) {
             $limit = $this->container->hasParameter('profile_query_limit') ? $this->container->getParameter('profile_query_limit') : 5;
@@ -1551,15 +1553,206 @@ class UserController extends Controller
             // this only returns pointers to tours, so loop through and build tours array
             foreach ($permissions as $permission) {
                 if ($object = $em->getRepository('TourBundle:Tour')->find($permission->getObject())) {
-                    $tours[] = $object;
+                    if ($permission->getGrants() != "parent") {
+                        $tours[] = $object;
+                    }
+
                 }
             }
         }
 
+        $data['tours'] = $tours;
+        $data['locale'] = $locale;
 
-        return $this->render('TUIToolkitUserBundle:User:myTours.html.twig', array(
-            'tours' => $tours,
+        return $this->render('TUIToolkitUserBundle:User:myTours.html.twig', $data);
+    }
+
+
+    public function getToursWithPassengersAction($id){
+        $locale = $this->container->getParameter('locale');
+        // if user is brand or admin, list quotes where they are salesAgent or SecondaryContact
+        // if user is customer, list quotes by Permission Entity
+        $parents = array();
+        $data = array();
+        $em = $this->getDoctrine()->getManager();
+        $passengers = $em->getRepository('PermissionBundle:Permission')->findBy(array('user' => $id, 'class' => 'passenger', 'grants' => 'parent'));
+
+        foreach ($passengers as $passenger) {
+
+            if ($object = $em->getRepository('PassengerBundle:Passenger')->find($passenger->getObject())) {
+                $completedTasks = array();
+                $tour = $em->getRepository('TourBundle:Tour')->find($object->getTourReference()->getId());
+                //Find the possible Passenger Tasks for the tour
+                $possibleTasks = array();
+
+                $medicalTask = $tour->getMedicalDate();
+                $dietaryTask = $tour->getDietaryDate();
+                $emergencyTask = $tour->getEmergencyDate();
+                $passportTask = $tour->getPassportDate();
+
+                if ($tour->getMedicalDate() != null) {
+                    $possibleTasks[] = $medicalTask;
+                }
+                if ($tour->getDietaryDate() != null){
+                    $possibleTasks[] = $dietaryTask;
+                }
+                if ($tour->getEmergencyDate() != null) {
+                    $possibleTasks[] = $emergencyTask;
+                }
+                if ($tour->getPassportDate() != null){
+                    $possibleTasks[] = $passportTask;
+                }
+
+                if (!in_array($tour, $parents)) {
+                    $parents[] = $tour;
+                }
+                //Then find the tasks that the passengers have completed
+                $medical = $object->getMedicalReference();
+                $dietary = $object->getDietaryReference();
+                $emergency = $object->getEmergencyReference();
+                $passport = $object->getPassportReference();
+                if ($medical != null) {
+                    $completedTasks[] = $medical;
+                }
+                if ($dietary != null) {
+                    $completedTasks[] = $dietary;
+                }
+                if ($emergency != null) {
+                    $completedTasks[] = $emergency;
+                }
+                if($passport != null){
+                    $completedTasks[] = $passport;
+                }
+
+                //Grab counts of completed tasks for each passenger
+                $completedTasksCount = count($completedTasks);
+                $object->completedTasks = $completedTasks;
+                $object->completedTasksCount = $completedTasksCount;
+
+                //Grab count of possible tasks
+                $possibleTasksCount = count($possibleTasks);
+                $object->possibleTasks = $possibleTasks;
+                $object->possibleTasksCount = $possibleTasksCount;
+
+                $data['passengerObjects'][] = $object;
+            }
+        }
+
+        foreach ($parents as $parent) {
+            $passengers = array();
+            $possible = '';
+            $completed = '';
+            foreach ($data['passengerObjects'] as $passengerObject) {
+                if ($passengerObject->getTourReference()->getId() == $parent->getId()) {
+                    $passengers[] = $passengerObject;
+                    $completed += $passengerObject->completedTasksCount;
+                    $possible += $passengerObject->possibleTasksCount;
+                }
+            }
+            $parent->passengers = $passengers;
+            $parent->possible = $possible;
+            $parent->completed = $completed;
+        }
+        $data['parents'] = $parents;
+        $data['locale'] = $locale;
+
+        return $this->render('TUIToolkitUserBundle:User:myToursWithPassengers.html.twig', $data);
+    }
+
+    public function getTourPassengersAction($tourId, $parentId){
+        $locale = $this->container->getParameter('locale');
+        $em = $this->getDoctrine()->getManager();
+        $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
+        $user = $em->getRepository('TUIToolkitUserBundle:User')->find($parentId);
+        $totalCompletedTasks = '';
+        $possibleTasks = array();
+
+        $medicalTask = $tour->getMedicalDate();
+        $dietaryTask = $tour->getDietaryDate();
+        $emergencyTask = $tour->getEmergencyDate();
+        $passportTask = $tour->getPassportDate();
+
+        if ($tour->getMedicalDate() != null) {
+            $possibleTasks[] = $medicalTask;
+        }
+        if ($tour->getDietaryDate() != null){
+            $possibleTasks[] = $dietaryTask;
+        }
+        if ($tour->getEmergencyDate() != null) {
+            $possibleTasks[] = $emergencyTask;
+        }
+        if ($tour->getPassportDate() != null){
+            $possibleTasks[] = $passportTask;
+        }
+
+
+        $passengers = $em->getRepository('PermissionBundle:Permission')->findBy(array('user' => $parentId, 'class' => 'passenger'));
+
+        $passengerObjects = array();
+        foreach ($passengers as $passenger) {
+            $object = $em->getRepository('PassengerBundle:Passenger')->find($passenger->getObject());
+            if ($object->getTourReference()->getId() == $tourId) {
+                $passengerObjects[] = $object;
+            }
+        }
+
+        $completedTasksCount = '';
+
+        foreach ($passengerObjects as $passengerObject){
+
+            $completedTasks = array();
+            $medical = $passengerObject->getMedicalReference();
+            $dietary = $passengerObject->getDietaryReference();
+            $emergency = $passengerObject->getEmergencyReference();
+            $passport = $passengerObject->getPassportReference();
+            if ($medical != null) {
+                $completedTasks[] = $medical;
+            }
+            if ($dietary != null) {
+                $completedTasks[] = $dietary;
+            }
+            if ($emergency != null) {
+                $completedTasks[] = $emergency;
+            }
+            if($passport != null){
+                $completedTasks[] = $passport;
+            }
+            $completedTasksCount = count($completedTasks);
+            $passengerObject->completedTasks = $completedTasks;
+
+            $totalCompletedTasks += $completedTasksCount;
+
+        }
+
+        //Get total possible tasks
+        $totalPossibleTasks = count($possibleTasks) * count($passengerObjects);
+        $possibleTasksCount = count($possibleTasks);
+
+
+        //Get all brand stuff
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
+
+        return $this->render('TUIToolkitUserBundle:User:myPassengers.html.twig', array(
+            'entity' => $tour,
+            'tour' => $tour,
+            'user' => $user,
             'locale' => $locale,
+            'brand' => $brand,
+            'passengers' => $passengers,
+            'passengerObjects' => $passengerObjects,
+            'totalCompletedTasks' => $totalCompletedTasks,
+            'totalPossibleTasks' => $totalPossibleTasks,
+            'possibleTasks' => $possibleTasks,
+            'possibleTasksCount' => $possibleTasksCount,
         ));
     }
 

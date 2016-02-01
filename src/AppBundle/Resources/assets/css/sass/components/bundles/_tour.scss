@@ -137,7 +137,7 @@
   z-index: 5;
 
   @include breakpoint_tablet() {
-    margin-top: -75px;
+    margin-top: -50px;
     float: right;
     width: $column_total_width * 2;
   }
