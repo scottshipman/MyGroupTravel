@@ -319,7 +319,7 @@ trsteel_ckeditor:
     transformers:  ['tuihtmlpurifier'] #['html_purifier']
     toolbar: ['document', 'basicstyles', 'links', 'insert', 'styles', 'paragraph']
     toolbar_groups:
-        document: ['Source', 'Undo', 'Redo']
+        document: ['Source', 'Undo', 'Redo', 'Scayt']
         links: ['Link','Unlink','Anchor']
         insert: ['Embed', 'Image', 'Table']
         styles: ['Styles']
@@ -383,6 +383,9 @@ trsteel_ckeditor:
 #            path: "/bundles/app/ckeditor-plugins/imageuploader"
         embedsemantic:
             path: "/bundles/app/ckeditor-plugins/embedsemantic"
+        scayt:
+            path: "/bundles/app/ckeditor-plugins/scayt"
+
 
 app:
     html_purifier:
