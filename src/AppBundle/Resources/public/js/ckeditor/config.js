@@ -7,6 +7,7 @@ if ( typeof CKEDITOR != 'undefined' ) {
 
     CKEDITOR.editorConfig = function (config) {
         // Define changes to default configuration here. For example:
+        config.extraAllowedContent = 'span;ul;li;table;td;style;*[id];*(*);*{*}';
         config.embed_provider = 'https://noembed.com/embed?url={url}&callback={callback}';
         config.stylesSet = [
             {"name": "Normal Text", "element": "p", "styles": {"color": "rgba(0, 0, 0, 0.87)"}},
