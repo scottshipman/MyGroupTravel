@@ -32,6 +32,9 @@
             {% endif %}
 
             {{ render(controller('TUIToolkitUserBundle:User:getTours', {'id' : user.id })) }}
+
+            {{ render(controller('TUIToolkitUserBundle:User:getToursWithPassengers', {'id' : user.id })) }}
+
         </div>
 
     </div>

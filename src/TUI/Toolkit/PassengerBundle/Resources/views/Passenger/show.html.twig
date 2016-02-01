@@ -15,6 +15,9 @@
 {% endblock %}
 
 {% block page_title_menu %}
+    {% if "passenger" | getRoles(entity.id) == "parent" %}
+
+    {% else %}
     <button id="tour-title-drop" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-menu-drop">
         <i class="material-icons">arrow_drop_down</i>
     </button>
@@ -23,12 +26,16 @@
             <li><a href="{{ path('manage_passenger_dashboard', { 'tourId': entity.tourReference.id }) }}" class="mdl-menu__item">{% trans %}tour.title.index{% endtrans %}</a></li>
         {% endblock %}
     {% endembed %}
+    {% endif %}
 {% endblock %}
 
 {% block back_link %}
+    {% if "passenger" | getRoles(entity.id) == "parent" %}
+        <a class="back-link" href="{{ path('manage_parent_passenger_dashboard', {'tourId': entity.tourReference.id, 'parentId': app.user.id}) }}"><i class="fa fa-arrow-left"></i> Back To Your Passengers</a>
+    {% else %}
+        <a class="back-link" href="{{ path('manage_passenger_dashboard', { 'tourId': entity.tourReference.id }) }}"><i class="fa fa-arrow-left"></i> {% trans %}passenger.actions.back{% endtrans %}</a>
 
-    <a class="back-link" href="{{ path('manage_passenger_dashboard', { 'tourId': entity.tourReference.id }) }}"><i class="fa fa-arrow-left"></i> {% trans %}passenger.actions.back{% endtrans %}</a>
-
+    {% endif %}
 {% endblock %}
 
 {% block body -%}

@@ -165,6 +165,14 @@
           text-align: center;
         }
 
+        &.three-column {
+          width: 50%;
+
+          @include breakpoint_desktop() {
+            max-width: 33%;
+          }
+        }
+
         &.four-column {
           width: 50%;
           height:100px;
@@ -207,6 +215,14 @@
           text-align: center;
         }
 
+        &.three-column {
+          width: 50%;
+
+          @include breakpoint_desktop() {
+            max-width: 33%;
+          }
+        }
+
         &.four-column {
           width: 50%;
           min-height:100px;
@@ -242,6 +258,14 @@
           text-align: left;
           width: auto;
           min-width: 20%;
+        }
+
+        &.three-column {
+          width: 100%;
+
+          @include breakpoint_desktop() {
+            max-width: 33%;
+          }
         }
 
         &.four-column {
