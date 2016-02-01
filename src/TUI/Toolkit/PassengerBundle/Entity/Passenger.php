@@ -75,7 +75,7 @@ class Passenger
     /**
      *
      * @var \TUI\Toolkit\TourBundle\Entity\Tour
-     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\TourBundle\Entity\Tour", cascade={"persist"}, fetch="LAZY")
+     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\TourBundle\Entity\Tour", cascade={"persist"})
      * @ORM\JoinColumn(name="tour", referencedColumnName="id")
      *
      */

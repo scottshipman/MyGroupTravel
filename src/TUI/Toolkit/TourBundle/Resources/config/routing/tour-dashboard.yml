@@ -30,6 +30,11 @@ manage_passenger_dashboard:
     path: /{tourId}/passengers
     defaults: { _controller: "PassengerBundle:Passenger:getPassengerDashboard" }
 
+
+manage_parent_passenger_dashboard:
+    path: /{tourId}/parent/{parentId}/passengers
+    defaults: { _controller: "TUIToolkitUserBundle:User:getTourPassengers" }
+
 manage_ajax_move_to_accepted:
     path: /move/accepted/{tourId}/{passengerId}
     defaults: { _controller: "PassengerBundle:Passenger:moveToAccepted" }

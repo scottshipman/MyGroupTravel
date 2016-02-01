@@ -1,0 +1,243 @@
+{% extends '::site-base.html.twig' %}
+{% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
+{% if 'en_GB' in locale %} {% set shortFormat = 'd M' %} {% else %} {% set format = 'M d' %} {% endif %}
+{% set compareFormat = 'Y-m-d' %}
+
+{# calculate Days to Go for Departure Date #}
+{% if  tour.departureDate and tour.departureDate | date ('Y-m-d') > "now - 1 day" | date('Y-m-d') %}
+    {% set dtgFinal  = date(tour.departureDate).diff(date("now - 1 day")).days %}
+{% else  %}
+    {%  set dtgFinal = 0  %}
+{% endif %}
+
+{# calculate Days Until Expiration #}
+{% if  tour.expiryDate and tour.expiryDate | date ('Y-m-d') > "now - 1 day" | date('Y-m-d') %}
+    {% set dteFinal  = date(tour.expiryDate).diff(date("now - 1 day")).days %}
+{% else %}
+    {%  set dteFinal = 0  %}
+{% endif %}
+
+{% block page_title %}
+    <span>{% trans %}passenger.page_title.index{% endtrans %}</span>
+{% endblock %}
+
+{% block page_title_menu %}
+
+{% endblock %}
+
+{% block back_link %}
+        <a class="back-link" href="/profile"><i class="fa fa-arrow-left"></i> Back To Profile</a>
+{% endblock %}
+
+{% block body -%}
+
+<div class="tour-show-wrapper site-show" entityId="{{ tour.id }}">
+
+
+    <div class="tour-show-left-column">
+        <ul class="tour-show-submenu">
+            <li><strong>{% trans %}passenger.labels.passenger_for{% endtrans %} {{ tour.name|capitalize }}</strong></li>
+            <li><label>{% trans %}tour.show.institution{% endtrans %}</label><strong>{{ tour.institution.name }}</strong></li>
+            <li><label>{% trans %}tour.show.name{% endtrans %}</label><strong>{{ tour.name}}</strong></li>
+            {#{% if entity.tourReference != null %}#}
+            {#<li><label>{% trans %}tour.show.number{% endtrans %}</label><strong>{{ entity.tourReference}}</strong></li>#}
+            {#{% endif %}#}
+            <li><label>{% trans %}tour.show.departure{% endtrans %}</label><strong>{{ tour.departureDate|date(format) }}</strong></li>
+
+        </ul>
+
+        <div class="tour-edit-organizer-left">
+            <label>{% trans %}tour.show.organizers{% endtrans %}</label><br>
+            {% if tour.organizer.media %}
+                <img class="tui-image-avatar" src="{{ ( tour.organizer.media.getRelativePath ~ "/" ~ tour.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.tourReference.organizer.username }}">
+            {% elseif tour.organizer.firstName and tour.organizer.lastName %}
+                <span class="tui-text-avatar mdl-typography--headline">{{ tour.organizer.firstName[:1] }}{{ tour.organizer.lastName[:1] }}</span>
+            {% else %}
+                <span class="tui-text-avatar mdl-typography--headline">{{ tour.organizer.username[:1] }}</span>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="tour-show-right-column">
+
+    {#Status Card#}
+
+    {#Status Bar, only the organizer for the specific tour or brand users can view the dashboard#}
+    <div class="tour-edit mdl-card mdl-shadow--2dp">
+        <div class="mdl-card__title">
+            <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.status{% endtrans %}</h3>
+            {#{% if entity.tripStatus.name is defined and entity.tripStatus.name != null %}#}
+                {#{% if entity.tripStatus.name == "Provisional" %}#}
+                    {#<span style="color: goldenrod; margin-left: 20px;" class="status-alert"><i style="margin-right:5px;" class="fa fa-exclamation-circle"></i>{{ entity.tripStatus.name }}</span>#}
+                {#{% elseif entity.tripStatus.name == "Confirmed" %}#}
+                    {#<span style="color: green; margin-left: 20px;" class="status-alert"><i style="margin-right:5px;" class="fa fa-check"></i>{{ entity.tripStatus.name }}</span>#}
+                {#{% elseif entity.tripStatus.name == "Cancelled" %}#}
+                    {#<span style="color: red; margin-left: 20px;" class="status-alert"><i style="margin-right:5px;" class="fa fa-times"></i>{{ entity.tripStatus.name }}</span>#}
+                {#{% endif %}#}
+            {#{% endif %}#}
+            {#<span class="tour-dashboard-cta status-block"><a class=""><i class="fa fa-ellipsis-v"></i></a></span>#}
+        </div>
+        <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
+            <ul>
+                {% if tour.paymentTasksPassenger is not empty  %}
+                    {% for paymentTask in tour.paymentTasksPassenger if paymentTaskPassenger.paidDate == null %}
+                        {% if loop.first %}
+                            <li>
+                                <div class="profile-list-item item-1 tour-dashboard three-column">
+                                    <span class="date-span">{% if tour.currency %}<p id="currency" style="display: inline; font-size: inherit;">{{ tour.currency.htmlSymbol | raw }}</p>{% endif %}{{ paymentTask.value * tour.payingPlaces }}</span>
+                                    <label>{{ paymentTask.name }} {% trans %}tour.dashboard.due{% endtrans %} {{ paymentTask.dueDate|date(shortFormat) }}</label>
+                                </div>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                {% elseif tour.paymentTasksPassenger is empty  %}
+                    <li>
+                        <div class="profile-list-item item-1 tour-dashboard three-column">
+                            <span class="date-span">{% trans %}tour.dashboard.na{% endtrans %}</span>
+                            <label>{% trans %}tour.dashboard.no_payments{% endtrans %}</label>
+                        </div>
+                    </li>
+                {% endif %}
+                <li>
+                    <div class="profile-list-item item-2 tour-dashboard three-column">
+                        <span class="date-span">{{ totalCompletedTasks }}/{{ totalPossibleTasks }}</span>
+                        <label>Tasks Completed</label>
+                    </div>
+                </li>
+                <li>
+                    {# if Provisional and not yet expired, show days till expired, else show days to departure #}
+                    {# if there is no expiry, show day till departure #}
+                    <div class="profile-list-item item-3 tour-dashboard three-column">
+                        {% if tour.tripStatus.name == "Provisional" and tour.expiryDate %}
+                            {% if dteFinal< 1 %}
+                                <span class="date-span" style="color:red;"><i class="fa fa-exclamation-circle"> Expired</i></span>
+                                <label>{% trans %}tour.dashboard.expiry{% endtrans %}</label>
+                            {% endif %}
+                            {% if dteFinal > 0 %}
+                                <span class="date-span">{{ dteFinal }}</span>
+                                <label>{% trans %}tour.dashboard.expiry{% endtrans %}</label>
+                            {% endif %}
+                        {% else %}
+                            <span class="date-span">{{ dtgFinal }}</span>
+                            <label>{% trans %}tour.dashboard.days{% endtrans %}</label>
+                        {%  endif %}
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    {% for passengerObject in  passengerObjects %}
+    {% set age = date(passengerObject.dateOfBirth).diff(date("now")) %}
+        <div class="tour-edit mdl-card mdl-shadow--2dp">
+            <div class="mdl-card__title">
+                <h3 class="mdl-card__title-text">{{ passengerObject.fName }} {{ passengerObject.lName }}</h3>
+                <button id="passenger-edit-actions-menu-drop-{{ passengerObject.id }}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-button">
+                    <i class="material-icons">more_vert</i>
+                </button>
+                {% embed "PassengerBundle:Passenger:passengerSubMenu.html.twig" %}{% endembed %}
+                <div class="clear"></div>
+            </div>
+            <div class="mdl-card__supporting-text mdl-card--border">
+                    {% if passengerObject.media %}
+                        <img id="passenger-avatar" class="tui-image-avatar" src="{{ ( passengerObject.media.getRelativePath ~ "/" ~ passengerObject.media.getHashedFilename ) | imagine_filter('thumbnail') }}">
+                    {% elseif passengerObject.fName and passengerObject.lName %}
+                        <span id="passenger-avatar" class="tui-text-avatar mdl-typography--headline">{{ passengerObject.fName[:1] }}{{ passengerObject.lName[:1] }}</span>
+                    {% else %}
+                        <span id="passenger-avatar" class="tui-text-avatar mdl-typography--headline">{{ passengerObject.fName[:1] }}</span>
+                    {% endif %}
+                <div class="passenger-details">
+                    <h3><span id="passenger-fname">{{ passengerObject.fname }}</span> <span id="passenger-lname">{{ passengerObject.lname }}</span></h3>
+                    <label style="display: block">
+                    {#{{ statusicon | raw }} {{ freeicon | raw }}{{ organizericon | raw }}#}
+                    <span id="passenger-dob">{{ 'passenger.form.invite.age' | trans }}: {{ (age.days/365)|round(0, 'floor') }}</span>
+                     {% if passengerObject.gender != 'undefined' %}, <span id="passenger-gender">{{ 'passenger.form.invite.gender' | trans }}: {{ passengerObject.gender }}</span>{% endif %}
+                     </label>
+                </div>
+                <div class="clear"></div>
+                    <div class="mdl-card__supporting-text profile-tour-details">
+                       <ul>
+                           <li>
+                               <div class="profile-list-item item-1 tour-dashboard two-column">
+                                   <span class="date-span">{% if passengerObject.tourReference.currency %}{{ passengerObject.tourReference.currency.htmlSymbol | raw}}{% endif %} {{ passengerObject.tourReference.pricePersonPublic }}</span>
+                                   <label>Price Per Person</label>
+                               </div>
+                           </li>
+                          <li>
+                               <div class="profile-list-item item-2 tour-dashboard two-column">
+                                    <span class="date-span">{{ passengerObject.completedTasks|length }}/{{ possibleTasksCount}}</span>
+                                   <label>Tasks Completed</label>
+                               </div>
+                           </li>
+                       </ul>
+                   </div>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+
+{% javascripts '@toolkit_passenger' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}
+
+{% endblock %}
+
+{% block footer_left %}
+    {% if tour.salesAgent.email%} {# Show Sales Agent Info to an Organizer#}
+        {% if tour.salesAgent %}
+            <span class="intro">
+                    {{ brand.name }} {% trans %}tour.show.footer.intro_org{% endtrans %}
+            </span>
+            {% if tour.salesAgent.media %}
+                <span class="tui-image-avatar"><img src="{{ ( tour.salesAgent.media.getRelativePath ~ "/" ~ tour.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ tour.salesAgent.username }}"></span>
+            {% elseif tour.salesAgent.firstName and tour.salesAgent.lastName %}
+                <span class="tui-text-avatar mdl-typography--headline">{{ tour.salesAgent.firstName[:1] }}{{ tour.salesAgent.lastName[:1] }}</span>
+            {% else %}
+                <span class="tui-text-avatar mdl-typography--headline">{{ tour.salesAgent.username[:1] }}</span>
+            {% endif %}
+            <span class="agent">
+                {% if tour.salesAgent.displayName %}
+                    {{ tour.salesAgent.displayName }}
+                {% else %}
+                    {{ tour.salesAgent.firstName }} {{ tour.salesAgent.lastName }}
+                {% endif %}
+                <br>
+                <a href="mailto:{{ tour.salesAgent.email }}">{{ tour.salesAgent.email }}</a>
+            </span>
+        {% endif %}
+    {% else %} {# Show organizer info to everyone but organizers #}
+        {% if tour.organizer %}
+            <span class="intro">
+                    {% trans %}tour.show.footer.intro{% endtrans %}
+            </span>
+            {% if tour.organizer.media %}
+                <span class="tui-image-avatar"><img src="{{ ( tour.organizer.media.getRelativePath ~ "/" ~ tour.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ tour.organizer.username }}"></span>
+            {% elseif tour.organizer.firstName and tour.organizer.lastName %}
+                <span class="tui-text-avatar mdl-typography--headline">{{ tour.organizer.firstName[:1] }}{{ tour.organizer.lastName[:1] }}</span>
+            {% else %}
+                <span class="tui-text-avatar mdl-typography--headline">{{ tour.organizer.username[:1] }}</span>
+            {% endif %}
+            <span class="agent">
+                {% if tour.organizer.displayName %}
+                    {{ tour.organizer.displayName }}
+                {% else %}
+                    {{ tour.organizer.firstName }} {{ tour.organizer.lastName }}
+                {% endif %}
+                <br>
+                <a href="mailto:{{ tour.organizer.email }}">{{ tour.organizer.email }}</a>
+            </span>
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block footer_right %}
+    <div class="quote-info">
+        <span class="quote-label">{% trans %}tour.show.footer.price{% endtrans %}</span>
+
+        <span class="quote-price">
+            {% if tour.pricePerson %}
+                <strong>{% if tour.currency %}{{ tour.currency.htmlSymbol | raw }}{% endif %}{{ tour.pricePersonPublic }}</strong>
+            {% endif %}
+        </span>
+    </div>
+{% endblock %}
