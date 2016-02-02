@@ -25,16 +25,6 @@ class EmergencyType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        switch (true){
-            case strstr($this->locale, 'en_GB'):
-                $phoneFormat = PhoneNumberFormat::NATIONAL;
-                $defaultRegion = 'GB';
-                break;
-            default:
-                $phoneFormat = PhoneNumberFormat::NATIONAL;
-                $defaultRegion = 'US';
-                break;
-        }
 
         $builder
             ->add('emergencyName', 'text', array(
@@ -45,11 +35,9 @@ class EmergencyType extends AbstractType
                 'required' => false,
                 'label' => 'passenger.labels.emergency_relationship',
             ))
-            ->add('emergencyNumber', 'tel', array(
+            ->add('emergencyNumber', 'text', array(
                 'required' => false,
                 'label' => 'passenger.labels.emergency_number',
-                'default_region' => $defaultRegion,
-                'format' => $phoneFormat,
             ))
             ->add('emergencyEmail', 'email', array(
                 'required' => false,

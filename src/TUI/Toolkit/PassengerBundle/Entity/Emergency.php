@@ -45,7 +45,7 @@ class Emergency
     private $emergencyRelationship;
 
     /**
-     * @ORM\Column(type="phone_number", nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      */
     private $emergencyNumber;
 
