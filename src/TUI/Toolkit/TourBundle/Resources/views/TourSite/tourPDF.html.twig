@@ -189,7 +189,7 @@
                         <span class="tui-image-avatar"><img
                                     src="{{ ( entity.salesAgent.media.getRelativePath ~ "/" ~ entity.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}"
                                     alt="{{ entity.salesAgent.username }}"></span>
-                    {% elseif entity.firstName and entity.salesAgent.lastName %}
+                    {% elseif entity.salesAgent.firstName and entity.salesAgent.lastName %}
                         <span class="tui-text-avatar mdl-typography--headline">{{ entity.salesAgent.firstName[:1] }}{{ entity.salesAgent.lastName[:1] }}</span>
                     {% else %}
                         <span class="tui-text-avatar mdl-typography--headline">{{ entity.salesAgent.username[:1] }}</span>
