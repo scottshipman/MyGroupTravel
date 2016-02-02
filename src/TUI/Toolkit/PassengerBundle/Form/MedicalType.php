@@ -25,27 +25,15 @@ class MedicalType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
-        switch (true){
-            case strstr($this->locale, 'en_GB'):
-                $phoneFormat = PhoneNumberFormat::NATIONAL;
-                $defaultRegion = 'GB';
-                break;
-            default:
-                $phoneFormat = PhoneNumberFormat::NATIONAL;
-                $defaultRegion = 'US';
-                break;
-        }
+        
         $builder
             ->add('doctorName', 'text', array(
                 'required' => false,
                 'label' => 'passenger.labels.doctor_name',
             ))
-            ->add('DoctorNumber', 'tel', array(
+            ->add('DoctorNumber', 'text', array(
                 'required' => false,
                 'label' => 'passenger.labels.doctor_number',
-                'default_region' => $defaultRegion,
-                'format' => $phoneFormat,
             ))
             ->add('conditions', 'text', array(
                 'required' => false,

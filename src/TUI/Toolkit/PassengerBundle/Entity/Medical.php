@@ -47,7 +47,7 @@ class Medical
     private $doctorName;
 
     /**
-     * @ORM\Column(type="phone_number", nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      */
     private $doctorNumber;
 
