@@ -105,7 +105,7 @@
 
             <div id="site-header-summary" style="margin-top: 75px; padding-left: 0;">
                 <div id="site-header-summary-content-pdf" style="width: 400px;">
-                    <ul id="site-summary-details-pdf" style="position: relative; right: 45px; list-style: none; font-size: 16px; line-height: 32px">
+                    <ul id="site-summary-details-pdf" style="position: relative; right: 50px; list-style: none; font-size: 16px; line-height: 32px; max-width: 370px;">
                         {% if entity.departureDate %}<li class="right"><span class="label" style="text-align: left">{% trans %}quote_site.quote_summary.departing{% endtrans %}</span> <strong>{{ entity.departureDate|date(format) }}</strong></li>{% endif %}
                         {% if entity.duration %}<li class="right"><span class="label">{% trans %}quote_site.quote_summary.duration{% endtrans %}</span> <strong>{{ entity.duration }}</strong></li>{% endif %}
                         {% if entity.returnDate %}<li class="right"><span class="label">{% trans %}quote_site.quote_summary.returning{% endtrans %}</span> <strong>{{ entity.returnDate|date(format) }}</strong></li>{% endif %}
@@ -123,7 +123,7 @@
                             </li>{% endif %}
                         {% if entity.expiryDate %}<li>{% trans %}quote_site.quote_summary.expiry{% endtrans %} <strong>{{ entity.expiryDate|date(format) }}</strong></li>{% endif %}
 
-                        <li id="headerBlock-text">{% if entity.welcomeMsg %}{{ entity.welcomeMsg|raw }}{% endif %}</li>
+                        <li id="headerBlock-text" style="width: 250px;">{% if entity.welcomeMsg %}{{ entity.welcomeMsg|raw }}{% endif %}</li>
                     </ul>
                 </div>
             </div>
