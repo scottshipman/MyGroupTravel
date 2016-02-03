@@ -804,6 +804,7 @@ class QuoteSiteController extends Controller
   public function updateSummaryAction(Request $request, $id)
   {
     $date_format = $this->container->getParameter('date_format');
+    $template = "";
     $em = $this->getDoctrine()->getManager();
     $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
     if (!$entity) {
@@ -825,10 +826,9 @@ class QuoteSiteController extends Controller
 
     }
 
-    return $this->render('QuoteBundle:QuoteVersion:editSummary.html.twig', array(
+    return $this->render('QuoteBundle:QuoteSite:editSummary.html.twig', array(
       'entity' => $entity,
       'edit_form' => $editForm->createView(),
-      'delete_form' => $deleteForm->createView(),
       'template' => $template,
       'date_format' => $date_format,
     ));
