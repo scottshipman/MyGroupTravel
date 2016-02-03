@@ -286,6 +286,7 @@ tour:
             message: Message to the organiser
         payment_task:
             value: Amount
+            type: Payment Type
             date: Due Date (DD-MM-YYYY)
         tour_setup:
             price: Price per Person

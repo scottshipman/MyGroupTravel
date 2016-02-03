@@ -35,7 +35,9 @@ class PaymentTaskType extends AbstractType
       }
 
         $builder
-            ->add('name')
+            ->add('name', 'text', array(
+                'label' => 'tour.form.payment_task.type',
+            ))
             ->add('value', 'integer', array(
                 'label' =>  'tour.form.payment_task.value',
                 'scale' => 2,
