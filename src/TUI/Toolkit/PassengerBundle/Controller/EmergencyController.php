@@ -92,7 +92,7 @@ class EmergencyController extends Controller
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => 'Save'));
 
         return $form;
     }
