@@ -203,7 +203,7 @@
                         </div>
                         <div class="mdl-card__supporting-text mdl-card--border">
                             <label class="row-label">{% trans %}passenger.labels.doctor_number{% endtrans %}</label>
-                            <p id="doctors-number" class="doctors-number row-content">{% if entity.medicalReference != null and entity.medicalReference.doctorNumber != null%}{{ entity.medicalReference.doctorNumber.nationalNumber }}{% endif %}</p>
+                            <p id="doctors-number" class="doctors-number row-content">{% if entity.medicalReference != null and entity.medicalReference.doctorNumber != null%}{{ entity.medicalReference.doctorNumber }}{% endif %}</p>
                             <div class="clear"></div>
                         </div>
                        <div class="mdl-card__supporting-text mdl-card--border">
@@ -311,7 +311,7 @@
                         </div>
                         <div class="mdl-card__supporting-text mdl-card--border">
                             <label class="row-label">{% trans %}passenger.labels.emergency_number{% endtrans %}</label>
-                            <p class="emergency-number row-content">{% if entity.emergencyReference != null and entity.emergencyReference.emergencyNumber != null%}{{ entity.emergencyReference.emergencyNumber.nationalNumber }}{% endif %}</p>
+                            <p class="emergency-number row-content">{% if entity.emergencyReference != null and entity.emergencyReference.emergencyNumber != null%}{{ entity.emergencyReference.emergencyNumber }}{% endif %}</p>
                             <div class="clear"></div>
                         </div>
                         <div class="mdl-card__supporting-text mdl-card--border">
@@ -337,6 +337,18 @@
     {% javascripts '@toolkit_passenger' %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
+
+    <script>
+        $(document).ready(function () {
+            //Add the date of birth label
+            var labelText = "{% trans %}passenger.modals.dob{% endtrans %}";
+            var div = $('.dateOfBirth');
+            div.prepend('<label class="mdl-label-mimic dob">' + labelText + '</label><br/>');
+            $('.dob').css({"position": "relative", "font-size": "14px"});
+            div.css({"margin-top": "5px"});
+//            $('#tui_toolkit_tourbundle_tourpassenger_passengers_"' + index + '"_dateOfBirth > div:nth-child(1)').css({"width": "100"});
+        });
+    </script>
 {% endblock %}
 
 {% block footer_left %}
@@ -385,17 +397,6 @@
             </span>
         {% endif %}
     {% endif %}
-    <script>
-        $(document).ready(function () {
-            //Add the date of birth label
-            var labelText = "{% trans %}passenger.modals.dob{% endtrans %}";
-            var div = $('.dateOfBirth');
-            div.prepend('<label class="mdl-label-mimic dob">' + labelText + '</label><br/>');
-            $('.dob').css({"position": "relative", "font-size": "14px"});
-            div.css({"margin-top": "5px"});
-//            $('#tui_toolkit_tourbundle_tourpassenger_passengers_"' + index + '"_dateOfBirth > div:nth-child(1)').css({"width": "100"});
-        });
-    </script>
 {% endblock %}
 
 {% block footer_right %}
