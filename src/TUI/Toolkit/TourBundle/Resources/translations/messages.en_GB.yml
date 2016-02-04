@@ -17,7 +17,7 @@ tour:
         index_active: Tour Dashboard - Active
         new: Create New Tour
         show: Tour
-        site_view: Site View
+        site_view: Tour Website
         dashboard: Dashboard
         deleted: Tour Dashboard - Deleted
         payment_task:
