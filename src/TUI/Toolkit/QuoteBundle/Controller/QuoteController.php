@@ -11,6 +11,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use TUI\Toolkit\TourBundle\Entity\Tour;
 use TUI\Toolkit\QuoteBundle\Controller\QuoteVersionController;
+use TUI\Toolkit\PassengerBundle\Entity\Passenger;
+use TUI\Toolkit\UserBundle\Entity\User;
+use TUI\Toolkit\PermissionBundle\Entity\Permission;
 
 /**
  * Quote controller.
@@ -299,7 +302,7 @@ class QuoteController extends Controller
         //$newPassenger->setDateOfBirth(); // we dont know what this is here
         $newPassenger->setFName($organizer->getFirstName());
         //$newPassenger->setGender(); // we dont know what this is here
-        $newPassenger->setLName($organizer->getLastName);
+        $newPassenger->setLName($organizer->getLastName());
         $newPassenger->setStatus("waitlist");
         $newPassenger->setSignUpDate(new \DateTime());
         $newPassenger->setTourReference($tour);
