@@ -455,8 +455,8 @@ $(document).ready(function () {
             $('#passenger-close').css("display", "none");
             $('#passenger-fname').html(firstName);
             $('#passenger-lname').html(lastName);
-            $('#passenger-dob').html(dob);
-            $('#passenger-gender').html(gender);
+            $('#passenger-dob').html("Age: " + dob);
+            $('#passenger-gender').html("Gender: " + gender);
             var length = response.length;
             if (length == 7) {
                 var imagePath = response[5] + '/' + response[6];
