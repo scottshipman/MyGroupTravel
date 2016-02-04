@@ -202,7 +202,7 @@
                     {{ tour.salesAgent.firstName }} {{ tour.salesAgent.lastName }}
                 {% endif %}
                 <br>
-                <a href="mailto:{{ tour.salesAgent.email }}">{{ tour.salesAgent.email }}</a>
+                <a style="text-decoration: none;" href="mailto:{{ tour.salesAgent.email }}">{{ tour.salesAgent.email }}</a>
             </span>
         {% endif %}
     {% else %} {# Show organizer info to everyone but organizers #}
@@ -224,7 +224,7 @@
                     {{ tour.organizer.firstName }} {{ tour.organizer.lastName }}
                 {% endif %}
                 <br>
-                <a href="mailto:{{ tour.organizer.email }}">{{ tour.organizer.email }}</a>
+                <a style="text-decoration: none;" href="mailto:{{ tour.organizer.email }}">{{ tour.organizer.email }}</a>
             </span>
         {% endif %}
     {% endif %}
