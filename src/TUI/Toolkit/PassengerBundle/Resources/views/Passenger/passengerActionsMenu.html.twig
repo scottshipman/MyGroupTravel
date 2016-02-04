@@ -26,5 +26,12 @@
         {% else %}
             <li><a style="display: none;" href="#free" class="mdl-menu__item move-to-free" tour="{{ tourId }}" passenger="{{ passengerId }}">Move to {{ "free" | paxLabel }}</a></li>
         {% endif %}
+
+        {# make payment menu item #}
+        {% if passengerStatus == 'accepted' and free is sameas(false) %}
+            {% if is_granted("ROLE_BRAND") or "tour" | getRoles(tourId) == "organizer" or "tour" | getRoles(tourId) == "assistant"%}
+                <li><a style="display: block;" href="#payment" class="mdl-menu__item payment" tour="{{ tourId }}" passenger="{{ passengerId }}">Log a Payment</a></li>
+            {% endif %}
+        {% endif %}
     </span>
 </ul>
