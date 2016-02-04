@@ -4,7 +4,6 @@ namespace TUI\Toolkit\PassengerBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use TUI\Toolkit\UserBundle\Entity\User;
 use TUI\Toolkit\TourBundle\Entity\Tour;
 use TUI\Toolkit\PermissionBundle\Entity\Permission;
