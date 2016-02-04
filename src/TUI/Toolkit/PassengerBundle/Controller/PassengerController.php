@@ -197,10 +197,13 @@ class PassengerController extends Controller
 
             $em->flush();
 //            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('passenger.flash.save'));
+
+
             $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('passenger.flash.save'));
 
-
             return $this->redirect($request->server->get('HTTP_REFERER'));
+
+
         }
 
         $errors = $this->get("passenger.actions")->getErrorMessages($form);
@@ -427,8 +430,8 @@ class PassengerController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
-            $dob = $entity->getDateOfBirth()->format('Y');
-            $age = date_diff(date_create($dob), date_create('now'))->y;
+            $dob = $entity->getDateOfBirth();
+            $age = date_diff($dob, date_create('now'))->y;
 
             $data = array (
                 $entity->getFName(),
@@ -581,7 +584,7 @@ class PassengerController extends Controller
             $combinedObjects = array();
 
             if (empty($passengers)) {
-                return NULL;
+                return array();
             }
 
             foreach($passengers as $passenger) {
