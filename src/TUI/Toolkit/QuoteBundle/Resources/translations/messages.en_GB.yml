@@ -4,7 +4,7 @@ quote:
         edit: Edit Quote
         index: Quote Dashboard
         new: Create New Quote
-        show: Site Preview
+        show: Quote Website
         layout_auth: My Tours
         layout_anon: Quote Login
         deleted: Quote Dashboard - Deleted
@@ -14,7 +14,7 @@ quote:
         edit: Edit Quote
         index: Quote Dashboard
         new: Create New Quote
-        show: Site Preview
+        show: Quote Website
         layout_auth: My Tours
         layout_anon: Quote Login
         deleted: Quote Dashboard - Deleted
