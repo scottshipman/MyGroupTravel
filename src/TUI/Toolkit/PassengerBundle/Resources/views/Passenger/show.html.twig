@@ -70,7 +70,6 @@
     </div>
 
         <div class="tour-show-right-column">
-
         {#Passenger Information Card#}
                     {% if entity.status == "accepted" %}
                         {% set statusicon =  '<a class="' ~ entity.status ~ 'icon" title = "' ~ entity.status ~ '"><i class="material-icons">verified_user</i></a>'%}
@@ -113,8 +112,8 @@
                         <h3><span id="passenger-fname">{{ entity.fname }}</span> <span id="passenger-lname">{{ entity.lname }}</span></h3>
                         <label style="display: block">
                         {{ statusicon | raw }} {{ freeicon | raw }}{{ organizericon | raw }}
-                        <span id="passenger-dob">{{ 'passenger.form.invite.age' | trans }}: {{ (age.days/365)|round(0, 'floor') }}</span>
-                         {% if entity.gender != 'undefined' %}, <span id="passenger-gender">{{ 'passenger.form.invite.gender' | trans }}: {{ entity.gender }}</span>{% endif %}
+                        <span id="passenger-dob">{% if entity.dateOfBirth != null %}{{ 'passenger.form.invite.age' | trans }}: {{ (age.days/365)|round(0, 'floor') }}{% endif %}</span>
+                        <span id="passenger-gender"> {% if entity.gender != null %}{{ 'passenger.form.invite.gender' | trans }}: {{ entity.gender }}{% endif %}</span>
                          </label>
                     </div>
                         {{ render(controller( 'PassengerBundle:Passenger:edit', {'id' : entity.id} )) }}
@@ -189,8 +188,8 @@
                     <div class="waitlist tour-edit mdl-card mdl-shadow--2dp">
                         <div class="mdl-card__title">
                             <h3 class="mdl-card__title-text"><i style="margin-right: 10px;"class="material-icons">local_hospital</i> {% trans %}passenger.labels.medical_info{% endtrans %}</h3>
-                            <i id="medical" class="material-icons" style="color: grey; position: absolute; right: 15px; display: inline-block;">border_color</i>
-                            <i id="medical-close" style="display: none" class="material-icons">close</i>
+                            <a style="position: absolute; right: 15px;" href="#"><i id="medical" class="material-icons" style="position: relative; display: inline-block; border-radius: 0px; border: none; padding: 0px">border_color</i></a>
+                            <a style="position: absolute; right: 15px;" href="#"><i id="medical-close" style="display: none; position: relative; border-radius: 0px; border: none; padding: 0px" class="material-icons">close</i></a>
                         </div>
                         {% if entity.medicalReference != null %}
                             {% set medicalId  = entity.medicalReference.id%}
@@ -225,8 +224,8 @@
                 <div class="waitlist tour-edit mdl-card mdl-shadow--2dp">
                     <div class="mdl-card__title">
                         <h3 class="mdl-card__title-text"><i style="margin-right: 10px;"class="material-icons">local_dining</i> {% trans %}passenger.labels.dietary_info{% endtrans %}</h3>
-                        <i id="dietary" class="material-icons" style="color: grey; position: absolute; right: 15px; display: inline-block;">border_color</i>
-                        <i id="dietary-close" style="display: none;" class="material-icons">close</i>
+                        <a style="position: absolute; right: 15px;" href="#"><i id="dietary" class="material-icons" style="position: relative; display: inline-block; border-radius: 0px; border: none; padding: 0px">border_color</i></a>
+                        <a style="position: absolute; right: 15px;" href="#"><i id="dietary-close" style="display: none; position: relative; border-radius: 0px; border: none; padding: 0px" class="material-icons">close</i></a>
                     </div>
                     {% if entity.dietaryReference != null %}
                         {% set dietaryId  = entity.dietaryReference.id%}
@@ -245,8 +244,8 @@
                     <div class="waitlist tour-edit mdl-card mdl-shadow--2dp">
                         <div class="mdl-card__title">
                             <h3 class="mdl-card__title-text"><i style="margin-right: 10px;"class="material-icons">person_outline</i> {% trans %}passenger.labels.passport_info{% endtrans %}</h3>
-                            <i id="passport" class="material-icons" style="color: grey; position: absolute; right: 15px; display: inline-block;">border_color</i>
-                            <i id="passport-close" style="display: none;" class="material-icons">close</i>
+                            <a style="position: absolute; right: 15px;" href="#"><i id="passport" class="material-icons" style="position: relative; display: inline-block; border-radius: 0px; border: none; padding: 0px">border_color</i></a>
+                            <a style="position: absolute; right: 15px;" href="#"><i id="passport-close" style="display: none; position: relative; border-radius: 0px; border: none; padding: 0px" class="material-icons">close</i></a>
                         </div>
                         {% if entity.PassportReference != null %}
                             {% set passportId  = entity.passportReference.id%}
@@ -292,8 +291,8 @@
                     <div class="waitlist tour-edit mdl-card mdl-shadow--2dp">
                         <div class="mdl-card__title">
                             <h3 class="mdl-card__title-text"><i style="margin-right: 10px;"class="material-icons">warning</i> {% trans %}passenger.labels.emergency_info{% endtrans %}</h3>
-                            <i id="emergency" class="material-icons" style="color: grey; position: absolute; right: 15px; display: inline-block;">border_color</i>
-                            <i id="emergency-close" style="display: none;" class="material-icons">close</i>
+                            <a style="position: absolute; right: 15px;" href="#"><i id="emergency" class="material-icons" style="position: relative; display: inline-block; border-radius: 0px; border: none; padding: 0px">border_color</i></a>
+                            <a style="position: absolute; right: 15px;" href="#"><i id="emergency-close" style="display: none; position: relative; border-radius: 0px; border: none; padding: 0px" class="material-icons">close</i></a>
                         </div>
                         {% if entity.emergencyReference != null %}
                             {% set emergencyId  = entity.emergencyReference.id%}
