@@ -98,9 +98,9 @@
                 </div>
             {% endif %}
 
-            <a href="javascript:window.print()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
-                <i class="fa fa-print"></i> {% trans %}tour.actions.print{% endtrans %}
-            </a>
+            {#<a href="javascript:window.print()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">#}
+                {#<i class="fa fa-print"></i> {% trans %}tour.actions.print{% endtrans %}#}
+            {#</a>#}
 
             <a href="/tour/print/{{ entity.id }}/{{ entity.quoteNumber }}.pdf" target="_blank" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
                 <i class="fa fa-file-pdf-o"></i> {% trans %}tour.actions.pdf{% endtrans %}
