@@ -1060,7 +1060,7 @@ class PassengerController extends Controller
                 $user->getLastName(),
                 $organizersCount + 1,
             );
-
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess("An email invitation has been sent to " . $user->getFirstName() . " " . $user->getLastName() . " at " . $newEmail .".");
             $responseContent = json_encode($data);
             return new Response($responseContent,
                 Response::HTTP_OK,
