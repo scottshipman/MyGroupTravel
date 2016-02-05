@@ -1,0 +1,42 @@
+#PaymentBundle/Resources/translations/messages.en_gb.yml
+payment:
+    title:
+        edit: Edit Payment
+        index: Payment Dashboard
+        new: Log a Payment
+        show: Payment
+
+    page_title:
+        edit: Edit Payment
+        index: Payments
+        new: Log a Payment
+        show: Payment
+
+    actions:
+        back: Back to the Dashboard
+        edit: Edit
+        update: Update
+        create: Create
+        delete: Delete
+        create_new: Log a New Payment
+        view: View
+        edit: Edit
+
+    flash:
+        save: "This payment has been logged."
+        delete: Payment deleted -
+
+    labels:
+        payment: Payment
+        add: Add Payment
+
+    form:
+        date: Email
+        value: Passenger's First Name
+        note: Passenger's Last Name
+
+        error:
+            value: Value must be numeric only
+
+        success:
+            message: This payment has been logged.
