@@ -45,6 +45,7 @@
 {% endif %}
 
 {% set signup = accepted %}{% if signup >= entity.payingPlaces %}{% set signupPercent = 100 %}{% elseif signup < entity.payingPlaces %}{% set signupPercent = (signup/entity.payingPlaces) * 100 %}{% endif %}
+{% set signupNumber = (accepted + waitlist) - totalOrganizerCount %}{% if  signupNumber <= 0%}{% set signupNumber = 0 %}{% endif %}
 
 {% if is_granted("ROLE_BRAND") or app.user.email == entity.organizer.email %}
 
@@ -86,7 +87,7 @@
                 {% endif %}
                 <li>
                     <div class="profile-list-item item-2 tour-dashboard four-column">
-                        <span class="date-span">{{ (accepted + waitlist) - totalOrganizerCount }}</span>
+                        <span class="date-span">{{ signupNumber }}</span>
                         <label>{% trans %}tour.dashboard.signups{% endtrans %}</label>
                     </div>
                 </li>

@@ -53,7 +53,7 @@ class Passenger
     /**
      * @var string
      *
-     * @ORM\Column(name="gender", type="string")
+     * @ORM\Column(name="gender", nullable=true, type="string")
      */
     protected $gender;
 
@@ -61,7 +61,7 @@ class Passenger
     /**
      * @var datetime
      *
-     * @ORM\Column(name="dob", type="date", nullable=false)
+     * @ORM\Column(name="dob", type="date", nullable=true)
      */
     protected $dateOfBirth;
 

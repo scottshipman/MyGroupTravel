@@ -1787,7 +1787,7 @@ class QuoteVersionController extends Controller
                 }
             }
         } else {
-            $logger->error('Content Block appears to be empty during QuoteVersion Clone process: ' . $content);
+            $logger->error('Content Block appears to be empty during QuoteVersion Clone process.');
         }
 
         return $newContentArray;
