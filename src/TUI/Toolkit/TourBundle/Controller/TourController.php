@@ -1275,7 +1275,6 @@ class TourController extends Controller
             'accepted' => $accepted,
             'free' => $free,
             'completedPassengerData' => $completedPassengerData,
-            'medical' => $medical,
             'totalOrganizerCount' => $totalOrganizerCount,
         ));
 
