@@ -77,9 +77,9 @@
                 {% endif %}
             {% endif %}
 
-            <a href="javascript:window.print()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
-                <i class="fa fa-print"></i> {% trans %}quote.actions.print{% endtrans %}
-            </a>
+            {#<a href="javascript:window.print()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">#}
+                {#<i class="fa fa-print"></i> {% trans %}quote.actions.print{% endtrans %}#}
+            {#</a>#}
             {% if entity.quoteNumber %} {% set pdfFilename = entity.quoteNumber %} {% else %} {% set pdfFilename = 'template-' ~ entity.id %} {% endif %}
             <a href="/quote/print/{{ entity.id }}/{{ pdfFilename  }}.pdf" target="_blank" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
                 <i class="fa fa-file-pdf-o"></i> {% trans %}quote.actions.pdf{% endtrans %}
