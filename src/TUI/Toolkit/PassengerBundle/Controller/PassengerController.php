@@ -201,8 +201,14 @@ class PassengerController extends Controller
 
             $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('passenger.flash.save'));
 
-            return $this->redirect($request->server->get('HTTP_REFERER'));
+            $serializer = $this->container->get('jms_serializer');
+            $passengerObjects = $serializer->serialize($newPassengers, 'json');
 
+            $response = new Response($passengerObjects);
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
+
+//            return $this->redirect($request->server->get('HTTP_REFERER'));
 
         }
 
