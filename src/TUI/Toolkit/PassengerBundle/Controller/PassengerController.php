@@ -16,6 +16,8 @@ use TUI\Toolkit\PassengerBundle\Entity\Passenger;
 use TUI\Toolkit\PassengerBundle\Form\PassengerType;
 use TUI\Toolkit\PassengerBundle\Form\TourPassengerType;
 
+use Symfony\Component\DependencyInjection\Container;
+
 
 /**
  * Passenger controller.
@@ -23,6 +25,13 @@ use TUI\Toolkit\PassengerBundle\Form\TourPassengerType;
  */
 class PassengerController extends Controller
 {
+
+    protected $container;
+
+    public function __construct(Container $container)
+    {
+        $this->container = $container;
+    }
 
     /**
      * Lists all Passenger entities.

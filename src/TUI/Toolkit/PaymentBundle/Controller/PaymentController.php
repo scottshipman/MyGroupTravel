@@ -221,4 +221,64 @@ class PaymentController extends Controller
             ->getForm()
         ;
     }
+
+    /**
+     * Getting the passenger dashboard
+     * @param $tourId
+     * @return Response
+     */
+
+    public function getPassengerDashboardAction($tourId)
+    {
+        //check permissions first
+        $currUser = $this->get('security.context')->getToken()->getUser();
+        $currRole =  $this->get("permission.set_permission")->getPermission($tourId, 'tour', $currUser);
+
+        if(!$this->get('security.context')->isGranted('ROLE_BRAND')){
+            if(!in_array('assistant', $currRole) && !in_array('organizer', $currRole)) {
+                throw $this->createAccessDeniedException('You are not authorized to manage passengers for this tour!');
+            }
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
+
+        //combine all lists and get parents
+        $all = $this->get("passenger.actions")->getPassengersByStatus('all', $tourId);
+        $passengers = $this->get('passenger.controller')->addPassengerParents($all, $em);
+
+        // get counts of status for passengers and organizers
+        $participantCounts = $this->get('passenger.controller')->getParticipantCounts($passengers);
+
+        //Get Pending Invite organizer list (have no passenger object created yet so we'll fake it)
+        $organizers = $this->get("passenger.actions")->getOrganizers($tourId);
+        array_unshift($organizers, $tour->getOrganizer());
+
+        $organizersObjects = $this->get('passenger.controller')->addOrganizerPassengers($organizers, $tourId, $em);
+        if ($organizersObjects == null){
+            $organizersObjects = array();
+        }
+
+        // merge all records
+        $passengers = array_merge($passengers, $organizersObjects);
+
+        //brand stuff
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
+
+        return $this->render('PaymentBundle:Payment:dashboard.html.twig', array(
+            'entity' => $tour, // just to re-use the tour menu which relies on a variable called entity
+            'tour' => $tour,
+            'brand' => $brand,
+            'passengers' => $passengers
+        ));
+    }
 }
