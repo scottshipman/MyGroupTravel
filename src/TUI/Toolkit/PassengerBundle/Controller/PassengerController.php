@@ -317,6 +317,12 @@ class PassengerController extends Controller
             }
         }
 
+        //Get Number of possible tasks on the tour
+        $possibleTasksCount = $this->get("passenger.actions")->getPossibleTourTasks($entity->getTourReference()->getId());
+
+        //Get total number of completed tasks for the passenger
+        $completedTasksCount = $this->get("passenger.actions")->getPassengerCompletedTasks($id);
+
 
         //brand stuff
         $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
@@ -338,6 +344,8 @@ class PassengerController extends Controller
             'parent' => $parent,
             'delete_form' => $deleteForm->createView(),
             'isOrganizer' => $isOrganizer,
+            'completedTasksCount' => $completedTasksCount,
+            'possibleTasksCount' => $possibleTasksCount,
         ));
     }
 
