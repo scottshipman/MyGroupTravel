@@ -1,0 +1,30 @@
+payment:
+    path:     /
+    defaults: { _controller: "PaymentBundle:Payment:index" }
+
+payment_show:
+    path:     /{id}/show
+    defaults: { _controller: "PaymentBundle:Payment:show" }
+
+payment_new:
+    path:     /new
+    defaults: { _controller: "PaymentBundle:Payment:new" }
+
+payment_create:
+    path:     /create
+    defaults: { _controller: "PaymentBundle:Payment:create" }
+    methods:  POST
+
+payment_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "PaymentBundle:Payment:edit" }
+
+payment_update:
+    path:     /{id}/update
+    defaults: { _controller: "PaymentBundle:Payment:update" }
+    methods:  [POST, PUT]
+
+payment_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "PaymentBundle:Payment:delete" }
+    methods:  [POST, DELETE]
