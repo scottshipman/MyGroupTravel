@@ -6,6 +6,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityRepository;
+use TUI\Toolkit\TourBundle\Entity\Tour;
+use TUI\Toolkit\CurrencyBundle\Entity\Currency;
 
 class PaymentType extends AbstractType
 {
@@ -17,6 +19,7 @@ class PaymentType extends AbstractType
     {
         $this->passenger = $passenger;
         $this->tour = $tour;
+        $this->locale = $locale;
     }
 
     /**
@@ -27,20 +30,19 @@ class PaymentType extends AbstractType
     {
          switch (true) {
             case strstr($this->locale, 'en_GB'):
-                $date_label = '(DD-MM-YYYY)';
                 $date_format = 'dd-MM-yyyy';
                 break;
             default:
-                $date_label = '(MM-DD-YYYY)';
                 $date_format = 'MM-dd-yyyy';
                 break;
         }
 
         $builder
-            ->add('value' 'integer', array(
+            ->add('value', 'money', array(
                 'label' => 'payment.form.value',
                 'translation_domain'  => 'messages',
                 'required' => true,
+                'currency' => $this->tour->getCurrency()->getCode()
             ))
             ->add('date', 'genemu_jquerydate', array(
                 'widget' => 'single_text',
@@ -48,12 +50,16 @@ class PaymentType extends AbstractType
                 'label' => 'payment.form.date',
                 'format' => $date_format,
             ))
-            ->add('note', 'ckeditor', array(
+            ->add('note', 'textarea', array(
                 'label' => 'payment.form.note',
                 'translation_domain'  => 'messages',
-            ));)
-            ->add('tour')
-            ->add('passenger')
+            ))
+            ->add('tour', 'hidden', array(
+                'data' => $this->tour->getId()
+            ))
+            ->add('passenger','hidden', array(
+                'data' => $this->passenger->getId()
+    ))
         ;
     }
     

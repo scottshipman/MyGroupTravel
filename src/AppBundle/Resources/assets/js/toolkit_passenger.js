@@ -140,7 +140,7 @@ $(document).ready(function () {
         e.preventDefault();
         var passengerId = t.attr('passenger');
         var tourId = t.attr('tour');
-        $("#loader").css("display", "block");;
+        $("#loader").css("display", "block");
         $.ajax({
             type: 'POST',
             url: '/tour/dashboard/move/waitlist/' + tourId + '/' + passengerId,
@@ -159,7 +159,7 @@ $(document).ready(function () {
         e.preventDefault();
         var passengerId = t.attr('passenger');
         var tourId = t.attr('tour');
-        $("#loader").css("display", "block");;
+        $("#loader").css("display", "block");
         $.ajax({
             type: 'POST',
             url: '/tour/dashboard/move/free/' + tourId + '/' + passengerId,
@@ -171,6 +171,16 @@ $(document).ready(function () {
         }).done(function (response) {
             updateCounts(response, passengerId);
         });
+    });
+
+    // Payment popup
+    $(document).on('click', 'a.make-a-payment', function (e) {
+        var t = $(this);
+        e.preventDefault();
+        var passengerId = t.attr('passenger');
+        var tourId = t.attr('tour');
+        //$("#loader").css("display", "block");
+        toolkitStandardPopup("Log A Payment", '/payment/tour/' + tourId + '/passenger/' + passengerId + '/new' );
     });
 
     $('#medical').click(function(e) {

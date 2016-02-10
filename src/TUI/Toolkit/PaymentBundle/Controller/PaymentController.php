@@ -4,6 +4,7 @@ namespace TUI\Toolkit\PaymentBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 use TUI\Toolkit\PaymentBundle\Entity\Payment;
 use TUI\Toolkit\PaymentBundle\Form\PaymentType;
@@ -33,24 +34,52 @@ class PaymentController extends Controller
      * Creates a new Payment entity.
      *
      */
-    public function createAction(Request $request)
+    public function createAction(Request $request, $tourId, $passengerId)
     {
         $entity = new Payment();
-        $form = $this->createCreateForm($entity);
+        $em = $this->getDoctrine()->getManager();
+
+        $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
+        $passenger = $em->getRepository('PassengerBundle:Passenger')->find($passengerId);
+        $form = $this->createCreateForm($entity, $tour, $passenger);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $entity->setTour($tour);
+            $entity->setPassenger($passenger);
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('payment_show', array('id' => $entity->getId())));
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('payment.flash.save'));
+
+            $serializer = $this->container->get('jms_serializer');
+            $paymentSerialized = $serializer->serialize($entity, 'json');
+
+            $response = new Response($paymentSerialized);
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
         }
 
-        return $this->render('PaymentBundle:Payment:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        ));
+        $errors = array();
+        foreach ($form->getErrors() as $key => $error) {
+            if ($form->isRoot()) {
+                $errors['#'][] = $error->getMessage();
+            } else {
+                $errors[] = $error->getMessage();
+            }
+        }
+        foreach ($form->all() as $child) {
+            if (!$child->isValid()) {
+                $errors[$child->getName()] = $this->getErrorMessages($child);
+            }
+        }
+        $serializer = $this->container->get('jms_serializer');
+        $errors = $serializer->serialize($errors, 'json');
+        $response = new Response($errors);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setStatusCode('400');
+        return $response;
     }
 
     /**
@@ -60,14 +89,19 @@ class PaymentController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Payment $entity)
-    {
-        $form = $this->createForm(new PaymentType(), $entity, array(
-            'action' => $this->generateUrl('payment_create'),
-            'method' => 'POST',
-        ));
+    private function createCreateForm(Payment $entity, $tour, $passenger)
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+    {
+        $locale = $this->container->getParameter('locale');
+        $form = $this->createForm(new PaymentType($locale, $tour, $passenger), $entity, array(
+            'action' => $this->generateUrl('payment_create', array('tourId' => $tour->getId(), 'passengerId' => $passenger->getId())),
+            'method' => 'POST',
+            'attr'  => array(
+                'id' => 'ajax_new_payment_form'
+                )
+            ));
+
+        $form->add('submit', 'submit', array('label' => 'Log New Payment'));
 
         return $form;
     }
@@ -76,14 +110,21 @@ class PaymentController extends Controller
      * Displays a form to create a new Payment entity.
      *
      */
-    public function newAction()
+    public function newAction($tourId, $passengerId)
     {
         $entity = new Payment();
-        $form   = $this->createCreateForm($entity);
+
+        $em = $this->getDoctrine()->getManager();
+
+        $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
+        $passenger = $em->getRepository('PassengerBundle:Passenger')->find($passengerId);
+        $form   = $this->createCreateForm($entity, $tour, $passenger);
 
         return $this->render('PaymentBundle:Payment:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
+            'tour'  => $tour,
+            'passenger' => $passenger,
         ));
     }
 
