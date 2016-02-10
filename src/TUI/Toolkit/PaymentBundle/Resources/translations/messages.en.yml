@@ -1,4 +1,4 @@
-#PaymentBundle/Resources/translations/messages.en_gb.yml
+#PaymentBundle/Resources/translations/messages.en.yml
 payment:
     title:
         edit: Edit Payment
@@ -31,9 +31,11 @@ payment:
         add: Add Payment
 
     form:
-        date: Email
-        value: Passenger's First Name
-        note: Passenger's Last Name
+        date: Date Received (MM-DD-YYYY)
+        value: Amount Received
+        note: Note
+        headline: Log a New Payment
+        message: "This payment is being logged for %fname% %lname% for the Tour: %tourname%."
 
         error:
             value: Value must be numeric only
