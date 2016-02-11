@@ -12,7 +12,7 @@ use Symfony\Component\Form\Form;
 use Symfony\Component\DependencyInjection\Container;
 
 /**
- * Permission Service controller.
+ * Passenger Service controller.
  *
  */
 class PassengerService

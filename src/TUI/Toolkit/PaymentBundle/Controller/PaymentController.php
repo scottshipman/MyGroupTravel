@@ -8,6 +8,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use TUI\Toolkit\PaymentBundle\Entity\Payment;
 use TUI\Toolkit\PaymentBundle\Form\PaymentType;
 
+use TUI\Toolkit\TourBundle\Entity\Tour;
+use TUI\Toolkit\TourBundle\Form\TourSetupType;
+use TUI\Toolkit\TourBundle\Controller\TourController;
+
 /**
  * Payment controller.
  *
@@ -280,5 +284,60 @@ class PaymentController extends Controller
             'brand' => $brand,
             'passengers' => $passengers
         ));
+    }
+
+    public function getEditPaymentSettingsAction($tourId)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
+        $date_format = $this->container->getParameter('date_format');
+        $locale = $this->container->getParameter('locale');
+        $setupForm = $this->createTourSetupForm($tour);
+
+        //brand stuff
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
+
+        $passenger_payment_tasks = $tour->getPaymentTasksPassenger();
+
+
+        return $this->render('PaymentBundle:Payment:settings.html.twig', array(
+            'tour' => $tour,
+            'setup_form' => $setupForm->createView(),
+            'date_format' => $date_format,
+            'locale' => $locale,
+            'brand' => $brand,
+            'passenger_payment_tasks' => $passenger_payment_tasks,
+        ));
+
+    }
+
+    /**
+     * Creates a form to edit a Tour entity on first setup.
+     *
+     * @param Tour $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+
+    public function createTourSetupForm(Tour $entity)
+    {
+        $locale = $this->container->getParameter('locale');
+        $setupForm = $this->createForm(new TourSetupType($locale), $entity, array(
+            'action' => $this->generateUrl('manage_tour_setup', array('id' => $entity->getId())),
+            'method' => 'PUT',
+        ));
+
+        $setupForm->add('submit', 'submit', array('label' => $this->get('translator')->trans('tour.actions.save')));
+
+        return $setupForm;
     }
 }

@@ -12,7 +12,7 @@
 {% endblock %}
 
 {% block page_title %}
-    <span xmlns="http://www.w3.org/1999/html">Payments</span>
+    <span xmlns="http://www.w3.org/1999/html">{% trans %}payment.labels.payments{% endtrans %}</span>
 {% endblock %}
 
 {% block page_title_menu %}
@@ -37,13 +37,12 @@
     <div class="tour-show-wrapper site-show" entityId="{{ tour.id }}">
 
         <div class="tour-show-left-column">
-            {{ dump() }}
 
             <h3>{{ tour.name|capitalize }}</h3>
             <ul class="tour-show-submenu">
-                <li><strong>Passenger Balances</strong></li>
-                <li><strong>Due</strong></li>
-                <li><strong>Payment Settings</strong></li>
+                <li><a href="{{ path('manage_payment_dashboard', { 'tourId': tour.id }) }}" style="text-decoration: none; color:{{ brand.secondaryColor }};"><strong>{% trans %}payment.labels.balances{% endtrans %}</strong></a></li>
+                <li><strong>{% trans %}payment.labels.due{% endtrans %}</strong></li>
+                <li><a href="{{ path('manage_payment_dashboard_edit_payments', { 'tourId': tour.id }) }}" style="text-decoration: none; color: inherit;"><strong>{% trans %}payment.labels.payment_settings{% endtrans %}</strong></a></li>
             </ul>
         </div>
 

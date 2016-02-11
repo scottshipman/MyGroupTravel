@@ -26,7 +26,7 @@ use Symfony\Component\DependencyInjection\Container;
 class PassengerController extends Controller
 {
 
-    protected $container;
+    public $container;
 
     public function __construct(Container $container)
     {
@@ -535,7 +535,7 @@ class PassengerController extends Controller
      * @return Response
      */
 
-    public function getPassengerDashboardAction($tourId)
+    public function getPassengerDashboardAction(Container $container, $tourId)
     {
         //check permissions first
         $currUser = $this->get('security.context')->getToken()->getUser();

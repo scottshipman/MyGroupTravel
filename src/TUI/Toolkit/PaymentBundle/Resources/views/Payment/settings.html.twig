@@ -1,0 +1,318 @@
+{% extends '::site-base.html.twig' %}
+
+{% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
+
+{% block title %}
+    {% if is_granted("ROLE_BRAND") %}
+        {% trans %}tour.page_title.index{% endtrans %}
+    {% else %}
+        {{ entity.name }}
+    {% endif %}
+{% endblock %}
+
+{% block page_title %}
+    <span>{% trans %}payment.labels.payment{% endtrans %}</span>
+{% endblock %}
+
+{% block page_title_menu %}
+    <button id="tour-title-drop" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-menu-drop">
+        <i class="material-icons">arrow_drop_down</i>
+    </button>
+    {#{% embed "TourBundle:Tour:tourMenu.html.twig" %}#}
+        {#{% block tour_dashboard_link %}#}
+            {#<li><a href="{{ path('manage_tour_show', { 'id': entity.id }) }}" class="mdl-menu__item">{% trans %}tour.title.index{% endtrans %}</a></li>#}
+        {#{% endblock %}#}
+    {#{% endembed %}#}
+{% endblock %}
+
+{% block back_link %}
+    {% if is_granted("ROLE_BRAND") %}
+        <a class="back-link" href="{{ path('manage_tour') }}"><i class="fa fa-arrow-left"></i> {% trans %}tour.title.back_list{% endtrans %}</a>
+    {% else %}
+        <a class="back-link" href="{{ path('manage_tour_show', { 'id': entity.id }) }}"><i class="fa fa-arrow-left"></i> {% trans %}tour.actions.back_dashboard{% endtrans %}</a>
+    {% endif %}
+{% endblock %}
+
+{% block body -%}
+
+    <div class="tour-show-wrapper">
+        <div class="tour-show-left-column">
+
+            <h3>{{ tour.name|capitalize }}</h3>
+            <ul class="tour-show-submenu">
+                <li><a href="{{ path('manage_payment_dashboard', { 'tourId': tour.id }) }}" style="text-decoration: none; color:black;"><strong>{% trans %}payment.labels.balances{% endtrans %}</strong></a></li>
+                <li><strong>{% trans %}payment.labels.due{% endtrans %}</strong></li>
+                <li><a href="{{ path('manage_payment_dashboard_edit_payments', { 'tourId': tour.id }) }}" style="color: {{ brand.secondaryColor }}; text-decoration: none;"><strong>{% trans %}payment.labels.payment_settings{% endtrans %}</strong></a></li>
+            </ul>
+        </div>
+
+        <div class="tour-show-right-column">
+
+            <div class="tour-edit mdl-card mdl-shadow--2dp">
+
+                <div class="mdl-card__title">
+                    <h3 class="mdl-card__title-text">Payment Settings</h3>
+                </div>
+
+                {#<div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">#}
+                    {#<i class="fa fa-check"></i> {% trans %}tour.not_setup.signup{% endtrans %}#}
+                {#</div>#}
+
+                <div class="mdl-card__supporting-text mdl-card--border">
+                    {{ form_start(setup_form) }}
+                    {#<i class="fa fa-credit-card "></i> {% trans %}tour.not_setup.payment_settings{% endtrans %}#}
+                    <ul class="setup-form-list" style="list-style: none; padding-left: 15px;">
+                        <li>
+                            <strong>{% trans %}tour.not_setup.how_much{% endtrans %}</strong>
+                            <p>{% trans %}tour.not_setup.pass_price{% endtrans %}</p>
+                            {{ form_widget(setup_form.pricePersonPublic) }}<p style="display: inline; font-size: 16px;"> x </p><p style="display:inline; font-size: 16px;" id="passengers">{{ tour.payingPlaces }}</p><p style="display: inline; font-size: 16px;"> = </p>
+                            {% if tour.currency %}<p id="currency" style="display: inline; font-size: inherit;">{{ tour.currency.htmlSymbol | raw }}</p>{% endif %}<p style="display: inline; font-size: 16px; color: green;" id="adjusted-price">{{ tour.payingPlaces * tour.pricePerson }}</p>
+                            <p style="display:none; font-size: 16px;" id="total">{{ tour.payingPlaces * tour.pricePerson }}</p>
+                            {% if tour.currency %}<p id="currency" style="display: none">{{ tour.currency.htmlSymbol | raw }}</p>{% endif %}
+                        </li>
+
+                        <li>
+                            <strong>{% trans %}tour.not_setup.amounts_and_dates{% endtrans %}</strong>
+                            <p>{{ "tour.not_setup.suggested_price" | trans({'brand' : brand.name}) }}</p>
+                            <div style="margin-bottom: 20px" class="paymenttasks" data-prototype="{{ form_widget(setup_form.paymentTasksPassenger.vars.prototype)|e }}">
+                                {# iterate over each existing paymenttask and render its  fields:  #}
+                                {% for paymentTaskPassenger in setup_form.paymentTasksPassenger %}
+                                    <ul class="payment_task" taskid = "{{ paymentTaskPassenger.vars.value.id }}">
+                                        <li>{{ form_widget(paymentTaskPassenger.name) }}</li>
+                                        <li>{{ form_widget(paymentTaskPassenger.value) }}</li>
+                                        <li>{{ form_widget(paymentTaskPassenger.dueDate) }}</li>
+                                    </ul>
+                                {% endfor %}
+                            </div>
+                        </li>
+                        <li>
+                            <strong>{% trans %}tour.not_setup.how_to_pay{% endtrans %}</strong>
+                            <p>{% trans %}tour.not_setup.preferred_payment{% endtrans %}</p>
+                            <div class="payment-types">
+                                {{ form_widget(setup_form.cashPayment, {'label' : 'tour.form.tour_setup.cash'|trans}) }}
+                                {{ form_widget(setup_form.cashPaymentDescription) }}
+                                {{ form_widget(setup_form.bankTransferPayment, {'label' : 'tour.form.tour_setup.bank'|trans}) }}
+                                {{ form_widget(setup_form.bankTransferPaymentDescription) }}
+                                {{ form_widget(setup_form.onlinePayment, {'label' : 'tour.form.tour_setup.online'|trans}) }}
+                                {{ form_widget(setup_form.onlinePaymentDescription) }}
+                                {{ form_widget(setup_form.otherPayment, {'label' : 'tour.form.tour_setup.other'|trans}) }}
+                                {{ form_widget(setup_form.otherPaymentDescription) }}
+                            </div>
+                        </li>
+                    </ul>
+                    {{ form_rest(setup_form) }}
+                    {{ form_end(setup_form) }}
+                    {{ form_javascript(setup_form) }}
+                </div>
+
+                {#<div class="mdl-card__supporting-text mdl-card--border" style="color: grey;">#}
+                    {#<p style="margin: 0; font-size: inherit;">{% trans %}tour.not_setup.next{% endtrans %}</p>#}
+                {#</div>#}
+
+                {#<div class="mdl-card__supporting-text mdl-card--border" style="color: grey;">#}
+                    {#<i class="fa fa-clone"></i>{% trans %}tour.not_setup.personalize{% endtrans %}#}
+                {#</div>#}
+
+                {#<div class="mdl-card__supporting-text mdl-card--border" style="color: grey;">#}
+                    {#<i class="fa fa-share"></i> {% trans %}tour.not_setup.promote{% endtrans %}#}
+                {#</div>#}
+
+            </div>
+        </div>
+
+    </div>
+
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.js">
+    </script>
+
+    <script>
+        var $collectionHolder;
+
+        // setup an "add a tag" link
+        var $addPaymentTaskLink = $('<a href="#" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add_tag_link" title="{% trans %}tour.form.tour.add_payment{% endtrans %}"><i class="fa fa-plus"></i>{% trans %}tour.form.tour.add_payment{% endtrans %}</a>');
+        var $newLinkDiv = $('<div></div>').append($addPaymentTaskLink);
+
+        $( document ).ready(function() {
+
+            //To expose the payment type description fields if there is already a value there
+            $('.mdl-checkbox').each( function() {
+                var something = $(this).next().children(":first");
+                console.log(something);
+                if ($(this).next().children(":first").val().length > 0) {
+                    $(this).next().css({"display": "inline-block"});
+                }
+
+            });
+
+            //toggle showing and hiding text fields based on input
+            $('.mdl-checkbox').on( 'change', 'input:checkbox', function() {
+
+                if ($(this).parent().hasClass("is-checked")) {
+                    $(this).parent().next().css({"display": "inline-block"});
+
+                }else if (!$(this).parent().hasClass("is-checked")){
+                    $(this).parent().next().css({"display": "none"});
+                    $(this).parent().next().children(":first").val('');
+
+                }
+
+            });
+
+
+            $( ".hasDatepicker" ).datepicker( "option", "dateFormat", "{{ date_format }}" );
+            $( ".hasDatepicker" ).change(function(){
+                $(this).parent().addClass('is-dirty');
+            });
+
+            // Get the div that holds the collection of payments
+            $collectionHolder = $('div.paymenttasks');
+
+            // add a delete link to all of the existing payment form ul elements
+            $collectionHolder.find('ul.payment_task').each(function() {
+                addPaymentTaskFormDeleteLink($(this), 'li');
+            });
+
+            // add the "add a Payment" anchor and li to the Payment div
+            $collectionHolder.append($newLinkDiv);
+
+            // count the current form inputs we have (e.g. 2), use that as the new
+            // index when inserting a new item (e.g. 2)
+            $collectionHolder.data('index', $collectionHolder.find('ul').length);
+
+            $addPaymentTaskLink.on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+
+                // add a new tag form (see next code block)
+                addPaymentTaskForm($collectionHolder, $newLinkDiv);
+            });
+
+            $('#tui_toolkit_tourbundle_toursetup_submit').on('click', function() {
+                console.log($('form'));
+            });
+
+        });
+        function addPaymentTaskForm($collectionHolder, $newLinkDiv) {
+            // Get the data-prototype explained earlier
+            var prototype = $collectionHolder.data('prototype');
+
+            // get the new index
+            var index = $collectionHolder.data('index');
+            console.log(index);
+
+            // Replace '__name__' in the prototype's HTML to
+            // instead be a number based on how many items we have
+            var newForm = prototype.replace(/__name__/g, index);
+
+            // increase the index with one for the next item
+            $collectionHolder.data('index', index + 1);
+
+            // Display the form in the page in an div, before the "Add a Payment" link div
+            var $newFormDiv = $('<div class="new_payment_task" task="' + index + '"></div>').append(newForm);
+            $newLinkDiv.before($newFormDiv);
+
+            // add a delete link to the new form
+            addPaymentTaskFormDeleteLink($newFormDiv, 'div');
+
+            //trigger date field popup
+            $("input[id*='_dueDate']").each(function() {
+                var $configs = $.extend({
+                    minDate: new Date(2010, 0, 1),
+                    maxDate: new Date(2030, 11, 31)
+                }, $.datepicker.regional['{{ locale }}'] ,{"dateFormat":"{{ date_format }}"});
+                $(this).datepicker($configs);
+            });
+            $( ".hasDatepicker" ).datepicker( "option", "dateFormat", "{{ date_format }}" );
+            $( ".hasDatepicker" ).change(function(){
+                $(this).parent().addClass('is-dirty');
+            });
+            doMDLpopup($newFormDiv);
+        }
+
+        function addPaymentTaskFormDeleteLink($paymentFormDiv, elem) {
+            var $removeFormA;
+            if (elem=='li'){
+                $removeFormA = $('<li><a href="#" title="Delete this Payment"><i class="fa fam-delete"></i></a></li>');
+                $paymentFormDiv.append($removeFormA);
+            } else {
+                $removeFormA = $('<div class="form-row"><a href="#" title="Delete this Payment"><i class="fa fam-delete"></i></a></div>');
+                var hidden = $paymentFormDiv.find('input[type="hidden"]');
+                $paymentFormDiv.children().first().append($removeFormA);
+            }
+
+            $removeFormA.on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+                if ($paymentFormDiv.get(0).tagName =='UL') {
+                    if (confirm('Are you sure you want to remove this payment? You must click Update for changes to be saved.')) {
+
+                    }
+                } else {
+                    $paymentFormDiv.remove();
+                }
+            });
+        }
+
+    </script>
+    {#<script>#}
+        {#$(document).ready(function () {#}
+            {#// Promote Popup#}
+            {#$(document).on('click', '#promote-tour', function (e) {#}
+                {#e.preventDefault();#}
+                {#var shareValue = "{{ url('tour_site_show', { 'id': tour.id, 'quoteNumber' : tour.quoteNumber }) }}";#}
+                {#var link_html = '<h3>Share this Tour with others</h3>' +#}
+                        {#'<div><p>To send this tour to others, copy the URL below.</p></div>' +#}
+                        {#'<div class="input"><input style="width:70%; padding:.25em; margin:1em;" type="text" id="share_url" name="share_url" value="' + shareValue + '" readonly="readonly">' +#}
+                        {#'<a href="#" id="copy-button" data-clipboard-target="share_url"' +#}
+                        {#'title="Click to copy Tour URL"' +#}
+                        {#'class="not-full mdl-button mdl-js-button mdl-button--raised mdl-button--colored">' +#}
+                        {#'<i class="fa fa-sign-in fa-stack"></i>' +#}
+                        {#'</a></div>';#}
+                {#toolkitStaticPopup("Promote the Tour", link_html);#}
+                {#// Copy to Clipboard#}
+                {#ZeroClipboard.config({swfPath: "//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf"});#}
+                {#var client = new ZeroClipboard(document.getElementById("copy-button"));#}
+                {#client.on('aftercopy', function (event) {#}
+                    {#$('#copy-button').css('background-color', 'green');#}
+                {#});#}
+                {#//remove the CopytoClipboard button if not Flash#}
+                {#if (navigator.mimeTypes["application/x-shockwave-flash"] == undefined) {#}
+                    {#$("#copy-button").addClass('hidden');#}
+                    {#$('share_url').css('width', '80%');#}
+                {#};#}
+
+            {#});#}
+        {#});#}
+    {#</script>#}
+
+{% endblock %}
+
+
+{% block footer_left %}
+    {% if tour.salesAgent %}
+        <span class="intro">
+                    {{ brand.name }} {% trans %}tour.show.footer.intro_org{% endtrans %}
+            </span>
+        {% if tour.salesAgent.media %}
+            <span class="tui-image-avatar"><img src="{{ ( tour.salesAgent.media.getRelativePath ~ "/" ~ tour.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ tour.salesAgent.username }}"></span>
+        {% elseif tour.salesAgent.firstName and tour.salesAgent.lastName %}
+            <span class="tui-text-avatar mdl-typography--headline">{{ tour.salesAgent.firstName[:1] }}{{ tour.salesAgent.lastName[:1] }}</span>
+        {% else %}
+            <span class="tui-text-avatar mdl-typography--headline">{{ tour.salesAgent.username[:1] }}</span>
+        {% endif %}
+        <span class="agent">
+                {% if tour.salesAgent.displayName %}
+                    {{ tour.salesAgent.displayName }}
+                {% else %}
+                    {{ tour.salesAgent.firstName }} {{ tour.salesAgent.lastName }}
+                {% endif %}
+            <br>
+                <a href="mailto:{{ tour.salesAgent.email }}">{{ tour.salesAgent.email }}</a>
+            </span>
+    {% endif %}
+{% endblock %}
+
+{% block footer_right %}
+    <div class="quote-info"><span class="quote-label">{% trans %}tour.show.footer.price{% endtrans %}</span><span class="quote-price">{% if tour.pricePerson %}<strong>{% if tour.currency %}{{ tour.currency.htmlSymbol | raw }}{% endif %}{{ tour.pricePerson }}</strong>{% endif %}</span></div>
+{% endblock %}

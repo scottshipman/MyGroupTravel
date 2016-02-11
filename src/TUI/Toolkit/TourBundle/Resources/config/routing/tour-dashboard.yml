@@ -34,6 +34,9 @@ manage_payment_dashboard:
     path: /{tourId}/payments
     defaults: { _controller: "PaymentBundle:Payment:getPassengerDashboard" }
 
+manage_payment_dashboard_edit_payments:
+    path: /{tourId}/payments/edit
+    defaults: { _controller: "PaymentBundle:Payment:getEditPaymentSettings" }
 
 manage_parent_passenger_dashboard:
     path: /{tourId}/parent/{parentId}/passengers

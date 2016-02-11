@@ -1,4 +1,4 @@
-#PaymentBundle/Resources/translations/messages.en.yml
+#PaymentBundle/Resources/translations/messages.en_gb.yml
 payment:
     title:
         edit: Edit Payment
@@ -28,12 +28,16 @@ payment:
 
     labels:
         payment: Payment
+        payments: Payments
         add: Add Payment
+        balances: Passenger Balances
+        due: Due
+        payment_settings: Payment Settings
 
     form:
-        date: Date Received
-        value: Amount Received
-        note: Note
+        date: Email
+        value: Passenger's First Name
+        note: Passenger's Last Name
 
         error:
             value: Value must be numeric only

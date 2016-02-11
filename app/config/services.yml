@@ -6,6 +6,7 @@ parameters:
 imports:
     - { resource: "@PermissionBundle/Resources/config/services.yml" }
     - { resource: "@ContentBlocksBundle/Resources/config/services.yml" }
+    - { resource: "@TourBundle/Resources/config/services.yml"}
 
 services:
 #    service_name:
