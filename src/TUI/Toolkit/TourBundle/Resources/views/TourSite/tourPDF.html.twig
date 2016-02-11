@@ -15,10 +15,6 @@
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
 
-    {# Dropzone and Flexslider CSS #}
-    {#{% stylesheets filter='cssrewrite' '@AppBundle/Resources/assets/css/flexslider.css' '@AppBundle/Resources/assets/css/dropzone.css' %}#}
-    {#<link rel="stylesheet" href="{{ asset_url }}">#}
-    {#{% endstylesheets %}#}
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.7.0/spectrum.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.6.1/spectrum.min.css">
@@ -52,10 +48,10 @@
     <div class="sub-header">
         <div class="sizer">
             <div class="inner">
-                    <div style="position: absolute; display: inline-block; right: 1em;">
-                        {% if brand.media %}<img style="padding-right: 15px" src="{{ absolute_url(( brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) | imagine_filter('thumbnail') ) }}">{% endif %}
-                        {% if entity.institution.media %}<img src="{{ absolute_url(( entity.institution.media.getRelativePath ~ "/" ~ entity.institution.media.getHashedFilename ) | imagine_filter('thumbnail') ) }}">{% endif %}
-                    </div>
+                <div style="position: absolute; display: inline-block; right: 1em;">
+                    {% if brand.media %}<img style="padding-right: 15px" src="{{ absolute_url(( brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) | imagine_filter('thumbnail') ) }}">{% endif %}
+                    {% if entity.institution.media %}<img src="{{ absolute_url(( entity.institution.media.getRelativePath ~ "/" ~ entity.institution.media.getHashedFilename ) | imagine_filter('thumbnail') ) }}">{% endif %}
+                </div>
 
                 {% if entity.institution %}
                     <div id="site-quote-name">{{ entity.institution.name }}</div>
