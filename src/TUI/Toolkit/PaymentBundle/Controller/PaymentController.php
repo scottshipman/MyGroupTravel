@@ -262,4 +262,24 @@ class PaymentController extends Controller
             ->getForm()
         ;
     }
+
+    public function getPassengerPaymentCardAction($passengerId){
+        $locale = $this->container->getParameter('locale');
+        $em = $this->getDoctrine()->getManager();
+        $passenger = $em->getRepository('PassengerBundle:Passenger')->find($passengerId);
+        $currency = $passenger->getTourReference()->getCurrency();
+
+        $due = $this->get("payment.getPayments")->getPassengerPaymentsDue($passengerId);
+        $payments = $this->get("payment.getPayments")->getPassengersPaymentsPaid($passengerId);
+        $paymentTasks = $this->get("payment.getPayments")->getPassengersPaymentTasks($passengerId);
+
+        return $this->render('PaymentBundle:Payment:passengerPaymentCard.html.twig', array(
+            'due' => $due,
+            'payments' => $payments,
+            'paymentTasks' => $paymentTasks,
+            'currency' => $currency,
+            'locale' => $locale,
+        ));
+
+    }
 }

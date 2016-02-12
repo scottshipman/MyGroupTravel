@@ -1,0 +1,18 @@
+{% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
+<div class="waitlist tour-edit mdl-card mdl-shadow--2dp">
+    <div class="mdl-card__title">
+        <h3 class="mdl-card__title-text">{% trans %}passenger.labels.payments{% endtrans %}</h3>
+    </div>
+    <div class="mdl-card__supporting-text mdl-card--border">
+        {% if paymentTasks is not empty %}
+            <ul>
+                {% for paymentTask in paymentTasks %}
+                  <li>
+                      <label>{{ paymentTask.item.name }}</label> due {{ paymentTask.item.dueDate | date(format) }} {{ currency.htmlSymbol | raw  }}{{ paymentTask.credit }} paid of {{ currency.htmlSymbol | raw  }}{{ paymentTask.item.value }}
+                  </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <p><label>Account Summary:</label> <span>{{ currency.htmlSymbol | raw  }}{{ payments.total }}</span> of <span>{{ currency.htmlSymbol | raw  }}{{ due.total }}</span> paid</p>
+    </div>
+</div>

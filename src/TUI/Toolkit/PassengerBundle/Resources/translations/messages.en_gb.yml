@@ -97,6 +97,7 @@ passenger:
         emergency_relationship: Relationship
         emergency_number: Telephone
         emergency_email: Email
+        payments: Payments
 
 
 
