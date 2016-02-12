@@ -16,8 +16,6 @@ use TUI\Toolkit\PassengerBundle\Entity\Passenger;
 use TUI\Toolkit\PassengerBundle\Form\PassengerType;
 use TUI\Toolkit\PassengerBundle\Form\TourPassengerType;
 
-use Symfony\Component\DependencyInjection\Container;
-
 
 /**
  * Passenger controller.
@@ -25,13 +23,6 @@ use Symfony\Component\DependencyInjection\Container;
  */
 class PassengerController extends Controller
 {
-
-    public $container;
-
-    public function __construct(Container $container)
-    {
-        $this->container = $container;
-    }
 
     /**
      * Lists all Passenger entities.
@@ -535,7 +526,7 @@ class PassengerController extends Controller
      * @return Response
      */
 
-    public function getPassengerDashboardAction(Container $container, $tourId)
+    public function getPassengerDashboardAction($tourId)
     {
         //check permissions first
         $currUser = $this->get('security.context')->getToken()->getUser();

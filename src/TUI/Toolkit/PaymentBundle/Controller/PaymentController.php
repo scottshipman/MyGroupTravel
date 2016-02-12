@@ -232,7 +232,7 @@ class PaymentController extends Controller
      * @return Response
      */
 
-    public function getPassengerDashboardAction($tourId)
+    public function getPaymentDashboardAction($tourId)
     {
         //check permissions first
         $currUser = $this->get('security.context')->getToken()->getUser();
@@ -249,16 +249,16 @@ class PaymentController extends Controller
 
         //combine all lists and get parents
         $all = $this->get("passenger.actions")->getPassengersByStatus('all', $tourId);
-        $passengers = $this->get('passenger.controller')->addPassengerParents($all, $em);
+        $passengers = $this->get('passenger.actions')->addPassengerParents($all, $em);
 
         // get counts of status for passengers and organizers
-        $participantCounts = $this->get('passenger.controller')->getParticipantCounts($passengers);
+        $participantCounts = $this->get('passenger.actions')->getParticipantCounts($passengers);
 
         //Get Pending Invite organizer list (have no passenger object created yet so we'll fake it)
         $organizers = $this->get("passenger.actions")->getOrganizers($tourId);
         array_unshift($organizers, $tour->getOrganizer());
 
-        $organizersObjects = $this->get('passenger.controller')->addOrganizerPassengers($organizers, $tourId, $em);
+        $organizersObjects = $this->get('passenger.actions')->addOrganizerPassengers($organizers, $tourId, $em);
         if ($organizersObjects == null){
             $organizersObjects = array();
         }

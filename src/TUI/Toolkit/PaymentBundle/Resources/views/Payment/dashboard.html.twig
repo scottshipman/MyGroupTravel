@@ -116,12 +116,12 @@
                             <p style="display: inline-block"><strong><a href="mailto:{{ passenger[1].email }}">{{ passenger[1].email }}</a></strong></p>
                             <label style="display: inline-block; margin-left: 63px; min-width: 100%;">{{ statusicon | raw }} {{ freeicon | raw }}{{ organizericon | raw }} {{ signedUp }}</label>
                             </div>
-                            {% if  passenger[0].status != "Pending Invite"%}
-                                <button style="position: absolute; right: 20px; color:grey; margin-top:10px;" id="passenger-actions-menu-drop-{{ passenger[0].id }}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
-                                    <i class="material-icons">more_vert</i>
-                                </button>
-                                {% embed "PassengerBundle:Passenger:passengerActionsMenu.html.twig" %}{% endembed %}
-                            {% endif %}
+                            {#{% if  passenger[0].status != "Pending Invite"%}#}
+                                {#<button style="position: absolute; right: 20px; color:grey; margin-top:10px;" id="passenger-actions-menu-drop-{{ passenger[0].id }}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">#}
+                                    {#<i class="material-icons">more_vert</i>#}
+                                {#</button>#}
+                                {#{% embed "PassengerBundle:Passenger:passengerActionsMenu.html.twig" %}{% endembed %}#}
+                            {#{% endif %}#}
                         </div>
 
                     </div>
