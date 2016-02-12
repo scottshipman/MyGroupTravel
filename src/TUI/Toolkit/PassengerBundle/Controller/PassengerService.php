@@ -9,7 +9,8 @@ use TUI\Toolkit\PassengerBundle\Entity\Passenger;
 use TUI\Toolkit\PassengerBundle\Form\PassengerType;
 
 use Symfony\Component\Form\Form;
-use Symfony\Component\DependencyInjection\Container;
+
+use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 
 /**
  * Passenger Service controller.
@@ -289,6 +290,134 @@ class PassengerService
         $possibleTasksCount = count($possibleTasks);
 
         return $possibleTasksCount;
+    }
+
+    /**
+     * @param $passengers
+     * @param $em
+     * @return array
+     */
+
+    public function addPassengerParents($passengers, $em)
+    {
+        $combinedObjects = array();
+        $container = $this->container;
+
+        if (empty($passengers)) {
+            return array();
+        }
+
+        foreach($passengers as $passenger) {
+            $object = $passenger->getId();
+            $tourId = $passenger->getTourReference()->getId();
+            $parent = $container->get("permission.set_permission")->getUser('parent', $object, 'passenger');
+
+            if (!empty($parent)){
+                $parentObject = $em->getRepository('TUIToolkitUserBundle:User')->find($parent[1]);
+            } else {
+                $parentObject = "";
+            }
+            $isOrganizer = $container->get("permission.set_permission")->getPermission($tourId, 'tour', $parentObject)[0]=='organizer' ? TRUE : FALSE;
+            $isOrganizer = $container->get("permission.set_permission")->getPermission($tourId, 'tour', $parentObject)[0]=='assistant' ? TRUE : $isOrganizer;
+
+
+            $combinedObjects[]= array($passenger, $parentObject, $isOrganizer);
+        }
+
+        return $combinedObjects;
+    }
+
+    /**
+     * @param $passengers
+     * @return array
+     */
+
+    public function getParticipantCounts($passengers)
+    {
+        $count=array(
+            'organizer'=>array(
+                'accepted' => 0,
+                'waitlist' => 0,
+                'free' => 0,
+            ),
+            'passenger' => array(
+                'accepted' => 0,
+                'waitlist' => 0,
+                'free' => 0,
+            ),
+        );
+
+        foreach($passengers as $passenger) {
+            //loop to see if organizer
+            if($passenger[2]===true){
+                $category = 'organizer';
+            } else {
+                $category = 'passenger';
+            }
+
+            if($passenger[0]->getStatus() == 'accepted' && $passenger[0]->getFree() == FALSE) {
+                $count[$category]['accepted'] ++;
+            }
+            if($passenger[0]->getStatus() == 'waitlist') {
+                $count[$category]['waitlist'] ++;
+            }
+            if($passenger[0]->getFree() == TRUE) {
+                $count[$category]['free'] ++;
+            }
+        }
+
+        return $count;
+    }
+
+    /**
+     * Helper function to build array of organizer, passenger and boolean organizer flag
+     * @param organizerList, entity manager
+     * @return array
+     *
+     */
+    public function addOrganizerPassengers($organizers, $tourId, $em)
+    {
+        $combinedObjects = array();
+        $container = $this->container;
+
+        if (empty($organizers)) {
+            return NULL;
+        }
+
+        foreach($organizers as $organizer) {
+
+            $passengerObject = new Passenger();
+            $passengerObject->setStatus('Pending Invite');
+
+            $user = $organizer->getId();
+            $passenger = $container->get("permission.set_permission")->getObject('parent', $user, 'passenger');
+            $isOrganizer = TRUE;
+
+            if (!empty($passenger)){
+                // could be more than one passenger object
+                foreach($passenger as $pax){
+                    $paxObject = $em->getRepository('PassengerBundle:Passenger')->find($pax['object']);
+                    if( $paxObject &&
+                        /*strtolower(trim($organizer->getFirstName())) == strtolower(trim($paxObject->getFName())) &&
+                        strtolower(trim($organizer->getLastName())) == strtolower(trim($paxObject->getLName())) &&*/
+                        $paxObject->getSelf() == TRUE &&
+                        $tourId == $paxObject->getTourReference()->getId())
+                    {
+                        $passengerObject = $paxObject;
+                        $break;
+                    }
+                }
+
+            } else {
+                // need to add name data to fake passenger data
+                $passengerObject->setfName($organizer->getFirstName());
+                $passengerObject->setlname($organizer->getLastName());
+
+            }
+            $combinedObjects[]= array($passengerObject, $organizer, $isOrganizer);
+        }
+
+        return $combinedObjects;
     }
 
 }

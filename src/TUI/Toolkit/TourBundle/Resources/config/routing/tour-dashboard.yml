@@ -32,7 +32,7 @@ manage_passenger_dashboard:
 
 manage_payment_dashboard:
     path: /{tourId}/payments
-    defaults: { _controller: "PaymentBundle:Payment:getPassengerDashboard" }
+    defaults: { _controller: "PaymentBundle:Payment:getPaymentDashboard" }
 
 manage_payment_dashboard_edit_payments:
     path: /{tourId}/payments/edit
