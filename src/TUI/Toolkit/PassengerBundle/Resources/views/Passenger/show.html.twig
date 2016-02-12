@@ -45,7 +45,7 @@
 
     <div class="tour-show-left-column">
         <ul class="tour-show-submenu">
-                <li><strong>{% trans %}passenger.labels.passenger_for{% endtrans %} {{ entity.tourReference.name|capitalize }}</strong></li>
+                <li><strong>{% trans %}passenger.labels.passenger_for{% endtrans %} {{ entity.tourReference.name }}</strong></li>
             <li><label>{% trans %}tour.show.institution{% endtrans %}</label><strong>{{ entity.tourReference.institution.name }}</strong></li>
             <li><label>{% trans %}tour.show.name{% endtrans %}</label><strong>{{ entity.tourReference.name}}</strong></li>
             {#{% if entity.tourReference != null %}#}
