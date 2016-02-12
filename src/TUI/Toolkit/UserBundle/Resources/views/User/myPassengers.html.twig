@@ -79,8 +79,8 @@
         </div>
         <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
             <ul>
-                {% if tour.paymentTasksPassenger is not empty  %}
-                    {% for paymentTask in tour.paymentTasksPassenger if paymentTaskPassenger.paidDate == null %}
+                {% if tour.paymentTasksPassenger is not empty and if tour.paymentTasksPassenger is defined %}
+                    {% for paymentTask in tour.paymentTasksPassenger if tour.paymentTaskPassenger.paidDate == null %}
                         {% if loop.first %}
                             <li>
                                 <div class="profile-list-item item-1 tour-dashboard three-column">
@@ -90,7 +90,7 @@
                             </li>
                         {% endif %}
                     {% endfor %}
-                {% elseif tour.paymentTasksPassenger is empty  %}
+                {% elseif tour.paymentTasksPassenger is empty or if tour.paymentTasksPassenger is not defined %}
                     <li>
                         <div class="profile-list-item item-1 tour-dashboard three-column">
                             <span class="date-span">{% trans %}tour.dashboard.na{% endtrans %}</span>
