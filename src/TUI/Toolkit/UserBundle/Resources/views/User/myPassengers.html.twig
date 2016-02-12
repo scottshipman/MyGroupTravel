@@ -49,7 +49,7 @@
         <div class="tour-edit-organizer-left">
             <label>{% trans %}tour.show.organizers{% endtrans %}</label><br>
             {% if tour.organizer.media %}
-                <img class="tui-image-avatar" src="{{ ( tour.organizer.media.getRelativePath ~ "/" ~ tour.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.tourReference.organizer.username }}">
+                <img class="tui-image-avatar" src="{{ ( tour.organizer.media.getRelativePath ~ "/" ~ tour.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ tour.organizer.username }}">
             {% elseif tour.organizer.firstName and tour.organizer.lastName %}
                 <span class="tui-text-avatar mdl-typography--headline">{{ tour.organizer.firstName[:1] }}{{ tour.organizer.lastName[:1] }}</span>
             {% else %}
@@ -79,18 +79,20 @@
         </div>
         <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
             <ul>
-                {% if tour.paymentTasksPassenger is not empty  %}
-                    {% for paymentTask in tour.paymentTasksPassenger if paymentTaskPassenger.paidDate == null %}
-                        {% if loop.first %}
-                            <li>
-                                <div class="profile-list-item item-1 tour-dashboard three-column">
-                                    <span class="date-span">{% if tour.currency %}<p id="currency" style="display: inline; font-size: inherit;">{{ tour.currency.htmlSymbol | raw }}</p>{% endif %}{{ paymentTask.value * tour.payingPlaces }}</span>
-                                    <label>{{ paymentTask.name }} {% trans %}tour.dashboard.due{% endtrans %} {{ paymentTask.dueDate|date(shortFormat) }}</label>
-                                </div>
-                            </li>
+                {% if tour.paymentTasksPassenger is not empty %}
+                    {% for paymentTask in tour.paymentTasksPassenger %}
+                        {% if paymentTask.paidDate == null %}
+                            {% if loop.first %}
+                                <li>
+                                    <div class="profile-list-item item-1 tour-dashboard three-column">
+                                        <span class="date-span">{% if tour.currency %}<p id="currency" style="display: inline; font-size: inherit;">{{ tour.currency.htmlSymbol | raw }}</p>{% endif %}{{ paymentTask.value * passengerObjects|length }}</span>
+                                        <label>{{ paymentTask.name }} {% trans %}tour.dashboard.due{% endtrans %} {{ paymentTask.dueDate|date(shortFormat) }}</label>
+                                    </div>
+                                </li>
+                            {% endif %}
                         {% endif %}
                     {% endfor %}
-                {% elseif tour.paymentTasksPassenger is empty  %}
+                {% elseif tour.paymentTasksPassenger is empty %}
                     <li>
                         <div class="profile-list-item item-1 tour-dashboard three-column">
                             <span class="date-span">{% trans %}tour.dashboard.na{% endtrans %}</span>
