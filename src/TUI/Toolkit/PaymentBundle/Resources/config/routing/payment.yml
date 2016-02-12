@@ -7,11 +7,11 @@ payment_show:
     defaults: { _controller: "PaymentBundle:Payment:show" }
 
 payment_new:
-    path:     /new
+    path:     /tour/{tourId}/passenger/{passengerId}/new
     defaults: { _controller: "PaymentBundle:Payment:new" }
 
 payment_create:
-    path:     /create
+    path:     /create/{tourId}/{passengerId}
     defaults: { _controller: "PaymentBundle:Payment:create" }
     methods:  POST
 

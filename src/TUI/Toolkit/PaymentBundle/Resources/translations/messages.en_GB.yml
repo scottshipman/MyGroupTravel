@@ -35,9 +35,11 @@ payment:
         payment_settings: Payment Settings
 
     form:
-        date: Email
-        value: Passenger's First Name
-        note: Passenger's Last Name
+        date: Date Received (DD-MM-YYYY)
+        value: Amount Received
+        note: Note
+        headline: Log a New Payment
+        message: "This payment is being logged for %fname% %lname% for the Tour: %tourname%."
 
         error:
             value: Value must be numeric only
