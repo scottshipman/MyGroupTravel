@@ -101,30 +101,35 @@
                         {% set freeClass = '' %}
                         {% set freeicon = '' %}
                     {% endif %}
-                    <div class="{{ status }} {{ freeClass }} {{ paxClass }} tour-edit mdl-shadow--2dp" style="background-color:white; margin-bottom: 0;" passenger="{{ passenger[0].id }}">
-                        <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
-                            <div style="float: left; color: grey;" class="pcardname">
-                            {% if passenger[0].media %}
-                                <img style="float: left; margin-right: 15px;"  class="tui-image-avatar" src="{{ ( passenger[0].media.getRelativePath ~ "/" ~ passenger[0].media.getHashedFilename ) | imagine_filter('thumbnail') }}">
-                            {% elseif passenger[0].fName and passenger[0].lName %}
-                                <span style="float: left; margin-right: 15px;"  class="tui-text-avatar mdl-typography--headline">{{ passenger[0].fName[:1] }}{{ passenger[0].lName[:1] }}</span>
-                            {% else %}
-                                <span style="float: left; margin-right: 15px;"  class="tui-text-avatar mdl-typography--headline">{{ passenger[0].fName[:1] }}</span>
-                            {% endif %}
-                            <p style="display: inline-block"><strong>{{ passenger[0].fName }}</strong></p>
-                            <p style="display: inline-block"><strong>{{ passenger[0].lName }}</strong></p>
-                            <p style="display: inline-block"><strong><a href="mailto:{{ passenger[1].email }}">{{ passenger[1].email }}</a></strong></p>
-                            <label style="display: inline-block; margin-left: 63px; min-width: 100%;">{{ statusicon | raw }} {{ freeicon | raw }}{{ organizericon | raw }} {{ signedUp }}</label>
+                    {% if passenger[0].status == "accepted"  %}
+                        <div class="{{ status }} {{ freeClass }} {{ paxClass }} tour-edit mdl-shadow--2dp" style="background-color:white; margin-bottom: 0;" passenger="{{ passenger[0].id }}">
+                            <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
+                                <div style="float: left; color: grey;" class="pcardname">
+                                {% if passenger[0].media %}
+                                    <img style="float: left; margin-right: 15px;"  class="tui-image-avatar" src="{{ ( passenger[0].media.getRelativePath ~ "/" ~ passenger[0].media.getHashedFilename ) | imagine_filter('thumbnail') }}">
+                                {% elseif passenger[0].fName and passenger[0].lName %}
+                                    <span style="float: left; margin-right: 15px;"  class="tui-text-avatar mdl-typography--headline">{{ passenger[0].fName[:1] }}{{ passenger[0].lName[:1] }}</span>
+                                {% else %}
+                                    <span style="float: left; margin-right: 15px;"  class="tui-text-avatar mdl-typography--headline">{{ passenger[0].fName[:1] }}</span>
+                                {% endif %}
+                                <p style="display: inline-block"><strong>{{ passenger[0].fName }}</strong></p>
+                                <p style="display: inline-block"><strong>{{ passenger[0].lName }}</strong></p>
+                                <p style="display: inline-block"><strong><a href="mailto:{{ passenger[1].email }}">{{ passenger[1].email }}</a></strong></p>
+                                <label style="display: inline-block; margin-left: 63px; min-width: 100%;">{{ statusicon | raw }} {{ freeicon | raw }}{{ organizericon | raw }} {{ signedUp }}</label>
+                                </div>
+                                {% if 0==0 %}
+                                    {% if passenger[0].id != null %}
+                                        <button style="position: absolute; right: 20px; color:grey; margin-top:10px;" id="payment-actions-menu-drop-{{ passenger[0].id }}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-button">
+                                            <i class="material-icons">more_vert</i>
+                                        </button>
+                                        <a href="#"><i id="passenger-close" style="display: none;" class="material-icons" passenger="{{ passenger[0].id }}">close</i></a>
+                                        {% embed "PaymentBundle:Payment:paymentSubMenu.html.twig" %}{% endembed %}
+                                    {% endif %}
+                                {% endif %}
                             </div>
-                            {#{% if  passenger[0].status != "Pending Invite"%}#}
-                                {#<button style="position: absolute; right: 20px; color:grey; margin-top:10px;" id="passenger-actions-menu-drop-{{ passenger[0].id }}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">#}
-                                    {#<i class="material-icons">more_vert</i>#}
-                                {#</button>#}
-                                {#{% embed "PassengerBundle:Passenger:passengerActionsMenu.html.twig" %}{% endembed %}#}
-                            {#{% endif %}#}
-                        </div>
 
-                    </div>
+                        </div>
+                    {% endif %}
                 {% endfor %}
 
                 <!-- render the organizers -->
