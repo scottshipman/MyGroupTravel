@@ -58,7 +58,7 @@
         {% endif %}
         {#<p><span>{{ currency.htmlSymbol | raw  }}{{ payments.total }}</span> total paid of <span>{{ currency.htmlSymbol | raw  }}{{ due.total }}</span> total due.#}
         {% if payments.total >0  %}
-            <span id="payment-history-link" style="text-align: center;"><a href="" id="toggle-payment-history" class="payment-history-link">view payment history <br /><i class="material-icons">expand_more</i></a></span>
+            <span id="payment-history-link" style="text-align: center;"><a href="" id="toggle-payment-history" class="payment-history-link">Payment History <br /><i class="material-icons">expand_more</i></a></span>
             <div style="display:none;" id="payment-history">
                 <div class="mdl-card__title">
                     <h3 class="mdl-card__title-text">Payment History</h3>
@@ -101,11 +101,11 @@
                 e.preventDefault();
                 $('#payment-history').toggle(400, function(){
                     console.log($('#toggle-payment-history').text());
-                    if ($('#toggle-payment-history').text()=='view payment history expand_more') {
-                        $('#toggle-payment-history').html('hide payment history <br /><i class="material-icons">expand_less</i>');
+                    if ($('#toggle-payment-history').text()=='Payment History expand_more') {
+                        $('#toggle-payment-history').html('Payment History <br /><i class="material-icons">expand_less</i>');
                         console.log($('#toggle-payment-history').html());
                     } else {
-                        $('#toggle-payment-history').html('view payment history <br /><i class="material-icons">expand_more</i>');
+                        $('#toggle-payment-history').html('Payment History <br /><i class="material-icons">expand_more</i>');
                     }
                 });
             });
