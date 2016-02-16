@@ -15,44 +15,63 @@
         {% endif %}
         <div class="clear"></div>
     </div>
-    <div class="mdl-card__supporting-text mdl-card--border">
         {% if paymentTasks is not empty %}
             {% set overdue = 0 %}
-            <ul class="passenger-payment-tasks" style="list-style-type: none">
                 {% for paymentTask in paymentTasks %}
                     {% set overdue = overdue + paymentTask.overdueAmt %}
                         {%  set color = 'blue' %}{%  set icon = 'event' %}
                         {% if paymentTask.status == "paid" %}{%  set color = 'green' %}{%  set icon = 'done' %} {% endif %}
                         {% if paymentTask.status ==  "overdue" %}{%  set color = 'red' %}{%  set icon = 'warning' %}{% endif %}
 
-                  <li>
+                {#<div class="mdl-card__supporting-text mdl-card--border">#}
+                    {#<label class="row-label">{{ paymentTask.item.name }} Paid</label>#}
+                    {#<p class="row-content">{{ currency.htmlSymbol | raw  }}{{ paymentTask.credit }}</p>#}
+                {#</div>#}
+                {#<div class="mdl-card__supporting-text mdl-card--border">#}
+                    {#<label class="row-label">{{ paymentTask.item.name }} Owed</label>#}
+                    {#<p class="row-content">{{ currency.htmlSymbol | raw  }}{{ paymentTask.item.value }}</p>#}
+                {#</div>#}
+                <div class="mdl-card__supporting-text mdl-card--border">
                       <i style="color:{{ color }};" class="material-icons" >{{ icon }}</i>
-                      <label>{{ paymentTask.item.name }}</label> due <span class="payment-date">{{ paymentTask.item.dueDate | date(format) }}</span> {{ currency.htmlSymbol | raw  }}{{ paymentTask.credit }} paid of {{ currency.htmlSymbol | raw  }}{{ paymentTask.item.value }}
-                  </li>
+                      <p class="mdl-card__title-text task-title" style="font-weight: 500;">{{ paymentTask.item.name }}</p>
+                     <label class="task-due-date"> due by {{ paymentTask.item.dueDate | date(format) }}</label>
+                     <p class="row-content" style="font-weight: 500; margin-left:3px;"> {{ currency.htmlSymbol | raw  }}{{ paymentTask.item.value }}</p>
+                     <p class="row-content">{{ currency.htmlSymbol | raw  }}{{ paymentTask.credit }} of</p>
+                      {#<label>{{ paymentTask.item.name }}</label> due <span class="payment-date">{{ paymentTask.item.dueDate | date(format) }}</span> {{ currency.htmlSymbol | raw  }}{{ paymentTask.credit }} paid of {{ currency.htmlSymbol | raw  }}{{ paymentTask.item.value }}#}
+                </div>
                 {% endfor %}
-            </ul>
 
         {% endif %}
-        <p><span>{{ currency.htmlSymbol | raw  }}{{ payments.total }}</span> total paid of <span>{{ currency.htmlSymbol | raw  }}{{ due.total }}</span> total due.
-            {% if payments.total >0  %}
-                <span id="payment-history-link"><a href="" id="toggle-payment-history" class="payment-history-link">view payment history</a></span>
-                <div style="display:none;" id="payment-history">
-                    <h4>Payment History</h4>
-                        <ul>
-                            {% for paid in payments.items %}
-                            <li>
-                                {{ currency.htmlSymbol | raw  }}{{ paid.value }} on {{ paid.date | date(format)}} {% if paid.note is not empty %}- {{ paid.note }} {% endif %}
-                            </li>
-                            {% endfor %}
-                        </ul>
-                </div>
-            {% endif %}
-        </p>
+        <div class="mdl-card__supporting-text mdl-card--border">
+            <label class="row-label">Total Paid</label>
+            <p class="row-content" style="color:green;">{{ currency.htmlSymbol | raw  }}{{ payments.total }}</p>
+        </div>
+        <div class="mdl-card__supporting-text mdl-card--border">
+            <label class="row-label">Total Due</label>
+            <p class="row-content" style="color:blue;">{{ currency.htmlSymbol | raw  }}{{ due.total }}</p>
+        </div>
         {% if overdue > 0 %}
-            <div style="color:red">There is a past due balance of {{ currency.htmlSymbol | raw  }}{{ overdue }}</div>
+            <div class="mdl-card__supporting-text mdl-card--border">
+                <label class="row-label">Past Due</label>
+                <p class="row-content" style="color:red;">{{ currency.htmlSymbol | raw  }}{{ overdue }}</p>
+            </div>
+        {% endif %}
+        {#<p><span>{{ currency.htmlSymbol | raw  }}{{ payments.total }}</span> total paid of <span>{{ currency.htmlSymbol | raw  }}{{ due.total }}</span> total due.#}
+        {% if payments.total >0  %}
+            <span id="payment-history-link" style="text-align: center;"><a href="" id="toggle-payment-history" class="payment-history-link">view payment history <br /><i class="material-icons">expand_more</i></a></span>
+            <div style="display:none;" id="payment-history">
+                <div class="mdl-card__title">
+                    <h3 class="mdl-card__title-text">Payment History</h3>
+                </div>
+                {% for paid in payments.items %}
+                <div class="mdl-card__supporting-text mdl-card--border">
+                    <p class="mdl-card__title-text task-title" style="font-weight: 500;">{{ currency.htmlSymbol | raw  }}{{ paid.value }}</p>
+                    <label class="task-due-date"> on {{ paid.date | date(format)}} {% if paid.note is not empty %}- {{ paid.note }} {% endif %}</label>
+                </div>
+                {% endfor %}
+            </div>
         {% endif %}
     </div>
-</div>
 <script>
     $(document).ready(function () {
 
@@ -81,10 +100,10 @@
             $(document).on('click', 'a.payment-history-link', function(e){
                 e.preventDefault();
                 $('#payment-history').toggle(400, function(){
-                    if ($('#toggle-payment-history').html()=='view payment history') {
-                        $('#toggle-payment-history').text('hide payment history');
+                    if ($('#toggle-payment-history').text()=='view payment history') {
+                        $('#toggle-payment-history').html('hide payment history <br /><i class="material-icons">expand_less</i>');
                     } else {
-                        $('#toggle-payment-history').text('view payment history');
+                        $('#toggle-payment-history').html('view payment history <br /><i class="material-icons">expand_more</i>');
                     }
                 });
             });
