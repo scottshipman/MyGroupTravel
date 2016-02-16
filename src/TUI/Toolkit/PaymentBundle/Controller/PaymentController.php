@@ -11,6 +11,10 @@ use TUI\Toolkit\PaymentBundle\Entity\Payment;
 use TUI\Toolkit\PaymentBundle\Form\PaymentType;
 use TUI\Toolkit\TourBundle\Entity\PaymentTaskOverride;
 
+use TUI\Toolkit\TourBundle\Entity\Tour;
+use TUI\Toolkit\TourBundle\Form\TourSetupType;
+use TUI\Toolkit\TourBundle\Controller\TourController;
+
 /**
  * Payment controller.
  *
@@ -308,6 +312,122 @@ class PaymentController extends Controller
     }
 
     /**
+     * Getting the passenger dashboard
+     * @param $tourId
+     * @return Response
+     */
+
+    public function getPaymentDashboardAction($tourId)
+    {
+        //check permissions first
+        $currUser = $this->get('security.context')->getToken()->getUser();
+        $currRole =  $this->get("permission.set_permission")->getPermission($tourId, 'tour', $currUser);
+
+        if(!$this->get('security.context')->isGranted('ROLE_BRAND')){
+            if(!in_array('assistant', $currRole) && !in_array('organizer', $currRole)) {
+                throw $this->createAccessDeniedException('You are not authorized to manage passengers for this tour!');
+            }
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
+
+        //combine all lists and get parents
+        $all = $this->get("passenger.actions")->getPassengersByStatus('all', $tourId);
+        $passengers = $this->get('passenger.actions')->addPassengerParents($all, $em);
+
+        // get counts of status for passengers and organizers
+        $participantCounts = $this->get('passenger.actions')->getParticipantCounts($passengers);
+
+        //Get Pending Invite organizer list (have no passenger object created yet so we'll fake it)
+        $organizers = $this->get("passenger.actions")->getOrganizers($tourId);
+        array_unshift($organizers, $tour->getOrganizer());
+
+        $organizersObjects = $this->get('passenger.actions')->addOrganizerPassengers($organizers, $tourId, $em);
+        if ($organizersObjects == null){
+            $organizersObjects = array();
+        }
+
+        // merge all records
+        $passengers = array_merge($passengers, $organizersObjects);
+
+        //brand stuff
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
+
+        return $this->render('PaymentBundle:Payment:dashboard.html.twig', array(
+            'entity' => $tour, // just to re-use the tour menu which relies on a variable called entity
+            'tour' => $tour,
+            'brand' => $brand,
+            'passengers' => $passengers
+        ));
+    }
+
+    public function getEditPaymentSettingsAction($tourId)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
+        $date_format = $this->container->getParameter('date_format');
+        $locale = $this->container->getParameter('locale');
+        $setupForm = $this->createTourSetupForm($tour);
+
+        //brand stuff
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
+
+        $passenger_payment_tasks = $tour->getPaymentTasksPassenger();
+
+
+        return $this->render('PaymentBundle:Payment:settings.html.twig', array(
+            'tour' => $tour,
+            'setup_form' => $setupForm->createView(),
+            'date_format' => $date_format,
+            'locale' => $locale,
+            'brand' => $brand,
+            'passenger_payment_tasks' => $passenger_payment_tasks,
+        ));
+
+    }
+
+    /**
+     * Creates a form to edit a Tour entity on first setup.
+     *
+     * @param Tour $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+
+    public function createTourSetupForm(Tour $entity)
+    {
+        $locale = $this->container->getParameter('locale');
+        $setupForm = $this->createForm(new TourSetupType($locale), $entity, array(
+            'action' => $this->generateUrl('manage_tour_setup', array('id' => $entity->getId())),
+            'method' => 'PUT',
+        ));
+
+        $setupForm->add('submit', 'submit', array('label' => $this->get('translator')->trans('tour.actions.save')));
+
+        return $setupForm;
+    }
+
+
+    /**
      * Action to render a passenger's payment card details
      *
      * @param $passengerId
@@ -385,19 +505,19 @@ class PaymentController extends Controller
             $override=NULL;
             if($paymentOverride = $em->getRepository('TourBundle:PaymentTaskOverride')
                 ->findBy(array('paymentTaskSource'=>$task->getId(), 'passenger'=>$passenger->getId()))){
-            $task->setValue($paymentOverride[0]->getValue());
-            $override = $paymentOverride[0]->getId();
+                $task->setValue($paymentOverride[0]->getValue());
+                $override = $paymentOverride[0]->getId();
             }
             $form->add('task' . $task->getId(), 'money', array(
                 'currency' => $currency->getCode(),
                 'label' => $task->getName() . ' (due '. $task->getDueDate()->format($date_format) . ')',
                 'data' => $task->getValue(),
-                    'constraints' => array(
-                         new NotBlank(),
-                        )))
-                    ->add('override' . $task->getId(), 'hidden', array(
-                        'data' => $override,
-                        ));
+                'constraints' => array(
+                    new NotBlank(),
+                )))
+                ->add('override' . $task->getId(), 'hidden', array(
+                    'data' => $override,
+                ));
         }
 
 

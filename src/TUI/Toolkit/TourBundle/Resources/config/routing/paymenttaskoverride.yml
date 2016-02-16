@@ -26,5 +26,5 @@ paymenttaskoverride_update:
 
 paymenttaskoverride_delete:
     path:     /{id}/delete
-    defaults: { _controller: "TourBundle:PaymentTaskOverride:delete" }
+    defaults: { _controller: "TourBundle:PaymentTaskOverride:ajaxDelete" }
     methods:  [POST, DELETE]
