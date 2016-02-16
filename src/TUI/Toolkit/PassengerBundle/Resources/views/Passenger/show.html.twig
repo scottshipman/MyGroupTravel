@@ -121,6 +121,13 @@
                 </div>
             </div>
 
+            {#Passenger Payment Card#}
+            {% if entity.status == 'accepted' %}
+                {{ render(controller('PaymentBundle:Payment:getPassengerPaymentCard', { 'passengerId': entity.id })) }}
+            {% endif %}
+
+
+
             {#Passenger Task Card#}
             <div class="waitlist tour-edit mdl-card mdl-shadow--2dp">
                 <div class="mdl-card__title">
