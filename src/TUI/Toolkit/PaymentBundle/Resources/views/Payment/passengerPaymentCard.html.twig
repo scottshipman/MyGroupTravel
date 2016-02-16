@@ -100,8 +100,10 @@
             $(document).on('click', 'a.payment-history-link', function(e){
                 e.preventDefault();
                 $('#payment-history').toggle(400, function(){
-                    if ($('#toggle-payment-history').text()=='view payment history') {
+                    console.log($('#toggle-payment-history').text());
+                    if ($('#toggle-payment-history').text()=='view payment history expand_more') {
                         $('#toggle-payment-history').html('hide payment history <br /><i class="material-icons">expand_less</i>');
+                        console.log($('#toggle-payment-history').html());
                     } else {
                         $('#toggle-payment-history').html('view payment history <br /><i class="material-icons">expand_more</i>');
                     }
