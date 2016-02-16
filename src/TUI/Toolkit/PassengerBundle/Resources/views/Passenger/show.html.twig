@@ -122,7 +122,9 @@
             </div>
 
             {#Passenger Payment Card#}
-            {{ render(controller('PaymentBundle:Payment:getPassengerPaymentCard', { 'passengerId': entity.id })) }}
+            {% if entity.status == 'accepted' %}
+                {{ render(controller('PaymentBundle:Payment:getPassengerPaymentCard', { 'passengerId': entity.id })) }}
+            {% endif %}
 
 
 

@@ -5,9 +5,11 @@ namespace TUI\Toolkit\PaymentBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 use TUI\Toolkit\PaymentBundle\Entity\Payment;
 use TUI\Toolkit\PaymentBundle\Form\PaymentType;
+use TUI\Toolkit\TourBundle\Entity\PaymentTaskOverride;
 
 /**
  * Payment controller.
@@ -193,34 +195,76 @@ class PaymentController extends Controller
         return $form;
     }
     /**
-     * Edits an existing Payment entity.
+     * Edits an existing Payment Schedule for a passenger entity.
      *
      */
-    public function updateAction(Request $request, $id)
+    public function scheduleUpdateAction(Request $request, $passengerId)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('PaymentBundle:Payment')->find($id);
+        $paymentTasks = $this->get("payment.getPayments")->getPassengersPaymentTasks($passengerId);
+        $passenger = $em->getRepository('PassengerBundle:Passenger')->find($passengerId);
+        $tour = $passenger->getTourReference();
+        $form = $this->createCustomScheduleForm($tour->getId(), $passenger);
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $data = $form->getData();
+            foreach($paymentTasks as $paymentTask) {
+                $passengerOverride = NULL;
+                $key = $paymentTask['item']->getId();
+                if($data['override'.$key] !== NULL){
+                    // This is an overriden payment task, use the value of $data['override'.$key] as the record to update
+                    if($data['task' . $key] !== $paymentTask['item']->getValue()){
+                        //new value  so change the record
+                        $passengerOverride = $em->getRepository('TourBundle:PaymentTaskOverride')->find($data['override' . $key]);
+                        if ($passengerOverride !== NULL) {
+                            $passengerOverride->setValue($data['task'.$key]);
+                            $em->persist($passengerOverride);
+                        }
+                    }
 
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Payment entity.');
-        }
+                } else {
+                    // This is the default task...if the value is different create a new overriden task
+                    if($data['task' . $key] !== $paymentTask['item']->getValue()){
+                        //new value so change the record
+                        $newPaymentTask = new PaymentTaskOverride();
+                        $newPaymentTask->setPassenger($passenger);
+                        $newPaymentTask->setPaymentTaskSource($paymentTask['item']);
+                        $newPaymentTask->setValue($data['task'.$key]);
+                        $em->persist($newPaymentTask);
 
-        $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createEditForm($entity);
-        $editForm->handleRequest($request);
+                    }
+                }
+            }
 
-        if ($editForm->isValid()) {
+
+
             $em->flush();
 
-            return $this->redirect($this->generateUrl('payment_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('manage_passenger_show', array('id' => $passengerId)));
         }
 
-        return $this->render('PaymentBundle:Payment:edit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        // form not valid or has errors
+        $errors = array();
+        foreach ($form->getErrors() as $key => $error) {
+            if ($form->isRoot()) {
+                $errors['#'][] = $error->getMessage();
+            } else {
+                $errors[] = $error->getMessage();
+            }
+        }
+        foreach ($form->all() as $child) {
+            if (!$child->isValid()) {
+                $errors[$child->getName()] = $this->getErrorMessages($child);
+            }
+        }
+        $serializer = $this->container->get('jms_serializer');
+        $errors = $serializer->serialize($errors, 'json');
+        $response = new Response($errors);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setStatusCode('400');
+        return $response;
+
     }
     /**
      * Deletes a Payment entity.
@@ -263,6 +307,12 @@ class PaymentController extends Controller
         ;
     }
 
+    /**
+     * Action to render a passenger's payment card details
+     *
+     * @param $passengerId
+     * @return mixed
+     */
     public function getPassengerPaymentCardAction($passengerId){
         $locale = $this->container->getParameter('locale');
         $em = $this->getDoctrine()->getManager();
@@ -279,7 +329,80 @@ class PaymentController extends Controller
             'paymentTasks' => $paymentTasks,
             'currency' => $currency,
             'locale' => $locale,
+            'passenger' => $passenger,
         ));
+    }
 
+    /**
+     * Action to generate a Custom Payment Schedule form
+     *
+     * @param $tourId
+     * @param $passengerId
+     * @return mixed
+     */
+    public function customizeScheduleAction($tourId, $passengerId) {
+        $em = $this->getDoctrine()->getManager();
+        $paymentTasks = $this->get("payment.getPayments")->getPassengersPaymentTasks($passengerId);
+        $passenger = $em->getRepository('PassengerBundle:Passenger')->find($passengerId);
+        $currency = $passenger->getTourReference()->getCurrency();
+        $form = $this->createCustomScheduleForm($tourId, $passenger);
+
+        return $this->render('PaymentBundle:Payment:passengerCustomScheduleForm.html.twig', array(
+            'paymentTasks' => $paymentTasks,
+            'currency' => $currency,
+            'passenger' => $passenger,
+            'form' => $form->createView(),
+        ));
+    }
+
+    /**
+     * Creates a form to edit a Passenger's Payment schedule.
+     *
+     * @param TourId the Tour ID
+     * @param passenger= the full passenger object
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createCustomScheduleForm($tourId, $passenger)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
+        $currency = $tour->getCurrency();
+        $locale = $this->container->getParameter('locale');
+        if($locale == 'en_GB') {
+            $date_format = 'd M Y';
+        } else {
+            $date_format = 'M d Y';
+        }
+
+        $tasks = $tour->getPaymentTasksPassenger();;
+        $defaultData = array('message' => 'Type your message here');
+        $form = $this->createFormBuilder($defaultData)
+            ->setMethod('POST')
+            ->setAction($this->generateUrl('payment_schedule_update', array('passengerId' => $passenger->getId())));
+
+        foreach($tasks as $task) {
+            $override=NULL;
+            if($paymentOverride = $em->getRepository('TourBundle:PaymentTaskOverride')
+                ->findBy(array('paymentTaskSource'=>$task->getId(), 'passenger'=>$passenger->getId()))){
+            $task->setValue($paymentOverride[0]->getValue());
+            $override = $paymentOverride[0]->getId();
+            }
+            $form->add('task' . $task->getId(), 'money', array(
+                'currency' => $currency->getCode(),
+                'label' => $task->getName() . ' (due '. $task->getDueDate()->format($date_format) . ')',
+                'data' => $task->getValue(),
+                    'constraints' => array(
+                         new NotBlank(),
+                        )))
+                    ->add('override' . $task->getId(), 'hidden', array(
+                        'data' => $override,
+                        ));
+        }
+
+
+        $form->add('submit', 'submit', array('label' => 'Update'));
+
+        return $form->getForm();
     }
 }

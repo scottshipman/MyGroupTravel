@@ -21,6 +21,8 @@ payment:
         create_new: Log a New Payment
         view: View
         edit: Edit
+        log-payment: Log a Payment
+        customize-payments: Edit Payment Schedule
 
     flash:
         save: "This payment has been logged."

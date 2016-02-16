@@ -10,6 +10,10 @@ payment_new:
     path:     /tour/{tourId}/passenger/{passengerId}/new
     defaults: { _controller: "PaymentBundle:Payment:new" }
 
+payment_schedle_customize:
+    path:     /tour/{tourId}/passenger/{passengerId}/customize
+    defaults: { _controller: "PaymentBundle:Payment:customizeSchedule" }
+
 payment_create:
     path:     /create/{tourId}/{passengerId}
     defaults: { _controller: "PaymentBundle:Payment:create" }
@@ -19,9 +23,9 @@ payment_edit:
     path:     /{id}/edit
     defaults: { _controller: "PaymentBundle:Payment:edit" }
 
-payment_update:
-    path:     /{id}/update
-    defaults: { _controller: "PaymentBundle:Payment:update" }
+payment_schedule_update:
+    path:     passenger/{passengerId}/payment_update
+    defaults: { _controller: "PaymentBundle:Payment:scheduleUpdate" }
     methods:  [POST, PUT]
 
 payment_delete:
