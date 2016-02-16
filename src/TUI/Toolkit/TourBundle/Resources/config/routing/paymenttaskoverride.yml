@@ -1,0 +1,30 @@
+paymenttaskoverride:
+    path:     /
+    defaults: { _controller: "TourBundle:PaymentTaskOverride:index" }
+
+paymenttaskoverride_show:
+    path:     /{id}/show
+    defaults: { _controller: "TourBundle:PaymentTaskOverride:show" }
+
+paymenttaskoverride_new:
+    path:     /new
+    defaults: { _controller: "TourBundle:PaymentTaskOverride:new" }
+
+paymenttaskoverride_create:
+    path:     /create
+    defaults: { _controller: "TourBundle:PaymentTaskOverride:create" }
+    methods:  POST
+
+paymenttaskoverride_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "TourBundle:PaymentTaskOverride:edit" }
+
+paymenttaskoverride_update:
+    path:     /{id}/update
+    defaults: { _controller: "TourBundle:PaymentTaskOverride:update" }
+    methods:  [POST, PUT]
+
+paymenttaskoverride_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "TourBundle:PaymentTaskOverride:ajaxDelete" }
+    methods:  [POST, DELETE]

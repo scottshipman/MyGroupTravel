@@ -29,6 +29,11 @@ payment:
     labels:
         payment: Payment
         add: Add Payment
+        balances: Passenger Balances
+        due: Due
+        payment_settings: Payment Settings
+        balances: Passenger Balances
+        Paid: Paid
 
     form:
         date: Date Received (MM-DD-YYYY)

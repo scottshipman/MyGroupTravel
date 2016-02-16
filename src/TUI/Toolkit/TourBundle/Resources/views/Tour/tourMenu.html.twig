@@ -1,4 +1,4 @@
-{% if entity.tourReference is defined and entity.tourReference.id is defined %}{% set tourId = entity.tourReference.id %}{% else %}{% set tourId = entity.id %}{% endif %}
+{% if entity.tourReference is defined and entity.tourReference.id is defined %}{% set tourId = entity.tourReference.id %}{% elseif tour is defined %}{% set tourId = tour.id %}{% else %}{% set tourId = entity.id %}{% endif %}
 {# Only logged-in can see this menu #}
 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
 <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="tour-title-drop">
@@ -9,7 +9,7 @@
         {%  if is_granted('ROLE_BRAND') %}
             <li><a href="{{ path('manage_tour_edit', { 'id': tourId }) }}" class="mdl-menu__item">{% trans %}tour.menu.brand_edit{% endtrans %}</a></li>
         {% endif %}
-        <li><a href="{{ path('manage_tour_edit_payments', { 'id': tourId }) }}" class="mdl-menu__item">{% trans %}tour.menu.payments{% endtrans %}</a></li>
+        <li><a href="{{ path('manage_payment_dashboard_edit_payments', { 'tourId': tourId }) }}" class="mdl-menu__item">{% trans %}tour.menu.payments{% endtrans %}</a></li>
         <li><a href="{{ path('manage_passenger_dashboard', { 'tourId': tourId }) }}" class="mdl-menu__item">{% trans %}passenger.title.index{% endtrans %}</a></li>
     </span>
 </ul>
