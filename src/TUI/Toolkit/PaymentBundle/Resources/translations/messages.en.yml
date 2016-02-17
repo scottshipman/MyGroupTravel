@@ -36,6 +36,10 @@ payment:
         payment_settings: Payment Settings
         balances: Passenger Balances
         Paid: Paid
+        total_paid: Total Paid
+        total_due: Total Due
+        past_due: Past Due
+        payment_history: Payment History
 
     form:
         date: Date Received (MM-DD-YYYY)
