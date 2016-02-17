@@ -1,11 +1,11 @@
 {% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
-
+{% set tourId = passenger.tourReference.id %}
 <div class="waitlist tour-edit mdl-card mdl-shadow--2dp">
     <div class="mdl-card__title">
         <h3 class="mdl-card__title-text">{% trans %}passenger.labels.payments{% endtrans %}</h3>
 
           {# only if an organizer or brand #}
-        {% if 0==0 %}
+        {% if  is_granted("ROLE_BRAND") or "tour" | getRoles(tourId) == "parent" or "tour" | getRoles(tourId) == "assistant"%}
                 <button id="payment-actions-menu-drop-{{ passenger.id }}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-button">
                     <i class="material-icons">more_vert</i>
                 </button>
