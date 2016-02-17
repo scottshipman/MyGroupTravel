@@ -264,6 +264,23 @@
 
   .row-content {
     float: right;
+
+    .weighted {
+      font-weight: 500;
+      margin-left:3px;
+    }
+
+    .green {
+      color:green;
+    }
+
+    .red {
+      color:red;
+    }
+
+    .blue {
+      color:blue;
+    }
   }
 
   .title-button {
@@ -292,6 +309,10 @@
   .task-title {
     display: inline;
     font-size:18px;
+
+    .weighted {
+      font-weight: 500;
+    }
 
     .add-info {
       margin-right: 10px;
