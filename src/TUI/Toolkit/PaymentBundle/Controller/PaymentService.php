@@ -9,10 +9,12 @@
 namespace TUI\Toolkit\PaymentBundle\Controller;
 
 
-use Symfony\Component\HttpFoundation\Request;use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use TUI\Toolkit\PaymentBundle\Entity\Payment;
 use TUI\Toolkit\PassengerBundle\Entity\Passenger;
+use TUI\Toolkit\TourBundle\Entity\Tour;
 
 use Symfony\Component\DependencyInjection\Container;
 
@@ -109,20 +111,51 @@ class PaymentService {
      * @return float total amount due for a tour
      */
     public function getTourPaymentsDue($tourId) {
-        $total = 0;
-        $tour = $em->getRepository('PassengerBundle:Passenger')->find($tourId);
+        $em = $this->em;
+        $now = new \DateTime('now');
+        $final = 0;
+        $finalStatus = 'pending';
+        $finalOverdueAmt = 0;
+        $cashBalance = $this->getTourPaymentsPaid($tourId);
+        $collected = $cashBalance;
+        $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
         $tourPaymentTasks = $tour->getPaymentTasksPassenger();
-        $tourPassengers = $this->get("passenger.actions")->getPassengersByStatus('accepted', $tourId);
+        $tourPassengers = $this->container->get("passenger.actions")->getPassengersByStatus('accepted', $tourId);
         foreach($tourPaymentTasks as $tourPaymentTask){
+            $total = 0;
             foreach($tourPassengers as $tourPassenger){
-                if ($paymentOverride = $em->getRepository('TourBundle:PaymentTaskOverride')->findBy(array('tour' => $tourId, 'passenger' => $tourPassenger->getId()))){
-                    $total = $total + $paymentOverride->getValue();
+                if ($paymentOverride = $em->getRepository('TourBundle:PaymentTaskOverride')
+                    ->findBy(array('paymentTaskSource'=>$tourPaymentTask->getId(), 'passenger'=>$tourPassenger->getId()))){
+                    $total = $total + $paymentOverride[0]->getValue();
                 } else {
                     $total = $total + $tourPaymentTask->getValue();
                 }
             }
+
+
+            $overdueAmt = 0;
+            if($cashBalance >= $total){
+                $credit = $total;
+                $cashBalance = $cashBalance - $credit;
+                $status = "paid";
+            }elseif($cashBalance < $total){
+                $credit = $cashBalance;
+                $cashBalance = 0;
+                if ($tourPaymentTask->getDueDate() < $now) {
+                    $status = "overdue";
+                    $finalStatus = 'overdue';
+                    $overdueAmt = $total - $credit;
+                } else {
+                    $status = "pending";
+                }
+            }
+            $finalOverdueAmt = $finalOverdueAmt + $overdueAmt;
+            $final = $final + $total;
+            $items[] = array('task' => $tourPaymentTask, 'status'=>$status, 'overdueAmt' => $overdueAmt, 'credit' => $credit, 'total' => $total);
+
         }
-        return $total;
+        if ($collected - $final >= 0) { $finalStatus = 'paid';}
+        return array('total' => $final, 'items' => $items, 'finalStatus' => $finalStatus, 'overdueAmt' => $finalOverdueAmt, 'paid' => $collected);
     }
 
     /**
@@ -130,6 +163,13 @@ class PaymentService {
      * @return float total amount Paid for a tour
      */
     public function getTourPaymentsPaid($tourId) {
+        $em = $this->em;
+        $total = 0;
+        $payments = $em->getRepository('PaymentBundle:Payment')->findBy(array('tour' => $tourId));
+        foreach($payments as $payment) {
+            $total = $total + $payment->getValue();
+        }
+        return $total;
 
     }
 

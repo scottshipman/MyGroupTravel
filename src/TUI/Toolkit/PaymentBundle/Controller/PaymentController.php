@@ -325,31 +325,18 @@ class PaymentController extends Controller
 
         if(!$this->get('security.context')->isGranted('ROLE_BRAND')){
             if(!in_array('assistant', $currRole) && !in_array('organizer', $currRole)) {
-                throw $this->createAccessDeniedException('You are not authorized to manage passengers for this tour!');
+                throw $this->createAccessDeniedException('You are not authorized to manage payments for this tour!');
             }
         }
-
+        $locale = $this->container->getParameter('locale');
         $em = $this->getDoctrine()->getManager();
         $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
 
         //combine all lists and get parents
-        $all = $this->get("passenger.actions")->getPassengersByStatus('all', $tourId);
-        $passengers = $this->get('passenger.actions')->addPassengerParents($all, $em);
-
-        // get counts of status for passengers and organizers
-        $participantCounts = $this->get('passenger.actions')->getParticipantCounts($passengers);
-
-        //Get Pending Invite organizer list (have no passenger object created yet so we'll fake it)
-        $organizers = $this->get("passenger.actions")->getOrganizers($tourId);
-        array_unshift($organizers, $tour->getOrganizer());
-
-        $organizersObjects = $this->get('passenger.actions')->addOrganizerPassengers($organizers, $tourId, $em);
-        if ($organizersObjects == null){
-            $organizersObjects = array();
-        }
-
-        // merge all records
-        $passengers = array_merge($passengers, $organizersObjects);
+        $accepted = $this->get("passenger.actions")->getPassengersByStatus('accepted', $tourId);
+        $passengers = $this->get('passenger.actions')->addPassengerParents($accepted, $em);
+        $payments = $this->get("payment.getPayments")->getTourPaymentsPaid($tourId);
+        $due = $this->get("payment.getPayments")->getTourPaymentsDue($tourId);
 
         //brand stuff
         $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
@@ -367,7 +354,10 @@ class PaymentController extends Controller
             'entity' => $tour, // just to re-use the tour menu which relies on a variable called entity
             'tour' => $tour,
             'brand' => $brand,
-            'passengers' => $passengers
+            'passengers' => $passengers,
+            'due' => $due,
+            'payments' => $payments,
+            'locale' => $locale,
         ));
     }
 
@@ -450,6 +440,42 @@ class PaymentController extends Controller
             'currency' => $currency,
             'locale' => $locale,
             'passenger' => $passenger,
+        ));
+    }
+
+
+    /**
+     * Action to render a passenger's payment card details
+     *
+     * @param $passengerId
+     * @return mixed
+     */
+    public function getPassengerPaymentMiniCardAction($passenger) {
+        $locale = $this->container->getParameter('locale');
+        $currency = $passenger[0]->getTourReference()->getCurrency();
+
+        $due = $this->get("payment.getPayments")->getPassengerPaymentsDue($passenger[0]->getId());
+        $payments = $this->get("payment.getPayments")->getPassengersPaymentsPaid($passenger[0]->getId());
+        $paymentTasks = $this->get("payment.getPayments")->getPassengersPaymentTasks($passenger[0]->getId());
+
+        $overdueAmt = 0;
+        $status= 'pending';
+        foreach($paymentTasks as $paymentTask) {
+            if ($paymentTask['overdueAmt'] > 0){
+                $overdueAmt = $overdueAmt + $paymentTask['overdueAmt'];
+                $status = "overdue";
+            }
+        }
+
+        return $this->render('PaymentBundle:Payment:passengerPaymentMiniCard.html.twig', array(
+            'due' => $due,
+            'payments' => $payments,
+            'paymentTasks' => $paymentTasks,
+            'currency' => $currency,
+            'locale' => $locale,
+            'pax' => $passenger,
+            'status'=>$status,
+            'overdue' => $overdueAmt,
         ));
     }
 

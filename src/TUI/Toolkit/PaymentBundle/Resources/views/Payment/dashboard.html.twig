@@ -57,74 +57,20 @@
                 <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
                     <h3 style="float: left; font-weight:300; font-size:2em;">{% trans %}payment.labels.paid{% endtrans %}</h3>
                     <div style="float: right; margin-top:20px;">
-                        <span style="color:{{ brand.secondaryColor }}; font-size:3.5em;em; font-weight:100;">{% if tour.currency %}<p id="currency" style="display: inline; font-size: inherit; font-weight: inherit;">{{ tour.currency.htmlSymbol | raw }}</p>{% endif %}<p style="display: inline; margin-left:5px; font-size:inherit; font-weight:inherit;">36000</p></span><br/>
-                        <span style="float:right;"><label>/{% if tour.currency %}<p id="currency" style="display: inline; font-size: inherit; font-weight: inherit;">{{ tour.currency.htmlSymbol | raw }}</p>{% endif %}<p style="display: inline; margin-left:5px; font-size:inherit; font-weight:inherit;">{{ totalDue }}</p></label></span>
+                        <span style="color:{{ brand.secondaryColor }}; font-size:3.5em;em; font-weight:100;">{% if tour.currency %}<p id="currency" style="display: inline; font-size: inherit; font-weight: inherit;">{{ tour.currency.htmlSymbol | raw }}</p>{% endif %}<p style="display: inline; margin-left:5px; font-size:inherit; font-weight:inherit;">{{ payments }}</p></span><br/>
+                        <span style="float:right;"><label>/{% if tour.currency %}<p id="currency" style="display: inline; font-size: inherit; font-weight: inherit;">{{ tour.currency.htmlSymbol | raw }}</p>{% endif %}<p style="display: inline; margin-left:5px; font-size:inherit; font-weight:inherit;">{{ due.total }}</p></label></span>
                     </div>
                 </div>
             </div>
 
+                {# Tour Payment Tasks collapsable card #}
+                {% embed "PaymentBundle:Payment:tourPaymentTaskSummary.html.twig" %}{% endembed %}
+
+
+                {# Passenger Mini Cards #}
                 {% for passenger in passengers %}
-
-                    {% set signedUp = 'Signed up on ' ~ passenger[0].signUpDate|date(format)  %}
-                    {% if passenger[0].status == "accepted" %}
-                        {% set statusicon =  '<a class="' ~ passenger[0].status ~ 'icon" title = "' ~ passenger[0].status | paxLabel ~ '"><i class="material-icons statusicon">verified_user</i></a>'%}
-                        {% set status = 'accepted' %}
-                    {% else %}
-                        {% set statusicon = '<a class="' ~ passenger[0].status ~ 'icon" title = "' ~ passenger[0].status | paxLabel ~ '"><i class="material-icons statusicon">list</i></a>'%}
-                        {% set status = 'waitlist' %}
-                    {% endif %}
-
-                    {% if passenger[2] is sameas(TRUE) %} {# is this an organizer? #}
-                        {% set organizericon = '<a class="organizer-card" title = "Organizer"><i class="material-icons">group_add</i></a>' %}
-                        {% set paxClass = "organizers" %}
-                        {% if tour.organizer.id == passenger[1].id %}
-                            {% set signedUp = 'passenger.labels.primary-organizer' | trans %}
-                        {% else %}
-                            {% if passenger[1].enabled is sameas(false) %} {# Pending Invite #}
-                                {% set statusicon = '<a class="' ~ passenger[0].status ~ 'icon" title = "' ~ passenger[0].status | paxLabel ~ '"><i class="material-icons">live_help</i></a>' %}
-                                {% set signedUp = 'passenger.labels.invite-pending' | trans %}  {% endif %}
-                            {% if passenger[1].enabled is sameas(true) %}
-                                {% set signedUp = 'passenger.labels.assistant-organizer' | trans %}  {% endif %}
-                        {% endif %}
-                    {% else %}
-                        {% set organizericon = '' %}
-                        {% set paxClass = "passengers" %}
-                    {% endif %}
-
-                    {% if passenger[0].free == 1 %}
-                        {% set freeLabel = "free" | paxLabel %}
-                        {% set freeicon = '<a class="freeicon" title = "' ~ freeLabel ~ '"><i class="material-icons statusicon">money_off</i></a>' %}
-                        {%  set freeClass = "free" %}
-                        {% set statusicon = '' %}
-                        {% set status = '' %}
-                    {% else %}
-                        {% set freeClass = '' %}
-                        {% set freeicon = '' %}
-                    {% endif %}
-                    <div class="{{ status }} {{ freeClass }} {{ paxClass }} tour-edit mdl-shadow--2dp" style="background-color:white; margin-bottom: 0;" passenger="{{ passenger[0].id }}">
-                        <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
-                            <div style="float: left; color: grey;" class="pcardname">
-                            {% if passenger[0].media %}
-                                <img style="float: left; margin-right: 15px;"  class="tui-image-avatar" src="{{ ( passenger[0].media.getRelativePath ~ "/" ~ passenger[0].media.getHashedFilename ) | imagine_filter('thumbnail') }}">
-                            {% elseif passenger[0].fName and passenger[0].lName %}
-                                <span style="float: left; margin-right: 15px;"  class="tui-text-avatar mdl-typography--headline">{{ passenger[0].fName[:1] }}{{ passenger[0].lName[:1] }}</span>
-                            {% else %}
-                                <span style="float: left; margin-right: 15px;"  class="tui-text-avatar mdl-typography--headline">{{ passenger[0].fName[:1] }}</span>
-                            {% endif %}
-                            <p style="display: inline-block"><strong>{{ passenger[0].fName }}</strong></p>
-                            <p style="display: inline-block"><strong>{{ passenger[0].lName }}</strong></p>
-                            <p style="display: inline-block"><strong><a href="mailto:{{ passenger[1].email }}">{{ passenger[1].email }}</a></strong></p>
-                            <label style="display: inline-block; margin-left: 63px; min-width: 100%;">{{ statusicon | raw }} {{ freeicon | raw }}{{ organizericon | raw }} {{ signedUp }}</label>
-                            </div>
-                            {#{% if  passenger[0].status != "Pending Invite"%}#}
-                                {#<button style="position: absolute; right: 20px; color:grey; margin-top:10px;" id="passenger-actions-menu-drop-{{ passenger[0].id }}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">#}
-                                    {#<i class="material-icons">more_vert</i>#}
-                                {#</button>#}
-                                {#{% embed "PassengerBundle:Passenger:passengerActionsMenu.html.twig" %}{% endembed %}#}
-                            {#{% endif %}#}
-                        </div>
-
-                    </div>
+                    {# render each accepted passenger mini-card #}
+                    {{ render(controller('PaymentBundle:Payment:getPassengerPaymentMiniCard', { 'passenger': passenger})) }}
                 {% endfor %}
 
                 <!-- render the organizers -->
@@ -146,108 +92,43 @@
     {% endjavascripts %}
 
     <script>
-
-        (function(passengerStatus, $, undefined) {
-            //Accepted Property
-            passengerStatus.accepted = "{{ 'accepted' | paxLabel }}";
-            //Waitlist Property
-            passengerStatus.waitlist = "{{ 'waitlist' | paxLabel }}";
-            //Free Property
-            passengerStatus.free = "{{ 'free' | paxLabel }}";
-            //Organizer property
-            passengerStatus.organizer = "{{ 'passenger.labels.organizer' | trans }}";
-            passengerStatus.passenger = "{{ 'passenger.labels.passenger' | trans }}";
-            passengerStatus.all = "{{ 'passenger.labels.passenger_list' | trans }}";
-
-            // Colors
-            passengerStatus.primaryColor = "{{ brand.primaryColor }}";
-            passengerStatus.secondaryColor = "{{ brand.secondaryColor }}";
-            passengerStatus.tertiaryColor = "{{ brand.tertiaryColor }}";
-
-
-        }( window.passengerStatus = window.passengerStatus || {}, jQuery ));
-
         $(document).ready(function () {
-            if( window.location.hash ) {
-                var hashFilter = window.location.hash;
-                // Fragment exists
-                filterPassengers(hashFilter.substring(1));
-            }
 
-                // Promote Popup
-                $(document).on('click', '#invite-passengers', function (e) {
-                    e.preventDefault();
-                    var shareValue = "{{ url('tour_site_show', { 'id': tour.id, 'quoteNumber' : tour.quoteNumber }) }}";
-                    var link_html = '<h3>Share this Tour with others</h3>' +
-                                      '<div><p>To send this tour to others, copy the URL below.</p></div>' +
-                                      '<div class="input"><input style="width:70%; padding:.25em; margin:1em;" type="text" id="share_url" name="share_url" value="' + shareValue + '" readonly="readonly">' +
-                                      '<a href="#" id="copy-button" data-clipboard-target="share_url"' +
-                                      'title="Click to copy Tour URL"' +
-                                      'class="not-full mdl-button mdl-js-button mdl-button--raised mdl-button--colored">' +
-                                      '<i class="fa fa-sign-in fa-stack"></i>' +
-                                      '</a></div>';
-                    toolkitStaticPopup("Promote the Tour", link_html);
-                    // Copy to Clipboard
-                    ZeroClipboard.config({swfPath: "//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf"});
-                    var client = new ZeroClipboard(document.getElementById("copy-button"));
-                    client.on('aftercopy', function (event) {
-                        $('#copy-button').css('background-color', 'green');
-                    });
-                    //remove the CopytoClipboard button if not Flash
-                    if (navigator.mimeTypes["application/x-shockwave-flash"] == undefined) {
-                        $("#copy-button").addClass('hidden');
-                        $('share_url').css('width', '80%');
-                    };
+            // Payment popup
+            $(document).on('click', 'a.make-a-payment', function (e) {
+                var t = $(this);
+                e.preventDefault();
+                var passengerId = t.attr('passenger');
+                var tourId = t.attr('tour');
+                toolkitStandardPopup("Log A Payment", '/payment/tour/' + tourId + '/passenger/' + passengerId + '/new' );
+            });
 
+            // Customize a passenger's payment schedule
+            $(document).on('click', 'a.edit-payment-schedule', function (e) {
+                var t = $(this);
+                e.preventDefault();
+                var passengerId = t.attr('passenger');
+                var tourId = t.attr('tour');
+                toolkitStandardPopup("Custom Payment Schedule", '/payment/tour/' + tourId + '/passenger/' + passengerId + '/customize' );
+            });
+
+
+            // toggle payment Tasks
+            $(document).on('click', 'a.payment-schedule-link', function(e){
+                e.preventDefault();
+                $('#payment-schedule').toggle(400, function(){
+                    if ($('#toggle-payment-schedule').text()=='view payment schedule') {
+                        $('#toggle-payment-schedule').text('hide payment schedule');
+                    } else {
+                        $('#toggle-payment-schedule').text('view payment schedule');
+                    }
                 });
+            });
 
-                $(document).on('click', '.passenger-filter', function (e){
-                    e.preventDefault();
-                    var elemID = this.getAttribute('data-id');
-                    window.location.hash = elemID;
-                    filterPassengers(elemID);
-                });
-
-                // toggle invite form display
-                $(document).on('click', '.show-invite-form', function (e) {
-                    e.preventDefault();
-                    $('.organizer-form-container').slideDown(400);
-                    $('.show-invite-form').hide();
-
-
-                });
-                 $(document).on('click', '.hide-invite-form', function (e) {
-                    e.preventDefault();
-                    $('.organizer-form-container').slideUp(400);
-                    $('.show-invite-form').show();
-
-
-                });
-
-                // bind Invite Organizer form and provide a simple callback function
-                $('#ajax_invite_organizer').ajaxForm({
-                    beforeSubmit: function(){
-                        $('#loader').show();
-                        $('.errors').html('');
-                    },
-                    clearForm: true,
-                    success : function (response) {
-                        // display success message
-                        $('.errors').html('<div id="invite-org-success" style="display:none;">An email invitation has been sent to ' + response[1] + ' ' + response[2] + '  at ' + response[0] + '.</div>');
-                        $('#invite-org-success').slideDown(400);
-                        // increment organizer count
-                        $('#organizerPassengers').html('(' + response[3] + ')')
-                        // add an organizer card with waitlist and pending invite status
-                        $('#organizer-cards-wrapper').prepend('<div class="tour-edit mdl-shadow--2dp" style="background-color:white; margin-bottom: 0;"><div class="mdl-card__supporting-text mdl-card--border" style="color:grey;"><div style="float: left; color: grey;"><span class="tui-text-avatar mdl-typography--headline">' + response[1].charAt(0) + response[1].charAt(0) + '</span><p style="display: inline-block"><strong>' + response[1] + '&nbsp;</strong></p><p style="display: inline-block"><strong>' + response[2] + '&nbsp;</strong></p><p style="display: inline-block"><strong>(Invited - Not yet responded.)</strong></p><p style="display: inline-block" class="organizer-Not Travelling "></p><p><a href="' + response[0] + '">' + response[0] + '</a></p></div></div></div>');
-                        $('#loader').hide();
-                    },
-                    error : function (response) {
-                        console.log(response);
-
-                    },
-                });
         });
     </script>
+
+
 
 {% endblock %}
 
