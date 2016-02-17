@@ -5,7 +5,7 @@
         <h3 class="mdl-card__title-text">{% trans %}passenger.labels.payments{% endtrans %}</h3>
 
           {# only if an organizer or brand #}
-        {% if  is_granted("ROLE_BRAND") or "tour" | getRoles(entity.id) == "parent" or "tour" | getRoles(entity.id) == "assistant"%}
+        {% if  is_granted("ROLE_BRAND") or "tour" | getRoles(tourId) == "parent" or "tour" | getRoles(tourId) == "assistant"%}
                 <button id="payment-actions-menu-drop-{{ passenger.id }}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-button">
                     <i class="material-icons">more_vert</i>
                 </button>
