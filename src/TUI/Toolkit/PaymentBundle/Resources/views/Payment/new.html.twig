@@ -33,7 +33,8 @@
     {% endjavascripts %}
     <script>
         $(document).ready(function () {
-            $(document).on('click', 'a.cancel', function() {
+            $(document).on('click', 'a.cancel', function(e) {
+                e.preventDefault();
                 $("#dialog").html("");
                 $("#dialog").dialog("close");
             });
