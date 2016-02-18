@@ -121,41 +121,66 @@ class PaymentService {
         $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
         $tourPaymentTasks = $tour->getPaymentTasksPassenger();
         $tourPassengers = $this->container->get("passenger.actions")->getPassengersByStatus('accepted', $tourId);
-        foreach($tourPaymentTasks as $tourPaymentTask){
-            $total = 0;
-            foreach($tourPassengers as $tourPassenger){
+        // initialize task storage structure
+        foreach($tourPaymentTasks as $tourPaymentTask) {
+            $taskItems[$tourPaymentTask->getId()] = array(
+                    'credit'=>0,
+                    'total'=>0,
+                    'overdueAmt'=>0,
+                    'status'=>'',
+                    'task'=>'',
+                );
+        }
+
+
+        foreach($tourPassengers as $tourPassenger) {
+            $paxPayments = $this->getPassengersPaymentsPaid($tourPassenger->getId());
+            $cashBalance = $paxPayments['total'];
+            foreach ($tourPaymentTasks as $tourPaymentTask) {
+                $taskItems[$tourPaymentTask->getId()]['task'] = $tourPaymentTask;
+                // was task overriden?
                 if ($paymentOverride = $em->getRepository('TourBundle:PaymentTaskOverride')
                     ->findBy(array('paymentTaskSource'=>$tourPaymentTask->getId(), 'passenger'=>$tourPassenger->getId()))){
-                    $total = $total + $paymentOverride[0]->getValue();
+                    $total = $paymentOverride[0]->getValue();
                 } else {
-                    $total = $total + $tourPaymentTask->getValue();
+                    $total = $tourPaymentTask->getValue();
+                }
+                // increment to total due for the task
+                $taskItems[$tourPaymentTask->getId()]['total'] = $taskItems[$tourPaymentTask->getId()]['total'] + $total;
+
+                //allocate funds to task for this passenger
+                $overdueAmt = 0;
+                if($cashBalance >= $total){
+                    $credit = $total;
+                    $cashBalance = $cashBalance - $credit;
+                    $taskItems[$tourPaymentTask->getId()]['credit'] = $taskItems[$tourPaymentTask->getId()]['credit'] + $credit;
+                }elseif($cashBalance < $total){
+                    $credit = $cashBalance;
+                    $cashBalance = 0;
+                    if ($tourPaymentTask->getDueDate() < $now) {
+                        $taskItems[$tourPaymentTask->getId()]['overdueAmt'] = $taskItems[$tourPaymentTask->getId()]['overdueAmt'] + ( $total - $credit);
+                    }
                 }
             }
-
-
-            $overdueAmt = 0;
-            if($cashBalance >= $total){
-                $credit = $total;
-                $cashBalance = $cashBalance - $credit;
-                $status = "paid";
-            }elseif($cashBalance < $total){
-                $credit = $cashBalance;
-                $cashBalance = 0;
-                if ($tourPaymentTask->getDueDate() < $now) {
-                    $status = "overdue";
-                    $finalStatus = 'overdue';
-                    $overdueAmt = $total - $credit;
-                } else {
-                    $status = "pending";
-                }
-            }
-            $finalOverdueAmt = $finalOverdueAmt + $overdueAmt;
-            $final = $final + $total;
-            $items[] = array('task' => $tourPaymentTask, 'status'=>$status, 'overdueAmt' => $overdueAmt, 'credit' => $credit, 'total' => $total);
-
         }
+
+        foreach($taskItems as $key=>$taskItem){
+            $finalOverdueAmt = $finalOverdueAmt + $taskItem['overdueAmt'];
+            $final = $final + $taskItem['total'];
+            $taskItems[$key]['status'] = 'pending';
+
+            if($taskItem['credit'] >= $taskItem['total'] ) {
+                $taskItem['status'] = 'paid';
+            } elseif ($taskItem['overdueAmt'] > 0) {
+                $taskItems[$key]['status'] = 'overdue';
+                $finalStatus = 'overdue';
+            }
+        }
+
+        //    $items[] = array('task' => $tourPaymentTask, 'status'=>$status, 'overdueAmt' => $overdueAmt, 'credit' => $credit, 'total' => $total);
+
         if ($collected - $final >= 0) { $finalStatus = 'paid';}
-        return array('total' => $final, 'items' => $items, 'finalStatus' => $finalStatus, 'overdueAmt' => $finalOverdueAmt, 'paid' => $collected);
+        return array('total' => $final, 'items' => $taskItems, 'finalStatus' => $finalStatus, 'overdueAmt' => $finalOverdueAmt, 'paid' => $collected);
     }
 
     /**

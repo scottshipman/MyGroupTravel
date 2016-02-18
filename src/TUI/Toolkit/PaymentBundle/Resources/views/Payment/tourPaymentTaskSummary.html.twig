@@ -1,0 +1,23 @@
+<div class="tour-edit mdl-shadow--2dp" style="background-color:white; margin-bottom: 0;">
+    <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
+        <div style="float: left; color: grey;" class="pcardname">
+
+        {% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
+            <span id="payment-schedule-link">
+                <a href="" id="toggle-payment-schedule" class="payment-schedule-link">view payment schedule</a>
+            </span>
+            <div style="display:none;" id="payment-schedule">
+                <h4>Payment Schedule</h4>
+                <ul>
+                    {% for item in due.items %}
+                        <li>
+                            {# need logic here to add the right task status icon based on item.status #}
+                            <i>{{ item.status }}</i>{{ item.task.name }}  {{ item.task.dueDate | date(format)}}
+                            {{ tour.currency.htmlSymbol | raw  }}{{ item.credit }} / {{ tour.currency.htmlSymbol | raw  }}{{ item.total }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
