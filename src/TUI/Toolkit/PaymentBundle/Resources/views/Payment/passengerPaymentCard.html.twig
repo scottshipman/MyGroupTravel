@@ -27,8 +27,8 @@
                       <i style="color:{{ color }};" class="material-icons" >{{ icon }}</i>
                       <p class="mdl-card__title-text task-title weighted">{{ paymentTask.item.name }}</p>
                      <label class="task-due-date"> due by {{ paymentTask.item.dueDate | date(format) }}</label>
-                     <p class="row-content weighted"> {{ currency.htmlSymbol | raw  }}{{ paymentTask.item.value }}</p>
-                     <p class="row-content">{{ currency.htmlSymbol | raw  }}{{ paymentTask.credit }} of</p>
+                     <p class="row-content indented">/ {{ currency.htmlSymbol | raw  }}{{ paymentTask.item.value }}</p>
+                     <p class="row-content weighted">{{ currency.htmlSymbol | raw  }}{{ paymentTask.credit }}</p>
                 </div>
                 {% endfor %}
 
@@ -48,7 +48,7 @@
             </div>
         {% endif %}
         {% if payments.total >0  %}
-            <span id="payment-history-link"><a href="" id="toggle-payment-history" class="payment-history-link">{% trans %}payment.labels.payment_history{% endtrans %} <br /><i class="material-icons">expand_more</i></a></span>
+            <span id="payment-history-link"><a href="" id="toggle-payment-history" class="payment-history-link" style="color: {{ brand.secondaryColor }};">{% trans %}payment.labels.payment_history{% endtrans %} <br /><i class="material-icons">expand_more</i></a></span>
             <div style="display:none;" id="payment-history">
                 <div class="mdl-card__title">
                     <h3 class="mdl-card__title-text">{% trans %}payment.labels.payment_history{% endtrans %}</h3>

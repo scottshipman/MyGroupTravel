@@ -157,6 +157,7 @@ class PaymentService {
                 }elseif($cashBalance < $total){
                     $credit = $cashBalance;
                     $cashBalance = 0;
+                    $taskItems[$tourPaymentTask->getId()]['credit'] = $taskItems[$tourPaymentTask->getId()]['credit'] + $credit;
                     if ($tourPaymentTask->getDueDate() < $now) {
                         $taskItems[$tourPaymentTask->getId()]['overdueAmt'] = $taskItems[$tourPaymentTask->getId()]['overdueAmt'] + ( $total - $credit);
                     }
@@ -170,7 +171,7 @@ class PaymentService {
             $taskItems[$key]['status'] = 'pending';
 
             if($taskItem['credit'] >= $taskItem['total'] ) {
-                $taskItem['status'] = 'paid';
+                $taskItems[$key]['status'] = 'paid';
             } elseif ($taskItem['overdueAmt'] > 0) {
                 $taskItems[$key]['status'] = 'overdue';
                 $finalStatus = 'overdue';

@@ -17,15 +17,15 @@
             {% else %}
                 <span style="float: left; margin-right: 15px;"  class="tui-text-avatar mdl-typography--headline">{{ passenger.fName[:1] }}</span>
             {% endif %}
-            <p style="display: inline-block"><strong>{{ passenger.fName }}</strong></p>
-            <p style="display: inline-block"><strong>{{ passenger.lName }}</strong></p>
-            <p style="display: inline-block"><strong><a href="mailto:{{ user.email }}">{{ user.email }}</a></strong></p>
-            <label style="display: inline-block; margin-left: 63px; min-width: 100%;">
+            <p class="mini-card-title"><strong>{{ passenger.fName }}</strong></p>
+            <p class="mini-card-title"><strong>{{ passenger.lName }}</strong></p>
+            <p class="mini-card-title"><strong><a href="mailto:{{ user.email }}">{{ user.email }}</a></strong></p>
+            <label style="display: block; margin-left: 63px; min-width: 100%;">
                 <i style="color:{{ color }};" class="material-icons" >{{ icon }}</i>
-                {% if overdue > 0 %}
-                    <span style="color:{{ color }}; right: 20px;;"> {{ currency.htmlSymbol | raw  }}{{ overdue }} Past Due </span>
-                {% endif %}
                 <span>{{ currency.htmlSymbol | raw  }}{{ payments['total'] }} / {{ currency.htmlSymbol | raw  }}{{ due.total }}</span>
+                {% if overdue > 0 %}
+                    <span style="color:{{ color }}; margin-left: 1em;"> {{ currency.htmlSymbol | raw  }}{{ overdue }} Past Due </span>
+                {% endif %}
 
             </label>
         </div>

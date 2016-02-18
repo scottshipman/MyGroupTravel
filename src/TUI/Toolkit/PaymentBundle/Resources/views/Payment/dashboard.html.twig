@@ -60,10 +60,11 @@
                         <span style="float:right;"><label>/{% if tour.currency %}<p id="currency" style="display: inline; font-size: inherit; font-weight: inherit;">{{ tour.currency.htmlSymbol | raw }}</p>{% endif %}<p style="display: inline; margin-left:5px; font-size:inherit; font-weight:inherit;">{{ due.total }}</p></label></span>
                     </div>
                 </div>
-            </div>
-
                 {# Tour Payment Tasks collapsable card #}
                 {% embed "PaymentBundle:Payment:tourPaymentTaskSummary.html.twig" %}{% endembed %}
+
+            </div>
+
 
 
                 {# Passenger Mini Cards #}

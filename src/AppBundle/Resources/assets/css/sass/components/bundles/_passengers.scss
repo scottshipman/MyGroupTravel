@@ -265,20 +265,23 @@
   .row-content {
     float: right;
 
-    .weighted {
+    &.weighted {
       font-weight: 500;
-      margin-left:3px;
     }
 
-    .green {
+    &.indented {
+      margin-left: 3px;
+    }
+
+    &.green {
       color:green;
     }
 
-    .red {
+    &.red {
       color:red;
     }
 
-    .blue {
+    &.blue {
       color:blue;
     }
   }
@@ -400,3 +403,29 @@ a.organizer-card {
   box-shadow: none;
   display: block;
 }
+//#payment-schedule > div:nth-child(2) > p.row-content.weighted {
+//  float:right;
+//  font-weight:500;
+//}
+//
+//#payment-schedule {
+//
+//  .mdl-card__supporting-text {
+//
+//    .row-content {
+//      float: right;
+//
+//      .weighted {
+//        font-weight: 500;
+//      }
+//
+//      .indented {
+//        margin-left: 3px;
+//      }
+//    }
+//  }
+//}
+//
+//.mdl-card{
+//  .mdl-card__supporting-text.mdl
+//}

@@ -433,6 +433,18 @@ class PaymentController extends Controller
         $payments = $this->get("payment.getPayments")->getPassengersPaymentsPaid($passengerId);
         $paymentTasks = $this->get("payment.getPayments")->getPassengersPaymentTasks($passengerId);
 
+        //brand stuff
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
+
         return $this->render('PaymentBundle:Payment:passengerPaymentCard.html.twig', array(
             'due' => $due,
             'payments' => $payments,
@@ -440,6 +452,7 @@ class PaymentController extends Controller
             'currency' => $currency,
             'locale' => $locale,
             'passenger' => $passenger,
+            'brand' => $brand,
         ));
     }
 

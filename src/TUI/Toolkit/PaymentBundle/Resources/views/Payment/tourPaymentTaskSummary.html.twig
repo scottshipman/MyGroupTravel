@@ -1,23 +1,28 @@
-<div class="tour-edit mdl-shadow--2dp" style="background-color:white; margin-bottom: 0;">
-    <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
-        <div style="float: left; color: grey;" class="pcardname">
+{#<div class="tour-edit mdl-shadow--2dp" style="background-color:white; margin-bottom: 0;">#}
+    {#<div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">#}
+        <div style="text-align: center; color: grey;" class="pcardname">
 
         {% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
-            <span id="payment-schedule-link">
-                <a href="" id="toggle-payment-schedule" class="payment-schedule-link">view payment schedule</a>
+            <span id="payment-schedule-link" style="margin-bottom: 10px;">
+                <a href="" id="toggle-payment-schedule" class="payment-schedule-link" style="color: {{ brand.secondaryColor }};">payment schedule <br /><i class="material-icons">expand_more</i></a>
             </span>
-            <div style="display:none;" id="payment-schedule">
-                <h4>Payment Schedule</h4>
-                <ul>
+            <div style="display:none; text-align: left;" id="payment-schedule">
+                <div class="mdl-card__title">
+                    <h3 class="mdl-card__title-text">Payment Schedule</h3>
+                </div>
                     {% for item in due.items %}
-                        <li>
+                        {#{% set overdue = overdue + item.overdueAmt %}#}
+                        {%  set color = 'blue' %}{%  set icon = 'event' %}
+                        {% if item.status == "paid" %}{%  set color = 'green' %}{%  set icon = 'done' %} {% endif %}
+                        {% if item.status ==  "overdue" %}{%  set color = 'red' %}{%  set icon = 'warning' %}{% endif %}
+                        <div class="mdl-card__supporting-text mdl-card--border">
                             {# need logic here to add the right task status icon based on item.status #}
-                            <i>{{ item.status }}</i>{{ item.task.name }}  {{ item.task.dueDate | date(format)}}
-                            {{ tour.currency.htmlSymbol | raw  }}{{ item.credit }} / {{ tour.currency.htmlSymbol | raw  }}{{ item.total }}
-                        </li>
+                            <label class="task-due-date"><i class="material-icons" style="color: {{ color }};">{{ icon }}</i>{{ item.task.name }}  {{ item.task.dueDate | date(format)}}</label>
+                            <p class="row-content indented">/ {{ tour.currency.htmlSymbol | raw  }}{{ item.total }}</p>
+                            <p class="row-content weighted">{{ tour.currency.htmlSymbol | raw  }}{{ item.credit }} </p>
+                        </div>
                     {% endfor %}
-                </ul>
             </div>
         </div>
-    </div>
-</div>
+    {#</div>#}
+    {#</div>#}

@@ -41,7 +41,6 @@
             <h3>{{ tour.name|capitalize }}</h3>
             <ul class="tour-show-submenu">
                 <li><a href="{{ path('manage_payment_dashboard', { 'tourId': tour.id }) }}" style="text-decoration: none; color:black;"><strong>{% trans %}payment.labels.balances{% endtrans %}</strong></a></li>
-                <li><strong>{% trans %}payment.labels.due{% endtrans %}</strong></li>
                 <li><a href="{{ path('manage_payment_dashboard_edit_payments', { 'tourId': tour.id }) }}" style="color: {{ brand.secondaryColor }}; text-decoration: none;"><strong>{% trans %}payment.labels.payment_settings{% endtrans %}</strong></a></li>
             </ul>
         </div>
