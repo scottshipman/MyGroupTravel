@@ -76,7 +76,12 @@
         var modal_form = e.currentTarget.id;
         var parts = modal_form.split("-add");
         var form_type = parts[0].toLowerCase();
-        toolkitStandardPopup( "Create New " + parts[0], "/ajax/" + form_type + "/new");
+        console.log(parts);
+        if (parts[0] == 'organizer'){
+            toolkitStandardPopup( "Create New Organiser", "/ajax/" + form_type + "/new");
+        }else {
+            toolkitStandardPopup("Create New " + parts[0], "/ajax/" + form_type + "/new");
+        }
     });
 
     /*
