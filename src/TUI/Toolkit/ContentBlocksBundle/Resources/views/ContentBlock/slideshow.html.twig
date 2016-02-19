@@ -6,8 +6,8 @@
                     {%  if entity.mediaWrapper %}
                         {% for mediaWrapper in entity.mediaWrapper %}
                             {% for media in mediaWrapper.media %}
-                                <li>
-                                    <img src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}" title="{{ mediaWrapper.title }}" alt="{{ mediaWrapper.title }}" />
+                                <li style="list-style: none;">
+                                    <img src="{{ ( media.getRelativePath ~ "/" ~ media.getHashedFilename ) | imagine_filter('slideShow') }}" title="{{ mediaWrapper.title }}" alt="{{ mediaWrapper.title }}" />
                                 </li>
                             {% endfor %}
                         {% endfor %}
@@ -30,8 +30,8 @@
                     {%  if entity.mediaWrapper %}
                         {% for mediaWrapper in entity.mediaWrapper %}
                             {% for media in mediaWrapper.media %}
-                                <li>
-                                    <img src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}" title="{{ mediaWrapper.title }}" alt="{{ mediaWrapper.title }}" />
+                                <li style="list-style: none;">
+                                    <img src="{{ ( media.getRelativePath ~ "/" ~ media.getHashedFilename ) | imagine_filter('slideShow') }}" title="{{ mediaWrapper.title }}" alt="{{ mediaWrapper.title }}" />
                                 </li>
                             {% endfor %}
                         {% endfor %}
