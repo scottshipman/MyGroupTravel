@@ -54,7 +54,7 @@
                 </div>
 
                 <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
-                    <h3 style="float: left; font-weight:300; font-size:2em;">{% trans %}payment.labels.paid{% endtrans %}</h3>
+                    <h3 style="float: left; font-weight:300; font-size:2em;">{% trans %}payment.labels.collected{% endtrans %}</h3>
                     <div style="float: right; margin-top:20px;">
                         <span style="color:{{ brand.secondaryColor }}; font-size:3.5em;em; font-weight:100;">{% if tour.currency %}<p id="currency" style="display: inline; font-size: inherit; font-weight: inherit;">{{ tour.currency.htmlSymbol | raw }}</p>{% endif %}<p style="display: inline; margin-left:5px; font-size:inherit; font-weight:inherit;">{{ payments }}</p></span><br/>
                         <span style="float:right;"><label>/{% if tour.currency %}<p id="currency" style="display: inline; font-size: inherit; font-weight: inherit;">{{ tour.currency.htmlSymbol | raw }}</p>{% endif %}<p style="display: inline; margin-left:5px; font-size:inherit; font-weight:inherit;">{{ due.total }}</p></label></span>
@@ -117,10 +117,10 @@
             $(document).on('click', 'a.payment-schedule-link', function(e){
                 e.preventDefault();
                 $('#payment-schedule').toggle(400, function(){
-                    if ($('#toggle-payment-schedule').text()=='view payment schedule') {
-                        $('#toggle-payment-schedule').text('hide payment schedule');
-                    } else {
-                        $('#toggle-payment-schedule').text('view payment schedule');
+                    if ($('#toggle-payment-schedule').text()=='Payment History expand_more') {
+                        $('#toggle-payment-schedule').html('{% trans %}payment.labels.payment_history{% endtrans %} <br /><i class="material-icons">expand_less</i>');
+                    } else if ($('#toggle-payment-schedule').text()=='Payment History expand_less') {
+                        $('#toggle-payment-schedule').html('{% trans %}payment.labels.payment_history{% endtrans %} <br /><i class="material-icons">expand_more</i>');
                     }
                 });
             });

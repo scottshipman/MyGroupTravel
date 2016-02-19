@@ -40,6 +40,8 @@ payment:
         total_due: Total Due
         past_due: Past Due
         payment_history: Payment History
+        collected: Collected
+
 
     form:
         date: Date Received (MM-DD-YYYY)
