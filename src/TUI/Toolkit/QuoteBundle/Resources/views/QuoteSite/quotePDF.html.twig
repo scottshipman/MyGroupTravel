@@ -1,6 +1,7 @@
 <html class="pdf">
 <head>
 
+    <base href="{{ app.request.getSchemeAndHttpHost() }}">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -42,10 +43,6 @@
         }
     </style>
 
-    <head>
-        <base href="{{ app.request.getSchemeAndHttpHost() }}" target="_blank" />
-    </head>
-
 </head>
 
 {% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
@@ -76,7 +73,6 @@
                 {% if entity.quoteNumber %}
                     <div>Quote Number: {{ entity.quoteNumber }}</div>
                 {% endif %}
-                <h2>{{ app.request.getSchemeAndHttpHost() }}/</h2>
             </div>
         </div>
     </div>
@@ -102,7 +98,6 @@
                                             </li>
                                     {% endif %}
                                     {% endif %}
-                                {% endif %}
                                 {% endif %}
                             </ul>
                         </div>
