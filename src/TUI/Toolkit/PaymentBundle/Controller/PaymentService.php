@@ -118,6 +118,7 @@ class PaymentService {
         $finalOverdueAmt = 0;
         $cashBalance = $this->getTourPaymentsPaid($tourId);
         $collected = $cashBalance;
+        $taskItems = array();
         $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
         $tourPaymentTasks = $tour->getPaymentTasksPassenger();
         $tourPassengers = $this->container->get("passenger.actions")->getPassengersByStatus('accepted', $tourId);
