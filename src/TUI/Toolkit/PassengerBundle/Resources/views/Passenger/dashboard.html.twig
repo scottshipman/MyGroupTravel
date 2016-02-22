@@ -175,10 +175,10 @@
                             {% else %}
                                 <span style="float: left; margin-right: 15px;"  class="tui-text-avatar mdl-typography--headline">{{ passenger[0].fName[:1] }}</span>
                             {% endif %}
-                            <p style="display: inline-block"><strong>{{ passenger[0].fName }}</strong></p>
-                            <p style="display: inline-block"><strong>{{ passenger[0].lName }}</strong></p>
-                            <p style="display: inline-block"><strong><a href="mailto:{{ passenger[1].email }}">{{ passenger[1].email }}</a></strong></p>
-                            <label style="display: inline-block; margin-left: 63px; min-width: 100%;">{{ statusicon | raw }} {{ freeicon | raw }}{{ organizericon | raw }} {{ signedUp }}</label>
+                            <p class="mini-card-title"><strong>{{ passenger[0].fName }}</strong></p>
+                            <p class="mini-card-title"><strong>{{ passenger[0].lName }}</strong></p>
+                            <p class="mini-card-title"><strong><a href="mailto:{{ passenger[1].email }}">{{ passenger[1].email }}</a></strong></p>
+                            <label style="display: block; margin-left: 63px; min-width: 100%;">{{ statusicon | raw }} {{ freeicon | raw }}{{ organizericon | raw }} {{ signedUp }}</label>
                             </div>
                             {% if  passenger[0].status != "Pending Invite"%}
                                 <button style="position: absolute; right: 20px; color:grey; margin-top:10px;" id="passenger-actions-menu-drop-{{ passenger[0].id }}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
