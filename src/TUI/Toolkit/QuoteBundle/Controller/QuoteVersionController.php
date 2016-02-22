@@ -73,7 +73,8 @@ class QuoteVersionController extends Controller
             'returnDate',
             'pricePerson',
             'currency.name',
-            'salesAgent_full'
+            'salesAgent_full',
+            'description'
         );
 
         // Creates simple grid based on your entity (ORM)
@@ -246,7 +247,8 @@ class QuoteVersionController extends Controller
             'returnDate',
             'pricePerson',
             'currency.name',
-            'salesAgent_full'
+            'salesAgent_full',
+            'description'
         );
 
         // Creates simple grid based on your entity (ORM)
@@ -391,7 +393,8 @@ class QuoteVersionController extends Controller
             'returnDate',
             'pricePerson',
             'currency.name',
-            'salesAgent_full'
+            'salesAgent_full',
+            'description'
         );
 
         // Creates simple grid based on your entity (ORM)
@@ -553,7 +556,8 @@ class QuoteVersionController extends Controller
             'organizer_full',
             'institution_full',
             'quoteNumber',
-            'salesAgent_full'
+            'salesAgent_full',
+            'description'
         );
 
         // Creates simple grid based on your entity (ORM)

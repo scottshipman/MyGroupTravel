@@ -206,6 +206,7 @@ quote:
             pricePerson: Price per Person
             currency: Currency
             welcomeMsg: Summary Message
+            description: Description
         delete:
             prompt: "Are you sure you wish to delete this quote?"
 quote_site:
@@ -233,6 +234,7 @@ quote_site:
         created: Date created
         price_person: Price per person
         quote_name: Quote Name
+        quote_description: Description
     quote_summary:
         departing: "Departing: "
         duration: "Duration: "
