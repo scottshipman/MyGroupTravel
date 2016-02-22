@@ -16,14 +16,14 @@
         {% endif %}
 
         {# Accepted Menu Item #}
-        {% if passengerStatus == "waitlist" or free == TRUE %}
+        {% if passengerStatus == "waitlist" | paxLabel  or free == TRUE %}
             <li><a href="#accepted" style="display: block;"class="mdl-menu__item move-to-accepted" tour="{{ tourId }}" passenger="{{ passengerId }}">Move to {{ "accepted" | paxLabel }}</a></li>
         {% else %}
             <li><a href="#accepted" style="display: none;"class="mdl-menu__item move-to-accepted" tour="{{ tourId }}" passenger="{{ passengerId }}">Move to {{ "accepted" | paxLabel }}</a></li>
          {% endif %}
 
         {# Waitlist Menu Item #}
-        {% if passengerStatus != "waitlist" %}
+        {% if passengerStatus != "waitlist" | paxLabel %}
             <li><a href="#waitlist" style="display: block;" class="mdl-menu__item move-to-waitlist" tour="{{ tourId }}" passenger="{{ passengerId }}">Move to {{ "waitlist" | paxLabel }}</a></li>
         {%  else %}
             <li><a href="#waitlist" style="display: none;" class="mdl-menu__item move-to-waitlist" tour="{{ tourId }}" passenger="{{ passengerId }}">Move to {{ "waitlist" | paxLabel }}</a></li>
@@ -37,7 +37,7 @@
         {% endif %}
 
         {# make payment menu item #}
-        {% if passengerStatus == 'accepted' and free is sameas(false) %}
+        {% if passengerStatus ==  "accepted" | paxLabel  and free is sameas(false) %}
             {% if is_granted("ROLE_BRAND") or "tour" | getRoles(tourId) == "organizer" or "tour" | getRoles(tourId) == "assistant"%}
                 <li><a style="display: block;" href="#payment" class="mdl-menu__item make-a-payment" tour="{{ tourId }}" passenger="{{ passengerId }}">Log a Payment</a></li>
             {% endif %}
