@@ -109,6 +109,8 @@ tour:
             intro: Your Contact:
             intro_org: Contact:
             price: Price per person:
+       expiry: Tour valid until
+
 
     contact_organizer:
         name: Tour Name:

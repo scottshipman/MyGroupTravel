@@ -105,21 +105,21 @@
                 <div id="site-header-summary-content-pdf" style="width: 400px;">
                     <ul id="site-summary-details-pdf" style="position: relative; right: 50px; list-style: none; font-size: 16px; line-height: 32px; max-width: 370px;">
                         {% if entity.departureDate %}<li class="right"><span class="label" style="text-align: left">{% trans %}quote_site.quote_summary.departing{% endtrans %}</span> <strong>{{ entity.departureDate|date(format) }}</strong></li>{% endif %}
-                        {% if entity.duration %}<li class="right"><span class="label">{% trans %}quote_site.quote_summary.duration{% endtrans %}</span> <strong>{{ entity.duration }}</strong></li>{% endif %}
+                        {% if entity.duration %}<li class="right"><span class="label" style="max-width: 275px;">{% trans %}quote_site.quote_summary.duration{% endtrans %}</span> <strong>{{ entity.duration }}</strong></li>{% endif %}
                         {% if entity.returnDate %}<li class="right"><span class="label">{% trans %}quote_site.quote_summary.returning{% endtrans %}</span> <strong>{{ entity.returnDate|date(format) }}</strong></li>{% endif %}
                         {% if entity.boardBasis %}<li class="right"><span class="label">{% trans %}quote_site.quote_summary.board_basis{% endtrans %}</span> <strong>{{ entity.boardBasis.name }}</strong></li>{% endif %}
                         {% if entity.transportType %}<li class="right"><span class="label">{% trans %}quote_site.quote_summary.transport{% endtrans %}</span> <strong>{{ entity.transportType.name }}</strong></li>{% endif %}
-                        {% if entity.pricePerson %}<li class="right"><span class="label">{% trans %}quote_site.quote_summary.price_person{% endtrans %}</span> <span class="quote-price"><strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong></span></li>{% endif %}
-                        {% if (entity.payingPlaces) or (entity.freePlaces) %}<li>
-                            {%  if (entity.payingPlaces) and (entity.freePlaces) %}
-                                {{ 'quote_site.quote_summary.price_based_on_payingandfree'|trans({'%payingplaces%' : entity.payingPlaces, '%freeplaces%' : entity.freePlaces})|raw }}
-                            {% elseif (entity.payingPlaces) and (entity.freePlaces is empty or entity.freePlaces == 0) %}
-                                {{ 'quote_site.quote_summary.price_based_on_payingonly'|trans({'%payingplaces%' : entity.payingPlaces})|raw }}
-                            {% elseif (entity.payingPlaces|default is empty) and (entity.freePlaces) %}
-                                {{ 'quote_site.quote_summary.price_based_on_freeonly'|trans({'%freeplaces%' : entity.freePlaces})|raw }}
-                            {%  endif %}
-                            </li>{% endif %}
-                        {% if entity.expiryDate %}<li>{% trans %}quote_site.quote_summary.expiry{% endtrans %} <strong>{{ entity.expiryDate|date(format) }}</strong></li>{% endif %}
+                        {% if entity.pricePerson %}<li class="right"><span class="label">{% trans %}quote_site.quote_summary.price_person{% endtrans %}</span> <span class="quote-price"><strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{% if entity.pricePersonPublic %}{{ entity.pricePersonPublic }}{% else %}{{ entity.pricePerson }}{% endif %}</strong></span></li>{% endif %}
+                        {#{% if (entity.payingPlaces) or (entity.freePlaces) %}<li>#}
+                            {#{%  if (entity.payingPlaces) and (entity.freePlaces) %}#}
+                                {#{{ 'quote_site.quote_summary.price_based_on_payingandfree'|trans({'%payingplaces%' : entity.payingPlaces, '%freeplaces%' : entity.freePlaces})|raw }}#}
+                            {#{% elseif (entity.payingPlaces) and (entity.freePlaces is empty or entity.freePlaces == 0) %}#}
+                                {#{{ 'quote_site.quote_summary.price_based_on_payingonly'|trans({'%payingplaces%' : entity.payingPlaces})|raw }}#}
+                            {#{% elseif (entity.payingPlaces|default is empty) and (entity.freePlaces) %}#}
+                                {#{{ 'quote_site.quote_summary.price_based_on_freeonly'|trans({'%freeplaces%' : entity.freePlaces})|raw }}#}
+                            {#{%  endif %}#}
+                            {#</li>{% endif %}#}
+                        {% if entity.expiryDate %}<li>{% trans %}tour.show.expiry{% endtrans %} <strong>{{ entity.expiryDate|date(format) }}</strong></li>{% endif %}
 
                         <li id="headerBlock-text" style="width: 250px;">{% if entity.welcomeMsg %}{{ entity.welcomeMsg|raw }}{% endif %}</li>
                     </ul>
@@ -175,7 +175,7 @@
                 <div class="quote-info"><span class="quote-label">{% trans %}quote.footer.price_person{% endtrans %}</span><span
                             class="quote-price">{% if entity.pricePerson %}
 
-                <strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong>{% endif %}</span>
+                <strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{% if entity.pricePersonPublic %}{{ entity.pricePersonPublic }}{% else %}{{ entity.pricePerson }}{% endif %}</strong></span>{% endif %}
                 </div>
             {% endblock %}
         </div>

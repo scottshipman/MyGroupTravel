@@ -111,6 +111,7 @@ tour:
        price_based_on_payingandfree: Based on <strong>%payingplaces%</strong> paying and <strong>%freeplaces%</strong> free places.
        price_based_on_payingonly: Based on <strong>%payingplaces%</strong> paying places
        price_based_on_freeonly: Based on <strong>%freeplaces%</strong> free places
+       expiry: Tour valid until
 
     contact_organizer:
         name: Tour Name:
