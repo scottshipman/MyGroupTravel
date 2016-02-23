@@ -563,6 +563,8 @@ class PassengerController extends Controller
             $organizersObjects = array();
         }
 
+        $unactivatedCount = $this->get("passenger.actions")->getActivatedUsers($tourId);
+
         // merge all records
         $passengers = array_merge($passengers, $organizersObjects);
 
@@ -583,7 +585,8 @@ class PassengerController extends Controller
             'tour' => $tour,
             'statusCounts' => $participantCounts,
             'brand' => $brand,
-            'passengers' => $passengers
+            'passengers' => $passengers,
+            'unactivatedCount' => $unactivatedCount
         ));
     }
 
@@ -1125,7 +1128,9 @@ class PassengerController extends Controller
         $acceptedUsers = $this->get('passenger.actions')->getPassengersByStatus('accepted', $tourId);
 
         foreach ($acceptedUsers as $acceptedUser) {
-            $user = $em->getRepository('TUIToolkitUserBundle:User')->find($acceptedUser->getId());
+
+            $object = $acceptedUser->getId();
+            $user = $this->get("permission.set_permission")->getUser('parent', $object, 'passenger');
 
             $tokenGenerator = $this->container->get('fos_user.util.token_generator');
 
