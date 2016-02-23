@@ -40,7 +40,8 @@ passenger:
         add_passport: Add Passport Information
         add_emergency: Add Emergency Contact Information
         no_tasks: has no tasks
-
+        send_message:  You are sending an email to all accepted passengers, are you sure you want to do that?
+        send_activation: Send Activation
         actions:
             view: View
             edit: Edit

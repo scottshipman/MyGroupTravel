@@ -1156,6 +1156,6 @@ class PassengerController extends Controller
         $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('user.flash.registration_notification'));
 
         return $this->redirect($_SERVER['HTTP_REFERER']);
-        
+
     }
 }
