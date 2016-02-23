@@ -11,7 +11,7 @@
             {% for mediaWrapper in collection %}
                 {% for media in mediaWrapper.media %}
                 <div class="existing-media-item">
-                    <div class="existing-media-item-image"><img id="{{ media.id }}" src="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}" title="{{ mediaWrapper.title }}" alt="{{ mediaWrapper.title }}"></div>
+                    <div class="existing-media-item-image"><img id="{{ media.id }}" src="{{  (media.getRelativePath ~ "/" ~ media.getHashedFilename)  | imagine_filter('thumbnailLarge') }} " title="{{ mediaWrapper.title }}" alt="{{ mediaWrapper.title }}"></div>
                     <a class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a>
                     <div style="display: none" class="caption-textfield mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                         <input class="caption mdl-textfield__input" type="text" data="{{ mediaWrapper.id }}" value="{{ mediaWrapper.title }}" name="caption" id="{{ mediaWrapper.id }}-caption">
