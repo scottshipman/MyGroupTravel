@@ -408,12 +408,12 @@ liip_imagine:
     filter_sets:
         cache: ~
         thumbnail:
-            quality: 100
+            quality: %image_quality%
             filters:
                 thumbnail: { size: [120, 120], mode: inset }
 
         thumbnailLarge:
-            quality: 100
+            quality: %image_quality%
             filters:
                 thumbnail: { size: [240, 240], mode: inset }
 
@@ -422,22 +422,22 @@ liip_imagine:
                 relative_resize: { widen: 120 }
 
         slideShow:
-            quality: 100
+            quality: %image_quality%
             filters:
                 strip: ~
                 thumbnail: { size: [1600, 900], mode: inset }
         smallBlock:
-            quality: 100
+            quality: %image_quality%
             filters:
                 relative_resize:  { widen: 500 }
 
         largeBlock:
-            quality: 100
+            quality: %image_quality%
             filters:
                 relative_resize: { widen: 1000 }
 
         modalImage:
-            quality: 100
+            quality: %image_quality%
             filters:
                 relative_resize: { widen: 300 }
 
