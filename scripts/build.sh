@@ -127,7 +127,7 @@ then
   echo "Cleaning up old builds"
   echo "============================================="
 
-  (cd .. && find releases -maxdepth 1 -mindepth 1 -type d | sort | head -n -5 | xargs sudo rm -rf)
+  (cd .. && ls releases/*/ -dtr | head -n -5 | xargs sudo rm -rf)
 
   echo $'\n  - Done!'
 fi
