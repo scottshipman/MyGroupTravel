@@ -16,14 +16,14 @@
         {% endif %}
 
         {# Accepted Menu Item #}
-        {% if passengerStatus == "waitlist" | paxLabel  or free == TRUE %}
+        {% if passengerStatus == "waitlist"  or free == TRUE %}
             <li><a href="#accepted" style="display: block;"class="mdl-menu__item move-to-accepted" tour="{{ tourId }}" passenger="{{ passengerId }}">Move to {{ "accepted" | paxLabel }}</a></li>
         {% else %}
             <li><a href="#accepted" style="display: none;"class="mdl-menu__item move-to-accepted" tour="{{ tourId }}" passenger="{{ passengerId }}">Move to {{ "accepted" | paxLabel }}</a></li>
          {% endif %}
 
         {# Waitlist Menu Item #}
-        {% if passengerStatus != "waitlist" | paxLabel %}
+        {% if passengerStatus != "waitlist" %}
             <li><a href="#waitlist" style="display: block;" class="mdl-menu__item move-to-waitlist" tour="{{ tourId }}" passenger="{{ passengerId }}">Move to {{ "waitlist" | paxLabel }}</a></li>
         {%  else %}
             <li><a href="#waitlist" style="display: none;" class="mdl-menu__item move-to-waitlist" tour="{{ tourId }}" passenger="{{ passengerId }}">Move to {{ "waitlist" | paxLabel }}</a></li>
