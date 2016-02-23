@@ -50,6 +50,7 @@ passenger:
         save: "Thanks for signing up. A copy of the form has been emailed to you, and the tour organiser will be in touch."
         delete: Passenger deleted -
         restore: Passenger Restored -
+        users_activation: An activation email has been sent to all unactivated users accepted on the tour
 
     modals:
         message: As a parent, you can sign up your child/children for the tour below.

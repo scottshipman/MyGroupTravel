@@ -1131,6 +1131,8 @@ class PassengerController extends Controller
 
             $object = $acceptedUser->getId();
             $user = $this->get("permission.set_permission")->getUser('parent', $object, 'passenger');
+            $user = array_shift($user);
+            $user = $em->getRepository('TUIToolkitUserBundle:User')->find($user);
 
             $tokenGenerator = $this->container->get('fos_user.util.token_generator');
 
@@ -1158,7 +1160,7 @@ class PassengerController extends Controller
         }
 
 
-        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('user.flash.registration_notification'));
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('passenger.flash.users_activation'));
 
         return $this->redirect($_SERVER['HTTP_REFERER']);
 
