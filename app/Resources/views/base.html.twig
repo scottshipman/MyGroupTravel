@@ -127,6 +127,19 @@
     <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 
+<script type="text/javascript">
+    {% if locale is defined %}
+    $( document ).ready(function() {
+        var locale = "{{ locale }}";
+    });
+    {% endif %}
+</script>
+
+{% if locale is defined %}
+    <div id="locale" style="display: none">{{ locale }}</div>
+{% endif %}
+
+
 </body>
 
 </html>

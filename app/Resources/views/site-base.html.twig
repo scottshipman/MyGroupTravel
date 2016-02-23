@@ -134,6 +134,10 @@
 
 <div id="loader"><div class="loader-icon mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div></div>
 
+{% if locale is defined %}
+    <div id="locale" style="display: none">{{ locale }}</div>
+{% endif %}
+
 {% javascripts '@toolkit' '@AppBundle/Resources/assets/js/dropzone.js' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
