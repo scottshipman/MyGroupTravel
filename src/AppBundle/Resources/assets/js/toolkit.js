@@ -76,7 +76,8 @@
         var modal_form = e.currentTarget.id;
         var parts = modal_form.split("-add");
         var form_type = parts[0].toLowerCase();
-        var locale = $('#locale').text();
+        console.log(locale);
+        //var locale = $('#locale').text();
         if (locale == 'en_GB'){
             toolkitStandardPopup( "Create New Organiser", "/ajax/" + form_type + "/new");
         }else {
