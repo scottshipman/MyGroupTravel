@@ -42,6 +42,7 @@ class ContactOrganizerType extends AbstractType
                 'label' => 'tour.form.contact_organizer.message',
                 'mapped' => false,
                 'required' => false,
+                'data' => 'We have created a set of tools to help you manage your tour online and you need to activate your account to start using them.',
                 'attr' => array(
                     'maxlength' => 800,
                 )
