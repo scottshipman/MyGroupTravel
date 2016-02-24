@@ -128,6 +128,12 @@ class QuoteVersionType extends AbstractType
                 'translation_domain'  => 'messages',
                 'required' => $require_qn,
             ))
+
+            ->add('description', 'textarea', array(
+                'label' => 'quote.form.quote_version.description',
+                'translation_domain'  => 'messages',
+                'required' => FALSE,
+            ))
             // Expire default should be now + 30 days
             ->add('expiryDate', 'genemu_jquerydate', array(
                 'widget' => 'single_text',
