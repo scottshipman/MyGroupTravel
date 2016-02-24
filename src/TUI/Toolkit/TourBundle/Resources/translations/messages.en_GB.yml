@@ -164,6 +164,8 @@ tour:
         has_passed: has passed.  If you have any questions please contact
         operations_team: in our operations team.
         departure: Days until departure
+        registrations: Registrations
+        passengers: Passengers
 
     edit:
         summary: Summary

@@ -350,6 +350,13 @@ class Tour
     /**
      * @var integer
      *
+     * @ORM\Column(name="registrations", type="integer")
+     */
+    private $registrations;
+
+    /**
+     * @var integer
+     *
      * @ORM\ManyToMany(targetEntity="TUI\Toolkit\TourBundle\Entity\PaymentTask", cascade={"persist", "remove"}, orphanRemoval = true)
      * @ORM\JoinColumn(name="paymenttasks", referencedColumnName="id")
      */
@@ -1222,7 +1229,7 @@ class Tour
      * Set views
      *
      * @param integer $views
-     * @return Quote
+     * @return Tour
      */
     public function setViews($views)
     {
@@ -1239,6 +1246,29 @@ class Tour
     public function getViews()
     {
       return $this->views;
+    }
+
+    /**
+     * Set registrations
+     *
+     * @param integer $views
+     * @return Tour
+     */
+    public function setRegistrations($registrations)
+    {
+        $this->registrations = $registrations;
+
+        return $this;
+    }
+
+    /**
+     * Get registrations
+     *
+     * @return integer
+     */
+    public function getRegistrations()
+    {
+        return $this->registrations;
     }
 
     /**

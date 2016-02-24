@@ -52,6 +52,7 @@ class PassengerController extends Controller
         $form = $this->createCreateForm($entity, $tourId);
         $locale = $this->container->getParameter('locale');
         $date_format = $this->container->getParameter('date_format');
+        $paxCount = 0;
 
         $form->handleRequest($request);
 
@@ -102,7 +103,10 @@ class PassengerController extends Controller
                 $permission->setUser($user);
                 $em->persist($permission);
                 $em->flush();
+                $paxCount = $paxCount +1;
             }
+            $tour->setRegistrations($tour->getRegistrations() + $paxCount);
+            $em->persist($tour);
 
             //brand stuff
             $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
