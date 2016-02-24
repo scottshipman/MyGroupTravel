@@ -420,7 +420,7 @@ class PassengerService
         return $combinedObjects;
     }
 
-    public function getActivatedUsers($tourId){
+    public function getUnActivatedUsers($tourId){
         $container = $this->container;
         $em = $this->em;
         $unactivated = array();

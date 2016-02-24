@@ -563,7 +563,7 @@ class PassengerController extends Controller
             $organizersObjects = array();
         }
 
-        $unactivatedCount = $this->get("passenger.actions")->getActivatedUsers($tourId);
+        $unactivatedCount = $this->get("passenger.actions")->getUnActivatedUsers($tourId);
 
         // merge all records
         $passengers = array_merge($passengers, $organizersObjects);
