@@ -59,7 +59,7 @@ passenger:
         show-everyone: Clear Filters
         passengers_for: Passengers
         organizers_for: Organizers
-        all-passengers: All Passengers
+        all-passengers: All Travelers
         all-organizers: All Organizers
         passenger_for: Passenger For
         waitlist: Wait List
