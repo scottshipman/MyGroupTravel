@@ -563,6 +563,8 @@ class PassengerController extends Controller
             $organizersObjects = array();
         }
 
+        $unactivatedCount = $this->get("passenger.actions")->getUnActivatedUsers($tourId);
+
         // merge all records
         $passengers = array_merge($passengers, $organizersObjects);
 
@@ -583,7 +585,8 @@ class PassengerController extends Controller
             'tour' => $tour,
             'statusCounts' => $participantCounts,
             'brand' => $brand,
-            'passengers' => $passengers
+            'passengers' => $passengers,
+            'unactivatedCount' => $unactivatedCount
         ));
     }
 
@@ -1100,5 +1103,66 @@ class PassengerController extends Controller
         } else {
             return ucfirst($status);
         }
+    }
+
+    public function getActivateAllUsersAction($tourId)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $mailer = $this->container->get('mailer');
+
+        $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
+
+        //brand stuff
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
+
+        $acceptedUsers = $this->get('passenger.actions')->getPassengersByStatus('accepted', $tourId);
+
+        foreach ($acceptedUsers as $acceptedUser) {
+
+            $object = $acceptedUser->getId();
+            $user = $this->get("permission.set_permission")->getUser('parent', $object, 'passenger');
+            $user = array_shift($user);
+            $user = $em->getRepository('TUIToolkitUserBundle:User')->find($user);
+
+            $tokenGenerator = $this->container->get('fos_user.util.token_generator');
+
+            //Get some user info
+            $user->setConfirmationToken($tokenGenerator->generateToken());
+            $userEmail = $user->getEmail();
+
+            $message = \Swift_Message::newInstance()
+                ->setSubject($this->get('translator')->trans('user.email.registration.subject'))
+                ->setFrom($this->container->getParameter('user_system_email'))
+                ->setTo($userEmail)
+                ->setBody(
+                    $this->renderView(
+                        'TUIToolkitUserBundle:Registration:register_email.html.twig',
+                        array(
+                            'brand' => $brand,
+                            'user' => $user,
+                        )
+                    ), 'text/html');
+
+            $em->persist($user);
+            $em->flush();
+
+            $mailer->send($message);
+        }
+
+
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('passenger.flash.users_activation'));
+
+        return $this->redirect($_SERVER['HTTP_REFERER']);
+
     }
 }
