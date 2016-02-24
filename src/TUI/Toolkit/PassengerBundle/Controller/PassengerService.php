@@ -420,4 +420,29 @@ class PassengerService
         return $combinedObjects;
     }
 
+    public function getUnActivatedUsers($tourId){
+        $container = $this->container;
+        $em = $this->em;
+        $unactivated = array();
+
+        //Get Accepted Passengers
+        $acceptedUsers = $this->getPassengersByStatus('accepted', $tourId);
+        $accepted = count($acceptedUsers);
+
+        foreach ($acceptedUsers as $acceptedUser){
+            $object = $acceptedUser->getId();
+            $users = $container->get("permission.set_permission")->getUser('parent', $object, 'passenger');
+
+            foreach ($users as $user) {
+                $user = $em->getRepository('TUIToolkitUserBundle:User')->find($user);
+                if ($user->isEnabled() == false) {
+                    $unactivated[] = $user;
+                }
+            }
+        }
+
+        $uanctivatedCount = count($unactivated);
+        return $uanctivatedCount;
+    }
+
 }
