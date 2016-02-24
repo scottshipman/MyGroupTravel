@@ -37,17 +37,42 @@ class PassportType extends AbstractType
 
 
         $builder
-            ->add('passportNumber', 'text', array(
-                'required' => false,
-                'label' => 'passenger.labels.passport_number',
-            ))
-            ->add('passportFirstName', 'text', array(
-                'required' => false,
-                'label' => 'passenger.labels.passport_first_name',
-            ))
             ->add('passportLastName', 'text', array(
                 'required' => false,
                 'label' => 'passenger.labels.passport_last_name',
+            ))
+            ->add('passportFirstName', 'text', array(
+                'required' => false,
+                'label' => 'Title',
+            ))
+            ->add('passportMiddleName', 'text', array(
+                'required' => false,
+                'label' => 'Middle Name',
+            ))
+            ->add('passportTitle', 'choice', array(
+                'choices' => array(
+                  "Mr" => "Mr.",
+                  "Mrs" => "Mrs.",
+                  "Ms" => "Ms."
+                ),
+                'required' => false,
+                'label' => 'Title',
+            ))
+            ->add('passportGender', 'choice', array(
+                'choices' => array(
+                    'Male' => 'Male',
+                    'Female' => 'Female'
+                ),
+                'label' => 'passenger.form.invite.gender',
+                'required' => false,
+            ))
+            ->add('passportIssuingState', 'text', array(
+                'required' => false,
+                'label' => 'Code of Issuing state (e.g. GBR)',
+            ))
+            ->add('passportNumber', 'text', array(
+                'required' => false,
+                'label' => 'passenger.labels.passport_number',
             ))
             ->add('passportNationality', 'country', array(
                 'required' => false,
@@ -62,6 +87,14 @@ class PassportType extends AbstractType
                 'years' => range(date('Y') - 15, date('Y') - 1)
             ))
             ->add('passportDateOfExpiry', 'birthday', array(
+                'format' => $date_format,
+                'required' => true,
+                'attr' => array(
+                    'class' => 'dateOfExpiry',
+                ),
+                'years' => range(date('Y') - 15, date('Y') - 1)
+            ))
+            ->add('passportDateOfBirth', 'birthday', array(
                 'format' => $date_format,
                 'required' => true,
                 'attr' => array(
