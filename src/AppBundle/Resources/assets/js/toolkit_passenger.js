@@ -28,8 +28,8 @@ function filterPassengers(elemID) {
             $('#card-title').html(passengerStatus.free + ' ' + passengerStatus.passenger + ' List');
             break;
         case 'showAllPassengers':
-            $('.organizers,  .organizer-cta-card').slideUp(400, function () {
-                $(' .passengers, .passenger-cta-card, .passenger-dashboard-buttons').slideDown(400);
+            $('.organizers, .passengers, .organizer-cta-card').slideUp(400, function () {
+                $(' .accepted.passengers, .free.passengers, .accepted.organizers, .passenger-cta-card, .free.organizers, .passenger-dashboard-buttons').slideDown(400);
             });
             $('.passenger-filter').css("color", passengerStatus.primaryColor);
             $("a[data-id='" + elemID + "']").css("color", passengerStatus.secondaryColor);
