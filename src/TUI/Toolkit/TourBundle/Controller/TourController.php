@@ -1245,10 +1245,23 @@ class TourController extends Controller
 
         $locale = $this->container->getParameter('locale');
 
+        //brand stuff
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
+
         return $this->render('TourBundle:Tour:notCompletedAndSetup.html.twig', array(
             'entity' => $entity,
             'date_format' => $date_format,
-            'locale' => $locale
+            'locale' => $locale,
+            'brand' => $brand,
         ));
 
     }
