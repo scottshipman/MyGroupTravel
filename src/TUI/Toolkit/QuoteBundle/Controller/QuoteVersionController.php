@@ -59,6 +59,7 @@ class QuoteVersionController extends Controller
             'quoteReference.salesAgent.email',
             'quoteReference.secondaryContact.firstName',
             'quoteReference.secondaryContact.lastName',
+            'quoteReference.secondaryContact.email',
             'secondaryContact_name',
             'quoteReference.destination',
 //            'created',
@@ -133,7 +134,7 @@ class QuoteVersionController extends Controller
             function ($action, $row) { // business rule is only admins can edit locked quotes
                 if ($row->getField('quoteReference.salesAgent.email') == true) {
                     $agentEmail = $this->get('security.context')->getToken()->getUser()->getEmail();
-                    if ($row->getField('quoteReference.salesAgent.email') == $agentEmail and $this->get('security.authorization_checker')->isGranted('ROLE_BRAND')) {
+                    if ($row->getField('quoteReference.salesAgent.email') == $agentEmail or $row->getField('quoteReference.secondaryContact.email') == $agentEmail and $this->get('security.authorization_checker')->isGranted('ROLE_BRAND')) {
                         return $action;
                     }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
                         return $action;
@@ -242,6 +243,7 @@ class QuoteVersionController extends Controller
             'quoteReference.salesAgent.email',
             'quoteReference.secondaryContact.firstName',
             'quoteReference.secondaryContact.lastName',
+            'quoteReference.secondaryContact.email',
             'secondaryContact_name',
             'quoteReference.destination',
 //            'created',
@@ -397,6 +399,7 @@ class QuoteVersionController extends Controller
             'quoteReference.salesAgent.email',
             'quoteReference.secondaryContact.firstName',
             'quoteReference.secondaryContact.lastName',
+            'quoteReference.secondaryContact.email',
             'secondaryContact_name',
             'quoteReference.destination',
 //            'created',
@@ -564,6 +567,7 @@ class QuoteVersionController extends Controller
             'quoteReference.salesAgent.email',
             'quoteReference.secondaryContact.firstName',
             'quoteReference.secondaryContact.lastName',
+            'quoteReference.secondaryContact.email',
             'secondaryContact_name',
             //'quoteReference.destination',
 //            'created',
