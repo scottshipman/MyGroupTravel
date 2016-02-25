@@ -57,6 +57,10 @@ class QuoteVersionController extends Controller
             'quoteReference.salesAgent.firstName',
             'quoteReference.salesAgent.lastName',
             'quoteReference.salesAgent.email',
+            'quoteReference.secondaryContact.firstName',
+            'quoteReference.secondaryContact.lastName',
+            'quoteReference.secondaryContact.email',
+            'secondaryContact_name',
             'quoteReference.destination',
 //            'created',
             'version',
@@ -130,7 +134,7 @@ class QuoteVersionController extends Controller
             function ($action, $row) { // business rule is only admins can edit locked quotes
                 if ($row->getField('quoteReference.salesAgent.email') == true) {
                     $agentEmail = $this->get('security.context')->getToken()->getUser()->getEmail();
-                    if ($row->getField('quoteReference.salesAgent.email') == $agentEmail and $this->get('security.authorization_checker')->isGranted('ROLE_BRAND')) {
+                    if ($row->getField('quoteReference.salesAgent.email') == $agentEmail or $row->getField('quoteReference.secondaryContact.email') == $agentEmail and $this->get('security.authorization_checker')->isGranted('ROLE_BRAND')) {
                         return $action;
                     }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
                         return $action;
@@ -174,6 +178,12 @@ class QuoteVersionController extends Controller
         $column = $grid->getColumn('quoteReference.salesAgent.lastName');
         $column->setFilterable(true);
         $column->setTitle($this->get('translator')->trans('quote.grid.filters.title.sales_agent'));
+        $column->setOperatorsVisible(false);
+
+        // add secondary Contact last name filter
+        $column = $grid->getColumn('quoteReference.secondaryContact.lastName');
+        $column->setFilterable(true);
+        $column->setTitle($this->get('translator')->trans('quote.grid.filters.title.secondContact'));
         $column->setOperatorsVisible(false);
 
         // add organizer last name filter
@@ -231,6 +241,10 @@ class QuoteVersionController extends Controller
             'quoteReference.salesAgent.firstName',
             'quoteReference.salesAgent.lastName',
             'quoteReference.salesAgent.email',
+            'quoteReference.secondaryContact.firstName',
+            'quoteReference.secondaryContact.lastName',
+            'quoteReference.secondaryContact.email',
+            'secondaryContact_name',
             'quoteReference.destination',
 //            'created',
             'version',
@@ -302,6 +316,12 @@ class QuoteVersionController extends Controller
         $column = $grid->getColumn('quoteReference.salesAgent.lastName');
         $column->setFilterable(true);
         $column->setTitle($this->get('translator')->trans('quote.grid.filters.title.sales_agent'));
+        $column->setOperatorsVisible(false);
+
+        // add secondary Contact last name filter
+        $column = $grid->getColumn('quoteReference.secondaryContact.lastName');
+        $column->setFilterable(true);
+        $column->setTitle($this->get('translator')->trans('quote.grid.filters.title.secondContact'));
         $column->setOperatorsVisible(false);
 
         // add organizer last name filter
@@ -377,6 +397,10 @@ class QuoteVersionController extends Controller
             'quoteReference.salesAgent.firstName',
             'quoteReference.salesAgent.lastName',
             'quoteReference.salesAgent.email',
+            'quoteReference.secondaryContact.firstName',
+            'quoteReference.secondaryContact.lastName',
+            'quoteReference.secondaryContact.email',
+            'secondaryContact_name',
             'quoteReference.destination',
 //            'created',
             'version',
@@ -465,6 +489,12 @@ class QuoteVersionController extends Controller
         $column->setTitle($this->get('translator')->trans('quote.grid.filters.title.sales_agent'));
         $column->setOperatorsVisible(false);
 
+        // add secondary Contact last name filter
+        $column = $grid->getColumn('quoteReference.secondaryContact.lastName');
+        $column->setFilterable(true);
+        $column->setTitle($this->get('translator')->trans('quote.grid.filters.title.secondContact'));
+        $column->setOperatorsVisible(false);
+
         // add organizer last name filter
         $column = $grid->getColumn('quoteReference.organizer.lastName');
         $column->setFilterable(true);
@@ -535,6 +565,10 @@ class QuoteVersionController extends Controller
             'quoteReference.salesAgent.firstName',
             'quoteReference.salesAgent.lastName',
             'quoteReference.salesAgent.email',
+            'quoteReference.secondaryContact.firstName',
+            'quoteReference.secondaryContact.lastName',
+            'quoteReference.secondaryContact.email',
+            'secondaryContact_name',
             //'quoteReference.destination',
 //            'created',
             'version',
