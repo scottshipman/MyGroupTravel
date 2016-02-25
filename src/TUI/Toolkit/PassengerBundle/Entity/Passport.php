@@ -341,7 +341,7 @@ class Passport
      */
     public function setPassportDateOfBirth($passportDateOfBirth) {
 
-        $this->passportDateOfExpiry = $passportDateOfBirth;
+        $this->passportDateOfBirth = $passportDateOfBirth;
 
         return $this;
 

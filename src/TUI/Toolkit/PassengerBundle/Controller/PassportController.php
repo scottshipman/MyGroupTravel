@@ -198,14 +198,18 @@ class PassportController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
-            $em->flush();
 
             if ($locale == "en_GB") {
+                //formatted date of birth
+                $dateOfBirth = $entity->getPassportDateOfBirth()->format('d M Y');
                 //formatted date of issue
                 $dateOfIssue = $entity->getPassportDateOfIssue()->format('d M Y');
                 //formatted date of expiry
                 $dateOfExpiry = $entity->getPassportDateOfExpiry()->format('d M Y');
             }else {
+                //formatted date of birth
+                $dateOfBirth = $entity->getPassportDateOfBirth()->format('M d Y');
+
                 $dateOfIssue = $entity->getPassportDateOfIssue()->format('M d Y');
                 //formatted date of expiry
                 $dateOfExpiry = $entity->getPassportDateOfExpiry()->format('M d Y');
@@ -213,13 +217,21 @@ class PassportController extends Controller
 
 
             $data = array(
-                $entity->getPassportNumber(),
-                $entity->getPassportFirstName(),
                 $entity->getPassportLastName(),
+                $entity->getPassportFirstName(),
+                $entity->getPassportMiddleName(),
+                $entity->getPassportGender(),
+                $entity->getPassportTitle(),
+                $entity->getPassportIssuingState(),
+                $entity->getPassportNumber(),
                 $entity->getPassportNationality(),
+                $dateOfBirth,
                 $dateOfIssue,
                 $dateOfExpiry,
         );
+            $em->persist($entity);
+            $em->flush();
+
 
 
             $responseContent =  json_encode($data);

@@ -322,12 +322,17 @@ $(document).ready(function () {
                 "display": "inline-block"
             });
             $('#passport-close').css("display", "none");
-            $('.passport-number').html(response[0]);
+            $('.passport-lastName').html(response[0]);
             $('.passport-firstName').html(response[1]);
-            $('.passport-lastName').html(response[2]);
-            $('.passport-nationality').html(response[3]);
-            $('.passport-dateOfIssue').html(response[4]);
-            $('.passport-dateOfExpiry').html(response[5]);
+            $('.passport-middleName').html(response[2]);
+            $('.passport-gender').html(response[3]);
+            $('.passport-title').html(response[4]);
+            $('.passport-issuingState').html(response[5]);
+            $('.passport-number').html(response[6]);
+            $('.passport-nationality').html(response[7]);
+            $('.passport-dateOfBirth').html(response[8]);
+            $('.passport-dateOfIssue').html(response[9]);
+            $('.passport-dateOfExpiry').html(response[10]);
 
         }).error(function (response) {
             var attribute = 'tui_toolkit_passengerbundle_passport_';

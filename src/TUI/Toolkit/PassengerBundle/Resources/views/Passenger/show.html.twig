@@ -252,8 +252,8 @@
                             {{ render(controller( 'PassengerBundle:Passport:edit', {'id' : passportId} )) }}
                         {% endif %}
                         <div class="mdl-card__supporting-text mdl-card--border">
-                            <label class="row-label">{% trans %}passenger.labels.passport_number{% endtrans %}</label>
-                            <p class="passport-number row-content">{% if entity.passportReference != null %}{{ entity.passportReference.passportNumber }}{% endif %}</p>
+                            <label class="row-label">{% trans %}passenger.labels.passport_last_name{% endtrans %}</label>
+                            <p class="passport-lastName row-content">{% if entity.passportReference != null %}{{ entity.passportReference.passportLastName }}{% endif %}</p>
                             <div class="clear"></div>
                         </div>
                         <div class="mdl-card__supporting-text mdl-card--border">
@@ -262,13 +262,38 @@
                             <div class="clear"></div>
                         </div>
                         <div class="mdl-card__supporting-text mdl-card--border">
-                            <label class="row-label">{% trans %}passenger.labels.passport_last_name{% endtrans %}</label>
-                            <p class="passport-lastName row-content">{% if entity.passportReference != null %}{{ entity.passportReference.passportLastName }}{% endif %}</p>
+                            <label class="row-label">Middle Name</label>
+                            <p class="passport-middleName row-content">{% if entity.passportReference != null %}{{ entity.passportReference.passportMiddleName }}{% endif %}</p>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="mdl-card__supporting-text mdl-card--border">
+                            <label class="row-label">Gender</label>
+                            <p class="passport-gender row-content">{% if entity.passportReference != null %}{{ entity.passportReference.passportGender }}{% endif %}</p>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="mdl-card__supporting-text mdl-card--border">
+                            <label class="row-label">Title</label>
+                            <p class="passport-title row-content">{% if entity.passportReference != null %}{{ entity.passportReference.passportTitle }}{% endif %}</p>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="mdl-card__supporting-text mdl-card--border">
+                            <label class="row-label">Code of Issuing State</label>
+                            <p class="passport-issuingState row-content">{% if entity.passportReference != null %}{{ entity.passportReference.passportIssuingState }}{% endif %}</p>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="mdl-card__supporting-text mdl-card--border">
+                            <label class="row-label">{% trans %}passenger.labels.passport_number{% endtrans %}</label>
+                            <p class="passport-number row-content">{% if entity.passportReference != null %}{{ entity.passportReference.passportNumber }}{% endif %}</p>
                             <div class="clear"></div>
                         </div>
                         <div class="mdl-card__supporting-text mdl-card--border">
                             <label class="row-label">{% trans %}passenger.labels.passport_nationality{% endtrans %}</label>
                             <p class="passport-nationality row-content">{% if entity.passportReference != null %}{{ entity.passportReference.passportNationality }}{% endif %}</p>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="mdl-card__supporting-text mdl-card--border">
+                            <label class="row-label">Date of Birth</label>
+                            <p class="passport-dateOfBirth row-content">{% if entity.passportReference != null %}{{ entity.passportReference.passportDateOfBirth|date(format) }}{% endif %}</p>
                             <div class="clear"></div>
                         </div>
                         <div class="mdl-card__supporting-text mdl-card--border">
