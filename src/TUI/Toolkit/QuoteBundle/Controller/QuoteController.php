@@ -279,6 +279,7 @@ class QuoteController extends Controller
         $tour->setBankTransferPayment(false);
         $tour->setOnlinePayment(false);
         $tour->setOtherPayment(false);
+        $tour->setRegistrations(0);
 
 
       //  $tour->setContent()
