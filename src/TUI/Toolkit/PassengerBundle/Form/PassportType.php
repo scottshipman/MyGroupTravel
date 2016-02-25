@@ -39,7 +39,7 @@ class PassportType extends AbstractType
         $builder
             ->add('passportLastName', 'text', array(
                 'required' => true,
-                'label' => 'passenger.labels.passport_last_name',
+                'label' => 'passenger.labels.passport_family_name',
             ))
             ->add('passportFirstName', 'text', array(
                 'required' => true,
@@ -47,7 +47,7 @@ class PassportType extends AbstractType
             ))
             ->add('passportMiddleName', 'text', array(
                 'required' => true,
-                'label' => 'Middle Name',
+                'label' => 'passenger.labels.passport_middle_name',
             ))
             ->add('passportTitle', 'choice', array(
                 'choices' => array(
@@ -56,7 +56,7 @@ class PassportType extends AbstractType
                   "Ms" => "Ms."
                 ),
                 'required' => true,
-                'label' => 'Title',
+                'label' => 'passenger.labels.passport_title',
             ))
             ->add('passportGender', 'choice', array(
                 'choices' => array(
@@ -68,7 +68,7 @@ class PassportType extends AbstractType
             ))
             ->add('passportIssuingState', 'text', array(
                 'required' => true,
-                'label' => 'Code of Issuing state (e.g. GBR)',
+                'label' => 'passenger.labels.passport_state_issue',
             ))
             ->add('passportNumber', 'text', array(
                 'required' => true,
