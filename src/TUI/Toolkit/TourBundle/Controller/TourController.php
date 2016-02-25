@@ -306,6 +306,12 @@ class TourController extends Controller
         $column->setTitle($this->get('translator')->trans('tour.grid.filter.title.ba_lname'));
         $column->setOperatorsVisible(false);
 
+        // add other business admin last name filter
+        $column = $grid->getColumn('secondaryContact.lastName');
+        $column->setFilterable(true);
+        $column->setTitle($this->get('translator')->trans('tour.grid.filter.title.sc_lname'));
+        $column->setOperatorsVisible(false);
+
         // add organizer last name filter
         $column = $grid->getColumn('organizer.lastName');
         $column->setFilterable(true);
