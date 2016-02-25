@@ -110,7 +110,7 @@ passenger:
         thank_you: Thank you for your submission
         notifications: You have new notifications
         invite-organizer:
-            organizer-subject: A new organizer has been invited to your tour
+            organizer-subject: A new organiser has been invited to your tour
             new-user-subject: You have been invited to help manage a tour
 
     form:

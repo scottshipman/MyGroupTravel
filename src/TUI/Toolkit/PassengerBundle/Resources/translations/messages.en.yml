@@ -28,7 +28,7 @@ passenger:
         activate: Submit
         security: Reset Security Info
         invite: Invite
-        invite-organizers: Invite Organisers
+        invite-organizers: Invite Organizers
         edit_passenger: Edit Passenger
         send-notification: Send Notification
         move_accepted: Move to Accepted
@@ -46,7 +46,7 @@ passenger:
             edit: Edit
 
     flash:
-        save: "Thanks for signing up. A copy of the form has been emailed to you, and the tour organiser will be in touch."
+        save: "Thanks for signing up. A copy of the form has been emailed to you, and the tour organizer will be in touch."
         delete: Passenger deleted -
         restore: Passenger Restored -
 
@@ -58,26 +58,26 @@ passenger:
         passenger: Passenger
         show-everyone: Clear Filters
         passengers_for: Passengers
-        organizers_for: Organisers
+        organizers_for: Organizers
         passenger_for: Passenger For
         all-passengers: All Travelers
-        all-organizers: All Organisers
+        all-organizers: All Organizers
         waitlist: Wait List
         accepted: Accepted
         free: Free
-        organizer: Organisers
+        organizer: Organizers
         passenger_list: All Participants List
         add_paying: Add Paying Passengers
         remaining: Remaining
         welcome: Welcome to the passenger dashboard.  Here you can invite, add, and manage all of your passengers.
         invite: Invite Passengers
         add: Add Passenger
-        primary-organizer: Primary Organiser
+        primary-organizer: Primary Organizer
         invite-pending: Invited - Not yet responded.
         invite-accepted: Accepted Invitation.
-        add-organizer: Manage Organisers
-        invite-text: Complete the form below to invite someone to help organise this tour.
-        assistant-organizer: Assistant Organiser
+        add-organizer: Manage Organizers
+        invite-text: Complete the form below to invite someone to help organize this tour.
+        assistant-organizer: Assistant Organizer
         tasks: Tasks
         medical_info: Medical Information
         doctor_name: Doctor's name
