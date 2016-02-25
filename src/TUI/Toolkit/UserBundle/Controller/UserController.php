@@ -1467,14 +1467,6 @@ class UserController extends Controller
     public function getQuotesAction($id)
     {
         $locale = $this->container->getParameter('locale');
-        switch (true) {
-            case strstr($locale, 'en_GB'):
-                $format = 'd-m-Y';
-                break;
-            default:
-                $format = 'm-d-Y';
-                break;
-        }
         // if user is brand or admin, list quotes where they are salesAgent or SecondaryContact
         // dont show expired or converted quotes for brand/admins either
         // if user is customer, list quotes by Permission Entity
@@ -1495,7 +1487,7 @@ class UserController extends Controller
                 ->AndWhere('qv.isTemplate = false');
             $qb->setParameter(1, $id);
             $qb->setParameter(2, $id);
-            $qb->setParameter(3, $today->format($format));
+            $qb->setParameter(3, $today);
             $qb->orderBy('qv.created', 'DESC');
             $qb->setMaxResults( $limit);
             $query = $qb->getQuery();
