@@ -195,7 +195,7 @@ class TourController extends Controller
           $usr = $this->get('security.context')->getToken()->getUser();
           $lastName = $usr->getLastName();
           $filters = array(
-            'all_salesagents' => array(
+            'salesAgent.lastName' => array(
               'operator' => 'like',
               'from' => $lastName
             )
