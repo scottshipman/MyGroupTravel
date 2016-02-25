@@ -256,6 +256,7 @@ tour:
                 enabled: Enabled
                 ba_lname: Primary Business Admin (Last Name)
                 o_lname: Organiser (Last Name)
+                sc_lname: Secondary Admin (Last Name)
         column:
             title:
                 last_login: Last Login

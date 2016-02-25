@@ -18,10 +18,11 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
  * @UniqueEntity(fields={"quoteNumber"}, message="This Quote Number already exists on another Quote.", ignoreNull=true)
  *
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
- * @GRID\Source(columns="id, institution_full, quoteReference.institution.name, quoteReference.institution.city, quoteReference.name, name, isTemplate, quoteReference.ts, quoteReference.id, quoteNumber, organizer_full, salesAgent_full, salesAgent_name, quoteReference.salesAgent.firstName, quoteReference.salesAgent.lastName,  quoteReference.salesAgent.email, quoteReference.organizer.firstName, quoteReference.organizer.lastName, quoteReference.organizer.email, quoteReference.views, quoteReference.shareViews, quoteReference.converted, deleted, locked, quoteReference.setupComplete, quoteReference.destination, created, version, duration, displayName, tripStatus.name, expiryDate, transportType.name, boardBasis.name, freePlaces, payingPlaces, departureDate, returnDate, pricePerson,  currency.name, converted, views, shareViews, hideAlt, description", filterable=false, sortable=true)
+ * @GRID\Source(columns="id, institution_full, quoteReference.institution.name, quoteReference.institution.city, quoteReference.name, name, isTemplate, quoteReference.ts, quoteReference.id, quoteNumber, organizer_full, salesAgent_full, secondaryContact_name, salesAgent_name, quoteReference.salesAgent.firstName, quoteReference.salesAgent.lastName,  quoteReference.salesAgent.email, quoteReference.secondaryContact.firstName, quoteReference.secondaryContact.lastName, quoteReference.organizer.firstName, quoteReference.organizer.lastName, quoteReference.organizer.email, quoteReference.views, quoteReference.shareViews, quoteReference.converted, deleted, locked, quoteReference.setupComplete, quoteReference.destination, created, version, duration, displayName, tripStatus.name, expiryDate, transportType.name, boardBasis.name, freePlaces, payingPlaces, departureDate, returnDate, pricePerson,  currency.name, converted, views, shareViews, hideAlt, description", filterable=false, sortable=true)
  * @GRID\Column(id="organizer_full", type="join", columns = {"quoteReference.organizer.firstName", "quoteReference.organizer.lastName", "quoteReference.organizer.email"}, title="Organizer", export=false, filterable=false, operatorsVisible=false)
  * @GRID\Column(id="salesAgent_full", type="join", columns = {"quoteReference.salesAgent.firstName", "quoteReference.salesAgent.lastName", "quoteReference.salesAgent.email"}, title="Primary Business Admin", export=false, filterable=false, operatorsVisible=false)
  * @GRID\Column(id="salesAgent_name", type="join", columns = {"quoteReference.salesAgent.firstName", "quoteReference.salesAgent.lastName"}, title="Primary Business Admin", export=false, filterable=false, operatorsVisible=false)
+ * @GRID\Column(id="secondaryContact_name", type="join", columns = {"quoteReference.secondaryContact.firstName", "quoteReference.secondaryContact.lastName"}, title="Secondary Contact", export=false, filterable=false, operatorsVisible=false)
  * @GRID\Column(id="institution_full", type="join", columns = {"quoteReference.institution.name", "quoteReference.institution.city"}, title="Institution", export=false, filterable=false, operatorsVisible=false)
  */
 
@@ -184,6 +185,8 @@ class QuoteVersion
      * @GRID\Column(field = "quoteReference.salesAgent.firstName", title="BA First", export=true)
      * @GRID\Column(field = "quoteReference.salesAgent.lastName", title="BA Last", export=true)
      * @GRID\Column(field = "quoteReference.salesAgent.email", title="BA email", export=true)
+     * @GRID\Column(field = "quoteReference.secondaryContact.firstName", title="2nd Contact First", export=true)
+     * @GRID\Column(field = "quoteReference.secondaryContact.lastName", title="2nd Contact Last", export=true)
      * @GRID\Column(field = "quoteReference.converted", title="Converted", export=true)
      * @GRID\Column(field = "quoteReference.setupComplete", title="Setup Complete", export=true)
      * @GRID\Column(field = "quoteReference.institution.name", title="Institution Name", export=true, filterable=true, operatorsVisible=false)

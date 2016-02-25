@@ -57,6 +57,9 @@ class QuoteVersionController extends Controller
             'quoteReference.salesAgent.firstName',
             'quoteReference.salesAgent.lastName',
             'quoteReference.salesAgent.email',
+            'quoteReference.secondaryContact.firstName',
+            'quoteReference.secondaryContact.lastName',
+            'secondaryContact_name',
             'quoteReference.destination',
 //            'created',
             'version',
@@ -176,6 +179,12 @@ class QuoteVersionController extends Controller
         $column->setTitle($this->get('translator')->trans('quote.grid.filters.title.sales_agent'));
         $column->setOperatorsVisible(false);
 
+        // add secondary Contact last name filter
+        $column = $grid->getColumn('quoteReference.secondaryContact.lastName');
+        $column->setFilterable(true);
+        $column->setTitle($this->get('translator')->trans('quote.grid.filters.title.secondContact'));
+        $column->setOperatorsVisible(false);
+
         // add organizer last name filter
         $column = $grid->getColumn('quoteReference.organizer.lastName');
         $column->setFilterable(true);
@@ -231,6 +240,9 @@ class QuoteVersionController extends Controller
             'quoteReference.salesAgent.firstName',
             'quoteReference.salesAgent.lastName',
             'quoteReference.salesAgent.email',
+            'quoteReference.secondaryContact.firstName',
+            'quoteReference.secondaryContact.lastName',
+            'secondaryContact_name',
             'quoteReference.destination',
 //            'created',
             'version',
@@ -377,6 +389,9 @@ class QuoteVersionController extends Controller
             'quoteReference.salesAgent.firstName',
             'quoteReference.salesAgent.lastName',
             'quoteReference.salesAgent.email',
+            'quoteReference.secondaryContact.firstName',
+            'quoteReference.secondaryContact.lastName',
+            'secondaryContact_name',
             'quoteReference.destination',
 //            'created',
             'version',
@@ -535,6 +550,9 @@ class QuoteVersionController extends Controller
             'quoteReference.salesAgent.firstName',
             'quoteReference.salesAgent.lastName',
             'quoteReference.salesAgent.email',
+            'quoteReference.secondaryContact.firstName',
+            'quoteReference.secondaryContact.lastName',
+            'secondaryContact_name',
             //'quoteReference.destination',
 //            'created',
             'version',

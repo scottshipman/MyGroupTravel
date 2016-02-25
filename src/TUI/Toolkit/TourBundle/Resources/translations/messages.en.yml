@@ -253,6 +253,7 @@ tour:
                 email: Email
                 enabled: Enabled
                 ba_lname: Primary Business Admin (Last Name)
+                sc_lname: Secondary Admin (Last Name)
                 o_lname: Organizer (Last Name)
         column:
             title:
