@@ -6,6 +6,7 @@
         </div>
 
         {{ form_start(form) }}
+        <p style="color:red;">It is important that the details provided here match exactly as per the passport</p>
         {{ form_widget(form.passportLastName) }}
         {{ form_widget(form.passportFirstName) }}
         {{ form_widget(form.passportMiddleName) }}
@@ -14,7 +15,7 @@
         {{ form_widget(form.passportIssuingState) }}
         {{ form_widget(form.passportNumber) }}
         {{ form_widget(form.passportNationality) }}
-        <label style="display: block; color:rgba(0,0,0,.26);">Date of Birth</label>
+        <label style="display: block; color:rgba(0,0,0,.26);">{% trans %}passenger.labels.passport_dob{% endtrans %}</label>
         {{ form_widget(form.passportDateOfBirth) }}
         <label style="display: block; color:rgba(0,0,0,.26);">{% trans %}passenger.labels.passport_doi{% endtrans %}</label>
         {{ form_widget(form.passportDateOfIssue) }}
