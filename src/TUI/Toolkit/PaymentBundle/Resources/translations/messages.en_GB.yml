@@ -42,6 +42,7 @@ payment:
         past_due: Past Due
         payment_history: Payment History
         collected: Collected
+        schedule: Payment Schedule
 
 
     form:
