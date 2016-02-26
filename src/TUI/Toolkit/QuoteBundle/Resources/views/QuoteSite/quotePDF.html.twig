@@ -96,15 +96,13 @@
                                             <li>
                                                 <span class="inner-list" style="background-image: url('{{ absolute_url(( entity.headerBlock.mediaWrapper[0].media[0].getRelativePath ~ "/" ~ entity.headerBlock.mediaWrapper[0].media[0].getHashedFilename )) }}')"></span>
                                             </li>
+                                        {% endif %}
                                     {% endif %}
-                                    {% endif %}
-                                {% endif %}
                                 {% endif %}
                             </ul>
                         </div>
                     </div>
                 </div>
-            {% else %}
             {% endif %}
         </div>
 
