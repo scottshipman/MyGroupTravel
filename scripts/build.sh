@@ -12,19 +12,19 @@ fi
 case "$1" in
   vm)
     application_env="dev"
-    composer_params=""
+    composer_params="--no-interaction"
     ;;
   dev)
     application_env="dev"
-    composer_params=""
+    composer_params="--no-interaction"
     ;;
   uat)
     application_env="prod"
-    composer_params="--optimize-autoloader"
+    composer_params="--no-interaction --optimize-autoloader"
     ;;
   prod)
     application_env="prod"
-    composer_params="--optimize-autoloader"
+    composer_params="--no-interaction --optimize-autoloader"
     ;;
 esac
 
@@ -127,7 +127,7 @@ then
   echo "Cleaning up old builds"
   echo "============================================="
 
-  (cd .. && find releases -maxdepth 1 -mindepth 1 -type d | sort | head -n -5 | xargs sudo rm -rf)
+  (cd .. && ls releases/*/ -dtr | head -n -5 | xargs sudo rm -rf)
 
   echo $'\n  - Done!'
 fi

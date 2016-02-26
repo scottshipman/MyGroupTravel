@@ -1,0 +1,30 @@
+emergency:
+    path:     /
+    defaults: { _controller: "PassengerBundle:Emergency:index" }
+
+emergency_show:
+    path:     /{id}/show
+    defaults: { _controller: "PassengerBundle:Emergency:show" }
+
+emergency_new:
+    path:     /new
+    defaults: { _controller: "PassengerBundle:Emergency:new" }
+
+emergency_create:
+    path:     /create
+    defaults: { _controller: "PassengerBundle:Emergency:create" }
+    methods:  POST
+
+emergency_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "PassengerBundle:Emergency:edit" }
+
+emergency_update:
+    path:     /{id}/update
+    defaults: { _controller: "PassengerBundle:Emergency:update" }
+    methods:  [POST, PUT]
+
+emergency_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "PassengerBundle:Emergency:delete" }
+    methods:  [POST, DELETE]

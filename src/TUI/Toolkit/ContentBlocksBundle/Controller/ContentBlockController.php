@@ -43,7 +43,9 @@ class ContentBlockController extends Controller
         $form = $this->createCreateForm($entity, $class, $quoteVersion, $tabId);
         $form->handleRequest($request);
 
-        if (NULL != $form->getData()->getMediaWrapper() and !empty($form->getData()->getMediaWrapper())) {
+        $mediaData = $form->getData()->getMediaWrapper();
+
+        if (NULL != $mediaData and !empty($mediaData)) {
             $fileArrays = json_decode($form->getData()->getMediaWrapper());
             if (!empty($fileArrays)) {
                 foreach ($fileArrays as $fileArray) {
@@ -284,8 +286,9 @@ class ContentBlockController extends Controller
           $editForm->handleRequest($request);
 
         $medias = array();
+        $mediaData = $editForm->getData()->getMediaWrapper();
 
-        if (NULL != $editForm->getData()->getMediaWrapper() and !empty($editForm->getData()->getMediaWrapper())) {
+        if (NULL != $mediaData and !empty($mediaData)) {
             $fileArrays = json_decode($editForm->getData()->getMediaWrapper());
             $wrappers = array();
             if (!empty($fileArrays)) {

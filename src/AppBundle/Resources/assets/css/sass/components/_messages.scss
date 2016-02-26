@@ -29,7 +29,7 @@
 
 .snackbar {
   padding: 14px 2.5%;
-  height: 48px;
+  height: auto;
   color: #fff;
   position: relative;
   left: 0;
@@ -87,4 +87,9 @@
   font-style: normal;
   z-index: 1;
   cursor: pointer;
+}
+
+#ras-flash-alerts > div {
+  margin-bottom: 0 !important;
+  text-align: center;
 }

@@ -81,7 +81,7 @@ class User extends BaseUser
     protected $honorific = null;
 
     /**
-     * @ORM\Column(type="phone_number", nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      */
     protected $phoneNumber = null;
 
@@ -368,6 +368,4 @@ class User extends BaseUser
   {
     return $this->answer;
   }
-
-
 }

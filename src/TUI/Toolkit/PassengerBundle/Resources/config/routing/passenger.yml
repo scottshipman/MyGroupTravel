@@ -32,3 +32,11 @@ manage_passenger_delete:
 manager_passenger_dashboard:
     path: /dashboard/{tourId}
     defaults: { _controller: "PassengerBundle:Passenger:getPassengerDashboard" }
+invite_organizer:
+    path: /invite-organizer/new/{tourId}
+    defaults:  { _controller: "PassengerBundle:Passenger:inviteOrganizer" }
+invite_organizer_submit:
+    path: /invite-organizer/submit/{tourId}
+    defaults: { _controller: "PassengerBundle:Passenger:inviteOrganizerSubmit" }
+    methods: [POST]
+

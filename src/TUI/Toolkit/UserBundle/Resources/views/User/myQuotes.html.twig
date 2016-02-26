@@ -58,7 +58,9 @@
                             <span class="tui-text-avatar mdl-typography--headline">{{ quote.quoteReference.salesAgent.username[:1] }}</span>
 
                         {% endif %}
-                        {{ quote.quoteReference.salesAgent.firstName }} {{ tour.salesAgent.lastName }} <br /> {{ quote.quoteReference.salesAgent.email }}<br /><label>{% trans %}user.profile.my_quotes.salesAgent{% endtrans %}</label>
+                        {{ quote.quoteReference.salesAgent.firstName }} {{ tour.salesAgent.lastName }} <br /> <a style="text-decoration: none;" href="mailto:{{ quote.quoteReference.salesAgent.email }}">{{ quote.quoteReference.salesAgent.email }}</a><br />
+                        <span style="margin-left:57px;"><tel>{{ quote.reference.salesAgent.phoneNumber }}</tel></span>
+                        <label>{% trans %}user.profile.my_quotes.salesAgent{% endtrans %}</label>
                     {% elseif quote.quoteReference.organizer %}
                         {% if quote.quoteReference.organizer.media %}
                             <span class="tui-image-avatar">
@@ -69,7 +71,9 @@
                             <span class="tui-text-avatar mdl-typography--headline">{{ quote.quoteReference.organizer.username[:1] }}</span>
 
                         {% endif %}
-                        {{ quote.quoteReference.organizer.firstName }} {{ quote.quoteReference.organizer.lastName }}  <br /> {{ quote.quoteReference.organizer.email }}<br /><label>{% trans %}user.profile.my_quotes.organizer{% endtrans %}</label>
+                        {{ quote.quoteReference.organizer.firstName }} {{ quote.quoteReference.organizer.lastName }}  <br /> <a style="text-decoration: none;" href="mailto:{{ quote.quoteReference.organizer.email }}">{{ quote.quoteReference.organizer.email }}</a><br />
+                        <span style="margin-left:57px;"><tel>{{ quote.quoteReference.organizer.phoneNumber }}</tel></span>
+                        <label>{% trans %}user.profile.my_quotes.organizer{% endtrans %}</label>
                     {% endif %}
                 </div>
 

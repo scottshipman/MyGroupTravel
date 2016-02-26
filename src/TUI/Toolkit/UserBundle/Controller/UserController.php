@@ -15,7 +15,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Symfony\Component\Validator\Constraints\Null;
+
 use TUI\Toolkit\UserBundle\Entity\User;
+use TUI\Toolkit\PermissionBundle\Entity\Permission;
+use TUI\Toolkit\PassengerBundle\Entity\Passenger;
+use TUI\Toolkit\TourBundle\Entity\Tour;
 use TUI\Toolkit\UserBundle\Form\ResettingFormType;
 use TUI\Toolkit\UserBundle\Form\UserType;
 use TUI\Toolkit\UserBundle\Form\AjaxuserType;
@@ -283,11 +287,11 @@ class UserController extends Controller
         if ($form->isValid()) {
             $entity->setUsername($entity->getEmail());
             $entity->setPassword('');
-            $entity->setRolesString(implode(', ', $roles));
+            $entity->setRolesString(implode(', ', $entity->getRoles()));
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.save') . $entity->getUsername());
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('user.flash.save') . $entity->getUsername());
 
             return $this->redirect($this->generateUrl('user_show', array('id' => $entity->getId())));
         }
@@ -628,7 +632,7 @@ class UserController extends Controller
             $roles = $entity->getRoles();
             $entity->setRolesString(implode(', ', $roles));
             $em->flush();
-            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.save') . $entity->getUsername());
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('user.flash.save') . $entity->getUsername());
 
             if (null !== $_SESSION['user_edit_return']) {
                 return $this->redirect($_SESSION['user_edit_return']);
@@ -652,6 +656,7 @@ class UserController extends Controller
      */
     public function activateUserAction($token)
     {
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('TUIToolkitUserBundle:User')->findByConfirmationToken($token);
@@ -665,10 +670,16 @@ class UserController extends Controller
         }
         $setForm = $this->createActivateUserForm($entity[0]);
 
+        // Check if the User is an Organizer or Assistant to do funcky stuff
+        $tourOrganizer = $this->get("permission.set_permission")->getObject('organizer', $entity[0], 'tour');
+        $tourAssistant = $this->get("permission.set_permission")->getObject('assistant', $entity[0], 'tour');
+
         return $this->render('TUIToolkitUserBundle:Registration:activation.html.twig', array(
             'form' => $setForm->createView(),
             'user'  => $entity[0],
             'token' => $token,
+            'isOrganizer' => is_array($tourOrganizer) ? array_shift($tourOrganizer): $tourOrganizer,
+            'isAssistant' => is_array($tourAssistant) ? array_shift($tourAssistant) : $tourAssistant,
         ));
     }
 
@@ -710,10 +721,22 @@ class UserController extends Controller
         $setForm = $this->createActivateUserForm($user);
         $setForm->handleRequest($request);
 
+        //Encoder factory for hashing security questions
+        $factory = $this->get('security.encoder_factory');
+        $user_manager = $this->get('fos_user.user_manager');
+        $userObject = $user_manager->loadUserByUsername($user->getUsername());
+        $encoder = $factory->getEncoder($userObject);
+
         if ($setForm->isValid()) {
+
+            //Do some manipulation for encoding the security answer
+            $answer = $setForm->getData()->getAnswer();
+            $answer = trim((strtolower($answer)));
+            $answerHash = $encoder->encodePassword($answer, $user->getSalt());
+
             $user->setPassword($setForm->getData()->getPlainPassword());
             $user->setQuestion($setForm->getData()->getQuestion());
-            $user->setAnswer($setForm->getData()->getAnswer());
+            $user->setAnswer($answerHash);
             $user->setEnabled(true);
             $user->setConfirmationToken(null);
             $em->persist($user);
@@ -734,6 +757,39 @@ class UserController extends Controller
           $loginEvent = new InteractiveLoginEvent($request, $token);
           $this->get("event_dispatcher")
             ->dispatch("security.interactive_login", $loginEvent);
+
+          // check if new user is an assistant or organizer, and allow them to edit their passenger record
+            if ($role = $setForm['role']->getData() ) {
+                // if an assistant, create a passenger record
+                $tour = $em->getRepository('TourBundle:Tour')->find($setForm['tour']->getData());
+                $newPassenger = new Passenger();
+                $newPassenger->setStatus("waitlist");
+                $newPassenger->setFree(false);
+                $newPassenger->setFName($user->getFirstName());
+                $newPassenger->setLName($user->getLastName());
+                $newPassenger->setTourReference($tour);
+                $newPassenger->setGender('undefined');
+                $newPassenger->setDateOfBirth(new \DateTime("1987-01-01"));
+                $newPassenger->setSignUpDate(new \DateTime("now"));
+
+                $em->persist($newPassenger);
+                $em->flush($newPassenger);
+
+                $newPermission = new Permission();
+                $newPermission->setUser($user);
+                $newPermission->setClass('passenger');
+                $newPermission->setGrants('parent');
+                $newPermission->setObject($newPassenger->getId());
+
+
+                $em->persist($newPermission);
+                $em->flush($newPermission);
+                // if an organizer, a passenger record exists so just add a message
+                $baseurl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
+                $tourUrl = $baseurl . "/tour/dashboard/" . $setForm['tour']->getData()  . "/passengers";
+                $tourLink = " <br><a style='color:white;' href='$tourUrl'>$tourUrl</a>";
+                $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('user.flash.register-organizer') . $tourLink);
+            }
 
             return $this->redirect($this->generateUrl('fos_user_profile_show'));
         }
@@ -808,10 +864,18 @@ class UserController extends Controller
         $token = $user->getConfirmationToken();
         $question = $user->getQuestion();
 
+        //Encoder factory for hashing security questions
+        $factory = $this->get('security.encoder_factory');
+        $user_manager = $this->get('fos_user.user_manager');
+        $userObject = $user_manager->loadUserByUsername($user->getUsername());
+        $encoder = $factory->getEncoder($userObject);
+
         if ($setForm->isValid()) {
             $answer = $setForm['answerConfirm']->getData();
-            if(trim(strtolower($answer)) == trim(strtolower($user->getAnswer()))) {
-
+            $answer = trim((strtolower($answer)));
+            $answerHash = $encoder->encodePassword($answer, $user->getSalt());
+            $old_answer = $user->getAnswer();
+            if($answerHash == $old_answer) {
 
                 $user->setPassword($setForm->getData()->getPlainPassword());
                 $user->setConfirmationToken(null);
@@ -828,8 +892,30 @@ class UserController extends Controller
                 $this->get("event_dispatcher")
                     ->dispatch("security.interactive_login", $loginEvent);
 
-                $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.password') . ' ' . $user->getEmail());
+                $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('user.flash.password') . ' ' . $user->getEmail());
                 return $this->redirect($this->generateUrl('fos_user_profile_show'));
+            } else if(trim(strtolower($answer)) == trim(strtolower($user->getAnswer()))) {
+
+                //Set the security question answer to a hashed value if it isn't already
+                $user->setAnswer($answerHash);
+                $user->setPassword($setForm->getData()->getPlainPassword());
+                $user->setConfirmationToken(null);
+                $em->persist($user);
+                $em->flush();
+
+                $token = new UsernamePasswordToken($user, $user->getPassword(),
+                    "public", $user->getRoles());
+
+                $this->get("security.context")->setToken($token);
+
+                // Trigger login event
+                $loginEvent = new InteractiveLoginEvent($request, $token);
+                $this->get("event_dispatcher")
+                    ->dispatch("security.interactive_login", $loginEvent);
+
+                $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('user.flash.password') . ' ' . $user->getEmail());
+                return $this->redirect($this->generateUrl('fos_user_profile_show'));
+
             } else {
                 $setForm->addError(new FormError('Your security answer did not match our records. Please try again, or contact your application\'s contact.'));
             }
@@ -868,9 +954,9 @@ class UserController extends Controller
             if ($this->canDeleteUser($entity->getId())) {
               $em->remove($entity);
               $em->flush();
-              $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.delete') . $id);
+              $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('user.flash.delete') . $id);
             } else {
-              $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.cant_delete'));
+              $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('user.flash.cant_delete'));
             }
 
 
@@ -914,7 +1000,7 @@ class UserController extends Controller
         $entity->setDeleted(NULL);
         $em->persist($entity);
         $em->flush();
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.restore') . ' ' . $entity->getUsername());
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('user.flash.restore') . ' ' . $entity->getUsername());
 
         return $this->redirect($this->generateUrl('user'));
     }
@@ -936,9 +1022,9 @@ class UserController extends Controller
       if ($this->canDeleteUser($entity->getId())) {
         $em->remove($entity);
         $em->flush();
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.delete') . $entity->getUsername());
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('user.flash.delete') . $entity->getUsername());
       } else {
-          $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('user.flash.cant_delete'));
+          $this->get('ras_flash_alert.alert_reporter')->addError($this->get('translator')->trans('user.flash.cant_delete'));
           return $this->redirect($this->generateUrl('user'));
         }
 
@@ -964,9 +1050,9 @@ class UserController extends Controller
         if ($this->canDeleteUser($entity->getId())) {
             $em->remove($entity);
             $em->flush();
-            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.delete') . $entity->getUsername());
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('user.flash.delete') . $entity->getUsername());
         } else {
-            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('user.flash.cant_delete'));
+            $this->get('ras_flash_alert.alert_reporter')->addError($this->get('translator')->trans('user.flash.cant_delete'));
             return $this->redirect($this->generateUrl('user'));
         }
 
@@ -1037,11 +1123,12 @@ class UserController extends Controller
         $em->persist($user);
         $em->flush();
 
-        $mailer->send($message);;
+        $mailer->send($message);
 
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.registration_notification') . ' ' .$user->getEmail());
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('user.flash.registration_notification') . ' ' .$user->getEmail());
 
-        return $this->redirect($this->generateUrl('user'));
+//        return $this->redirect($this->generateUrl('user'));
+      return $this->redirect($_SERVER['HTTP_REFERER']);
 
     }
 
@@ -1109,7 +1196,7 @@ class UserController extends Controller
         $user->setPasswordRequestedAt(new \DateTime());
         $this->get('fos_user.user_manager')->updateUser($user);
 
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.registration_notification') . ' ' . $user->getEmail());
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('user.flash.registration_notification') . ' ' . $user->getEmail());
 
         return $this->redirect($this->generateUrl('user'));
 
@@ -1268,15 +1355,59 @@ class UserController extends Controller
             throw $this->createNotFoundException('Unable to find User entity when submitting security info changes.');
         }
 
-
-
         $question = $entity->getQuestion();
         $securityForm = $this->createSecurityForm($entity);
         $securityForm->handleRequest($request);
 
+        //Encoder factory for hashing security questions
+        $factory = $this->get('security.encoder_factory');
+        $user_manager = $this->get('fos_user.user_manager');
+        $user = $user_manager->loadUserByUsername($entity->getUsername());
+        $encoder = $factory->getEncoder($user);
+
         if ($securityForm->isValid()) {
             $answer = $securityForm['originalAnswer']->getData();
-            if(trim(strtolower($answer)) == trim(strtolower($entity->getAnswer()))) {
+            $answer = trim((strtolower($answer)));
+            $answerHash = $encoder->encodePassword($answer, $user->getSalt());
+            $old_answer = $entity->getAnswer();
+            if($answerHash == $old_answer) {
+                // $entity->setUsername($securityForm->getData()->getEmail());
+                $fields = array();
+                $pw = $securityForm['plainPassword']->getData();
+                $newQuestion = $securityForm['newQuestion']->getData();
+                $newAnswer = $securityForm['newAnswer']->getData();
+
+                if (!empty($pw)){
+                    $entity->setPassword($pw);
+                    $fields[] = 'Password';
+                }
+                if (!empty($newQuestion)){
+                    $entity->setQuestion($newQuestion);
+                    $fields[] = 'Security Question';
+                }
+                if (!empty($newAnswer)){
+                    $newAnswerHash = $encoder->encodePassword($newAnswer, $user->getSalt());
+//                    $hash = $this->$factory->getEncoder($user)->encodePassword($newAnswer, null);
+                    $entity->setAnswer($newAnswerHash);
+                    $fields[] = 'Security Answer';
+                }
+                $em->persist($entity);
+                $em->flush();
+
+                if(count($fields) == 0) {
+                    $msg = "No data was changed.";
+                } else {
+                    $msg = $this->get('translator')
+                            ->trans('user.flash.save') . $entity->getUsername() .  ' for the fields: ' . implode(', ', $fields);
+                }
+
+                $this->get('session')
+                    ->getFlashBag()
+                    ->add('notice', $msg);
+
+
+                return $this->redirect('/profile');
+            } else if(trim(strtolower($answer)) == trim(strtolower($entity->getAnswer()))) {
                 // $entity->setUsername($securityForm->getData()->getEmail());
                 $fields = array();
                 $pw = $securityForm['plainPassword']->getData();
@@ -1398,6 +1529,7 @@ class UserController extends Controller
         // if user is brand or admin, list quotes where they are salesAgent or SecondaryContact
         // if user is customer, list quotes by Permission Entity
         $tours = array();
+        $data = array();
         $securityContext = $this->get('security.context');
         if ($securityContext->isGranted('ROLE_BRAND')) {
             $limit = $this->container->hasParameter('profile_query_limit') ? $this->container->getParameter('profile_query_limit') : 5;
@@ -1421,15 +1553,206 @@ class UserController extends Controller
             // this only returns pointers to tours, so loop through and build tours array
             foreach ($permissions as $permission) {
                 if ($object = $em->getRepository('TourBundle:Tour')->find($permission->getObject())) {
-                    $tours[] = $object;
+                    if ($permission->getGrants() != "parent") {
+                        $tours[] = $object;
+                    }
+
                 }
             }
         }
 
+        $data['tours'] = $tours;
+        $data['locale'] = $locale;
 
-        return $this->render('TUIToolkitUserBundle:User:myTours.html.twig', array(
-            'tours' => $tours,
+        return $this->render('TUIToolkitUserBundle:User:myTours.html.twig', $data);
+    }
+
+
+    public function getToursWithPassengersAction($id){
+        $locale = $this->container->getParameter('locale');
+        // if user is brand or admin, list quotes where they are salesAgent or SecondaryContact
+        // if user is customer, list quotes by Permission Entity
+        $parents = array();
+        $data = array();
+        $em = $this->getDoctrine()->getManager();
+        $passengers = $em->getRepository('PermissionBundle:Permission')->findBy(array('user' => $id, 'class' => 'passenger', 'grants' => 'parent'));
+
+        foreach ($passengers as $passenger) {
+
+            if ($object = $em->getRepository('PassengerBundle:Passenger')->find($passenger->getObject())) {
+                $completedTasks = array();
+                $tour = $em->getRepository('TourBundle:Tour')->find($object->getTourReference()->getId());
+                //Find the possible Passenger Tasks for the tour
+                $possibleTasks = array();
+
+                $medicalTask = $tour->getMedicalDate();
+                $dietaryTask = $tour->getDietaryDate();
+                $emergencyTask = $tour->getEmergencyDate();
+                $passportTask = $tour->getPassportDate();
+
+                if ($tour->getMedicalDate() != null) {
+                    $possibleTasks[] = $medicalTask;
+                }
+                if ($tour->getDietaryDate() != null){
+                    $possibleTasks[] = $dietaryTask;
+                }
+                if ($tour->getEmergencyDate() != null) {
+                    $possibleTasks[] = $emergencyTask;
+                }
+                if ($tour->getPassportDate() != null){
+                    $possibleTasks[] = $passportTask;
+                }
+
+                if (!in_array($tour, $parents)) {
+                    $parents[] = $tour;
+                }
+                //Then find the tasks that the passengers have completed
+                $medical = $object->getMedicalReference();
+                $dietary = $object->getDietaryReference();
+                $emergency = $object->getEmergencyReference();
+                $passport = $object->getPassportReference();
+                if ($medical != null) {
+                    $completedTasks[] = $medical;
+                }
+                if ($dietary != null) {
+                    $completedTasks[] = $dietary;
+                }
+                if ($emergency != null) {
+                    $completedTasks[] = $emergency;
+                }
+                if($passport != null){
+                    $completedTasks[] = $passport;
+                }
+
+                //Grab counts of completed tasks for each passenger
+                $completedTasksCount = count($completedTasks);
+                $object->completedTasks = $completedTasks;
+                $object->completedTasksCount = $completedTasksCount;
+
+                //Grab count of possible tasks
+                $possibleTasksCount = count($possibleTasks);
+                $object->possibleTasks = $possibleTasks;
+                $object->possibleTasksCount = $possibleTasksCount;
+
+                $data['passengerObjects'][] = $object;
+            }
+        }
+
+        foreach ($parents as $parent) {
+            $passengers = array();
+            $possible = '';
+            $completed = '';
+            foreach ($data['passengerObjects'] as $passengerObject) {
+                if ($passengerObject->getTourReference()->getId() == $parent->getId()) {
+                    $passengers[] = $passengerObject;
+                    $completed += $passengerObject->completedTasksCount;
+                    $possible += $passengerObject->possibleTasksCount;
+                }
+            }
+            $parent->passengers = $passengers;
+            $parent->possible = $possible;
+            $parent->completed = $completed;
+        }
+        $data['parents'] = $parents;
+        $data['locale'] = $locale;
+
+        return $this->render('TUIToolkitUserBundle:User:myToursWithPassengers.html.twig', $data);
+    }
+
+    public function getTourPassengersAction($tourId, $parentId){
+        $locale = $this->container->getParameter('locale');
+        $em = $this->getDoctrine()->getManager();
+        $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
+        $user = $em->getRepository('TUIToolkitUserBundle:User')->find($parentId);
+        $totalCompletedTasks = '';
+        $possibleTasks = array();
+
+        $medicalTask = $tour->getMedicalDate();
+        $dietaryTask = $tour->getDietaryDate();
+        $emergencyTask = $tour->getEmergencyDate();
+        $passportTask = $tour->getPassportDate();
+
+        if ($tour->getMedicalDate() != null) {
+            $possibleTasks[] = $medicalTask;
+        }
+        if ($tour->getDietaryDate() != null){
+            $possibleTasks[] = $dietaryTask;
+        }
+        if ($tour->getEmergencyDate() != null) {
+            $possibleTasks[] = $emergencyTask;
+        }
+        if ($tour->getPassportDate() != null){
+            $possibleTasks[] = $passportTask;
+        }
+
+
+        $passengers = $em->getRepository('PermissionBundle:Permission')->findBy(array('user' => $parentId, 'class' => 'passenger'));
+
+        $passengerObjects = array();
+        foreach ($passengers as $passenger) {
+            $object = $em->getRepository('PassengerBundle:Passenger')->find($passenger->getObject());
+            if ($object->getTourReference()->getId() == $tourId) {
+                $passengerObjects[] = $object;
+            }
+        }
+
+        $completedTasksCount = '';
+
+        foreach ($passengerObjects as $passengerObject){
+
+            $completedTasks = array();
+            $medical = $passengerObject->getMedicalReference();
+            $dietary = $passengerObject->getDietaryReference();
+            $emergency = $passengerObject->getEmergencyReference();
+            $passport = $passengerObject->getPassportReference();
+            if ($medical != null) {
+                $completedTasks[] = $medical;
+            }
+            if ($dietary != null) {
+                $completedTasks[] = $dietary;
+            }
+            if ($emergency != null) {
+                $completedTasks[] = $emergency;
+            }
+            if($passport != null){
+                $completedTasks[] = $passport;
+            }
+            $completedTasksCount = count($completedTasks);
+            $passengerObject->completedTasks = $completedTasks;
+
+            $totalCompletedTasks += $completedTasksCount;
+
+        }
+
+        //Get total possible tasks
+        $totalPossibleTasks = count($possibleTasks) * count($passengerObjects);
+        $possibleTasksCount = count($possibleTasks);
+
+
+        //Get all brand stuff
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
+
+        return $this->render('TUIToolkitUserBundle:User:myPassengers.html.twig', array(
+            'entity' => $tour,
+            'tour' => $tour,
+            'user' => $user,
             'locale' => $locale,
+            'brand' => $brand,
+            'passengers' => $passengers,
+            'passengerObjects' => $passengerObjects,
+            'totalCompletedTasks' => $totalCompletedTasks,
+            'totalPossibleTasks' => $totalPossibleTasks,
+            'possibleTasks' => $possibleTasks,
+            'possibleTasksCount' => $possibleTasksCount,
         ));
     }
 
@@ -1444,22 +1767,22 @@ class UserController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
-            return TRUE;
-        }
-        $permissions = $em->getRepository('PermissionBundle:Permission')->findOneBy(array('user' => $id));
-        $primary_organizerq = $em->getRepository('QuoteBundle:Quote')->findOneBy(array('organizer' => $id));
-        $primary_adminq = $em->getRepository('QuoteBundle:Quote')->findOneBy(array('salesAgent' => $id));
-        $secondary_adminq = $em->getRepository('QuoteBundle:Quote')->findOneBy(array('secondaryContact' => $id));
-        $primary_organizert = $em->getRepository('TourBundle:Tour')->findOneBy(array('organizer' => $id));
-        $primary_admint = $em->getRepository('TourBundle:Tour')->findOneBy(array('salesAgent' => $id));
-        $secondary_admint = $em->getRepository('TourBundle:Tour')->findOneBy(array('secondaryContact' => $id));
 
-        if ($primary_organizerq || $primary_adminq || $secondary_adminq || $primary_organizert || $primary_admint || $secondary_admint || $permissions) {
-            //$this->get('session')->getFlashBag()->add('error', 'Unable to delete the User because they are associated with Quotes or Tours');
-            //return $this->redirect($this->generateUrl('user'));
-            return false;
-        } else {
-            return true;
+            $permissions = $em->getRepository('PermissionBundle:Permission')->findOneBy(array('user' => $id));
+            $primary_organizerq = $em->getRepository('QuoteBundle:Quote')->findOneBy(array('organizer' => $id));
+            $primary_adminq = $em->getRepository('QuoteBundle:Quote')->findOneBy(array('salesAgent' => $id));
+            $secondary_adminq = $em->getRepository('QuoteBundle:Quote')->findOneBy(array('secondaryContact' => $id));
+            $primary_organizert = $em->getRepository('TourBundle:Tour')->findOneBy(array('organizer' => $id));
+            $primary_admint = $em->getRepository('TourBundle:Tour')->findOneBy(array('salesAgent' => $id));
+            $secondary_admint = $em->getRepository('TourBundle:Tour')->findOneBy(array('secondaryContact' => $id));
+
+            if ($primary_organizerq || $primary_adminq || $secondary_adminq || $primary_organizert || $primary_admint || $secondary_admint || $permissions) {
+                //$this->get('session')->getFlashBag()->add('error', 'Unable to delete the User because they are associated with Quotes or Tours');
+                //return $this->redirect($this->generateUrl('user'));
+                return false;
+            } else {
+                return true;
+            }
         }
     }
 
@@ -1524,17 +1847,22 @@ class UserController extends Controller
         $permission = $em->getRepository('PermissionBundle:Permission')->findBy(array('user' => $user[0]));
 
           if(empty($permission)) {
-              $role = 'participant';
+              $role = 'parent';
           } else {
              $role = $permission[0]->getGrants();
           }
         if ($role =='organizer'){
           $msg = $this->get('translator')->trans('user.activate.organizer');
         }
-        if ($role == 'participant' ){
+          if ($role =='assistant'){
+              $msg = $this->get('translator')->trans('user.activate.assistant');
+          }
+
+        if ($role == 'parent' ){
           $msg = $this->get('translator')->trans('user.activate.participant');
         }
       }
+
       return $this->render('TUIToolkitUserBundle:Resetting:welcomeMessage.html.twig', array(
         'message' => $msg,
       ));

@@ -1,0 +1,30 @@
+{% if passenger is not defined %}{% set passengerId = entity.id %}{% elseif passenger is defined %}{% set passengerId =  passenger[0].id %}{% endif %}
+{% if passenger is not defined %}{% set passengerStatus = entity.status %}{% elseif passenger is defined %}{% set passengerStatus =  passenger[0].status %}{% endif %}
+{% if passenger is not defined %}{% set tourId = entity.tourReference.id %}{% elseif passenger is defined %}{% set tourId =  tour.id %}{% endif %}
+{% if passenger is not defined %}{% set free = entity.free %}{% elseif passenger is defined %}{% set free =  passenger[0].free %}{% endif %}
+
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="passenger-actions-menu-drop-{{ passengerId }}">
+    <span>
+        <li><a href="{{ path('manage_passenger_show', { 'id': passengerId }) }}" class="mdl-menu__item">{% trans %}passenger.actions.view_passenger{% endtrans %}</a></li>
+       {# Accepted Menu Item #}
+        {% if passengerStatus == "waitlist" or free == TRUE %}
+            <li><a href="#accepted" style="display: block;"class="mdl-menu__item move-to-accepted" tour="{{ tourId }}" passenger="{{ passengerId }}">Move to {{ "accepted" | paxLabel }}</a></li>
+        {% else %}
+            <li><a href="#accepted" style="display: none;"class="mdl-menu__item move-to-accepted" tour="{{ tourId }}" passenger="{{ passengerId }}">Move to {{ "accepted" | paxLabel }}</a></li>
+         {% endif %}
+
+        {# Waitlist Menu Item #}
+        {% if passengerStatus != "waitlist" %}
+            <li><a href="#waitlist" style="display: block;" class="mdl-menu__item move-to-waitlist" tour="{{ tourId }}" passenger="{{ passengerId }}">Move to {{ "waitlist" | paxLabel }}</a></li>
+        {%  else %}
+            <li><a href="#waitlist" style="display: none;" class="mdl-menu__item move-to-waitlist" tour="{{ tourId }}" passenger="{{ passengerId }}">Move to {{ "waitlist" | paxLabel }}</a></li>
+        {% endif %}
+
+        {# Free Menu Item #}
+        {% if free == false %}
+            <li><a style="display: block;" href="#free" class="mdl-menu__item move-to-free" tour="{{ tourId }}" passenger="{{ passengerId }}">Move to {{ "free" | paxLabel }}</a></li>
+        {% else %}
+            <li><a style="display: none;" href="#free" class="mdl-menu__item move-to-free" tour="{{ tourId }}" passenger="{{ passengerId }}">Move to {{ "free" | paxLabel }}</a></li>
+        {% endif %}
+    </span>
+</ul>

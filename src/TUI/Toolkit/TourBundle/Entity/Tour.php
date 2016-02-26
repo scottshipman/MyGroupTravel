@@ -18,7 +18,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @UniqueEntity(fields={"quoteNumber"}, message="This Quote Number already exists on another Tour.", ignoreNull=true)
  *
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
- * @GRID\Source(columns="id, institution_full, institution.name, institution.city, name, quoteNumber, tripStatus.name, created, destination, quoteReference.id, organizer_full, salesAgent_full, salesAgent_name, salesAgent.firstName, salesAgent.lastName,  salesAgent.email, organizer.firstName, organizer.lastName, organizer.email, views, deleted, locked,  tourReference, duration, displayName, expiryDate, transportType.name, boardBasis.name, freePlaces, payingPlaces, departureDate, returnDate, pricePerson,  pricePersonPublic, currency.name, status, passengerDate, passportDate, medicalDate, dietaryDate, cashPayment, cashPaymentDescription, bankTransferPayment, bankTransferPaymentDescription, onlinePayment, onlinePaymentDescription, otherPayment, otherPaymentDescription", filterable=false, sortable=true)
+ * @GRID\Source(columns="id, institution_full, institution.name, institution.city, name, quoteNumber, tripStatus.name, created, destination, quoteReference.id, organizer_full, salesAgent_full, salesAgent_name, salesAgent.firstName, salesAgent.lastName,  salesAgent.email, organizer.firstName, organizer.lastName, organizer.email, views, deleted, locked,  tourReference, duration, displayName, expiryDate, transportType.name, boardBasis.name, freePlaces, payingPlaces, departureDate, returnDate, pricePerson,  pricePersonPublic, currency.name, status, emergencyDate, passportDate, medicalDate, dietaryDate, cashPayment, cashPaymentDescription, bankTransferPayment, bankTransferPaymentDescription, onlinePayment, onlinePaymentDescription, otherPayment, otherPaymentDescription", filterable=false, sortable=true)
  * @GRID\Column(id="organizer_full", type="join", columns = {"organizer.firstName", "organizer.lastName", "organizer.email"}, title="Organizer", export=false, filterable=false, operatorsVisible=false)
  * @GRID\Column(id="salesAgent_full",  type="join", columns = {"salesAgent.firstName", "salesAgent.lastName", "salesAgent.email"}, title="Primary Business Admin", export=false, filterable=false, operatorsVisible=false)
  * @GRID\Column(id="salesAgent_name",  type="join", columns = {"salesAgent.firstName", "salesAgent.lastName"}, title="Primary Business Admin", export=false, filterable=false, operatorsVisible=false)
@@ -350,6 +350,13 @@ class Tour
     /**
      * @var integer
      *
+     * @ORM\Column(name="registrations", type="integer")
+     */
+    private $registrations;
+
+    /**
+     * @var integer
+     *
      * @ORM\ManyToMany(targetEntity="TUI\Toolkit\TourBundle\Entity\PaymentTask", cascade={"persist", "remove"}, orphanRemoval = true)
      * @ORM\JoinColumn(name="paymenttasks", referencedColumnName="id")
      */
@@ -374,10 +381,10 @@ class Tour
     /**
      * @var DateTime
      *
-     * @ORM\Column(name="passengerDate", type="date", nullable=true)
+     * @ORM\Column(name="emergencyDate", type="date", nullable=true)
      * @GRID\Column(title="Passenger Info Due Date", export=true)
      */
-    private $passengerDate;
+    private $emergencyDate;
 
     /**
      * @var DateTime
@@ -1222,7 +1229,7 @@ class Tour
      * Set views
      *
      * @param integer $views
-     * @return Quote
+     * @return Tour
      */
     public function setViews($views)
     {
@@ -1239,6 +1246,29 @@ class Tour
     public function getViews()
     {
       return $this->views;
+    }
+
+    /**
+     * Set registrations
+     *
+     * @param integer $views
+     * @return Tour
+     */
+    public function setRegistrations($registrations)
+    {
+        $this->registrations = $registrations;
+
+        return $this;
+    }
+
+    /**
+     * Get registrations
+     *
+     * @return integer
+     */
+    public function getRegistrations()
+    {
+        return $this->registrations;
     }
 
     /**
@@ -1269,26 +1299,26 @@ class Tour
 
 
     /**
-     * Set passengerDate
+     * Set emergencyDate
      *
-     * @param \DateTime $passengerDate
+     * @param \DateTime $emergencyDate
      * @return Tour
      */
-    public function setPassengerDate($passengerDate)
+    public function setEmergencyDate($emergencyDate)
     {
-      $this->passengerDate = $passengerDate;
+      $this->emergencyDate = $emergencyDate;
 
       return $this;
     }
 
     /**
-     * Get passengerDate
+     * Get $emergencyDate
      *
      * @return \DateTime
      */
-    public function getPassengerDate()
+    public function getEmergencyDate()
     {
-      return $this->passengerDate;
+      return $this->emergencyDate;
     }
 
     /**

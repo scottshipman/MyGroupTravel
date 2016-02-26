@@ -80,7 +80,7 @@ class TourController extends Controller
             'pricePerson',
             'pricePersonPublic',
             'currency.name',
-            'passengerDate',
+            'emergencyDate',
             'passportDate',
             'medicalDate',
             'dietaryDate',
@@ -244,7 +244,7 @@ class TourController extends Controller
           'pricePerson',
           'pricePersonPublic',
           'currency.name',
-          'passengerDate',
+          'emergencyDate',
           'passportDate',
           'medicalDate',
           'dietaryDate',
@@ -410,7 +410,7 @@ class TourController extends Controller
             $em->flush();
             // Create organizer permission
             $permission = $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
-            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tour.flash.save') . $entity->getName());
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.save') . $entity->getName());
 
             return $this->redirect($this->generateUrl('manage_tour'));
         }
@@ -478,14 +478,21 @@ class TourController extends Controller
         $editable = FALSE;
         $permission = array();
 
+        //Check to see if the user is allowed to view the dashboard
+
         $securityContext = $this->get('security.context');
         $user = $securityContext->getToken()->getUser();
         if ($user != 'anon.') {
             $permission = $this->get("permission.set_permission")->getPermission($id, 'tour', $user->getId());
         }
 
-        if ($securityContext->isGranted('ROLE_BRAND') || in_array('organizer', $permission)) {
-          $editable = TRUE;
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            if ($permission != null && !in_array('organizer', $permission) && !in_array('assistant', $permission)) {
+                throw $this->createAccessDeniedException('You are not authorized to view this tour!');
+            }
+            elseif ($permission == null ) {
+                throw $this->createAccessDeniedException('You are not authorized to view this tour!');
+            }
         }
 
         $em = $this->getDoctrine()->getManager();
@@ -757,7 +764,7 @@ class TourController extends Controller
 
         //Handling the request for institution a little different than we did for the other 2.
         $institutionParts = explode(' - ', $editForm->getData()->getInstitution());
-        if (count($institutionParts) == 2 ) {
+            if (count($institutionParts) == 2 ) {
             $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findBy(
                 array('name' => $institutionParts[0], 'city' => $institutionParts[1])
             );
@@ -837,7 +844,7 @@ class TourController extends Controller
             $em->persist($entity);
             $em->flush();
             $permission = $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
-            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tour.flash.save') . $entity->getName());
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.save') . $entity->getName());
             if ( $entity->getSetupComplete() == false and $entity->getIsComplete() == false) {
 
                 return $this->redirect($this->generateUrl('tour_site_show', array('id' => $entity->getId(), 'quoteNumber' => $entity->getQuoteNumber())));
@@ -914,7 +921,7 @@ class TourController extends Controller
 
             $em->remove($entity);
             $em->flush();
-            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tour.flash.delete') . $entity->getName());
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.delete') . $entity->getName());
 
         }
 
@@ -958,7 +965,7 @@ class TourController extends Controller
         }
         $em->remove($tour);
         $em->flush();
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tour.flash.delete') . $tour->getName());
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.delete') . $tour->getName());
 
         return $this->redirect($this->generateUrl('manage_tour'));
     }
@@ -981,7 +988,7 @@ class TourController extends Controller
         }
         $em->remove($tour);
         $em->flush();
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('user.flash.delete'). ' ' . $tour->getName());
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('user.flash.delete'). ' ' . $tour->getName());
 
         return $this->redirect($this->generateUrl('manage_tour'));
     }
@@ -1024,7 +1031,7 @@ class TourController extends Controller
         $tour->setDeleted(NULL);
         $em->persist($tour);
         $em->flush();
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tour.flash.restore') . $tour->getName());
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.restore') . $tour->getName());
 
         return $this->redirect($this->generateUrl('manage_tour'));
     }
@@ -1053,7 +1060,7 @@ class TourController extends Controller
         $tour->setLocked($status);
         $em->persist($tour);
         $em->flush();
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tour.flash.lock'));
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.lock'));
 
         return new Response(json_encode((array)$tour));
 
@@ -1082,7 +1089,7 @@ class TourController extends Controller
         $tour->setLocked($status);
         $em->persist($tour);
         $em->flush();
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tour.flash.lock'));
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.lock'));
 
         return $this->redirect($this->generateUrl('manage_tour'));
 
@@ -1210,17 +1217,52 @@ class TourController extends Controller
           $brand = $default_brand;
         }
 
-        //get number of wait listed
-        $passengers = $em->getRepository('PassengerBundle:Passenger')->findByTourReference($entity);
-        $waitlist = 0;
-        $accepted = 0;
-        foreach ($passengers as $passenger) {
-            if ($passenger->getStatus() == "waitlist") {
-                $waitlist++;
+        //Get Waitlist Passengers
+        $waitListUsers = $this->get("passenger.actions")->getPassengersByStatus('waitlist', $id);
+        $waitlist = count($waitListUsers);
+
+        //Get Accepted Passengers
+        $acceptedUsers = $this->get("passenger.actions")->getPassengersByStatus('accepted', $id);
+        $accepted = count($acceptedUsers);
+
+        //Get free passengers
+        $free = $this->get("passenger.actions")->getPassengersByStatus('free', $id);
+        $free = count($free);
+
+        //Get Organizers
+        $organizerCount = $this->get("permission.set_permission")->getUser('organizer', $entity->getId(), 'tour');
+        $assistantCount = $this->get("permission.set_permission")->getUser('assistant', $entity->getId(), 'tour');
+        $totalOrganizerCount = count($organizerCount) + count($assistantCount);
+
+
+        //Real Accepted Passenger Count
+        $accepted = $accepted - $free;
+
+        $completedPassengerData = array();
+        $medical = array();
+        $dietary = array();
+        $emergency = array();
+        $passport = array();
+
+        $completedPassengerData = array('medical' => $medical, 'dietary' => $dietary, 'emergency' => $emergency, 'passport' => $passport);
+
+        //Get Accepted Users with completed medical information
+        foreach ($acceptedUsers as $acceptedUser) {
+
+            if ($acceptedUser->getMedicalReference() != null) {
+                $completedPassengerData['medical'][] = $acceptedUser;
             }
-            else if ($passenger->getStatus() == "accepted"){
-                $accepted++;
+            if ($acceptedUser->getDietaryReference() != null) {
+                $completedPassengerData['dietary'][] = $acceptedUser;
             }
+            if ($acceptedUser->getEmergencyReference() != null) {
+                $completedPassengerData['emergency'][] = $acceptedUser;
+            }
+            if ($acceptedUser->getPassportReference() != null) {
+                $completedPassengerData['passport'][] = $acceptedUser;
+            }
+
+
         }
 
         return $this->render('TourBundle:Tour:completedandsetup.html.twig', array(
@@ -1231,6 +1273,9 @@ class TourController extends Controller
             'brand' => $brand,
             'waitlist' => $waitlist,
             'accepted' => $accepted,
+            'free' => $free,
+            'completedPassengerData' => $completedPassengerData,
+            'totalOrganizerCount' => $totalOrganizerCount,
         ));
 
     }
@@ -1373,11 +1418,11 @@ class TourController extends Controller
         if ($setupForm->isValid()) {
             $em->flush();
             $permission = $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
-            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tour.flash.save') . $entity->getName());
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.save') . $entity->getName());
             return $this->redirect($this->generateUrl('manage_tour_show', array('id' => $id)));
         }
 
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tour.flash.not_saved') . $entity->getName());
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.not_saved') . $entity->getName());
         return $this->redirect($this->generateUrl('manage_tour_show', array('id' => $id)));
 
 
@@ -1538,7 +1583,7 @@ class TourController extends Controller
         $em->persist($entity);
         $em->flush();
         $this->get('mailer')->send($message);
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tour.flash.registration_notification') . " " . $organizerEmail);
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.registration_notification') . " " . $organizerEmail);
 
 
     return $this->redirect($this->generateUrl('manage_tour'));

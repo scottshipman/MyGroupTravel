@@ -5,8 +5,7 @@ namespace TUI\Toolkit\UserBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use libphonenumber\PhoneNumberUtils;
-use libphonenumber\PhoneNumberFormat;
+
 
 class ActivateUserType extends AbstractType
 {
@@ -40,6 +39,13 @@ class ActivateUserType extends AbstractType
             'mapped' => FALSE,
             'required' => TRUE,
           ))
+            // Add these for when an Organizer is registering
+            ->add('role', 'hidden', array(
+                'mapped' => FALSE,
+            ))
+            ->add('tour', 'hidden', array(
+                'mapped' => FALSE,
+            ))
         ;
     }
 

@@ -1,0 +1,26 @@
+<div class="organizer-form-container" style="display:none; border:1px solid grey; padding:1em;">
+    <div style="right:1em; position:absolute;"><i class="fa fa-times-circle fa-2 hide-invite-form" style="float:right;"></i></div>
+    <p class="organizer-dashboard-copy">{% trans %}passenger.labels.invite-text{% endtrans %}</p>
+    <div style="clear: both"></div>
+    <div id="invite-organizer-form"  class="invite-organizer-form">
+        {{ form_start(form) }}
+        <span class="errors">
+            {{ form_errors(form) }}
+        </span>
+        <span>
+            {{ form_row(form.email) }}
+        </span>
+        <span style="display:inline;">
+            {{ form_row(form.firstname) }}
+            {{ form_row(form.lastname) }}
+        </span>
+        <span>
+            {{ form_row(form.message) }}
+        </span>
+        {{ form_row(form.tourId) }}
+        {{ form_row(form.submit) }}
+        {# <a href="" class="hide-invite-form mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons">Cancel</a>#}
+        {{ form_end(form) }}
+    </div>
+</div>
+

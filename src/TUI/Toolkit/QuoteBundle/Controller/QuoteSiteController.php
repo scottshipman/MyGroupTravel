@@ -179,7 +179,19 @@ class QuoteSiteController extends Controller
     $query = $qb->getQuery();
     $relatedQuotes = $query->getResult();
     if(count($relatedQuotes) > 1){
-      $related=TRUE;
+        // more than one Quote, now get count of quote versions that Arent current Quote
+        $relatedLength = 0;
+        foreach($relatedQuotes as $relatedQuote) {
+            $rqr = $relatedQuote->getID();
+            if ($rqr != $qr) {
+                $relatedVersions = $em->getRepository('QuoteBundle:QuoteVersion')
+                    ->findBy(array('quoteReference' => $relatedQuote));
+                $relatedLength = $relatedLength + count($relatedVersions);
+            }
+        }
+        if ($relatedLength > 0) {
+            $related = TRUE;
+        }
     }
 
 
@@ -239,7 +251,7 @@ class QuoteSiteController extends Controller
       return $this->redirect($this->generateUrl('quote_site_show', array('id' => $id, 'quoteNumber' => $realQuoteNumber)));
     } else {
     //send back to form page
-      $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.exception.prompt_error'));
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('quote.exception.prompt_error'));
       return $this->redirect($this->generateUrl('quote_site_action_show', array('id' => $id)));
   }
 
@@ -397,7 +409,7 @@ class QuoteSiteController extends Controller
         }
 
 
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.change_request') . ' '. $tourName);
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('quote.flash.change_request') . ' '. $tourName);
 
         return $this->redirect($this->generateUrl('quote_site_show', array('id' => $id, "quoteNumber" => $entity->getQuoteNumber())));
 
@@ -506,7 +518,7 @@ class QuoteSiteController extends Controller
             $this->get('mailer')->send($message);
         }
 
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.liked') . ' ' . $tourName );
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('quote.flash.liked') . ' ' . $tourName );
 
         return $this->redirect($this->generateUrl('quote_site_show', array('id' => $id, "quoteNumber" => $entity->getQuoteNumber())));
 
@@ -616,7 +628,7 @@ class QuoteSiteController extends Controller
       );
 
 
-      $quoteNumber = $entity->getQuoteNumber();
+      $fileNameFinal = $entity->getQuoteNumber()? $entity->getQuoteNumber() : 'template-' . $id;
       $html = $this->renderView( 'QuoteBundle:QuoteSite:quotePDF.html.twig', $data );
 
 
@@ -624,7 +636,7 @@ class QuoteSiteController extends Controller
           200,
           array(
           'Content-Type' => 'application/pdf',
-          'Content-Disposition'   => 'attachment; filename="' . $quoteNumber . '.pdf"',
+          'Content-Disposition'   => 'attachment; filename="' . $fileNameFinal . '.pdf"',
       ));
     }
 
@@ -792,6 +804,7 @@ class QuoteSiteController extends Controller
   public function updateSummaryAction(Request $request, $id)
   {
     $date_format = $this->container->getParameter('date_format');
+    $template = "";
     $em = $this->getDoctrine()->getManager();
     $entity = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
     if (!$entity) {
@@ -813,10 +826,9 @@ class QuoteSiteController extends Controller
 
     }
 
-    return $this->render('QuoteBundle:QuoteVersion:editSummary.html.twig', array(
+    return $this->render('QuoteBundle:QuoteSite:editSummary.html.twig', array(
       'entity' => $entity,
       'edit_form' => $editForm->createView(),
-      'delete_form' => $deleteForm->createView(),
       'template' => $template,
       'date_format' => $date_format,
     ));

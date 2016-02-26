@@ -405,8 +405,6 @@ class QuoteVersionController extends Controller
                 $query
                     //->andWhere($tableAlias . '.ts IS NULL')
                     ->andWhere($tableAlias . ".deleted IS NOT NULL");
-                $dql = $query->getDql();
-                $foo = '';
             }
         );
 
@@ -428,6 +426,34 @@ class QuoteVersionController extends Controller
         $deleteAction = new RowAction('Delete', 'manage_quote_hard_delete');
         $deleteAction->setRole('ROLE_BRAND');
         $deleteAction->setConfirm(true);
+        $deleteAction->manipulateRender(
+            function ($action, $row) { // business rule is only admins can edit locked quotes
+                if ($row->getField('converted') == TRUE) {
+                    $em = $this->getDoctrine()->getManager();
+                    $tours = $em->getRepository('TourBundle:Tour')->findBy(array("quoteVersionReference" => $row->getField('id')));
+                    if ($tours) {
+                        return null;
+                    }
+                }
+                if ($row->getField('quoteReference.salesAgent.email') == TRUE) {
+                    $agentEmail = $this->get('security.context')
+                        ->getToken()
+                        ->getUser()
+                        ->getEmail();
+                    if ($row->getField('quoteReference.salesAgent.email') == $agentEmail and $this->get('security.authorization_checker')
+                            ->isGranted('ROLE_BRAND')
+                    ) {
+                        return $action;
+                    }
+                    elseif ($this->get('security.authorization_checker')
+                        ->isGranted('ROLE_ADMIN')
+                    ) {
+                        return $action;
+                    }
+                }
+                return null;
+            }
+        );
         $grid->addRowAction($deleteAction);
 
         // add business admin last name filter
@@ -716,7 +742,7 @@ class QuoteVersionController extends Controller
             $em->flush();
             // Create organizer permission
             $permission = $this->get("permission.set_permission")->setPermission($entity->getQuoteReference()->getId(), 'quote', $entity->getQuoteReference()->getOrganizer(), 'organizer');
-            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.save') . ' ' . $entity->getName());
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('quote.flash.save') . ' ' . $entity->getName());
 
             return $this->redirect($this->generateUrl('manage_quote_show', array('id' => $entity->getId())));
         }
@@ -754,7 +780,7 @@ class QuoteVersionController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.save_template'). ' ' . $entity->getName());
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('quote.flash.save_template'). ' ' . $entity->getName());
 
             return $this->redirect($this->generateUrl('manage_quote_templates'));
         }
@@ -1070,6 +1096,7 @@ class QuoteVersionController extends Controller
 
         $cloneForm = $this->createCloneForm($new_entity);
         $date_format = $this->container->getParameter('date_format');
+        $this->get('session')->set('cloneSourceId', $original_entity->getId());
 
         return $this->render('QuoteBundle:QuoteVersion:edit.html.twig', array(
             'entity' => $new_entity,
@@ -1116,6 +1143,7 @@ class QuoteVersionController extends Controller
 
         $cloneForm = $this->createCloneForm($new_entity);
         $date_format = $this->container->getParameter('date_format');
+        $this->get('session')->set('cloneSourceId', $original_entity->getId());
 
         return $this->render('QuoteBundle:QuoteVersion:edit.html.twig', array(
             'entity' => $new_entity,
@@ -1305,10 +1333,10 @@ class QuoteVersionController extends Controller
                 $em->persist($new_entity);
                 $em->flush($new_entity);
                 $permission = $this->get("permission.set_permission")->setPermission($new_entity->getQuoteReference()->getId(), 'quote', $new_entity->getQuoteReference()->getOrganizer(), 'organizer');
-                $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.save') . ' ' . $new_entity->getName());
+                $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('quote.flash.save') . ' ' . $new_entity->getName());
                 return $this->redirect($this->generateUrl('manage_quote' . $route));
             }
-            $this->get('session')->getFlashBag()->add('error', $message);
+            $this->get('ras_flash_alert.alert_reporter')->addError($message);
             return $this->render('QuoteBundle:QuoteVersion:edit.html.twig', array(
                 'entity' => $entity,
                 'edit_form' => $editForm->createView(),
@@ -1335,7 +1363,7 @@ class QuoteVersionController extends Controller
 
             }
 
-            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.save') . ' ' . $entity->getName());
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('quote.flash.save') . ' ' . $entity->getName());
             return $this->redirect($this->generateUrl('manage_quote_show', array('id' => $entity->getId())));
         }
 
@@ -1356,7 +1384,7 @@ class QuoteVersionController extends Controller
     public function cloneUpdateAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-
+        $logger = $this->get('logger');
         $entity = new QuoteVersion();
         $cloneform = $this->createCloneForm($entity);
         $cloneform->handleRequest($request);
@@ -1439,9 +1467,12 @@ class QuoteVersionController extends Controller
         //}
 
         // clone the content blocks, but first load the original entity since we never did that - only used form values
-        $pathArr = explode('/', $_SERVER['HTTP_REFERER']);
-        if (is_numeric($pathArr[5])) {
-            $originalEntity = $em->getRepository('QuoteBundle:QuoteVersion')->find($pathArr[5]);
+//        $pathArr = explode('/', $_SERVER['HTTP_REFERER']);
+//        if (is_numeric($pathArr[5])) {
+        $originalEntityId = $this->get('session')->get('cloneSourceId');
+        if($originalEntityId){
+            $originalEntity = $em->getRepository('QuoteBundle:QuoteVersion')->find($originalEntityId);
+            if($originalEntity) {
             $entity->setContent($this->cloneContentBlocks($originalEntity->getContent()));
 
             // And clone the Header block if it has one
@@ -1450,18 +1481,48 @@ class QuoteVersionController extends Controller
                 $entity->setHeaderBlock($this->cloneHeaderBlock($headerBlock));
             }
         }
+        } else {
+
+            $logger->error('cloneSourceID session var appears to be invalid for cloning Content: ' . $originalEntityId);
+        }
 
 
         if ($cloneform->isValid()) {
+
+            //make sure there isnt a soft-deleted version of the quote ref first
+            // a sql error occurs because doctrine cant enforce constraint on soft-deleted item but SQL will
+            $filters = $em->getFilters();
+            $filters->disable('softdeleteable');
+            $qn = $cloneform->getData()->getQuoteNumber();
+            $query = $em->createQuery(
+                'select q
+                from QuoteBundle:QuoteVersion q
+                where q.quoteNumber = :qn')
+                ->setParameter('qn', $qn);
+            $deletedQuotes= $query->getResult();
+
+
+            if ($deletedQuotes) {
+                $filters->enable('softdeleteable');
+                $this->get('ras_flash_alert.alert_reporter')->addError(
+                    $this->get('translator')->trans('quote.flash.soft_delete') . ' <br>QuoteNumber: ' . $deletedQuotes[0]->getQuoteNumber() . ' - id # :' . $deletedQuotes[0]->getId() );
+                goto error;
+            }
+
+
+
+
+
             $em->persist($entity);
             $em->flush();
             $permission = $this->get("permission.set_permission")->setPermission($entity->getQuoteReference()->getId(), 'quote', $entity->getQuoteReference()->getOrganizer(), 'organizer');
-            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.save') . ' ' . $entity->getName());
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('quote.flash.save') . ' ' . $entity->getName());
 
 
             return $this->redirect($this->generateUrl('manage_quote_show', array('id' => $entity->getId())));
         }
 
+        error:
         $date_format = $this->container->getParameter('date_format');
         return $this->render('QuoteBundle:QuoteVersion:edit.html.twig', array(
             'entity' => $entity,
@@ -1490,7 +1551,7 @@ class QuoteVersionController extends Controller
 
             $em->remove($entity);
             $em->flush();
-            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.delete') . ' ' . $entity->getName());
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('quote.flash.delete') . ' ' . $entity->getName());
 
         }
 
@@ -1533,7 +1594,7 @@ class QuoteVersionController extends Controller
         }
         $em->remove($quoteVersion);
         $em->flush();
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.delete'). ' ' . $quoteVersion->getName());
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('quote.flash.delete'). ' ' . $quoteVersion->getName());
 
         return $this->redirect($this->generateUrl('manage_quote'));
     }
@@ -1556,7 +1617,7 @@ class QuoteVersionController extends Controller
         }
         $em->remove($quoteVersion);
         $em->flush();
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.delete'). ' ' . $quoteVersion->getName());
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('quote.flash.delete'). ' ' . $quoteVersion->getName());
 
         return $this->redirect($this->generateUrl('manage_quote'));
     }
@@ -1599,7 +1660,7 @@ class QuoteVersionController extends Controller
         $quoteVersion->setDeleted(NULL);
         $em->persist($quoteVersion);
         $em->flush();
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.restore'). ' ' . $quoteVersion->getName());
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('quote.flash.restore'). ' ' . $quoteVersion->getName());
 
         return $this->redirect($this->generateUrl('manage_quote'));
     }
@@ -1628,7 +1689,7 @@ class QuoteVersionController extends Controller
         $quoteVersion->setLocked($status);
         $em->persist($quoteVersion);
         $em->flush();
-        // $this->get('session')->getFlashBag()->add('notice', 'Quote Lock has been toggled ');
+        // $this->get('ras_flash_alert.alert_reporter')->addSuccess('Quote Lock has been toggled ');
 
         return new Response(json_encode((array)$quoteVersion));
 
@@ -1685,7 +1746,7 @@ class QuoteVersionController extends Controller
         $quoteVersion->setLocked($status);
         $em->persist($quoteVersion);
         $em->flush();
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.lock'));
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('quote.flash.lock'));
 
         return $this->redirect($this->generateUrl('manage_quote'));
 
@@ -1725,6 +1786,8 @@ class QuoteVersionController extends Controller
                     }
                 }
             }
+        } else {
+            $logger->error('Content Block appears to be empty during QuoteVersion Clone process.');
         }
 
         return $newContentArray;

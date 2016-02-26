@@ -7,6 +7,8 @@ if ( typeof CKEDITOR != 'undefined' ) {
 
     CKEDITOR.editorConfig = function (config) {
         // Define changes to default configuration here. For example:
+        config.disableNativeSpellChecker = false;
+        config.extraAllowedContent = 'span;ul;li;table;td;style;*[id];*(*);*{*}';
         config.embed_provider = 'https://noembed.com/embed?url={url}&callback={callback}';
         config.stylesSet = [
             {"name": "Normal Text", "element": "p", "styles": {"color": "rgba(0, 0, 0, 0.87)"}},
@@ -38,7 +40,9 @@ if ( typeof CKEDITOR != 'undefined' ) {
                 "name": "Green Heading",
                 "element": "p",
                 "styles": {"margin": "0 0 15px", "padding": "0", "color": "#92b73e", "font-size": "18px"}
-            }
+            },
+            { "name" : "Float Left", "element" : "p", "styles" : { "float" : "left", "width" : "50%" } },
+            { "name" : "Float Right          ", "element" : "p", "styles" : { "float" : "right", "width" : "50%" } }
 
         ];
 

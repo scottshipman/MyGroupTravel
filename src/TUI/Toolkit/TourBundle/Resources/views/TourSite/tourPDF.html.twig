@@ -1,0 +1,211 @@
+<html class="pdf">
+<head>
+
+    <base href="{{ app.request.getSchemeAndHttpHost() }}">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+    {# Google Material Design (Lite) Stuff #}
+    <script src="https://storage.googleapis.com/code.getmdl.io/1.0.0/material.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.7.0/spectrum.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.6.1/spectrum.min.css">
+
+    <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.0/material.indigo-pink.min.css">
+
+    {% stylesheets filter="compass" "@AppBundle/Resources/assets/css/sass/main.scss" %}
+    <link rel="stylesheet" type="text/css" href="{{ absolute_url(asset_url) }}"/>
+    {% endstylesheets %}
+
+    {{ render(controller('BrandBundle:Default:colors')) }}
+
+    <style type="text/css" media="screen,print">
+        .break{
+            display: block;
+            clear: both;
+            page-break-after: always;
+        }
+
+        .content-block h2 {
+            font-size: 22px;;
+        }
+    </style>
+
+
+</head>
+
+{% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
+
+{% block sub_header %}
+    <div class="sub-header">
+        <div class="sizer">
+            <div class="inner">
+                <div style="position: absolute; display: inline-block; right: 1em;">
+                    {% if brand.media %}<img style="padding-right: 15px" src="{{ absolute_url(( brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) | imagine_filter('thumbnail') ) }}">{% endif %}
+                    {% if entity.institution.media %}<img src="{{ absolute_url(( entity.institution.media.getRelativePath ~ "/" ~ entity.institution.media.getHashedFilename ) | imagine_filter('thumbnail') ) }}">{% endif %}
+                </div>
+
+                {% if entity.institution %}
+                    <div id="site-quote-name">{{ entity.institution.name }}</div>
+                {% endif %}
+
+                <h2 class="{% if brand.media %}has-brand-logo{% endif %}">
+                    {% if entity.displayName %}
+                        {{ entity.displayName }}
+                    {% else %}
+                        {{ entity.name }}
+                    {% endif %}
+                </h2>
+
+                {% if entity.quoteNumber %}
+                    <div>Quote Number: {{ entity.quoteNumber }}</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body -%}
+    <div id="quote-version-{{ entity.id }}" class="site-show" entityId="{{ entity.id }}" entityType="quote" entityClass="QuoteVersion" entityPath="quoteversion">
+
+        <div id="site-header" class="quote-view-site-header">
+            {# render the slideshow using the controller/twig with headerbock.id as param #}
+            <div id="site-header-slideshow">
+                {% if entity.headerBlock %}
+                    <div id="site-header-slideshow-content">
+                        <div id="header-block-content-item" class="header-block-content-item content-block" blockId="{{ entity.id }}">
+                            <div class="flexslider">
+                                <ul class="slides" style="list-style: none">
+                                    {% if entity.headerBlock %}
+                                        {% if entity.headerBlock.mediaWrapper is defined %}
+                                            {% if entity.headerBlock.mediaWrapper is not empty %}
+                                            <li>
+                                                <span class="inner-list" style="background-image: url('{{ absolute_url(( entity.headerBlock.mediaWrapper[0].media[0].getRelativePath ~ "/" ~ entity.headerBlock.mediaWrapper[0].media[0].getHashedFilename )) }}')"></span>
+                                            </li>
+                                        {% endif %}
+                                    {% endif %}
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                {% endif %}
+            </div>
+
+            <div id="site-header-summary" style="margin-top: 75px; padding-left: 0;">
+                <div id="site-header-summary-content-pdf" style="width: 400px;">
+                    <ul id="site-summary-details-pdf" style="position: relative; right: 50px; list-style: none; font-size: 16px; line-height: 32px; max-width: 370px;">
+                        {% if entity.departureDate %}<li class="right"><span class="label" style="text-align: left">{% trans %}quote_site.quote_summary.departing{% endtrans %}</span> <strong>{{ entity.departureDate|date(format) }}</strong></li>{% endif %}
+                        {% if entity.duration %}<li class="right"><span class="label" style="max-width: 275px;">{% trans %}quote_site.quote_summary.duration{% endtrans %}</span> <strong>{{ entity.duration }}</strong></li>{% endif %}
+                        {% if entity.returnDate %}<li class="right"><span class="label">{% trans %}quote_site.quote_summary.returning{% endtrans %}</span> <strong>{{ entity.returnDate|date(format) }}</strong></li>{% endif %}
+                        {% if entity.boardBasis %}<li class="right"><span class="label">{% trans %}quote_site.quote_summary.board_basis{% endtrans %}</span> <strong>{{ entity.boardBasis.name }}</strong></li>{% endif %}
+                        {% if entity.transportType %}<li class="right"><span class="label">{% trans %}quote_site.quote_summary.transport{% endtrans %}</span> <strong>{{ entity.transportType.name }}</strong></li>{% endif %}
+                        {% if entity.pricePerson %}<li class="right"><span class="label">{% trans %}quote_site.quote_summary.price_person{% endtrans %}</span> <span class="quote-price"><strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{% if entity.pricePersonPublic %}{{ entity.pricePersonPublic }}{% else %}{{ entity.pricePerson }}{% endif %}</strong></span></li>{% endif %}
+                        {#{% if (entity.payingPlaces) or (entity.freePlaces) %}<li>#}
+                            {#{%  if (entity.payingPlaces) and (entity.freePlaces) %}#}
+                                {#{{ 'quote_site.quote_summary.price_based_on_payingandfree'|trans({'%payingplaces%' : entity.payingPlaces, '%freeplaces%' : entity.freePlaces})|raw }}#}
+                            {#{% elseif (entity.payingPlaces) and (entity.freePlaces is empty or entity.freePlaces == 0) %}#}
+                                {#{{ 'quote_site.quote_summary.price_based_on_payingonly'|trans({'%payingplaces%' : entity.payingPlaces})|raw }}#}
+                            {#{% elseif (entity.payingPlaces|default is empty) and (entity.freePlaces) %}#}
+                                {#{{ 'quote_site.quote_summary.price_based_on_freeonly'|trans({'%freeplaces%' : entity.freePlaces})|raw }}#}
+                            {#{%  endif %}#}
+                            {#</li>{% endif %}#}
+                        {% if entity.expiryDate %}<li>{% trans %}tour.show.expiry{% endtrans %} <strong>{{ entity.expiryDate|date(format) }}</strong></li>{% endif %}
+
+                        <li id="headerBlock-text" style="width: 250px;">{% if entity.welcomeMsg %}{{ entity.welcomeMsg|raw }}{% endif %}</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>{# end site header #}
+
+        {# RENDER THE CONTENT BLOCKS HERE #}
+
+        <a id="site-content"></a>
+
+        <div id="content-wrapper" class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+
+            {# render the tabs' content #}
+            {% for tab, data in entity.content %}
+                <div class="break"></div>
+                <div id="content-blocks-wrapper" class="">
+                    <h2 class="mdl-tabs__tab is-active" style="float:none; font-size: 30px; position:relative; text-align: center; display: block; margin: 0 auto;">{{ data[0] }}</h2>
+                </div>
+                <div id="tabs-drawer-{{ tab }}" class="content-blocks-drawer">
+                    <div class="sortable-items">
+                        {% for item in data[1] %}
+                            {% if items[item] != null %}
+                                {% if items[item].doubleWidth == 1 %}
+                                    {% set size = 'full' %}
+                                {% else %}
+                                    {% set size = 'half' %}
+                                {% endif %}
+                                <div id="content-blocks-{{ items[item].id }}" class="site-content-blocks site-content-blocks-item site-content-blocks-size-{{ size }}" blockId="{{ items[item].id }}">
+                                    <div class="inner-wrapper move-cursor">
+                                        {# render the actual content block #}
+                                        <div id="previewable-content-blocks-{{ items[item].id }}">
+                                            {{ render(controller('ContentBlocksBundle:ContentBlock:show', {'id':  items[item].id  })) }}
+                                        </div>
+
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div><!-- sortable-items -->
+                </div>
+            {% endfor %}
+
+        </div>
+    </div><!-- view-mode -->
+{% endblock %}
+
+<footer class="mdl-mini-footer site-footer">
+    <div class="sizer">
+        <div class="mdl-mini-footer__right-section footer-right-section">
+            {% block footer_right %}
+                <div class="quote-info"><span class="quote-label">{% trans %}quote.footer.price_person{% endtrans %}</span><span
+                            class="quote-price">{% if entity.pricePerson %}
+
+                <strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{% if entity.pricePersonPublic %}{{ entity.pricePersonPublic }}{% else %}{{ entity.pricePerson }}{% endif %}</strong></span>{% endif %}
+                </div>
+            {% endblock %}
+        </div>
+        <div class="mdl-mini-footer__left-section footer-left-section">
+            {% block footer_left %}
+                {% if entity.salesAgent %}
+                    <span class="intro">{% trans %}quote.footer.salesAgent{% endtrans %}</span>
+                    {% if entity.salesAgent.media %}
+                        <span class="tui-image-avatar"><img
+                                    src="{{ ( entity.salesAgent.media.getRelativePath ~ "/" ~ entity.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}"
+                                    alt="{{ entity.salesAgent.username }}"></span>
+                    {% elseif entity.salesAgent.firstName and entity.salesAgent.lastName %}
+                        <span class="tui-text-avatar mdl-typography--headline">{{ entity.salesAgent.firstName[:1] }}{{ entity.salesAgent.lastName[:1] }}</span>
+                    {% else %}
+                        <span class="tui-text-avatar mdl-typography--headline">{{ entity.salesAgent.username[:1] }}</span>
+                    {% endif %}
+                    <span class="agent">
+            {% if entity.salesAgent.displayName %}
+                {{ entity.salesAgent.displayName }}
+            {% else %}
+                {{ entity.salesAgent.firstName }} {{ entity.quoteReference.salesAgent.lastName }}
+            {% endif %}
+                        <br>
+            <a href="mailto:{{ entity.salesAgent.email }}">{{ entity.salesAgent.email }}</a></span>
+                {% endif %}
+            {% endblock %}
+        </div>
+        <div class="mdl-mini-footer__left-section footer-full-section">
+            <div class="footer-editor">{{ brand.footerBody|raw }}</div>
+        </div>
+    </div>
+</footer>
+</html>

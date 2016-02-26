@@ -57,7 +57,7 @@ use TUI\Toolkit\MediaBundle\Form\MediaType;
       $em = $this->getDoctrine()->getManager();
       $em->persist($entity);
       $em->flush();
-      $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('media.flash.save') . $entity->getFilename());
+      $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('media.flash.save') . $entity->getFilename());
 
 
       return $this->redirect($this->generateUrl('media', array('id' => $entity->getId())));
@@ -231,7 +231,7 @@ use TUI\Toolkit\MediaBundle\Form\MediaType;
 
     if ($editForm->isValid()) {
       $em->flush();
-      $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('media.flash.save') . $entity->getFilename());
+      $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('media.flash.save') . $entity->getFilename());
       return $this->redirect($this->generateUrl('media_edit', array('id' => $id)));
     }
 

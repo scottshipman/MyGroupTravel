@@ -172,7 +172,7 @@ class TourType extends AbstractType
             'by_reference' => false,
           ))
 
-          ->add('passengerDate', 'genemu_jquerydate', array(
+          ->add('emergencyDate', 'genemu_jquerydate', array(
             'widget' => 'single_text',
             'required' => false,
             'label' => 'tour.form.tour.passenger_date',

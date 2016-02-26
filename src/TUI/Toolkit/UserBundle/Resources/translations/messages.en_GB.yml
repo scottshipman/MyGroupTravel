@@ -53,6 +53,8 @@ user:
         password: Password updated for
         cant_delete: Unable to delete this user because they are associated with Quotes or Tours
         registration_notification: A Notification was sent to
+        register-organizer: Your Account has been created. <br>If you also plan on travelling, you can edit your Passenger details on the tour's Passenger Dashboard at the url
+
 
     grid:
         no_result: There are no users to show. Please check your filter settings and try again.
@@ -137,6 +139,7 @@ user:
         brand: "Please create a password and security question to finish setting up your account."
         organizer: "It's time to set up your account. Just create a password and security question and you'll be on your way."
         participant: "It's time to set up your account. Just create a password and security question and you'll be on your way."
+        assistant: "Its time to set up your account so you can start promoting this tour to passengers. Just setup your password and security question and you'll be on your way."
 
 
 

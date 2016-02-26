@@ -41,19 +41,19 @@
             {% endif %}
 
             {% if entity.quoteReference.institution %}
-                <div id="site-quote-name">{{ entity.quoteReference.institution.name }}</div>
+                <div style="font-size:20px;" id="site-quote-name">{{ entity.quoteReference.institution.name }}</div>
             {% endif %}
 
-            <h2 class="{% if brand.media %}has-brand-logo{% endif %}">
+            <h2 style="font-size: 30px;" class="{% if brand.media %}has-brand-logo{% endif %}">
                 {% if entity.displayName %}
                     {{ entity.displayName }}
                 {% else %}
-                    {{ entity.quoteReference.name }}{% if is_granted("ROLE_BRAND") %}, {{ entity.name }}{% endif %}
+                    {{ entity.quoteReference.name }}, {{ entity.name }}
                 {% endif %}
             </h2>
 
             {% if entity.quoteNumber %}
-                <div>Quote Number: {{ entity.quoteNumber }}</div>
+                <div style="font-size: 12px;">Quote Number: {{ entity.quoteNumber }}</div>
             {% endif %}
         </div>
       </div>
@@ -77,11 +77,11 @@
                 {% endif %}
             {% endif %}
 
-            <a href="javascript:window.print()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
-                <i class="fa fa-print"></i> {% trans %}quote.actions.print{% endtrans %}
-            </a>
-
-            <a href="/quote/print/{{ entity.id }}/{{ entity.quoteNumber }}.pdf" target="_blank" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
+            {#<a href="javascript:window.print()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">#}
+                {#<i class="fa fa-print"></i> {% trans %}quote.actions.print{% endtrans %}#}
+            {#</a>#}
+            {% if entity.quoteNumber %} {% set pdfFilename = entity.quoteNumber %} {% else %} {% set pdfFilename = 'template-' ~ entity.id %} {% endif %}
+            <a href="/quote/print/{{ entity.id }}/{{ pdfFilename  }}.pdf" target="_blank" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored print-actions">
                 <i class="fa fa-file-pdf-o"></i> {% trans %}quote.actions.pdf{% endtrans %}
             </a>
 
@@ -239,14 +239,14 @@
                                 </div>
                             </div>
                         {% endif %}
-                        {% if alternate %}
+                        {% if alternate is sameas (true) %}
                             <div class="site-content-blocks site-content-blocks-item site-content-blocks-size-full">
                                 <div class="inner-wrapper">
                                     {{ render(controller('QuoteBundle:QuoteSite:getQuoteSiblings', {'id':  quoteID  })) }}
                                 </div>
                             </div>
                         {% endif %}
-                        {% if related %}
+                        {% if related is sameas (true) %}
                             <div class="site-content-blocks site-content-blocks-item site-content-blocks-size-full">
                                 <div class="inner-wrapper">
                                     {{ render(controller('QuoteBundle:QuoteSite:getRelatedQuotes', {'id':  quoteID  })) }}

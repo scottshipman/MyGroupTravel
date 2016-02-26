@@ -8,7 +8,7 @@ tour:
         show: Tour
         deleted: Tour Dashboard - Deleted
         restore: Restore
-        site_view: Site View
+        site_view: Tour Website
         new_tour: New Tour
 
     page_title:
@@ -17,7 +17,7 @@ tour:
         index_active: Tour Dashboard - Active
         new: Create New Tour
         show: Tour
-        site_view: Site View
+        site_view: Tour Website
         dashboard: Dashboard
         deleted: Tour Dashboard - Deleted
         payment_task:
@@ -67,7 +67,7 @@ tour:
 
     menu:
         my_tours: My Tours
-        preview: Preview Tour
+        preview: Tour Website
         payments: Edit Payment Setup
         brand_edit: Edit Tour Details
 
@@ -111,6 +111,7 @@ tour:
        price_based_on_payingandfree: Based on <strong>%payingplaces%</strong> paying and <strong>%freeplaces%</strong> free places.
        price_based_on_payingonly: Based on <strong>%payingplaces%</strong> paying places
        price_based_on_freeonly: Based on <strong>%freeplaces%</strong> free places
+       expiry: Tour valid until
 
     contact_organizer:
         name: Tour Name:
@@ -130,10 +131,12 @@ tour:
         na: N/A
         signups: Sign-ups
         days: Days until Departure
+        days_due: Days until Due
+        payment_due: Days until Payment Due
         expiry: Days to expiry
         passport_data: Collect passport data by
-        passenger_data: Collect passenger data by
-        collecting: Collecting
+        passenger_data: Collect emergency contact data by
+        collecting: Collected
         outstanding: Outstanding
         medical_data: Collect medical data By
         dietary_data: Collect dietary data By
@@ -143,7 +146,7 @@ tour:
         todo: To do
         completed: Completed
         completed_passport_data: Collect passport data
-        completed_passenger_data: Collect passenger data
+        completed_passenger_data: Collect emergency contact data
         completed_medical_data: Collect medical data
         completed_dietary_data: Collect dietary data
         sign_up: Sign Up
@@ -161,6 +164,8 @@ tour:
         has_passed: has passed.  If you have any questions please contact
         operations_team: in our operations team.
         departure: Days until departure
+        registrations: Registrations
+        passengers: Passengers
 
     edit:
         summary: Summary
@@ -316,7 +321,7 @@ tour:
             display_name: Display Name
             board: Board Basis
             tour_number: Tour Number
-            passenger_date: Passenger Info Due Date (DD-MM-YYYY)
+            passenger_date: Emergency Contact Due Date (DD-MM-YYYY)
             passport_date: Passport Info Due Date (DD-MM-YYYY)
             medical_date: Medical Info Due Date (DD-MM-YYYY)
             dietary_date: Dietary Info Due Date (DD-MM-YYYY)

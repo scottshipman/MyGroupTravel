@@ -53,3 +53,9 @@ services:
          tags:
              - { name: trsteel_ckeditor.transformer, alias: html_purifier }
 
+     app.twig_extension:
+         class: AppBundle\Twig\AppExtension
+         public: false
+         arguments: ['@service_container']
+         tags:
+             - { name: twig.extension }

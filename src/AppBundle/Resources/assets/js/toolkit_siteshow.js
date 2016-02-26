@@ -29,43 +29,10 @@ $(document).ready(function () {
     $(document).on('click', '#accept-tour', function (e) {
         e.preventDefault();
         var entityId = $('.site-show').attr('entityId');
-        toolkitStandardPopup("Sign Up", '/passenger/new/' + entityId, function () {
-            $('#ajax_passenger_form').on('submit', function(e) {
+        toolkitStandardPopup("Sign Up", '/passenger/new/' + entityId);
 
-                var formAction = $(this).attr('action');
-                var form =$(this);
-                e.preventDefault();
-                $.ajax({
-                    url: formAction,
-                    type: 'POST',
-                    headers: {
-                        "Pragma": "no-cache",
-                        "Expires": -1,
-                        "Cache-Control": "no-cache"
-                    },
-                    data: $('#ajax_passenger_form').serialize(),
-                    contentType: "application/x-www-form-urlencoded",
-                }).success(function (response) {
-                    $("#loader").show();
-                    window.location.reload(true);
-                }).error(function (response) {
-                    var parsed = $.parseJSON(response.responseText);
-                        $.each(parsed, function(i, item) {
-                            //console.log(i);
-                            $.each(item, function(c, child) {
-                                console.log(c);
-                                var task = c;
-                                $.each(child, function(f, field) {
-                                    var specificFrom = $('.new_passenger[task="'+task+'"]');
-                                    specificFrom.prepend('<p style="color:red;">'+ field + '</p>');
-                                });
-                            });
-                        });
-                    });
-                });
-
-            })
-        });
     });
+    
+});
 
 

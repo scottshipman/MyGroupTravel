@@ -8,7 +8,7 @@ tour:
         show: Tour
         deleted: Tour Dashboard - Deleted
         restore: Restore
-        site_view: Site View
+        site_view: Tour Website
         back_list: Back to List
         back_dashboard: Back to Dashboard
         new_tour: New Tour
@@ -19,7 +19,7 @@ tour:
         index_active: Tour Dashboard - Active
         new: Create New Tour
         show: Tour
-        site_view: Site View
+        site_view: Tour Website
         dashboard: Dashboard
         deleted: Tour Dashboard - Deleted
         payment_task:
@@ -68,7 +68,7 @@ tour:
 
     menu:
         my_tours: My Tours
-        preview: Preview Tour
+        preview: Tour Website
         payments: Edit Payment Setup
         brand_edit: Edit Tour Details
 
@@ -109,6 +109,8 @@ tour:
             intro: Your Contact:
             intro_org: Contact:
             price: Price per person:
+       expiry: Tour valid until
+
 
     contact_organizer:
         name: Tour Name:
@@ -128,10 +130,12 @@ tour:
         na: N/A
         signups: Sign-ups
         days: Days until deadline
+        days_due: Days until Due
+        payment_due: Days until Payment Due
         expiry: Days to expiry
         passport_data: Collect Passport Data By
-        passenger_data: Collect Passenger Data By
-        collecting: Collecting
+        passenger_data: Collect Emergency Contact Data By
+        collecting: Collected
         outstanding: Outstanding
         medical_data: Collect Medical Data By
         dietary_data: Collect Dietary Data By
@@ -141,7 +145,7 @@ tour:
         todo: To Do
         completed: Completed
         completed_passport_data: Collect Passport Data
-        completed_passenger_data: Collect Passenger Data
+        completed_passenger_data: Collect Emergency Contact Data
         completed_medical_data: Collect Medical Data
         completed_dietary_data: Collect Dietary Data
         sign_up: Sign Up
@@ -159,6 +163,8 @@ tour:
         has_passed: has passed.  If you have any questions please contact
         operations_team: in our operations team.
         departure: Days until departure
+        registrations: Registrations
+        passengers: Passengers
 
     edit:
         summary: Summary
@@ -313,7 +319,7 @@ tour:
             display_name: Display Name
             board: Board Basis
             tour_number: Tour Number
-            passenger_date: Passenger Info Due Date (DD-MM-YYYY)
+            passenger_date: Emergency Contact Due Date (DD-MM-YYYY)
             passport_date: Passport Info Due Date (DD-MM-YYYY)
             medical_date: Medical Info Due Date (DD-MM-YYYY)
             dietary_date: Dietary Info Due Date (DD-MM-YYYY)

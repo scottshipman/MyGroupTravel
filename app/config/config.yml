@@ -70,6 +70,7 @@ assetic:
                     - "%kernel.root_dir%/../components/jquery/jquery.form.js"
                     - @AppBundle/Resources/assets/js/jeditable.js
                     - @AppBundle/Resources/assets/js/jquery.flexslider.js
+                    - @AppBundle/Resources/assets/js/jquery.transit.min.js
                     # - /srv/www/Toolkit/vendor/components/jquery/jquery.min.js
             toolkit:
                 inputs:
@@ -100,6 +101,10 @@ assetic:
             toolkit_siteshow_edit:
                 inputs:
                     - @AppBundle/Resources/assets/js/toolkit_siteshow_edit.js
+
+            toolkit_passenger:
+                inputs:
+                    - @AppBundle/Resources/assets/js/toolkit_passenger.js
 
 
 # Doctrine Configuration
@@ -217,6 +222,18 @@ oneup_uploader:
                - image/jpg
             storage:
               directory: "%kernel.root_dir%/../web/static/uploads/media/institution"
+        passenger:
+            frontend: dropzone
+            namer: oneup_uploader.namer.uniqid
+            error_handler: oneup_uploader.error_handler.noop
+            enable_progress:      true
+            enable_cancelation:   true
+            storage:
+              directory: "%kernel.root_dir%/../web/static/uploads/media/passenger"
+            allowed_mimetypes:
+              - image/jpeg
+              - image/png
+              - image/jpg
         user:
             frontend: dropzone
             namer: oneup_uploader.namer.uniqid
@@ -302,7 +319,7 @@ trsteel_ckeditor:
     transformers:  ['tuihtmlpurifier'] #['html_purifier']
     toolbar: ['document', 'basicstyles', 'links', 'insert', 'styles', 'paragraph']
     toolbar_groups:
-        document: ['Source', 'Undo', 'Redo']
+        document: ['Source', 'Undo', 'Redo', 'Scayt']
         links: ['Link','Unlink','Anchor']
         insert: ['Embed', 'Image', 'Table']
         styles: ['Styles']
@@ -366,6 +383,9 @@ trsteel_ckeditor:
 #            path: "/bundles/app/ckeditor-plugins/imageuploader"
         embedsemantic:
             path: "/bundles/app/ckeditor-plugins/embedsemantic"
+        scayt:
+            path: "/bundles/app/ckeditor-plugins/scayt"
+
 
 app:
     html_purifier:
@@ -388,12 +408,12 @@ liip_imagine:
     filter_sets:
         cache: ~
         thumbnail:
-            quality: 100
+            quality: %image_quality%
             filters:
                 thumbnail: { size: [120, 120], mode: inset }
 
         thumbnailLarge:
-            quality: 100
+            quality: %image_quality%
             filters:
                 thumbnail: { size: [240, 240], mode: inset }
 
@@ -402,12 +422,22 @@ liip_imagine:
                 relative_resize: { widen: 120 }
 
         slideShow:
-            quality: 100
+            quality: %image_quality%
             filters:
                 strip: ~
                 thumbnail: { size: [1600, 900], mode: inset }
+        smallBlock:
+            quality: %image_quality%
+            filters:
+                relative_resize:  { widen: 500 }
+
+        largeBlock:
+            quality: %image_quality%
+            filters:
+                relative_resize: { widen: 1000 }
+
         modalImage:
-            quality: 100
+            quality: %image_quality%
             filters:
                 relative_resize: { widen: 300 }
 
@@ -429,3 +459,7 @@ fm_elfinder:
                         upload_allow: ['image/png', 'image/jpg', 'image/jpeg']
                         upload_deny: ['all']
                         upload_max_size: 32M
+
+#GtmBundle
+gtm:
+    id: "%google_tag_manager%"

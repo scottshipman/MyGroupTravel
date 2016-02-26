@@ -28,3 +28,13 @@ parameters:
     user_system_name: TUI Toolkit System
     profile_query_limit:    5
     cache_asset_version: 1
+    google_tag_manager: GTM-xxx
+
+    # Optional Passenger Status Labels
+    accepted_label: accepted
+    waitlist_label: waitlist
+    free_label: free
+    'pending invite_label': Pending Invite
+
+    # JPEG Quality 0-100 for Liip Imagine Bundle
+    image_quality: 75

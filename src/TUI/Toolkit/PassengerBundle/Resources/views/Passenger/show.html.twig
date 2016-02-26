@@ -1,28 +1,436 @@
-{% extends '::base.html.twig' %}
+{% extends '::site-base.html.twig' %}
+{% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
+{% set age = date(entity.dateOfBirth).diff(date("now")) %}
+
+{% block title %}
+    {% if is_granted("ROLE_BRAND") %}
+        {{ entity.fname }} {{ entity.lname }} {% trans %}passenger.title.show{% endtrans %}
+    {% else %}
+        {{ entity.tourReference.name }}
+    {% endif %}
+{% endblock %}
+
+{% block page_title %}
+    <span>{% trans %}passenger.page_title.index{% endtrans %}</span>
+{% endblock %}
+
+{% block page_title_menu %}
+    {% if "passenger" | getRoles(entity.id) == "parent" %}
+
+    {% else %}
+    <button id="tour-title-drop" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-menu-drop">
+        <i class="material-icons">arrow_drop_down</i>
+    </button>
+    {% embed "TourBundle:Tour:tourMenu.html.twig" %}
+        {% block tour_dashboard_link %}
+            <li><a href="{{ path('manage_passenger_dashboard', { 'tourId': entity.tourReference.id }) }}" class="mdl-menu__item">{% trans %}tour.title.index{% endtrans %}</a></li>
+        {% endblock %}
+    {% endembed %}
+    {% endif %}
+{% endblock %}
+
+{% block back_link %}
+    {% if "passenger" | getRoles(entity.id) == "parent" %}
+        <a class="back-link" href="{{ path('manage_parent_passenger_dashboard', {'tourId': entity.tourReference.id, 'parentId': app.user.id}) }}"><i class="fa fa-arrow-left"></i> Back To Your Passengers</a>
+    {% else %}
+        <a class="back-link" href="{{ path('manage_passenger_dashboard', { 'tourId': entity.tourReference.id }) }}"><i class="fa fa-arrow-left"></i> {% trans %}passenger.actions.back{% endtrans %}</a>
+
+    {% endif %}
+{% endblock %}
 
 {% block body -%}
-    <h1>Passenger</h1>
 
-    <table class="record_properties">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="tour-show-wrapper site-show" entityId="{{ entity.tourReference.id }}" passengerId="{{ entity.Id }}">
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('manage_passenger') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('manage_passenger_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+
+    <div class="tour-show-left-column">
+        <ul class="tour-show-submenu">
+                <li><strong>{% trans %}passenger.labels.passenger_for{% endtrans %} {{ entity.tourReference.name }}</strong></li>
+            <li><label>{% trans %}tour.show.institution{% endtrans %}</label><strong>{{ entity.tourReference.institution.name }}</strong></li>
+            <li><label>{% trans %}tour.show.name{% endtrans %}</label><strong>{{ entity.tourReference.name}}</strong></li>
+            {#{% if entity.tourReference != null %}#}
+                {#<li><label>{% trans %}tour.show.number{% endtrans %}</label><strong>{{ entity.tourReference}}</strong></li>#}
+            {#{% endif %}#}
+            <li><label>{% trans %}tour.show.departure{% endtrans %}</label><strong>{{ entity.tourReference.departureDate|date(format) }}</strong></li>
+
+        </ul>
+
+        <div class="tour-edit-organizer-left">
+            <label>{% trans %}tour.show.organizers{% endtrans %}</label><br>
+            {% if entity.tourReference.organizer.media %}
+                <img class="tui-image-avatar" src="{{ ( entity.tourReference.organizer.media.getRelativePath ~ "/" ~ entity.tourReference.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.tourReference.organizer.username }}">
+            {% elseif entity.tourReference.organizer.firstName and entity.tourReference.organizer.lastName %}
+                <span class="tui-text-avatar mdl-typography--headline">{{ entity.tourReference.organizer.firstName[:1] }}{{ entity.tourReference.organizer.lastName[:1] }}</span>
+            {% else %}
+                <span class="tui-text-avatar mdl-typography--headline">{{ entity.tourReference.organizer.username[:1] }}</span>
+            {% endif %}
+            {#<a class="add-organizer" href="#"><i class="add-icon fa fa-plus"></i></a>#}
+            {#<a class="add-organizer mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">Add/remove organizers</a>#}
+        </div>
+    </div>
+
+        <div class="tour-show-right-column">
+        {#Passenger Information Card#}
+                    {% if entity.status == "accepted" %}
+                        {% set statusicon =  '<a class="' ~ entity.status ~ 'icon" title = "' ~ entity.status ~ '"><i class="material-icons">verified_user</i></a>'%}
+                    {% else %}
+                        {% set statusicon = '<a class="' ~ entity.status ~ 'icon" title = "' ~ entity.status ~ '"><i class="material-icons">list</i></a>'%}
+                    {% endif %}
+
+                    {% if isOrganizer %}
+                        {% set organizericon = '<a class="organizer-card" title = "' ~ isOrganizer ~ '"><i class="material-icons">group_add</i></a>' %}
+                    {% else %}
+                        {% set organizericon = '' %}
+                    {% endif %}
+
+                    {% if entity.free == 1 %}
+                        {% set freeicon = '<a class="freeicon" title = "Free"><i class="material-icons">money_off</i></a>' %}
+                        {% set statusicon = '' %}
+                        {% set status = '' %}
+                    {% else %}
+                        {% set freeicon = '' %}
+                    {% endif %}
+            <div class="waitlist tour-edit mdl-card mdl-shadow--2dp">
+                <div class="mdl-card__title">
+                    <h3 class="mdl-card__title-text">{% trans %}passenger.labels.passenger{% endtrans %}</h3>
+                    <button id="passenger-edit-actions-menu-drop-{{ entity.id }}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-button">
+                        <i class="material-icons">more_vert</i>
+                    </button>
+                    <a href="#"><i id="passenger-close" style="display: none;" class="material-icons" passenger="{{ entity.id }}">close</i></a>
+                    {% embed "PassengerBundle:Passenger:passengerSubMenu.html.twig" %}{% endembed %}
+                    <div class="clear"></div>
+                </div>
+                <div class="mdl-card__supporting-text mdl-card--border">
+                        {% if entity.media %}
+                            <img id="passenger-avatar" class="tui-image-avatar" src="{{ ( entity.media.getRelativePath ~ "/" ~ entity.media.getHashedFilename ) | imagine_filter('thumbnail') }}">
+                        {% elseif entity.fName and entity.lName %}
+                            <span id="passenger-avatar" class="tui-text-avatar mdl-typography--headline">{{ entity.fName[:1] }}{{ entity.lName[:1] }}</span>
+                        {% else %}
+                            <span id="passenger-avatar" class="tui-text-avatar mdl-typography--headline">{{ entity.fName[:1] }}</span>
+                        {% endif %}
+                    <div class="passenger-details">
+                        <h3><span id="passenger-fname">{{ entity.fname }}</span> <span id="passenger-lname">{{ entity.lname }}</span></h3>
+                        <label style="display: block">
+                        {{ statusicon | raw }} {{ freeicon | raw }}{{ organizericon | raw }}
+                        <span id="passenger-dob">{% if entity.dateOfBirth != null %}{{ 'passenger.form.invite.age' | trans }}: {{ (age.days/365)|round(0, 'floor') }}{% endif %}</span>
+                        <span id="passenger-gender"> {% if entity.gender != null %}{{ 'passenger.form.invite.gender' | trans }}: {{ entity.gender }}{% endif %}</span>
+                         </label>
+                    </div>
+                        {{ render(controller( 'PassengerBundle:Passenger:edit', {'id' : entity.id} )) }}
+                    <div class="clear"></div>
+                </div>
+            </div>
+
+            {#Passenger Task Card#}
+            <div class="waitlist tour-edit mdl-card mdl-shadow--2dp">
+                <div class="mdl-card__title">
+                    <h3 class="mdl-card__title-text">{% trans %}passenger.labels.tasks{% endtrans %}</h3>
+                </div>
+                {% if entity.medicalReference == null and entity.tourReference.medicalDate != null%}
+                    <div class="mdl-card__supporting-text mdl-card--border">
+                        <p class="mdl-card__title-text task-title"><i style="margin-right: 10px; color:grey; display: inline;"class="material-icons">local_hospital</i> {% trans %}passenger.actions.add_medical{% endtrans %}</p>
+                        <label class="task-due-date">by {{ entity.tourReference.medicalDate|date(format) }}</label>
+                        <a href="#"><i id="medical" class="material-icons">add</i></a>
+                        <a href="#"><i id="medical-close" class="material-icons">close</i></a>
+                        <div class="clear"></div>
+                        {% if entity.medicalReference == null %}
+                            {{ render(controller( 'PassengerBundle:Medical:new', {'passengerId' : entity.id} )) }}
+                        {% endif %}
+                    </div>
+                {% endif %}
+                {% if entity.dietaryReference == null and entity.tourReference.dietaryDate != null%}
+                    <div class="mdl-card__supporting-text mdl-card--border">
+                        <p class="mdl-card__title-text task-title"><i style="margin-right: 10px; color:grey;"class="material-icons">local_dining</i> {% trans %}passenger.actions.add_dietary{% endtrans %}</p>
+                        <label class="task-due-date">by {{ entity.tourReference.dietaryDate|date(format) }}</label>
+                        <a href="#"><i id="dietary" class="material-icons">add</i></a>
+                        <a href="#"><i id="dietary-close" class="material-icons">close</i></a>
+                        <div class="clear"></div>
+                        {% if entity.dietaryReference == null %}
+                            {{ render(controller( 'PassengerBundle:Dietary:new' )) }}
+                        {% endif %}
+                    </div>
+                {% endif %}
+                {% if entity.PassportReference == null and entity.tourReference.passportDate != null%}
+                    <div class="mdl-card__supporting-text mdl-card--border">
+                        <p class="mdl-card__title-text task-title"><i style="margin-right: 10px; color:grey;"class="material-icons">person_outline</i> {% trans %}passenger.actions.add_passport{% endtrans %}</p>
+                        <label class="task-due-date">by {{ entity.tourReference.passportDate|date(format) }}</label>
+                        <a href="#"><i id="passport" class="material-icons">add</i></a>
+                        <a href="#"><i id="passport-close" class="material-icons">close</i></a>
+                        <div class="clear"></div>
+                        {% if entity.passportReference == null %}
+                            {{ render(controller( 'PassengerBundle:Passport:new' )) }}
+                        {% endif %}
+                    </div>
+                {% endif %}
+                {% if entity.EmergencyReference == null and entity.tourReference.emergencyDate != null%}
+                    <div class="mdl-card__supporting-text mdl-card--border">
+                        <p class="mdl-card__title-text task-title"><i style="margin-right: 10px; color:grey;"class="material-icons">warning</i> {% trans %}passenger.actions.add_emergency{% endtrans %}</p>
+                        <label class="task-due-date">by {{ entity.tourReference.emergencyDate|date(format) }}</label>
+                        <a href="#"><i id="emergency" class="material-icons">add</i></a>
+                        <a href="#"><i id="emergency-close" class="material-icons">close</i></a>
+                        <div class="clear"></div>
+                        {% if entity.emergencyReference == null %}
+                            {{ render(controller( 'PassengerBundle:Emergency:new' )) }}
+                        {% endif %}
+                    </div>
+                {% endif %}
+                {% if (entity.medicalReference != null and entity.dietaryReference != null and entity.passportReference != null and entity.emergencyReference != null) or (entity.tourReference.passportDate == null and entity.tourReference.emergencyDate == null and entity.tourReference.medicalDate == null and entity.tourReference.dietaryDate == null) %}
+                    <div class="mdl-card__supporting-text mdl-card--border expired-quote">
+                        <p class="mdl-card__title-text no-tasks">{{ entity.fName|capitalize }} {% trans %}passenger.actions.no_tasks{% endtrans %}</p>
+                        <div class="clear"></div>
+                    </div>
+                {% endif %}
+            </div>
+
+            {#Passenger Medical Information Card#}
+           {% if entity.tourReference.medicalDate != null %}
+                {% if entity.medicalReference != null %}
+                    <div class="waitlist tour-edit mdl-card mdl-shadow--2dp">
+                        <div class="mdl-card__title">
+                            <h3 class="mdl-card__title-text"><i style="margin-right: 10px;"class="material-icons">local_hospital</i> {% trans %}passenger.labels.medical_info{% endtrans %}</h3>
+                            <a style="position: absolute; right: 15px;" href="#"><i id="medical" class="material-icons" style="position: relative; display: inline-block; border-radius: 0px; border: none; padding: 0px">border_color</i></a>
+                            <a style="position: absolute; right: 15px;" href="#"><i id="medical-close" style="display: none; position: relative; border-radius: 0px; border: none; padding: 0px" class="material-icons">close</i></a>
+                        </div>
+                        {% if entity.medicalReference != null %}
+                            {% set medicalId  = entity.medicalReference.id%}
+                            {{ render(controller( 'PassengerBundle:Medical:edit', {'id' : medicalId} )) }}
+                        {% endif %}
+                        <div class="mdl-card__supporting-text mdl-card--border">
+                            <label class="row-label">{% trans %}passenger.labels.doctor_name{% endtrans %}</label>
+                                <p class="doctor-name row-content">{% if entity.medicalReference != null %}{{ entity.medicalReference.doctorName }}{% endif %}</p>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="mdl-card__supporting-text mdl-card--border">
+                            <label class="row-label">{% trans %}passenger.labels.doctor_number{% endtrans %}</label>
+                            <p id="doctors-number" class="doctors-number row-content">{% if entity.medicalReference != null and entity.medicalReference.doctorNumber != null%}{{ entity.medicalReference.doctorNumber }}{% endif %}</p>
+                            <div class="clear"></div>
+                        </div>
+                       <div class="mdl-card__supporting-text mdl-card--border">
+                            <label class="row-label">{% trans %}passenger.labels.conditions{% endtrans %}</label>
+                            <p class="medical-conditions row-content">{% if entity.medicalReference != null %}{{ entity.medicalReference.conditions }}{% endif %}</p>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="mdl-card__supporting-text mdl-card--border">
+                            <label class="row-label">{% trans %}passenger.labels.medication{% endtrans %}</label>
+                            <p class="medications row-content">{% if entity.medicalReference != null %}{{ entity.medicalReference.medications }}{% endif %}</p>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                {% endif %}
+           {% endif %}
+
+            {% if entity.tourReference.dietaryDate != null %}
+                {% if entity.dietaryReference != null %}
+                <div class="waitlist tour-edit mdl-card mdl-shadow--2dp">
+                    <div class="mdl-card__title">
+                        <h3 class="mdl-card__title-text"><i style="margin-right: 10px;"class="material-icons">local_dining</i> {% trans %}passenger.labels.dietary_info{% endtrans %}</h3>
+                        <a style="position: absolute; right: 15px;" href="#"><i id="dietary" class="material-icons" style="position: relative; display: inline-block; border-radius: 0px; border: none; padding: 0px">border_color</i></a>
+                        <a style="position: absolute; right: 15px;" href="#"><i id="dietary-close" style="display: none; position: relative; border-radius: 0px; border: none; padding: 0px" class="material-icons">close</i></a>
+                    </div>
+                    {% if entity.dietaryReference != null %}
+                        {% set dietaryId  = entity.dietaryReference.id%}
+                        {{ render(controller( 'PassengerBundle:Dietary:edit', {'id' : dietaryId} )) }}
+                    {% endif %}
+                    <div class="mdl-card__supporting-text mdl-card--border">
+                        <p class="dietary-description">{% if entity.dietaryReference != null %}{{ entity.dietaryReference.description }}{% endif %}</p>
+                    </div>
+                </div>
+                {% endif %}
+            {% endif %}
+
+            {#Passenger Passport Information Card#}
+            {% if entity.tourReference.passportDate != null %}
+                {% if entity.passportReference != null %}
+                    <div class="waitlist tour-edit mdl-card mdl-shadow--2dp">
+                        <div class="mdl-card__title">
+                            <h3 class="mdl-card__title-text"><i style="margin-right: 10px;"class="material-icons">person_outline</i> {% trans %}passenger.labels.passport_info{% endtrans %}</h3>
+                            <a style="position: absolute; right: 15px;" href="#"><i id="passport" class="material-icons" style="position: relative; display: inline-block; border-radius: 0px; border: none; padding: 0px">border_color</i></a>
+                            <a style="position: absolute; right: 15px;" href="#"><i id="passport-close" style="display: none; position: relative; border-radius: 0px; border: none; padding: 0px" class="material-icons">close</i></a>
+                        </div>
+                        {% if entity.PassportReference != null %}
+                            {% set passportId  = entity.passportReference.id%}
+                            {{ render(controller( 'PassengerBundle:Passport:edit', {'id' : passportId} )) }}
+                        {% endif %}
+                        <div class="mdl-card__supporting-text mdl-card--border">
+                            <label class="row-label">{% trans %}passenger.labels.passport_family_name{% endtrans %}</label>
+                            <p class="passport-lastName row-content">{% if entity.passportReference != null %}{{ entity.passportReference.passportLastName }}{% endif %}</p>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="mdl-card__supporting-text mdl-card--border">
+                            <label class="row-label">{% trans %}passenger.labels.passport_first_name{% endtrans %}</label>
+                            <p class="passport-firstName row-content">{% if entity.passportReference != null %}{{ entity.passportReference.passportFirstName }}{% endif %}</p>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="mdl-card__supporting-text mdl-card--border">
+                            <label class="row-label">{% trans %}passenger.labels.passport_middle_name{% endtrans %}</label>
+                            <p class="passport-middleName row-content">{% if entity.passportReference != null %}{{ entity.passportReference.passportMiddleName }}{% endif %}</p>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="mdl-card__supporting-text mdl-card--border">
+                            <label class="row-label">{% trans %}passenger.labels.passport_gender{% endtrans %}</label>
+                            <p class="passport-gender row-content">{% if entity.passportReference != null %}{{ entity.passportReference.passportGender }}{% endif %}</p>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="mdl-card__supporting-text mdl-card--border">
+                            <label class="row-label">{% trans %}passenger.labels.passport_title{% endtrans %}</label>
+                            <p class="passport-title row-content">{% if entity.passportReference != null %}{{ entity.passportReference.passportTitle }}{% endif %}</p>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="mdl-card__supporting-text mdl-card--border">
+                            <label class="row-label">{% trans %}passenger.labels.passport_state_issue{% endtrans %}</label>
+                            <p class="passport-issuingState row-content">{% if entity.passportReference != null %}{{ entity.passportReference.passportIssuingState }}{% endif %}</p>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="mdl-card__supporting-text mdl-card--border">
+                            <label class="row-label">{% trans %}passenger.labels.passport_number{% endtrans %}</label>
+                            <p class="passport-number row-content">{% if entity.passportReference != null %}{{ entity.passportReference.passportNumber }}{% endif %}</p>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="mdl-card__supporting-text mdl-card--border">
+                            <label class="row-label">{% trans %}passenger.labels.passport_nationality{% endtrans %}</label>
+                            <p class="passport-nationality row-content">{% if entity.passportReference != null %}{{ entity.passportReference.passportNationality }}{% endif %}</p>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="mdl-card__supporting-text mdl-card--border">
+                            <label class="row-label">{% trans %}passenger.labels.passport_dob{% endtrans %}</label>
+                            <p class="passport-dateOfBirth row-content">{% if entity.passportReference != null %}{{ entity.passportReference.passportDateOfBirth|date(format) }}{% endif %}</p>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="mdl-card__supporting-text mdl-card--border">
+                            <label class="row-label">{% trans %}passenger.labels.passport_doi{% endtrans %}</label>
+                            <p class="passport-dateOfIssue row-content">{% if entity.passportReference != null %}{{ entity.passportReference.passportDateOfIssue|date(format) }}{% endif %}</p>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="mdl-card__supporting-text mdl-card--border">
+                            <label class="row-label">{% trans %}passenger.labels.passport_doe{% endtrans %}</label>
+                            <p class="passport-dateOfExpiry row-content">{% if entity.passportReference != null %}{{ entity.passportReference.passportDateOfExpiry|date(format) }}{% endif %}</p>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endif %}
+
+            {#Passenger Emergency Contact Information Card#}
+            {% if entity.tourReference.emergencyDate != null%}
+                {% if entity.emergencyReference != null %}
+                    <div class="waitlist tour-edit mdl-card mdl-shadow--2dp">
+                        <div class="mdl-card__title">
+                            <h3 class="mdl-card__title-text"><i style="margin-right: 10px;"class="material-icons">warning</i> {% trans %}passenger.labels.emergency_info{% endtrans %}</h3>
+                            <a style="position: absolute; right: 15px;" href="#"><i id="emergency" class="material-icons" style="position: relative; display: inline-block; border-radius: 0px; border: none; padding: 0px">border_color</i></a>
+                            <a style="position: absolute; right: 15px;" href="#"><i id="emergency-close" style="display: none; position: relative; border-radius: 0px; border: none; padding: 0px" class="material-icons">close</i></a>
+                        </div>
+                        {% if entity.emergencyReference != null %}
+                            {% set emergencyId  = entity.emergencyReference.id%}
+                            {{ render(controller( 'PassengerBundle:Emergency:edit', {'id' : emergencyId} )) }}
+                        {% endif %}
+                        <div class="mdl-card__supporting-text mdl-card--border">
+                            <label class="row-label">{% trans %}passenger.labels.emergency_name{% endtrans %}</label>
+                            <p class="emergency-name row-content">{% if entity.emergencyReference != null %}{{ entity.emergencyReference.emergencyName }}{% endif %}</p>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="mdl-card__supporting-text mdl-card--border">
+                            <label class="row-label">{% trans %}passenger.labels.emergency_relationship{% endtrans %}</label>
+                            <p class="emergency-relationship row-content">{% if entity.emergencyReference != null %}{{ entity.emergencyReference.emergencyRelationship }}{% endif %}</p>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="mdl-card__supporting-text mdl-card--border">
+                            <label class="row-label">{% trans %}passenger.labels.emergency_number{% endtrans %}</label>
+                            <p class="emergency-number row-content">{% if entity.emergencyReference != null and entity.emergencyReference.emergencyNumber != null%}{{ entity.emergencyReference.emergencyNumber }}{% endif %}</p>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="mdl-card__supporting-text mdl-card--border">
+                            <label class="row-label">{% trans %}passenger.labels.emergency_email{% endtrans %}</label>
+                            <p class="emergency-email row-content">{% if entity.emergencyReference != null %}{{ entity.emergencyReference.emergencyEmail }}{% endif %}</p>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endif %}
+        </div>
+
+    </div>
+
+</div>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.js"></script>
+
+    {% javascripts '@toolkit_siteshow' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    {% javascripts '@toolkit_passenger' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    <script>
+        $(document).ready(function () {
+            //Add the date of birth label
+            var labelText = "{% trans %}passenger.modals.dob{% endtrans %}";
+            var div = $('.dateOfBirth');
+            div.prepend('<label class="mdl-label-mimic dob">' + labelText + '</label><br/>');
+            $('.dob').css({"position": "relative", "font-size": "14px"});
+            div.css({"margin-top": "5px"});
+//            $('#tui_toolkit_tourbundle_tourpassenger_passengers_"' + index + '"_dateOfBirth > div:nth-child(1)').css({"width": "100"});
+        });
+    </script>
+{% endblock %}
+
+{% block footer_left %}
+    {% if entity.tourReference.salesAgent.email%} {# Show Sales Agent Info to an Organizer#}
+        {% if entity.tourReference.salesAgent %}
+            <span class="intro">
+                    {{ brand.name }} {% trans %}tour.show.footer.intro_org{% endtrans %}
+            </span>
+            {% if entity.tourReference.salesAgent.media %}
+                <span class="tui-image-avatar"><img src="{{ ( entity.tourReference.salesAgent.media.getRelativePath ~ "/" ~ entity.tourReference.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.tourReference.salesAgent.username }}"></span>
+            {% elseif entity.tourReference.salesAgent.firstName and entity.tourReference.salesAgent.lastName %}
+                <span class="tui-text-avatar mdl-typography--headline">{{ entity.tourReference.salesAgent.firstName[:1] }}{{ entity.tourReference.salesAgent.lastName[:1] }}</span>
+            {% else %}
+                <span class="tui-text-avatar mdl-typography--headline">{{ entity.tourReference.salesAgent.username[:1] }}</span>
+            {% endif %}
+            <span class="agent">
+                {% if entity.tourReference.salesAgent.displayName %}
+                    {{ entity.tourReference.salesAgent.displayName }}
+                {% else %}
+                    {{ entity.tourReference.salesAgent.firstName }} {{ entity.tourReference.salesAgent.lastName }}
+                {% endif %}
+                <br>
+                <a href="mailto:{{ entity.tourReference.salesAgent.email }}">{{ entity.tourReference.salesAgent.email }}</a>
+            </span>
+        {% endif %}
+    {% else %} {# Show organizer info to everyone but organizers #}
+        {% if entity.tourReference.organizer %}
+            <span class="intro">
+                    {% trans %}tour.show.footer.intro{% endtrans %}
+            </span>
+            {% if entity.tourReference.organizer.media %}
+                <span class="tui-image-avatar"><img src="{{ ( entity.tourReference.organizer.media.getRelativePath ~ "/" ~ entity.tourReference.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.tourReference.organizer.username }}"></span>
+            {% elseif entity.tourReference.organizer.firstName and entity.tourReference.organizer.lastName %}
+                <span class="tui-text-avatar mdl-typography--headline">{{ entity.tourReference.organizer.firstName[:1] }}{{ entity.tourReference.organizer.lastName[:1] }}</span>
+            {% else %}
+                <span class="tui-text-avatar mdl-typography--headline">{{ entity.tourReference.organizer.username[:1] }}</span>
+            {% endif %}
+            <span class="agent">
+                {% if entity.tourReference.organizer.displayName %}
+                    {{ entity.tourReference.organizer.displayName }}
+                {% else %}
+                    {{ entity.tourReference.organizer.firstName }} {{ entity.tourReference.organizer.lastName }}
+                {% endif %}
+                <br>
+                <a href="mailto:{{ entity.tourReference.organizer.email }}">{{ entity.tourReference.organizer.email }}</a>
+            </span>
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block footer_right %}
+    <div class="quote-info">
+        <span class="quote-label">{% trans %}tour.show.footer.price{% endtrans %}</span>
+
+        <span class="quote-price">
+            {% if entity.tourReference.pricePerson %}
+                <strong>{% if entity.tourReference.currency %}{{ entity.tourReference.currency.htmlSymbol | raw }}{% endif %}{{ entity.tourReference.pricePersonPublic }}</strong>
+            {% endif %}
+        </span>
+    </div>
 {% endblock %}

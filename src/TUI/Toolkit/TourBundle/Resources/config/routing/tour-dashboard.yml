@@ -30,6 +30,24 @@ manage_passenger_dashboard:
     path: /{tourId}/passengers
     defaults: { _controller: "PassengerBundle:Passenger:getPassengerDashboard" }
 
+
+manage_parent_passenger_dashboard:
+    path: /{tourId}/parent/{parentId}/passengers
+    defaults: { _controller: "TUIToolkitUserBundle:User:getTourPassengers" }
+
+manage_ajax_move_to_accepted:
+    path: /move/accepted/{tourId}/{passengerId}
+    defaults: { _controller: "PassengerBundle:Passenger:moveToAccepted" }
+    methods:  [POST, PUT]
+
+manage_ajax_move_to_wailist:
+    path: /move/waitlist/{tourId}/{passengerId}
+    defaults: { _controller: "PassengerBundle:Passenger:moveToWaitlist" }
+
+manage_ajax_move_to_free:
+    path: /move/free/{tourId}/{passengerId}
+    defaults: { _controller: "PassengerBundle:Passenger:moveToFree" }
+
 manage_tour_edit_payments:
     path: /edit/payments/{id}
     defaults: { _controller: "TourBundle:Tour:getEditPayments" }

@@ -8,6 +8,8 @@
     <div id="avatar-label" class="mdl-label-mimic">{% trans %}user.avatar.label{% endtrans %}
         <div style="display:none;" id="dropzone-form-close"><i class="fa fa-times-circle"></i></div>
     </div>
+
+
     {{ render(controller('MediaBundle:Media:createDropzoneForm', {'context':'user'})) }}
     {{ form_start(edit_form) }}
 
@@ -16,11 +18,10 @@
         {% if entity.media %}
             <div class="media-placeholder-image edit">
                 <div id="overlay">
-                    <i class="fa fa-pencil-square-o fa-2x"></i>
+                    <i style="color:red;" class="fa fa-times fa-2x"></i>
                 </div>
             </div>
             <script>
-                {% if entity.media %}
                 $(document).ready(function () {
                     var bUrl = '{{ asset(".." ~ entity.media.getRelativePath ~ "/" ~ entity.media.getHashedFilename ) }}';
                     $(".media-placeholder-image").css({
@@ -31,10 +32,12 @@
                         "width": "300px",
                         "height": "160px"
                     });
-                    $("#tui_toolkit_userbundle_user_media").val('{{ entity.media.id }}');
-                });
-                {% endif %}
+                    $("#tui_toolkit_passengerbundle_passenger_media").val('{{ entity.media.id }}');
 
+                    $(document).on('click', '.media-placeholder-image', function(e) {
+                        $("#tui_toolkit_passengerbundle_passenger_media").val('');
+                    });
+                });
             </script>
         {% else %}
             <span class="media-placeholder-image new">

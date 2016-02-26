@@ -1,0 +1,20 @@
+
+{% block body -%}
+
+    <div class="emergency-form">
+        <div class="errors">
+            {{ form_errors(form) }}
+        </div>
+        {{ form(form) }}
+    </div>
+    <script>
+        $(document).ready(function () {
+            var tourId = $('.site-show').attr('entityId');
+            var passengerId = $('.site-show').attr('passengerId');
+            console.log(tourId);
+            $('#tui_toolkit_passengerbundle_emergency_passengerReference').val(passengerId);
+            $()
+        });
+    </script>
+
+{% endblock %}

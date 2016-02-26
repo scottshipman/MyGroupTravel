@@ -1,0 +1,30 @@
+dietary:
+    path:     /
+    defaults: { _controller: "PassengerBundle:Dietary:index" }
+
+dietary_show:
+    path:     /{id}/show
+    defaults: { _controller: "PassengerBundle:Dietary:show" }
+
+dietary_new:
+    path:     /new
+    defaults: { _controller: "PassengerBundle:Dietary:new" }
+
+dietary_create:
+    path:     /create
+    defaults: { _controller: "PassengerBundle:Dietary:create" }
+    methods:  POST
+
+dietary_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "PassengerBundle:Dietary:edit" }
+
+dietary_update:
+    path:     /{id}/update
+    defaults: { _controller: "PassengerBundle:Dietary:update" }
+    methods:  [POST, PUT]
+
+dietary_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "PassengerBundle:Dietary:delete" }
+    methods:  [POST, DELETE]

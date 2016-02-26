@@ -4,7 +4,7 @@ quote:
         edit: Edit Quote
         index: Quote Dashboard
         new: Create New Quote
-        show: Site View
+        show: Quote Website
         layout_auth: My Tours
         layout_anon: Quote Login
         deleted: Quote Dashboard - Deleted
@@ -14,7 +14,7 @@ quote:
         edit: Edit Quote
         index: Quote Dashboard - Active
         new: Create New Quote
-        show: Site View
+        show: Quote Website
         layout_auth: My Tours
         layout_anon: Quote Login
         deleted: Quote Dashboard - Deleted
@@ -73,11 +73,12 @@ quote:
         change_request: Your change request was successfully submitted for
         liked: Your Sales Contact has been notified that you liked this quote -
         lock: This quote's lock has been toggled.
+        soft_delete: "A quote already exists with this Quote Number, but has been deleted (archived). <br>Please ask an administrator to remove this Quote permanently, or undelete it for editing."
 
     grid:
         no_result: There are no Quotes to show. Please check your filter settings and try again.
         no_result-deleted: There are no Deleted Quotes to show. Please check your filter settings and try again.
-        no_result-converted: There are no Converted Quotes to show. Please check your filter settings and try again.
+        no_results-converted: There are no Converted Quotes to show. Please check your filter settings and try again.
         no_results-templates: There are no Templates to show. Please check your filter settings and try again.
         export: Quotes as CSV
         export_deleted: Deleted Quotes as CSV
@@ -109,6 +110,7 @@ quote:
             changes: If you would like to make some changes to the quote, you can choose from the options below and send a message to the your %brand% contact.
             change_request: Changes I would like to make
             add: Anything you would like to add?
+            promote: Copy and paste this link into your email and send it to your customer:
 
     exception:
         access: You do not have the ability to edit this Quote's information.

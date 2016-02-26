@@ -165,7 +165,7 @@ class InstitutionController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('institution.flash.save') . $entity->getName());
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('institution.flash.save') . $entity->getName());
 
             return $this->redirect($this->generateUrl('manage_institution_show', array('id' => $entity->getId())));
         }
@@ -379,7 +379,7 @@ class InstitutionController extends Controller
 
         if ($editForm->isValid()) {
             $em->flush();
-            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('institution.flash.save') . $entity->getName());
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('institution.flash.save') . $entity->getName());
 
             return $this->redirect($this->generateUrl('manage_institution'));
         }
@@ -412,13 +412,13 @@ class InstitutionController extends Controller
             // todo check for tours or other objects that might apply
             $quotes = $em->getRepository('QuoteBundle:Quote')->findOneBy(array('institution' => $entity->getId()));
             if($quotes){
-              $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('institution.flash.cant_delete'));
+                $this->get('ras_flash_alert.alert_reporter')->addError($this->get('translator')->trans('institution.flash.cant_delete'));
               return $this->redirect($this->generateUrl('manage_institution'));
             }
 
             $em->remove($entity);
             $em->flush();
-            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('institution.flash.delete') . $entity->getName());
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('institution.flash.delete') . $entity->getName());
         }
 
         return $this->redirect($this->generateUrl('manage_institution'));
@@ -458,13 +458,13 @@ class InstitutionController extends Controller
         // todo check for tours or other objects that might apply
         $quotes = $em->getRepository('QuoteBundle:Quote')->findOneBy(array('institution' => $entity->getId()));
         if($quotes){
-          $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('institution.flash.cant_delete'));
+            $this->get('ras_flash_alert.alert_reporter')->addError($this->get('translator')->trans('institution.flash.cant_delete'));
           return $this->redirect($this->generateUrl('manage_institution'));
         }
 
         $em->remove($entity);
         $em->flush();
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('institution.flash.delete') . $entity->getname());
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('institution.flash.delete') . $entity->getname());
 
         return $this->redirect($this->generateUrl('manage_institution'));
     }
@@ -488,13 +488,13 @@ class InstitutionController extends Controller
 
         $quotes = $em->getRepository('QuoteBundle:Quote')->findOneBy(array('institution' => $entity->getId()));
         if($quotes){
-            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('institution.flash.cant_delete'));
+            $this->get('ras_flash_alert.alert_reporter')->addError($this->get('translator')->trans('institution.flash.cant_delete'));
             return $this->redirect($this->generateUrl('manage_institution'));
         }
 
         $em->remove($entity);
         $em->flush();
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('quote.flash.delete'). ' ' . $entity->getName());
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('quote.flash.delete'). ' ' . $entity->getName());
 
         return $this->redirect($this->generateUrl('manage_institution'));
     }
@@ -518,7 +518,7 @@ class InstitutionController extends Controller
         $entity->setDeleted(NULL);
         $em->persist($entity);
         $em->flush();
-        $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('institution.flash.restore') . $entity->getname());
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('institution.flash.restore') . $entity->getname());
 
         return $this->redirect($this->generateUrl('manage_institution'));
     }

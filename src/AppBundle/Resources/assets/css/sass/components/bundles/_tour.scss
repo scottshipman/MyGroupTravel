@@ -75,6 +75,10 @@
       border-bottom: 1px solid #ccc;
     }
 
+    &.list-indent {
+      padding-left: 1em;
+    }
+
   }
 
   .payment-task-list {
@@ -119,13 +123,21 @@
 
 }
 
+.list-header {
+  font-size: 1.4em;
+  margin-bottom: 2em;
+  line-height: 2.5em;
+  border-bottom: 1px solid black;
+  width: 100%;
+}
+
 .tour-show-right-column {
   margin-top: $element-bottom;
   position: relative;
   z-index: 5;
 
   @include breakpoint_tablet() {
-    margin-top: -75px;
+    margin-top: -50px;
     float: right;
     width: $column_total_width * 2;
   }

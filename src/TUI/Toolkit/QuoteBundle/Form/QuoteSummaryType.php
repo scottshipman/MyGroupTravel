@@ -44,21 +44,21 @@ class QuoteSummaryType extends AbstractType
             ->add('expiryDate', 'genemu_jquerydate', array(
               'widget' => 'single_text',
               'required' => false,
-              'label' => 'quote.form.summary.expiry'. ' ' .$date_label,
+              'label' => 'quote.form.summary.expiry',
                 'translation_domain'  => 'messages',
               'format' => $date_format,
             ))
             ->add('departureDate', 'genemu_jquerydate', array(
               'widget' => 'single_text',
               'required' => false,
-              'label' => 'quote.form.summary.departure'. ' ' .$date_label,
+              'label' => 'quote.form.summary.departure',
               'translation_domain'  => 'messages',
               'format' => $date_format,
             ))
             ->add('returnDate', 'genemu_jquerydate', array(
               'widget' => 'single_text',
               'required' => false,
-              'label' => 'quote.form.summary.return'. ' ' .$date_label,
+              'label' => 'quote.form.summary.return',
               'translation_domain'  => 'messages',
               'format' => $date_format,
             ))

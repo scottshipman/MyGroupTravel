@@ -43,7 +43,7 @@ class TripStatusController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-          $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tripstatus.flash.save') . $entity->getName());
+          $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tripstatus.flash.save') . $entity->getName());
 
             return $this->redirect($this->generateUrl('manage_tripstatus_show', array('id' => $entity->getId())));
         }
@@ -172,7 +172,7 @@ class TripStatusController extends Controller
 
         if ($editForm->isValid()) {
             $em->flush();
-          $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tripstatus.flash.save'). $entity->getName());
+          $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tripstatus.flash.save'). $entity->getName());
 
             return $this->redirect($this->generateUrl('manage_tripstatus_edit', array('id' => $id)));
         }
@@ -202,7 +202,7 @@ class TripStatusController extends Controller
 
             $em->remove($entity);
             $em->flush();
-          $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('tripstatus.flash.delete'). $entity->getName());
+          $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tripstatus.flash.delete'). $entity->getName());
         }
 
         return $this->redirect($this->generateUrl('manage_tripstatus'));

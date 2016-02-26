@@ -40,11 +40,13 @@ class PassengerType extends AbstractType
         $builder
             ->add('fName', 'text', array(
                 'required' => true,
-                'label' => 'First Name'
+                'label' => 'passenger.form.invite.first',
+                'required' => true,
             ))
             ->add('lName', 'text', array(
                 'required' => true,
-                'label' => 'Last Name'
+                'label' => 'passenger.form.invite.last',
+                'required' => true,
             ))
             ->add('dateOfBirth', 'birthday', array(
                 'format' => $date_format,
@@ -59,6 +61,7 @@ class PassengerType extends AbstractType
                     'Male' => 'Male',
                     'Female' => 'Female'
                 ),
+                'label' => 'passenger.form.invite.gender',
                 'required' => true,
             ))
             ->add('tourReference', 'entity', array(
@@ -71,6 +74,13 @@ class PassengerType extends AbstractType
                 },
                 'attr' => array(
                     'class' => 'tour-reference'
+                )
+            ))
+            ->add('media', 'hidden', array(
+                'required' => false,
+                'data_class' => 'TUI\Toolkit\MediaBundle\Entity\Media',
+                'attr' => array(
+                    'class' => 'media-placeholder',
                 )
             ))
         ;

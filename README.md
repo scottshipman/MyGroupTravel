@@ -117,3 +117,4 @@ $ bin/toolkit-console doctrine:migrations:migrate
 \\ to check migrations status
 $ bin/toolkit-console doctrine:migrations:status
 ```
+

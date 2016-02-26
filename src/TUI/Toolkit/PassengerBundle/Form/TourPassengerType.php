@@ -45,21 +45,21 @@ class TourPassengerType extends AbstractType
 
         $builder
             ->add('firstName', 'text', array(
-                'label' => 'user.form.fname',
+                'label' => 'passenger.signupform.fname',
                 'translation_domain'  => 'messages',
                 'required' => true,
                 'mapped' => false,
 
             ))
             ->add('lastName', 'text', array(
-                'label' => 'user.form.lname',
+                'label' => 'passenger.signupform.lname',
                 'translation_domain'  => 'messages',
                 'required' => true,
                 'mapped' => false,
 
             ))
             ->add('email', 'email', array(
-                'label' => 'user.form.email',
+                'label' => 'passenger.signupform.email',
                 'translation_domain'  => 'messages',
                 'required'  => true,
                 'mapped' => false,
@@ -72,6 +72,7 @@ class TourPassengerType extends AbstractType
                 'allow_delete' => true,
                 'by_reference' => false,
                 'mapped' => false,
+                'required' => true,
             ))
                     // Honeypot field
             ->add('password', 'honeypot')

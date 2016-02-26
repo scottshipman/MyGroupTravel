@@ -1,6 +1,7 @@
-{% extends '::base.html.twig' %}
+{% extends '::site-base.html.twig' %}
 {% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
-{% set spotsRemaining = tour.payingPlaces - acceptedobjects|length %}
+{% set payingSpotsRemaining = tour.payingPlaces - (statusCounts.passenger.accepted + statusCounts.organizer.accepted)  %}
+{% set freeSpotsRemaining = tour.freePlaces - (statusCounts.passenger.free + statusCounts.organizer.free)  %}
 
 {% block title %}
     {% if is_granted("ROLE_BRAND") %}
@@ -11,14 +12,14 @@
 {% endblock %}
 
 {% block page_title %}
-    <span>{% trans %}passenger.page_title.index{% endtrans %}</span>
+    <span xmlns="http://www.w3.org/1999/html">{% trans %}passenger.page_title.index{% endtrans %}</span>
 {% endblock %}
 
 {% block page_title_menu %}
     <button id="tour-title-drop" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-menu-drop">
         <i class="material-icons">arrow_drop_down</i>
     </button>
-    {% embed "PassengerBundle:Passenger:passengerMenu.html.twig" %}
+    {% embed "TourBundle:Tour:tourMenu.html.twig" %}
             {% block tour_dashboard_link %}
                 <li><a href="{{ path('manage_tour_show', { 'id': tour.id }) }}" class="mdl-menu__item">{% trans %}tour.title.index{% endtrans %}</a></li>
             {% endblock %}
@@ -36,12 +37,22 @@
     <div class="tour-show-wrapper site-show" entityId="{{ tour.id }}">
 
         <div class="tour-show-left-column">
-            <ul class="tour-show-submenu">
-                <li><strong>{% trans %}passenger.labels.passengers_for{% endtrans %} {{ tour.name|capitalize }}</strong></li>
-                {#<li><strong>Accepted ({{ accepted|length }})</strong></li>#}
-                <li><strong>{% trans %}passenger.labels.waitlist{% endtrans %} ({{ waitlistobjects|length }})</strong></li>
-                {#<li><strong>Free</strong></li>#}
-                {#<li><strong><a href="#">Organisers</a></strong></li>#}
+
+            <h3>{{ tour.name|capitalize }}</h3>
+            <a href="" style="float:right;" class="passenger-filter" data-id="showEveryone"><i class="material-icons md-18">undo</i> {% trans %} passenger.labels.show-everyone{% endtrans %}</a><br>
+            <div class="list-header" style="color: {{ brand.secondaryColor }}"><i class="material-icons">flight_takeoff</i> {% trans %} passenger.labels.passengers_for{% endtrans %}</div>
+            <ul class="tour-show-submenu list-indent">
+                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" data-id="showAllPassengers"><strong>{% trans %}passenger.labels.all-passengers{% endtrans %} <span id="allPassengers">({{ statusCounts.passenger.accepted + statusCounts.organizer.accepted + statusCounts.passenger.free + statusCounts.organizer.free }})</span></strong></a></li>
+                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" data-id="showAcceptedPassengers"><strong>{{ "accepted" | paxLabel }} <span id="acceptedPassengers">({{ statusCounts.passenger.accepted }})</span></strong></a></li>
+                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" data-id="showWaitlistPassengers"><strong>{{ "waitlist" | paxLabel }} <span id="waitlistPassengers">({{ statusCounts.passenger.waitlist }})</span></strong></a></li>
+                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" data-id="showFreePassengers"><strong>{{ "free" | paxLabel }} <span id="freePassengers">({{ statusCounts.passenger.free}})</span></strong></a></li>
+            </ul>
+            <div class="list-header" style="color: {{ brand.secondaryColor }}"><i class="material-icons">group_add</i> {% trans %} passenger.labels.organizers_for{% endtrans %}</div>
+            <ul class="tour-show-submenu list-indent">
+                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" data-id="showAllOrganizers"><strong>{% trans %}passenger.labels.all-organizers{% endtrans %} <span id="allOrganizers">({{ statusCounts.organizer.accepted + statusCounts.organizer.waitlist + statusCounts.organizer.free }})</span></strong></a></li>
+                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" data-id="showAcceptedOrganizers"><strong>{{ "accepted" | paxLabel }} <span id="acceptedOrganizers">({{ statusCounts.organizer.accepted  }})</span></strong></a></li>
+                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" data-id="showWaitlistOrganizers"><strong>{{ "waitlist" | paxLabel }} <span id="waitlistOrganizers">({{ statusCounts.organizer.waitlist  }})</span></strong></a></li>
+                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" data-id="showFreeOrganizers"><strong>{{ "free" | paxLabel }} <span id="freeOrganizers">({{ statusCounts.organizer.free  }})</span></strong></a></li>
             </ul>
 
             <div class="tour-edit-organizer-left">
@@ -59,43 +70,132 @@
         </div>
 
         <div class="tour-show-right-column">
-
-            <div class="waitlist tour-edit mdl-card mdl-shadow--2dp">
+            {# Passenger CTA Card #}
+            <div class="passenger-cta-card tour-edit mdl-card mdl-shadow--2dp passenger-dashboard-cta-card">
 
                 <div class="mdl-card__title">
-                    <h3 class="mdl-card__title-text">{% trans %}passenger.labels.passenger_list{% endtrans %}</h3>
+                    <h3 id="card-title" class="mdl-card__title-text">{% trans %}passenger.labels.passenger_list{% endtrans %}</h3>
                 </div>
 
                 <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
-                    <div class="paying-passengers-title"><h3>{% trans %}passenger.labels.add_paying{% endtrans %}</h3></div> <div class="passenger-count"><p style="color: {{ brand.primaryColor }}" class="spots-remaining">{{ spotsRemaining }}</p><p class="spots-remaining-copy"><strong>{% trans %}passenger.labels.remaining{% endtrans %}</strong></p></div>
-                    <p class="passenger-dashboard-copy">{% trans %}passenger.labels.welcome{% endtrans %}</p>
-                    <div style="clear: both"></div>
-                    <a id="invite-passengers" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="#">{% trans %}passenger.labels.invite{% endtrans %}</a>
-                    <a id="accept-tour" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="#"><i class="fa fa-user-plus"></i>{% trans %}passenger.labels.add{% endtrans %}</a>
+                        <div class="paying-passengers-title"><h3>{% trans %}passenger.labels.add_paying{% endtrans %}</h3></div>
+                        <div class="passenger-count">
+                            {# Accepted/Paying Summary #}
+                            <div style="display: inline-block; margin-right: 20px;" class="payingspots-remaining">
+                                <p style="color: {{ brand.primaryColor }}" class="payingspots-remaining spots-remaining">{{ payingSpotsRemaining }}</p>
+                                <p class="spots-remaining-copy"><strong>{% trans %}passenger.labels.remaining{% endtrans %}<br>{{ 'accepted' | paxLabel }}</strong></p>
+                            </div>
+                            {# Free Summary #}
+                            <div style="display: inline-block;" class="freespots-remaining">
+                                <p style="color: {{ brand.primaryColor }}; padding-top:.5em;" class="freespots-remaining spots-remaining">{{ freeSpotsRemaining }}</p>
+                                <p class="spots-remaining-copy"><strong>{% trans %}passenger.labels.remaining{% endtrans %}<br>{{ 'free' | paxLabel }}</strong></p>
+                            </div>
+                        </div>
+                        <p class="passenger-dashboard-copy">{% trans %}passenger.labels.welcome{% endtrans %}</p>
+                        <div style="clear: both"></div>
+                        <a id="invite-passengers" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="#"><i class="fa fa-users"></i>{% trans %}passenger.labels.invite{% endtrans %}</a>
+                        <a id="accept-tour" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="#"><i class="fa fa-user-plus"></i>{% trans %}passenger.labels.add{% endtrans %}</a>
                 </div>
-                {% for passenger in waitlistobjects %}
-                    <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
-                        <p style="display: inline-block"><strong>{{ passenger[0].p_fName }}</strong></p> <p style="display: inline-block"><strong>{{ passenger[0].p_lName }}</strong></p> <p style="display: inline-block"><strong><a href="mailto:{{ passenger[1].email }}">{{ passenger[1].email }}</a></strong></p>
-                        <label style="display: block">Signed up on {{ passenger[0].p_signUpDate|date(format) }}</label>
+            </div>
+
+            {# Organizer CTA Card #}
+            <div class="organizer-cta-card organizers tour-edit mdl-card mdl-shadow--2dp" style="margin-bottom: 0; box-shadow: none; display:none;">
+
+                <div class="mdl-card__title">
+                    <h3 id="organizer-card-title" class="mdl-card__title-text">{% trans %}passenger.labels.passenger_list{% endtrans %}</h3>
+                </div>
+
+                <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
+                    <div style="float:left; width:80%" >
+                        <div class="paying-passengers-title"><h3>{% trans %}passenger.labels.add-organizer{% endtrans %}</h3></div>
+                        <div style="clear:both;">
+                            <a href="" class="show-invite-form mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons"><i class="fa fa-users"></i>{% trans %}passenger.actions.invite-organizers{% endtrans %}</a>
+                        </div>
+                    </div>
+                    {#<div style="float:left;" class="passenger-count">#}
+                        {#&#123;&#35; Accepted/Paying Summary &#35;&#125;#}
+                        {#<p style="color: {{ brand.primaryColor }}" class="payingspots-remaining spots-remaining">{{ payingSpotsRemaining }}</p>#}
+                        {#<p class="spots-remaining-copy"><strong>{% trans %}passenger.labels.remaining{% endtrans %}<br>{{ 'accepted' | paxLabel }}</strong></p>#}
+                        {#&#123;&#35; Free Summary &#35;&#125;#}
+                        {#<p style="color: {{ brand.primaryColor }}; padding-top:.5em;" class="freespots-remaining spots-remaining">{{ freeSpotsRemaining }}</p>#}
+                        {#<p class="spots-remaining-copy"><strong>{% trans %}passenger.labels.remaining{% endtrans %}<br>{{ 'free' | paxLabel }}</strong></p>#}
+                    {#</div>#}
+                        {# render the Invite organizer form #}
+                        <div style="clear:both;">
+                         {{ render(controller( 'PassengerBundle:Passenger:inviteOrganizer', {'tourId' : tour.id} )) }}
+                        </div>
+
+               </div>
+            </div>
+                {% for passenger in passengers %}
+
+                    {% set signedUp = 'Signed up on ' ~ passenger[0].signUpDate|date(format)  %}
+                    {% if passenger[0].status == "accepted" %}
+                        {% set statusicon =  '<a class="' ~ passenger[0].status ~ 'icon" title = "' ~ passenger[0].status | paxLabel ~ '"><i class="material-icons statusicon">verified_user</i></a>'%}
+                        {% set status = 'accepted' %}
+                    {% else %}
+                        {% set statusicon = '<a class="' ~ passenger[0].status ~ 'icon" title = "' ~ passenger[0].status | paxLabel ~ '"><i class="material-icons statusicon">list</i></a>'%}
+                        {% set status = 'waitlist' %}
+                    {% endif %}
+
+                    {% if passenger[2] is sameas(TRUE) %} {# is this an organizer? #}
+                        {% set organizericon = '<a class="organizer-card" title = "Organizer"><i class="material-icons">group_add</i></a>' %}
+                        {% set paxClass = "organizers" %}
+                        {% if tour.organizer.id == passenger[1].id %}
+                            {% set signedUp = 'passenger.labels.primary-organizer' | trans %}
+                        {% else %}
+                            {% if passenger[1].enabled is sameas(false) %} {# Pending Invite #}
+                                {% set statusicon = '<a class="' ~ passenger[0].status ~ 'icon" title = "' ~ passenger[0].status | paxLabel ~ '"><i class="material-icons">live_help</i></a>' %}
+                                {% set signedUp = 'passenger.labels.invite-pending' | trans %}  {% endif %}
+                            {% if passenger[1].enabled is sameas(true) %}
+                                {% set signedUp = 'passenger.labels.assistant-organizer' | trans %}  {% endif %}
+                        {% endif %}
+                    {% else %}
+                        {% set organizericon = '' %}
+                        {% set paxClass = "passengers" %}
+                    {% endif %}
+
+                    {% if passenger[0].free == 1 %}
+                        {% set freeLabel = "free" | paxLabel %}
+                        {% set freeicon = '<a class="freeicon" title = "' ~ freeLabel ~ '"><i class="material-icons statusicon">money_off</i></a>' %}
+                        {%  set freeClass = "free" %}
+                        {% set statusicon = '' %}
+                        {% set status = '' %}
+                    {% else %}
+                        {% set freeClass = '' %}
+                        {% set freeicon = '' %}
+                    {% endif %}
+                    <div class="{{ status }} {{ freeClass }} {{ paxClass }} tour-edit mdl-shadow--2dp" style="background-color:white; margin-bottom: 0;" passenger="{{ passenger[0].id }}">
+                        <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
+                            <div style="float: left; color: grey;" class="pcardname">
+                            {% if passenger[0].media %}
+                                <img style="float: left; margin-right: 15px;"  class="tui-image-avatar" src="{{ ( passenger[0].media.getRelativePath ~ "/" ~ passenger[0].media.getHashedFilename ) | imagine_filter('thumbnail') }}">
+                            {% elseif passenger[0].fName and passenger[0].lName %}
+                                <span style="float: left; margin-right: 15px;"  class="tui-text-avatar mdl-typography--headline">{{ passenger[0].fName[:1] }}{{ passenger[0].lName[:1] }}</span>
+                            {% else %}
+                                <span style="float: left; margin-right: 15px;"  class="tui-text-avatar mdl-typography--headline">{{ passenger[0].fName[:1] }}</span>
+                            {% endif %}
+                            <p style="display: inline-block"><strong>{{ passenger[0].fName }}</strong></p>
+                            <p style="display: inline-block"><strong>{{ passenger[0].lName }}</strong></p>
+                            <p style="display: inline-block"><strong><a href="mailto:{{ passenger[1].email }}">{{ passenger[1].email }}</a></strong></p>
+                            <label style="display: inline-block; margin-left: 63px; min-width: 100%;">{{ statusicon | raw }} {{ freeicon | raw }}{{ organizericon | raw }} {{ signedUp }}</label>
+                            </div>
+                            {% if  passenger[0].status != "Pending Invite"%}
+                                <button style="position: absolute; right: 20px; color:grey; margin-top:10px;" id="passenger-actions-menu-drop-{{ passenger[0].id }}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+                                    <i class="material-icons">more_vert</i>
+                                </button>
+                                {% embed "PassengerBundle:Passenger:passengerActionsMenu.html.twig" %}{% endembed %}
+                            {% endif %}
+                        </div>
+
                     </div>
                 {% endfor %}
-                </div>
-        </div>
 
-            {#{% if entity.SetupComplete == true and entity.isComplete == true %}#}
+                <!-- render the organizers -->
+                {#{% embed "PassengerBundle:Passenger:organizerList.html.twig" %} {% endembed %}#}
 
-                {#{{ render(controller('TourBundle:Tour:getTourCompletedAndSetup', { 'id': entity.id } )) }}#}
-
-            {#{% elseif entity.SetupComplete == true and entity.isComplete == false %}#}
-
-                {#{{ render(controller('TourBundle:Tour:getTourNotCompletedAndSetup', { 'id': entity.id } )) }}#}
-
-            {#{% elseif entity.SetupComplete == false %}#}
-
-                {#{{ render(controller('TourBundle:Tour:getTourNotSetup', { 'id': entity.id } )) }}#}
-
-            {#{% endif %}#}
-
+                <div style="clear: both; height: 150px;"></div>
+            </div>
         </div>
 
     </div>
@@ -106,8 +206,38 @@
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
+    {% javascripts '@toolkit_passenger' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
     <script>
+
+        (function(passengerStatus, $, undefined) {
+            //Accepted Property
+            passengerStatus.accepted = "{{ 'accepted' | paxLabel }}";
+            //Waitlist Property
+            passengerStatus.waitlist = "{{ 'waitlist' | paxLabel }}";
+            //Free Property
+            passengerStatus.free = "{{ 'free' | paxLabel }}";
+            //Organizer property
+            passengerStatus.organizer = "{{ 'passenger.labels.organizer' | trans }}";
+            passengerStatus.passenger = "{{ 'passenger.labels.passenger' | trans }}";
+            passengerStatus.all = "{{ 'passenger.labels.passenger_list' | trans }}";
+
+            // Colors
+            passengerStatus.primaryColor = "{{ brand.primaryColor }}";
+            passengerStatus.secondaryColor = "{{ brand.secondaryColor }}";
+            passengerStatus.tertiaryColor = "{{ brand.tertiaryColor }}";
+
+
+        }( window.passengerStatus = window.passengerStatus || {}, jQuery ));
+
         $(document).ready(function () {
+            if( window.location.hash ) {
+                var hashFilter = window.location.hash;
+                // Fragment exists
+                filterPassengers(hashFilter.substring(1));
+            }
 
                 // Promote Popup
                 $(document).on('click', '#invite-passengers', function (e) {
@@ -136,6 +266,113 @@
 
                 });
 
+                $(document).on('click', '.passenger-filter', function (e){
+                    e.preventDefault();
+                    var elemID = this.getAttribute('data-id');
+                    window.location.hash = elemID;
+                    filterPassengers(elemID);
+                });
+
+                // toggle invite form display
+                $(document).on('click', '.show-invite-form', function (e) {
+                    e.preventDefault();
+                    $('.organizer-form-container').slideDown(400);
+                    $('.show-invite-form').hide();
+
+
+                });
+                 $(document).on('click', '.hide-invite-form', function (e) {
+                    e.preventDefault();
+                    $('.organizer-form-container').slideUp(400);
+                    $('.show-invite-form').show();
+
+
+                });
+
+                // bind Invite Organizer form and provide a simple callback function
+                $('#ajax_invite_organizer').ajaxForm({
+                    beforeSubmit: function(){
+                        $('#loader').show();
+                        $('.errors').html('');
+                    },
+                    clearForm: true,
+                    success : function (response) {
+                        // display success message
+//                        $('.errors').html('<div id="invite-org-success" style="display:none;">An email invitation has been sent to ' + response[1] + ' ' + response[2] + '  at ' + response[0] + '.</div>');
+//                        $('#invite-org-success').slideDown(400);
+                        // increment organizer count
+                        $('#organizerPassengers').html('(' + response[3] + ')')
+                        // add an organizer card with waitlist and pending invite status
+                        $('#organizer-cards-wrapper').prepend('<div class="tour-edit mdl-shadow--2dp" style="background-color:white; margin-bottom: 0;"><div class="mdl-card__supporting-text mdl-card--border" style="color:grey;"><div style="float: left; color: grey;"><span class="tui-text-avatar mdl-typography--headline">' + response[1].charAt(0) + response[1].charAt(0) + '</span><p style="display: inline-block"><strong>' + response[1] + '&nbsp;</strong></p><p style="display: inline-block"><strong>' + response[2] + '&nbsp;</strong></p><p style="display: inline-block"><strong>(Invited - Not yet responded.)</strong></p><p style="display: inline-block" class="organizer-Not Travelling "></p><p><a href="' + response[0] + '">' + response[0] + '</a></p></div></div></div>');
+//                        $('#loader').hide();
+                        location.reload(true);
+                    },
+                    error : function (response) {
+                        console.log(response);
+
+                    },
+                });
         });
     </script>
+
+{% endblock %}
+
+{% block footer_left %}
+    {% if app.user.email != tour.salesAgent.email%} {# Show Sales Agent Info to an Organizer#}
+        {% if tour.salesAgent %}
+            <span class="intro">
+                    {{ brand.name }} {% trans %}tour.show.footer.intro_org{% endtrans %}
+            </span>
+            {% if tour.salesAgent.media %}
+                <span class="tui-image-avatar"><img src="{{ ( tour.salesAgent.media.getRelativePath ~ "/" ~ tour.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ tour.salesAgent.username }}"></span>
+            {% elseif tour.salesAgent.firstName and tour.salesAgent.lastName %}
+                <span class="tui-text-avatar mdl-typography--headline">{{ tour.salesAgent.firstName[:1] }}{{ tour.salesAgent.lastName[:1] }}</span>
+            {% else %}
+                <span class="tui-text-avatar mdl-typography--headline">{{ tour.salesAgent.username[:1] }}</span>
+            {% endif %}
+            <span class="agent">
+                {% if tour.salesAgent.displayName %}
+                    {{ tour.salesAgent.displayName }}
+                {% else %}
+                    {{ tour.salesAgent.firstName }} {{ tour.salesAgent.lastName }}
+                {% endif %}
+                <br>
+                <a href="mailto:{{ tour.salesAgent.email }}">{{ tour.salesAgent.email }}</a>
+            </span>
+        {% endif %}
+    {% else %} {# Show organizer info to everyone but organizers #}
+        {% if tour.organizer %}
+            <span class="intro">
+                    {% trans %}tour.show.footer.intro{% endtrans %}
+            </span>
+            {% if tour.organizer.media %}
+                <span class="tui-image-avatar"><img src="{{ ( tour.organizer.media.getRelativePath ~ "/" ~ tour.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ tour.organizer.username }}"></span>
+            {% elseif tour.organizer.firstName and tour.organizer.lastName %}
+                <span class="tui-text-avatar mdl-typography--headline">{{ tour.organizer.firstName[:1] }}{{ tour.organizer.lastName[:1] }}</span>
+            {% else %}
+                <span class="tui-text-avatar mdl-typography--headline">{{ tour.organizer.username[:1] }}</span>
+            {% endif %}
+            <span class="agent">
+                {% if tour.organizer.displayName %}
+                    {{ tour.organizer.displayName }}
+                {% else %}
+                    {{ tour.organizer.firstName }} {{ tour.organizer.lastName }}
+                {% endif %}
+                <br>
+                <a href="mailto:{{ tour.organizer.email }}">{{ tour.organizer.email }}</a>
+            </span>
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block footer_right %}
+    <div class="quote-info">
+        <span class="quote-label">{% trans %}tour.show.footer.price{% endtrans %}</span>
+
+        <span class="quote-price">
+            {% if tour.pricePerson %}
+                <strong>{% if tour.currency %}{{ tour.currency.htmlSymbol | raw }}{% endif %}{{ tour.pricePersonPublic }}</strong>
+            {% endif %}
+        </span>
+    </div>
 {% endblock %}

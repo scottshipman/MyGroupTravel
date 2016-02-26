@@ -9,8 +9,17 @@
 }
 
 .passenger-dashboard-copy {
-  width: 60%;
+  width: auto;
   float:left;
+  @include breakpoint_desktop() {
+    width: 60%;
+  }
+}
+
+.organizer-dashboard-copy {
+  width: auto;
+  float:left;
+  margin-top: 1.5em;
 }
 
 .passenger-dashboard-buttons {
@@ -19,10 +28,16 @@
 }
 
 .passenger-count {
-  float: right;
-  width: 30%;
+  float: left;
+  width: 100%;
   display: inline-block;
-  margin-top: 20px;
+
+  @include breakpoint_desktop() {
+    display: inline-block;
+    width: 170px;
+    float:right;
+    margin-top: 0;
+  }
 
   .spots-remaining {
     font-size: 60px;
@@ -34,4 +49,333 @@
 
 .passenger-form div.new_passenger > div > div:nth-child(5) {
   display: none;
+}
+
+.passenger-removed {
+    -webkit-transition: max-height 1s;
+    -moz-transition: max-height 1s;
+    -ms-transition: max-height 1s;
+    -o-transition: max-height 1s;
+    transition: max-height 1s;
+    overflow: hidden;
+    // "height: 0" not work with css transitions
+    max-height: 0 !important;
+    //padding: 0;
+}
+
+.passenger-info {
+  max-height: 200px;
+}
+
+.mdl-card__supporting-text {
+
+  .passenger-supporting-icon {
+    color: grey;
+    float:right;
+    margin-top: 15px;
+    display: inline-block;
+    font-size: 22px;
+  }
+
+}
+
+.medical-form {
+  max-height: 0;
+  opacity: 0;
+  margin-left: 20px;
+  -webkit-transition: max-height 1s;
+  -moz-transition: max-height 1s;
+  -ms-transition: max-height 1s;
+  -o-transition: max-height 1s;
+  transition: max-height 1s;
+  overflow: hidden;
+  max-height: 0px;
+  opacity: 1;
+
+  &.expanded {
+    -webkit-transition: max-height 1s;
+    -moz-transition: max-height 1s;
+    -ms-transition: max-height 1s;
+    -o-transition: max-height 1s;
+    transition: max-height 1s;
+    overflow: hidden;
+    max-height: 500px !important;
+    //padding: 0;
+    opacity: 1;
+  }
+}
+
+.dietary-form {
+  max-height: 0;
+  opacity: 0;
+  margin-left: 20px;
+  -webkit-transition: max-height 1s;
+  -moz-transition: max-height 1s;
+  -ms-transition: max-height 1s;
+  -o-transition: max-height 1s;
+  transition: max-height 1s;
+  overflow: hidden;
+  max-height: 0px;
+  opacity: 1;
+
+  &.expanded {
+    -webkit-transition: max-height 1s;
+    -moz-transition: max-height 1s;
+    -ms-transition: max-height 1s;
+    -o-transition: max-height 1s;
+    transition: max-height 1s;
+    overflow: hidden;
+    max-height: 300px !important;
+    //padding: 0;
+    opacity: 1;
+  }
+}
+
+.passport-form {
+  max-height: 0;
+  opacity: 0;
+  margin-left: 20px;
+  -webkit-transition: max-height 1s;
+  -moz-transition: max-height 1s;
+  -ms-transition: max-height 1s;
+  -o-transition: max-height 1s;
+  transition: max-height 1s;
+  overflow: hidden;
+  max-height: 0px;
+  opacity: 1;
+
+  &.expanded {
+    -webkit-transition: max-height 1s;
+    -moz-transition: max-height 1s;
+    -ms-transition: max-height 1s;
+    -o-transition: max-height 1s;
+    transition: max-height 1s;
+    overflow: hidden;
+    max-height: 900px !important;
+    //padding: 0;
+    opacity: 1;
+  }
+
+   .mdl-selectfield {
+    width: auto !important;
+  }
+}
+
+.emergency-form {
+  max-height: 0;
+  opacity: 0;
+  margin-left: 20px;
+  -webkit-transition: max-height 1s;
+  -moz-transition: max-height 1s;
+  -ms-transition: max-height 1s;
+  -o-transition: max-height 1s;
+  transition: max-height 1s;
+  overflow: hidden;
+  max-height: 0px;
+  opacity: 1;
+
+  &.expanded {
+    -webkit-transition: max-height 1s;
+    -moz-transition: max-height 1s;
+    -ms-transition: max-height 1s;
+    -o-transition: max-height 1s;
+    transition: max-height 1s;
+    overflow: hidden;
+    max-height: 400px !important;
+    //padding: 0;
+    opacity: 1;
+  }
+}
+
+.passenger-edit-form {
+  max-height: 0;
+  opacity: 0;
+  margin-left: 20px;
+  -webkit-transition: max-height 1s;
+  -moz-transition: max-height 1s;
+  -ms-transition: max-height 1s;
+  -o-transition: max-height 1s;
+  transition: max-height 1s;
+  overflow: hidden;
+  max-height: 0px;
+  opacity: 1;
+
+  &.expanded {
+    -webkit-transition: max-height 1s;
+    -moz-transition: max-height 1s;
+    -ms-transition: max-height 1s;
+    -o-transition: max-height 1s;
+    transition: max-height 1s;
+    overflow: hidden;
+    max-height: 550px !important;
+    //padding: 0;
+    opacity: 1;
+    margin-top: 10px;
+  }
+
+  .mdl-textfield {
+    max-width: 250px;
+  }
+
+  .mdl-selectfield {
+    max-width: 100px;
+  }
+}
+
+//Overwrite min-height for cards on the passengers profile
+.mdl-card {
+  min-height:190px;
+
+  .mdl-card__title {
+    color:grey;
+  }
+
+  a {
+    color: grey;
+
+    #medical,
+    #passport,
+    #emergency,
+    #dietary {
+      float:right;
+      border-radius: 25px;
+      border: 1px solid grey;
+      padding:5px;
+      color:grey;
+    }
+
+    #medical-close,
+    #passport-close,
+    #emergency-close,
+    #dietary-close {
+      display: none;
+      border-radius: 25px;
+      border: 1px solid grey;
+      padding:5px;
+      color: grey;
+    }
+  }
+
+  .row-label {
+    display: block;
+    float:left;
+    color: grey;
+  }
+
+  .row-content {
+    float: right;
+  }
+
+  .title-button {
+    position: absolute;
+    right: 20px;
+    color:grey;
+    margin-top:5px;
+  }
+
+  #passenger-avatar {
+    float: left;
+    margin-right: 15px;
+  }
+
+  .passenger-details {
+    display: inline-block;
+
+    h3 {
+      margin-bottom: 10px;
+      font-size: 35px;
+      font-weight: 100;
+    }
+
+  }
+
+  .task-title {
+    display: inline;
+    font-size:18px;
+
+    .add-info {
+      margin-right: 10px;
+      color:grey;
+      display: inline;
+    }
+
+  }
+  
+  .clear {
+    clear: both;
+  }
+
+  .task-due-date {
+    display: inline;
+    margin-left:5px;
+  }
+
+  .no-tasks {
+    font-size: 18px;
+    color: grey;
+  }
+
+}
+
+.organizer-free {
+  color: blue;
+  margin-left: 1em;
+  &:after {
+    content: "Free";
+
+  }
+}
+
+.organizer-accepted {
+  color: green;
+  margin-left: 1em;
+  &:after {
+    content: "Accepted";
+
+  }
+}
+
+.organizer-waitlist {
+  color: gold;
+  margin-left: 1em;
+  &:after {
+    content: 'Waitlist';
+
+  }
+}
+
+a.freeicon {
+  color: blue;
+}
+
+a.waitlisticon {
+  color: gold;
+}
+
+a.acceptedicon {
+  color: green;
+}
+
+a.organizer-card {
+  color: orangered;
+}
+
+.invite-organizer-form {
+  &.mdl-textfield {
+    width: 80%;
+  }
+}
+
+#invite-org-success {
+  margin: 1em;
+  background-color: green;
+  color:white;
+  padding: 1em;
+  font-size: .82em;
+}
+
+.passenger-dashboard-cta-card {
+  margin-bottom: 0px;
+  box-shadow: none;
+  display: block;
 }

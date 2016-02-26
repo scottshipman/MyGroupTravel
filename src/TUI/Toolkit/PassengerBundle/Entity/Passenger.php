@@ -53,7 +53,7 @@ class Passenger
     /**
      * @var string
      *
-     * @ORM\Column(name="gender", type="string")
+     * @ORM\Column(name="gender", nullable=true, type="string")
      */
     protected $gender;
 
@@ -61,7 +61,7 @@ class Passenger
     /**
      * @var datetime
      *
-     * @ORM\Column(name="dob", type="date", nullable=false)
+     * @ORM\Column(name="dob", type="date", nullable=true)
      */
     protected $dateOfBirth;
 
@@ -75,12 +75,54 @@ class Passenger
     /**
      *
      * @var \TUI\Toolkit\TourBundle\Entity\Tour
-     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\TourBundle\Entity\Tour", cascade={"persist"}, fetch="LAZY")
+     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\TourBundle\Entity\Tour", cascade={"persist"})
      * @ORM\JoinColumn(name="tour", referencedColumnName="id")
      *
      */
     protected $tourReference;
 
+    /**
+     * @var \TUI\Toolkit\PassengerBundle\Entity\Medical
+     * @ORM\OneToOne(targetEntity="TUI\Toolkit\PassengerBundle\Entity\Medical")
+     * @ORM\JoinColumn(name="medical", referencedColumnName="id")
+     */
+    protected $medicalReference;
+
+    /**
+     * @var \TUI\Toolkit\PassengerBundle\Entity\Dietary
+     * @ORM\OneToOne(targetEntity="TUI\Toolkit\PassengerBundle\Entity\Dietary")
+     * @ORM\JoinColumn(name="dietary", referencedColumnName="id")
+     */
+    protected $dietaryReference;
+
+    /**
+     * @var \TUI\Toolkit\PassengerBundle\Entity\Passport
+     * @ORM\OneToOne(targetEntity="TUI\Toolkit\PassengerBundle\Entity\Passport")
+     * @ORM\JoinColumn(name="passport", referencedColumnName="id")
+     */
+    protected $passportReference;
+
+    /**
+     * @var \TUI\Toolkit\PassengerBundle\Entity\Emergency
+     * @ORM\OneToOne(targetEntity="TUI\Toolkit\PassengerBundle\Entity\Emergency")
+     * @ORM\JoinColumn(name="emergency", referencedColumnName="id")
+     */
+    protected $emergencyReference;
+
+    /**
+     * @var \TUI\Toolkit\MediaBundle\Entity\Media
+     * @ORM\OneToOne(targetEntity="TUI\Toolkit\MediaBundle\Entity\Media", cascade={"persist"}, fetch="LAZY")
+     * @ORM\JoinColumn(name="media", referencedColumnName="id")
+     */
+    protected $media;
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="self", type="boolean")
+     */
+    protected $self;
 
     /**
      * @var string
@@ -89,8 +131,16 @@ class Passenger
      */
     protected $status;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="free", type="boolean")
+     */
+    protected $free;
+
 
     public function __construct()  {
+        $this->self = FALSE;
     }
 
     /**
@@ -202,13 +252,97 @@ class Passenger
     }
 
     /**
+      * @param $medicalReference
+      * @return $this
+      *
+      */
+    public function setMedicalReference($medicalReference) {
+
+        $this->medicalReference = $medicalReference;
+
+        return $medicalReference;
+
+    }
+
+    /**
+     * @return Medical
+     *
+     */
+    public function getMedicalReference() {
+        return $this->medicalReference;
+    }
+
+    /**
+     * @param $dietaryReference
+     * @return $this
+     *
+     */
+    public function setDietaryReference($dietaryReference) {
+
+        $this->dietaryReference = $dietaryReference;
+
+        return $dietaryReference;
+
+    }
+
+    /**
+     * @return Dietary
+     *
+     */
+    public function getDietaryReference() {
+        return $this->dietaryReference;
+    }
+
+    /**
+     * @param $passportReference
+     * @return $this
+     *
+     */
+    public function setPassportReference($passportReference) {
+
+        $this->passportReference = $passportReference;
+
+        return $passportReference;
+
+    }
+
+    /**
+     * @return Passport
+     *
+     */
+    public function getPassportReference() {
+        return $this->passportReference;
+    }
+
+    /**
+     * @param $emergencyReference
+     * @return $this
+     *
+     */
+    public function setEmergencyReference($emergencyReference) {
+
+        $this->emergencyReference = $emergencyReference;
+
+        return $emergencyReference;
+
+    }
+
+    /**
+     * @return Emergency
+     *
+     */
+    public function getEmergencyReference() {
+        return $this->emergencyReference;
+    }
+
+    /**
      * @param  $status
      */
     public function setStatus($status)
     {
         $this->status = $status;
 
-        return $status;
+        return $this;
     }
 
     /**
@@ -217,5 +351,59 @@ class Passenger
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * @param  $free
+     */
+    public function setFree($free)
+    {
+        $this->free = $free;
+
+        return $this;
+    }
+
+    /**
+     * @return free
+     */
+    public function getFree()
+    {
+        return $this->free;
+    }
+
+    /**
+     * @param  $media
+     */
+    public function setMedia($media)
+    {
+        $this->media = $media;
+
+        return $this;
+    }
+
+    /**
+     * @return Media
+     */
+    public function getMedia()
+    {
+        return $this->media;
+    }
+
+    /**
+     * @param  $self
+     */
+    public function setSelf($self)
+    {
+        $this->self = $self;
+
+        return $this;
+    }
+
+    /**
+     * @return self
+     */
+    public function getSelf()
+    {
+        return $this->self;
     }
 }
