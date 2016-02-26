@@ -1,0 +1,34 @@
+payment:
+    path:     /
+    defaults: { _controller: "PaymentBundle:Payment:index" }
+
+payment_show:
+    path:     /{id}/show
+    defaults: { _controller: "PaymentBundle:Payment:show" }
+
+payment_new:
+    path:     /tour/{tourId}/passenger/{passengerId}/new
+    defaults: { _controller: "PaymentBundle:Payment:new" }
+
+payment_schedle_customize:
+    path:     /tour/{tourId}/passenger/{passengerId}/customize
+    defaults: { _controller: "PaymentBundle:Payment:customizeSchedule" }
+
+payment_create:
+    path:     /create/{tourId}/{passengerId}
+    defaults: { _controller: "PaymentBundle:Payment:create" }
+    methods:  POST
+
+payment_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "PaymentBundle:Payment:edit" }
+
+payment_schedule_update:
+    path:     passenger/{passengerId}/payment_update
+    defaults: { _controller: "PaymentBundle:Payment:scheduleUpdate" }
+    methods:  [POST, PUT]
+
+payment_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "PaymentBundle:Payment:delete" }
+    methods:  [POST, DELETE]

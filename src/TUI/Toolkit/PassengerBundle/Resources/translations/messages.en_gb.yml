@@ -40,6 +40,8 @@ passenger:
         add_passport: Add Passport Information
         add_emergency: Add Emergency Contact Information
         no_tasks: has no tasks
+        send_message:  You are sending an email to all accepted passengers, are you sure you want to do that?
+        send_activation: Send Activation
 
         actions:
             view: View
@@ -49,6 +51,8 @@ passenger:
         save: "Thanks for signing up. A copy of the form has been emailed to you, and the tour organiser will be in touch."
         delete: Passenger deleted -
         restore: Passenger Restored -
+        users_activation: An activation email has been sent to all unactivated users accepted on the tour
+
 
     modals:
         message: As a parent, you can sign up your child/children for the tour below.
@@ -103,6 +107,7 @@ passenger:
         emergency_relationship: Relationship
         emergency_number: Telephone
         emergency_email: Email
+        payments: Payments
 
 
 

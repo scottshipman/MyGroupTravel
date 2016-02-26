@@ -10,18 +10,22 @@ use TUI\Toolkit\PassengerBundle\Form\PassengerType;
 
 use Symfony\Component\Form\Form;
 
+use Symfony\Component\DependencyInjection\ContainerInterface as Container;
+
 /**
- * Permission Service controller.
+ * Passenger Service controller.
  *
  */
 class PassengerService
 {
 
     protected $em;
+    protected $container;
 
-    public function __construct(\Doctrine\ORM\EntityManager $em)
+    public function __construct(\Doctrine\ORM\EntityManager $em, Container $container)
     {
         $this->em = $em;
+        $this->container = $container;
     }
 
     /**
@@ -124,6 +128,321 @@ class PassengerService
         return $errorString;
     }
 
+    /**
+     * @param $id tour Id
+     * @return object is stdObject()
+     */
+    public function getTourPassengersData($id){
 
+        $em = $this->em;
+        $container = $this->container;
+
+        $tour = $em->getRepository('TourBundle:Tour')->find($id);
+
+        $passengerData = (object) [];
+        //Get Waitlist Passengers
+        $waitListUsers = $this->getPassengersByStatus('waitlist', $id);
+        $waitlist = count($waitListUsers);
+        $passengerData->waitlist = $waitlist;
+
+        //Get Accepted Passengers
+        $acceptedUsers = $this->getPassengersByStatus('accepted', $id);
+        $accepted = count($acceptedUsers);
+
+        //Get free passengers
+        $free = $this->getPassengersByStatus('free', $id);
+        $free = count($free);
+        $passengerData->free = $free;
+
+        //Get Organizers
+        $organizerCount = $container->get("permission.set_permission")->getUser('organizer', $tour->getId(), 'tour');
+        $assistantCount = $container->get("permission.set_permission")->getUser('assistant', $tour->getId(), 'tour');
+        $totalOrganizerCount = count($organizerCount) + count($assistantCount);
+        $passengerData->totalOrganizerCount = $totalOrganizerCount;
+
+
+
+        //Real Accepted Passenger Count
+        $accepted = $accepted - $free;
+        $passengerData->accepted = $accepted;
+
+        $completedPassengerData = array();
+        $medical = array();
+        $dietary = array();
+        $emergency = array();
+        $passport = array();
+
+        $completedPassengerData = array('medical' => $medical, 'dietary' => $dietary, 'emergency' => $emergency, 'passport' => $passport);
+
+        //Get Accepted Users with completed medical information
+        foreach ($acceptedUsers as $acceptedUser) {
+
+            if ($acceptedUser->getMedicalReference() != null) {
+                $completedPassengerData['medical'][] = $acceptedUser;
+            }
+            if ($acceptedUser->getDietaryReference() != null) {
+                $completedPassengerData['dietary'][] = $acceptedUser;
+            }
+            if ($acceptedUser->getEmergencyReference() != null) {
+                $completedPassengerData['emergency'][] = $acceptedUser;
+            }
+            if ($acceptedUser->getPassportReference() != null) {
+                $completedPassengerData['passport'][] = $acceptedUser;
+            }
+
+
+        }
+        $passengerData->completedPassengerData = $completedPassengerData;
+
+        $possibleTasks = array();
+
+        $medicalTask = $tour->getMedicalDate();
+        $dietaryTask = $tour->getDietaryDate();
+        $emergencyTask = $tour->getEmergencyDate();
+        $passportTask = $tour->getPassportDate();
+
+        if ($tour->getMedicalDate() != null) {
+            $possibleTasks[] = $medicalTask;
+        }
+        if ($tour->getDietaryDate() != null){
+            $possibleTasks[] = $dietaryTask;
+        }
+        if ($tour->getEmergencyDate() != null) {
+            $possibleTasks[] = $emergencyTask;
+        }
+        if ($tour->getPassportDate() != null){
+            $possibleTasks[] = $passportTask;
+        }
+        $possibleTasksCount = count($possibleTasks);
+        $passengerData->possibleTasksCount = $possibleTasksCount;
+
+        return $passengerData;
+
+
+    }
+
+    /**
+     * @param $id tour id
+     * @return int count
+     */
+    public function getPossibleTourTasks($id)
+    {
+
+        $em = $this->em;
+        $tour = $em->getRepository('TourBundle:Tour')->find($id);
+
+        $possibleTasks = array();
+
+        $medicalTask = $tour->getMedicalDate();
+        $dietaryTask = $tour->getDietaryDate();
+        $emergencyTask = $tour->getEmergencyDate();
+        $passportTask = $tour->getPassportDate();
+
+        if ($tour->getMedicalDate() != null) {
+            $possibleTasks[] = $medicalTask;
+        }
+        if ($tour->getDietaryDate() != null){
+            $possibleTasks[] = $dietaryTask;
+        }
+        if ($tour->getEmergencyDate() != null) {
+            $possibleTasks[] = $emergencyTask;
+        }
+        if ($tour->getPassportDate() != null){
+            $possibleTasks[] = $passportTask;
+        }
+
+        $possibleTasksCount = count($possibleTasks);
+
+        return $possibleTasksCount;
+
+
+    }
+
+    /**
+     * @param $id passenger id
+     * @return int count
+     */
+    public function getPassengerCompletedTasks($id) {
+
+        $em = $this->em;
+        $passenger = $em->getRepository('PassengerBundle:Passenger')->find($id);
+
+        $possibleTasks = array();
+
+        $medicalTask = $passenger->getMedicalReference();
+        $dietaryTask = $passenger->getDietaryReference();
+        $emergencyTask = $passenger->getEmergencyReference();
+        $passportTask = $passenger->getPassportReference();
+
+        if ($passenger->getMedicalReference() != null) {
+            $possibleTasks[] = $medicalTask;
+        }
+        if ($passenger->getDietaryReference() != null){
+            $possibleTasks[] = $dietaryTask;
+        }
+        if ($passenger->getEmergencyReference() != null) {
+            $possibleTasks[] = $emergencyTask;
+        }
+        if ($passenger->getPassportReference() != null){
+            $possibleTasks[] = $passportTask;
+        }
+
+        $possibleTasksCount = count($possibleTasks);
+
+        return $possibleTasksCount;
+    }
+
+    /**
+     * @param $passengers
+     * @param $em
+     * @return array
+     */
+
+    public function addPassengerParents($passengers, $em)
+    {
+        $combinedObjects = array();
+        $container = $this->container;
+
+        if (empty($passengers)) {
+            return array();
+        }
+
+        foreach($passengers as $passenger) {
+            $object = $passenger->getId();
+            $tourId = $passenger->getTourReference()->getId();
+            $parent = $container->get("permission.set_permission")->getUser('parent', $object, 'passenger');
+
+            if (!empty($parent)){
+                $parentObject = $em->getRepository('TUIToolkitUserBundle:User')->find($parent[1]);
+            } else {
+                $parentObject = "";
+            }
+            $isOrganizer = $container->get("permission.set_permission")->getPermission($tourId, 'tour', $parentObject)[0]=='organizer' ? TRUE : FALSE;
+            $isOrganizer = $container->get("permission.set_permission")->getPermission($tourId, 'tour', $parentObject)[0]=='assistant' ? TRUE : $isOrganizer;
+
+
+            $combinedObjects[]= array($passenger, $parentObject, $isOrganizer);
+        }
+
+        return $combinedObjects;
+    }
+
+    /**
+     * @param $passengers
+     * @return array
+     */
+
+    public function getParticipantCounts($passengers)
+    {
+        $count=array(
+            'organizer'=>array(
+                'accepted' => 0,
+                'waitlist' => 0,
+                'free' => 0,
+            ),
+            'passenger' => array(
+                'accepted' => 0,
+                'waitlist' => 0,
+                'free' => 0,
+            ),
+        );
+
+        foreach($passengers as $passenger) {
+            //loop to see if organizer
+            if($passenger[2]===true){
+                $category = 'organizer';
+            } else {
+                $category = 'passenger';
+            }
+
+            if($passenger[0]->getStatus() == 'accepted' && $passenger[0]->getFree() == FALSE) {
+                $count[$category]['accepted'] ++;
+            }
+            if($passenger[0]->getStatus() == 'waitlist') {
+                $count[$category]['waitlist'] ++;
+            }
+            if($passenger[0]->getFree() == TRUE) {
+                $count[$category]['free'] ++;
+            }
+        }
+
+        return $count;
+    }
+
+    /**
+     * Helper function to build array of organizer, passenger and boolean organizer flag
+     * @param organizerList, entity manager
+     * @return array
+     *
+     */
+    public function addOrganizerPassengers($organizers, $tourId, $em)
+    {
+        $combinedObjects = array();
+        $container = $this->container;
+
+        if (empty($organizers)) {
+            return NULL;
+        }
+
+        foreach($organizers as $organizer) {
+
+            $passengerObject = new Passenger();
+            $passengerObject->setStatus('Pending Invite');
+
+            $user = $organizer->getId();
+            $passenger = $container->get("permission.set_permission")->getObject('parent', $user, 'passenger');
+            $isOrganizer = TRUE;
+
+            if (!empty($passenger)){
+                // could be more than one passenger object
+                foreach($passenger as $pax){
+                    $paxObject = $em->getRepository('PassengerBundle:Passenger')->find($pax['object']);
+                    if( $paxObject &&
+                        /*strtolower(trim($organizer->getFirstName())) == strtolower(trim($paxObject->getFName())) &&
+                        strtolower(trim($organizer->getLastName())) == strtolower(trim($paxObject->getLName())) &&*/
+                        $paxObject->getSelf() == TRUE &&
+                        $tourId == $paxObject->getTourReference()->getId())
+                    {
+                        $passengerObject = $paxObject;
+                        $break;
+                    }
+                }
+
+            } else {
+                // need to add name data to fake passenger data
+                $passengerObject->setfName($organizer->getFirstName());
+                $passengerObject->setlname($organizer->getLastName());
+
+            }
+            $combinedObjects[]= array($passengerObject, $organizer, $isOrganizer);
+        }
+
+        return $combinedObjects;
+    }
+
+    public function getUnActivatedUsers($tourId){
+        $container = $this->container;
+        $em = $this->em;
+        $unactivated = array();
+
+        //Get Accepted Passengers
+        $acceptedUsers = $this->getPassengersByStatus('accepted', $tourId);
+        $accepted = count($acceptedUsers);
+
+        foreach ($acceptedUsers as $acceptedUser){
+            $object = $acceptedUser->getId();
+            $users = $container->get("permission.set_permission")->getUser('parent', $object, 'passenger');
+
+            foreach ($users as $user) {
+                $user = $em->getRepository('TUIToolkitUserBundle:User')->find($user);
+                if ($user->isEnabled() == false) {
+                    $unactivated[] = $user;
+                }
+            }
+        }
+
+        $uanctivatedCount = count($unactivated);
+        return $uanctivatedCount;
+    }
 
 }

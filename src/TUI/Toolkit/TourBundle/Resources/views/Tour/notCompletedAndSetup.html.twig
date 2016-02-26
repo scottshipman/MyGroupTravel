@@ -5,15 +5,15 @@
     </div>
 
     <div class="mdl-card__supporting-text mdl-card--border" style="color: grey;">
-        <i class="fa fa-check"></i> {% trans %}tour.not_completed.signup{% endtrans %}
+        <i class="fa fa-check" style="color:{{ brand.secondaryColor }};"></i> {% trans %}tour.not_completed.signup{% endtrans %}
     </div>
 
     <div class="mdl-card__supporting-text mdl-card--border" style="color: grey;">
-        <i class="fa fa-check"></i> {% trans %}tour.not_completed.payment_settings{% endtrans %}
+        <i class="fa fa-check" style="color:{{ brand.secondaryColor }};"></i> {% trans %}tour.not_completed.payment_settings{% endtrans %}
     </div>
 
     <div class="mdl-card__supporting-text mdl-card--border">
-        <i class="fa fa-clone"></i> <a href="{{ path('manage_tour_setup_complete', { 'id': entity.id, "quoteNumber": entity.quoteNumber } ) }}">{% trans %}tour.not_completed.personalize{% endtrans %}</a>
+        <i class="fa fa-clone"></i> <a href="{{ path('manage_tour_setup_complete', { 'id': entity.id, "quoteNumber": entity.quoteNumber } ) }}" style="color:{{ brand.secondaryColor }};">{% trans %}tour.not_completed.personalize{% endtrans %}</a>
     </div>
 
     <div class="mdl-card__supporting-text mdl-card--border" style="color: grey;">

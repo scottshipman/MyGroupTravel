@@ -51,6 +51,9 @@ class TourController extends Controller
     {
         // hide columns from the screen display
         $hidden = array(
+            'secondaryContact.firstName',
+            'secondaryContact.lastName',
+            'secondaryContact.email',
             'quoteReference.id',
             'institution.city',
             'institution.name',
@@ -164,6 +167,12 @@ class TourController extends Controller
         $column->setTitle($this->get('translator')->trans('tour.grid.filter.title.ba_lname'));
         $column->setOperatorsVisible(false);
 
+        // add other business admin last name filter
+        $column = $grid->getColumn('secondaryContact.lastName');
+        $column->setFilterable(true);
+        $column->setTitle($this->get('translator')->trans('tour.grid.filter.title.sc_lname'));
+        $column->setOperatorsVisible(false);
+
         // add organizer last name filter
         $column = $grid->getColumn('organizer.lastName');
         $column->setFilterable(true);
@@ -216,6 +225,9 @@ class TourController extends Controller
 
         // hide columns from the screen display
         $hidden = array(
+          'secondaryContact.firstName',
+          'secondaryContact.lastName',
+          'secondaryContact.email',
           'quoteReference.id',
           'institution.name',
           'deleted',
@@ -292,6 +304,12 @@ class TourController extends Controller
         $column = $grid->getColumn('salesAgent.lastName');
         $column->setFilterable(true);
         $column->setTitle($this->get('translator')->trans('tour.grid.filter.title.ba_lname'));
+        $column->setOperatorsVisible(false);
+
+        // add other business admin last name filter
+        $column = $grid->getColumn('secondaryContact.lastName');
+        $column->setFilterable(true);
+        $column->setTitle($this->get('translator')->trans('tour.grid.filter.title.sc_lname'));
         $column->setOperatorsVisible(false);
 
         // add organizer last name filter
@@ -1217,53 +1235,7 @@ class TourController extends Controller
           $brand = $default_brand;
         }
 
-        //Get Waitlist Passengers
-        $waitListUsers = $this->get("passenger.actions")->getPassengersByStatus('waitlist', $id);
-        $waitlist = count($waitListUsers);
-
-        //Get Accepted Passengers
-        $acceptedUsers = $this->get("passenger.actions")->getPassengersByStatus('accepted', $id);
-        $accepted = count($acceptedUsers);
-
-        //Get free passengers
-        $free = $this->get("passenger.actions")->getPassengersByStatus('free', $id);
-        $free = count($free);
-
-        //Get Organizers
-        $organizerCount = $this->get("permission.set_permission")->getUser('organizer', $entity->getId(), 'tour');
-        $assistantCount = $this->get("permission.set_permission")->getUser('assistant', $entity->getId(), 'tour');
-        $totalOrganizerCount = count($organizerCount) + count($assistantCount);
-
-
-        //Real Accepted Passenger Count
-        $accepted = $accepted - $free;
-
-        $completedPassengerData = array();
-        $medical = array();
-        $dietary = array();
-        $emergency = array();
-        $passport = array();
-
-        $completedPassengerData = array('medical' => $medical, 'dietary' => $dietary, 'emergency' => $emergency, 'passport' => $passport);
-
-        //Get Accepted Users with completed medical information
-        foreach ($acceptedUsers as $acceptedUser) {
-
-            if ($acceptedUser->getMedicalReference() != null) {
-                $completedPassengerData['medical'][] = $acceptedUser;
-            }
-            if ($acceptedUser->getDietaryReference() != null) {
-                $completedPassengerData['dietary'][] = $acceptedUser;
-            }
-            if ($acceptedUser->getEmergencyReference() != null) {
-                $completedPassengerData['emergency'][] = $acceptedUser;
-            }
-            if ($acceptedUser->getPassportReference() != null) {
-                $completedPassengerData['passport'][] = $acceptedUser;
-            }
-
-
-        }
+        $passengerData = $this->get("passenger.actions")->getTourPassengersData($id);
 
         return $this->render('TourBundle:Tour:completedandsetup.html.twig', array(
             'entity' => $entity,
@@ -1271,11 +1243,7 @@ class TourController extends Controller
             'date_format' => $date_format,
             'locale' => $locale,
             'brand' => $brand,
-            'waitlist' => $waitlist,
-            'accepted' => $accepted,
-            'free' => $free,
-            'completedPassengerData' => $completedPassengerData,
-            'totalOrganizerCount' => $totalOrganizerCount,
+            'passengerData' =>$passengerData
         ));
 
     }
@@ -1295,10 +1263,23 @@ class TourController extends Controller
 
         $locale = $this->container->getParameter('locale');
 
+        //brand stuff
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
+
         return $this->render('TourBundle:Tour:notCompletedAndSetup.html.twig', array(
             'entity' => $entity,
             'date_format' => $date_format,
-            'locale' => $locale
+            'locale' => $locale,
+            'brand' => $brand,
         ));
 
     }

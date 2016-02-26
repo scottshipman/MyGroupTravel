@@ -1467,14 +1467,6 @@ class UserController extends Controller
     public function getQuotesAction($id)
     {
         $locale = $this->container->getParameter('locale');
-        switch (true) {
-            case strstr($locale, 'en_GB'):
-                $format = 'd-m-Y';
-                break;
-            default:
-                $format = 'm-d-Y';
-                break;
-        }
         // if user is brand or admin, list quotes where they are salesAgent or SecondaryContact
         // dont show expired or converted quotes for brand/admins either
         // if user is customer, list quotes by Permission Entity
@@ -1495,7 +1487,7 @@ class UserController extends Controller
                 ->AndWhere('qv.isTemplate = false');
             $qb->setParameter(1, $id);
             $qb->setParameter(2, $id);
-            $qb->setParameter(3, $today->format($format));
+            $qb->setParameter(3, $today);
             $qb->orderBy('qv.created', 'DESC');
             $qb->setMaxResults( $limit);
             $query = $qb->getQuery();
@@ -1567,7 +1559,10 @@ class UserController extends Controller
         return $this->render('TUIToolkitUserBundle:User:myTours.html.twig', $data);
     }
 
-
+    /**
+     * @param $id tour id
+     * @return Response
+     */
     public function getToursWithPassengersAction($id){
         $locale = $this->container->getParameter('locale');
         // if user is brand or admin, list quotes where they are salesAgent or SecondaryContact
@@ -1582,56 +1577,23 @@ class UserController extends Controller
             if ($object = $em->getRepository('PassengerBundle:Passenger')->find($passenger->getObject())) {
                 $completedTasks = array();
                 $tour = $em->getRepository('TourBundle:Tour')->find($object->getTourReference()->getId());
+
+
                 //Find the possible Passenger Tasks for the tour
-                $possibleTasks = array();
+                $possibleTasksCount = $this->get("passenger.actions")->getPossibleTourTasks($tour->getId());
 
-                $medicalTask = $tour->getMedicalDate();
-                $dietaryTask = $tour->getDietaryDate();
-                $emergencyTask = $tour->getEmergencyDate();
-                $passportTask = $tour->getPassportDate();
-
-                if ($tour->getMedicalDate() != null) {
-                    $possibleTasks[] = $medicalTask;
-                }
-                if ($tour->getDietaryDate() != null){
-                    $possibleTasks[] = $dietaryTask;
-                }
-                if ($tour->getEmergencyDate() != null) {
-                    $possibleTasks[] = $emergencyTask;
-                }
-                if ($tour->getPassportDate() != null){
-                    $possibleTasks[] = $passportTask;
-                }
-
+                //Only add to array if unique
                 if (!in_array($tour, $parents)) {
                     $parents[] = $tour;
                 }
-                //Then find the tasks that the passengers have completed
-                $medical = $object->getMedicalReference();
-                $dietary = $object->getDietaryReference();
-                $emergency = $object->getEmergencyReference();
-                $passport = $object->getPassportReference();
-                if ($medical != null) {
-                    $completedTasks[] = $medical;
-                }
-                if ($dietary != null) {
-                    $completedTasks[] = $dietary;
-                }
-                if ($emergency != null) {
-                    $completedTasks[] = $emergency;
-                }
-                if($passport != null){
-                    $completedTasks[] = $passport;
-                }
+
+                //Then find the tasks that the passengers have completed Id= Pa
+                $completedTasksCount = $this->get("passenger.actions")->getPassengerCompletedTasks($object->getId());
 
                 //Grab counts of completed tasks for each passenger
-                $completedTasksCount = count($completedTasks);
-                $object->completedTasks = $completedTasks;
                 $object->completedTasksCount = $completedTasksCount;
 
                 //Grab count of possible tasks
-                $possibleTasksCount = count($possibleTasks);
-                $object->possibleTasks = $possibleTasks;
                 $object->possibleTasksCount = $possibleTasksCount;
 
                 $data['passengerObjects'][] = $object;
@@ -1664,26 +1626,10 @@ class UserController extends Controller
         $em = $this->getDoctrine()->getManager();
         $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
         $user = $em->getRepository('TUIToolkitUserBundle:User')->find($parentId);
-        $totalCompletedTasks = '';
-        $possibleTasks = array();
 
-        $medicalTask = $tour->getMedicalDate();
-        $dietaryTask = $tour->getDietaryDate();
-        $emergencyTask = $tour->getEmergencyDate();
-        $passportTask = $tour->getPassportDate();
+        //Get possible tasks on the tour
+        $possibleTasksCount = $this->get("passenger.actions")->getPossibleTourTasks($tour->getId());
 
-        if ($tour->getMedicalDate() != null) {
-            $possibleTasks[] = $medicalTask;
-        }
-        if ($tour->getDietaryDate() != null){
-            $possibleTasks[] = $dietaryTask;
-        }
-        if ($tour->getEmergencyDate() != null) {
-            $possibleTasks[] = $emergencyTask;
-        }
-        if ($tour->getPassportDate() != null){
-            $possibleTasks[] = $passportTask;
-        }
 
 
         $passengers = $em->getRepository('PermissionBundle:Permission')->findBy(array('user' => $parentId, 'class' => 'passenger'));
@@ -1697,36 +1643,20 @@ class UserController extends Controller
         }
 
         $completedTasksCount = '';
+        $totalCompletedTasks = 0;
+
 
         foreach ($passengerObjects as $passengerObject){
 
-            $completedTasks = array();
-            $medical = $passengerObject->getMedicalReference();
-            $dietary = $passengerObject->getDietaryReference();
-            $emergency = $passengerObject->getEmergencyReference();
-            $passport = $passengerObject->getPassportReference();
-            if ($medical != null) {
-                $completedTasks[] = $medical;
-            }
-            if ($dietary != null) {
-                $completedTasks[] = $dietary;
-            }
-            if ($emergency != null) {
-                $completedTasks[] = $emergency;
-            }
-            if($passport != null){
-                $completedTasks[] = $passport;
-            }
-            $completedTasksCount = count($completedTasks);
-            $passengerObject->completedTasks = $completedTasks;
-
+            //Get completed tasks on the tour for each passenger
+            $completedTasksCount = $this->get("passenger.actions")->getPassengerCompletedTasks($passengerObject->getId());
+            $passengerObject->completedTasksCount = $completedTasksCount;
             $totalCompletedTasks += $completedTasksCount;
 
         }
 
         //Get total possible tasks
-        $totalPossibleTasks = count($possibleTasks) * count($passengerObjects);
-        $possibleTasksCount = count($possibleTasks);
+        $totalPossibleTasks = $possibleTasksCount * count($passengerObjects);
 
 
         //Get all brand stuff
@@ -1751,7 +1681,6 @@ class UserController extends Controller
             'passengerObjects' => $passengerObjects,
             'totalCompletedTasks' => $totalCompletedTasks,
             'totalPossibleTasks' => $totalPossibleTasks,
-            'possibleTasks' => $possibleTasks,
             'possibleTasksCount' => $possibleTasksCount,
         ));
     }

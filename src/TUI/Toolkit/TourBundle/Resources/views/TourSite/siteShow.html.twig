@@ -62,8 +62,8 @@
       <div class="sizer">
         <div class="inner">
             {% if brand.media %}
-                <div class="brand-logo">
-                    <img src="{{ ( brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ brand.name }}">
+                <div class="brand-logo public-logo">
+                    <img src="{{ ( brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) | imagine_filter('publicLogo') }}" alt="{{ brand.name }}">
                 </div>
             {% endif %}
 

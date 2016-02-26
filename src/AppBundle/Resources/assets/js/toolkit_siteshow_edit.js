@@ -188,7 +188,6 @@ $(document).ready(function () {
     $(document).on('click', '.content-block-cancel', function (e) {
         var tabId = $(this).attr("tabId");
         if(tabId == 'header') {
-            console.log('header cancelled');
             $('#site-header-editForm').empty().hide();
             $('#site-header-slideshow').show();
         } else {
@@ -197,13 +196,10 @@ $(document).ready(function () {
         }
         $('.item-edit').show();
         $(this).hide();
-        console.log('is draggable?');
         //$('.add-content-block').hide() // hide ALL Add Block's for all tabs
         if ( toolkitBreakpointAllowDrag() ) {
             // Sorting not allowed on phone for content blocks
-            console.log('about to enable sorting');
             $(".sortable-items").sortable("enable");
-            console.log('enabled sorting');
             $('.noembed-meta-info').remove();
         };
     });

@@ -5,4 +5,4 @@ services:
 
   passenger.actions:
     class: TUI\Toolkit\PassengerBundle\Controller\PassengerService
-    arguments: [ @doctrine.orm.entity_manager ]
+    arguments: [ @doctrine.orm.entity_manager, @service_container ]

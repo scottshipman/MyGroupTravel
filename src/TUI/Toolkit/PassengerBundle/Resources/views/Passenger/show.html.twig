@@ -121,6 +121,13 @@
                 </div>
             </div>
 
+            {#Passenger Payment Card#}
+            {% if entity.status == 'accepted' %}
+                {{ render(controller('PaymentBundle:Payment:getPassengerPaymentCard', { 'passengerId': entity.id })) }}
+            {% endif %}
+
+
+
             {#Passenger Task Card#}
             <div class="waitlist tour-edit mdl-card mdl-shadow--2dp">
                 <div class="mdl-card__title">
@@ -174,7 +181,7 @@
                         {% endif %}
                     </div>
                 {% endif %}
-                {% if (entity.medicalReference != null and entity.dietaryReference != null and entity.passportReference != null and entity.emergencyReference != null) or (entity.tourReference.passportDate == null and entity.tourReference.emergencyDate == null and entity.tourReference.medicalDate == null and entity.tourReference.dietaryDate == null) %}
+                {% if possibleTasksCount == 0 or possibleTasksCount == completedTasksCount %}
                     <div class="mdl-card__supporting-text mdl-card--border expired-quote">
                         <p class="mdl-card__title-text no-tasks">{{ entity.fName|capitalize }} {% trans %}passenger.actions.no_tasks{% endtrans %}</p>
                         <div class="clear"></div>

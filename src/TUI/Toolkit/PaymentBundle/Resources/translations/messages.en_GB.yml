@@ -1,0 +1,58 @@
+#PaymentBundle/Resources/translations/messages.en_gb.yml
+payment:
+    title:
+        edit: Edit Payment
+        index: Payment Dashboard
+        new: Log a Payment
+        show: Payment
+
+    page_title:
+        edit: Edit Payment
+        index: Payments
+        new: Log a Payment
+        show: Payment
+
+    actions:
+        back: Back to the Dashboard
+        edit: Edit
+        update: Update
+        create: Create
+        delete: Delete
+        create_new: Log a New Payment
+        view: View
+        edit: Edit
+        log-payment: Log a Payment
+        customize-payments: Edit Payment Schedule
+
+    flash:
+        save: "This payment has been logged."
+        delete: Payment deleted -
+
+    labels:
+        payment: Payment
+        payments: Payments
+        add: Add Payment
+        balances: Passenger Balances
+        due: Due
+        payment_settings: Payment Settings
+        balances: Passenger Balances
+        paid: Paid
+        total_paid: Total Paid
+        total_due: Total Due
+        past_due: Past Due
+        payment_history: Payment History
+        collected: Collected
+
+
+    form:
+        date: Date Received (DD-MM-YYYY)
+        value: Amount Received
+        note: Note
+        headline: Log a New Payment
+        message: "This payment is being logged for %fname% %lname% for the Tour: %tourname%."
+
+        error:
+            value: Value must be numeric only
+
+        success:
+            message: This payment has been logged.

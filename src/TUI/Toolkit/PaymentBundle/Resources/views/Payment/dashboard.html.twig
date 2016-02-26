@@ -1,0 +1,191 @@
+{% extends '::site-base.html.twig' %}
+{% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
+
+{% if tour.payingPlaces != null and tour.pricePersonPublic != null %}{% set totalDue = (tour.pricePersonPublic * tour.payingPlaces) %}{% else %}{% set totalDue = 0%}{% endif %}
+
+{% block title %}
+    {% if is_granted("ROLE_BRAND") %}
+        {{ tour.name }} {% trans %}payment.labels.payments{% endtrans %}}
+    {% else %}
+        {{ tour.name }}
+    {% endif %}
+{% endblock %}
+
+{% block page_title %}
+    <span xmlns="http://www.w3.org/1999/html">{% trans %}payment.labels.payments{% endtrans %}</span>
+{% endblock %}
+
+{% block page_title_menu %}
+    <button id="tour-title-drop" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-menu-drop">
+        <i class="material-icons">arrow_drop_down</i>
+    </button>
+    {% embed "TourBundle:Tour:tourMenu.html.twig" %}
+        {% block tour_dashboard_link %}
+            <li><a href="{{ path('manage_tour_show', { 'id': tour.id }) }}" class="mdl-menu__item">{% trans %}tour.title.index{% endtrans %}</a></li>
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block back_link %}
+
+    <a class="back-link" href="{{ path('manage_tour_show', { 'id': tour.id }) }}"><i class="fa fa-arrow-left"></i> {% trans %}passenger.actions.back{% endtrans %}</a>
+
+{% endblock %}
+
+{% block body -%}
+
+    <div class="tour-show-wrapper site-show" entityId="{{ tour.id }}">
+
+        <div class="tour-show-left-column">
+
+            <h3>{{ tour.name|capitalize }}</h3>
+            <ul class="tour-show-submenu">
+                <li><a href="{{ path('manage_payment_dashboard', { 'tourId': tour.id }) }}" style="text-decoration: none; color:{{ brand.secondaryColor }};"><strong>{% trans %}payment.labels.balances{% endtrans %}</strong></a></li>
+                <li><a href="{{ path('manage_payment_dashboard_edit_payments', { 'tourId': tour.id }) }}" style="text-decoration: none; color: inherit;"><strong>{% trans %}payment.labels.payment_settings{% endtrans %}</strong></a></li>
+            </ul>
+        </div>
+
+        <div class="tour-show-right-column">
+            {# Passenger CTA Card #}
+            <div class="passenger-cta-card tour-edit mdl-card mdl-shadow--2dp passenger-dashboard-cta-card">
+
+                <div class="mdl-card__title">
+                    <h3 id="card-title" class="mdl-card__title-text">{% trans %}payment.labels.balances{% endtrans %}</h3>
+                </div>
+
+                <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
+                    <h3 style="float: left; font-weight:300; font-size:2em;">{% trans %}payment.labels.collected{% endtrans %}</h3>
+                    <div style="float: right; margin-top:20px;">
+                        <span style="color:{{ brand.secondaryColor }}; font-size:3.5em;em; font-weight:100;">{% if tour.currency %}<p id="currency" style="display: inline; font-size: inherit; font-weight: inherit;">{{ tour.currency.htmlSymbol | raw }}</p>{% endif %}<p style="display: inline; margin-left:5px; font-size:inherit; font-weight:inherit;">{{ payments }}</p></span><br/>
+                        <span style="float:right;"><label>/{% if tour.currency %}<p id="currency" style="display: inline; font-size: inherit; font-weight: inherit;">{{ tour.currency.htmlSymbol | raw }}</p>{% endif %}<p style="display: inline; margin-left:5px; font-size:inherit; font-weight:inherit;">{{ due.total }}</p></label></span>
+                    </div>
+                </div>
+                {# Tour Payment Tasks collapsable card #}
+                {% embed "PaymentBundle:Payment:tourPaymentTaskSummary.html.twig" %}{% endembed %}
+
+            </div>
+
+
+
+                {# Passenger Mini Cards #}
+                {% for passenger in passengers %}
+                    {# render each accepted passenger mini-card #}
+                    {{ render(controller('PaymentBundle:Payment:getPassengerPaymentMiniCard', { 'passenger': passenger})) }}
+                {% endfor %}
+
+                <!-- render the organizers -->
+                {#{% embed "PassengerBundle:Passenger:organizerList.html.twig" %} {% endembed %}#}
+
+                <div style="clear: both; height: 150px;"></div>
+        </div>
+
+    </div>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.js"></script>
+
+    {% javascripts '@toolkit_siteshow' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    {% javascripts '@toolkit_passenger' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    <script>
+        $(document).ready(function () {
+
+            // Payment popup
+            $(document).on('click', 'a.make-a-payment', function (e) {
+                var t = $(this);
+                e.preventDefault();
+                var passengerId = t.attr('passenger');
+                var tourId = t.attr('tour');
+                toolkitStandardPopup("Log A Payment", '/payment/tour/' + tourId + '/passenger/' + passengerId + '/new' );
+            });
+
+            // Customize a passenger's payment schedule
+            $(document).on('click', 'a.edit-payment-schedule', function (e) {
+                var t = $(this);
+                e.preventDefault();
+                var passengerId = t.attr('passenger');
+                var tourId = t.attr('tour');
+                toolkitStandardPopup("Custom Payment Schedule", '/payment/tour/' + tourId + '/passenger/' + passengerId + '/customize' );
+            });
+
+
+            // toggle payment Tasks
+            $(document).on('click', 'a.payment-schedule-link', function(e){
+                e.preventDefault();
+                $('#payment-schedule').toggle(400, function(){
+                    if ($('#toggle-payment-schedule').text()=='Payment History expand_more') {
+                        $('#toggle-payment-schedule').html('{% trans %}payment.labels.payment_history{% endtrans %} <br /><i class="material-icons">expand_less</i>');
+                    } else if ($('#toggle-payment-schedule').text()=='Payment History expand_less') {
+                        $('#toggle-payment-schedule').html('{% trans %}payment.labels.payment_history{% endtrans %} <br /><i class="material-icons">expand_more</i>');
+                    }
+                });
+            });
+
+        });
+    </script>
+
+{% endblock %}
+
+{% block footer_left %}
+    {% if app.user.email != tour.salesAgent.email%} {# Show Sales Agent Info to an Organizer#}
+        {% if tour.salesAgent %}
+            <span class="intro">
+                    {{ brand.name }} {% trans %}tour.show.footer.intro_org{% endtrans %}
+            </span>
+            {% if tour.salesAgent.media %}
+                <span class="tui-image-avatar"><img src="{{ ( tour.salesAgent.media.getRelativePath ~ "/" ~ tour.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ tour.salesAgent.username }}"></span>
+            {% elseif tour.salesAgent.firstName and tour.salesAgent.lastName %}
+                <span class="tui-text-avatar mdl-typography--headline">{{ tour.salesAgent.firstName[:1] }}{{ tour.salesAgent.lastName[:1] }}</span>
+            {% else %}
+                <span class="tui-text-avatar mdl-typography--headline">{{ tour.salesAgent.username[:1] }}</span>
+            {% endif %}
+            <span class="agent">
+                {% if tour.salesAgent.displayName %}
+                    {{ tour.salesAgent.displayName }}
+                {% else %}
+                    {{ tour.salesAgent.firstName }} {{ tour.salesAgent.lastName }}
+                {% endif %}
+                <br>
+                <a href="mailto:{{ tour.salesAgent.email }}">{{ tour.salesAgent.email }}</a>
+            </span>
+        {% endif %}
+    {% else %} {# Show organizer info to everyone but organizers #}
+        {% if tour.organizer %}
+            <span class="intro">
+                    {% trans %}tour.show.footer.intro{% endtrans %}
+            </span>
+            {% if tour.organizer.media %}
+                <span class="tui-image-avatar"><img src="{{ ( tour.organizer.media.getRelativePath ~ "/" ~ tour.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ tour.organizer.username }}"></span>
+            {% elseif tour.organizer.firstName and tour.organizer.lastName %}
+                <span class="tui-text-avatar mdl-typography--headline">{{ tour.organizer.firstName[:1] }}{{ tour.organizer.lastName[:1] }}</span>
+            {% else %}
+                <span class="tui-text-avatar mdl-typography--headline">{{ tour.organizer.username[:1] }}</span>
+            {% endif %}
+            <span class="agent">
+                {% if tour.organizer.displayName %}
+                    {{ tour.organizer.displayName }}
+                {% else %}
+                    {{ tour.organizer.firstName }} {{ tour.organizer.lastName }}
+                {% endif %}
+                <br>
+                <a href="mailto:{{ tour.organizer.email }}">{{ tour.organizer.email }}</a>
+            </span>
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block footer_right %}
+    <div class="quote-info">
+        <span class="quote-label">{% trans %}tour.show.footer.price{% endtrans %}</span>
+
+        <span class="quote-price">
+            {% if tour.pricePerson %}
+                <strong>{% if tour.currency %}{{ tour.currency.htmlSymbol | raw }}{% endif %}{{ tour.pricePersonPublic }}</strong>
+            {% endif %}
+        </span>
+    </div>
+{% endblock %}

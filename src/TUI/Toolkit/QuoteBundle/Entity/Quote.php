@@ -12,7 +12,7 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
  *
  * @ORM\Table(name="quote")
  * @ORM\Entity
- * @GRID\Source(columns="id, name, destination, institution.name, orgfullname, organizer.firstName, organizer.lastName, bizfullname, salesAgent.firstName, salesAgent.lastName, converted, setupComplete", filterable=false, sortable=true)
+ * @GRID\Source(columns="id, name, destination, institution.name, orgfullname, organizer.firstName, organizer.lastName, bizfullname, salesAgent.firstName, salesAgent.lastName, secondaryContact.firstName, secondaryContact.lastName, secondaryContact.email, converted, setupComplete", filterable=false, sortable=true)
  * @GRID\Column(id="bizfullname", type="join", title="Business Admin", columns={"salesAgent.firstName", "salesAgent.lastName"}, filterable=true, operatorsVisible=false)
  * @GRID\Column(id="orgfullname", type="join", title="Organizer", columns={"organizer.firstName", "organizer.lastName"}, filterable=true, operatorsVisible=false)
  */
@@ -80,6 +80,9 @@ class Quote
      *
      * @ORM\ManyToOne(targetEntity="TUI\Toolkit\UserBundle\Entity\User", cascade={"persist"})
      * @ORM\JoinColumn(name="secondaryContact", referencedColumnName="id")
+     * @GRID\Column(field="secondaryContact.firstName", type="text", title="Secondary Contact first", filterable=false, export=true)
+     * @GRID\Column(field="secondaryContact.lastName", type="text", title="Secondary Contact last", filterable=false, export=true)
+     * @GRID\Column(field="secondaryContact.email", type="text", title="Secondary Contact email", filterable=false, export=true)
      */
     private $secondaryContact;
 

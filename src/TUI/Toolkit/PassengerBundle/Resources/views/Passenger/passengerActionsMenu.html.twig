@@ -2,12 +2,21 @@
 {% if passenger is not defined %}{% set passengerStatus = entity.status %}{% elseif passenger is defined %}{% set passengerStatus =  passenger[0].status %}{% endif %}
 {% if passenger is not defined %}{% set tourId = entity.tourReference.id %}{% elseif passenger is defined %}{% set tourId =  tour.id %}{% endif %}
 {% if passenger is not defined %}{% set free = entity.free %}{% elseif passenger is defined %}{% set free =  passenger[0].free %}{% endif %}
+{% if parent is not defined %}{% if passenger[1] is defined %}{% set parent = passenger[1] %}{% endif %}{% endif %}
 
 <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="passenger-actions-menu-drop-{{ passengerId }}">
     <span>
         <li><a href="{{ path('manage_passenger_show', { 'id': passengerId }) }}" class="mdl-menu__item">{% trans %}passenger.actions.view_passenger{% endtrans %}</a></li>
-       {# Accepted Menu Item #}
-        {% if passengerStatus == "waitlist" or free == TRUE %}
+
+        {#Activation Email for Users#}
+        {% if parent is defined and parent.enabled == false %}
+            <li><a href="{{ path('user_registration_confirmation', { 'id': parent.id }) }}" class="mdl-menu__item">{% trans %}passenger.actions.send-notification{% endtrans %}</a></li>
+        {% elseif user is defined and user.enabled == false %}
+            <li><a href="{{ path('user_registration_confirmation', { 'id': user.id }) }}" class="mdl-menu__item">{% trans %}passenger.actions.send-notification{% endtrans %}</a></li>
+        {% endif %}
+
+        {# Accepted Menu Item #}
+        {% if passengerStatus == "waitlist"  or free == TRUE %}
             <li><a href="#accepted" style="display: block;"class="mdl-menu__item move-to-accepted" tour="{{ tourId }}" passenger="{{ passengerId }}">Move to {{ "accepted" | paxLabel }}</a></li>
         {% else %}
             <li><a href="#accepted" style="display: none;"class="mdl-menu__item move-to-accepted" tour="{{ tourId }}" passenger="{{ passengerId }}">Move to {{ "accepted" | paxLabel }}</a></li>
@@ -25,6 +34,13 @@
             <li><a style="display: block;" href="#free" class="mdl-menu__item move-to-free" tour="{{ tourId }}" passenger="{{ passengerId }}">Move to {{ "free" | paxLabel }}</a></li>
         {% else %}
             <li><a style="display: none;" href="#free" class="mdl-menu__item move-to-free" tour="{{ tourId }}" passenger="{{ passengerId }}">Move to {{ "free" | paxLabel }}</a></li>
+        {% endif %}
+
+        {# make payment menu item #}
+        {% if passengerStatus ==  "accepted" and free is sameas(false) %}
+            {% if is_granted("ROLE_BRAND") or "tour" | getRoles(tourId) == "organizer" or "tour" | getRoles(tourId) == "assistant"%}
+                <li><a style="display: block;" href="#payment" class="mdl-menu__item make-a-payment" tour="{{ tourId }}" passenger="{{ passengerId }}">Log a Payment</a></li>
+            {% endif %}
         {% endif %}
     </span>
 </ul>

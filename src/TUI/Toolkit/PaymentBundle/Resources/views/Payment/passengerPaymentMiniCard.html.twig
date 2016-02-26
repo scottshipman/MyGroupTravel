@@ -1,0 +1,44 @@
+{% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
+{% set tourId = pax[0].tourReference.id %}
+{% set passenger = pax[0] %}
+{% set user = pax[1] %}
+{%  set icon = 'event' %}
+{%  set color = 'blue' %}
+{% if status == "paid" %}{%  set color = 'green' %}{%  set icon = 'done' %} {% endif %}
+{% if status ==  "overdue" %}{%  set color = 'red' %}{%  set icon = 'warning' %}{% endif %}
+
+<div class="tour-edit mdl-shadow--2dp" style="background-color:white; margin-bottom: 0;" passenger="{{ passenger.id }}">
+    <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
+        <div style="float: left; color: grey;" class="pcardname">
+            {% if passenger.media %}
+                <img style="float: left; margin-right: 15px;"  class="tui-image-avatar" src="{{ ( passenger.media.getRelativePath ~ "/" ~ passenger.media.getHashedFilename ) | imagine_filter('thumbnail') }}">
+            {% elseif passenger.fName and passenger.lName %}
+                <span style="float: left; margin-right: 15px;"  class="tui-text-avatar mdl-typography--headline">{{ passenger.fName[:1] }}{{ passenger.lName[:1] }}</span>
+            {% else %}
+                <span style="float: left; margin-right: 15px;"  class="tui-text-avatar mdl-typography--headline">{{ passenger.fName[:1] }}</span>
+            {% endif %}
+            <p class="mini-card-title"><strong>{{ passenger.fName }}</strong></p>
+            <p class="mini-card-title"><strong>{{ passenger.lName }}</strong></p>
+            <p class="mini-card-title"><strong><a href="mailto:{{ user.email }}">{{ user.email }}</a></strong></p>
+            <label style="display: block; margin-left: 63px; min-width: 100%;">
+                <i style="color:{{ color }};" class="material-icons" >{{ icon }}</i>
+                <span>{{ currency.htmlSymbol | raw  }}{{ payments['total'] }} / {{ currency.htmlSymbol | raw  }}{{ due.total }}</span>
+                {% if overdue > 0 %}
+                    <span style="color:{{ color }}; margin-left: 1em;"> {{ currency.htmlSymbol | raw  }}{{ overdue }} Past Due </span>
+                {% endif %}
+
+            </label>
+        </div>
+
+        {# only if an organizer or brand #}
+        {% if  is_granted("ROLE_BRAND") or "tour" | getRoles(tourId) == "parent" or "tour" | getRoles(tourId) == "assistant"%}
+            <button style="position: absolute; right: 20px; color:grey; margin-top:10px;" id="payment-actions-menu-drop-{{ passenger.id }}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-button">
+                <i class="material-icons">more_vert</i>
+            </button>
+            {% set showViewLink = TRUE %}
+            {% embed "PaymentBundle:Payment:paymentSubMenu.html.twig" %}{% endembed %}
+        {% endif %}
+    </div>
+
+</div>
+
