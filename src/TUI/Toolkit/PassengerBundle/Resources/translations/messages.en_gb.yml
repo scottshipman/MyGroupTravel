@@ -60,7 +60,7 @@ passenger:
         passengers_for: Passengers
         organizers_for: Organisers
         passenger_for: Passenger For
-        all-passengers: All Travelers
+        all-passengers: All Travellers
         all-organizers: All Organisers
         waitlist: Wait List
         accepted: Accepted
