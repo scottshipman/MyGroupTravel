@@ -6,10 +6,17 @@
         </div>
 
         {{ form_start(form) }}
-        {{ form_widget(form.passportNumber) }}
-        {{ form_widget(form.passportFirstName) }}
+        <p style="color:red;">It is important that the details provided here match exactly as per the passport</p>
         {{ form_widget(form.passportLastName) }}
+        {{ form_widget(form.passportFirstName) }}
+        {{ form_widget(form.passportMiddleName) }}
+        {{ form_widget(form.passportGender) }}
+        {{ form_widget(form.passportTitle) }}
+        {{ form_widget(form.passportIssuingState) }}
+        {{ form_widget(form.passportNumber) }}
         {{ form_widget(form.passportNationality) }}
+        <label style="display: block; color:rgba(0,0,0,.26);">{% trans %}passenger.labels.passport_dob{% endtrans %}</label>
+        {{ form_widget(form.passportDateOfBirth) }}
         <label style="display: block; color:rgba(0,0,0,.26);">{% trans %}passenger.labels.passport_doi{% endtrans %}</label>
         {{ form_widget(form.passportDateOfIssue) }}
         <label style="display: block; color:rgba(0,0,0,.26);">{% trans %}passenger.labels.passport_doe{% endtrans %}</label>
@@ -22,9 +29,10 @@
         $(document).ready(function () {
             var tourId = $('.site-show').attr('entityId');
             var passengerId = $('.site-show').attr('passengerId');
-            console.log(tourId);
             $('#tui_toolkit_passengerbundle_passport_passengerReference').val(passengerId);
-            $()
+            $('#tui_toolkit_passengerbundle_passport_passportGender').css("width", "300px");
+            $('#tui_toolkit_passengerbundle_passport_passportTitle').css("width", "300px");
+
         });
     </script>
 {% endblock %}

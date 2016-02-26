@@ -28,7 +28,7 @@ passenger:
         activate: Submit
         security: Reset Security Info
         invite: Invite
-        invite-organizers: Invite Organisers
+        invite-organizers: Invite Organizers
         edit_passenger: Edit Passenger
         send-notification: Send Notification
         move_accepted: Move to Accepted
@@ -46,7 +46,7 @@ passenger:
             edit: Edit
 
     flash:
-        save: "Thanks for signing up. A copy of the form has been emailed to you, and the tour organiser will be in touch."
+        save: "Thanks for signing up. A copy of the form has been emailed to you, and the tour organizer will be in touch."
         delete: Passenger deleted -
         restore: Passenger Restored -
 
@@ -65,19 +65,19 @@ passenger:
         waitlist: Wait List
         accepted: Accepted
         free: Free
-        organizer: Organisers
+        organizer: Organizers
         passenger_list: All Participants List
         add_paying: Add Paying Passengers
         remaining: Remaining
         welcome: Welcome to the passenger dashboard.  Here you can invite, add, and manage all of your passengers.
         invite: Invite Passengers
         add: Add Passenger
-        primary-organizer: Primary Organiser
+        primary-organizer: Primary Organizer
         invite-pending: Invited - Not yet responded.
         invite-accepted: Accepted Invitation.
-        add-organizer: Manage Organisers
-        invite-text: Complete the form below to invite someone to help organise this tour.
-        assistant-organizer: Assistant Organiser
+        add-organizer: Manage Organizers
+        invite-text: Complete the form below to invite someone to help organize this tour.
+        assistant-organizer: Assistant Organizer
         tasks: Tasks
         medical_info: Medical Information
         doctor_name: Doctor's name
@@ -88,8 +88,14 @@ passenger:
         passport_info: Passport Details
         passport_number: Passport number
         passport_first_name: First name
+        passport_family_name: Family Name
+        passport_middle_name: Middle Name
+        passport_gender: Gender
+        passport_title: Title
+        passport_state_issue: Code of Issuing state (e.g. GBR)
         passport_last_name: Last name
         passport_nationality: Nationality
+        passport_dob: Date Of Birth
         passport_doi: Date of issue
         passport_doe: Date of expiry
         emergency_info: Emergency Contact Information

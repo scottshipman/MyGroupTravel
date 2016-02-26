@@ -88,8 +88,14 @@ passenger:
         passport_info: Passport Details
         passport_number: Passport number
         passport_first_name: First name
+        passport_family_name: Family Name
+        passport_middle_name: Middle Name
+        passport_gender: Gender
+        passport_title: Title
+        passport_state_issue: Code of Issuing state (e.g. GBR)
         passport_last_name: Last name
         passport_nationality: Nationality
+        passport_dob: Date Of Birth
         passport_doi: Date of issue
         passport_doe: Date of expiry
         emergency_info: Emergency Contact Information
@@ -104,7 +110,7 @@ passenger:
         thank_you: Thank you for your submission
         notifications: You have new notifications
         invite-organizer:
-            organizer-subject: A new organizer has been invited to your tour
+            organizer-subject: A new organiser has been invited to your tour
             new-user-subject: You have been invited to help manage a tour
 
     form:

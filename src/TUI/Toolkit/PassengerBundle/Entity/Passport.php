@@ -45,13 +45,43 @@ class Passport
      * @ORM\Column(type="string", nullable=true)
      * @GRID\Column(visible=false, filterable=false, export=true)
      */
-    protected $passportLastName;
+    private $passportMiddleName;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      * @GRID\Column(visible=false, filterable=false, export=true)
      */
-    protected $passportNationality;
+    private $passportLastName;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @GRID\Column(visible=false, filterable=false, export=true)
+     */
+    private $passportTitle;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @GRID\Column(visible=false, filterable=false, export=true)
+     */
+    private $passportGender;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @GRID\Column(visible=false, filterable=false, export=true)
+     */
+    private $passportNationality;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @GRID\Column(visible=false, filterable=false, export=true)
+     * @Assert\Length(
+     *    min=3,
+     *    max=3,
+     *    minMessage = "Your first name must be at least {{ limit }} characters long",
+     *    maxMessage = "Your first name cannot be longer than {{ limit }} characters"
+     * )
+     */
+    private $passportIssuingState;
 
     /**
      * @var date
@@ -68,6 +98,14 @@ class Passport
      * @GRID\Column(visible=true, export=true, operatorsVisible=false)
      */
     private $passportDateOfExpiry;
+
+    /**
+     * @var date
+     *
+     * @ORM\Column(name="date_of_birth", type="date", nullable=true)
+     * @GRID\Column(visible=true, export=true, operatorsVisible=false)
+     */
+    private $passportDateOfBirth;
 
     /**
      * @var \TUI\Toolkit\PassengerBundle\Entity\Passenger
@@ -129,6 +167,27 @@ class Passport
     }
 
     /**
+     * @param $passportMiddleName
+     * @return $this
+     *
+     */
+    public function setPassportMiddleName($passportMiddleName) {
+
+        $this->passportMiddleName = $passportMiddleName;
+
+        return $this;
+
+    }
+
+    /**
+     * @return passportMiddleName
+     *
+     */
+    public function getPassportMiddleName() {
+        return $this->passportMiddleName;
+    }
+
+    /**
      * @param $passportLastName
      * @return $this
      *
@@ -147,6 +206,69 @@ class Passport
      */
     public function getPassportLastName() {
         return $this->passportLastName;
+    }
+
+    /**
+     * @param $passportTitle
+     * @return $this
+     *
+     */
+    public function setPassportTitle($passportTitle) {
+
+        $this->passportTitle = $passportTitle;
+
+        return $this;
+
+    }
+
+    /**
+     * @return passportTitle
+     *
+     */
+    public function getPassportTitle() {
+        return $this->passportTitle;
+    }
+
+    /**
+     * @param $passportGender
+     * @return $this
+     *
+     */
+    public function setPassportGender($passportGender) {
+
+        $this->passportGender = $passportGender;
+
+        return $this;
+
+    }
+
+    /**
+     * @return passportGender
+     *
+     */
+    public function getPassportGender() {
+        return $this->passportGender;
+    }
+
+    /**
+     * @param $passportIssuingState
+     * @return $this
+     *
+     */
+    public function setPassportIssuingState($passportIssuingState) {
+
+        $this->passportIssuingState = $passportIssuingState;
+
+        return $this;
+
+    }
+
+    /**
+     * @return passportGender
+     *
+     */
+    public function getPassportIssuingState() {
+        return $this->passportIssuingState;
     }
 
     /**
@@ -210,6 +332,27 @@ class Passport
      */
     public function getPassportDateOfExpiry() {
         return $this->passportDateOfExpiry;
+    }
+
+    /**
+     * @param $passportDateOfBirth
+     * @return $this
+     *
+     */
+    public function setPassportDateOfBirth($passportDateOfBirth) {
+
+        $this->passportDateOfBirth = $passportDateOfBirth;
+
+        return $this;
+
+    }
+
+    /**
+     * @return passportDateOfBirth
+     *
+     */
+    public function getPassportDateOfBirth() {
+        return $this->passportDateOfBirth;
     }
 
     /**
