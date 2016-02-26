@@ -3,12 +3,14 @@
         <div style="text-align: center; color: grey;" class="pcardname">
 
         {% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
-            <span id="payment-schedule-link" style="margin-bottom: 10px;">
-                <a href="" id="toggle-payment-schedule" class="payment-schedule-link" style="color: {{ brand.secondaryColor }};">{% trans %}payment.labels.payment_history{% endtrans %} <br /><i class="material-icons">expand_more</i></a>
-            </span>
+            {#{% if due.items is defined and due.items is not empty %}#}
+                <span id="payment-schedule-link" style="margin-bottom: 10px;">
+                    <a href="" id="toggle-payment-schedule" class="payment-schedule-link" style="color: {{ brand.secondaryColor }};">{% trans %}payment.labels.payment_history{% endtrans %} <br /><i class="material-icons">expand_more</i></a>
+                </span>
+            {#{% endif %}#}
             <div style="display:none; text-align: left;" id="payment-schedule">
                 <div class="mdl-card__title">
-                    <h3 class="mdl-card__title-text">Payment Schedule</h3>
+                    <h3 class="mdl-card__title-text">{% trans %}payment.labels.schedule{% endtrans %}</h3>
                 </div>
                     {% for item in due.items %}
                         {#{% set overdue = overdue + item.overdueAmt %}#}
@@ -17,12 +19,15 @@
                         {% if item.status ==  "overdue" %}{%  set color = 'red' %}{%  set icon = 'warning' %}{% endif %}
                         <div class="mdl-card__supporting-text mdl-card--border">
                             {# need logic here to add the right task status icon based on item.status #}
-                            <label class="task-due-date"><i class="material-icons" style="color: {{ color }};">{{ icon }}</i>{{ item.task.name }}  {{ item.task.dueDate | date(format)}}</label>
+                            {% if item.task is defined and item.task is not empty %}
+                                <label class="task-due-date"><i class="material-icons" style="color: {{ color }};">{{ icon }}</i>{{ item.task.name }}  {{ item.task.dueDate | date(format)}}</label>
+                            {% endif %}
                             <p class="row-content indented">/ {{ tour.currency.htmlSymbol | raw  }}{{ item.total }}</p>
                             <p class="row-content weighted">{{ tour.currency.htmlSymbol | raw  }}{{ item.credit }} </p>
                         </div>
                     {% endfor %}
             </div>
+
         </div>
     {#</div>#}
     {#</div>#}
