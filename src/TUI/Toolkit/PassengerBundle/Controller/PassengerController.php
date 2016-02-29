@@ -15,7 +15,6 @@ use Symfony\Component\Form\Form;
 use TUI\Toolkit\PassengerBundle\Entity\Passenger;
 use TUI\Toolkit\PassengerBundle\Form\PassengerType;
 use TUI\Toolkit\PassengerBundle\Form\TourPassengerType;
-use TUI\Toolkit\UserBundle\Controller\UserController;
 
 
 /**
