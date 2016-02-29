@@ -87,7 +87,7 @@ quote:
         filters:
             title:
                 sales_agent: Primary Business Admin (last name)
-                secondContact: SecondaryContact (last name)
+                secondContact: Other Business Admin (last name)
                 organizer: Organizer (last name)
                 createdby: Created By
                 owner: Template Owner
