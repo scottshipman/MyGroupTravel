@@ -150,8 +150,8 @@ class PassengerService
         $accepted = count($acceptedUsers);
 
         //Get free passengers
-        $free = $this->getPassengersByStatus('free', $id);
-        $free = count($free);
+        $freeUsers = $this->getPassengersByStatus('free', $id);
+        $free = count($freeUsers);
         $passengerData->free = $free;
 
         //Get Organizers
@@ -192,6 +192,23 @@ class PassengerService
 
 
         }
+
+        foreach ($freeUsers as $freeUser) {
+            if ($freeUser->getMedicalReference() != null) {
+                $completedPassengerData['medical'][] = $freeUser;
+            }
+            if ($freeUser->getDietaryReference() != null) {
+                $completedPassengerData['dietary'][] = $freeUser;
+            }
+            if ($freeUser->getEmergencyReference() != null) {
+                $completedPassengerData['emergency'][] = $freeUser;
+            }
+            if ($freeUser->getPassportReference() != null) {
+                $completedPassengerData['passport'][] = $freeUser;
+            }
+        }
+
+
         $passengerData->completedPassengerData = $completedPassengerData;
 
         $possibleTasks = array();

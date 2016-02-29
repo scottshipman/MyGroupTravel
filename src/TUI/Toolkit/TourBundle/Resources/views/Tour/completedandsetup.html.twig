@@ -70,14 +70,16 @@
         <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
             <ul>
                 {% if entity.paymentTasks is not empty  %}
-                    {% for paymentTask in entity.paymentTasks if paymentTask.paidDate == null %}
-                        {% if loop.first %}
-                            <li>
-                                <div class="profile-list-item item-1 tour-dashboard four-column">
-                                    <span class="date-span">{% if entity.currency %}<p id="currency" style="display: inline; font-size: inherit;">{{ entity.currency.htmlSymbol | raw }}</p>{% endif %}{{ paymentTask.value * entity.payingPlaces }}</span>
-                                    <label>{{ paymentTask.name }} {% trans %}tour.dashboard.due{% endtrans %} {{ paymentTask.dueDate|date(shortFormat) }}</label>
-                                </div>
-                            </li>
+                    {% for paymentTask in entity.paymentTasks %}
+                        {% if paymentTask.paidDate == null %}
+                            {% if loop.first %}
+                                <li>
+                                    <div class="profile-list-item item-1 tour-dashboard four-column">
+                                        <span class="date-span">{% if entity.currency %}<p id="currency" style="display: inline; font-size: inherit;">{{ entity.currency.htmlSymbol | raw }}</p>{% endif %}{{ paymentTask.value * entity.payingPlaces }}</span>
+                                        <label>{{ paymentTask.name }} {% trans %}tour.dashboard.due{% endtrans %} {{ paymentTask.dueDate|date(shortFormat) }}</label>
+                                    </div>
+                                </li>
+                            {% endif %}
                         {% endif %}
                     {% endfor %}
                 {% elseif entity.paymentTasks is empty  %}
