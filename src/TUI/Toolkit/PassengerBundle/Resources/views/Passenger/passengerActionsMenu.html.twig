@@ -10,9 +10,9 @@
 
         {#Activation Email for Users#}
         {% if parent is defined and parent.enabled == false %}
-            <li><a href="{{ path('user_registration_confirmation', { 'id': parent.id }) }}" class="mdl-menu__item">{% trans %}passenger.actions.send-notification{% endtrans %}</a></li>
+            <li><a href="{{ path('parent_user_registration_confirmation', { 'id': parent.id, 'tourId': tour.id }) }}" class="mdl-menu__item">{% trans %}passenger.actions.send-notification{% endtrans %}</a></li>
         {% elseif user is defined and user.enabled == false %}
-            <li><a href="{{ path('user_registration_confirmation', { 'id': user.id }) }}" class="mdl-menu__item">{% trans %}passenger.actions.send-notification{% endtrans %}</a></li>
+            <li><a href="{{ path('parent_user_registration_confirmation', { 'id': user.id, 'tourId': tour.id }) }}" class="mdl-menu__item">{% trans %}passenger.actions.send-notification{% endtrans %}</a></li>
         {% endif %}
 
         {# Accepted Menu Item #}

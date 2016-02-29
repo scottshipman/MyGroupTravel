@@ -1109,6 +1109,71 @@ class PassengerController extends Controller
         }
     }
 
+    /*
+ * Sends an email to a User when brand user clicks Notify User
+ */
+    public function parentRegisterConfirmationTriggerAction($id, $tourId)
+    {
+
+        $mailer = $this->container->get('mailer');
+
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
+
+        //check permissions first
+        $currUser = $this->get('security.context')->getToken()->getUser();
+        $currRole =  $this->get("permission.set_permission")->getPermission($tourId, 'tour', $currUser);
+
+        if(!$this->get('security.context')->isGranted('ROLE_BRAND')){
+            if(!in_array('assistant', $currRole) && !in_array('organizer', $currRole)) {
+                throw $this->createAccessDeniedException('You are not authorized to manage passengers for this tour!');
+            }
+        }
+
+        // Create token
+        $tokenGenerator = $this->container->get('fos_user.util.token_generator');
+
+        //Get some user info
+        $user->setConfirmationToken($tokenGenerator->generateToken());
+        $userEmail = $user->getEmail();
+
+        //brand stuff
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
+
+        $message = \Swift_Message::newInstance()
+            ->setSubject($this->get('translator')->trans('user.email.registration.subject'))
+            ->setFrom($this->container->getParameter('user_system_email'))
+            ->setTo($userEmail)
+            ->setBody(
+                $this->renderView(
+                    'TUIToolkitUserBundle:Registration:register_email.html.twig',
+                    array(
+                        'brand' => $brand,
+                        'user' => $user,
+                    )
+                ), 'text/html');
+
+        $em->persist($user);
+        $em->flush();
+
+        $mailer->send($message);
+
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('user.flash.registration_notification') . ' ' .$user->getEmail());
+
+//        return $this->redirect($this->generateUrl('user'));
+        return $this->redirect($_SERVER['HTTP_REFERER']);
+
+    }
+
     public function getActivateAllUsersAction($tourId)
     {
 
