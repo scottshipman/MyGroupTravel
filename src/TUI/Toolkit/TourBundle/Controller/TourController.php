@@ -1209,6 +1209,43 @@ class TourController extends Controller
 
     }
 
+    public function getTourTaskDashboardAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('TourBundle:Tour')->find($id);
+        $editForm = $this->createEditForm($entity);
+        $date_format = $this->container->getParameter('date_format');
+        $locale = $this->container->getParameter('locale');
+
+        //brand stuff
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
+
+        $passengerData = $this->get("passenger.actions")->getTourPassengersData($id);
+
+        $payment_tasks = $entity->getPaymentTasks();
+
+        return $this->render('TourBundle:Tour:task-passenger-dashboard.html.twig', array(
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
+            'date_format' => $date_format,
+            'locale' => $locale,
+            'brand' => $brand,
+            'passengerData' =>$passengerData,
+            'payment_tasks' => $payment_tasks
+        ));
+
+    }
+
     /**
      * @param $id
      * @return Response

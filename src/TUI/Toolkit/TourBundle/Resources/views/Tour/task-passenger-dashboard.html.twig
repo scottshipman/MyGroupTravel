@@ -1,0 +1,372 @@
+{% extends '::site-base.html.twig' %}
+
+{% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
+{% if 'en_GB' in locale %} {% set shortFormat = 'd M' %} {% else %} {% set format = 'M d' %} {% endif %}
+{% set compareFormat = 'Y-m-d' %}
+
+{% if entity.passportDate is defined and entity.passportDate != null %}
+    {% set passDtg  = date(entity.passPortDate).diff(date("now")) %}
+    {% set passTime  = date(entity.created.date).diff(date(entity.passPortDate))%}
+    {% set passPercent = (passengerData.completedPassengerData['passport']|length/entity.payingPlaces) * 100  %}
+    {% if passDtg.days < 1 %} {%  set passDtgFinal = 0  %} {% else %} {% set passDtgFinal = passDtg.days %}{% endif %}
+{% endif %}
+
+{% if entity.emergencyDate is defined and entity.emergencyDate != null %}
+    {% set emergencyDtg  = date(entity.emergencyDate).diff(date("now")) %}
+    {% set emergencyTime  = date(entity.created.date).diff(date(entity.emergencyDate))%}
+    {% set emergencyPercent = (passengerData.completedPassengerData['emergency']|length/entity.payingPlaces) * 100  %}
+    {% if emergencyDtg.days < 1 %} {%  set emergecyDtgFinal = 0  %} {% else %} {% set emergencyDtgFinal = emergencyDtg.days %}{% endif %}
+{% endif %}
+
+{% if entity.medicalDate is defined and entity.medicalDate != null%}
+    {% set medDtg  = date(entity.medicalDate).diff(date("now")) %}
+    {% set medTime  = date(entity.created.date).diff(date(entity.medicalDate))%}
+    {% set medPercent = (passengerData.completedPassengerData['medical']|length/entity.payingPlaces) * 100  %}
+    {% if medDtg.days < 1 %} {%  set medDtgFinal = 0  %} {% else %} {% set medDtgFinal = medDtg.days %}{% endif %}
+{% endif %}
+
+{% if entity.dietaryDate is defined and entity.dietaryDate != null%}
+    {% set dietDtg  = date(entity.dietaryDate).diff(date("now")) %}
+    {% set dietTime  = date(entity.created.date).diff(date(entity.dietaryDate))%}
+    {% set dietPercent = (passengerData.completedPassengerData['dietary']|length/entity.payingPlaces) * 100  %}
+    {% if dietDtg.days < 1 %} {%  set dietDtgFinal = 0  %} {% else %} {% set dietDtgFinal = dietDtg.days %}{% endif %}
+{% endif %}
+
+{# calculate Days to Go for Departure Date #}
+{% if  entity.departureDate and entity.departureDate | date ('Y-m-d') > "now - 1 day" | date('Y-m-d') %}
+    {% set dtgFinal  = date(entity.departureDate).diff(date("now - 1 day")).days %}
+{% else  %}
+    {%  set dtgFinal = 0  %}
+{% endif %}
+
+{# calculate Days Until Expiration #}
+{% if  entity.expiryDate and entity.expiryDate | date ('Y-m-d') > "now - 1 day" | date('Y-m-d') %}
+    {% set dteFinal  = date(entity.expiryDate).diff(date("now - 1 day")).days %}
+{% else %}
+    {%  set dteFinal = 0  %}
+{% endif %}
+
+{% block title %}
+    {% if is_granted("ROLE_BRAND") %}
+        {% trans %}tour.page_title.index{% endtrans %}
+    {% else %}
+        {{ entity.name }}
+    {% endif %}
+{% endblock %}
+
+{% block page_title %}
+    <span>Tasks</span>
+{% endblock %}
+
+{% block page_title_menu %}
+    <button id="tour-title-drop" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-menu-drop">
+        <i class="material-icons">arrow_drop_down</i>
+    </button>
+    {% embed "TourBundle:Tour:tourMenu.html.twig" %}
+            {% block tour_dashboard_link %}
+                <li><a href="{{ path('manage_tour_show', { 'id': entity.id }) }}" class="mdl-menu__item">{% trans %}tour.title.index{% endtrans %}</a></li>
+            {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block back_link %}
+    {% if is_granted("ROLE_BRAND") %}
+        <a class="back-link" href="{{ path('manage_tour') }}"><i class="fa fa-arrow-left"></i> {% trans %}tour.actions.back_to_tours{% endtrans %}</a>
+    {% else %}
+        <a class="back-link" href="/"><i class="fa fa-arrow-left"></i> {% trans %}tour.actions.home{% endtrans %}</a>
+    {% endif %}
+{% endblock %}
+
+{% block body -%}
+    <div class="tour-show-wrapper">
+
+        <div class="tour-show-left-column">
+            <h3>{{ entity.name|capitalize }}</h3>
+            <ul class="tour-show-submenu">
+                <li><a href="{{ path('manage_tour_passenger_task_dashboard', { 'id': entity.id }) }}" style="text-decoration: none; color:{{ brand.secondaryColor }};"><strong>Passenger Tasks ({{ passengerData.possibleTasksCount }})</strong></a></li>
+                <li><a href="{{ path('manage_payment_dashboard_edit_payments', { 'tourId': entity.id }) }}" style="text-decoration: none; color: inherit;"><strong>Organiser Tasks ({{ entity.paymentTasks|length }})</strong></a></li>
+            </ul>
+        </div>
+
+        <div class="tour-show-right-column">
+
+                {# Passenger CTA Card #}
+                <div class="passenger-cta-card tour-edit mdl-card mdl-shadow--2dp">
+
+                    <div class="mdl-card__title">
+                        <h3 id="card-title" class="mdl-card__title-text">Passenger Tasks</h3>
+                    </div>
+
+                    <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
+                        {% if passengerData.totalCompletedTasksCount == passengerData.possibleTasksCount %}
+                            <h3 style="float: left; font-weight:300; font-size:2em;">All Done!</h3>
+                        {% else %}
+                            <h3 style="float: left; font-weight:300; font-size:2em;">In Progress</h3>
+                        {% endif %}
+                        <div style="float: right; margin-top:20px;">
+                            <span style="color:{{ brand.secondaryColor }}; font-size:3.5em; font-weight:100;"><p style="display: inline; margin-left:5px; font-size:inherit; font-weight:inherit;">{{ passengerData.totalCompletedTasksCount }}/{{ passengerData.possibleTasksCount }}</p></span><br/>
+                            <span style="float:right;"><label><p style="display: inline; margin-left:5px; font-size:inherit; font-weight:inherit;">Complete</p></label></span>
+                        </div>
+                    </div>
+                    {# Tour Payment Tasks collapsable card #}
+                    {#{% embed "PaymentBundle:Payment:tourPaymentTaskSummary.html.twig" %}{% endembed %}#}
+
+                </div>
+
+            {#Passport Date info task#}
+            {% if entity.passportDate is defined and entity.passportDate != null %}
+                {% if (entity.payingPlaces - passengerData.completedPassengerData['passport']|length)  > 0 %}
+                    <div class="tour-edit mdl-card mdl-shadow--2dp">
+                        {#<a class ="dashboard-titles" href="#">#}
+                        <div class="mdl-card__title">
+                            <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.passport_data{% endtrans %} {{ entity.passPortDate|date(shortFormat) }}</h3>
+                            <span class="tour-dashboard-cta"></span>
+                        </div>
+                        {#</a>#}
+                        <div id="passport-progress" class="mdl-progress mdl-js-progress" style="width: 100%;"></div>
+                        <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
+                            <ul>
+                                <li>
+                                    <div class="profile-list-item item-1 tour-dashboard">
+                                        <span class="date-span">{{ passengerData.completedPassengerData['passport']|length }}</span>
+                                        <label>{% trans %}tour.dashboard.collecting{% endtrans %}</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="profile-list-item item-2 tour-dashboard">
+                                        <span class="date-span">{{ entity.payingPlaces - passengerData.completedPassengerData['passport']|length }}</span>
+                                        <label>{% trans %}tour.dashboard.outstanding{% endtrans %}</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="profile-list-item item-3 tour-dashboard">
+                                        <span class="date-span">{{ passDtgFinal }}</span>
+                                        <label>{% trans %}tour.dashboard.days_due{% endtrans %}</label>
+                                    </div>
+                                </li>
+                                <li>
+                            </ul>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endif %}
+
+            {#Emergency Contact Data info task#}
+            {% if entity.emergencyDate is defined and entity.emergencyDate != null %}
+                {% if (entity.payingPlaces - passengerData.completedPassengerData['emergency']|length)  > 0 %}
+                    <div class="tour-edit mdl-card mdl-shadow--2dp">
+                        {#<a class ="dashboard-titles" href="#">#}
+                        <div class="mdl-card__title">
+                            <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.passenger_data{% endtrans %} {{ entity.emergencyDate|date(shortFormat) }}</h3>
+                            <span class="tour-dashboard-cta"></span>
+                        </div>
+                        {#</a>#}
+                        <div id="emergency-progress" class="mdl-progress mdl-js-progress" style="width: 100%;"></div>
+                        <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
+                            <ul>
+                                <li>
+                                    <div class="profile-list-item item-1 tour-dashboard">
+                                        <span class="date-span">{{ passengerData.completedPassengerData['emergency']|length }}</span>
+                                        <label>{% trans %}tour.dashboard.collecting{% endtrans %}</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="profile-list-item item-2 tour-dashboard">
+                                        <span class="date-span">{{ entity.payingPlaces - passengerData.completedPassengerData['emergency']|length }}</span>
+                                        <label>{% trans %}tour.dashboard.outstanding{% endtrans %}</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="profile-list-item item-3 tour-dashboard">
+                                        <span class="date-span">{{ emergencyDtgFinal }}</span>
+                                        <label>{% trans %}tour.dashboard.days_due{% endtrans %}</label>
+                                    </div>
+                                </li>
+                                <li>
+                            </ul>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endif %}
+
+            {#Medical Date info task#}
+            {% if entity.medicalDate is defined and entity.medicalDate != null %}
+                {% if (entity.payingPlaces - passengerData.completedPassengerData['medical']|length)  > 0 %}
+                    <div class="tour-edit mdl-card mdl-shadow--2dp">
+                        {#<a class ="dashboard-titles" href="#">#}
+                        <div class="mdl-card__title">
+                            <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.medical_data{% endtrans %} {{ entity.medicalDate|date(shortFormat) }}</h3>
+                            <span class="tour-dashboard-cta"></span>
+                        </div>
+                        {#</a>#}
+                        <div id="medical-progress" class="mdl-progress mdl-js-progress" style="width: 100%;"></div>
+                        <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
+                            <ul>
+                                <li>
+                                    <div class="profile-list-item item-1 tour-dashboard">
+                                        <span class="date-span">{{ passengerData.completedPassengerData['medical']|length }}</span>
+                                        <label>{% trans %}tour.dashboard.collecting{% endtrans %}</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="profile-list-item item-2 tour-dashboard">
+                                        <span class="date-span">{{ entity.payingPlaces - passengerData.completedPassengerData['medical']|length }}</span>
+                                        <label>{% trans %}tour.dashboard.outstanding{% endtrans %}</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="profile-list-item item-3 tour-dashboard">
+                                        <span class="date-span">{{ medDtgFinal }}</span>
+                                        <label>{% trans %}tour.dashboard.days_due{% endtrans %}</label>
+                                    </div>
+                                </li>
+                                <li>
+                            </ul>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endif %}
+
+            {#Dietary Date Task#}
+            {% if entity.dietaryDate is defined and entity.dietaryDate != null %}
+                {% if (entity.payingPlaces - passengerData.completedPassengerData['dietary']|length)  > 0 %}
+                    <div class="tour-edit mdl-card mdl-shadow--2dp">
+                        {#<a class ="dashboard-titles" href="#">#}
+                        <div class="mdl-card__title">
+                            <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.dietary_data{% endtrans %} {{ entity.dietaryDate|date(shortFormat) }}</h3>
+                            <span class="tour-dashboard-cta"></span>
+                        </div>
+                        {#</a>#}
+                        <div id="dietary-progress" class="mdl-progress mdl-js-progress" style="width: 100%;"></div>
+                        <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
+                            <ul>
+                                <li>
+                                    <div class="profile-list-item item-1 tour-dashboard">
+                                        <span class="date-span">{{ passengerData.completedPassengerData['dietary']|length }}</span>
+                                        <label>{% trans %}tour.dashboard.collecting{% endtrans %}</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="profile-list-item item-2 tour-dashboard">
+                                        <span class="date-span">{{ entity.payingPlaces - passengerData.completedPassengerData['dietary']|length }}</span>
+                                        <label>{% trans %}tour.dashboard.outstanding{% endtrans %}</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="profile-list-item item-3 tour-dashboard">
+                                        <span class="date-span">{{ dietDtgFinal }}</span>
+                                        <label>{% trans %}tour.dashboard.days_due{% endtrans %}</label>
+                                    </div>
+                                </li>
+                                <li>
+                            </ul>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endif %}
+
+                <div style="clear: both; height: 150px;"></div>
+            </div>
+
+        </div>
+<script>
+    //Percentage Bars
+    $(document).ready(function() {
+
+    //Emergency Contact Information progress bar
+    {% if emergencyPercent is defined %}
+        var emergencyPercent = {{ emergencyPercent }};
+        document.querySelector('#emergency-progress').addEventListener('mdl-componentupgraded', function() {
+        this.MaterialProgress.setProgress(emergencyPercent);
+        });
+    {% endif %}
+
+    //Dietary Info progress bar
+    {% if dietPercent is defined %}
+        var dietPercent = {{ dietPercent }};
+        document.querySelector('#dietary-progress').addEventListener('mdl-componentupgraded', function() {
+        this.MaterialProgress.setProgress(dietPercent);
+        });
+    {% endif %}
+
+    //Medical Info Progress Bar
+    {% if medPercent is defined %}
+        var medPercent = {{ medPercent }};
+        document.querySelector('#medical-progress').addEventListener('mdl-componentupgraded', function() {
+        this.MaterialProgress.setProgress(medPercent);
+        });
+    {% endif %}
+
+    //Passport Info progress bar
+    {% if passPercent is defined %}
+        var passPercent = {{ passPercent }};
+        document.querySelector('#passport-progress').addEventListener('mdl-componentupgraded', function() {
+        this.MaterialProgress.setProgress(passPercent);
+        });
+    {% endif %}
+
+    });
+</script>
+
+{% endblock %}
+
+
+{% block footer_left %}
+    {% if app.user.email != entity.salesAgent.email%} {# Show Sales Agent Info to an Organizer#}
+        {% if entity.salesAgent %}
+            <span class="intro">
+                    {{ brand.name }} {% trans %}tour.show.footer.intro_org{% endtrans %}
+            </span>
+            {% if entity.salesAgent.media %}
+                <span class="tui-image-avatar"><img src="{{ ( entity.salesAgent.media.getRelativePath ~ "/" ~ entity.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.salesAgent.username }}"></span>
+            {% elseif entity.salesAgent.firstName and entity.salesAgent.lastName %}
+                <span class="tui-text-avatar mdl-typography--headline">{{ entity.salesAgent.firstName[:1] }}{{ entity.salesAgent.lastName[:1] }}</span>
+            {% else %}
+                <span class="tui-text-avatar mdl-typography--headline">{{ entity.salesAgent.username[:1] }}</span>
+            {% endif %}
+            <span class="agent">
+                {% if entity.salesAgent.displayName %}
+                    {{ entity.salesAgent.displayName }}
+                {% else %}
+                    {{ entity.salesAgent.firstName }} {{ entity.salesAgent.lastName }}
+                {% endif %}
+                <br>
+                <a href="mailto:{{ entity.salesAgent.email }}">{{ entity.salesAgent.email }}</a>
+            </span>
+        {% endif %}
+    {% else %} {# Show organizer info to everyone but organizers #}
+        {% if entity.organizer %}
+            <span class="intro">
+                    {% trans %}tour.show.footer.intro{% endtrans %}
+            </span>
+            {% if entity.organizer.media %}
+                <span class="tui-image-avatar"><img src="{{ ( entity.organizer.media.getRelativePath ~ "/" ~ entity.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.organizer.username }}"></span>
+            {% elseif entity.organizer.firstName and entity.organizer.lastName %}
+                <span class="tui-text-avatar mdl-typography--headline">{{ entity.organizer.firstName[:1] }}{{ entity.organizer.lastName[:1] }}</span>
+            {% else %}
+                <span class="tui-text-avatar mdl-typography--headline">{{ entity.organizer.username[:1] }}</span>
+            {% endif %}
+            <span class="agent">
+                {% if entity.organizer.displayName %}
+                    {{ entity.organizer.displayName }}
+                {% else %}
+                    {{ entity.organizer.firstName }} {{ entity.organizer.lastName }}
+                {% endif %}
+                <br>
+                <a href="mailto:{{ entity.organizer.email }}">{{ entity.organizer.email }}</a>
+            </span>
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block footer_right %}
+    <div class="quote-info">
+        <span class="quote-label">{% trans %}tour.show.footer.price{% endtrans %}</span>
+
+        <span class="quote-price">
+            {% if entity.pricePerson %}
+                <strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePersonPublic }}</strong>
+            {% endif %}
+        </span>
+    </div>
+{% endblock %}
