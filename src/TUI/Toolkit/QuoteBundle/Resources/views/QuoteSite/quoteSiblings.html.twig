@@ -24,7 +24,6 @@
             <td>{% if entity.pricePerson %}{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}{% endif %}</td>
             <td>{% if date(entity.expiryDate) < date('now') %}<span style="color:red;">Expired</span>{% endif %}</td>
         </tr>
-        <tr> <td>{% if entity.description %}{{ entity.description }}{% endif %}</td></tr>
     {% if zebra == "odd" %}{% set zebra = "even" %}{% else %}{% set zebra = "odd" %}{% endif %}
     {% endfor %}
     </tbody>
