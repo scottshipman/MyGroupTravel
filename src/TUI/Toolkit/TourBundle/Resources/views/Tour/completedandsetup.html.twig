@@ -48,6 +48,8 @@
 {# {% set signupNumber = (passengerData.accepted + waitlist) - totalOrganizerCount %}{% if  signupNumber <= 0%}{% set signupNumber = 0 %}{% endif %} #}
 {% set signupNumber = entity.registrations %}
 
+
+
 {# {% if is_granted("ROLE_BRAND") or app.user.email == entity.organizer.email %} #}
 
     {#Status Bar, only the organizer for the specific tour or brand users can view the dashboard#}
@@ -92,7 +94,7 @@
                             <span class="date-span">{{ signupNumber }}</span>
                             <label>{% trans %}tour.dashboard.registrations{% endtrans %}</label>
                          {% else %}
-                             <span class="date-span">{{ accepted + free }}</span>
+                             <span class="date-span">{{ passengerData.accepted + passengerData.free }}</span>
                              <label>{% trans %}tour.dashboard.passengers{% endtrans %}</label>
                         {% endif %}
                     </div>
