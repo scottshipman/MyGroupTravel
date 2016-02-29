@@ -58,3 +58,7 @@ manage_ajax_move_to_free:
 manage_tour_edit_payments:
     path: /edit/payments/{id}
     defaults: { _controller: "TourBundle:Tour:getEditPayments" }
+
+parent_user_registration_confirmation:
+  path: /{id}/{tourId}/parent-register-confirm-notification
+  defaults: {_controller: "PassengerBundle:Passenger:parentRegisterConfirmationTrigger" }
