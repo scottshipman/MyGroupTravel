@@ -302,3 +302,47 @@ td .layout-icons.image_bottom {
   }
 
 }
+
+//.flex-direction-nav a:before {
+//  content: "\25AE";
+//  //font-family: FontAwesome;
+//  font-size: 3em;
+//  display: block;
+//  //background: url('../path-to-image/flexslider-left.png') no-repeat;
+//  width: 40px;
+//  height: 40px;
+//}
+//
+//.flex-direction-nav a.flex-next:before {
+//  content: "\25AE";
+//  //font-family: FontAwesome;
+//  display: block;
+//  font-size: 3em;
+//  //background: url('../path-to-image/flexslider-right.png') no-repeat;
+//  width: 40px;
+//  height: 40px;
+//}
+
+.flex-control-nav {
+bottom:15px;
+  li a {
+    width: 13px;
+    height: 13px;
+    display: block;
+    background: url(../images/6459910_part_1_bg_control_nav_1) no-repeat 0 0;
+    cursor: pointer;
+    text-indent: -9999px;
+  }
+}
+
+.flex-direction-nav li a {
+  width: 52px;
+  height: 52px;
+  margin: -13px 0 0;
+  display: block;
+  background: url(../images/6459910_part_1_bg_direction_nav_2) no-repeat 0 0;
+  position: absolute;
+  top: 50%;
+  cursor: pointer;
+  text-indent: -9999px;
+}

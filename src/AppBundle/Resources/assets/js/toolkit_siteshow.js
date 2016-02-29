@@ -2,9 +2,10 @@ $(window).load(function () {
 
     // Flexslider
     $('.flexslider').flexslider({
-        directionNav: false,
-        controlNav: false,
-        smoothHeight: true
+        directionNav: true,
+        controlNav: true,
+        smoothHeight: true,
+        pauseOnHover: true
     });
 
 });

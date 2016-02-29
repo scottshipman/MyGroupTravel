@@ -59,4 +59,12 @@ html {
 .mini-card-title {
   display: inline-block;
   margin: 0;
+
+  &.email {
+    display: block;
+
+    @include breakpoint_desktop() {
+      display: inline-block;
+    }
+  }
 }
