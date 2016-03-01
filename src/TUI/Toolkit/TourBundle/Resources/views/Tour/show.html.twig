@@ -146,7 +146,6 @@
         });
 
         //brand_payment popup
-        // Payment popup
         $(document).on('click', 'a.make-a-brand-payment', function (e) {
             e.preventDefault();
             toolkitStandardPopup("Log A Payment", '{{ path('brand_payment_new', {'tourId': entity.id}) }}' );

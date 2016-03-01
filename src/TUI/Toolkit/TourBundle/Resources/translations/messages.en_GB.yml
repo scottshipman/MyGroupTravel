@@ -334,7 +334,8 @@ tour:
             paying_places: Paying Places
             free_places: Free Places
             price_per_person: Price per Person
-            add_payment: Add a Payment
+            add_payment: Add a Schedule Item
+            log_payment: Log a Collected Payment
 
 
 
