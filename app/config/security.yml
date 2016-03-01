@@ -54,5 +54,6 @@ security:
             - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
             - { path: ^/efconnect, role: ROLE_USER }
             - { path: ^/elfinder, role: ROLE_USER }
+            - { path: ^/brand_payment, role: ROLE_BRAND }
 
 

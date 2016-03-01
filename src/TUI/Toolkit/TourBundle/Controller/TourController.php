@@ -525,6 +525,7 @@ class TourController extends Controller
         $collection = $entity->getMedia()->toArray() ? $entity->getMedia()->toArray() : NULL;
 
         $payment_tasks = $entity->getPaymentTasks();
+        $paymentSchedule = $this->getPaymentSchedule($id);
 
         //Get logger service for errors
         $logger = $this->get('logger');
@@ -582,6 +583,7 @@ class TourController extends Controller
             'locale' => $locale,
             'collection' => $collection,
             'payment_tasks' => $payment_tasks,
+            'payment_schedule' => $paymentSchedule,
             'items' => $items,
             'tabs' => $tabs,
             'editable' => $editable,
@@ -1685,6 +1687,53 @@ class TourController extends Controller
 
 
     return $this->redirect($this->generateUrl('manage_tour'));
+
+    }
+
+    /*
+     * getPaymentSchedule
+     *
+     * parameter int tourId
+     * returns array of payment tasks and payments made plus status of each task and balances due.
+     */
+
+    public function getPaymentSchedule($tourId) {
+        $totalPaid = 0;
+        $items=array();
+        $now = new \DateTime('now');
+        $em = $this->getDoctrine()->getManager();
+        $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
+        $paymentTasks = $tour->getPaymentTasks();
+        $payments = $em->getRepository('PaymentBundle:BrandPayment')->findBy(array('tour' => $tourId));
+
+        foreach($payments as $payment){
+            $totalPaid = $totalPaid + $payment->getValue();
+        }
+
+        $balance = $totalPaid;
+        foreach($paymentTasks as $paymentTask) {
+            $taskDue = $paymentTask->getValue() * $tour->getPayingPlaces();
+            $taskStatus = 'pending';
+            $taskOverdueAmt = 0;
+            $taskPaid = 0;
+            if($balance >= $taskDue){
+                $taskStatus = 'paid';
+                $taskPaid = $taskDue;
+                $balance = $balance - $taskDue;
+            }
+
+            elseif($balance < $taskDue){
+                $taskPaid = $balance;
+                $balance = 0;
+                if($paymentTask->getDueDate() < $now){
+                    $taskStatus = "overdue";
+                    $taskOverdueAmt = $taskDue - $taskPaid;
+                }
+            }
+            $items[] = array('taskPaid' => $taskPaid, 'item' =>$paymentTask, 'taskStatus' => $taskStatus, 'taskOverdueAmt' => $taskOverdueAmt);
+
+        }
+        return $items;
 
     }
 }

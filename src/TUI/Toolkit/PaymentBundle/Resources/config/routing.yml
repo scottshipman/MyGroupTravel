@@ -2,6 +2,7 @@ payment_payment:
     resource: "@PaymentBundle/Resources/config/routing/payment.yml"
     prefix:   /payment
 
-payment_homepage:
-    path:     /hello/{name}
-    defaults: { _controller: PaymentBundle:Default:index }
+payment_brand_payment:
+    resource: "@PaymentBundle/Resources/config/routing/brand_payment.yml"
+    prefix:   /brand_payment
+
