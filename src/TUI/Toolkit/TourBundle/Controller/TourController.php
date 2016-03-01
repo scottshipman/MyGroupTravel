@@ -1209,7 +1209,7 @@ class TourController extends Controller
 
     }
 
-    public function getTourTaskDashboardAction($id)
+    public function getTourTasksDashboardAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -1234,7 +1234,7 @@ class TourController extends Controller
 
         $payment_tasks = $entity->getPaymentTasks();
 
-        return $this->render('TourBundle:Tour:task-passenger-dashboard.html.twig', array(
+        return $this->render('TourBundle:Tour:tasks-dashboard.html.twig', array(
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'date_format' => $date_format,
