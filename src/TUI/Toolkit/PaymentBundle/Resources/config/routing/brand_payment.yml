@@ -1,0 +1,25 @@
+brand_payment:
+    path:     /
+    defaults: { _controller: "PaymentBundle:BrandPayment:index" }
+
+brand_payment_show:
+    path:     /{id}/show
+    defaults: { _controller: "PaymentBundle:BrandPayment:show" }
+
+brand_payment_new:
+    path:     /tour/{tourId}/new
+    defaults: { _controller: "PaymentBundle:BrandPayment:new" }
+
+brand_payment_create:
+    path:     /create/{tourId}
+    defaults: { _controller: "PaymentBundle:BrandPayment:create" }
+    methods:  POST
+
+brand_payment_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "PaymentBundle:BrandPayment:edit" }
+
+brand_payment_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "PaymentBundle:BrandPayment:delete" }
+    methods:  [POST, DELETE]

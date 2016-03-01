@@ -55,3 +55,7 @@ payment:
 
         success:
             message: This payment has been logged.
+
+brand_payment:
+    form:
+        message: "This payment is being logged for %iname% for the Tour: %tourname%."

@@ -65,31 +65,12 @@
                     <span style="color: red; margin-left: 20px;" class="status-alert"><i style="margin-right:5px;" class="fa fa-times"></i>{{ entity.tripStatus.name }}</span>
                 {% endif %}
             {% endif %}
-            {#<span class="tour-dashboard-cta status-block"><a class=""><i class="fa fa-ellipsis-v"></i></a></span>#}
+
         </div>
         <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
             <ul>
-                {% if entity.paymentTasks is not empty  %}
-                    {% for paymentTask in entity.paymentTasks if paymentTask.paidDate == null %}
-                        {% if loop.first %}
-                            <li>
-                                <div class="profile-list-item item-1 tour-dashboard four-column">
-                                    <span class="date-span">{% if entity.currency %}<p id="currency" style="display: inline; font-size: inherit;">{{ entity.currency.htmlSymbol | raw }}</p>{% endif %}{{ paymentTask.value * entity.payingPlaces }}</span>
-                                    <label>{{ paymentTask.name }} {% trans %}tour.dashboard.due{% endtrans %} {{ paymentTask.dueDate|date(shortFormat) }}</label>
-                                </div>
-                            </li>
-                        {% endif %}
-                    {% endfor %}
-                {% elseif entity.paymentTasks is empty  %}
-                    <li>
-                        <div class="profile-list-item item-1 tour-dashboard four-column">
-                            <span class="date-span">{% trans %}tour.dashboard.na{% endtrans %}</span>
-                            <label>{% trans %}tour.dashboard.no_payments{% endtrans %}</label>
-                        </div>
-                    </li>
-                {% endif %}
                 <li>
-                    <div class="profile-list-item item-2 tour-dashboard four-column">
+                    <div class="profile-list-item item-1 tour-dashboard four-column">
                         {% if entity.tripStatus.name == "Provisional" %}
                             <span class="date-span">{{ signupNumber }}</span>
                             <label>{% trans %}tour.dashboard.registrations{% endtrans %}</label>
@@ -100,16 +81,15 @@
                     </div>
                 </li>
                 <li>
-                    <div class="profile-list-item item-3 tour-dashboard four-column">
-                        <span class="date-span">{{ passengerData.totalOrganizerCount }}</span>
-                        {#<label>{% trans %}%totalOrganizerCount%{% endtrans %}</label>#}
-                        <label>{% transchoice passengerData.totalOrganizerCount %}{0} Organizers|{1} Organizer|]1,Inf[  Organizers}{% endtranschoice %}</label>
+                    <div class="profile-list-item item-2 tour-dashboard four-column">
+                        <span class="date-span">{{ entity.views }}</span>
+                        <label>{% trans %}tour.dashboard.views{% endtrans %}</label>
                     </div>
                 </li>
                 <li>
                     {# if Provisional and not yet expired, show days till expired, else show days to departure #}
                     {# if there is no expiry, show day till departure #}
-                    <div class="profile-list-item item-4 tour-dashboard four-column">
+                    <div class="profile-list-item item-3 tour-dashboard four-column">
                         {% if entity.tripStatus.name == "Provisional" and entity.expiryDate %}
                             {% if dteFinal<1 %}
                                 <span class="date-span" style="color:red;"><i class="fa fa-exclamation-circle"> Expired</i></span>
@@ -146,8 +126,8 @@
                     <ul>
                         <li>
                             <div class="profile-list-item item-1 tour-dashboard four-column">
-                                <span class="date-span">{{ entity.views }}</span>
-                                <label>{% trans %}tour.dashboard.views{% endtrans %}</label>
+                                <span class="date-span">{{ passengerData.totalOrganizerCount }}</span>
+                                <label>{% transchoice passengerData.totalOrganizerCount %}{0} Organizers|{1} Organizer|]1,Inf[  Organizers}{% endtranschoice %}</label>
                             </div>
                         </li>
                         <li>
@@ -158,62 +138,20 @@
                         </li>
                         <li>
                             <div class="profile-list-item item-3 tour-dashboard four-column">
-                                <span class="date-span">{{ passengerData.waitlist }}</span>
-                                <label>{{ "waitlist" | paxLabel }}</label>
+                                <span class="date-span">{{ passengerData.free }}</span>
+                                <label>{{ "free" | paxLabel }} of {{ entity.freePlaces }}</label>
                             </div>
                         </li>
                         <li>
                             <div class="profile-list-item item-4 tour-dashboard four-column">
-                                <span class="date-span">{{ passengerData.free }}</span>
-                                <label>{{ "free" | paxLabel }} of {{ entity.freePlaces }}</label>
+                                <span class="date-span">{{ passengerData.waitlist }}</span>
+                                <label>{{ "waitlist" | paxLabel }}</label>
                             </div>
                         </li>
                     </ul>
                 </div>
             </div>
     {% endif %}
-
-    {#First and not paid passenger payment tasks#}
-
-    {#{% if entity.paymentTasksPassenger is not empty  %}#}
-    {#{% for paymentTask in entity.paymentTasksPassenger if paymentTask.paidDate == null %}#}
-    {#{% if loop.first %}#}
-    {#{% set passengerDepositDtg  = date(paymentTask.dueDate).diff(date("now")) %}#}
-    {#{% if passengerDepositDtg.days < 1 %} {%  set passengerDepositDtgFinal = 0  %} {% else %} {% set passengerDepositDtgFinal = passengerDepositDtg.days %}{% endif %}#}
-    {#{% if "now"|date(compareFormat) < paymentTask.dueDate|date(compareFormat) %}#}
-    {#<div class="tour-edit mdl-card mdl-shadow--2dp">#}
-    {#<div class="mdl-card__title">#}
-    {#<h3 class="mdl-card__title-text">{% trans %}tour.dashboard.collect{% endtrans %} {{ entity.payingPlaces }} {{ paymentTask.name|capitalize }} {% trans %}tour.dashboard.payments_by{% endtrans %} {{ paymentTask.dueDate|date(shortFormat) }}</h3>#}
-    {#</div>#}
-    {#<div class="mdl-card__supporting-text mdl-card--border profile-tour-details">#}
-    {#<ul>#}
-    {#<li>#}
-    {#<div class="profile-list-item item-1 tour-dashboard">#}
-    {#<span class="date-span">5</span>#}
-    {#<label>{% trans %}tour.dashboard.paid{% endtrans %}</label>#}
-    {#</div>#}
-    {#</li>#}
-    {#<li>#}
-    {#<div class="profile-list-item item-2 tour-dashboard">#}
-    {#<span class="date-span">10</span>#}
-    {#<label>{% trans %}tour.dashboard.unpaid{% endtrans %}</label>#}
-    {#</div>#}
-    {#</li>#}
-    {#<li>#}
-    {#<div class="profile-list-item item-3 tour-dashboard">#}
-    {#<span class="date-span">{{ passengerDepositDtgFinal }}</span>#}
-    {#<label>{% trans %}tour.dashboard.days{% endtrans %}</label>#}
-    {#</div>#}
-    {#</li>#}
-    {#</ul>#}
-    {#</div>#}
-    {#</div>#}
-    {#{% endif %}#}
-    {#{% endif %}#}
-    {#{% endfor %}#}
-    {#{% endif %}#}
-
-    {#Payment Tasks Always show the first unpaid payment#}
 
 
     {% if entity.paymentTasks is not empty  %}

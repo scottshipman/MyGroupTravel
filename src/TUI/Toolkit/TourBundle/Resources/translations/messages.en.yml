@@ -31,7 +31,8 @@ tour:
                 id: Id
                 name: Name
                 value: Amount Due
-                duedate: Due Date
+                paid: Paid
+                duedate: Due On
                 paiddate: Paid Date
                 type: Type
                 string: String
@@ -104,7 +105,7 @@ tour:
        number: Tour Reference
        organizers: Organizers
        number: Tour Reference
-       schedule: Passenger Payment Schedule
+       schedule: Tour Payment Schedule
        footer:
             intro: Your Contact:
             intro_org: Contact:

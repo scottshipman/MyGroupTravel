@@ -62,20 +62,28 @@
             <li><label>{% trans %}tour.show.price{% endtrans %}</label><strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong></li>
             {% if payment_tasks is not empty %}
                 <li>
-                    <label>{% trans %}tour.show.schedule{% endtrans %}</label>
-                    {% for payment in payment_tasks %}
+                    <label>{% trans %}tour.show.schedule{% endtrans %}
+                        {% if is_granted("ROLE_BRAND") %}
+                            <span style="float:right;">
+                            <a href="" class="make-a-brand-payment">Log a Payment to {{ brand.name }}</a>
+                        </span>
+                        {% endif %}
+                    </label>
+
+                    {% for schedule in payment_schedule %}
                         {# render(controller('TourBundle:PaymentTask:showList', { 'id': payment.id } )) #}
                         <ul class="payment-task-list">
-                            <li>
-                                <strong>{{ payment.name }}</strong>
+                            <li style="display:block">
+                                <strong>{{ schedule.item.name }}</strong>
+                                <label style="display:inline;">{% trans %}tour.page_title.payment_task.show.duedate{% endtrans %}</label>
+                                {{ schedule.item.dueDate|date(format) }}
                             </li>
-                            <li>
-                                <label>{% trans %}tour.page_title.payment_task.show.value{% endtrans %}</label>
-                                <strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ payment.value }}</strong>
-                            </li>
-                            <li>
-                                <label>{% trans %}tour.page_title.payment_task.show.duedate{% endtrans %}</label>
-                                <strong>{{ payment.dueDate|date(format) }}</strong>
+                            <li style="display:block">
+                                <label style="display:inline;">{% trans %}tour.page_title.payment_task.show.paid{% endtrans %}</label>
+                                <strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ schedule.taskPaid }}</strong>
+                                <label style="display:inline;">of {# {% trans %}tour.page_title.payment_task.show.value{% endtrans %}#}</label>
+                                <strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ schedule.item.value  * entity.payingPlaces }}</strong>
+                                <label style="display:inline;">({% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ schedule.item.value }} per person * {{  entity.payingPlaces }} Paying Places)</label>
                             </li>
                         </ul>
                     {% endfor %}
@@ -83,18 +91,6 @@
             {% endif %}
         </ul>
 
-        <div class="tour-edit-organizer-left">
-            <label>{% trans %}tour.show.organizers{% endtrans %}</label><br>
-            {% if entity.organizer.media %}
-                <img class="tui-image-avatar" src="{{ ( entity.organizer.media.getRelativePath ~ "/" ~ entity.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.organizer.username }}">
-            {% elseif entity.organizer.firstName and entity.organizer.lastName %}
-                <span class="tui-text-avatar mdl-typography--headline">{{ entity.organizer.firstName[:1] }}{{ entity.organizer.lastName[:1] }}</span>
-            {% else %}
-                <span class="tui-text-avatar mdl-typography--headline">{{ entity.organizer.username[:1] }}</span>
-            {% endif %}
-            {#<a class="add-organizer" href="#"><i class="add-icon fa fa-plus"></i></a>#}
-            {#<a class="add-organizer mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">Add/remove organizers</a>#}
-        </div>
     </div>
 
     <div class="tour-show-right-column">
@@ -147,6 +143,13 @@
                 $('share_url').css('width', '80%');
             };
 
+        });
+
+        //brand_payment popup
+        // Payment popup
+        $(document).on('click', 'a.make-a-brand-payment', function (e) {
+            e.preventDefault();
+            toolkitStandardPopup("Log A Payment", '{{ path('brand_payment_new', {'tourId': entity.id}) }}' );
         });
     });
 </script>
