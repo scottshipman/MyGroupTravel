@@ -308,6 +308,7 @@ class QuoteController extends Controller
         $newPassenger->setSignUpDate(new \DateTime());
         $newPassenger->setTourReference($tour);
         $newPassenger->setFree(FALSE);
+        $newPassenger->setSelf(TRUE);
         $em->persist($newPassenger);
         $em->flush();
 

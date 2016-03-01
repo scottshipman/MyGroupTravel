@@ -728,6 +728,8 @@ class TourController extends Controller
         $date_format = $this->container->getParameter('date_format');
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('TourBundle:Tour')->find($id);
+        $oldOrganizerID = $entity->getOrganizer()->getID();
+        $oldOrganizer = $em->getRepository('TUIToolkitUserBundle:User')->find($oldOrganizerID);
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Tour entity.');
         }
@@ -736,6 +738,7 @@ class TourController extends Controller
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
+
         //handling ajax request for organizer
         $o_data = $editForm->getData()->getOrganizer();
         if (preg_match('/<+(.*?)>/', $o_data, $o_matches)) {
@@ -746,6 +749,7 @@ class TourController extends Controller
                 $organizer = array_shift($entities);
                 $editForm->getData()->setOrganizer($organizer);
             }
+
         }else {
             $editForm['organizer']->addError(new FormError($this->get('translator')->trans('quote.exception.organizer')));
         }
@@ -863,6 +867,13 @@ class TourController extends Controller
             $em->flush();
             $permission = $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
             $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.save') . $entity->getName());
+
+            // if new organizer, then check for / add passenger record and permissions
+            // stub out passenger record and parent permission for passenger for organizer
+            if($organizer->getEmail() != $oldOrganizer->getEmail()) {
+                $changeOrganizer = $this->changeOrganizer($organizer, $entity, $oldOrganizer);
+            }
+
             if ( $entity->getSetupComplete() == false and $entity->getIsComplete() == false) {
 
                 return $this->redirect($this->generateUrl('tour_site_show', array('id' => $entity->getId(), 'quoteNumber' => $entity->getQuoteNumber())));
@@ -870,7 +881,9 @@ class TourController extends Controller
             }else {
                 return $this->redirect($this->generateUrl('manage_tour'));
             }
+
         }
+
 
         return $this->render('TourBundle:Tour:edit.html.twig', array(
             'entity' => $entity,
@@ -879,6 +892,73 @@ class TourController extends Controller
             'delete_form' => $deleteForm->createView(),
             'date_format' => $date_format,
         ));
+    }
+
+    /**
+     * If a new Organizer if set to Tour, add Passenger and Permission Records
+     * Called from Tour Edit Forms create action
+     */
+
+    public function changeOrganizer($organizer, $tour, $oldOrganizer){
+        $em = $this->getDoctrine()->getManager();
+        $exists = FALSE;
+        $existingPermissions = $em->getRepository('PermissionBundle:Permission')->findBy(array('user' => $organizer, 'class' => 'passenger'));
+                foreach($existingPermissions as $existingPermission){
+                    $existingPassengers = $em->getRepository('PermissionBundle:Permission')->find($existingPermission->getObject());
+                    foreach($existingPassengers as $existingPassenger){
+                        if (($existingPassenger->getLName() == $organizer->getLastName())
+                            && $existingPassenger->getFName() == $organizer->getFirstName()
+                            && ($existingPassenger->getTour() == $tour->getId())) {
+                            // a passenger exists for this tour already for this user as best we can tell
+                            $exists = TRUE;
+                            $existingPassenger->setSelf(TRUE);
+                            $em->persist($existingPassenger);
+                            $em->flush();
+                        }
+                    }
+                }
+
+                if ($exists == FALSE) {
+                    // no pax or perm record for this user and this tour so create both
+
+                    $newPassenger = new Passenger();
+                    //$newPassenger->setDateOfBirth(); // we dont know what this is here
+                    $newPassenger->setFName($organizer->getFirstName());
+                    //$newPassenger->setGender(); // we dont know what this is here
+                    $newPassenger->setLName($organizer->getLastName());
+                    $newPassenger->setStatus("waitlist");
+                    $newPassenger->setSignUpDate(new \DateTime());
+                    $newPassenger->setTourReference($tour);
+                    $newPassenger->setFree(FALSE);
+                    $newPassenger->setSelf(TRUE);
+                    $em->persist($newPassenger);
+                    $em->flush($newPassenger);
+
+                    $paxpermission = new Permission();
+                    $paxpermission->setClass('passenger');
+                    $paxpermission->setObject($newPassenger->getId());
+                    $paxpermission->setGrants('parent');
+                    $paxpermission->setUser($organizer);
+                    $em->persist($paxpermission);
+                    $em->flush($paxpermission);
+                }
+//        // always create an Organizer permission for the tour
+//        $opermission = new Permission();
+//        $opermission->setClass('tour');
+//        $opermission->setObject($tour->getId());
+//        $opermission->setGrants('organizer');
+//        $opermission->setUser($organizer);
+//        $em->persist($opermission);
+//        $em->flush($opermission);
+//
+//        // remove the old organizer permission
+//        $oldPermission = $em->getRepository('PermissionBundle:Permission')->findBy(array('user' => $oldOrganizer, 'class' => 'tour', 'grants' => 'organizer', 'object' => $tour->getId()));
+//        if(!empty($oldPermission[0])) {
+//            $em->remove($oldPermission[0]);
+//            $em->flush($oldPermission[0]);
+//        }
+
+
     }
 
     /**
