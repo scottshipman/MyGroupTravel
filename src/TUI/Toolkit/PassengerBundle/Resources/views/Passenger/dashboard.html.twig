@@ -75,6 +75,19 @@
 
                 <div class="mdl-card__title">
                     <h3 id="card-title" class="mdl-card__title-text">{% trans %}passenger.labels.passenger_list{% endtrans %}</h3>
+                    <button style="position: absolute; right: 20px; color:grey;" id="passenger-export-menu" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+                        <i class="material-icons">more_vert</i>
+                    </button>
+                    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="passenger-export-menu">
+                        {% if is_granted('ROLE_BRAND') %}
+                            <li>
+                                   <a class="mdl-menu__item" href="{{ path('passenger_export', { 'type': 'brand', 'tourId': tour.id }) }}">{% trans %}passenger.labels.export-manifest{% endtrans %}</a>
+                               </li>
+                            <li>
+                         {% endif %}
+                            <a class="mdl-menu__item" href="{{ path('passenger_export', { 'type': 'organizer', 'tourId': tour.id }) }}">{% trans %}passenger.labels.export-organizer{% endtrans %}</a>
+                        </li>
+                    </ul>
                 </div>
 
                 <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">

@@ -61,6 +61,8 @@ passenger:
         dob: Date of Birth
 
     labels:
+        export-manifest: Export Manifest
+        export-organizer: Export Passenger List
         passenger: Passenger
         show-everyone: Clear Filters
         passengers_for: Passengers
