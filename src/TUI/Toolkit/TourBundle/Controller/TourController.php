@@ -1683,6 +1683,12 @@ class TourController extends Controller
                 $taskStatus = 'paid';
                 $taskPaid = $taskDue;
                 $balance = $balance - $taskDue;
+                if($paymentTask->getPaidDate() == NULL){
+                    //make sure to flag this as paid.
+                    $paymentTask->setPaidDate($now);
+                    $em->persist($paymentTask);
+                    $em->flush($paymentTask);
+                }
             }
 
             elseif($balance < $taskDue){
