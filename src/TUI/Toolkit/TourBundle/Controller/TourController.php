@@ -1328,6 +1328,39 @@ class TourController extends Controller
 
     }
 
+    public function getPassengerTasksMiniCardAction($passenger) {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $locale = $this->container->getParameter('locale');
+
+        $completedTasks = $this->get("passenger.actions")->getPassengerCompletedTasks($passenger->getId());
+
+        $passenger->completedTasks = $completedTasks;
+
+        $possibleTasks = $this->get("passenger.actions")->getPossibleTourTasks($passenger->getTourReference()->getId());
+
+        $passenger->possibleTasks = $possibleTasks;
+
+        //brand stuff
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
+
+        return $this->render('TourBundle:Tour:tasks-dashboard-minicards.html.twig', array(
+            'locale' => $locale,
+            'pax' => $passenger,
+            'brand' => $brand
+        ));
+    }
+
     /**
      * @param $id
      * @return Response

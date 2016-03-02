@@ -4,48 +4,6 @@
 {% if 'en_GB' in locale %} {% set shortFormat = 'd M' %} {% else %} {% set format = 'M d' %} {% endif %}
 {% set compareFormat = 'Y-m-d' %}
 
-{% if entity.passportDate is defined and entity.passportDate != null %}
-    {% set passDtg  = date(entity.passPortDate).diff(date("now")) %}
-    {% set passTime  = date(entity.created.date).diff(date(entity.passPortDate))%}
-    {% set passPercent = (passengerData.completedPassengerData['passport']|length/entity.payingPlaces) * 100  %}
-    {% if passDtg.days < 1 %} {%  set passDtgFinal = 0  %} {% else %} {% set passDtgFinal = passDtg.days %}{% endif %}
-{% endif %}
-
-{% if entity.emergencyDate is defined and entity.emergencyDate != null %}
-    {% set emergencyDtg  = date(entity.emergencyDate).diff(date("now")) %}
-    {% set emergencyTime  = date(entity.created.date).diff(date(entity.emergencyDate))%}
-    {% set emergencyPercent = (passengerData.completedPassengerData['emergency']|length/entity.payingPlaces) * 100  %}
-    {% if emergencyDtg.days < 1 %} {%  set emergecyDtgFinal = 0  %} {% else %} {% set emergencyDtgFinal = emergencyDtg.days %}{% endif %}
-{% endif %}
-
-{% if entity.medicalDate is defined and entity.medicalDate != null%}
-    {% set medDtg  = date(entity.medicalDate).diff(date("now")) %}
-    {% set medTime  = date(entity.created.date).diff(date(entity.medicalDate))%}
-    {% set medPercent = (passengerData.completedPassengerData['medical']|length/entity.payingPlaces) * 100  %}
-    {% if medDtg.days < 1 %} {%  set medDtgFinal = 0  %} {% else %} {% set medDtgFinal = medDtg.days %}{% endif %}
-{% endif %}
-
-{% if entity.dietaryDate is defined and entity.dietaryDate != null%}
-    {% set dietDtg  = date(entity.dietaryDate).diff(date("now")) %}
-    {% set dietTime  = date(entity.created.date).diff(date(entity.dietaryDate))%}
-    {% set dietPercent = (passengerData.completedPassengerData['dietary']|length/entity.payingPlaces) * 100  %}
-    {% if dietDtg.days < 1 %} {%  set dietDtgFinal = 0  %} {% else %} {% set dietDtgFinal = dietDtg.days %}{% endif %}
-{% endif %}
-
-{# calculate Days to Go for Departure Date #}
-{% if  entity.departureDate and entity.departureDate | date ('Y-m-d') > "now - 1 day" | date('Y-m-d') %}
-    {% set dtgFinal  = date(entity.departureDate).diff(date("now - 1 day")).days %}
-{% else  %}
-    {%  set dtgFinal = 0  %}
-{% endif %}
-
-{# calculate Days Until Expiration #}
-{% if  entity.expiryDate and entity.expiryDate | date ('Y-m-d') > "now - 1 day" | date('Y-m-d') %}
-    {% set dteFinal  = date(entity.expiryDate).diff(date("now - 1 day")).days %}
-{% else %}
-    {%  set dteFinal = 0  %}
-{% endif %}
-
 {% block title %}
     {% if is_granted("ROLE_BRAND") %}
         {% trans %}tour.page_title.index{% endtrans %}
@@ -82,9 +40,23 @@
 
         <div class="tour-show-left-column">
             <h3>{{ entity.name|capitalize }}</h3>
+            <a href="#all" style="float:right; text-decoration: none;" id="clear"><i class="material-icons md-18">undo</i> {% trans %} passenger.labels.show-everyone{% endtrans %}</a><br>
+            <div class="list-header" style="color: {{ brand.secondaryColor }}"><i class="material-icons">assignment</i> Passenger Tasks ({{ passengerData.possibleTasksCount }})</div>
             <ul class="tour-show-submenu">
-                <li><a href="{{ path('manage_tour_passenger_task_dashboard', { 'id': entity.id }) }}" style="text-decoration: none; color:{{ brand.secondaryColor }};"><strong>Passenger Tasks ({{ passengerData.possibleTasksCount }})</strong></a></li>
-                <li><a href="{{ path('manage_payment_dashboard_edit_payments', { 'tourId': entity.id }) }}" style="text-decoration: none; color: inherit;"><strong>Organiser Tasks ({{ entity.paymentTasks|length }})</strong></a></li>
+                {#<li><a href="{{ path('manage_tour_tasks_dashboard', { 'id': entity.id }) }}" style="text-decoration: none; color:{{ brand.secondaryColor }};"><strong>Passenger Tasks ({{ passengerData.possibleTasksCount }})</strong></a></li>#}
+                {% if entity.medicalDate != null %}
+                    <li><a id="medical" href="#medical" style="text-decoration: none; color:{{ brand.primaryColor }};"><strong>Medical</strong></a></li>
+                {% endif %}
+                {% if entity.dietaryDate != null %}
+                    <li><a id="dietary" href="#dietary" style="text-decoration: none; color:{{ brand.primaryColor }};"><strong>Dietary</strong></a></li>
+                {% endif %}
+                {% if entity.emergencyDate != null %}
+                    <li><a id="emergency" href="#emergency" style="text-decoration: none; color:{{ brand.primaryColor }};"><strong>Emergency Contact</strong></a></li>
+                {% endif %}
+                {% if entity.passportDate != null %}
+                    <li><a id="passport" href="#passport" style="text-decoration: none; color:{{ brand.primaryColor }};"><strong>Passport</strong></a></li>
+                {% endif %}
+                {#<li><a href="{{ path('manage_payment_dashboard_edit_payments', { 'tourId': entity.id }) }}" style="text-decoration: none; color: inherit;"><strong>Organiser Tasks ({{ entity.paymentTasks|length }})</strong></a></li>#}
             </ul>
         </div>
 
@@ -101,212 +73,45 @@
                         {% if passengerData.totalCompletedTasksCount == passengerData.possibleTasksCount %}
                             <h3 style="float: left; font-weight:300; font-size:2em;">All Done!</h3>
                         {% else %}
-                            <h3 style="float: left; font-weight:300; font-size:2em;">In Progress</h3>
+                            <h3 id="task-title" style="float: left; font-weight:300; font-size:2em;">In Progress</h3>
                         {% endif %}
                         <div style="float: right; margin-top:20px;">
-                            <span style="color:{{ brand.secondaryColor }}; font-size:3.5em; font-weight:100;"><p style="display: inline; margin-left:5px; font-size:inherit; font-weight:inherit;">{{ passengerData.totalCompletedTasksCount }}/{{ passengerData.possibleTasksCount }}</p></span><br/>
+                            <span style="color:{{ brand.secondaryColor }}; font-size:3.5em; font-weight:100;"><p id="task-counter" style="display: inline; margin-left:5px; font-size:inherit; font-weight:inherit;">{{ passengerData.totalCompletedTasksCount }}/{{ passengerData.possibleTasksCount }}</p></span><br/>
                             <span style="float:right;"><label><p style="display: inline; margin-left:5px; font-size:inherit; font-weight:inherit;">Complete</p></label></span>
                         </div>
-                    </div>
+                        </div>
+                <span id="payment-schedule-link" style="margin-bottom: 10px; text-align: center; display:none;">
+                    <a href="" id="toggle-payment-schedule" class="payment-schedule-link" style="color: {{ brand.secondaryColor }};">Filter <br /><i class="material-icons">expand_more</i></a>
+                </span>
+                        {#{% endif %}#}
+                        <div style="display:none; text-align: left;" id="payment-schedule">
+                            <div class="mdl-card__title">
+                                <label class="mdl-radio mdl-js-radio" for="complete" style="margin: 0 auto; width:auto;">
+                                    <input type="radio" id="complete" name="tasks" class="mdl-radio__button">
+                                    <span class="mdl-radio__label">Completed</span>
+                                </label>
+                                <label class="mdl-radio mdl-js-radio" for="uncomplete" style="margin: 0 auto; width:auto;">
+                                    <input type="radio" id="uncomplete" name="tasks" class="mdl-radio__button">
+                                    <span class="mdl-radio__label">Not Completed</span>
+                                </label>
+                            </div>
+                        </div>
                     {# Tour Payment Tasks collapsable card #}
                     {#{% embed "PaymentBundle:Payment:tourPaymentTaskSummary.html.twig" %}{% endembed %}#}
 
+                    {# Passenger Mini Cards #}
+
+                    {% for passenger in passengerData.travellingUsers %}
+                        {# render each accepted passenger mini-card #}
+                        {{ render(controller('TourBundle:Tour:getPassengerTasksMiniCard', { 'passenger': passenger})) }}
+                    {% endfor %}
+
                 </div>
-
-            {#Passport Date info task#}
-            {% if entity.passportDate is defined and entity.passportDate != null %}
-                {% if (entity.payingPlaces - passengerData.completedPassengerData['passport']|length)  > 0 %}
-                    <div class="tour-edit mdl-card mdl-shadow--2dp">
-                        {#<a class ="dashboard-titles" href="#">#}
-                        <div class="mdl-card__title">
-                            <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.passport_data{% endtrans %} {{ entity.passPortDate|date(shortFormat) }}</h3>
-                            <span class="tour-dashboard-cta"></span>
-                        </div>
-                        {#</a>#}
-                        <div id="passport-progress" class="mdl-progress mdl-js-progress" style="width: 100%;"></div>
-                        <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
-                            <ul>
-                                <li>
-                                    <div class="profile-list-item item-1 tour-dashboard">
-                                        <span class="date-span">{{ passengerData.completedPassengerData['passport']|length }}</span>
-                                        <label>{% trans %}tour.dashboard.collecting{% endtrans %}</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="profile-list-item item-2 tour-dashboard">
-                                        <span class="date-span">{{ entity.payingPlaces - passengerData.completedPassengerData['passport']|length }}</span>
-                                        <label>{% trans %}tour.dashboard.outstanding{% endtrans %}</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="profile-list-item item-3 tour-dashboard">
-                                        <span class="date-span">{{ passDtgFinal }}</span>
-                                        <label>{% trans %}tour.dashboard.days_due{% endtrans %}</label>
-                                    </div>
-                                </li>
-                                <li>
-                            </ul>
-                        </div>
-                    </div>
-                {% endif %}
-            {% endif %}
-
-            {#Emergency Contact Data info task#}
-            {% if entity.emergencyDate is defined and entity.emergencyDate != null %}
-                {% if (entity.payingPlaces - passengerData.completedPassengerData['emergency']|length)  > 0 %}
-                    <div class="tour-edit mdl-card mdl-shadow--2dp">
-                        {#<a class ="dashboard-titles" href="#">#}
-                        <div class="mdl-card__title">
-                            <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.passenger_data{% endtrans %} {{ entity.emergencyDate|date(shortFormat) }}</h3>
-                            <span class="tour-dashboard-cta"></span>
-                        </div>
-                        {#</a>#}
-                        <div id="emergency-progress" class="mdl-progress mdl-js-progress" style="width: 100%;"></div>
-                        <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
-                            <ul>
-                                <li>
-                                    <div class="profile-list-item item-1 tour-dashboard">
-                                        <span class="date-span">{{ passengerData.completedPassengerData['emergency']|length }}</span>
-                                        <label>{% trans %}tour.dashboard.collecting{% endtrans %}</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="profile-list-item item-2 tour-dashboard">
-                                        <span class="date-span">{{ entity.payingPlaces - passengerData.completedPassengerData['emergency']|length }}</span>
-                                        <label>{% trans %}tour.dashboard.outstanding{% endtrans %}</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="profile-list-item item-3 tour-dashboard">
-                                        <span class="date-span">{{ emergencyDtgFinal }}</span>
-                                        <label>{% trans %}tour.dashboard.days_due{% endtrans %}</label>
-                                    </div>
-                                </li>
-                                <li>
-                            </ul>
-                        </div>
-                    </div>
-                {% endif %}
-            {% endif %}
-
-            {#Medical Date info task#}
-            {% if entity.medicalDate is defined and entity.medicalDate != null %}
-                {% if (entity.payingPlaces - passengerData.completedPassengerData['medical']|length)  > 0 %}
-                    <div class="tour-edit mdl-card mdl-shadow--2dp">
-                        {#<a class ="dashboard-titles" href="#">#}
-                        <div class="mdl-card__title">
-                            <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.medical_data{% endtrans %} {{ entity.medicalDate|date(shortFormat) }}</h3>
-                            <span class="tour-dashboard-cta"></span>
-                        </div>
-                        {#</a>#}
-                        <div id="medical-progress" class="mdl-progress mdl-js-progress" style="width: 100%;"></div>
-                        <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
-                            <ul>
-                                <li>
-                                    <div class="profile-list-item item-1 tour-dashboard">
-                                        <span class="date-span">{{ passengerData.completedPassengerData['medical']|length }}</span>
-                                        <label>{% trans %}tour.dashboard.collecting{% endtrans %}</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="profile-list-item item-2 tour-dashboard">
-                                        <span class="date-span">{{ entity.payingPlaces - passengerData.completedPassengerData['medical']|length }}</span>
-                                        <label>{% trans %}tour.dashboard.outstanding{% endtrans %}</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="profile-list-item item-3 tour-dashboard">
-                                        <span class="date-span">{{ medDtgFinal }}</span>
-                                        <label>{% trans %}tour.dashboard.days_due{% endtrans %}</label>
-                                    </div>
-                                </li>
-                                <li>
-                            </ul>
-                        </div>
-                    </div>
-                {% endif %}
-            {% endif %}
-
-            {#Dietary Date Task#}
-            {% if entity.dietaryDate is defined and entity.dietaryDate != null %}
-                {% if (entity.payingPlaces - passengerData.completedPassengerData['dietary']|length)  > 0 %}
-                    <div class="tour-edit mdl-card mdl-shadow--2dp">
-                        {#<a class ="dashboard-titles" href="#">#}
-                        <div class="mdl-card__title">
-                            <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.dietary_data{% endtrans %} {{ entity.dietaryDate|date(shortFormat) }}</h3>
-                            <span class="tour-dashboard-cta"></span>
-                        </div>
-                        {#</a>#}
-                        <div id="dietary-progress" class="mdl-progress mdl-js-progress" style="width: 100%;"></div>
-                        <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
-                            <ul>
-                                <li>
-                                    <div class="profile-list-item item-1 tour-dashboard">
-                                        <span class="date-span">{{ passengerData.completedPassengerData['dietary']|length }}</span>
-                                        <label>{% trans %}tour.dashboard.collecting{% endtrans %}</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="profile-list-item item-2 tour-dashboard">
-                                        <span class="date-span">{{ entity.payingPlaces - passengerData.completedPassengerData['dietary']|length }}</span>
-                                        <label>{% trans %}tour.dashboard.outstanding{% endtrans %}</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="profile-list-item item-3 tour-dashboard">
-                                        <span class="date-span">{{ dietDtgFinal }}</span>
-                                        <label>{% trans %}tour.dashboard.days_due{% endtrans %}</label>
-                                    </div>
-                                </li>
-                                <li>
-                            </ul>
-                        </div>
-                    </div>
-                {% endif %}
-            {% endif %}
 
                 <div style="clear: both; height: 150px;"></div>
             </div>
 
         </div>
-<script>
-    //Percentage Bars
-    $(document).ready(function() {
-
-    //Emergency Contact Information progress bar
-    {% if emergencyPercent is defined %}
-        var emergencyPercent = {{ emergencyPercent }};
-        document.querySelector('#emergency-progress').addEventListener('mdl-componentupgraded', function() {
-        this.MaterialProgress.setProgress(emergencyPercent);
-        });
-    {% endif %}
-
-    //Dietary Info progress bar
-    {% if dietPercent is defined %}
-        var dietPercent = {{ dietPercent }};
-        document.querySelector('#dietary-progress').addEventListener('mdl-componentupgraded', function() {
-        this.MaterialProgress.setProgress(dietPercent);
-        });
-    {% endif %}
-
-    //Medical Info Progress Bar
-    {% if medPercent is defined %}
-        var medPercent = {{ medPercent }};
-        document.querySelector('#medical-progress').addEventListener('mdl-componentupgraded', function() {
-        this.MaterialProgress.setProgress(medPercent);
-        });
-    {% endif %}
-
-    //Passport Info progress bar
-    {% if passPercent is defined %}
-        var passPercent = {{ passPercent }};
-        document.querySelector('#passport-progress').addEventListener('mdl-componentupgraded', function() {
-        this.MaterialProgress.setProgress(passPercent);
-        });
-    {% endif %}
-
-    });
-</script>
 
 {% endblock %}
 
@@ -357,6 +162,227 @@
             </span>
         {% endif %}
     {% endif %}
+    <script>
+            $(document).on('click', '#emergency', function (e) {
+                e.preventDefault();
+                $('.pcardname').slideDown(400);
+                $('#payment-schedule-link').slideDown(400);
+                $('.tour-show-submenu').find('li > a').each(function(){
+                   $(this).css({'color': '{{ brand.primaryColor }}'});
+                });
+                $('.mdl-radio').removeClass("is-checked");
+                $('.mdl-radio__button').attr('name', 'emergency');
+                $(this).css({'color': '{{ brand.secondaryColor }}'});
+                $('.pcardname').each(function(){
+                    var child = $(this).find(">:first-child");
+                    var check = $(this).find('i:contains("done")');
+                    var arrow = $(this).find('i:contains("arrow_forward")');
+                    if ($(child).hasClass('emergency')){
+                        $(arrow).css({'display':'none'});
+                        $(check).css({'display':'inline'});
+                        $(this).find('.info-bar').css({'display': 'none'});
+                        var info = $(this).find('.info-task-bar');
+                        $(info).text("Emergency Contact Info Complete");
+                        $(info).css({
+                            'color': 'green',
+                            'display': 'block'
+                        });
+                    }else{
+                        $(arrow).css({'display':'inline'});
+                        $(check).css({'display':'none'});
+                        $(this).find('.info-bar').css({'display': 'none'});
+                        var info = $(this).find('.info-task-bar');
+                        $(info).css({
+                            'color': 'red',
+                            'display': 'block'
+                        });
+                        $(info).text("Emergency Contact Info Not Complete");
+                    }
+                    $('#task-title').text('Emergency Contact Info')
+                    $('#task-counter').text("{{ passengerData.completedPassengerData['emergency']|length }}/{{ passengerData.travellingUsers|length }}")
+                });
+            });
+
+            $(document).on('click', '#medical', function (e) {
+                e.preventDefault();
+                $('.pcardname').slideDown(400);
+                $('#payment-schedule-link').slideDown(400);
+                $('.tour-show-submenu').find('li > a').each(function(){
+                    console.log($(this));
+                    $(this).css({'color': '{{ brand.primaryColor }}'});
+                });
+                $(this).css({'color': '{{ brand.secondaryColor }}'});
+                $('.mdl-radio').removeClass("is-checked");
+                $('.mdl-radio__button').attr('name', 'medical');
+                $('.pcardname').each(function(){
+                    var child = $(this).find(">:first-child");
+                    var check = $(this).find('i:contains("done")');
+                    var arrow = $(this).find('i:contains("arrow_forward")');
+                    if ($(child).hasClass('medical')){
+                        $(arrow).css({'display':'none'});
+                        $(check).css({'display':'inline'});
+                        $(this).find('.info-bar').css({'display': 'none'});
+                        var info = $(this).find('.info-task-bar');
+                        $(info).text("Medical Info Complete");
+                        $(info).css({
+                            'color': 'green',
+                            'display': 'block'
+                        });                    }else{
+                        $(arrow).css({'display':'inline'});
+                        $(check).css({'display':'none'});
+                        $(this).find('.info-bar').css({'display': 'none'});
+                        var info = $(this).find('.info-task-bar');
+                        $(info).css({
+                            'color': 'red',
+                            'display': 'block'
+                        });
+                        $(info).text("Medical Info Not Complete");
+                    }
+                    $('#task-title').text('Medical Info');
+                    $('#task-counter').text("{{ passengerData.completedPassengerData['medical']|length }}/{{ passengerData.travellingUsers|length }}")
+                });
+            });
+
+            $(document).on('click', '#passport', function (e) {
+                e.preventDefault();
+                $('.pcardname').slideDown(400);
+                $('#payment-schedule-link').slideDown(400);
+                $('.tour-show-submenu').find('li > a').each(function(){
+                    $(this).css({'color': '{{ brand.primaryColor }}'});
+                });
+                $('.mdl-radio').removeClass("is-checked");
+                $('.mdl-radio__button').attr('name', 'passport');
+                $(this).css({'color': '{{ brand.secondaryColor }}'});
+                $('.pcardname').each(function(){
+                    var child = $(this).find(">:first-child");
+                    var check = $(this).find('i:contains("done")');
+                    var arrow = $(this).find('i:contains("arrow_forward")');
+                    if ($(child).hasClass('passport')){
+                        $(arrow).css({'display':'none'});
+                        $(check).css({'display':'inline'});
+                        $(this).find('.info-bar').css({'display': 'none'});
+                        var info = $(this).find('.info-task-bar');
+                        $(info).text("Passport Info Complete");
+                        $(info).css({
+                            'color': 'green',
+                            'display': 'block'
+                        });
+                    }else{
+                        $(arrow).css({'display':'inline'});
+                        $(check).css({'display':'none'});
+                        $(this).find('.info-bar').css({'display': 'none'});
+                        var info = $(this).find('.info-task-bar');
+                        $(info).css({
+                            'color': 'red',
+                            'display': 'block'
+                        });
+                        $(info).text("Passport Info Not Complete");
+                    }
+                    $('#task-title').text('Passport Info');
+                    $('#task-counter').text("{{ passengerData.completedPassengerData['passport']|length }}/{{ passengerData.travellingUsers|length }}")
+                });
+            });
+
+            $(document).on('click', '#dietary', function (e) {
+                e.preventDefault();
+                $('.pcardname').slideDown(400);
+                $('#payment-schedule-link').slideDown(400);
+                $('.tour-show-submenu').find('li > a').each(function(){
+                    console.log($(this));
+                    $(this).css({'color': '{{ brand.primaryColor }}'});
+                });
+                $('.mdl-radio').removeClass("is-checked");
+                $('.mdl-radio__button').attr('name', 'dietary');
+                $(this).css({'color': '{{ brand.secondaryColor }}'});
+                $('.pcardname').each(function(){
+                    var child = $(this).find(">:first-child");
+                    var check = $(this).find('i:contains("done")');
+                    var arrow = $(this).find('i:contains("arrow_forward")');
+                    if ($(child).hasClass('dietary')){
+                        $(arrow).css({'display':'none'});
+                        $(check).css({'display':'inline'});
+                        $(this).find('.info-bar').css({'display': 'none'});
+                        var info = $(this).find('.info-task-bar');
+                        $(info).text("Dietary Info Complete");
+                        $(info).css({
+                            'color': 'green',
+                            'display': 'block'
+                        });
+                    }else{
+                        $(arrow).css({'display':'inline'});
+                        $(check).css({'display':'none'});
+                        $(this).find('.info-bar').css({'display': 'none'});
+                        var info = $(this).find('.info-task-bar');
+                        $(info).css({
+                            'color': 'red',
+                            'display': 'block'
+                        });
+                        $(info).text("Dietary Info Not Complete");
+                    }
+                    $('#task-title').text('Dietary Info');
+                    $('#task-counter').text("{{ passengerData.completedPassengerData['dietary']|length }}/{{ passengerData.travellingUsers|length }}")
+                });
+            });
+
+            // toggle radio buttons
+            $(document).on('click', 'a.payment-schedule-link', function(e){
+                e.preventDefault();
+                $('#payment-schedule').toggle(400, function(){
+                    if ($('#toggle-payment-schedule').text()=='Filter expand_more') {
+                        $('#toggle-payment-schedule').html('Filter <br /><i class="material-icons">expand_less</i>');
+                    } else if ($('#toggle-payment-schedule').text()=='Filter expand_less') {
+                        $('#toggle-payment-schedule').html('Filter <br /><i class="material-icons">expand_more</i>');
+                    }
+                });
+            });
+
+            //Radio button animations for completed and not completed
+            $('#complete').change(function(){
+               var name = $(this).attr('name');
+                var variableClass = "." + name;
+                $('.pcardname').each(function() {
+                    var child = $(this).find(">:first-child");
+                    $(child).not(variableClass).parent().slideUp(400, function(){
+                        $(child).find(variableClass).parent().slideDown(400);
+                    });
+                });
+            });
+
+            $('#uncomplete').change(function(){
+                var name = $(this).attr('name');
+                var variableClass = "." + name;
+                $('.pcardname').each(function() {
+                    var child = $(this).find(">:first-child");
+                    var not = $(this).not(variableClass);
+                    console.log($(this));
+                    $(this).find('.emergency').slideUp(400, function(){
+                        $(this).not('.emergency').slideDown(400);
+                    });
+                });
+            });
+
+            //Clear functionality
+            $(document).on('click', '#clear', function (e) {
+                e.preventDefault();
+                $('.pcardname').slideDown(400);
+                $('.tour-show-submenu').find('li > a').each(function(){
+                    $(this).css({'color': '{{ brand.primaryColor }}'});
+                });
+                $('.pcardname').each(function(){
+                    var check = $(this).find('i:contains("done")');
+                    var arrow = $(this).find('i:contains("arrow_forward")');
+                    $(check).css({'display': 'none'});
+                    $(arrow).css({'display': 'inline'});
+                    $(this).find('.info-bar').css({'display': 'block'});
+                    var info = $(this).find('.info-task-bar');
+                    $(info).css({'display': 'none'});
+                    $("#task-title").text("In Progress");
+                    $("#task-counter").text("{{ passengerData.totalCompletedTasksCount }}/{{ passengerData.possibleTasksCount }}");
+                    $('#payment-schedule-link').slideUp(400);
+                    $('#payment-schedule').slideUp(400);
+                });
+            });
+    </script>
 {% endblock %}
 
 {% block footer_right %}

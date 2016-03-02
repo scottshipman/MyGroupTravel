@@ -168,6 +168,16 @@ class PassengerService
         $totalOrganizerCount = count($organizerCount) + count($assistantCount);
         $passengerData->totalOrganizerCount = $totalOrganizerCount;
 
+        foreach ($travellingUsers as $travellingUser){
+           $parent = $container->get("permission.set_permission")->getUser('parent', $travellingUser->getId(), 'passenger');
+            if (!empty($parent)){
+                $parentObject = $em->getRepository('TUIToolkitUserBundle:User')->find($parent[1]);
+            } else {
+                $parentObject = "";
+            }
+            $travellingUser->parent = $parentObject;
+        }
+
         $passengerData->travellingUsers = $travellingUsers;
 
 
@@ -273,21 +283,21 @@ class PassengerService
         $passportTask = $tour->getPassportDate();
 
         if ($tour->getMedicalDate() != null) {
-            $possibleTasks[] = $medicalTask;
+            $possibleTasks['medical'] = $medicalTask;
         }
         if ($tour->getDietaryDate() != null){
-            $possibleTasks[] = $dietaryTask;
+            $possibleTasks['dietary'] = $dietaryTask;
         }
         if ($tour->getEmergencyDate() != null) {
-            $possibleTasks[] = $emergencyTask;
+            $possibleTasks['emergency'] = $emergencyTask;
         }
         if ($tour->getPassportDate() != null){
-            $possibleTasks[] = $passportTask;
+            $possibleTasks['passport'] = $passportTask;
         }
 
         $possibleTasksCount = count($possibleTasks);
 
-        return $possibleTasksCount;
+        return $possibleTasks;
 
 
     }
@@ -309,21 +319,21 @@ class PassengerService
         $passportTask = $passenger->getPassportReference();
 
         if ($passenger->getMedicalReference() != null) {
-            $possibleTasks[] = $medicalTask;
+            $possibleTasks['medical'] = $medicalTask;
         }
         if ($passenger->getDietaryReference() != null){
-            $possibleTasks[] = $dietaryTask;
+            $possibleTasks['dietary'] = $dietaryTask;
         }
         if ($passenger->getEmergencyReference() != null) {
-            $possibleTasks[] = $emergencyTask;
+            $possibleTasks['emergency'] = $emergencyTask;
         }
         if ($passenger->getPassportReference() != null){
-            $possibleTasks[] = $passportTask;
+            $possibleTasks['passport'] = $passportTask;
         }
 
         $possibleTasksCount = count($possibleTasks);
 
-        return $possibleTasksCount;
+        return $possibleTasks;
     }
 
     /**
