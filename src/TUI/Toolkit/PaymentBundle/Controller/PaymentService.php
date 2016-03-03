@@ -42,11 +42,13 @@ class PaymentService {
         $tour = $passenger->getTourReference();
         $tourPaymentTasks = $tour->getPaymentTasksPassenger();
         foreach($tourPaymentTasks as $tourPaymentTask) {
+            $taskAmt =$tourPaymentTask->getValue();
             if ($paymentOverride = $em->getRepository('TourBundle:PaymentTaskOverride')
                 ->findBy(array('paymentTaskSource'=>$tourPaymentTask->getId(), 'passenger'=>$passengerId))) {
-                $tourPaymentTask->setValue($paymentOverride[0]->getValue());
+                $tourPaymentTask->setOverrideValue($paymentOverride[0]->getValue());
+                $taskAmt = $paymentOverride[0]->getValue();
             }
-            $due['total'] = $due['total'] + $tourPaymentTask->getValue();
+            $due['total'] = $due['total'] + $taskAmt;
             $due['items'][] = $tourPaymentTask;
         }
         return $due;
@@ -81,21 +83,23 @@ class PaymentService {
         $tour = $passenger->getTourReference();
         $tourPaymentTasks = $tour->getPaymentTasksPassenger();
         foreach($tourPaymentTasks as $tourPaymentTask){
+            $taskAmt = $tourPaymentTask->getValue();
             if($paymentOverride = $em->getRepository('TourBundle:PaymentTaskOverride')
                 ->findBy(array('paymentTaskSource'=>$tourPaymentTask->getId(), 'passenger'=>$passengerId))){
-                $tourPaymentTask->setValue($paymentOverride[0]->getValue());
+                $tourPaymentTask->setOverrideValue($paymentOverride[0]->getValue());
+                $taskAmt = $paymentOverride[0]->getValue();
             }
             $overdueAmt = 0;
-            if($cashBalance >= $tourPaymentTask->getValue()){
-                $credit = $tourPaymentTask->getValue();
+            if($cashBalance >= $taskAmt){
+                $credit = $taskAmt;
                 $cashBalance = $cashBalance - $credit;
                 $status = "paid";
-            }elseif($cashBalance < $tourPaymentTask->getValue()){
+            }elseif($cashBalance < $taskAmt){
                 $credit = $cashBalance;
                 $cashBalance = 0;
                 if ($tourPaymentTask->getDueDate() < $now) {
                     $status = "overdue";
-                    $overdueAmt = $tourPaymentTask->getValue() - $credit;
+                    $overdueAmt = $taskAmt - $credit;
                 } else {
                     $status = "pending";
                 }

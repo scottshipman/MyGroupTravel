@@ -3,7 +3,7 @@
 namespace TUI\Toolkit\TourBundle\Controller;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Proxies\__CG__\TUI\Toolkit\TourBundle\Entity\PaymentTask;
+use TUI\Toolkit\TourBundle\Entity\PaymentTask;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
