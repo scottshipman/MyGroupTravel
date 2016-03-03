@@ -95,8 +95,13 @@
                         <div style="clear: both"></div>
                         <a id="invite-passengers" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="#"><i class="fa fa-users"></i>{% trans %}passenger.labels.invite{% endtrans %}</a>
                         <a id="accept-tour" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="#"><i class="fa fa-user-plus"></i>{% trans %}passenger.labels.add{% endtrans %}</a>
-                        {% if unactivatedCount > 0 %}
-                            <a href="{{ path('activate_all_passengers', { 'tourId': tour.id }) }}" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"  onclick="return confirm('{% trans %}passenger.actions.send_message{% endtrans %}')"><i style="vertical-align:middle;" class="material-icons">email</i> {% trans %}passenger.actions.send_activation{% endtrans %}</a>
+                    {% if unactivatedCount > 0 %}
+                            <a href="{{ path('activate_all_passengers', { 'tourId': tour.id }) }}"
+                               title ="{% trans %}passenger.actions.send_activation_description{% endtrans %}"
+                               class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+                               onclick="return confirm('{% trans %}passenger.actions.send_message{% endtrans %}')">
+                                <i style="vertical-align:middle;" class="material-icons">email</i> {% trans %}passenger.actions.send_activation{% endtrans %}
+                            </a>
                         {% endif %}
                 </div>
             </div>

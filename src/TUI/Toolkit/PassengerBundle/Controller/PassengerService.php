@@ -472,7 +472,12 @@ class PassengerService
 
         //Get Accepted Passengers
         $acceptedUsers = $this->getPassengersByStatus('accepted', $tourId);
+        $freeUsers = $this->getPassengersByStatus('free', $tourId);
+
         $accepted = count($acceptedUsers);
+        $free = count($freeUsers);
+
+        $acceptedUsers = array_merge($acceptedUsers, $freeUsers);
 
         foreach ($acceptedUsers as $acceptedUser){
             $object = $acceptedUser->getId();

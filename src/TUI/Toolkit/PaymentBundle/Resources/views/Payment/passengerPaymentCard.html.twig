@@ -15,8 +15,9 @@
         {% endif %}
         <div class="clear"></div>
     </div>
+    {% set overdue = 0 %}
         {% if paymentTasks is not empty %}
-            {% set overdue = 0 %}
+
                 {% for paymentTask in paymentTasks %}
                     {% set overdue = overdue + paymentTask.overdueAmt %}
                         {%  set color = 'blue' %}{%  set icon = 'event' %}

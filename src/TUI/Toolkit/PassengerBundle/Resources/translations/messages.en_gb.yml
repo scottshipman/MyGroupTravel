@@ -42,6 +42,8 @@ passenger:
         no_tasks: has no tasks
         send_message:  You are sending an email to all accepted passengers, are you sure you want to do that?
         send_activation: Send Activation
+        send_activation_description: This will send an email to the Parents of all Passengers who havent created their accounts, and walk them through the process of creating an account.
+
 
         actions:
             view: View
