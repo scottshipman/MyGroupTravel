@@ -178,6 +178,7 @@ class PassengerService
             $travellingUser->parent = $parentObject;
         }
 
+//        $travellingUsers = from($travellingUsers)->orderBy('')
         $passengerData->travellingUsers = $travellingUsers;
 
 
