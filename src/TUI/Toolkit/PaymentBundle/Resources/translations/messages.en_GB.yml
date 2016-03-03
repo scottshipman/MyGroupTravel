@@ -2,7 +2,7 @@
 payment:
     title:
         edit: Edit Payment
-        index: Payment Dashboard
+        index: Payments
         new: Log a Payment
         show: Payment
 

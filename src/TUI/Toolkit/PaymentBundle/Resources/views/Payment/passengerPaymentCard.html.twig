@@ -28,7 +28,13 @@
                       <i style="color:{{ color }};" class="material-icons" >{{ icon }}</i>
                       <p class="mdl-card__title-text task-title weighted">{{ paymentTask.item.name }}</p>
                      <label class="task-due-date"> due by {{ paymentTask.item.dueDate | date(format) }}</label>
-                     <p class="row-content indented">/ {{ currency.htmlSymbol | raw  }}{{ paymentTask.item.value }}</p>
+                     <p class="row-content indented">/ {{ currency.htmlSymbol | raw  }}
+                         {% if paymentTask.item.overrideValue == null %}
+                            {{ paymentTask.item.value }}
+                         {% else %}
+                            {{ paymentTask.item.overrideValue }}
+                         {% endif %}
+                     </p>
                      <p class="row-content weighted">{{ currency.htmlSymbol | raw  }}{{ paymentTask.credit }}</p>
                 </div>
                 {% endfor %}

@@ -2,7 +2,7 @@
 passenger:
     title:
         edit: Edit Passenger
-        index: Passenger Dashboard
+        index: Passengers
         new: Create New Passenger
         show: Passengers
 
