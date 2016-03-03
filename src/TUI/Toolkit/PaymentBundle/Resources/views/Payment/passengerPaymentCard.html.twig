@@ -4,19 +4,20 @@
     <div class="mdl-card__title">
         <h3 class="mdl-card__title-text">{% trans %}passenger.labels.payments{% endtrans %}</h3>
 
-          {# only if an organizer or brand #}
+          {# only if an organizer or brand and not free status#}
         {% if  is_granted("ROLE_BRAND") or "tour" | getRoles(tourId) == "organizer" or "tour" | getRoles(tourId) == "assistant"%}
-                <button id="payment-actions-menu-drop-{{ passenger.id }}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-button">
-                    <i class="material-icons">more_vert</i>
-                </button>
-            <a href="#"><i id="passenger-close" style="display: none;" class="material-icons" passenger="{{ passenger.id }}">close</i></a>
-            {% embed "PaymentBundle:Payment:paymentSubMenu.html.twig" %}{% endembed %}
-
+            {% if passenger.free is sameas(false) %}
+                    <button id="payment-actions-menu-drop-{{ passenger.id }}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-button">
+                        <i class="material-icons">more_vert</i>
+                    </button>
+                <a href="#"><i id="passenger-close" style="display: none;" class="material-icons" passenger="{{ passenger.id }}">close</i></a>
+                {% embed "PaymentBundle:Payment:paymentSubMenu.html.twig" %}{% endembed %}
+            {% endif %}
         {% endif %}
         <div class="clear"></div>
     </div>
     {% set overdue = 0 %}
-        {% if paymentTasks is not empty %}
+        {% if paymentTasks is not empty and passenger.free is sameas(false)%}
 
                 {% for paymentTask in paymentTasks %}
                     {% set overdue = overdue + paymentTask.overdueAmt %}

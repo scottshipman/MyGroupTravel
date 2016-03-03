@@ -53,6 +53,7 @@ class PaymentType extends AbstractType
             ->add('note', 'textarea', array(
                 'label' => 'payment.form.note',
                 'translation_domain'  => 'messages',
+                'required' => false,
             ))
             ->add('tour', 'hidden', array(
                 'data' => $this->tour->getId()

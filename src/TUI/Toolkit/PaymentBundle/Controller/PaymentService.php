@@ -42,11 +42,16 @@ class PaymentService {
         $tour = $passenger->getTourReference();
         $tourPaymentTasks = $tour->getPaymentTasksPassenger();
         foreach($tourPaymentTasks as $tourPaymentTask) {
-            $taskAmt =$tourPaymentTask->getValue();
-            if ($paymentOverride = $em->getRepository('TourBundle:PaymentTaskOverride')
-                ->findBy(array('paymentTaskSource'=>$tourPaymentTask->getId(), 'passenger'=>$passengerId))) {
-                $tourPaymentTask->setOverrideValue($paymentOverride[0]->getValue());
-                $taskAmt = $paymentOverride[0]->getValue();
+            if($passenger->getFree() == TRUE)
+                {$taskAmt = 0; }
+            else {
+                $taskAmt =$tourPaymentTask->getValue();
+
+                if ($paymentOverride = $em->getRepository('TourBundle:PaymentTaskOverride')
+                    ->findBy(array('paymentTaskSource'=>$tourPaymentTask->getId(), 'passenger'=>$passengerId))) {
+                    $tourPaymentTask->setOverrideValue($paymentOverride[0]->getValue());
+                    $taskAmt = $paymentOverride[0]->getValue();
+                }
             }
             $due['total'] = $due['total'] + $taskAmt;
             $due['items'][] = $tourPaymentTask;
@@ -83,11 +88,19 @@ class PaymentService {
         $tour = $passenger->getTourReference();
         $tourPaymentTasks = $tour->getPaymentTasksPassenger();
         foreach($tourPaymentTasks as $tourPaymentTask){
-            $taskAmt = $tourPaymentTask->getValue();
-            if($paymentOverride = $em->getRepository('TourBundle:PaymentTaskOverride')
-                ->findBy(array('paymentTaskSource'=>$tourPaymentTask->getId(), 'passenger'=>$passengerId))){
-                $tourPaymentTask->setOverrideValue($paymentOverride[0]->getValue());
-                $taskAmt = $paymentOverride[0]->getValue();
+            if($passenger->getFree() == TRUE)
+            {$taskAmt = 0; }
+            else {
+                $taskAmt = $tourPaymentTask->getValue();
+                if ($paymentOverride = $em->getRepository('TourBundle:PaymentTaskOverride')
+                    ->findBy(array(
+                        'paymentTaskSource' => $tourPaymentTask->getId(),
+                        'passenger' => $passengerId
+                    ))
+                ) {
+                    $tourPaymentTask->setOverrideValue($paymentOverride[0]->getValue());
+                    $taskAmt = $paymentOverride[0]->getValue();
+                }
             }
             $overdueAmt = 0;
             if($cashBalance >= $taskAmt){
@@ -151,7 +164,10 @@ class PaymentService {
                     $total = $tourPaymentTask->getValue();
                 }
                 // increment to total due for the task
-                $taskItems[$tourPaymentTask->getId()]['total'] = $taskItems[$tourPaymentTask->getId()]['total'] + $total;
+                if($tourPassenger->getFree() == FALSE) {
+                    $taskItems[$tourPaymentTask->getId()]['total'] = $taskItems[$tourPaymentTask->getId()]['total'] + $total;
+                    $total = 0;
+                }
 
                 //allocate funds to task for this passenger
                 $overdueAmt = 0;
