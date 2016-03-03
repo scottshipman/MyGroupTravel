@@ -1,0 +1,5 @@
+passenger_export:
+    path:     /csv-export/{type}/{tourId}
+    defaults: { _controller: "TuiExportBundle:TuiExport:generateCsv" }
+
+
