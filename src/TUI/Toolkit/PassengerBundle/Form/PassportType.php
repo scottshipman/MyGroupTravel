@@ -46,14 +46,16 @@ class PassportType extends AbstractType
                 'label' => 'passenger.labels.passport_first_name',
             ))
             ->add('passportMiddleName', 'text', array(
-                'required' => true,
+                'required' => false,
                 'label' => 'passenger.labels.passport_middle_name',
             ))
             ->add('passportTitle', 'choice', array(
                 'choices' => array(
                   "Mr" => "Mr.",
                   "Mrs" => "Mrs.",
-                  "Ms" => "Ms."
+                  "Ms" => "Ms.",
+                  "Miss" => "Miss",
+                  "Master" => "Master"
                 ),
                 'required' => true,
                 'label' => 'passenger.labels.passport_title',
@@ -84,7 +86,7 @@ class PassportType extends AbstractType
                 'attr' => array(
                     'class' => 'dateOfExpiry',
                 ),
-                'years' => range(date('Y') - 15, date('Y') - 1)
+                'years' => range(date('Y') - 60, date('Y') - 1)
             ))
             ->add('passportDateOfIssue', 'birthday', array(
                 'format' => $date_format,
@@ -92,7 +94,7 @@ class PassportType extends AbstractType
                 'attr' => array(
                     'class' => 'dateOfIssue',
                 ),
-                'years' => range(date('Y') - 15, date('Y') - 1)
+                'years' => range(date('Y') - 60, date('Y') - 1)
             ))
             ->add('passportDateOfExpiry', 'birthday', array(
                 'format' => $date_format,
@@ -100,7 +102,7 @@ class PassportType extends AbstractType
                 'attr' => array(
                     'class' => 'dateOfExpiry',
                 ),
-                'years' => range(date('Y') - 15, date('Y') - 1)
+                'years' => range(date('Y'), date('Y') + 20)
             ))
             ->add('passengerReference', 'hidden', array(
                 'required' => true,
