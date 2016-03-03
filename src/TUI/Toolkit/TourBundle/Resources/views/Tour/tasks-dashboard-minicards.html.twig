@@ -6,10 +6,10 @@
 {%  set color = 'blue' %}
 {#{% if status == "paid" %}{%  set color = 'green' %}{%  set icon = 'done' %} {% endif %}#}
 {#{% if status ==  "overdue" %}{%  set color = 'red' %}{%  set icon = 'warning' %}{% endif %}#}
-{% set emergency = "" %}{% if passenger.completedTasks['emergency'] is defined %}{% set emergency = "emergency" %}{% endif %}
-{% set medical = "" %}{% if passenger.completedTasks['medical'] is defined %}{% set medical = "medical" %}{% endif %}
-{% set passport = "" %}{% if passenger.completedTasks['passport'] is defined %}{% set passport = "passport" %}{% endif %}
-{% set dietary = "" %}{% if passenger.completedTasks['dietary'] is defined %}{% set dietary = "dietary" %}{% endif %}
+{% set emergency = "emergency-incomplete" %}{% if passenger.completedTasks['emergency'] is defined %}{% set emergency = "emergency" %}{% endif %}
+{% set medical = "medical-incomplete" %}{% if passenger.completedTasks['medical'] is defined %}{% set medical = "medical" %}{% endif %}
+{% set passport = "passport-incomplete" %}{% if passenger.completedTasks['passport'] is defined %}{% set passport = "passport" %}{% endif %}
+{% set dietary = "dietary-incomplete" %}{% if passenger.completedTasks['dietary'] is defined %}{% set dietary = "dietary" %}{% endif %}
 {% set complete = "" %}{% if passenger.completedTasks|length == passenger.possibleTasks|length %}{% set complete = "complete" %}{% endif %}
 
 {#<a href="{{ path('manage_passenger_show', {'id': passenger.id }) }}" class="dashboard-titles">#}

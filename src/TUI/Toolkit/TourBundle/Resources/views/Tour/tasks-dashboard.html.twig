@@ -212,23 +212,24 @@
             $('#complete').change(function(){
                var name = $(this).attr('name');
                 var variableClass = "." + name;
+                var incomplete = variableClass + "-incomplete";
+                console.log(incomplete);
                 $('.pcardname').each(function() {
                     var child = $(this).find(">:first-child");
-                    $(child).not(variableClass).parent().parent().slideUp(400, function(){
-                        $(this).has(variableClass).parent().slideDown(400);
-                    });
+                    $(this).has(incomplete).parent().slideUp(400);
+                    $(this).has(variableClass).parent().slideDown(400);
                 });
             });
 
             $('#uncomplete').change(function(){
                 var name = $(this).attr('name');
                 var variableClass = "." + name;
+                var incomplete = variableClass + "-incomplete";
                 $('.pcardname').each(function() {
                     var child = $(this).find(">:first-child");
                     var not = $(this).not(variableClass);
-                    $(this).has(variableClass).parent().slideUp(400, function(){
-                        $(".pcardname .emergency:not").slideDown(400);
-                    });
+                    $(this).has(variableClass).parent().slideUp(400);
+                    $(this).has(incomplete).parent().slideDown(400);
                 });
             });
 
@@ -259,7 +260,7 @@
 
             function taskClickEvent(id, t){
 
-                $('.pcardname').slideDown(400);
+                $('.pcardname').parent().slideDown(400);
 
                 $('#complete').prop('checked', false);
                 $('#uncomplete').prop('checked', false);
