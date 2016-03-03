@@ -15,7 +15,7 @@
 {% endblock %}
 
 {% block page_title_menu %}
-    {% if "passenger" | getRoles(entity.id) == "parent" %}
+    {% if "passenger" | getRoles(entity.id) == "parent" and entity.self == FALSE%}
 
     {% else %}
     <button id="tour-title-drop" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-menu-drop">
