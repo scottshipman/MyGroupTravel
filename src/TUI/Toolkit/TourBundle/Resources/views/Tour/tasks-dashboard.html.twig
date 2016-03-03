@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block page_title %}
-    <span>Tasks</span>
+    <span>{% trans %}tour.dashboard.tasks{% endtrans %}</span>
 {% endblock %}
 
 {% block page_title_menu %}
@@ -41,7 +41,7 @@
         <div class="tour-show-left-column">
             <h3>{{ entity.name|capitalize }}</h3>
             <a href="#all" style="float:right; text-decoration: none;" id="clear"><i class="material-icons md-18">undo</i> {% trans %} passenger.labels.show-everyone{% endtrans %}</a><br>
-            <div class="list-header" style="color: {{ brand.secondaryColor }}"><i class="material-icons">assignment</i> Passenger Tasks ({{ passengerData.possibleTasksCount }})</div>
+            <div class="list-header" style="color: {{ brand.secondaryColor }}"><i class="material-icons">assignment</i> {% trans %}tour.dashboard.passenger_tasks{% endtrans %} ({{ passengerData.possibleTasksCount }})</div>
             <ul class="tour-show-submenu">
                 {#<li><a href="{{ path('manage_tour_tasks_dashboard', { 'id': entity.id }) }}" style="text-decoration: none; color:{{ brand.secondaryColor }};"><strong>Passenger Tasks ({{ passengerData.possibleTasksCount }})</strong></a></li>#}
                 {% if entity.medicalDate != null %}

@@ -142,6 +142,8 @@ tour:
         dietary: Dietary
         emergency: Emergency Contact
         passport: Passport
+        tasks: Tasks
+        passenger_tasks: Passenger Tasks
         due: due by
         no_payments: No payments due at this time
         na: N/A
