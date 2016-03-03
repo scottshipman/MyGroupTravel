@@ -1,0 +1,5 @@
+tui_export:
+    resource: "@TuiExportBundle/Resources/config/routing/tui_export.yml"
+    prefix:   /tui-export
+
+
