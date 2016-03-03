@@ -213,9 +213,7 @@
                var name = $(this).attr('name');
                 var variableClass = "." + name;
                 var incomplete = variableClass + "-incomplete";
-                console.log(incomplete);
                 $('.pcardname').each(function() {
-                    var child = $(this).find(">:first-child");
                     $(this).has(incomplete).parent().slideUp(400);
                     $(this).has(variableClass).parent().slideDown(400);
                 });
@@ -226,8 +224,6 @@
                 var variableClass = "." + name;
                 var incomplete = variableClass + "-incomplete";
                 $('.pcardname').each(function() {
-                    var child = $(this).find(">:first-child");
-                    var not = $(this).not(variableClass);
                     $(this).has(variableClass).parent().slideUp(400);
                     $(this).has(incomplete).parent().slideDown(400);
                 });
@@ -243,10 +239,16 @@
                     $(this).css({'color': '{{ brand.primaryColor }}'});
                 });
                 $('.pcardname').each(function(){
-                    var check = $(this).find('i:contains("done")');
-                    var arrow = $(this).find('i:contains("arrow_forward")');
-                    $(check).css({'display': 'none'});
-                    $(arrow).css({'display': 'inline'});
+                    var check = $(this).find('a > i:contains("done")');
+                    var arrow = $(this).find('a > i:contains("arrow_forward")');
+                    var child = $(this).find(">:first-child");
+                    if ($(child).hasClass('complete')) {
+                        $(check).css({'display': 'inline'});
+                        $(arrow).css({'display': 'none'});
+                    }else {
+                        $(check).css({'display': 'none'});
+                        $(arrow).css({'display': 'inline'});
+                    }
                     $(this).find('.info-bar').css({'display': 'block'});
                     var info = $(this).find('.info-task-bar');
                     $(info).css({'display': 'none'});
@@ -261,6 +263,7 @@
             function taskClickEvent(id, t){
 
                 $('.pcardname').parent().slideDown(400);
+
 
                 $('#complete').prop('checked', false);
                 $('#uncomplete').prop('checked', false);
