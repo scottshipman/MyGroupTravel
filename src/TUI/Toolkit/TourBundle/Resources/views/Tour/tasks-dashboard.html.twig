@@ -45,18 +45,17 @@
             <ul class="tour-show-submenu">
                 {#<li><a href="{{ path('manage_tour_tasks_dashboard', { 'id': entity.id }) }}" style="text-decoration: none; color:{{ brand.secondaryColor }};"><strong>Passenger Tasks ({{ passengerData.possibleTasksCount }})</strong></a></li>#}
                 {% if entity.medicalDate != null %}
-                    <li><a id="medical" href="#medical" style="text-decoration: none; color:{{ brand.primaryColor }};"><strong>Medical</strong></a></li>
+                    <li><a id="medical" href="#medical" style="text-decoration: none; color:{{ brand.primaryColor }};"><strong>{% trans %}tour.dashboard.medical{% endtrans %} ({{ passengerData.completedPassengerData['medical']|length }}/{{ passengerData.travellingUsers|length }})</strong></a></li>
                 {% endif %}
                 {% if entity.dietaryDate != null %}
-                    <li><a id="dietary" href="#dietary" style="text-decoration: none; color:{{ brand.primaryColor }};"><strong>Dietary</strong></a></li>
+                    <li><a id="dietary" href="#dietary" style="text-decoration: none; color:{{ brand.primaryColor }};"><strong>{% trans %}tour.dashboard.dietary{% endtrans %} ({{ passengerData.completedPassengerData['dietary']|length }}/{{ passengerData.travellingUsers|length }})</strong></a></li>
                 {% endif %}
                 {% if entity.emergencyDate != null %}
-                    <li><a id="emergency" href="#emergency" style="text-decoration: none; color:{{ brand.primaryColor }};"><strong>Emergency Contact</strong></a></li>
+                    <li><a id="emergency" href="#emergency" style="text-decoration: none; color:{{ brand.primaryColor }};"><strong>{% trans %}tour.dashboard.emergency{% endtrans %} ({{ passengerData.completedPassengerData['emergency']|length }}/{{ passengerData.travellingUsers|length }})</strong></a></li>
                 {% endif %}
                 {% if entity.passportDate != null %}
-                    <li><a id="passport" href="#passport" style="text-decoration: none; color:{{ brand.primaryColor }};"><strong>Passport</strong></a></li>
+                    <li><a id="passport" href="#passport" style="text-decoration: none; color:{{ brand.primaryColor }};"><strong>{% trans %}tour.dashboard.passport{% endtrans %} ({{ passengerData.completedPassengerData['passport']|length }}/{{ passengerData.travellingUsers|length }})</strong></a></li>
                 {% endif %}
-                {#<li><a href="{{ path('manage_payment_dashboard_edit_payments', { 'tourId': entity.id }) }}" style="text-decoration: none; color: inherit;"><strong>Organiser Tasks ({{ entity.paymentTasks|length }})</strong></a></li>#}
             </ul>
         </div>
 
@@ -66,38 +65,36 @@
                 <div class="passenger-cta-card tour-edit mdl-card mdl-shadow--2dp">
 
                     <div class="mdl-card__title">
-                        <h3 id="card-title" class="mdl-card__title-text">Passenger Tasks</h3>
+                        <h3 id="card-title" class="mdl-card__title-text">{% trans %}tour.dashboard.passenger_tasks{% endtrans %}</h3>
                     </div>
 
                     <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
                         {% if passengerData.totalCompletedTasksCount == passengerData.possibleTasksCount %}
-                            <h3 style="float: left; font-weight:300; font-size:2em;">All Done!</h3>
+                            <h3 style="float: left; font-weight:300; font-size:2em;">{% trans %}tour.dashboard.all_done{% endtrans %}</h3>
                         {% else %}
-                            <h3 id="task-title" style="float: left; font-weight:300; font-size:2em;">In Progress</h3>
+                            <h3 id="task-title" style="float: left; font-weight:300; font-size:2em;">{% trans %}tour.dashboard.in_progress{% endtrans %}</h3>
                         {% endif %}
                         <div style="float: right; margin-top:20px;">
                             <span style="color:{{ brand.secondaryColor }}; font-size:3.5em; font-weight:100;"><p id="task-counter" style="display: inline; margin-left:5px; font-size:inherit; font-weight:inherit;">{{ passengerData.totalCompletedTasksCount }}/{{ passengerData.possibleTasksCount }}</p></span><br/>
-                            <span style="float:right;"><label><p style="display: inline; margin-left:5px; font-size:inherit; font-weight:inherit;">Complete</p></label></span>
+                            <span style="float:right;"><label><p style="display: inline; margin-left:5px; font-size:inherit; font-weight:inherit;">{% trans %}tour.dashboard.complete{% endtrans %}</p></label></span>
                         </div>
                         </div>
-                <span id="payment-schedule-link" style="margin-bottom: 10px; text-align: center; display:none;">
-                    <a href="" id="toggle-payment-schedule" class="payment-schedule-link" style="color: {{ brand.secondaryColor }};">Filter <br /><i class="material-icons">expand_more</i></a>
-                </span>
+                {#<span id="payment-schedule-link" style="margin-bottom: 10px; text-align: center; display:none;">#}
+                    {#<a href="" id="toggle-payment-schedule" class="payment-schedule-link" style="color: {{ brand.secondaryColor }};">Filter <br /><i class="material-icons">expand_more</i></a>#}
+                {#</span>#}
                         {#{% endif %}#}
                         <div style="display:none; text-align: left;" id="payment-schedule">
                             <div class="mdl-card__title">
                                 <label class="mdl-radio mdl-js-radio" for="complete" style="margin: 0 auto; width:auto;">
                                     <input type="radio" id="complete" name="tasks" class="mdl-radio__button">
-                                    <span class="mdl-radio__label">Complete</span>
+                                    <span class="mdl-radio__label">{% trans %}tour.dashboard.show_complete{% endtrans %}</span>
                                 </label>
                                 <label class="mdl-radio mdl-js-radio" for="uncomplete" style="margin: 0 auto; width:auto;">
                                     <input type="radio" id="uncomplete" name="tasks" class="mdl-radio__button">
-                                    <span class="mdl-radio__label">Not Complete</span>
+                                    <span class="mdl-radio__label">{% trans %}tour.dashboard.show_not_complete{% endtrans %}</span>
                                 </label>
                             </div>
                         </div>
-                    {# Tour Payment Tasks collapsable card #}
-                    {#{% embed "PaymentBundle:Payment:tourPaymentTaskSummary.html.twig" %}{% endembed %}#}
 
                     {# Passenger Mini Cards #}
 
@@ -168,7 +165,7 @@
                 var id = $(this).attr('id');
                 e.preventDefault();
                 taskClickEvent(id, t);
-                $('#task-title').text('Emergency Contact Info')
+                $('#task-title').text('Emergency Contact Info');
                 $('#task-counter').text("{{ passengerData.completedPassengerData['emergency']|length }}/{{ passengerData.travellingUsers|length }}")
             });
 
@@ -268,12 +265,11 @@
                 $('#uncomplete').prop('checked', false);
                 $('.mdl-radio').removeClass("is-checked");
                 $('.mdl-radio__button').attr('name', id);
-                t.css({'color': '{{ brand.secondaryColor }}'});
-                $('#payment-schedule-link').slideDown(400);
+                $('#payment-schedule').slideDown(400);
                 $('.tour-show-submenu').find('li > a').each(function(){
-                    t.css({'color': '{{ brand.primaryColor }}'});
+                    $(this).css({'color': '{{ brand.primaryColor }}'});
                 });
-
+                t.css({'color': '{{ brand.secondaryColor }}'});
                 $('.pcardname').each(function(){
                     var child = $(this).find(">:first-child");
                     var check = $(this).find('i:contains("done")');
@@ -283,7 +279,7 @@
                         $(check).css({'display':'inline'});
                         $(this).find('.info-bar').css({'display': 'none'});
                         var info = $(this).find('.info-task-bar');
-                        $(info).text("Complete");
+                        $(info).text("{% trans %}tour.dashboard.complete{% endtrans %}");
                         $(info).css({
                             'color': 'green',
                             'display': 'block'
@@ -297,10 +293,10 @@
                             'color': 'red',
                             'display': 'block'
                         });
-                        $(info).text("Not Complete");
+                        $(info).text("{% trans %}tour.dashboard.not_complete{% endtrans %}");
                     }
                 });
-            }
+            };
     </script>
 {% endblock %}
 
