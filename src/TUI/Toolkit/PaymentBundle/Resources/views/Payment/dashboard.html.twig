@@ -131,7 +131,7 @@
 {% endblock %}
 
 {% block footer_left %}
-    {% if app.user.email != tour.salesAgent.email%} {# Show Sales Agent Info to an Organizer#}
+    {% if app.user.email = tour.organizer.email%} {# Show Sales Agent Info to an Organizer#}
         {% if tour.salesAgent %}
             <span class="intro">
                     {{ brand.name }} {% trans %}tour.show.footer.intro_org{% endtrans %}

@@ -5,7 +5,7 @@
         {% if passengerObject is not defined %}
         <li><a id ="passenger" href="#" class="mdl-menu__item" passenger="{{ passenger.id }}">{% trans %}passenger.actions.edit_passenger{% endtrans %}</a></li>
         {% elseif passengerObject is defined %}
-        <li><a href="{{ path('manage_passenger_show', { 'id': passenger.id }) }}" class="mdl-menu__item" passenger="{{ passenger.id }}">{% trans %}passenger.actions.edit_passenger{% endtrans %}</a></li>
+        <li><a href="{{ path('manage_passenger_show', { 'id': passenger.id }) }}" class="mdl-menu__item" passenger="{{ passenger.id }}">{% trans %}passenger.actions.view_passenger{% endtrans %}</a></li>
         {% endif %}
         {% if parent is defined and parent.enabled == false %}
             <li><a id="passenger-delete" href="{{ path('parent_user_registration_confirmation', { 'id': parent.id, 'tourId': entity.tourReference.id }) }}" class="mdl-menu__item">{% trans %}passenger.actions.send-notification{% endtrans %}</a></li>

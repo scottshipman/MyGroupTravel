@@ -118,7 +118,7 @@ class PaymentService {
                 }
             }
 
-            $tasks[] = array('credit' => $credit, 'item' =>$tourPaymentTask, 'status' => $status, 'overdueAmt' => $overdueAmt);
+            $tasks[] = array('credit' => $credit, 'item' =>$tourPaymentTask, 'status' => $status, 'overdueAmt' => $overdueAmt, 'due' => $taskAmt);
         }
         return $tasks;
     }

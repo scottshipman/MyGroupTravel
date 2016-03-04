@@ -1635,22 +1635,47 @@ class UserController extends Controller
         $passengers = $em->getRepository('PermissionBundle:Permission')->findBy(array('user' => $parentId, 'class' => 'passenger'));
 
         $passengerObjects = array();
+        $creditTotal = 0; $overdueTotal = 0; $priceTotal = 0;
         foreach ($passengers as $passenger) {
+            $paxPrice = 0; $paxCredit = 0; $paxOverdue = 0;
             $object = $em->getRepository('PassengerBundle:Passenger')->find($passenger->getObject());
             if ($object->getTourReference()->getId() == $tourId) {
-                $passengerObjects[] = $object;
+
+                // add payment details to object also
+                $payments = $this->get('payment.getPayments')->getPassengersPaymentTasks($object->getId());
+                // payment structure is array('credit' => $credit, 'item' =>$tourPaymentTask, 'status' => $status, 'overdueAmt' => $overdueAmt, 'due' => $taskAmt)
+                foreach($payments as $payment){
+                    $paxPrice += $payment['due'];
+                    $paxOverdue += $payment['overdueAmt'];
+                    $paxCredit += $payment['credit'];
+                }
+
+                $passengerObjects[] = array(
+                    'passenger' => $object,
+                    'payment' =>$payments,
+                    'completedTasksCount' => 0,
+                    'paxPrice' => $paxPrice,
+                    'paxOverdue' => $paxOverdue,
+                    'paxCredit' => $paxCredit,
+                );
+
+                $creditTotal+= $paxCredit;
+                $priceTotal += $paxPrice;
+                $overdueTotal += $paxOverdue;
+
             }
         }
 
-        $completedTasksCount = '';
+        $priceData = array('creditTotal' => $creditTotal, 'priceTotal' => $priceTotal, 'overdueTotal' => $overdueTotal);
+
         $totalCompletedTasks = 0;
 
 
         foreach ($passengerObjects as $passengerObject){
 
             //Get completed tasks on the tour for each passenger
-            $completedTasksCount = $this->get("passenger.actions")->getPassengerCompletedTasks($passengerObject->getId());
-            $passengerObject->completedTasksCount = $completedTasksCount;
+            $completedTasksCount = $this->get("passenger.actions")->getPassengerCompletedTasks($passengerObject['passenger']->getId());
+            $passengerObject['completedTasksCount'] = $completedTasksCount;
             $totalCompletedTasks += $completedTasksCount;
 
         }
@@ -1682,6 +1707,7 @@ class UserController extends Controller
             'totalCompletedTasks' => $totalCompletedTasks,
             'totalPossibleTasks' => $totalPossibleTasks,
             'possibleTasksCount' => $possibleTasksCount,
+            'priceData' => $priceData,
         ));
     }
 
