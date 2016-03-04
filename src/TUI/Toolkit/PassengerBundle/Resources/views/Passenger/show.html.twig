@@ -383,7 +383,7 @@
 {% endblock %}
 
 {% block footer_left %}
-    {% if if app.user.email == entity.tourReference.organizer.email%} {# Show Sales Agent Info to an Organizer#}
+    {% if app.user.email == entity.tourReference.organizer.email%} {# Show Sales Agent Info to an Organizer#}
         {% if entity.tourReference.salesAgent %}
             <span class="intro">
                     {{ brand.name }} {% trans %}tour.show.footer.intro_org{% endtrans %}
