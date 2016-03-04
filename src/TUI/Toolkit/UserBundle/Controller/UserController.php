@@ -1642,7 +1642,7 @@ class UserController extends Controller
             $paxPrice = 0; $paxCredit = 0; $paxOverdue = 0;
             $object = $em->getRepository('PassengerBundle:Passenger')->find($passenger->getObject());
             if ($object->getTourReference()->getId() == $tourId) {
-
+                $cashBalance = $this->get('payment.GetPayments')->getPassengersPaymentsPaid($object->getId());
                 // add payment details to object also
                 $payments = $this->get('payment.getPayments')->getPassengersPaymentTasks($object->getId());
                 // payment structure is array('credit' => $credit, 'item' =>$tourPaymentTask, 'status' => $status, 'overdueAmt' => $overdueAmt, 'due' => $taskAmt)
@@ -1664,9 +1664,14 @@ class UserController extends Controller
                 $creditTotal+= $paxCredit;
                 $priceTotal += $paxPrice;
                 $overdueTotal += $paxOverdue;
-
+                if($cashBalance['total'] > 0 && $creditTotal == 0) {
+                    // this passenger made payments but no longer owes because of status change
+                    $creditTotal = $cashBalance['total'];
+                }
             }
         }
+
+
 
         $priceData = array('creditTotal' => $creditTotal, 'priceTotal' => $priceTotal, 'overdueTotal' => $overdueTotal);
 
