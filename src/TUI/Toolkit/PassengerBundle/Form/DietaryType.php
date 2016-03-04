@@ -17,10 +17,10 @@ class DietaryType extends AbstractType
     {
         $builder
             ->add('description', 'text', array(
-                'required' => false,
+                'required' => true,
             ))
             ->add('passengerReference', 'hidden', array(
-                'required' => false,
+                'required' => true,
                 'mapped' => false,
                 'data_class' => 'TUI\Toolkit\PassengerBundle\Entity\Passenger',
             ));

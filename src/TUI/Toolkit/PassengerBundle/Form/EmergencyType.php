@@ -28,23 +28,23 @@ class EmergencyType extends AbstractType
 
         $builder
             ->add('emergencyName', 'text', array(
-                'required' => false,
+                'required' => true,
                 'label' => 'passenger.labels.emergency_name',
             ))
             ->add('emergencyRelationship', 'text', array(
-                'required' => false,
+                'required' => true,
                 'label' => 'passenger.labels.emergency_relationship',
             ))
             ->add('emergencyNumber', 'text', array(
-                'required' => false,
+                'required' => true,
                 'label' => 'passenger.labels.emergency_number',
             ))
             ->add('emergencyEmail', 'email', array(
-                'required' => false,
+                'required' => true,
                 'label' => 'passenger.labels.emergency_email'
             ))
             ->add('passengerReference', 'hidden', array(
-                'required' => false,
+                'required' => true,
                 'data_class' => 'TUI\Toolkit\PassengerBundle\Entity\Passenger',
                 'mapped' => false,
 
