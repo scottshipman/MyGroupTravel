@@ -427,25 +427,29 @@
 
     {#Completed Payment Tasks#}
     {% if entity.paymentTasks is not empty  %}
-        {% for paymentTask in entity.paymentTasks if paymentTask.paidDate != null and "now"|date(compareFormat) > paymentTask.dueDate|date(compareFormat)  %}
+        {% for paymentTask in entity.paymentTasks %}
+            {% if paymentTask.paidDate != null and "now"|date(compareFormat) > paymentTask.dueDate|date(compareFormat)  %}
         <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
             <div class="mdl-card__title">
                 <h3 class="mdl-card__title-text">Pay Deposit To {{ brand.name }}</h3>
                 <span class="tour-dashboard-cta"><i class="material-icons">check</i></span>
             </div>
         </div>
+            {% endif %}
         {% endfor %}
     {% endif %}
 
     {#Complete Passenger Payment Tasks#}
     {% if entity.paymentTasksPassenger is not empty  %}
-        {% for paymentTask in entity.paymentTasksPassenger if paymentTask.paidDate != null %}
+        {% for paymentTask in entity.paymentTasksPassenger %}
+            {% if paymentTask.paidDate != null %}
             <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
                 <div class="mdl-card__title">
                     <h3 class="mdl-card__title-text">Collect {{ entity.payingPlaces }} {{ paymentTask.name }} Payments</h3>
                     <span class="tour-dashboard-cta"><i class="material-icons">check</i></span>
                 </div>
             </div>
+            {% endif %}
         {% endfor %}
     {% endif %}
 {# {% endif %} #}
