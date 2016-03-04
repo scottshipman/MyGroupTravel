@@ -109,11 +109,155 @@
 
         </div>
 
+    <script>
+        $(document).on('click', '#emergency', function (e) {
+            var t = $(this);
+            var id = $(this).attr('id');
+            e.preventDefault();
+            taskClickEvent(id, t);
+            $('#task-title').text('Emergency Contact Info');
+            $('#task-counter').text("{{ passengerData.completedPassengerData['emergency']|length }}/{{ passengerData.travellingUsers|length }}")
+        });
+
+        $(document).on('click', '#medical', function (e) {
+            var t = $(this);
+            var id = $(this).attr('id');
+            e.preventDefault();
+            taskClickEvent(id, t);
+            $('#task-title').text('Medical Info');
+            $('#task-counter').text("{{ passengerData.completedPassengerData['medical']|length }}/{{ passengerData.travellingUsers|length }}")
+        });
+
+        $(document).on('click', '#passport', function (e) {
+            var t = $(this);
+            var id = $(this).attr('id');
+            e.preventDefault();
+            taskClickEvent(id, t);
+            $('#task-title').text('Passport Info');
+            $('#task-counter').text("{{ passengerData.completedPassengerData['passport']|length }}/{{ passengerData.travellingUsers|length }}")
+        });
+
+        $(document).on('click', '#dietary', function (e) {
+            var t = $(this);
+            var id = $(this).attr('id');
+            e.preventDefault();
+            taskClickEvent(id, t);
+            $('#task-title').text('Dietary Info');
+            $('#task-counter').text("{{ passengerData.completedPassengerData['dietary']|length }}/{{ passengerData.travellingUsers|length }}")
+        });
+
+        // toggle radio buttons
+        $(document).on('click', 'a.payment-schedule-link', function(e){
+            e.preventDefault();
+            $('#payment-schedule').toggle(400, function(){
+                if ($('#toggle-payment-schedule').text()=='Filter expand_more') {
+                    $('#toggle-payment-schedule').html('Filter <br /><i class="material-icons">expand_less</i>');
+                } else if ($('#toggle-payment-schedule').text()=='Filter expand_less') {
+                    $('#toggle-payment-schedule').html('Filter <br /><i class="material-icons">expand_more</i>');
+                }
+            });
+        });
+
+        //Radio button animations for completed and not completed
+        $('#complete').change(function(){
+            var name = $(this).attr('name');
+            var variableClass = "." + name;
+            var incomplete = variableClass + "-incomplete";
+            $('.pcardname').each(function() {
+                $(this).has(incomplete).parent().slideUp(400);
+                $(this).has(variableClass).parent().slideDown(400);
+            });
+        });
+
+        $('#uncomplete').change(function(){
+            var name = $(this).attr('name');
+            var variableClass = "." + name;
+            var incomplete = variableClass + "-incomplete";
+            $('.pcardname').each(function() {
+                $(this).has(variableClass).parent().slideUp(400);
+                $(this).has(incomplete).parent().slideDown(400);
+            });
+        });
+
+        //Clear functionality
+        $(document).on('click', '#clear', function (e) {
+            e.preventDefault();
+            $('#complete').prop('checked', false);
+            $('#uncomplete').prop('checked', false);
+            $('.pcardname').parent().slideDown(400);
+            $('.tour-show-submenu').find('li > a').each(function(){
+                $(this).css({'color': '{{ brand.primaryColor }}'});
+            });
+            $('.pcardname').each(function(){
+                var check = $(this).find('a > i:contains("done")');
+                var arrow = $(this).find('a > i:contains("arrow_forward")');
+                var child = $(this).find(">:first-child");
+                if ($(child).hasClass('complete')) {
+                    $(check).css({'display': 'inline'});
+                    $(arrow).css({'display': 'none'});
+                }else {
+                    $(check).css({'display': 'none'});
+                    $(arrow).css({'display': 'inline'});
+                }
+                $(this).find('.info-bar').css({'display': 'block'});
+                var info = $(this).find('.info-task-bar');
+                $(info).css({'display': 'none'});
+                $("#task-title").text("In Progress");
+                $("#task-counter").text("{{ passengerData.totalCompletedTasksCount }}/{{ passengerData.possibleTasksCount }}");
+                $('#payment-schedule-link').slideUp(400);
+                $('#payment-schedule').slideUp(400);
+                $('#toggle-payment-schedule').html('Filter <br /><i class="material-icons">expand_more</i>');
+            });
+        });
+
+        function taskClickEvent(id, t){
+
+            $('.pcardname').parent().slideDown(400);
+
+
+            $('#complete').prop('checked', false);
+            $('#uncomplete').prop('checked', false);
+            $('.mdl-radio').removeClass("is-checked");
+            $('.mdl-radio__button').attr('name', id);
+            $('#payment-schedule').slideDown(400);
+            $('.tour-show-submenu').find('li > a').each(function(){
+                $(this).css({'color': '{{ brand.primaryColor }}'});
+            });
+            t.css({'color': '{{ brand.secondaryColor }}'});
+            $('.pcardname').each(function(){
+                var child = $(this).find(">:first-child");
+                var check = $(this).find('i:contains("done")');
+                var arrow = $(this).find('i:contains("arrow_forward")');
+                if ($(child).hasClass(id)){
+                    $(arrow).css({'display':'none'});
+                    $(check).css({'display':'inline'});
+                    $(this).find('.info-bar').css({'display': 'none'});
+                    var info = $(this).find('.info-task-bar');
+                    $(info).text("{% trans %}tour.dashboard.complete{% endtrans %}");
+                    $(info).css({
+                        'color': 'green',
+                        'display': 'block'
+                    });
+                }else{
+                    $(arrow).css({'display':'inline'});
+                    $(check).css({'display':'none'});
+                    $(this).find('.info-bar').css({'display': 'none'});
+                    var info = $(this).find('.info-task-bar');
+                    $(info).css({
+                        'color': 'red',
+                        'display': 'block'
+                    });
+                    $(info).text("{% trans %}tour.dashboard.not_complete{% endtrans %}");
+                }
+            });
+        };
+    </script>
+
 {% endblock %}
 
 
 {% block footer_left %}
-    {% if app.user.email != entity.salesAgent.email%} {# Show Sales Agent Info to an Organizer#}
+    {% if app.user.email == entity.organizer.email%} {# Show Sales Agent Info to an Organizer#}
         {% if entity.salesAgent %}
             <span class="intro">
                     {{ brand.name }} {% trans %}tour.show.footer.intro_org{% endtrans %}
@@ -158,149 +302,7 @@
             </span>
         {% endif %}
     {% endif %}
-    <script>
-            $(document).on('click', '#emergency', function (e) {
-                var t = $(this);
-                var id = $(this).attr('id');
-                e.preventDefault();
-                taskClickEvent(id, t);
-                $('#task-title').text('Emergency Contact Info');
-                $('#task-counter').text("{{ passengerData.completedPassengerData['emergency']|length }}/{{ passengerData.travellingUsers|length }}")
-            });
 
-            $(document).on('click', '#medical', function (e) {
-                var t = $(this);
-                var id = $(this).attr('id');
-                e.preventDefault();
-                taskClickEvent(id, t);
-                $('#task-title').text('Medical Info');
-                $('#task-counter').text("{{ passengerData.completedPassengerData['medical']|length }}/{{ passengerData.travellingUsers|length }}")
-            });
-
-            $(document).on('click', '#passport', function (e) {
-                var t = $(this);
-                var id = $(this).attr('id');
-                e.preventDefault();
-                taskClickEvent(id, t);
-                $('#task-title').text('Passport Info');
-                $('#task-counter').text("{{ passengerData.completedPassengerData['passport']|length }}/{{ passengerData.travellingUsers|length }}")
-            });
-
-            $(document).on('click', '#dietary', function (e) {
-                var t = $(this);
-                var id = $(this).attr('id');
-                e.preventDefault();
-                taskClickEvent(id, t);
-                    $('#task-title').text('Dietary Info');
-                    $('#task-counter').text("{{ passengerData.completedPassengerData['dietary']|length }}/{{ passengerData.travellingUsers|length }}")
-            });
-
-            // toggle radio buttons
-            $(document).on('click', 'a.payment-schedule-link', function(e){
-                e.preventDefault();
-                $('#payment-schedule').toggle(400, function(){
-                    if ($('#toggle-payment-schedule').text()=='Filter expand_more') {
-                        $('#toggle-payment-schedule').html('Filter <br /><i class="material-icons">expand_less</i>');
-                    } else if ($('#toggle-payment-schedule').text()=='Filter expand_less') {
-                        $('#toggle-payment-schedule').html('Filter <br /><i class="material-icons">expand_more</i>');
-                    }
-                });
-            });
-
-            //Radio button animations for completed and not completed
-            $('#complete').change(function(){
-               var name = $(this).attr('name');
-                var variableClass = "." + name;
-                var incomplete = variableClass + "-incomplete";
-                $('.pcardname').each(function() {
-                    $(this).has(incomplete).parent().slideUp(400);
-                    $(this).has(variableClass).parent().slideDown(400);
-                });
-            });
-
-            $('#uncomplete').change(function(){
-                var name = $(this).attr('name');
-                var variableClass = "." + name;
-                var incomplete = variableClass + "-incomplete";
-                $('.pcardname').each(function() {
-                    $(this).has(variableClass).parent().slideUp(400);
-                    $(this).has(incomplete).parent().slideDown(400);
-                });
-            });
-
-            //Clear functionality
-            $(document).on('click', '#clear', function (e) {
-                e.preventDefault();
-                $('#complete').prop('checked', false);
-                $('#uncomplete').prop('checked', false);
-                $('.pcardname').parent().slideDown(400);
-                $('.tour-show-submenu').find('li > a').each(function(){
-                    $(this).css({'color': '{{ brand.primaryColor }}'});
-                });
-                $('.pcardname').each(function(){
-                    var check = $(this).find('a > i:contains("done")');
-                    var arrow = $(this).find('a > i:contains("arrow_forward")');
-                    var child = $(this).find(">:first-child");
-                    if ($(child).hasClass('complete')) {
-                        $(check).css({'display': 'inline'});
-                        $(arrow).css({'display': 'none'});
-                    }else {
-                        $(check).css({'display': 'none'});
-                        $(arrow).css({'display': 'inline'});
-                    }
-                    $(this).find('.info-bar').css({'display': 'block'});
-                    var info = $(this).find('.info-task-bar');
-                    $(info).css({'display': 'none'});
-                    $("#task-title").text("In Progress");
-                    $("#task-counter").text("{{ passengerData.totalCompletedTasksCount }}/{{ passengerData.possibleTasksCount }}");
-                    $('#payment-schedule-link').slideUp(400);
-                    $('#payment-schedule').slideUp(400);
-                    $('#toggle-payment-schedule').html('Filter <br /><i class="material-icons">expand_more</i>');
-                });
-            });
-
-            function taskClickEvent(id, t){
-
-                $('.pcardname').parent().slideDown(400);
-
-
-                $('#complete').prop('checked', false);
-                $('#uncomplete').prop('checked', false);
-                $('.mdl-radio').removeClass("is-checked");
-                $('.mdl-radio__button').attr('name', id);
-                $('#payment-schedule').slideDown(400);
-                $('.tour-show-submenu').find('li > a').each(function(){
-                    $(this).css({'color': '{{ brand.primaryColor }}'});
-                });
-                t.css({'color': '{{ brand.secondaryColor }}'});
-                $('.pcardname').each(function(){
-                    var child = $(this).find(">:first-child");
-                    var check = $(this).find('i:contains("done")');
-                    var arrow = $(this).find('i:contains("arrow_forward")');
-                    if ($(child).hasClass(id)){
-                        $(arrow).css({'display':'none'});
-                        $(check).css({'display':'inline'});
-                        $(this).find('.info-bar').css({'display': 'none'});
-                        var info = $(this).find('.info-task-bar');
-                        $(info).text("{% trans %}tour.dashboard.complete{% endtrans %}");
-                        $(info).css({
-                            'color': 'green',
-                            'display': 'block'
-                        });
-                    }else{
-                        $(arrow).css({'display':'inline'});
-                        $(check).css({'display':'none'});
-                        $(this).find('.info-bar').css({'display': 'none'});
-                        var info = $(this).find('.info-task-bar');
-                        $(info).css({
-                            'color': 'red',
-                            'display': 'block'
-                        });
-                        $(info).text("{% trans %}tour.dashboard.not_complete{% endtrans %}");
-                    }
-                });
-            };
-    </script>
 {% endblock %}
 
 {% block footer_right %}
@@ -314,3 +316,4 @@
         </span>
     </div>
 {% endblock %}
+
