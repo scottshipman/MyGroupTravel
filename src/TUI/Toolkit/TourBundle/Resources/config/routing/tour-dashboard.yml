@@ -61,7 +61,7 @@ manage_tour_edit_payments:
 
 parent_user_registration_confirmation:
   path: /{id}/{tourId}/parent-register-confirm-notification
-  defaults: {_controller: "PassengerBundle:Passenger:parentRegisterConfirmationTrigger" }
+  defaults: { _controller: "PassengerBundle:Passenger:parentRegisterConfirmationTrigger" }
 
 manage_tour_tasks_dashboard:
   path: /{id}/tasks
