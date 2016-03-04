@@ -102,7 +102,7 @@ tour:
        price: Price Per Passenger
        name: Tour Name
        number: Tour Reference
-       organizers: Organisers
+       organizers: Primary Organiser
        number: Tour Reference
        schedule: Tour Payment Schedule
        footer:
