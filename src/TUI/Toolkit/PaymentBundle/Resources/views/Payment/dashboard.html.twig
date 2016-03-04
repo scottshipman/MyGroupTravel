@@ -42,6 +42,8 @@
             <ul class="tour-show-submenu">
                 <li><a href="{{ path('manage_payment_dashboard', { 'tourId': tour.id }) }}" style="text-decoration: none; color:{{ brand.secondaryColor }};"><strong>{% trans %}payment.labels.balances{% endtrans %}</strong></a></li>
                 <li><a href="{{ path('manage_payment_dashboard_edit_payments', { 'tourId': tour.id }) }}" style="text-decoration: none; color: inherit;"><strong>{% trans %}payment.labels.payment_settings{% endtrans %}</strong></a></li>
+                <li><a class = "refund" tour="{{ tour.id }}" href="" style="text-decoration: none; color: inherit;"><strong>{% trans %}payment.labels.issue_refund{% endtrans %}</strong></a></li>
+
             </ul>
         </div>
 
@@ -110,6 +112,14 @@
                 var passengerId = t.attr('passenger');
                 var tourId = t.attr('tour');
                 toolkitStandardPopup("Custom Payment Schedule", '/payment/tour/' + tourId + '/passenger/' + passengerId + '/customize' );
+            });
+
+            // Refund a payment
+            $(document).on('click', 'a.refund', function (e) {
+                var t = $(this);
+                e.preventDefault();
+                var tourId = t.attr('tour');
+                toolkitStandardPopup("Issue a Refund", '/payment/tour/' + tourId + '/refund' );
             });
 
 
