@@ -240,7 +240,6 @@ class PassengerService
 
         $possibleTasks = array();
 
-
         $medicalTask = $tour->getMedicalDate();
         $dietaryTask = $tour->getDietaryDate();
         $emergencyTask = $tour->getEmergencyDate();
