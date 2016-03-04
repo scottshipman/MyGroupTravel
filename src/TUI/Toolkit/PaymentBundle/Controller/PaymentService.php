@@ -166,6 +166,8 @@ class PaymentService {
                 // increment to total due for the task
                 if($tourPassenger->getFree() == FALSE) {
                     $taskItems[$tourPaymentTask->getId()]['total'] = $taskItems[$tourPaymentTask->getId()]['total'] + $total;
+
+                } else  {
                     $total = 0;
                 }
 
