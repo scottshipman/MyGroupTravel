@@ -1607,8 +1607,10 @@ class UserController extends Controller
             foreach ($data['passengerObjects'] as $passengerObject) {
                 if ($passengerObject->getTourReference()->getId() == $parent->getId()) {
                     $passengers[] = $passengerObject;
-                    $completed += $passengerObject->completedTasksCount;
-                    $possible += $passengerObject->possibleTasksCount;
+                    $completed = $passengerObject->completedTasksCount;
+                    $completed = count($completed);
+                    $possible = $passengerObject->possibleTasksCount;
+                    $possible = count($possible);
                 }
             }
             $parent->passengers = $passengers;
@@ -1676,9 +1678,11 @@ class UserController extends Controller
             //Get completed tasks on the tour for each passenger
             $completedTasksCount = $this->get("passenger.actions")->getPassengerCompletedTasks($passengerObject['passenger']->getId());
             $passengerObject['completedTasksCount'] = $completedTasksCount;
+            $completedTasksCount = count($completedTasksCount);
             $totalCompletedTasks += $completedTasksCount;
 
         }
+        $possibleTasksCount = count($possibleTasksCount);
 
         //Get total possible tasks
         $totalPossibleTasks = $possibleTasksCount * count($passengerObjects);
