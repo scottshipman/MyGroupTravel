@@ -28,23 +28,23 @@ class MedicalType extends AbstractType
         
         $builder
             ->add('doctorName', 'text', array(
-                'required' => false,
+                'required' => true,
                 'label' => 'passenger.labels.doctor_name',
             ))
             ->add('DoctorNumber', 'text', array(
-                'required' => false,
+                'required' => true,
                 'label' => 'passenger.labels.doctor_number',
             ))
             ->add('conditions', 'text', array(
-                'required' => false,
+                'required' => true,
                 'label' => 'passenger.labels.conditions',
             ))
             ->add('medications', 'text', array(
-                'required' => false,
+                'required' => true,
                 'label' => 'passenger.labels.medication',
             ))
             ->add('passengerReference', 'hidden', array(
-                'required' => false,
+                'required' => true,
                 'data_class' => 'TUI\Toolkit\PassengerBundle\Entity\Passenger',
                 'mapped' => false,
 
