@@ -346,6 +346,9 @@ class PassengerController extends Controller
             $brand = $default_brand;
         }
 
+        // get payments from passenger
+        $payments = $this->get('payment.getPayments')->getPassengersPaymentsPaid($id);
+
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('PassengerBundle:Passenger:show.html.twig', array(
@@ -356,6 +359,7 @@ class PassengerController extends Controller
             'isOrganizer' => $isOrganizer,
             'completedTasksCount' => $completedTasksCount,
             'possibleTasksCount' => $possibleTasksCount,
+            'payments' => $payments,
         ));
     }
 

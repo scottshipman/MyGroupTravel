@@ -17,7 +17,7 @@
         <div class="clear"></div>
     </div>
     {% set overdue = 0 %}
-        {% if paymentTasks is not empty and passenger.free is sameas(false)%}
+        {% if paymentTasks is not empty and (passenger.free is sameas(false) and passenger.status != 'waitlist') %}
 
                 {% for paymentTask in paymentTasks %}
                     {% set overdue = overdue + paymentTask.overdueAmt %}
@@ -45,10 +45,12 @@
             <label class="row-label">{% trans %}payment.labels.total_paid{% endtrans %}</label>
             <p class="row-content green">{{ currency.htmlSymbol | raw  }}{{ payments.total }}</p>
         </div>
+    {% if passenger.status != 'waitlist' %}
         <div class="mdl-card__supporting-text mdl-card--border">
             <label class="row-label">{% trans %}payment.labels.total_due{% endtrans %}</label>
             <p class="row-content blue">{{ currency.htmlSymbol | raw  }}{{ due.total }}</p>
         </div>
+    {% endif %}
         {% if overdue > 0 %}
             <div class="mdl-card__supporting-text mdl-card--border">
                 <label class="row-label">{% trans %}payment.labels.past_due{% endtrans %}</label>
