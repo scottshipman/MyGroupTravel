@@ -65,7 +65,11 @@
                 </div>
                 {% for paid in payments.items %}
                 <div class="mdl-card__supporting-text mdl-card--border">
-                    <p class="mdl-card__title-text task-title weighted">{{ currency.htmlSymbol | raw  }}{{ paid.value }}</p>
+                    <p class="mdl-card__title-text task-title weighted">{{ currency.htmlSymbol | raw  }}{{ paid.value | abs }}
+                    {% if paid.value < 0 %}
+                        <span style="color:green;">Refund Issued</span>
+                    {% endif %}
+                    </p>
                     <label class="task-due-date"> on {{ paid.date | date(format)}} {% if paid.note is not empty %}- {{ paid.note }} {% endif %}</label>
                 </div>
                 {% endfor %}

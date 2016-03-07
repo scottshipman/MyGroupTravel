@@ -26,6 +26,7 @@ payment:
 
     flash:
         save: "This payment has been logged."
+        refund_save: "This refund has been issued."
         delete: Payment deleted -
 
     labels:
@@ -43,15 +44,18 @@ payment:
         payment_history: Payment History
         collected: Collected
         schedule: Payment Schedule
+        issue_refund: Issue a Refund
 
 
     form:
         date: Date Received (DD-MM-YYYY)
+        refund_date: Date Issued (DD-MM-YYYY)
         value: Amount Received
+        refund_value: Refund Amount
         note: Note
         headline: Log a New Payment
         message: "This payment is being logged for %fname% %lname% for the Tour: %tourname%."
-
+        refund_message: "This refund is being logged for the selected passenger for the Tour: %tourname%."
         error:
             value: Value must be numeric only
 

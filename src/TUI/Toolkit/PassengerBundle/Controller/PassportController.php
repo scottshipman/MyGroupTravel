@@ -68,7 +68,7 @@ class PassportController extends Controller
 
         $errorString = $this->get("passenger.actions")->getFlashErrorMessages($errors, $form, $translator);
 
-        $this->get('ras_flash_alert.alert_reporter')->addError($this->get('translator')->trans('passenger.form.error.message.dietary')." ".$errorString);
+        $this->get('ras_flash_alert.alert_reporter')->addError($this->get('translator')->trans('passenger.form.error.message.passport')." ".$errorString);
 
         return $this->redirect($this->generateUrl('manage_passenger_show', array('id' => $reference)));
     }

@@ -9,6 +9,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 use TUI\Toolkit\PaymentBundle\Entity\Payment;
 use TUI\Toolkit\PaymentBundle\Form\PaymentType;
+use TUI\Toolkit\PaymentBundle\Form\RefundType;
 use TUI\Toolkit\TourBundle\Entity\PaymentTaskOverride;
 
 use TUI\Toolkit\TourBundle\Entity\Tour;
@@ -88,6 +89,69 @@ class PaymentController extends Controller
         return $response;
     }
 
+
+    /**
+     * Creates a new Refund of payment entity.
+     *
+     */
+    public function refundAction(Request $request, $tourId)
+    {
+        $entity = new Payment();
+        $em = $this->getDoctrine()->getManager();
+
+        $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
+        $passengers = $em->getRepository('PassengerBundle:Passenger')->findBy(array('tourReference' => $tour));
+        $passenger = array();
+        foreach($passengers as $pax) {
+            $passenger[$pax->getId()] = $pax->getFName() . ' ' . $pax->getLName();
+        }
+        $form = $this->createRefundForm($entity, $tour, $passenger);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $entity->setTour($tour);
+            $pax = $form->getData()->getPassenger();
+            $paxObject = $em->getRepository('PassengerBundle:Passenger')->find($pax);
+           // $entity->setPassenger($passenger);
+            $entity->setValue(-abs($entity->getValue()));
+            $entity->setPassenger($paxObject);
+            $em->persist($entity);
+            $em->flush();
+
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('payment.flash.refund_save'));
+
+            $serializer = $this->container->get('jms_serializer');
+            $paymentSerialized = $serializer->serialize($entity, 'json');
+
+            $response = new Response($paymentSerialized);
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
+        }
+
+        $errors = array();
+        foreach ($form->getErrors() as $key => $error) {
+            if ($form->isRoot()) {
+                $errors['#'][] = $error->getMessage();
+            } else {
+                $errors[] = $error->getMessage();
+            }
+        }
+        foreach ($form->all() as $child) {
+            if (!$child->isValid()) {
+                $errors[$child->getName()] = $this->getErrorMessages($child);
+            }
+        }
+        $serializer = $this->container->get('jms_serializer');
+        $errors = $serializer->serialize($errors, 'json');
+        $response = new Response($errors);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setStatusCode('400');
+        return $response;
+    }
+
+
+
     /**
      * Creates a form to create a Payment entity.
      *
@@ -113,6 +177,30 @@ class PaymentController extends Controller
     }
 
     /**
+     * Creates a form to create a Refund Payment entity.
+     *
+     * @param Payment $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createRefundForm(Payment $entity, $tour, $passenger)
+
+    {
+        $locale = $this->container->getParameter('locale');
+        $form = $this->createForm(new RefundType($locale, $tour, $passenger), $entity, array(
+            'action' => $this->generateUrl('payment_refund', array('tourId' => $tour->getId())),
+            'method' => 'POST',
+            'attr'  => array(
+                'id' => 'ajax_new_refund_form'
+            )
+        ));
+
+        $form->add('submit', 'submit', array('label' => 'Issue Refund'));
+
+        return $form;
+    }
+
+    /**
      * Displays a form to create a new Payment entity.
      *
      */
@@ -127,6 +215,32 @@ class PaymentController extends Controller
         $form   = $this->createCreateForm($entity, $tour, $passenger);
 
         return $this->render('PaymentBundle:Payment:new.html.twig', array(
+            'entity' => $entity,
+            'form'   => $form->createView(),
+            'tour'  => $tour,
+            'passenger' => $passenger,
+        ));
+    }
+
+    /**
+     * Displays a form to create a new Refund Payment entity.
+     *
+     */
+    public function newRefundAction($tourId)
+    {
+        $entity = new Payment();
+
+        $em = $this->getDoctrine()->getManager();
+
+        $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
+        $passengers = $em->getRepository('PassengerBundle:Passenger')->findBy(array('tourReference' => $tour));
+        $passenger = array();
+        foreach($passengers as $pax) {
+          $passenger[$pax->getId()] = $pax->getFName() . ' ' . $pax->getLName();
+        }
+        $form   = $this->createRefundForm($entity, $tour, $passenger);
+
+        return $this->render('PaymentBundle:Payment:refund.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
             'tour'  => $tour,
