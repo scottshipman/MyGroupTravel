@@ -67,24 +67,24 @@
 
             <div class="mdl-card__supporting-text profile-tour-details">
                 <ul>
-                    <li>
-                        <div class="profile-list-item item-1 tour-dashboard">
-                            {% if (parent.organizer.id == app.user.id) or (parent.salesAgent.id == app.user.id) %}
-                                {% if parent.currency %}{{ parent.currency.htmlSymbol | raw}}{% endif %}{% if parent.pricePerson %}{{ parent.pricePerson }}{% else %}{% trans %}user.profile.my_quotes.no_price{% endtrans %}{% endif %}<br /><label>{% trans %}user.profile.my_quotes.price{% endtrans %}</label>
-                            {% else %} {# show the Public price for passenger/parents#}
-                                {% if parent.currency %}{{ parent.currency.htmlSymbol | raw}}{% endif %}{% if parent.pricePersonPublic %}{{ parent.pricePersonPublic }}{% else %}{% trans %}user.profile.my_quotes.no_price{% endtrans %}{% endif %}<br /><label>{% trans %}user.profile.my_quotes.price{% endtrans %}</label>
-                            {% endif %}
-                        </div>
-                    </li>
+                    {#<li>#}
+                        {#<div class="profile-list-item item-1 tour-dashboard">#}
+                            {#{% if (parent.organizer.id == app.user.id) or (parent.salesAgent.id == app.user.id) %}#}
+                                {#{% if parent.currency %}{{ parent.currency.htmlSymbol | raw}}{% endif %}{% if parent.pricePerson %}{{ parent.pricePerson }}{% else %}{% trans %}user.profile.my_quotes.no_price{% endtrans %}{% endif %}<br /><label>{% trans %}user.profile.my_quotes.price{% endtrans %}</label>#}
+                            {#{% else %} #}{# show the Public price for passenger/parents#}
+                                {#{% if parent.currency %}{{ parent.currency.htmlSymbol | raw}}{% endif %}{% if parent.pricePersonPublic %}{{ parent.pricePersonPublic }}{% else %}{% trans %}user.profile.my_quotes.no_price{% endtrans %}{% endif %}<br /><label>{% trans %}user.profile.my_quotes.price{% endtrans %}</label>#}
+                            {#{% endif %}#}
+                        {#</div>#}
+                    {#</li>#}
                     <li>
                         {% if is_granted('ROLE_BRAND') %}
-                            <div class="profile-list-item item-2 tour-dashboard">{% if parent.institution %} {{  parent.institution.name }}{% endif %}<br /><label>{% trans %}user.profile.my_quotes.institution{% endtrans %}</label> </div>
+                            <div class="profile-list-item item-1 tour-dashboard">{% if parent.institution %} {{  parent.institution.name }}{% endif %}<br /><label>{% trans %}user.profile.my_quotes.institution{% endtrans %}</label> </div>
                         {% else %}
-                            <div class="profile-list-item item-2 tour-dashboard">{{ parent.completed }}/{{ parent.possible }}<br /><label>Tasks Complete</label> </div>
+                            <div class="profile-list-item item-1 tour-dashboard">{{ parent.completed }}/{{ parent.possible }}<br /><label>Tasks Complete</label> </div>
                         {% endif %}
                     </li>
                     <li>
-                        <div class="profile-list-item item-3 tour-dashboard">
+                        <div class="profile-list-item item-2 tour-dashboard">
                             {{ dtgFinal }}<br /><label>{% trans %}user.profile.my_quotes.days{% endtrans %}</label> </div>
 
                     </li>
