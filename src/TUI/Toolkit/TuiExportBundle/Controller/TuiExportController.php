@@ -140,7 +140,7 @@ class TuiExportController extends Controller
         $em = $this->getDoctrine()->getManager();
         $passengers = $em->getRepository('PassengerBundle:Passenger')->findBy(array('tourReference' => $tourId));
         foreach($passengers as $passenger){
-            $item=array();
+            $item=array(); $passport=null;
             if($passenger->getPassportReference() != NULL){$passport = $em->getRepository('PassengerBundle:Passport')->find($passenger->getPassportReference()->getId());}
             $item['Family Name'] = isset($passport) ? $passport->getPassportLastName() : '';
             $item['First Name'] = isset($passport) ? $passport->getPassportFirstName() : '';
@@ -186,7 +186,7 @@ class TuiExportController extends Controller
         $em = $this->getDoctrine()->getManager();
         $passengers = $em->getRepository('PassengerBundle:Passenger')->findBy(array('tourReference' => $tourId));
         foreach($passengers as $passenger){
-            $item=array();
+            $item=array(); $medical=null; $dietary=null; $emergency = null; $passport = null;
             if($passenger->getPassportReference() != NULL){$passport = $em->getRepository('PassengerBundle:Passport')->find($passenger->getPassportReference()->getId());}
             if($passenger->getEmergencyReference() != NULL){$emergency = $em->getRepository('PassengerBundle:Emergency')->find($passenger->getEmergencyReference()->getId());}
             if($passenger->getDietaryReference() != NULL){$dietary = $em->getRepository('PassengerBundle:Dietary')->find($passenger->getDietaryReference()->getId());}
@@ -226,7 +226,7 @@ class TuiExportController extends Controller
             $item['Parent Name'] = $parent->getFirstName() . ' ' . $parent->getLastName();
             $item['Parent Email'] = $parent->getEmail();
             if(get_class($passenger->getSignUpDate()) == "DateTime"){$psud = $passenger->getSignUpDate()->format($format);} else {$psud = '';}
-            $item['Date Singed Up'] = $psud;
+            $item['Date Signed Up'] = $psud;
             $item['Travelling Status'] = $status;
             $items[] = $item;
         }
