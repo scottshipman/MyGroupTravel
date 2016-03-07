@@ -369,17 +369,6 @@
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
-    <script>
-        $(document).ready(function () {
-            //Add the date of birth label
-            var labelText = "{% trans %}passenger.modals.dob{% endtrans %}";
-            var div = $('.dateOfBirth');
-            div.prepend('<label class="mdl-label-mimic dob">' + labelText + '</label><br/>');
-            $('.dob').css({"position": "relative", "font-size": "14px"});
-            div.css({"margin-top": "5px"});
-//            $('#tui_toolkit_tourbundle_tourpassenger_passengers_"' + index + '"_dateOfBirth > div:nth-child(1)').css({"width": "100"});
-        });
-    </script>
 {% endblock %}
 
 {% block footer_left %}

@@ -115,6 +115,7 @@ class TuiExportController extends Controller
                 fclose($handle);
             }
         );
+        if($type=="organizer"){$type="";}
         $response->headers->set('Content-Type', 'application/force-download');
         $response->headers->set('Content-Disposition', 'attachment; filename="'. $type . '-Passengers-' . $tour->getName() . '.csv"');
 
@@ -123,29 +124,41 @@ class TuiExportController extends Controller
 
 
     public function getBrandPassengerList($tourId){
+        $locale =$this->container->getParameter('locale');
+        switch (true) {
+            case strstr($locale, 'en_GB'):
+
+                $format = 'd-M-Y';
+                break;
+            default:
+
+                $format = 'M-d-Y';
+                break;
+        }
         $items=array();
         $format =$this->container->getParameter('date_format');
         $em = $this->getDoctrine()->getManager();
         $passengers = $em->getRepository('PassengerBundle:Passenger')->findBy(array('tourReference' => $tourId));
         foreach($passengers as $passenger){
-            $passport = $em->getRepository('PassengerBundle:Passport')->findBy(array('passengerReference' => $passenger->getPassportReference()));
-            $item['Family Name'] = isset($passport[0]) ? $passport[0]->getPassportLastName() : '';
-            $item['First Name'] = isset($passport[0]) ? $passport[0]->getPassportFirstName() : '';
-            $item['Middle Name'] = isset($passport[0]) ? $passport[0]->getPassportMiddleName() : '';
-            $item['Gender'] = isset($passport[0]) ? $passport[0]->getPassportGender() : '';
-            $item['Title'] = isset($passport[0]) ? $passport[0]->getPassportTitle() : '';
+            $item=array();
+            if($passenger->getPassportReference() != NULL){$passport = $em->getRepository('PassengerBundle:Passport')->find($passenger->getPassportReference()->getId());}
+            $item['Family Name'] = isset($passport) ? $passport->getPassportLastName() : '';
+            $item['First Name'] = isset($passport) ? $passport->getPassportFirstName() : '';
+            $item['Middle Name'] = isset($passport) ? $passport->getPassportMiddleName() : '';
+            $item['Gender'] = isset($passport) ? $passport->getPassportGender() : '';
+            $item['Title'] = isset($passport) ? $passport->getPassportTitle() : '';
             $item['Child Fare'] = 'N';
             $item['Dietary Request Code'] = '';
-            $item['Code of Issuing State'] = isset($passport[0]) ? $passport->getPassportIssuingState() : '';
-            $item['Passport Number'] = isset($passport[0]) ? $passport->getPassportNumber() : '';
-            $item['Nationality'] = isset($passport[0]) ? $passport->getPassportNationality() : '';
-            if(isset($passport[0]) && get_class($passport[0]->getPassportDateOfBirth()) == "DateTime"){$ppid = $passport[0]->getPassportDateOfBirth()->format($format);} else {$ppid = '';}
+            $item['Code of Issuing State'] = isset($passport) ? $passport->getPassportIssuingState() : '';
+            $item['Passport Number'] = isset($passport) ? $passport->getPassportNumber() : '';
+            $item['Nationality'] = isset($passport) ? $passport->getPassportNationality() : '';
+            if(isset($passport) && get_class($passport->getPassportDateOfBirth()) == "DateTime"){$ppid = $passport->getPassportDateOfBirth()->format($format);} else {$ppid = '';}
             $item['Date of Birth'] = $ppid;
-            if(isset($passport[0]) && get_class($passport[0]->getPassportDateOfExpiry()) == "DateTime"){$pped = $passport[0]->getPassportDateOfExpiry()->format($format);} else {$pped = '';}
+            if(isset($passport) && get_class($passport->getPassportDateOfExpiry()) == "DateTime"){$pped = $passport->getPassportDateOfExpiry()->format($format);} else {$pped = '';}
             $item['Passport Expiry Date'] = $pped;
             $item['Passport Holder'] = '';
             $item['Country of Residence'] = '';
-            $item['Citizenship'] = isset($passport[0]) ? $passport[0]->getPassportNationality() : '';
+            $item['Citizenship'] = isset($passport) ? $passport->getPassportNationality() : '';
             $item['Destination or Residence'] = '';
             $item['Country 3 Letter Code'] = '';
             $item[ 'Hotel & Address'] = '';
@@ -159,14 +172,25 @@ class TuiExportController extends Controller
 
     public function getOrganizerPassengerList($tourId){
         $items=array();
-        $format =$this->container->getParameter('date_format');
+        $locale =$this->container->getParameter('locale');
+        switch (true) {
+            case strstr($locale, 'en_GB'):
+
+                $format = 'd-M-Y';
+                break;
+            default:
+
+                $format = 'M-d-Y';
+                break;
+        }
         $em = $this->getDoctrine()->getManager();
         $passengers = $em->getRepository('PassengerBundle:Passenger')->findBy(array('tourReference' => $tourId));
         foreach($passengers as $passenger){
-            $medical = $em->getRepository('PassengerBundle:Medical')->findBy(array('passengerReference' => $passenger->getMedicalReference()));
-            $passport = $em->getRepository('PassengerBundle:Passport')->findBy(array('passengerReference' => $passenger->getPassportReference()));
-            $emergency = $em->getRepository('PassengerBundle:Emergency')->findBy(array('passengerReference' => $passenger->getEmergencyReference()));
-            $dietary = $em->getRepository('PassengerBundle:Dietary')->findBy(array('passengerReference' => $passenger->getDietaryReference()));
+            $item=array();
+            if($passenger->getPassportReference() != NULL){$passport = $em->getRepository('PassengerBundle:Passport')->find($passenger->getPassportReference()->getId());}
+            if($passenger->getEmergencyReference() != NULL){$emergency = $em->getRepository('PassengerBundle:Emergency')->find($passenger->getEmergencyReference()->getId());}
+            if($passenger->getDietaryReference() != NULL){$dietary = $em->getRepository('PassengerBundle:Dietary')->find($passenger->getDietaryReference()->getId());}
+            if($passenger->getMedicalReference() != NULL){$medical = $em->getRepository('PassengerBundle:Medical')->find($passenger->getMedicalReference()->getId());}
             $parentId = $this->get("permission.set_permission")->getUser('parent', $passenger->getId(), 'passenger');
             $parent = $em->getRepository('TUIToolkitUserBundle:User')->find($parentId[1]);
             $status = 'waitlist';
@@ -176,29 +200,29 @@ class TuiExportController extends Controller
             if(get_class($passenger->getDateOfBirth()) == "DateTime"){$pdob = $passenger->getDateOfBirth()->format($format);} else {$pdob = '';}
             $item['Passenger DOB']  =  $pdob;
             $item['Passenger Gender'] = $passenger->getGender();
-            $item['Passport Number'] = isset($passport[0]) ? $passport->getPassportNumber() : '';
-            $item['Title'] = isset($passport[0]) ? $passport[0]->getPassportTitle() : '';
-            $item['First Name'] = isset($passport[0]) ? $passport[0]->getPassportFirstName() : '';
-            $item['Middle Name'] = isset($passport[0]) ? $passport[0]->getPassportMiddleName() : '';
-            $item['Last Name'] = isset($passport[0]) ? $passport[0]->getPassportLastName() : '';
-            if(isset($passport[0]) && get_class($passport[0]->getDateOfIssue()) == "DateTime"){$ppid = $passport[0]->getDateOfIssue()->format($format);} else {$ppid = '';}
+            $item['Passport Number'] = isset($passport) ? $passport->getPassportNumber() : '';
+            $item['Title'] = isset($passport) ? $passport->getPassportTitle() : '';
+            $item['First Name'] = isset($passport) ? $passport->getPassportFirstName() : '';
+            $item['Middle Name'] = isset($passport) ? $passport->getPassportMiddleName() : '';
+            $item['Last Name'] = isset($passport) ? $passport->getPassportLastName() : '';
+            if(isset($passport) && get_class($passport->getPassportDateOfIssue()) == "DateTime"){$ppid = $passport->getPassportDateOfIssue()->format($format);} else {$ppid = '';}
             $item['Passport Issue Date'] = $ppid;
-            if(isset($passport[0]) && get_class($passport[0]->getPassportDateOfExpiry()) == "DateTime"){$pped = $passport[0]->getPassportDateOfExpiry()->format($format);} else {$pped = '';}
+            if(isset($passport) && get_class($passport->getPassportDateOfExpiry()) == "DateTime"){$pped = $passport->getPassportDateOfExpiry()->format($format);} else {$pped = '';}
             $item['Passport Expiry Date'] = $pped;
-            $item['Nationality'] = isset($passport[0]) ? $passport[0]->getPassportNationality() : '';
-            $item['Code of Issuing State'] = isset($passport[0]) ? $passport[0]->getPassportIssuingState()->format($format) : '';
-            $item['Gender'] = isset($passport[0]) ? $passport[0]->getPassportGender() : '';
-            if(isset($passport[0]) && get_class($passport[0]->getPassportDateOfBirth()) == "DateTime"){$ppdob = $passport[0]->getPassportDateOfBirth()->format($format);} else {$ppdob = '';}
+            $item['Nationality'] = isset($passport) ? $passport->getPassportNationality() : '';
+            $item['Code of Issuing State'] = isset($passport) ? $passport->getPassportIssuingState() : '';
+            $item['Gender'] = isset($passport) ? $passport->getPassportGender() : '';
+            if(isset($passport) && get_class($passport->getPassportDateOfBirth()) == "DateTime"){$ppdob = $passport->getPassportDateOfBirth()->format($format);} else {$ppdob = '';}
             $item['Passport DOB'] = $ppdob;
-            $item['Medical Doctors Name'] = isset($medical[0]) ? $medical[0]->getDoctorName() : '';
-            $item['Medical Doctors Phone Number'] = isset($medical[0]) ? $medical->getDoctorNumber() : '';
-            $item['Medical Conditions'] = isset($medical[0]) ? $medical[0]->getConditions() : '';
-            $item['Medical Medications'] = isset($medical[0]) ? $medical[0]->getMedications() : '';
-            $item['Dietary details'] = isset($dietary[0]) ? $dietary[0]->getDescription() : '';
-            $item['Emergency Contact Name'] = isset($emergency[0]) ? $emergency[0]->getEmergencyName() :  '';
-            $item['Emergency Contact Relationship'] = isset($emergency[0]) ? $emergency[0]->getEmergencyRelationship() : '';
-            $item['Emergency Contact Phone Number'] = isset($emergency[0]) ? $emergency[0]->getEmergencyNumber() : '';
-            $item['Emergency Contact Email'] = isset($emergency[0]) ? $emergency[0]->getEmergencyEmail() : '';
+            $item['Medical Doctors Name'] = isset($medical) ? $medical->getDoctorName() : '';
+            $item['Medical Doctors Phone Number'] = isset($medical) ? $medical->getDoctorNumber() : '';
+            $item['Medical Conditions'] = isset($medical) ? $medical->getConditions() : '';
+            $item['Medical Medications'] = isset($medical) ? $medical->getMedications() : '';
+            $item['Dietary details'] = isset($dietary) ? $dietary->getDescription() : '';
+            $item['Emergency Contact Name'] = isset($emergency) ? $emergency->getEmergencyName() :  '';
+            $item['Emergency Contact Relationship'] = isset($emergency) ? $emergency->getEmergencyRelationship() : '';
+            $item['Emergency Contact Phone Number'] = isset($emergency) ? $emergency->getEmergencyNumber() : '';
+            $item['Emergency Contact Email'] = isset($emergency) ? $emergency->getEmergencyEmail() : '';
             $item['Parent Name'] = $parent->getFirstName() . ' ' . $parent->getLastName();
             $item['Parent Email'] = $parent->getEmail();
             if(get_class($passenger->getSignUpDate()) == "DateTime"){$psud = $passenger->getSignUpDate()->format($format);} else {$psud = '';}

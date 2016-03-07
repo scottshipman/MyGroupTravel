@@ -81,7 +81,7 @@
                     <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="passenger-export-menu">
                         {% if is_granted('ROLE_BRAND') %}
                             <li>
-                                   <a class="mdl-menu__item" href="{{ path('passenger_export', { 'type': 'brand', 'tourId': tour.id }) }}">{% trans %}passenger.labels.export-manifest{% endtrans %}</a>
+                                   <a class="pax-manifest mdl-menu__item" href="{{ path('passenger_export', { 'type': 'brand', 'tourId': tour.id }) }}">{% trans %}passenger.labels.export-manifest{% endtrans %}</a>
                                </li>
                             <li>
                          {% endif %}
@@ -333,6 +333,12 @@
 
                     },
                 });
+
+            // popup for passenger manifest warning
+            $(document).on('click', '.pax-manifest', function (e){
+                //e.preventDefault();
+                confirm("You are not permitted to use this information until the Organiser has confirmed that all information is correct");
+            });
         });
     </script>
 

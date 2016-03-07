@@ -84,7 +84,7 @@ class PassportType extends AbstractType
                 'format' => $date_format,
                 'required' => true,
                 'attr' => array(
-                    'class' => 'dateOfExpiry',
+                    'class' => 'dateOfBirth',
                 ),
                 'years' => range(date('Y') - 60, date('Y') - 1)
             ))
