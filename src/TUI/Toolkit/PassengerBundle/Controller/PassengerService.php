@@ -158,9 +158,9 @@ class PassengerService
         $freeUsers = $this->getPassengersByStatus('free', $id);
         $free = count($freeUsers);
         $passengerData->free = $free;
-        if (!empty($freeUsers)) {
-            $travellingUsers = array_merge($travellingUsers, $freeUsers);
-        }
+//        if (!empty($freeUsers)) {
+//            $travellingUsers = array_merge($travellingUsers, $freeUsers);
+//        }
 
         //Get Organizers
         $organizerCount = $container->get("permission.set_permission")->getUser('organizer', $tour->getId(), 'tour');

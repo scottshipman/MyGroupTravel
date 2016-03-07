@@ -181,7 +181,7 @@
                         {% endif %}
                     </div>
                 {% endif %}
-                {% if possibleTasksCount == 0 or possibleTasksCount == completedTasksCount %}
+                {% if possibleTasksCount | length == 0 or possibleTasksCount | length == completedTasksCount | length %}
                     <div class="mdl-card__supporting-text mdl-card--border expired-quote">
                         <p class="mdl-card__title-text no-tasks">{{ entity.fName|capitalize }} {% trans %}passenger.actions.no_tasks{% endtrans %}</p>
                         <div class="clear"></div>
@@ -421,12 +421,12 @@
 
 {% block footer_right %}
     <div class="quote-info">
-        <span class="quote-label">{% trans %}tour.show.footer.price{% endtrans %}</span>
+        {#<span class="quote-label">{% trans %}tour.show.footer.price{% endtrans %}</span>#}
 
-        <span class="quote-price">
-            {% if entity.tourReference.pricePerson %}
-                <strong>{% if entity.tourReference.currency %}{{ entity.tourReference.currency.htmlSymbol | raw }}{% endif %}{{ entity.tourReference.pricePersonPublic }}</strong>
-            {% endif %}
-        </span>
+        {#<span class="quote-price">#}
+            {#{% if entity.tourReference.pricePerson %}#}
+                {#<strong>{% if entity.tourReference.currency %}{{ entity.tourReference.currency.htmlSymbol | raw }}{% endif %}{{ entity.tourReference.pricePersonPublic }}</strong>#}
+            {#{% endif %}#}
+        {#</span>#}
     </div>
 {% endblock %}
