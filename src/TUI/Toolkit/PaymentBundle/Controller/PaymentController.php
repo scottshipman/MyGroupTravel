@@ -488,7 +488,7 @@ class PaymentController extends Controller
         ));
     }
 
-    public function getEditPaymentSettingsAction($tourId)
+    public function getEditPaymentSettingsAction(Request $request, $tourId)
     {
         $em = $this->getDoctrine()->getManager();
         $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
@@ -509,6 +509,9 @@ class PaymentController extends Controller
         }
 
         $passenger_payment_tasks = $tour->getPaymentTasksPassenger();
+        if($this->getRequest()->headers->get('referer')){
+            $_SESSION["tour_settings_referer"]=$this->getRequest()->headers->get('referer');
+        }
 
 
         return $this->render('PaymentBundle:Payment:settings.html.twig', array(

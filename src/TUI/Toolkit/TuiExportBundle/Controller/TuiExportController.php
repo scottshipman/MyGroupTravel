@@ -99,7 +99,7 @@ class TuiExportController extends Controller
                 'Emergency Contact Email',
                 'Parent Name',
                 'Parent Email',
-                'Date Singed Up',
+                'Date Signed Up',
                 'Travelling Status',
             );
         }

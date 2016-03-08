@@ -1552,7 +1552,16 @@ class TourController extends Controller
             $em->flush();
             $permission = $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
             $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.save') . $entity->getName());
-            return $this->redirect($this->generateUrl('manage_tour_show', array('id' => $id)));
+
+
+            // smarter redirect
+            if(isset($_SESSION["tour_settings_referer"]) && $_SESSION["tour_settings_referer"] != ''){
+                $referer = $_SESSION["tour_settings_referer"];
+                unset($_SESSION["tour_settings_referer"]);
+                return $this->redirect($referer);
+            } else {
+                return $this->redirect($this->generateUrl('manage_tour_show', array('id' => $id)));
+            }
         }
 
         $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.not_saved') . $entity->getName());
