@@ -125,6 +125,8 @@ tour:
         message_text: Message Text:
 
     dashboard:
+        organizer_count_single: Organizer
+        organizer_count_plural: Organizers
         status: Status
         complete: Complete
         not-complete: Not Complete

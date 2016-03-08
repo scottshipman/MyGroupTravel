@@ -127,7 +127,13 @@
                         <li>
                             <div class="profile-list-item item-1 tour-dashboard four-column">
                                 <span class="date-span">{{ passengerData.totalOrganizerCount }}</span>
-                                <label>{% transchoice passengerData.totalOrganizerCount %}{0} Organizers|{1} Organizer|]1,Inf[  Organizers}{% endtranschoice %}</label>
+                                <label>
+                                    {% if passengerData.totalOrganizerCount==1 %}
+                                        {% trans %}tour.dashboard.organizer_count_single{% endtrans %}
+                                    {% else %}
+                                        {% trans %}tour.dashboard.organizer_count_plural{% endtrans %}
+                                    {% endif %}
+                                </label>
                             </div>
                         </li>
                         <li>

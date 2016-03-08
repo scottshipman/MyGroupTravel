@@ -160,7 +160,7 @@
                     {% endif %}
 
                     {% if passenger[2] is sameas(TRUE) %} {# is this an organizer? #}
-                        {% set organizericon = '<a class="organizer-card" title = "Organizer"><i class="material-icons">group_add</i></a>' %}
+                        {% set organizericon = '<a class="organizer-card" title = "' ~ 'passenger.labels.organizer' | trans ~ '"><i class="material-icons">group_add</i></a>' %}
                         {% set paxClass = "organizers" %}
                         {% if tour.organizer.id == passenger[1].id %}
                             {% set signedUp = 'passenger.labels.primary-organizer' | trans %}
