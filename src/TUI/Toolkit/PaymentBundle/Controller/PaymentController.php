@@ -325,6 +325,7 @@ class PaymentController extends Controller
         $tour = $passenger->getTourReference();
         $form = $this->createCustomScheduleForm($tour->getId(), $passenger);
         $form->handleRequest($request);
+        $updated=array();
         if ($form->isValid()) {
             $data = $form->getData();
             foreach($paymentTasks as $paymentTask) {
@@ -338,6 +339,7 @@ class PaymentController extends Controller
                         if ($passengerOverride !== NULL) {
                             $passengerOverride->setValue($data['task'.$key]);
                             $em->persist($passengerOverride);
+                            $updated[$key] = 'default';
                         }
                     }
 
@@ -350,6 +352,7 @@ class PaymentController extends Controller
                         $newPaymentTask->setPaymentTaskSource($paymentTask['item']);
                         $newPaymentTask->setValue($data['task'.$key]);
                         $em->persist($newPaymentTask);
+                        $updated[$newPaymentTask->getId()] = 'override' ;
 
                     }
                 }
@@ -358,8 +361,18 @@ class PaymentController extends Controller
 
 
             $em->flush();
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess("Payment Schedule Updated for " . $passenger->getFName() . " " . $passenger->getLName() . ".");
 
-            return $this->redirect($this->generateUrl('manage_passenger_show', array('id' => $passengerId)));
+           // return $this->redirect($this->generateUrl('manage_passenger_show', array('id' => $passengerId)));
+            $r = array (
+                $passengerId,
+                $updated,
+            );
+            $responseContent =  json_encode($r);
+            return new Response($responseContent,
+                Response::HTTP_OK,
+                array('content-type' => 'application/json')
+            );
         }
 
         // form not valid or has errors
@@ -597,7 +610,7 @@ class PaymentController extends Controller
         return $this->render('PaymentBundle:Payment:passengerPaymentMiniCard.html.twig', array(
             'due' => $due,
             'payments' => $payments,
-            'paymentTasks' => $paymentTasks,
+         //   'paymentTasks' => $paymentTasks,
             'currency' => $currency,
             'locale' => $locale,
             'pax' => $passenger,
@@ -618,7 +631,11 @@ class PaymentController extends Controller
         $paymentTasks = $this->get("payment.getPayments")->getPassengersPaymentTasks($passengerId);
         $passenger = $em->getRepository('PassengerBundle:Passenger')->find($passengerId);
         $currency = $passenger->getTourReference()->getCurrency();
-        $form = $this->createCustomScheduleForm($tourId, $passenger);
+        $form = $this->createCustomScheduleForm($tourId, $passenger, array(
+            'attr' => array(
+                'id' => 'ajax_custom_schedule_form'
+                ),
+        ));
 
         return $this->render('PaymentBundle:Payment:passengerCustomScheduleForm.html.twig', array(
             'paymentTasks' => $paymentTasks,
@@ -648,7 +665,7 @@ class PaymentController extends Controller
             $date_format = 'M d Y';
         }
 
-        $tasks = $tour->getPaymentTasksPassenger();;
+        $tasks = $tour->getPaymentTasksPassenger();
         $defaultData = array('message' => 'Type your message here');
         $form = $this->createFormBuilder($defaultData)
             ->setMethod('POST')
@@ -656,15 +673,17 @@ class PaymentController extends Controller
 
         foreach($tasks as $task) {
             $override=NULL;
+            $value = $task->getValue();
             if($paymentOverride = $em->getRepository('TourBundle:PaymentTaskOverride')
                 ->findBy(array('paymentTaskSource'=>$task->getId(), 'passenger'=>$passenger->getId()))){
-                $task->setValue($paymentOverride[0]->getValue());
+                //$task->setValue($paymentOverride[0]->getValue());
+                $value = $paymentOverride[0]->getValue();
                 $override = $paymentOverride[0]->getId();
             }
             $form->add('task' . $task->getId(), 'money', array(
                 'currency' => $currency->getCode(),
                 'label' => $task->getName() . ' (due '. $task->getDueDate()->format($date_format) . ')',
-                'data' => $task->getValue(),
+                'data' => $value,
                 'constraints' => array(
                     new NotBlank(),
                 )))

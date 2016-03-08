@@ -35,7 +35,7 @@ payment_edit:
 payment_schedule_update:
     path:     passenger/{passengerId}/payment_update
     defaults: { _controller: "PaymentBundle:Payment:scheduleUpdate" }
-    methods:  [POST, PUT]
+    methods:  [POST]
 
 payment_delete:
     path:     /{id}/delete

@@ -88,6 +88,7 @@ class PaymentService {
         $tour = $passenger->getTourReference();
         $tourPaymentTasks = $tour->getPaymentTasksPassenger();
         foreach($tourPaymentTasks as $tourPaymentTask){
+           // $tourPaymentTask->setOverrideValue(0);
             if($passenger->getFree() == TRUE)
             {$taskAmt = 0; }
             else {
@@ -98,7 +99,7 @@ class PaymentService {
                         'passenger' => $passengerId
                     ))
                 ) {
-                    $tourPaymentTask->setOverrideValue($paymentOverride[0]->getValue());
+                   // $tourPaymentTask->setOverrideValue($paymentOverride[0]->getValue());
                     $taskAmt = $paymentOverride[0]->getValue();
                 }
             }
