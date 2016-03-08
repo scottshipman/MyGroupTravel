@@ -1,0 +1,65 @@
+#PaymentBundle/Resources/translations/messages.en.yml
+payment:
+    title:
+        edit: Edit Payment
+        index: Payments
+        new: Log a Payment
+        show: Payment
+
+    page_title:
+        edit: Edit Payment
+        index: Payments
+        new: Log a Payment
+        show: Payment
+
+    actions:
+        back: Back to the Dashboard
+        edit: Edit
+        update: Update
+        create: Create
+        delete: Delete
+        create_new: Log a New Payment
+        view: View
+        edit: Edit
+        log-payment: Log a Payment
+        customize-payments: Edit Payment Schedule
+
+    flash:
+        save: "This payment has been logged."
+        refund_save: "This refund has been issued."
+        delete: Payment deleted -
+
+    labels:
+        payment: Payment
+        add: Add Payment
+        balances: Passenger Balances
+        due: Due
+        payment_settings: Payment Settings
+        balances: Passenger Balances
+        Paid: Paid
+        total_paid: Total Paid
+        total_due: Total Due
+        past_due: Past Due
+        payment_history: Payment History
+        collected: Collected
+        schedule: Payment Schedule
+        issue_refund: Issue a Refund
+
+    form:
+        date: Date Received (MM-DD-YYYY)
+        refund_date: Date Issued (MM-DD-YYYY)
+        value: Amount Received
+        refund_value: Refund Amount
+        note: Note
+        headline: Log a New Payment
+        message: "This payment is being logged for %fname% %lname% for the Tour: %tourname%."
+        refund_message: "This refund is being logged for the selected passenger for the Tour: %tourname%."
+        error:
+            value: Value must be numeric only
+
+        success:
+            message: This payment has been logged.
+
+brand_payment:
+    form:
+        message: "This payment is being logged for %iname% for the Tour: %tourname%."

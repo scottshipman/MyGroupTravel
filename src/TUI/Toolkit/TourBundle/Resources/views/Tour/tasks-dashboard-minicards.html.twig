@@ -1,0 +1,51 @@
+{% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
+{#{% set tourId = pax[0].tourReference.id %}#}
+{% set passenger = pax %}
+{#{% set user = pax[1] %}#}
+{%  set icon = 'event' %}
+{%  set color = 'blue' %}
+{#{% if status == "paid" %}{%  set color = 'green' %}{%  set icon = 'done' %} {% endif %}#}
+{#{% if status ==  "overdue" %}{%  set color = 'red' %}{%  set icon = 'warning' %}{% endif %}#}
+{% set emergency = "emergency-incomplete" %}{% if passenger.completedTasks['emergency'] is defined %}{% set emergency = "emergency" %}{% endif %}
+{% set medical = "medical-incomplete" %}{% if passenger.completedTasks['medical'] is defined %}{% set medical = "medical" %}{% endif %}
+{% set passport = "passport-incomplete" %}{% if passenger.completedTasks['passport'] is defined %}{% set passport = "passport" %}{% endif %}
+{% set dietary = "dietary-incomplete" %}{% if passenger.completedTasks['dietary'] is defined %}{% set dietary = "dietary" %}{% endif %}
+{% set complete = "" %}{% if passenger.completedTasks|length == passenger.possibleTasks|length %}{% set complete = "complete" %}{% endif %}
+
+{#<a href="{{ path('manage_passenger_show', {'id': passenger.id }) }}" class="dashboard-titles">#}
+    <div class="tour-edit mdl-shadow--2dp" style="background-color:white; margin-bottom: 0;" passenger="{{ passenger.id }}">
+        <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
+            <div style="float: left; color: grey;" class="pcardname">
+                <div class="{{ emergency }} {{ medical }} {{ passport }} {{ dietary }} {{ complete }}"></div>
+                <a href="{{ path('manage_passenger_show', {'id': passenger.id }) }}">
+                    {% if passenger.media %}
+                        <img style="float: left; margin-right: 15px;"  class="tui-image-avatar" src="{{ ( passenger.media.getRelativePath ~ "/" ~ passenger.media.getHashedFilename ) | imagine_filter('thumbnail') }}">
+                    {% elseif passenger.fName and passenger.lName %}
+                        <span style="float: left; margin-right: 15px;"  class="tui-text-avatar mdl-typography--headline">{{ passenger.fName[:1] }}{{ passenger.lName[:1] }}</span>
+                    {% else %}
+                        <span style="float: left; margin-right: 15px;"  class="tui-text-avatar mdl-typography--headline">{{ passenger.fName[:1] }}</span>
+                    {% endif %}
+                </a>
+                <p class="mini-card-title"><strong>{{ passenger.fName }}</strong></p>
+                <p class="mini-card-title"><strong>{{ passenger.lName }}</strong></p>
+                {#<a href="{{ path('manage_passenger_show', {'id': passenger.id }) }}" class="dashboard-titles">#}
+                <a href="{{ path('manage_passenger_show', {'id': passenger.id }) }}">
+                    {% if passenger.completedTasks|length  ==  passenger.possibleTasks|length %}
+                        <i style="color:green; border-radius:25px; border: 1px solid green; padding:10px; position:absolute; right:20px;" class="material-icons" >done</i>
+                        <i style=" display:none; position:absolute; right:20px; padding:10px;" class="material-icons" >arrow_forward</i>
+                    {% else %}
+                        <i style="display:none; color:green; border-radius:25px; border: 1px solid green; padding:10px; position:absolute; right:20px;" class="material-icons" >done</i>
+                        <i style="position:absolute; right:20px; padding:10px;" class="material-icons" >arrow_forward</i>
+                    {% endif %}
+                </a>
+                {#</a>#}
+                <p class="mini-card-title email"><a style="color:{{ brand.secondaryColor }}" href="mailto:{{ passenger.parent.email }}"><strong>{{ passenger.parent.email }}</strong></a></p>
+                <label style="display: block; margin-left: 63px; min-width: 100%;">
+                    <p style="margin-bottom: 0;" class="info-bar">{{ passenger.completedTasks|length }}/{{ passenger.possibleTasks|length }} {% trans %}tour.dashboard.tasks_complete{% endtrans %}</p>
+                    <p style="margin-bottom: 0;" class="info-task-bar"></p>
+                </label>
+
+            </div>
+        </div>
+    </div>
+{#</a>#}

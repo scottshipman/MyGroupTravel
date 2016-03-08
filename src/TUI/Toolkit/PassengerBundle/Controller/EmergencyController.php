@@ -203,12 +203,12 @@ class EmergencyController extends Controller
             $em->flush();
 
             $emergencyNumber = $entity->getEmergencyNumber();
-            $emergencyNumberFormatted = $emergencyNumber->getNationalNumber();
+//            $emergencyNumberFormatted = $emergencyNumber->getNationalNumber();
 
             $data = array(
                 $entity->getEmergencyName(),
                 $entity->getEmergencyRelationship(),
-                $emergencyNumberFormatted,
+                $emergencyNumber,
                 $entity->getEmergencyEmail(),
             );
 

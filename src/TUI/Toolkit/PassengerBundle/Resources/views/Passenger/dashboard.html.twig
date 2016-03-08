@@ -75,6 +75,19 @@
 
                 <div class="mdl-card__title">
                     <h3 id="card-title" class="mdl-card__title-text">{% trans %}passenger.labels.passenger_list{% endtrans %}</h3>
+                    <button style="position: absolute; right: 20px; color:grey;" id="passenger-export-menu" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+                        <i class="material-icons">more_vert</i>
+                    </button>
+                    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="passenger-export-menu">
+                        {% if is_granted('ROLE_BRAND') %}
+                            <li>
+                                   <a class="pax-manifest mdl-menu__item" href="{{ path('passenger_export', { 'type': 'brand', 'tourId': tour.id }) }}">{% trans %}passenger.labels.export-manifest{% endtrans %}</a>
+                               </li>
+                            <li>
+                         {% endif %}
+                            <a class="mdl-menu__item" href="{{ path('passenger_export', { 'type': 'organizer', 'tourId': tour.id }) }}">{% trans %}passenger.labels.export-organizer{% endtrans %}</a>
+                        </li>
+                    </ul>
                 </div>
 
                 <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
@@ -95,6 +108,14 @@
                         <div style="clear: both"></div>
                         <a id="invite-passengers" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="#"><i class="fa fa-users"></i>{% trans %}passenger.labels.invite{% endtrans %}</a>
                         <a id="accept-tour" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="#"><i class="fa fa-user-plus"></i>{% trans %}passenger.labels.add{% endtrans %}</a>
+                    {% if unactivatedCount > 0 %}
+                            <a href="{{ path('activate_all_passengers', { 'tourId': tour.id }) }}"
+                               title ="{% trans %}passenger.actions.send_activation_description{% endtrans %}"
+                               class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+                               onclick="return confirm('{% trans %}passenger.actions.send_message{% endtrans %}')">
+                                <i style="vertical-align:middle;" class="material-icons">email</i> {% trans %}passenger.actions.send_activation{% endtrans %}
+                            </a>
+                        {% endif %}
                 </div>
             </div>
 
@@ -175,10 +196,10 @@
                             {% else %}
                                 <span style="float: left; margin-right: 15px;"  class="tui-text-avatar mdl-typography--headline">{{ passenger[0].fName[:1] }}</span>
                             {% endif %}
-                            <p style="display: inline-block"><strong>{{ passenger[0].fName }}</strong></p>
-                            <p style="display: inline-block"><strong>{{ passenger[0].lName }}</strong></p>
-                            <p style="display: inline-block"><strong><a href="mailto:{{ passenger[1].email }}">{{ passenger[1].email }}</a></strong></p>
-                            <label style="display: inline-block; margin-left: 63px; min-width: 100%;">{{ statusicon | raw }} {{ freeicon | raw }}{{ organizericon | raw }} {{ signedUp }}</label>
+                            <p class="mini-card-title"><strong>{{ passenger[0].fName }}</strong></p>
+                            <p class="mini-card-title"><strong>{{ passenger[0].lName }}</strong></p>
+                            <p class="mini-card-title"><strong><a href="mailto:{{ passenger[1].email }}">{{ passenger[1].email }}</a></strong></p>
+                            <label style="display: block; margin-left: 63px; min-width: 100%;">{{ statusicon | raw }} {{ freeicon | raw }}{{ organizericon | raw }} {{ signedUp }}</label>
                             </div>
                             {% if  passenger[0].status != "Pending Invite"%}
                                 <button style="position: absolute; right: 20px; color:grey; margin-top:10px;" id="passenger-actions-menu-drop-{{ passenger[0].id }}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
@@ -312,13 +333,19 @@
 
                     },
                 });
+
+            // popup for passenger manifest warning
+            $(document).on('click', '.pax-manifest', function (e){
+                //e.preventDefault();
+                confirm("You are not permitted to use this information until the Organiser has confirmed that all information is correct");
+            });
         });
     </script>
 
 {% endblock %}
 
 {% block footer_left %}
-    {% if app.user.email != tour.salesAgent.email%} {# Show Sales Agent Info to an Organizer#}
+    {% if app.user.email == tour.organizer.email%} {# Show Sales Agent Info to an Organizer#}
         {% if tour.salesAgent %}
             <span class="intro">
                     {{ brand.name }} {% trans %}tour.show.footer.intro_org{% endtrans %}

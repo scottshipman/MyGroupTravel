@@ -1,0 +1,117 @@
+{% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
+{% set tourId = passenger.tourReference.id %}
+<div class="waitlist tour-edit mdl-card mdl-shadow--2dp">
+    <div class="mdl-card__title">
+        <h3 class="mdl-card__title-text">{% trans %}passenger.labels.payments{% endtrans %}</h3>
+
+          {# only if an organizer or brand and not free status#}
+        {% if  is_granted("ROLE_BRAND") or "tour" | getRoles(tourId) == "organizer" or "tour" | getRoles(tourId) == "assistant"%}
+            {% if passenger.free is sameas(false) %}
+                    <button id="payment-actions-menu-drop-{{ passenger.id }}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-button">
+                        <i class="material-icons">more_vert</i>
+                    </button>
+                <a href="#"><i id="passenger-close" style="display: none;" class="material-icons" passenger="{{ passenger.id }}">close</i></a>
+                {% embed "PaymentBundle:Payment:paymentSubMenu.html.twig" %}{% endembed %}
+            {% endif %}
+        {% endif %}
+        <div class="clear"></div>
+    </div>
+    {% set overdue = 0 %}
+        {% if paymentTasks is not empty and (passenger.free is sameas(false) and passenger.status != 'waitlist') %}
+
+                {% for paymentTask in paymentTasks %}
+                    {% set overdue = overdue + paymentTask.overdueAmt %}
+                        {%  set color = 'blue' %}{%  set icon = 'event' %}
+                        {% if paymentTask.status == "paid" %}{%  set color = 'green' %}{%  set icon = 'done' %} {% endif %}
+                        {% if paymentTask.status ==  "overdue" %}{%  set color = 'red' %}{%  set icon = 'warning' %}{% endif %}
+
+                <div class="mdl-card__supporting-text mdl-card--border">
+                      <i style="color:{{ color }};" class="material-icons" >{{ icon }}</i>
+                      <p class="mdl-card__title-text task-title weighted">{{ paymentTask.item.name }}</p>
+                     <label class="task-due-date"> due by {{ paymentTask.item.dueDate | date(format) }}</label>
+                     <p class="row-content indented">/ {{ currency.htmlSymbol | raw  }}
+                         {% if paymentTask.item.overrideValue == null %}
+                            {{ paymentTask.item.value }}
+                         {% else %}
+                            {{ paymentTask.item.overrideValue }}
+                         {% endif %}
+                     </p>
+                     <p class="row-content weighted">{{ currency.htmlSymbol | raw  }}{{ paymentTask.credit }}</p>
+                </div>
+                {% endfor %}
+
+        {% endif %}
+        <div class="mdl-card__supporting-text mdl-card--border">
+            <label class="row-label">{% trans %}payment.labels.total_paid{% endtrans %}</label>
+            <p class="row-content green">{{ currency.htmlSymbol | raw  }}{{ payments.total }}</p>
+        </div>
+    {% if passenger.status != 'waitlist' %}
+        <div class="mdl-card__supporting-text mdl-card--border">
+            <label class="row-label">{% trans %}payment.labels.total_due{% endtrans %}</label>
+            <p class="row-content blue">{{ currency.htmlSymbol | raw  }}{{ due.total }}</p>
+        </div>
+    {% endif %}
+        {% if overdue > 0 %}
+            <div class="mdl-card__supporting-text mdl-card--border">
+                <label class="row-label">{% trans %}payment.labels.past_due{% endtrans %}</label>
+                <p class="row-content red">{{ currency.htmlSymbol | raw  }}{{ overdue }}</p>
+            </div>
+        {% endif %}
+        {% if payments.total >0  %}
+            <span id="payment-history-link"><a href="" id="toggle-payment-history" class="payment-history-link" style="color: {{ brand.secondaryColor }};">{% trans %}payment.labels.payment_history{% endtrans %} <br /><i class="material-icons">expand_more</i></a></span>
+            <div style="display:none;" id="payment-history">
+                <div class="mdl-card__title">
+                    <h3 class="mdl-card__title-text">{% trans %}payment.labels.payment_history{% endtrans %}</h3>
+                </div>
+                {% for paid in payments.items %}
+                <div class="mdl-card__supporting-text mdl-card--border">
+                    <p class="mdl-card__title-text task-title weighted">{{ currency.htmlSymbol | raw  }}{{ paid.value | abs }}
+                    {% if paid.value < 0 %}
+                        <span style="color:green;">Refund Issued</span>
+                    {% endif %}
+                    </p>
+                    <label class="task-due-date"> on {{ paid.date | date(format)}} {% if paid.note is not empty %}- {{ paid.note }} {% endif %}</label>
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+<script>
+    $(document).ready(function () {
+
+            // Payment popup
+            $(document).on('click', 'a.make-a-payment', function (e) {
+            var t = $(this);
+            e.preventDefault();
+            var passengerId = t.attr('passenger');
+            var tourId = t.attr('tour');
+            //$("#loader").css("display", "block");
+            toolkitStandardPopup("Log A Payment", '/payment/tour/' + tourId + '/passenger/' + passengerId + '/new' );
+            });
+
+            // Customize a passenger's payment schedule
+            $(document).on('click', 'a.edit-payment-schedule', function (e) {
+                var t = $(this);
+                e.preventDefault();
+                var passengerId = t.attr('passenger');
+                var tourId = t.attr('tour');
+                //$("#loader").css("display", "block");
+                toolkitStandardPopup("Customize {{ passenger.fname }}'s Payment Schedule", '/payment/tour/' + tourId + '/passenger/' + passengerId + '/customize' );
+            });
+
+
+            // toggle payment history
+            $(document).on('click', 'a.payment-history-link', function(e){
+                e.preventDefault();
+                $('#payment-history').toggle(400, function(){
+                    if ($('#toggle-payment-history').text()=='Payment History expand_more') {
+                        $('#toggle-payment-history').html('{% trans %}payment.labels.payment_history{% endtrans %} <br /><i class="material-icons">expand_less</i>');
+                        console.log($('#toggle-payment-history').html());
+                    } else if ($('#toggle-payment-history').text()=='Payment History expand_less') {
+                        $('#toggle-payment-history').html('{% trans %}payment.labels.payment_history{% endtrans %} <br /><i class="material-icons">expand_more</i>');
+                    }
+                });
+            });
+
+    });
+</script>

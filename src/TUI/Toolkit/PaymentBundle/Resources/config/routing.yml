@@ -1,0 +1,8 @@
+payment_payment:
+    resource: "@PaymentBundle/Resources/config/routing/payment.yml"
+    prefix:   /payment
+
+payment_brand_payment:
+    resource: "@PaymentBundle/Resources/config/routing/brand_payment.yml"
+    prefix:   /brand_payment
+

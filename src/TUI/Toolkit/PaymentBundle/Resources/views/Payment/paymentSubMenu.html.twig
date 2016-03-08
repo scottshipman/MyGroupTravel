@@ -1,0 +1,13 @@
+{% if passenger[0] is defined %}{% set passenger = passenger[0] %}{% endif %}
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="payment-actions-menu-drop-{{ passenger.id }}">
+    <span>
+        {% if showViewLink is defined and showViewLink is sameas(TRUE) %}
+            <li><a href="{{ path('manage_passenger_show', { 'id': passenger.id }) }}" class="mdl-menu__item">{% trans %}passenger.actions.view_passenger{% endtrans %}</a></li>
+        {% endif %}
+
+        {% if passenger.free is sameas (false) %}
+            <li><a tour="{{ passenger.tourReference.id }}" passenger="{{ passenger.id }}" id="passenger-log-payment" href="" class="mdl-menu__item make-a-payment">{% trans %}payment.actions.log-payment{% endtrans %}</a></li>
+            <li><a tour="{{ passenger.tourReference.id }}" passenger="{{ passenger.id }}" id="passenger-custom-payments" href="" class="mdl-menu__item edit-payment-schedule">{% trans %}payment.actions.customize-payments{% endtrans %}</a></li>
+        {% endif %}
+    </span>
+</ul>

@@ -57,6 +57,20 @@ class PaymentTask
     private $type;
 
 
+    private $overrideValue;
+
+    public function getOverrideValue()
+    {
+        return $this->overrideValue;
+    }
+
+    public function setOverrideValue($overrideValue)
+    {
+        $this->overrideValue = $overrideValue;
+        return $this;
+    }
+
+
     /**
      * Get id
      *

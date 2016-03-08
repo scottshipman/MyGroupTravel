@@ -46,16 +46,16 @@
 
         </ul>
 
-        <div class="tour-edit-organizer-left">
-            <label>{% trans %}tour.show.organizers{% endtrans %}</label><br>
-            {% if tour.organizer.media %}
-                <img class="tui-image-avatar" src="{{ ( tour.organizer.media.getRelativePath ~ "/" ~ tour.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ tour.organizer.username }}">
-            {% elseif tour.organizer.firstName and tour.organizer.lastName %}
-                <span class="tui-text-avatar mdl-typography--headline">{{ tour.organizer.firstName[:1] }}{{ tour.organizer.lastName[:1] }}</span>
-            {% else %}
-                <span class="tui-text-avatar mdl-typography--headline">{{ tour.organizer.username[:1] }}</span>
-            {% endif %}
-        </div>
+        {#<div class="tour-edit-organizer-left">#}
+            {#<label>{% trans %}tour.show.organizers{% endtrans %}</label><br>#}
+            {#{% if tour.organizer.media %}#}
+                {#<img class="tui-image-avatar" src="{{ ( tour.organizer.media.getRelativePath ~ "/" ~ tour.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ tour.organizer.username }}">#}
+            {#{% elseif tour.organizer.firstName and tour.organizer.lastName %}#}
+                {#<span class="tui-text-avatar mdl-typography--headline">{{ tour.organizer.firstName[:1] }}{{ tour.organizer.lastName[:1] }}</span>#}
+            {#{% else %}#}
+                {#<span class="tui-text-avatar mdl-typography--headline">{{ tour.organizer.username[:1] }}</span>#}
+            {#{% endif %}#}
+        {#</div>#}
     </div>
 
     <div class="tour-show-right-column">
@@ -79,27 +79,24 @@
         </div>
         <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
             <ul>
-                {% if tour.paymentTasksPassenger is not empty %}
-                    {% for paymentTask in tour.paymentTasksPassenger %}
-                        {% if paymentTask.paidDate == null %}
-                            {% if loop.first %}
-                                <li>
-                                    <div class="profile-list-item item-1 tour-dashboard three-column">
-                                        <span class="date-span">{% if tour.currency %}<p id="currency" style="display: inline; font-size: inherit;">{{ tour.currency.htmlSymbol | raw }}</p>{% endif %}{{ paymentTask.value * passengerObjects|length }}</span>
-                                        <label>{{ paymentTask.name }} {% trans %}tour.dashboard.due{% endtrans %} {{ paymentTask.dueDate|date(shortFormat) }}</label>
-                                    </div>
-                                </li>
-                            {% endif %}
-                        {% endif %}
-                    {% endfor %}
-                {% elseif tour.paymentTasksPassenger is empty %}
+                {% if priceData['overdueTotal'] > 0 %}
+                    <li>
+                        <div style="color:red;" class="profile-list-item item-1 tour-dashboard three-column">
+                            <span class="date-span">{% if tour.currency %}<p id="currency" style="display: inline; font-size: inherit;">{{ tour.currency.htmlSymbol | raw }}</p>{% endif %}{{ priceData['overdueTotal'] }}</span>
+                            <label> {% trans %}tour.dashboard.overdue{% endtrans %} </label>
+                        </div>
+                    </li>
+                {% else %}
                     <li>
                         <div class="profile-list-item item-1 tour-dashboard three-column">
-                            <span class="date-span">{% trans %}tour.dashboard.na{% endtrans %}</span>
-                            <label>{% trans %}tour.dashboard.no_payments{% endtrans %}</label>
+                            <span class="date-span">{% if tour.currency %}<p id="currency" style="display: inline; font-size: inherit;">{{ tour.currency.htmlSymbol | raw }}</p>{% endif %}{{ priceData['creditTotal'] }}</span>
+                            <p id="currency" style="display: inline; font-size: inherit;"> / {{ tour.currency.htmlSymbol | raw }}</p>{{ priceData['priceTotal'] }}</span>
+                            <label> {% trans %}tour.dashboard.parent_price{% endtrans %} </label>
                         </div>
                     </li>
                 {% endif %}
+
+
                 <li>
                     <div class="profile-list-item item-2 tour-dashboard three-column">
                         <span class="date-span">{{ totalCompletedTasks }}/{{ totalPossibleTasks }}</span>
@@ -129,8 +126,26 @@
         </div>
     </div>
 
-    {% for passengerObject in  passengerObjects %}
+    {% for passenger in  passengerObjects %}
+    {%  set passengerObject = passenger['passenger'] %}
     {% set age = date(passengerObject.dateOfBirth).diff(date("now")) %}
+    {% if passengerObject.status == "accepted" %}
+        {% set statusicon =  '<a class="' ~ passengerObject.status ~ 'icon" title = "' ~ passengerObject.status | paxLabel ~ '"><i class="material-icons statusicon">verified_user</i></a>'%}
+        {% set status = 'accepted' %}
+    {% else %}
+        {% set statusicon = '<a class="' ~ passengerObject.status ~ 'icon" title = "' ~ passengerObject.status | paxLabel ~ '"><i class="material-icons statusicon">list</i></a>'%}
+        {% set status = 'waitlist' %}
+    {% endif %}
+    {% if passengerObject.free == 1 %}
+        {% set freeLabel = "free" | paxLabel %}
+        {% set freeicon = '<a class="freeicon" title = "' ~ freeLabel ~ '"><i class="material-icons statusicon">money_off</i></a>' %}
+        {%  set freeClass = "free" %}
+        {% set statusicon = '' %}
+        {% set status = '' %}
+    {% else %}
+        {% set freeClass = '' %}
+        {% set freeicon = '' %}
+    {% endif %}
         <div class="tour-edit mdl-card mdl-shadow--2dp">
             <div class="mdl-card__title">
                 <h3 class="mdl-card__title-text">{{ passengerObject.fName }} {{ passengerObject.lName }}</h3>
@@ -151,7 +166,7 @@
                 <div class="passenger-details">
                     <h3><span id="passenger-fname">{{ passengerObject.fname }}</span> <span id="passenger-lname">{{ passengerObject.lname }}</span></h3>
                     <label style="display: block">
-                    {#{{ statusicon | raw }} {{ freeicon | raw }}{{ organizericon | raw }}#}
+                    {{ statusicon | raw }} {{ freeicon | raw }}
                     <span id="passenger-dob">{{ 'passenger.form.invite.age' | trans }}: {{ (age.days/365)|round(0, 'floor') }}</span>
                      {% if passengerObject.gender != 'undefined' %}, <span id="passenger-gender">{{ 'passenger.form.invite.gender' | trans }}: {{ passengerObject.gender }}</span>{% endif %}
                      </label>
@@ -161,13 +176,13 @@
                        <ul>
                            <li>
                                <div class="profile-list-item item-1 tour-dashboard two-column">
-                                   <span class="date-span">{% if passengerObject.tourReference.currency %}{{ passengerObject.tourReference.currency.htmlSymbol | raw}}{% endif %} {{ passengerObject.tourReference.pricePersonPublic }}</span>
-                                   <label>Price Per Person</label>
+                                   <span class="date-span">{% if passengerObject.tourReference.currency %}{{ passengerObject.tourReference.currency.htmlSymbol | raw}}{% endif %} {{ passenger['paxPrice'] }}</span>
+                                   <label>Passenger's Price</label>
                                </div>
                            </li>
                           <li>
                                <div class="profile-list-item item-2 tour-dashboard two-column">
-                                    <span class="date-span">{{ passengerObject.completedTasks|length }}/{{ possibleTasksCount}}</span>
+                                    <span class="date-span">{{ passenger['completedTasksCount'] }}/{{ possibleTasksCount}}</span>
                                    <label>Tasks Completed</label>
                                </div>
                            </li>
@@ -185,7 +200,7 @@
 {% endblock %}
 
 {% block footer_left %}
-    {% if tour.salesAgent.email%} {# Show Sales Agent Info to an Organizer#}
+    {% if app.user.email == tour.organizer.email%} {# Show Sales Agent Info to an Organizer#}
         {% if tour.salesAgent %}
             <span class="intro">
                     {{ brand.name }} {% trans %}tour.show.footer.intro_org{% endtrans %}
@@ -234,12 +249,12 @@
 
 {% block footer_right %}
     <div class="quote-info">
-        <span class="quote-label">{% trans %}tour.show.footer.price{% endtrans %}</span>
+        {#<span class="quote-label">{% trans %}tour.show.footer.price{% endtrans %}</span>#}
 
-        <span class="quote-price">
-            {% if tour.pricePerson %}
-                <strong>{% if tour.currency %}{{ tour.currency.htmlSymbol | raw }}{% endif %}{{ tour.pricePersonPublic }}</strong>
-            {% endif %}
-        </span>
+        {#<span class="quote-price">#}
+            {#{% if tour.pricePerson %}#}
+                {#<strong>{% if tour.currency %}{{ tour.currency.htmlSymbol | raw }}{% endif %}{{ tour.pricePersonPublic }}</strong>#}
+            {#{% endif %}#}
+        {#</span>#}
     </div>
 {% endblock %}

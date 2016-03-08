@@ -34,8 +34,8 @@
         <div class="inner">
             {% if entity.isTemplate == 0 %}{# no Institutions on Templates #}
                 {% if brand.media %}
-                    <div class="brand-logo">
-                        <img src="{{ ( brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ brand.name }}">
+                    <div class="brand-logo public-logo">
+                        <img src="{{ ( brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) | imagine_filter('publicLogo') }}" alt="{{ brand.name }}">
                     </div>
                 {% endif %}
             {% endif %}

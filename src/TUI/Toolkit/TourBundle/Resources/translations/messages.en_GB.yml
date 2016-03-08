@@ -29,7 +29,8 @@ tour:
                 id: Id
                 name: Name
                 value: Amount Due
-                duedate: Due Date
+                paid: Paid
+                duedate: Due On
                 paiddate: Paid Date
                 type: Type
                 string: String
@@ -101,9 +102,9 @@ tour:
        price: Price Per Passenger
        name: Tour Name
        number: Tour Reference
-       organizers: Organisers
+       organizers: Primary Organiser
        number: Tour Reference
-       schedule: Passenger Payment Schedule
+       schedule: Tour Payment Schedule
        footer:
             intro: Your Contact:
             intro_org: Contact:
@@ -126,7 +127,26 @@ tour:
 
     dashboard:
         status: Status
+        complete: Complete
+        not_complete: Not Complete
+        show_complete: Show Complete
+        show_not_complete: Show Not Complete
+        tasks_complete: Tasks Completed
+        emergency_info: Emergency Contact Info
+        medical_info: Medical Info
+        passport_info: Passport Info
+        dietary_info: Dietary Info
+        all_done: All Done!
+        in_progress: In Progress
+        passenger_tasks: Passenger Tasks
+        medical: Medical
+        dietary: Dietary
+        emergency: Emergency Contact
+        passport: Passport
+        tasks: Tasks
+        passenger_tasks: Passenger Tasks
         due: due by
+        overdue: Amount Past Due
         no_payments: No payments due at this time
         na: N/A
         signups: Sign-ups
@@ -166,6 +186,7 @@ tour:
         departure: Days until departure
         registrations: Registrations
         passengers: Passengers
+        parent_price: Paid / Total Tour Price
 
     edit:
         summary: Summary
@@ -256,6 +277,7 @@ tour:
                 enabled: Enabled
                 ba_lname: Primary Business Admin (Last Name)
                 o_lname: Organiser (Last Name)
+                sc_lname: Other Business Admin (Last Name)
         column:
             title:
                 last_login: Last Login
@@ -289,6 +311,7 @@ tour:
             message: Message to the organiser
         payment_task:
             value: Amount
+            type: Payment Type
             date: Due Date (DD-MM-YYYY)
         tour_setup:
             price: Price per Person
@@ -331,7 +354,8 @@ tour:
             paying_places: Paying Places
             free_places: Free Places
             price_per_person: Price per Person
-            add_payment: Add a Payment
+            add_payment: Add a Schedule Item
+            log_payment: Log a Collected Payment
 
 
 

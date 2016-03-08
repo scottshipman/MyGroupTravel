@@ -1,0 +1,7 @@
+services:
+#    payment.example:
+#        class: TUI\Toolkit\PaymentBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
+  payment.getPayments:
+    class: TUI\Toolkit\PaymentBundle\Controller\PaymentService
+    arguments: [ @doctrine.orm.entity_manager, @service_container ]

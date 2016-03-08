@@ -92,6 +92,10 @@
 
     }
 
+    &.public-logo {
+      width: auto;
+    }
+
   }
 
   .institution-logo-with-brand {
@@ -337,6 +341,14 @@
     background-color: lightgray;
   }
 
+}
+
+.alt-quote-description {
+  display: block;
+  font-size: .85em;
+  line-height: 1em;
+  max-width: 35em;
+  margin-bottom: 1em;;
 }
 
 

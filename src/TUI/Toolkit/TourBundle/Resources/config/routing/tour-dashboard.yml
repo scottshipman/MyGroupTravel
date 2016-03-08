@@ -30,6 +30,13 @@ manage_passenger_dashboard:
     path: /{tourId}/passengers
     defaults: { _controller: "PassengerBundle:Passenger:getPassengerDashboard" }
 
+manage_payment_dashboard:
+    path: /{tourId}/payments
+    defaults: { _controller: "PaymentBundle:Payment:getPaymentDashboard" }
+
+manage_payment_dashboard_edit_payments:
+    path: /{tourId}/payments/edit
+    defaults: { _controller: "PaymentBundle:Payment:getEditPaymentSettings" }
 
 manage_parent_passenger_dashboard:
     path: /{tourId}/parent/{parentId}/passengers
@@ -51,3 +58,11 @@ manage_ajax_move_to_free:
 manage_tour_edit_payments:
     path: /edit/payments/{id}
     defaults: { _controller: "TourBundle:Tour:getEditPayments" }
+
+parent_user_registration_confirmation:
+  path: /{id}/{tourId}/parent-register-confirm-notification
+  defaults: { _controller: "PassengerBundle:Passenger:parentRegisterConfirmationTrigger" }
+
+manage_tour_tasks_dashboard:
+  path: /{id}/tasks
+  defaults: { _controller: "TourBundle:Tour:getTourTasksDashboard" }

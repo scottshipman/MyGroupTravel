@@ -31,7 +31,8 @@ tour:
                 id: Id
                 name: Name
                 value: Amount Due
-                duedate: Due Date
+                paid: Paid
+                duedate: Due On
                 paiddate: Paid Date
                 type: Type
                 string: String
@@ -102,9 +103,9 @@ tour:
        price: Price Per Passenger
        name: Tour Name
        number: Tour Reference
-       organizers: Organizers
+       organizers: Primary Organizer
        number: Tour Reference
-       schedule: Passenger Payment Schedule
+       schedule: Tour Payment Schedule
        footer:
             intro: Your Contact:
             intro_org: Contact:
@@ -125,7 +126,26 @@ tour:
 
     dashboard:
         status: Status
+        complete: Complete
+        not-complete: Not Complete
+        show_complete: Show Complete
+        show_not_complete: Show Not Complete
+        tasks_complete: Tasks Completed
+        emergency_info: Emergency Contact Info
+        medical_info: Medical Info
+        passport_info: Passport Info
+        dietary_info: Dietary Info
+        all_done: All Done!
+        in_progress: In Progress
+        passenger_tasks: Passenger Tasks
+        medical: Medical
+        dietary: Dietary
+        emergency: Emergency Contact
+        passport: Passport
+        tasks: Tasks
+        passenger_tasks: Passenger Tasks
         due: due by
+        overdue: Amount Past Due
         no_payments: No payments due at this time
         na: N/A
         signups: Sign-ups
@@ -165,6 +185,7 @@ tour:
         departure: Days until departure
         registrations: Registrations
         passengers: Passengers
+        parent_price: Paid / Total Tour Price
 
     edit:
         summary: Summary
@@ -253,6 +274,7 @@ tour:
                 email: Email
                 enabled: Enabled
                 ba_lname: Primary Business Admin (Last Name)
+                sc_lname: Other Business Admin (Last Name)
                 o_lname: Organizer (Last Name)
         column:
             title:
@@ -287,7 +309,8 @@ tour:
             message: Message to the organiser
         payment_task:
             value: Amount
-            date: Due Date (DD-MM-YYYY)
+            type: Payment Type
+            date: Due Date (MM-DD-YYYY)
         tour_setup:
             price: Price Per Person
             cash: Cash / Cheque
@@ -296,9 +319,9 @@ tour:
             online: Online Payment
             other: Other
         tour_summary:
-            expiration: Tour Expiration? (DD-MM-YYYY)
-            departure: Departure Date (DD-MM-YYYY)
-            return: Return Date (DD-MM-YYYY)
+            expiration: Tour Expiration? (MM-DD-YYYY)
+            departure: Departure Date (MM-DD-YYYY)
+            return: Return Date (MM-DD-YYYY)
             duration: Duration
             display_name: Display Name
             board: Board Basis
@@ -310,19 +333,27 @@ tour:
         tour:
             placeholder: Select
             name: Tour Name
-            expiration: Quote Expiration? (DD-MM-YYYY)
+            expiration: Quote Expiry Date (MM-DD-YYYY)
             sales_agent: Primary Business Admin
             second_contact: Other Business Admin
             destination: Destination
-            departure: Departure Date (DD-MM-YYYY)
-            return: Return Date (DD-MM-YYYY)
+            departure: Departure Date (MM-DD-YYYY)
+            return: Return Date (MM-DD-YYYY)
             display_name: Display Name
             board: Board Basis
             tour_number: Tour Number
-            passenger_date: Emergency Contact Due Date (DD-MM-YYYY)
-            passport_date: Passport Info Due Date (DD-MM-YYYY)
-            medical_date: Medical Info Due Date (DD-MM-YYYY)
-            dietary_date: Dietary Info Due Date (DD-MM-YYYY)
+            passenger_date: Emergency Contact Due Date (MM-DD-YYYY)
+            passport_date: Passport Info Due Date (MM-DD-YYYY)
+            medical_date: Medical Info Due Date (MM-DD-YYYY)
+            dietary_date: Dietary Info Due Date (MM-DD-YYYY)
+            trip_status: Trip Status
+            quote_number: Quote Number
+            transport_type: Transport Type
+            paying_places: Paying Places
+            free_places: Free Places
+            price_per_person: Price per Person
+            add_payment: Add a Schedule Item
+            log_payment: Log a Collected Payment
 
 
     payment_task:

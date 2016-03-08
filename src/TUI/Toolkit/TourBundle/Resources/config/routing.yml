@@ -1,3 +1,7 @@
+tour_paymenttaskoverride:
+    resource: "@TourBundle/Resources/config/routing/paymenttaskoverride.yml"
+    prefix:   /paymenttaskoverride
+
 tour_manage_tour:
     resource: "@TourBundle/Resources/config/routing/tour.yml"
     prefix:   /manage/tour

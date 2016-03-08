@@ -1,0 +1,59 @@
+
+
+{% block body -%}
+
+    <div class="errors">
+         {{ form_errors(form) }}
+    </div>
+
+     {{ form(form, {'attr': {'id': 'ajax_custom_schedule_form'}} ) }}
+
+    <ul class="record_actions">
+        <a href="" class="cancel">Cancel</a>
+    </ul>
+
+     {{ form_javascript(form) }}
+
+    <script>
+        $(document).ready(function () {
+            $(document).on('click', 'a.cancel', function(e) {
+                e.preventDefault();
+                $("#dialog").html("");
+                $("#dialog").dialog("close");
+            });
+
+            //Bind the ajax form
+            $('#ajax_custom_schedule_form').on('submit', function(e) {
+                $("#loader").css("display", "block");
+                e.preventDefault();
+                var formAction = $(this).attr('action');
+                var form =$(this);
+                console.log('sent custom sched form');
+                $.ajax({
+                    url: formAction,
+                    type: 'POST',
+                    headers: {
+                        "Pragma": "no-cache",
+                        "Expires": -1,
+                        "Cache-Control": "no-cache"
+                    },
+                    data: $('#ajax_custom_schedule_form').serialize(),
+                    contentType: "application/x-www-form-urlencoded",
+                }).success(function (response) {
+                    $("#dialog").html("");
+                    $("#dialog").dialog("close");
+                    $(window).scrollTop(0);
+                    window.location.reload(true);
+                }).error(function (response) {
+                    $("#loader").hide();
+                    var parsed = $.parseJSON(response.responseText);
+                    $.each(parsed, function(i, item) {
+                        console.log(i);
+                    });
+                });
+            });
+
+        });
+
+    </script>
+{% endblock %}

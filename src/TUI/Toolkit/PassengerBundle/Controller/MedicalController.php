@@ -216,11 +216,10 @@ class MedicalController extends Controller
             $em->flush();
 
             $doctorNumber = $entity->getDoctorNumber();
-            $doctorNumberFormatted = $doctorNumber->getNationalNumber();
 
             $data = array(
                 $entity->getDoctorName(),
-                $doctorNumberFormatted,
+                $doctorNumber,
                 $entity->getConditions(),
                 $entity->getMedications(),
             );

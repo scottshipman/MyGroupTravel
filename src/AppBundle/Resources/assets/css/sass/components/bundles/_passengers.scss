@@ -264,6 +264,26 @@
 
   .row-content {
     float: right;
+
+    &.weighted {
+      font-weight: 500;
+    }
+
+    &.indented {
+      margin-left: 3px;
+    }
+
+    &.green {
+      color:green;
+    }
+
+    &.red {
+      color:red;
+    }
+
+    &.blue {
+      color:blue;
+    }
   }
 
   .title-button {
@@ -292,6 +312,10 @@
   .task-title {
     display: inline;
     font-size:18px;
+
+    .weighted {
+      font-weight: 500;
+    }
 
     .add-info {
       margin-right: 10px;
@@ -378,4 +402,34 @@ a.organizer-card {
   margin-bottom: 0px;
   box-shadow: none;
   display: block;
+}
+//#payment-schedule > div:nth-child(2) > p.row-content.weighted {
+//  float:right;
+//  font-weight:500;
+//}
+//
+//#payment-schedule {
+//
+//  .mdl-card__supporting-text {
+//
+//    .row-content {
+//      float: right;
+//
+//      .weighted {
+//        font-weight: 500;
+//      }
+//
+//      .indented {
+//        margin-left: 3px;
+//      }
+//    }
+//  }
+//}
+//
+//.mdl-card{
+//  .mdl-card__supporting-text.mdl
+//}
+
+.dashboard-titles:hover {
+  background-color: #eee;
 }

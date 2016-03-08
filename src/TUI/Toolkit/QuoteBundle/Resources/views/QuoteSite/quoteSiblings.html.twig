@@ -5,7 +5,7 @@
 <table>
     <thead>
         <tr>
-            <th>{% trans %}quote_site.quote_sibling.quote_name{% endtrans %}</th>
+            <th>{% trans %}quote_site.quote_sibling.quote_name{% endtrans %} / <br> {% trans %}quote_site.quote_sibling.quote_description{% endtrans %}</th>
             <th>{% trans %}quote_site.quote_sibling.quote_number{% endtrans %}</th>
             <th>{% trans %}quote_site.quote_sibling.departing{% endtrans %}</th>
             <th>{% trans %}quote_site.quote_sibling.created{% endtrans %}</th>
@@ -15,7 +15,9 @@
     <tbody>
     {% for entity in entities%}
         <tr id="alt~{{ entity.id }}~{{ entity.quoteNumber }}" class="{{ zebra }} alt-quote" quote="{{ entity.id }}" quotenumber="{{ entity.quoteNumber }}">
-            <td>{% if entity.name %}{{ entity.name }}{% endif %}</td>
+            <td><strong>{% if entity.name %}{{ entity.name }}</strong>{% endif %}
+                {% if entity.description %}<span class="alt-quote-description">{{ entity.description }}</span>{% endif %}
+            </td>
             <td>{% if entity.quoteNumber %}{{ entity.quoteNumber }}{% endif %}</td>
             <td>{% if entity.departureDate %}{{ entity.departureDate|date(format) }}{% endif %} </td>
             <td>{% if entity.created %}{{ entity.created |date(format) }}{% endif %}</td>

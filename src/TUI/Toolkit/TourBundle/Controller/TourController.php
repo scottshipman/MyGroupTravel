@@ -3,7 +3,7 @@
 namespace TUI\Toolkit\TourBundle\Controller;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Proxies\__CG__\TUI\Toolkit\TourBundle\Entity\PaymentTask;
+use TUI\Toolkit\TourBundle\Entity\PaymentTask;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -51,6 +51,9 @@ class TourController extends Controller
     {
         // hide columns from the screen display
         $hidden = array(
+            'secondaryContact.firstName',
+            'secondaryContact.lastName',
+            'secondaryContact.email',
             'quoteReference.id',
             'institution.city',
             'institution.name',
@@ -164,6 +167,12 @@ class TourController extends Controller
         $column->setTitle($this->get('translator')->trans('tour.grid.filter.title.ba_lname'));
         $column->setOperatorsVisible(false);
 
+        // add other business admin last name filter
+        $column = $grid->getColumn('secondaryContact.lastName');
+        $column->setFilterable(true);
+        $column->setTitle($this->get('translator')->trans('tour.grid.filter.title.sc_lname'));
+        $column->setOperatorsVisible(false);
+
         // add organizer last name filter
         $column = $grid->getColumn('organizer.lastName');
         $column->setFilterable(true);
@@ -216,6 +225,9 @@ class TourController extends Controller
 
         // hide columns from the screen display
         $hidden = array(
+          'secondaryContact.firstName',
+          'secondaryContact.lastName',
+          'secondaryContact.email',
           'quoteReference.id',
           'institution.name',
           'deleted',
@@ -292,6 +304,12 @@ class TourController extends Controller
         $column = $grid->getColumn('salesAgent.lastName');
         $column->setFilterable(true);
         $column->setTitle($this->get('translator')->trans('tour.grid.filter.title.ba_lname'));
+        $column->setOperatorsVisible(false);
+
+        // add other business admin last name filter
+        $column = $grid->getColumn('secondaryContact.lastName');
+        $column->setFilterable(true);
+        $column->setTitle($this->get('translator')->trans('tour.grid.filter.title.sc_lname'));
         $column->setOperatorsVisible(false);
 
         // add organizer last name filter
@@ -507,6 +525,7 @@ class TourController extends Controller
         $collection = $entity->getMedia()->toArray() ? $entity->getMedia()->toArray() : NULL;
 
         $payment_tasks = $entity->getPaymentTasks();
+        $paymentSchedule = $this->getPaymentSchedule($id);
 
         //Get logger service for errors
         $logger = $this->get('logger');
@@ -564,6 +583,7 @@ class TourController extends Controller
             'locale' => $locale,
             'collection' => $collection,
             'payment_tasks' => $payment_tasks,
+            'payment_schedule' => $paymentSchedule,
             'items' => $items,
             'tabs' => $tabs,
             'editable' => $editable,
@@ -710,6 +730,8 @@ class TourController extends Controller
         $date_format = $this->container->getParameter('date_format');
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('TourBundle:Tour')->find($id);
+        $oldOrganizerID = $entity->getOrganizer()->getID();
+        $oldOrganizer = $em->getRepository('TUIToolkitUserBundle:User')->find($oldOrganizerID);
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Tour entity.');
         }
@@ -718,6 +740,7 @@ class TourController extends Controller
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
+
         //handling ajax request for organizer
         $o_data = $editForm->getData()->getOrganizer();
         if (preg_match('/<+(.*?)>/', $o_data, $o_matches)) {
@@ -728,6 +751,7 @@ class TourController extends Controller
                 $organizer = array_shift($entities);
                 $editForm->getData()->setOrganizer($organizer);
             }
+
         }else {
             $editForm['organizer']->addError(new FormError($this->get('translator')->trans('quote.exception.organizer')));
         }
@@ -845,6 +869,13 @@ class TourController extends Controller
             $em->flush();
             $permission = $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
             $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.save') . $entity->getName());
+
+            // if new organizer, then check for / add passenger record and permissions
+            // stub out passenger record and parent permission for passenger for organizer
+            if($organizer->getEmail() != $oldOrganizer->getEmail()) {
+                $changeOrganizer = $this->changeOrganizer($organizer, $entity, $oldOrganizer);
+            }
+
             if ( $entity->getSetupComplete() == false and $entity->getIsComplete() == false) {
 
                 return $this->redirect($this->generateUrl('tour_site_show', array('id' => $entity->getId(), 'quoteNumber' => $entity->getQuoteNumber())));
@@ -852,7 +883,9 @@ class TourController extends Controller
             }else {
                 return $this->redirect($this->generateUrl('manage_tour'));
             }
+
         }
+
 
         return $this->render('TourBundle:Tour:edit.html.twig', array(
             'entity' => $entity,
@@ -861,6 +894,73 @@ class TourController extends Controller
             'delete_form' => $deleteForm->createView(),
             'date_format' => $date_format,
         ));
+    }
+
+    /**
+     * If a new Organizer if set to Tour, add Passenger and Permission Records
+     * Called from Tour Edit Forms create action
+     */
+
+    public function changeOrganizer($organizer, $tour, $oldOrganizer){
+        $em = $this->getDoctrine()->getManager();
+        $exists = FALSE;
+        $existingPermissions = $em->getRepository('PermissionBundle:Permission')->findBy(array('user' => $organizer, 'class' => 'passenger'));
+                foreach($existingPermissions as $existingPermission){
+                    $existingPassengers = $em->getRepository('PermissionBundle:Permission')->find($existingPermission->getObject());
+                    foreach($existingPassengers as $existingPassenger){
+                        if (($existingPassenger->getLName() == $organizer->getLastName())
+                            && $existingPassenger->getFName() == $organizer->getFirstName()
+                            && ($existingPassenger->getTour() == $tour->getId())) {
+                            // a passenger exists for this tour already for this user as best we can tell
+                            $exists = TRUE;
+                            $existingPassenger->setSelf(TRUE);
+                            $em->persist($existingPassenger);
+                            $em->flush();
+                        }
+                    }
+                }
+
+                if ($exists == FALSE) {
+                    // no pax or perm record for this user and this tour so create both
+
+                    $newPassenger = new Passenger();
+                    //$newPassenger->setDateOfBirth(); // we dont know what this is here
+                    $newPassenger->setFName($organizer->getFirstName());
+                    //$newPassenger->setGender(); // we dont know what this is here
+                    $newPassenger->setLName($organizer->getLastName());
+                    $newPassenger->setStatus("waitlist");
+                    $newPassenger->setSignUpDate(new \DateTime());
+                    $newPassenger->setTourReference($tour);
+                    $newPassenger->setFree(FALSE);
+                    $newPassenger->setSelf(TRUE);
+                    $em->persist($newPassenger);
+                    $em->flush($newPassenger);
+
+                    $paxpermission = new Permission();
+                    $paxpermission->setClass('passenger');
+                    $paxpermission->setObject($newPassenger->getId());
+                    $paxpermission->setGrants('parent');
+                    $paxpermission->setUser($organizer);
+                    $em->persist($paxpermission);
+                    $em->flush($paxpermission);
+                }
+//        // always create an Organizer permission for the tour
+//        $opermission = new Permission();
+//        $opermission->setClass('tour');
+//        $opermission->setObject($tour->getId());
+//        $opermission->setGrants('organizer');
+//        $opermission->setUser($organizer);
+//        $em->persist($opermission);
+//        $em->flush($opermission);
+//
+//        // remove the old organizer permission
+//        $oldPermission = $em->getRepository('PermissionBundle:Permission')->findBy(array('user' => $oldOrganizer, 'class' => 'tour', 'grants' => 'organizer', 'object' => $tour->getId()));
+//        if(!empty($oldPermission[0])) {
+//            $em->remove($oldPermission[0]);
+//            $em->flush($oldPermission[0]);
+//        }
+
+
     }
 
     /**
@@ -1191,6 +1291,76 @@ class TourController extends Controller
 
     }
 
+    public function getTourTasksDashboardAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('TourBundle:Tour')->find($id);
+        $editForm = $this->createEditForm($entity);
+        $date_format = $this->container->getParameter('date_format');
+        $locale = $this->container->getParameter('locale');
+
+        //brand stuff
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
+
+        $passengerData = $this->get("passenger.actions")->getTourPassengersData($id);
+
+        $payment_tasks = $entity->getPaymentTasks();
+
+        return $this->render('TourBundle:Tour:tasks-dashboard.html.twig', array(
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
+            'date_format' => $date_format,
+            'locale' => $locale,
+            'brand' => $brand,
+            'passengerData' =>$passengerData,
+            'payment_tasks' => $payment_tasks
+        ));
+
+    }
+
+    public function getPassengerTasksMiniCardAction($passenger) {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $locale = $this->container->getParameter('locale');
+
+        $completedTasks = $this->get("passenger.actions")->getPassengerCompletedTasks($passenger->getId());
+
+        $passenger->completedTasks = $completedTasks;
+
+        $possibleTasks = $this->get("passenger.actions")->getPossibleTourTasks($passenger->getTourReference()->getId());
+
+        $passenger->possibleTasks = $possibleTasks;
+
+        //brand stuff
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
+
+        return $this->render('TourBundle:Tour:tasks-dashboard-minicards.html.twig', array(
+            'locale' => $locale,
+            'pax' => $passenger,
+            'brand' => $brand
+        ));
+    }
+
     /**
      * @param $id
      * @return Response
@@ -1217,53 +1387,7 @@ class TourController extends Controller
           $brand = $default_brand;
         }
 
-        //Get Waitlist Passengers
-        $waitListUsers = $this->get("passenger.actions")->getPassengersByStatus('waitlist', $id);
-        $waitlist = count($waitListUsers);
-
-        //Get Accepted Passengers
-        $acceptedUsers = $this->get("passenger.actions")->getPassengersByStatus('accepted', $id);
-        $accepted = count($acceptedUsers);
-
-        //Get free passengers
-        $free = $this->get("passenger.actions")->getPassengersByStatus('free', $id);
-        $free = count($free);
-
-        //Get Organizers
-        $organizerCount = $this->get("permission.set_permission")->getUser('organizer', $entity->getId(), 'tour');
-        $assistantCount = $this->get("permission.set_permission")->getUser('assistant', $entity->getId(), 'tour');
-        $totalOrganizerCount = count($organizerCount) + count($assistantCount);
-
-
-        //Real Accepted Passenger Count
-        $accepted = $accepted - $free;
-
-        $completedPassengerData = array();
-        $medical = array();
-        $dietary = array();
-        $emergency = array();
-        $passport = array();
-
-        $completedPassengerData = array('medical' => $medical, 'dietary' => $dietary, 'emergency' => $emergency, 'passport' => $passport);
-
-        //Get Accepted Users with completed medical information
-        foreach ($acceptedUsers as $acceptedUser) {
-
-            if ($acceptedUser->getMedicalReference() != null) {
-                $completedPassengerData['medical'][] = $acceptedUser;
-            }
-            if ($acceptedUser->getDietaryReference() != null) {
-                $completedPassengerData['dietary'][] = $acceptedUser;
-            }
-            if ($acceptedUser->getEmergencyReference() != null) {
-                $completedPassengerData['emergency'][] = $acceptedUser;
-            }
-            if ($acceptedUser->getPassportReference() != null) {
-                $completedPassengerData['passport'][] = $acceptedUser;
-            }
-
-
-        }
+        $passengerData = $this->get("passenger.actions")->getTourPassengersData($id);
 
         return $this->render('TourBundle:Tour:completedandsetup.html.twig', array(
             'entity' => $entity,
@@ -1271,11 +1395,7 @@ class TourController extends Controller
             'date_format' => $date_format,
             'locale' => $locale,
             'brand' => $brand,
-            'waitlist' => $waitlist,
-            'accepted' => $accepted,
-            'free' => $free,
-            'completedPassengerData' => $completedPassengerData,
-            'totalOrganizerCount' => $totalOrganizerCount,
+            'passengerData' =>$passengerData
         ));
 
     }
@@ -1295,10 +1415,23 @@ class TourController extends Controller
 
         $locale = $this->container->getParameter('locale');
 
+        //brand stuff
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
+
         return $this->render('TourBundle:Tour:notCompletedAndSetup.html.twig', array(
             'entity' => $entity,
             'date_format' => $date_format,
-            'locale' => $locale
+            'locale' => $locale,
+            'brand' => $brand,
         ));
 
     }
@@ -1419,7 +1552,16 @@ class TourController extends Controller
             $em->flush();
             $permission = $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
             $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.save') . $entity->getName());
-            return $this->redirect($this->generateUrl('manage_tour_show', array('id' => $id)));
+
+
+            // smarter redirect
+            if(isset($_SESSION["tour_settings_referer"]) && $_SESSION["tour_settings_referer"] != ''){
+                $referer = $_SESSION["tour_settings_referer"];
+                unset($_SESSION["tour_settings_referer"]);
+                return $this->redirect($referer);
+            } else {
+                return $this->redirect($this->generateUrl('manage_tour_show', array('id' => $id)));
+            }
         }
 
         $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.not_saved') . $entity->getName());
@@ -1587,6 +1729,59 @@ class TourController extends Controller
 
 
     return $this->redirect($this->generateUrl('manage_tour'));
+
+    }
+
+    /*
+     * getPaymentSchedule
+     *
+     * parameter int tourId
+     * returns array of payment tasks and payments made plus status of each task and balances due.
+     */
+
+    public function getPaymentSchedule($tourId) {
+        $totalPaid = 0;
+        $items=array();
+        $now = new \DateTime('now');
+        $em = $this->getDoctrine()->getManager();
+        $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
+        $paymentTasks = $tour->getPaymentTasks();
+        $payments = $em->getRepository('PaymentBundle:BrandPayment')->findBy(array('tour' => $tourId));
+
+        foreach($payments as $payment){
+            $totalPaid = $totalPaid + $payment->getValue();
+        }
+
+        $balance = $totalPaid;
+        foreach($paymentTasks as $paymentTask) {
+            $taskDue = $paymentTask->getValue() * $tour->getPayingPlaces();
+            $taskStatus = 'pending';
+            $taskOverdueAmt = 0;
+            $taskPaid = 0;
+            if($balance >= $taskDue){
+                $taskStatus = 'paid';
+                $taskPaid = $taskDue;
+                $balance = $balance - $taskDue;
+                if($paymentTask->getPaidDate() == NULL){
+                    //make sure to flag this as paid.
+                    $paymentTask->setPaidDate($now);
+                    $em->persist($paymentTask);
+                    $em->flush($paymentTask);
+                }
+            }
+
+            elseif($balance < $taskDue){
+                $taskPaid = $balance;
+                $balance = 0;
+                if($paymentTask->getDueDate() < $now){
+                    $taskStatus = "overdue";
+                    $taskOverdueAmt = $taskDue - $taskPaid;
+                }
+            }
+            $items[] = array('taskPaid' => $taskPaid, 'item' =>$paymentTask, 'taskStatus' => $taskStatus, 'taskOverdueAmt' => $taskOverdueAmt);
+
+        }
+        return $items;
 
     }
 }

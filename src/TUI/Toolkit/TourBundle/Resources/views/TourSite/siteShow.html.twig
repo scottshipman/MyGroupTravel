@@ -62,8 +62,8 @@
       <div class="sizer">
         <div class="inner">
             {% if brand.media %}
-                <div class="brand-logo">
-                    <img src="{{ ( brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) | imagine_filter('thumbnailLarge') }}" alt="{{ brand.name }}">
+                <div class="brand-logo public-logo">
+                    <img src="{{ ( brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) | imagine_filter('publicLogo') }}" alt="{{ brand.name }}">
                 </div>
             {% endif %}
 
@@ -357,7 +357,7 @@
 
 
 {% block footer_left %}
-    {% if editable==true and app.user.email != entity.salesAgent.email%} {# Show Sales Agent Info to an Organizer#}
+    {% if app.user.email == entity.organizer.email%} {# Show Sales Agent Info to an Organizer#}
         {% if entity.salesAgent %}
             <span class="intro">
                     {{ brand.name }} {% trans %}tour.show.footer.intro_org{% endtrans %}
