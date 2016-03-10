@@ -60,7 +60,7 @@ class TourPassengerType extends AbstractType
                 'mapped' => false,
 
             ))
-            ->add('email', 'text', array(
+            ->add('email', 'email', array(
                 'label' => 'passenger.signupform.email',
                 'translation_domain'  => 'messages',
                 'required'  => true,
