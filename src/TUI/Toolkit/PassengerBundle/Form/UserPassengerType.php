@@ -27,17 +27,6 @@ class UserPassengerType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
 
-        switch (true){
-            case strstr($this->locale, 'en_GB'):
-                $phoneFormat = PhoneNumberFormat::NATIONAL;
-                $defaultRegion = 'GB';
-                break;
-            default:
-                $phoneFormat = PhoneNumberFormat::NATIONAL;
-                $defaultRegion = 'US';
-                break;
-        }
-
         // todo: Add logic so you cant add any role greater than your own
         $builder
             ->add('firstName', 'text', array(

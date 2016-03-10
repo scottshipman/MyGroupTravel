@@ -10,6 +10,8 @@ use TUI\Toolkit\PermissionBundle\Entity\Permission;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Form\Form;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\Collection;
 
 
 use TUI\Toolkit\PassengerBundle\Entity\Passenger;
@@ -400,7 +402,6 @@ class PassengerController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $tourId = $entity->getTourReference()->getId();
-
         $locale = $this->container->getParameter('locale');
         $form = $this->createForm(new PassengerType($locale, $tourId), $entity, array(
             'action' => $this->generateUrl('manage_passenger_update', array('id' => $entity->getId())),

@@ -6,6 +6,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\Collection;
 
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -63,6 +65,9 @@ class TourPassengerType extends AbstractType
                 'translation_domain'  => 'messages',
                 'required'  => true,
                 'mapped' => false,
+//                'constraints' => new Email(array(
+//                    'message' => 'enter a valid email address'
+//                )),
 
 
             ))
@@ -84,8 +89,13 @@ class TourPassengerType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
+
+        $collectionConstraint = new Collection(array(
+            'email' => new Email(array('message' => 'Invalid email address')),
+        ));
         $resolver->setDefaults(array(
             'cascade_validation' => true,
+            'validation_constraint' => $collectionConstraint,
         ));
     }
 
