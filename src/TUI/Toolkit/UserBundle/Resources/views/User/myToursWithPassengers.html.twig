@@ -7,7 +7,7 @@
 
     {% if app.user.id != parent.organizer.id and app.user.id != parent.salesAgent.id%}
         {% if parent.departureDate is defined %}
-            {% set dtg  = date(parent.departureDate).diff(date("now")) %}
+            {% set dtg  = date(parent.departureDate).diff(date("now - 1 day")) %}
             {% if dtg.days < 1 %} {%  set dtgFinal = 0  %} {% else %} {% set dtgFinal = dtg.days %}{% endif %}
         {% else %} {% set dtgFinal = 'n/a' %}
         {% endif %}
