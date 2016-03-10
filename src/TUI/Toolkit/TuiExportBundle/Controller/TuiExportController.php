@@ -136,7 +136,6 @@ class TuiExportController extends Controller
                 break;
         }
         $items=array();
-        $format =$this->container->getParameter('date_format');
         $em = $this->getDoctrine()->getManager();
         $passengers = $em->getRepository('PassengerBundle:Passenger')->findBy(array('tourReference' => $tourId));
         foreach($passengers as $passenger){
