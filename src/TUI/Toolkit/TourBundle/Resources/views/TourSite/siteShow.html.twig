@@ -357,7 +357,7 @@
 
 
 {% block footer_left %}
-    {% if app.user is defined and app.user.email == entity.organizer.email%} {# Show Sales Agent Info to an Organizer#}
+    {% if app.user != NULL and app.user.email == entity.organizer.email%} {# Show Sales Agent Info to an Organizer#}
         {% if entity.salesAgent %}
             <span class="intro">
                     {{ brand.name }} {% trans %}tour.show.footer.intro_org{% endtrans %}
