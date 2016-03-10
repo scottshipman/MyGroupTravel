@@ -4,7 +4,7 @@
     {% if is_granted("ROLE_BRAND") %}
         {% trans %}tour.page_title.site_view{% endtrans %}
     {% else %}
-        {{ entity.quoteReference.name }}, {{ entity.name }}
+         {{ entity.name }}
     {% endif %}
 {% endblock %}
 
