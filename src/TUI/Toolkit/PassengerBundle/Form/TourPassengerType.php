@@ -60,14 +60,14 @@ class TourPassengerType extends AbstractType
                 'mapped' => false,
 
             ))
-            ->add('email', 'email', array(
+            ->add('email', 'text', array(
                 'label' => 'passenger.signupform.email',
                 'translation_domain'  => 'messages',
                 'required'  => true,
                 'mapped' => false,
-//                'constraints' => new Email(array(
-//                    'message' => 'enter a valid email address'
-//                )),
+                'constraints' => new Email(array(
+                    'message' => 'enter a valid Parent / Guardian email address'
+                )),
 
 
             ))
@@ -90,12 +90,12 @@ class TourPassengerType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
 
-        $collectionConstraint = new Collection(array(
-            'email' => new Email(array('message' => 'Invalid email address')),
-        ));
+//        $collectionConstraint = new Collection(array(
+//            'email' => new Email(array('message' => 'Invalid email address')),
+//        ));
         $resolver->setDefaults(array(
             'cascade_validation' => true,
-            'validation_constraint' => $collectionConstraint,
+         //   'validation_constraint' => $collectionConstraint,
         ));
     }
 

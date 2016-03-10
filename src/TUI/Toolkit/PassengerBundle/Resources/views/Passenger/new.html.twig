@@ -37,10 +37,10 @@
         {{ form_rest(form) }}
         {{ form_end(form) }}
     </div>
-
-    {% javascripts '@toolkit_siteshow' %}
-        <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
+    {#{% javascripts '@toolkit_siteshow' %}#}
+    {#<script type="text/javascript" src="{{ asset_url }}"></script>#}
+    {#{% endjavascripts %}
+#}
 
     <script>
 
@@ -104,15 +104,8 @@
                     $("#loader").hide();
                     var parsed = $.parseJSON(response.responseText);
                     $.each(parsed, function(i, item) {
-                        //console.log(i);
-                        $.each(item, function(c, child) {
-                            console.log(c);
-                            var task = c;
-                            $.each(child, function(f, field) {
-                                var specificForm = $('.new_passenger[task="'+task+'"]');
-                                specificForm.prepend('<p style="color:red;">'+ field + '</p>');
-                            });
-                        });
+                        field= '#tui_toolkit_passengerbundle_tourpassenger_' + i;
+                        $(field).parent().prepend('<p style="color:red;">'+ item + '</p>');
                     });
                 });
             });

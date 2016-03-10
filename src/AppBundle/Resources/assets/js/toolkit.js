@@ -59,11 +59,13 @@
         open: function (e, ui) {
             $(this).parent().removeClass('has-mdl-submit-row');
             $(this).parent().addClass('mdl-shadow--8dp');
+            console.log('is this a mobile device?');
+            console.log(toolkitBreakpointAllowDrag());
             if ( !toolkitBreakpointAllowDrag() ) {
                 // Modal to full screen on phone
                 $("#dialog")
                     .dialog("option", "width", "100%")
-                    .dialog("option", "height", $(window).height() );
+                    .dialog("option", "height", 'auto' );
             } else {
                 $("#dialog")
                     .dialog("option", "width", "620px")
