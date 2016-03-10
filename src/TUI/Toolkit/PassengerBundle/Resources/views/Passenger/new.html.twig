@@ -103,10 +103,17 @@
                 }).error(function (response) {
                     $("#loader").hide();
                     var parsed = $.parseJSON(response.responseText);
+                    count = 0;
                     $.each(parsed, function(i, item) {
                         field= '#tui_toolkit_passengerbundle_tourpassenger_' + i;
+                        if(count=0){ scrolling = field;}
                         $(field).parent().prepend('<p style="color:red;">'+ item + '</p>');
+                        count++;
                     });
+                    if (typeof scrolling != undefined){
+                        var top = $(scrolling).position().top;
+                        $(window).scrollTop( top );
+                        }
                 });
             });
 

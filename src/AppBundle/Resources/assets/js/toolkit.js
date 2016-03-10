@@ -59,8 +59,6 @@
         open: function (e, ui) {
             $(this).parent().removeClass('has-mdl-submit-row');
             $(this).parent().addClass('mdl-shadow--8dp');
-            console.log('is this a mobile device?');
-            console.log(toolkitBreakpointAllowDrag());
             if ( !toolkitBreakpointAllowDrag() ) {
                 // Modal to full screen on phone
                 $("#dialog")
