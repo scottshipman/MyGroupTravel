@@ -864,7 +864,15 @@ class TourController extends Controller
                     $passengerPaymentTasksStorage[] = $newPaymentTaskPassenger;
                 }
             }
-            $entity->setPaymentTasksPassenger($passengerPaymentTasksStorage);
+
+            // sync payment tasks for instution and passengers if still Not Setup complete
+            if ($entity->getSetupComplete() == FALSE && $entity->getIsComplete() == FALSE) {
+                // Step 1 purge existing passenger payment schedules
+                $this->purgePassengerPaymentSchedule($entity->getPaymentTasksPassenger(), $entity->getId());
+                if(!empty($passengerPaymentTasksStorage)){$entity->setPaymentTasksPassenger($passengerPaymentTasksStorage);}
+            }
+
+
             $em->persist($entity);
             $em->flush();
             $permission = $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
