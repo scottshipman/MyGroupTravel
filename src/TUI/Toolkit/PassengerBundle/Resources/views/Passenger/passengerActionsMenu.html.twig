@@ -16,11 +16,22 @@
         {% endif %}
 
         {# Accepted Menu Item #}
-        {% if passengerStatus == "waitlist"  or free == TRUE %}
-            <li><a href="#accepted" style="display: block;"class="mdl-menu__item move-to-accepted" tour="{{ tourId }}" passenger="{{ passengerId }}">Move to {{ "accepted" | paxLabel }}</a></li>
-        {% else %}
-            <li><a href="#accepted" style="display: none;"class="mdl-menu__item move-to-accepted" tour="{{ tourId }}" passenger="{{ passengerId }}">Move to {{ "accepted" | paxLabel }}</a></li>
-         {% endif %}
+        {% if payingSpotsRemaining > 0  %}
+            {% if passengerStatus == "waitlist"  or free == TRUE %}
+                <li><a href="#accepted" style="display: block;"class="mdl-menu__item move-to-accepted" tour="{{ tourId }}" passenger="{{ passengerId }}">Move to {{ "accepted" | paxLabel }}</a></li>
+            {% else %}
+                <li><a href="#accepted" style="display: none;"class="mdl-menu__item move-to-accepted" tour="{{ tourId }}" passenger="{{ passengerId }}">Move to {{ "accepted" | paxLabel }}</a></li>
+             {% endif %}
+        {% endif %}
+
+        {# Free Menu Item #}
+        {% if freeSpotsRemaining > 0 %}
+            {% if free == false %}
+                <li><a style="display: block;" href="#free" class="mdl-menu__item move-to-free" tour="{{ tourId }}" passenger="{{ passengerId }}">Move to {{ "free" | paxLabel }}</a></li>
+            {% else %}
+                <li><a style="display: none;" href="#free" class="mdl-menu__item move-to-free" tour="{{ tourId }}" passenger="{{ passengerId }}">Move to {{ "free" | paxLabel }}</a></li>
+            {% endif %}
+        {% endif %}
 
         {# Waitlist Menu Item #}
         {% if passengerStatus != "waitlist" %}
@@ -29,12 +40,7 @@
             <li><a href="#waitlist" style="display: none;" class="mdl-menu__item move-to-waitlist" tour="{{ tourId }}" passenger="{{ passengerId }}">Move to {{ "waitlist" | paxLabel }}</a></li>
         {% endif %}
 
-        {# Free Menu Item #}
-        {% if free == false %}
-            <li><a style="display: block;" href="#free" class="mdl-menu__item move-to-free" tour="{{ tourId }}" passenger="{{ passengerId }}">Move to {{ "free" | paxLabel }}</a></li>
-        {% else %}
-            <li><a style="display: none;" href="#free" class="mdl-menu__item move-to-free" tour="{{ tourId }}" passenger="{{ passengerId }}">Move to {{ "free" | paxLabel }}</a></li>
-        {% endif %}
+
 
         {# make payment menu item #}
         {% if passengerStatus ==  "accepted" and free is sameas(false) %}
