@@ -91,7 +91,7 @@
                 </div>
 
                 <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
-                        <div class="paying-passengers-title"><h3>{% trans %}passenger.labels.add_paying{% endtrans %}</h3></div>
+                        {#<div class="paying-passengers-title"><h3>{% trans %}passenger.labels.add_paying{% endtrans %}</h3></div>#}
                         <div class="passenger-count">
                             {# Accepted/Paying Summary #}
                             <div style="display: inline-block; margin-right: 20px;" class="payingspots-remaining">
@@ -150,13 +150,14 @@
             </div>
                 {% for passenger in passengers %}
 
-                    {% set signedUp = 'Signed up on ' ~ passenger[0].signUpDate|date(format)  %}
+                    {% set signedUp = '' %}
                     {% if passenger[0].status == "accepted" %}
                         {% set statusicon =  '<a class="' ~ passenger[0].status ~ 'icon" title = "' ~ passenger[0].status | paxLabel ~ '"><i class="material-icons statusicon">verified_user</i></a>'%}
                         {% set status = 'accepted' %}
                     {% else %}
                         {% set statusicon = '<a class="' ~ passenger[0].status ~ 'icon" title = "' ~ passenger[0].status | paxLabel ~ '"><i class="material-icons statusicon">list</i></a>'%}
                         {% set status = 'waitlist' %}
+                        {% set signedUp = 'Signed up on ' ~ passenger[0].signUpDate|date(format)  %}
                     {% endif %}
 
                     {% if passenger[2] is sameas(TRUE) %} {# is this an organizer? #}
@@ -182,6 +183,7 @@
                         {%  set freeClass = "free" %}
                         {% set statusicon = '' %}
                         {% set status = '' %}
+                        {% set signedUp = '' %}
                     {% else %}
                         {% set freeClass = '' %}
                         {% set freeicon = '' %}
@@ -199,7 +201,7 @@
                             <p class="mini-card-title"><strong>{{ passenger[0].fName }}</strong></p>
                             <p class="mini-card-title"><strong>{{ passenger[0].lName }}</strong></p>
                             <p class="mini-card-title"><strong><a href="mailto:{{ passenger[1].email }}">{{ passenger[1].email }}</a></strong></p>
-                            <label style="display: block; margin-left: 63px; min-width: 100%;">{{ statusicon | raw }} {{ freeicon | raw }}{{ organizericon | raw }} {{ signedUp }}</label>
+                            <label style="display: block; margin-left: 63px; min-width: 100%;">{{ statusicon | raw }} {{ freeicon | raw }}{#{{ organizericon | raw }}#} {{ signedUp }}</label>
                             </div>
                             {% if  passenger[0].status != "Pending Invite"%}
                                 <button style="position: absolute; right: 20px; color:grey; margin-top:10px;" id="passenger-actions-menu-drop-{{ passenger[0].id }}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
