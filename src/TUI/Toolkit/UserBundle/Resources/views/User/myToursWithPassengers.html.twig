@@ -38,7 +38,7 @@
                 <h6 style="position: absolute; right: 10px; top: 10px; color: white;" class="mdl-card_title-text"><a style="text-decoration: none; color:white;" href="{{ passengersLink }}"><i class="material-icons">edit</i>Manage Passengers</a></h6>
 
 
-                <h2 class="mdl-card__title-text"><a href="{{ tourlink }}">{% trans %}user.profile.my_quotes.tour{% endtrans %}: {{ parent.name }} <i class="fa fa-arrow-right"></i></a></h2>
+                <h2 class="mdl-card__title-text"><a href="{{ tourlink }}">{% trans %}user.profile.my_quotes.tour{% endtrans %}: {{ parent.name }} </a></h2>
 
                 {#<h4 class="mdl-card_title-text"><a href="{{ passengersLink }}">Something Something</a></h4>#}
 
@@ -93,6 +93,11 @@
                     </li>
                 </ul>
             </div>
+            <a href="{{ tourlink }}">
+                <button class="mdl-button mdl-js-button mdl-js-ripple-effect" style="opacity: .5; width:100%; height: 50px;">
+                    View Tour <i class="material-icons" style="vertical-align: middle;">arrow_forward</i>
+                </button>
+            </a>
         </div>
     {% endif %}
 {% endfor %}

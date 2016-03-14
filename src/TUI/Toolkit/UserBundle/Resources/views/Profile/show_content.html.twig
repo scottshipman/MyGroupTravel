@@ -51,7 +51,7 @@
 
             {#</div>#}
 
-            <div class="tour-show-right-column">
+            <div class="tour-show-right-column" style="margin-top: -75px;">
                 {#<div class="profile-permissions">#}
                 {# list tours and quotes here #}
                 {% if is_granted("ROLE_BRAND") %}
@@ -79,7 +79,6 @@
                 $('#profile-tab-all').addClass('profile-tab-active');
                 $('#profile-tab-quotes').removeClass('profile-tab-active');
                 $('#profile-tab-tours').removeClass('profile-tab-active');
-
             });
             $(document).on('click', '#profile-tab-quotes', function (e) {
                 $('.quote-cards').show();
@@ -98,3 +97,12 @@
         });
     </script>
 {% endif %}
+
+<script>
+    $(document).ready(function () {
+        $('.page-title').css({'padding-left': 0});
+        var name = "{{ user.firstname|capitalize }}";
+        console.log(name);
+        $('.title-actions').append("<br /><h3 style='float:left;'>Hi " + name + ", here are your tours...</h3>");
+    });
+</script>
