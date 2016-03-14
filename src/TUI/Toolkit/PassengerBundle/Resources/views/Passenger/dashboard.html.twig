@@ -285,7 +285,15 @@
 
                 });
 
-                $(document).on('click', '.passenger-filter', function (e){
+            // Tour Sign Up popup
+            $(document).on('click', '#accept-tour', function (e) {
+                e.preventDefault();
+                var entityId = $('.site-show').attr('entityId');
+                toolkitStandardPopup("Sign Up", '/passenger/new/' + entityId);
+
+            });
+
+            $(document).on('click', '.passenger-filter', function (e){
                     e.preventDefault();
                     var elemID = this.getAttribute('data-id');
                     window.location.hash = elemID;
