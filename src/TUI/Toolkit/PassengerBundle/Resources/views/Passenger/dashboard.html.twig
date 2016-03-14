@@ -55,18 +55,18 @@
                 <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" data-id="showFreeOrganizers"><strong>{{ "free" | paxLabel }} <span id="freeOrganizers">({{ statusCounts.organizer.free  }})</span></strong></a></li>
             </ul>
 
-            <div class="tour-edit-organizer-left">
-                <label>{% trans %}tour.show.organizers{% endtrans %}</label><br>
-                {% if tour.organizer.media %}
-                    <img class="tui-image-avatar" src="{{ ( tour.organizer.media.getRelativePath ~ "/" ~ tour.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ tour.organizer.username }}">
-                {% elseif tour.organizer.firstName and tour.organizer.lastName %}
-                    <span class="tui-text-avatar mdl-typography--headline">{{ tour.organizer.firstName[:1] }}{{ tour.organizer.lastName[:1] }}</span>
-                {% else %}
-                    <span class="tui-text-avatar mdl-typography--headline">{{ tour.organizer.username[:1] }}</span>
-                {% endif %}
+            {#<div class="tour-edit-organizer-left">#}
+                {#<label>{% trans %}tour.show.organizers{% endtrans %}</label><br>#}
+                {#{% if tour.organizer.media %}#}
+                    {#<img class="tui-image-avatar" src="{{ ( tour.organizer.media.getRelativePath ~ "/" ~ tour.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ tour.organizer.username }}">#}
+                {#{% elseif tour.organizer.firstName and tour.organizer.lastName %}#}
+                    {#<span class="tui-text-avatar mdl-typography--headline">{{ tour.organizer.firstName[:1] }}{{ tour.organizer.lastName[:1] }}</span>#}
+                {#{% else %}#}
+                    {#<span class="tui-text-avatar mdl-typography--headline">{{ tour.organizer.username[:1] }}</span>#}
+                {#{% endif %}#}
                 {#<a class="add-organizer" href="#"><i class="add-icon fa fa-plus"></i></a>#}
                 {#<a class="add-organizer mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">Add/remove organizers</a>#}
-            </div>
+            {#</div>#}
         </div>
 
         <div class="tour-show-right-column">
