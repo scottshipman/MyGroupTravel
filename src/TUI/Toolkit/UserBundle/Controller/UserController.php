@@ -771,6 +771,8 @@ class UserController extends Controller
                 $newPassenger->setGender('undefined');
                 $newPassenger->setDateOfBirth(new \DateTime("1987-01-01"));
                 $newPassenger->setSignUpDate(new \DateTime("now"));
+                $newPassenger->setSelf(TRUE);
+
 
                 $em->persist($newPassenger);
                 $em->flush($newPassenger);
@@ -1571,32 +1573,39 @@ class UserController extends Controller
         $data = array();
         $em = $this->getDoctrine()->getManager();
         $passengers = $em->getRepository('PermissionBundle:Permission')->findBy(array('user' => $id, 'class' => 'passenger', 'grants' => 'parent'));
-
         foreach ($passengers as $passenger) {
 
             if ($object = $em->getRepository('PassengerBundle:Passenger')->find($passenger->getObject())) {
-                $completedTasks = array();
-                $tour = $em->getRepository('TourBundle:Tour')->find($object->getTourReference()->getId());
+                if($object->getSelf() == FALSE ) {
+                    // dont add passenger objects where they are an organizer or assistant (flagged as self)
 
 
-                //Find the possible Passenger Tasks for the tour
-                $possibleTasksCount = $this->get("passenger.actions")->getPossibleTourTasks($tour->getId());
+                    $completedTasks = array();
+                    $tour = $em->getRepository('TourBundle:Tour')
+                        ->find($object->getTourReference()->getId());
 
-                //Only add to array if unique
-                if (!in_array($tour, $parents)) {
-                    $parents[] = $tour;
+
+                    //Find the possible Passenger Tasks for the tour
+                    $possibleTasksCount = $this->get("passenger.actions")
+                        ->getPossibleTourTasks($tour->getId());
+
+                    //Only add to array if unique
+                    if (!in_array($tour, $parents)) {
+                        $parents[] = $tour;
+                    }
+
+                    //Then find the tasks that the passengers have completed Id= Pa
+                    $completedTasksCount = $this->get("passenger.actions")
+                        ->getPassengerCompletedTasks($object->getId());
+
+                    //Grab counts of completed tasks for each passenger
+                    $object->completedTasksCount = $completedTasksCount;
+
+                    //Grab count of possible tasks
+                    $object->possibleTasksCount = $possibleTasksCount;
+
+                    $data['passengerObjects'][] = $object;
                 }
-
-                //Then find the tasks that the passengers have completed Id= Pa
-                $completedTasksCount = $this->get("passenger.actions")->getPassengerCompletedTasks($object->getId());
-
-                //Grab counts of completed tasks for each passenger
-                $object->completedTasksCount = $completedTasksCount;
-
-                //Grab count of possible tasks
-                $object->possibleTasksCount = $possibleTasksCount;
-
-                $data['passengerObjects'][] = $object;
             }
         }
 

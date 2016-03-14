@@ -111,6 +111,7 @@ tour:
             intro_org: Contact:
             price: Price per person:
        expiry: Tour valid until
+       payment_instructions: Payment Instructions
 
 
     contact_organizer:
