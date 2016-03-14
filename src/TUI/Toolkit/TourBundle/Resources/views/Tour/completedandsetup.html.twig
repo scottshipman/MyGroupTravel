@@ -70,7 +70,7 @@
         <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
             <ul>
                 <li>
-                    <div class="profile-list-item item-1 tour-dashboard four-column">
+                    <div class="profile-list-item item-1 tour-dashboard">
                         {% if entity.tripStatus.name == "Provisional" %}
                             <span class="date-span">{{ signupNumber }}</span>
                             <label>{% trans %}tour.dashboard.registrations{% endtrans %}</label>
@@ -81,7 +81,7 @@
                     </div>
                 </li>
                 <li>
-                    <div class="profile-list-item item-2 tour-dashboard four-column">
+                    <div class="profile-list-item item-2 tour-dashboard">
                         <span class="date-span">{{ entity.views }}</span>
                         <label>{% trans %}tour.dashboard.views{% endtrans %}</label>
                     </div>
@@ -89,7 +89,7 @@
                 <li>
                     {# if Provisional and not yet expired, show days till expired, else show days to departure #}
                     {# if there is no expiry, show day till departure #}
-                    <div class="profile-list-item item-3 tour-dashboard four-column">
+                    <div class="profile-list-item item-3 tour-dashboard">
                         {% if entity.tripStatus.name == "Provisional" and entity.expiryDate %}
                             {% if dteFinal<1 %}
                                 <span class="date-span" style="color:red;"><i class="fa fa-exclamation-circle"> Expired</i></span>
@@ -208,12 +208,12 @@
     {% if entity.passportDate is defined and entity.passportDate != null %}
         {% if (entity.payingPlaces - passengerData.completedPassengerData['passport']|length)  > 0 %}
         <div class="tour-edit mdl-card mdl-shadow--2dp">
-            {#<a class ="dashboard-titles" href="#">#}
+            <a class ="dashboard-titles" href="{{ path('manage_tour_tasks_dashboard', { 'id': entity.id }) }}">
                 <div class="mdl-card__title">
                     <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.passport_data{% endtrans %} {{ entity.passPortDate|date(shortFormat) }}</h3>
-                    <span class="tour-dashboard-cta"></span>
+                    <span class="tour-dashboard-cta"><i class="material-icons">arrow_forward</i></span>
                 </div>
-            {#</a>#}
+            </a>
             <div id="passport-progress" class="mdl-progress mdl-js-progress" style="width: 100%;"></div>
             <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
                 <ul>
@@ -246,12 +246,12 @@
     {% if entity.emergencyDate is defined and entity.emergencyDate != null %}
         {% if (entity.payingPlaces - passengerData.completedPassengerData['emergency']|length)  > 0 %}
             <div class="tour-edit mdl-card mdl-shadow--2dp">
-                {#<a class ="dashboard-titles" href="#">#}
+                <a class ="dashboard-titles" href="{{ path('manage_tour_tasks_dashboard', { 'id': entity.id }) }}">
                     <div class="mdl-card__title">
                         <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.passenger_data{% endtrans %} {{ entity.emergencyDate|date(shortFormat) }}</h3>
-                        <span class="tour-dashboard-cta"></span>
+                        <span class="tour-dashboard-cta"><i class="material-icons">arrow_forward</i></span>
                     </div>
-                {#</a>#}
+                </a>
                 <div id="emergency-progress" class="mdl-progress mdl-js-progress" style="width: 100%;"></div>
                 <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
                     <ul>
@@ -284,12 +284,12 @@
     {% if entity.medicalDate is defined and entity.medicalDate != null %}
         {% if (entity.payingPlaces - passengerData.completedPassengerData['medical']|length)  > 0 %}
             <div class="tour-edit mdl-card mdl-shadow--2dp">
-                {#<a class ="dashboard-titles" href="#">#}
+                <a class ="dashboard-titles" href="{{ path('manage_tour_tasks_dashboard', { 'id': entity.id }) }}">
                     <div class="mdl-card__title">
                         <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.medical_data{% endtrans %} {{ entity.medicalDate|date(shortFormat) }}</h3>
-                        <span class="tour-dashboard-cta"></span>
+                        <span class="tour-dashboard-cta"><i class="material-icons">arrow_forward</i></span>
                     </div>
-                {#</a>#}
+                </a>
                 <div id="medical-progress" class="mdl-progress mdl-js-progress" style="width: 100%;"></div>
                 <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
                     <ul>
@@ -322,12 +322,12 @@
     {% if entity.dietaryDate is defined and entity.dietaryDate != null %}
         {% if (entity.payingPlaces - passengerData.completedPassengerData['dietary']|length)  > 0 %}
             <div class="tour-edit mdl-card mdl-shadow--2dp">
-                {#<a class ="dashboard-titles" href="#">#}
+                <a class ="dashboard-titles" href="{{ path('manage_tour_tasks_dashboard', { 'id': entity.id }) }}">
                     <div class="mdl-card__title">
                         <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.dietary_data{% endtrans %} {{ entity.dietaryDate|date(shortFormat) }}</h3>
-                        <span class="tour-dashboard-cta"></span>
+                        <span class="tour-dashboard-cta"><i class="material-icons">arrow_forward</i></span>
                     </div>
-                {#</a>#}
+                </a>
                 <div id="dietary-progress" class="mdl-progress mdl-js-progress" style="width: 100%;"></div>
                 <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
                     <ul>
