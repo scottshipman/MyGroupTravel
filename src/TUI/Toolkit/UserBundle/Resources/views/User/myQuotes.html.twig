@@ -80,10 +80,8 @@
             </li>
         </ul>
     </div>
-    <a href="{{ quotelink }}">
-        <button class="mdl-button mdl-js-button mdl-js-ripple-effect" style="opacity: .5; width:100%; height: 50px;">
-            {% trans %}user.actions.view_quote{% endtrans %} <i class="material-icons" style="vertical-align: middle;">arrow_forward</i>
-        </button>
+    <a href="{{ tourlink }}" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" style="width: 85%; margin: 10px auto 15px;">
+        {% trans %}user.actions.view_quote{% endtrans %} <i class="material-icons" style="vertical-align: middle;">arrow_forward</i>
     </a>
 </div>
 {% endfor %}
