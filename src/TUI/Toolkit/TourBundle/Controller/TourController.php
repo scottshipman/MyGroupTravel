@@ -868,7 +868,6 @@ class TourController extends Controller
             // sync payment tasks for instution and passengers if still Not Setup complete
             if ($entity->getSetupComplete() == FALSE && $entity->getIsComplete() == FALSE) {
                 // Step 1 purge existing passenger payment schedules
-                $this->purgePassengerPaymentSchedule($entity->getPaymentTasksPassenger(), $entity->getId());
                 if(!empty($passengerPaymentTasksStorage)){$entity->setPaymentTasksPassenger($passengerPaymentTasksStorage);}
             }
 
@@ -978,7 +977,7 @@ class TourController extends Controller
      */
 
     public function purgePassengerPaymentSchedule($paymentTasksPassenger, $entity) {
-        if ($paymentTasksPassenger->count() >= 1 ){
+        if (!empty($paymentTasksPassenger) ){
             $em = $this->getDoctrine()->getManager();
             $tasks=$paymentTasksPassenger->toArray();
             foreach($tasks as $task) {
