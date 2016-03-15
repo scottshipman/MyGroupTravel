@@ -471,7 +471,7 @@
     $(document).ready(function() {
 
         //Passenger Sign up progress bar
-        {% if signupPercent is defined %}
+        {% if signupPercent is defined  and signupPercent != 100 %}%}
             var signupPercent = {{ signupPercent }};
             document.querySelector('#signup-progress').addEventListener('mdl-componentupgraded', function() {
                 this.MaterialProgress.setProgress(signupPercent);
@@ -479,7 +479,7 @@
         {% endif %}
 
         //Emergency Contact Information progress bar
-        {% if emergencyPercent is defined %}
+        {% if emergencyPercent is defined  and emergencyPercent != 100 %}%}
             var emergencyPercent = {{ emergencyPercent }};
             document.querySelector('#emergency-progress').addEventListener('mdl-componentupgraded', function() {
                 this.MaterialProgress.setProgress(emergencyPercent);
@@ -487,7 +487,7 @@
         {% endif %}
 
         //Dietary Info progress bar
-        {% if dietPercent is defined %}
+        {% if dietPercent is defined  and dietPercent != 100 %}%}
             var dietPercent = {{ dietPercent }};
             document.querySelector('#dietary-progress').addEventListener('mdl-componentupgraded', function() {
                 this.MaterialProgress.setProgress(dietPercent);
@@ -495,7 +495,7 @@
         {% endif %}
 
         //Medical Info Progress Bar
-        {% if medPercent is defined %}
+        {% if medPercent is defined  and medPercent != 100 %}%}
             var medPercent = {{ medPercent }};
             document.querySelector('#medical-progress').addEventListener('mdl-componentupgraded', function() {
                 this.MaterialProgress.setProgress(medPercent);
@@ -503,7 +503,7 @@
         {% endif %}
 
         //Passport Info progress bar
-        {% if passPercent is defined %}
+        {% if passPercent is defined  and passPercent != 100 %}%}
             var passPercent = {{ passPercent }};
             document.querySelector('#passport-progress').addEventListener('mdl-componentupgraded', function() {
                 this.MaterialProgress.setProgress(passPercent);
