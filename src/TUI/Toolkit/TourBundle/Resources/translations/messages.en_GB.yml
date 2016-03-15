@@ -190,6 +190,9 @@ tour:
         registrations: Registrations
         passengers: Passengers
         parent_price: Paid / Total Tour Price
+        view_passenger: View Passenger
+        passenger_dashboard: Go to Passenger Dashboard
+        task_dashboard: Go to Task Dashboard
 
     edit:
         summary: Summary
