@@ -1208,29 +1208,32 @@ class PassengerController extends Controller
             $user = array_shift($user);
             $user = $em->getRepository('TUIToolkitUserBundle:User')->find($user);
 
-            $tokenGenerator = $this->container->get('fos_user.util.token_generator');
+            if($user->isEnabled() == false) {
 
-            //Get some user info
-            $user->setConfirmationToken($tokenGenerator->generateToken());
-            $userEmail = $user->getEmail();
+                $tokenGenerator = $this->container->get('fos_user.util.token_generator');
 
-            $message = \Swift_Message::newInstance()
-                ->setSubject($this->get('translator')->trans('user.email.registration.subject'))
-                ->setFrom($this->container->getParameter('user_system_email'))
-                ->setTo($userEmail)
-                ->setBody(
-                    $this->renderView(
-                        'TUIToolkitUserBundle:Registration:register_email.html.twig',
-                        array(
-                            'brand' => $brand,
-                            'user' => $user,
-                        )
-                    ), 'text/html');
+                //Get some user info
+                $user->setConfirmationToken($tokenGenerator->generateToken());
+                $userEmail = $user->getEmail();
 
-            $em->persist($user);
-            $em->flush();
+                $message = \Swift_Message::newInstance()
+                    ->setSubject($this->get('translator')->trans('user.email.registration.subject'))
+                    ->setFrom($this->container->getParameter('user_system_email'))
+                    ->setTo($userEmail)
+                    ->setBody(
+                        $this->renderView(
+                            'TUIToolkitUserBundle:Registration:register_email.html.twig',
+                            array(
+                                'brand' => $brand,
+                                'user' => $user,
+                            )
+                        ), 'text/html');
 
-            $mailer->send($message);
+                $em->persist($user);
+                $em->flush();
+
+                $mailer->send($message);
+            }
         }
 
 
