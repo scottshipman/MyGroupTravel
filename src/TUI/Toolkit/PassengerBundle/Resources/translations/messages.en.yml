@@ -109,6 +109,8 @@ passenger:
         emergency_number: Telephone
         emergency_email: Email
         payments: Payments
+        organizer_first_name: Organizer's First Name
+        organizer_last_name: Organizer's Last Name
 
 
 
