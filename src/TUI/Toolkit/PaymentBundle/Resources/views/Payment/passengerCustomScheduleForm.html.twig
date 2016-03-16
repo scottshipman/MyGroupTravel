@@ -28,7 +28,6 @@
                 e.preventDefault();
                 var formAction = $(this).attr('action');
                 var form =$(this);
-                console.log('sent custom sched form');
                 $.ajax({
                     url: formAction,
                     type: 'POST',
@@ -48,7 +47,6 @@
                     $("#loader").hide();
                     var parsed = $.parseJSON(response.responseText);
                     $.each(parsed, function(i, item) {
-                        console.log(i);
                     });
                 });
             });

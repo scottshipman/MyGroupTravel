@@ -314,7 +314,6 @@
         $(document).on('click', '.existing-delete', function (e) {
             e.preventDefault();
             var remove = $(this).parent().find('a').attr('id');
-            console.log(remove)
             var value = $(".media-placeholder").val();
             var values = [];
             values = value.split(',').map(Number);

@@ -338,7 +338,6 @@
                        },
                        axis: 'y',
                        update: function(e, ui) {
-                           console.log(ui);
                            var pathArray = window.location.pathname.split( '/' );
                            contentBlocksUpdate(pathArray[3], 'QuoteVersion'); // fourth [3] part in the path should be quote ID to pass in
                        }
@@ -428,7 +427,6 @@
                        editBlock.load("/manage/headerblock/" + headerBlockId + "/header/edit/" + entityId + entityClass, function () {
                            doMDLpopup(editBlock); // run the function to add appropriate MDL classes to form elements
 //                           originalDiv.hide();
-                           console.log("something");
                            editBlock.show();
                            $("#loader").css("display", "none");
                            $('.content-block-actions').hide();
