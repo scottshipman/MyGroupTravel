@@ -112,6 +112,8 @@ passenger:
         emergency_number: Telephone
         emergency_email: Email
         payments: Payments
+        organizer_first_name: Organiser's First Name
+        organizer_last_name: Organiser's Last Name
 
 
 
