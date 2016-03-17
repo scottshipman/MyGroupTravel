@@ -39,7 +39,7 @@
         <div class="tour-show-left-column">
 
             <h3>{{ tour.name|title }}</h3>
-            <a href="" style="float:right;" class="passenger-filter" data-id="showEveryone"><i class="material-icons md-18">undo</i> {% trans %} passenger.labels.show-everyone{% endtrans %}</a><br>
+            <a href="" style="float:right; text-decoration: none; color: {{ brand.secondaryColor }} !important;" class="passenger-filter" id="clear-filters" data-id="showEveryone"><i class="material-icons md-18">undo</i> {% trans %} passenger.labels.show-everyone{% endtrans %}</a><br>
             <div class="list-header" style="color: {{ brand.secondaryColor }}"><i class="material-icons">flight_takeoff</i> {% trans %} passenger.labels.passengers_for{% endtrans %}</div>
             <ul class="tour-show-submenu list-indent">
                 <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" data-id="showAllPassengers"><strong>{% trans %}passenger.labels.all-passengers{% endtrans %} <span id="allPassengers">({{ statusCounts.passenger.accepted + statusCounts.organizer.accepted + statusCounts.passenger.free + statusCounts.organizer.free }})</span></strong></a></li>

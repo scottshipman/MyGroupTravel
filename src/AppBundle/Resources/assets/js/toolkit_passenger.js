@@ -10,6 +10,7 @@ function filterPassengers(elemID) {
             $('.passenger-filter').css("color", passengerStatus.primaryColor);
             $("a[data-id='" + elemID + "']").css("color", passengerStatus.secondaryColor);
             $('#card-title').html(passengerStatus.accepted + ' ' + passengerStatus.passenger + ' List');
+            $('#clear-filters').css("color", passengerStatus.secondaryColor);
             break;
         case 'showWaitlistPassengers':
             $('.accepted, .organizers, .free, .organizer-cta-card').slideUp(400, function () {
@@ -18,6 +19,7 @@ function filterPassengers(elemID) {
             $('.passenger-filter').css("color", passengerStatus.primaryColor);
             $("a[data-id='" + elemID + "']").css("color", passengerStatus.secondaryColor);
             $('#card-title').html(passengerStatus.waitlist + ' ' + passengerStatus.passenger + ' List');
+            $('#clear-filters').css("color", passengerStatus.secondaryColor);
             break;
         case 'showFreePassengers':
             $('.accepted, .waitlist, .organizers,  .organizer-cta-card').slideUp(400, function () {
@@ -26,6 +28,7 @@ function filterPassengers(elemID) {
             $('.passenger-filter').css("color", passengerStatus.primaryColor);
             $("a[data-id='" + elemID + "']").css("color", passengerStatus.secondaryColor);
             $('#card-title').html(passengerStatus.free + ' ' + passengerStatus.passenger + ' List');
+            $('#clear-filters').css("color", passengerStatus.secondaryColor);
             break;
         case 'showAllPassengers':
             $('.organizers, .passengers, .organizer-cta-card').slideUp(400, function () {
@@ -34,6 +37,7 @@ function filterPassengers(elemID) {
             $('.passenger-filter').css("color", passengerStatus.primaryColor);
             $("a[data-id='" + elemID + "']").css("color", passengerStatus.secondaryColor);
             $('#card-title').html(passengerStatus.passenger + ' List');
+            $('#clear-filters').css("color", passengerStatus.secondaryColor);
             break;
         case 'showAllOrganizers':
             $('.passengers, .passenger-cta-card').slideUp(400, function () {
@@ -43,6 +47,7 @@ function filterPassengers(elemID) {
             $("a[data-id='" + elemID + "']").css("color", passengerStatus.secondaryColor);
             $('#organizer-card-title').html(passengerStatus.organizer + ' List');
             $('.organizer-cta-card').css("display", "block");
+            $('#clear-filters').css("color", passengerStatus.secondaryColor);
             break;
         case 'showAcceptedOrganizers':
             $('.waitlist, .free,  .passenger-cta-card, .passengers').slideUp(400, function () {
@@ -52,6 +57,7 @@ function filterPassengers(elemID) {
             $("a[data-id='" + elemID + "']").css("color", passengerStatus.secondaryColor);
             $('#organizer-card-title').html(passengerStatus.accepted + ' ' + passengerStatus.organizer + ' List');
             $('.organizer-cta-card').css("display", "block");
+            $('#clear-filters').css("color", passengerStatus.secondaryColor);
             break;
         case 'showWaitlistOrganizers':
             $('.accepted, .free,  .passenger-cta-card, .passengers').slideUp(400, function () {
@@ -61,6 +67,7 @@ function filterPassengers(elemID) {
             $("a[data-id='" + elemID + "']").css("color", passengerStatus.secondaryColor);
             $('#organizer-card-title').html(passengerStatus.waitlist + ' ' + passengerStatus.organizer + ' List');
             $('.organizer-cta-card').css("display", "block");
+            $('#clear-filters').css("color", passengerStatus.secondaryColor);
             break;
         case 'showFreeOrganizers':
             $('.accepted, .waitlist, .passenger-cta-card, .passengers').slideUp(400, function () {
@@ -70,6 +77,7 @@ function filterPassengers(elemID) {
             $("a[data-id='" + elemID + "']").css("color", passengerStatus.secondaryColor);
             $('#organizer-card-title').html(passengerStatus.free + ' ' + passengerStatus.organizer + ' List');
             $('.organizer-cta-card').css("display", "block");
+            $('#clear-filters').css("color", passengerStatus.secondaryColor);
             break;
         case 'showEveryone':
             $('.organizer-cta-card').slideUp(400, function () {
@@ -77,6 +85,7 @@ function filterPassengers(elemID) {
             });
             $('.passenger-filter').css("color", passengerStatus.primaryColor);
             $('#card-title').html(passengerStatus.all);
+            $('#clear-filters').css("color", passengerStatus.secondaryColor);
             break;
         default:
             // do nothing
