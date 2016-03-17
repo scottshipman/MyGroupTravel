@@ -40,12 +40,10 @@
         
         var closeBt = $('.close-'+settings.modalTarget);
 
-        //console.log(closeBt)
 
         var href = $(modal).attr('href'),
             id = $('body').find('#'+settings.modalTarget),
             idConc = '#'+id.attr('id');
-            //console.log(idConc);
             // Default Classes
             id.addClass('animated');
             id.addClass(settings.modalTarget+'-off');

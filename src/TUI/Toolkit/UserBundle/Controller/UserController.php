@@ -1469,11 +1469,25 @@ class UserController extends Controller
     public function getQuotesAction($id)
     {
         $locale = $this->container->getParameter('locale');
+        $em = $this->getDoctrine()->getManager();
         // if user is brand or admin, list quotes where they are salesAgent or SecondaryContact
         // dont show expired or converted quotes for brand/admins either
         // if user is customer, list quotes by Permission Entity
         $quotes = array();
         $securityContext = $this->get('security.context');
+
+        //brand stuff
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
+
         if ($securityContext->isGranted('ROLE_BRAND')) {
             $today = new \DateTime();
             $limit = $this->container->hasParameter('profile_query_limit') ? $this->container->getParameter('profile_query_limit') : 5;
@@ -1520,11 +1534,25 @@ class UserController extends Controller
     public function getToursAction($id)
     {
         $locale = $this->container->getParameter('locale');
+        $em = $this->getDoctrine()->getManager();
         // if user is brand or admin, list quotes where they are salesAgent or SecondaryContact
         // if user is customer, list quotes by Permission Entity
         $tours = array();
         $data = array();
         $securityContext = $this->get('security.context');
+
+        //brand stuff
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
+
         if ($securityContext->isGranted('ROLE_BRAND')) {
             $limit = $this->container->hasParameter('profile_query_limit') ? $this->container->getParameter('profile_query_limit') : 5;
             $qb = $this->getDoctrine()->getManager()->createQueryBuilder();
@@ -1557,6 +1585,7 @@ class UserController extends Controller
 
         $data['tours'] = $tours;
         $data['locale'] = $locale;
+        $data['brand'] = $brand;
 
         return $this->render('TUIToolkitUserBundle:User:myTours.html.twig', $data);
     }

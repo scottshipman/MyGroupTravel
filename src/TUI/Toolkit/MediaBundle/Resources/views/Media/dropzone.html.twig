@@ -22,7 +22,6 @@
                     });
 
                     this.on("error", function (file, response) {
-//                        console.log('Error: ' + response);
                     });
                     this.on("addedfile", function () {
                         $("#dropzone-form-close").css({"display":"none"});
@@ -33,7 +32,6 @@
                     });
                     this.on("removedfile", function (file) {
                         $("#dropzone-form-close").css({"display":"inline-block"});
-                        console.log(file.serverId);
 /*
                         var name = {file: file.name}
                         $.ajax({
@@ -43,7 +41,6 @@
                             data: JSON.stringify(name),
                             dataType: 'json',
                             success: function (e) {
-                                console.log(e);
                             }
                         });
                         var _ref;

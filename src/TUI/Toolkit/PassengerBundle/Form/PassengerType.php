@@ -52,7 +52,8 @@ class PassengerType extends AbstractType
                 'attr' => array(
                     'class' => 'dateOfBirth',
                 ),
-                'years' => range(date('Y') - 30, date('Y') - 1)
+                'years' => range(date('Y') - 30, date('Y') - 1),
+                'invalid_message' => 'Please enter a valid date'
             ))
             ->add('gender', 'choice', array(
                 'choices' => array(

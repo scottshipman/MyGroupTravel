@@ -82,8 +82,6 @@
 
         //To expose the payment type description fields if there is already a value there
         $('.mdl-checkbox').each( function() {
-            var something = $(this).next().children(":first");
-            console.log(something);
             if ($(this).next().children(":first").val().length > 0) {
                 $(this).next().css({"display": "inline-block"});
             }
@@ -175,7 +173,6 @@
 
         // get the new index
         var index = $collectionHolder.data('index');
-        console.log(index);
 
         // Replace '__name__' in the prototype's HTML to
         // instead be a number based on how many items we have

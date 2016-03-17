@@ -106,7 +106,6 @@
                 $('#payment-history').toggle(400, function(){
                     if ($('#toggle-payment-history').text()=='Payment History expand_more') {
                         $('#toggle-payment-history').html('{% trans %}payment.labels.payment_history{% endtrans %} <br /><i class="material-icons">expand_less</i>');
-                        console.log($('#toggle-payment-history').html());
                     } else if ($('#toggle-payment-history').text()=='Payment History expand_less') {
                         $('#toggle-payment-history').html('{% trans %}payment.labels.payment_history{% endtrans %} <br /><i class="material-icons">expand_more</i>');
                     }

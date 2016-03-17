@@ -142,6 +142,12 @@
 
             });
 
+            //add some padding on the Textarea for IOS
+            $('#tui_toolkit_tourbundle_toursetup_cashPaymentDescription').css({'margin-top': '10px'});
+            $('#tui_toolkit_tourbundle_toursetup_bankTransferPaymentDescription').css({'margin-top': '10px'});
+            $('#tui_toolkit_tourbundle_toursetup_onlinePaymentDescription').css({'margin-top': '10px'});
+            $('#tui_toolkit_tourbundle_toursetup_otherPaymentDescription').css({'margin-top': '10px'});
+
             //toggle showing and hiding text fields based on input
             $('.mdl-checkbox').on( 'change', 'input:checkbox', function() {
 
@@ -186,7 +192,6 @@
             });
 
             $('#tui_toolkit_tourbundle_toursetup_submit').on('click', function() {
-                console.log($('form'));
             });
 
             //Bind the tour settings ajax form
@@ -230,7 +235,6 @@
 
             // get the new index
             var index = $collectionHolder.data('index');
-            console.log(index);
 
             // Replace '__name__' in the prototype's HTML to
             // instead be a number based on how many items we have

@@ -72,7 +72,7 @@
                            {% if tour.salesAgent.phoneNumber %}
                                <span style="margin-left:57px;"><tel>{{ tour.salesAgent.phoneNumber }}</tel></span>
                            {% endif %}
-                           <label>{% trans %}user.profile.my_quotes.salesAgent{% endtrans %}</label>
+                           <label>{{ brand.name }} {% trans %}user.profile.my_quotes.contact{% endtrans %}</label>
                         {% else %}
                             {% if tour.organizer.media %}
                                 <span class="tui-image-avatar" style="float: left; margin-right: 5px;">
