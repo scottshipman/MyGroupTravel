@@ -136,6 +136,7 @@ user:
             tour: Tour
             days: Days to go
             no_price: N/A
+            contact: Contact
 
     activate:
         brand: "Please create a password and security question to finish setting up your account."

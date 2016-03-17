@@ -132,6 +132,8 @@ user:
             tour: Tour
             days: Days to go
             no_price: N/A
+            contact: Contact
+
 
     activate:
         brand: "Its time to set up your account so you can start managing Tours. Just setup your password and security question and you'll be on your way."

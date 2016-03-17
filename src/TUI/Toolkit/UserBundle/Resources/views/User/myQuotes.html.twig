@@ -60,7 +60,7 @@
                         {% endif %}
                         {{ quote.quoteReference.salesAgent.firstName }} {{ tour.salesAgent.lastName }} <br /> <a style="text-decoration: none;" href="mailto:{{ quote.quoteReference.salesAgent.email }}">{{ quote.quoteReference.salesAgent.email }}</a><br />
                         <span style="margin-left:57px;"><tel>{{ quote.reference.salesAgent.phoneNumber }}</tel></span>
-                        <label>{% trans %}user.profile.my_quotes.salesAgent{% endtrans %}</label>
+                        <label>{{ brand.name }} {% trans %}user.profile.my_quotes.contact{% endtrans %}</label>
                     {% elseif quote.quoteReference.organizer %}
                         {% if quote.quoteReference.organizer.media %}
                             <span class="tui-image-avatar">
