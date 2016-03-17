@@ -129,6 +129,8 @@ passenger:
             email: Email
             first: Passenger's First Name
             last: Passenger's Last Name
+            organizer_first: New Organiser's First Name
+            organizer_last: New Organiser's Last Name
             message: Message
             gender: Gender
             age: Age

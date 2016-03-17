@@ -9,6 +9,8 @@ use Doctrine\ORM\EntityRepository;
 
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Collection;
 use TUI\Toolkit\UserBundle\Form\UserType;
 
 class QuoteType extends AbstractType

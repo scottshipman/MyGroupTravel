@@ -3,6 +3,7 @@
 namespace TUI\Toolkit\PaymentBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Payment
@@ -23,14 +24,14 @@ class Payment
 
     /**
      * @var float
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="value", type="float")
      */
     private $value;
 
     /**
      * @var \DateTime
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="date", type="date")
      */
     private $date;

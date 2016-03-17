@@ -199,10 +199,15 @@ class InstitutionController extends Controller
 //      return $this->redirect($this->generateUrl('manage_institution_show', array('id' => $entity->getId())));
     }
 
-    return $this->render('InstitutionBundle:Institution:ajax_new.html.twig', array(
-      'entity' => $entity,
-      'form' => $form->createView(),
-    ));
+      //return errors
+      $errors = $this->get("app.form.validation")->getErrorMessages($form);
+      $serializer = $this->container->get('jms_serializer');
+      $errors = $serializer->serialize($errors, 'json');
+
+      $response = new Response($errors);
+      $response->headers->set('Content-Type', 'application/json');
+      $response->setStatusCode('400');
+      return $response;
   }
 
     /**

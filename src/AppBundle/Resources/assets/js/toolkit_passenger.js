@@ -450,6 +450,7 @@ $(document).ready(function () {
         var form = $(this);
         $("#loader").css("display", "block");
         e.preventDefault();
+        $('.errors').remove();
         $.ajax({
             url: formAction,
             type: 'POST',
@@ -496,8 +497,17 @@ $(document).ready(function () {
                 }
             }
         }).error(function (response) {
-            var attribute = 'tui_toolkit_passengerbundle_passenger_';
-            ajaxFormErrors(response, attribute);
+            $("#loader").hide();
+            var parsed = $.parseJSON(response.responseText);
+            $.each(parsed, function(i, item) {
+                field= '#tui_toolkit_passengerbundle_passenger_' + i;
+                if($(field).is('input')){
+                    $(field).parent().after('<p class="errors" style="color:red;">'+ item + '</p>');
+                }
+                else if($(field).is('div')){
+                    $(field).append('<p class="errors" style="color:red;">'+ item + '</p>');
+                }
+            });
         })
     });
 

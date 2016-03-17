@@ -9,7 +9,8 @@ use Doctrine\ORM\EntityRepository;
 
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use TUI\Toolkit\UserBundle\Form\UserType;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Collection;
 
 class TourSetupType extends AbstractType
 {
@@ -40,7 +41,8 @@ class TourSetupType extends AbstractType
 
         $builder
             ->add('pricePersonPublic', 'number', array(
-                'label' => 'tour.form.tour_setup.price'
+                'label' => 'tour.form.tour_setup.price',
+                'constraints' => array(new NotBlank(array('message' => 'Price per Person can not be blank'))),
             ))
             ->add('paymentTasksPassenger', 'collection', array(
                 'type' => new PaymentTaskType($this->locale),

@@ -341,14 +341,14 @@ class UserController extends Controller
 
         }
 
+        //return errors
+        $errors = $this->get("app.form.validation")->getErrorMessages($form);
+        $serializer = $this->container->get('jms_serializer');
+        $errors = $serializer->serialize($errors, 'json');
 
-        $response = new Response($this->renderView('TUIToolkitUserBundle:User:ajax_new.html.twig', array(
-            'entity' => $entity,
-            'form' => $form->createView(),
-        )));
-        $response->headers->set('Content-Type', 'text/html');
-        $response->setStatusCode('406');
-
+        $response = new Response($errors);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setStatusCode('400');
         return $response;
     }
 

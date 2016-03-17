@@ -40,7 +40,7 @@ class Tour
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="name", type="string", length=255)
      * @GRID\Column(title="Tour Name", filterable=true, operatorsVisible=false, export=true)
      *
@@ -114,6 +114,7 @@ class Tour
 
     /**
      * @var integer
+     *
      * @ORM\ManyToOne(targetEntity="TUI\Toolkit\UserBundle\Entity\User", cascade={"persist"})
      * @ORM\JoinColumn(name="organizer", referencedColumnName="id")
      * @GRID\Column(field="organizer.firstName", type="text", title="Organizer First", export=true)
@@ -148,6 +149,7 @@ class Tour
 
     /**
      * @var integer
+     *
      * @ORM\JoinColumn(name="institution", referencedColumnName="id")
      * @ORM\ManyToOne(targetEntity="TUI\Toolkit\InstitutionBundle\Entity\Institution", cascade={"persist"}, fetch="EAGER")
      * @GRID\Column(field="institution.name", title="Institution", filterable=true, operatorsVisible=false, export=true)
