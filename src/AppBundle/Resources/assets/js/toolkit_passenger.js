@@ -235,7 +235,6 @@ $(document).ready(function () {
         }).success(function (response) {
             $("#loader").css("display", "none");
             //window.location.reload(true);
-            console.log(response);
             $(".medical-form").removeClass('expanded');
             $('#medical').css({
                 "color": "grey",

@@ -42,7 +42,6 @@
                 e.preventDefault();
                 var formAction = $(this).attr('action');
                 var form =$(this);
-                console.log('before ajax');
                 $.ajax({
                     url: formAction,
                     type: 'POST',
@@ -62,9 +61,7 @@
                     $("#loader").hide();
                     var parsed = $.parseJSON(response.responseText);
                     $.each(parsed, function(i, item) {
-                        console.log(i);
     //                    $.each(item, function(c, child) {
-    //                        console.log(c);
     //                        var task = c;
     //                        $.each(child, function(f, field) {
     //                            var specificForm = $('.new_passenger[task="'+task+'"]');
