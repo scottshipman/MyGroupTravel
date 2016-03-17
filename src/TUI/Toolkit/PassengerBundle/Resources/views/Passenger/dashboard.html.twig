@@ -335,9 +335,13 @@
                         location.reload(true);
                     },
                     error : function (response) {
-                        console.log(response);
-
-                    },
+                        $("#loader").hide();
+                        var parsed = $.parseJSON(response.responseText);
+                        $.each(parsed, function(i, item) {
+                            field= '#form_' + i;
+                            $(field).parent().parent().append('<p class="errors" style="color:red;">'+ item + '</p>');
+                        });
+                    }
                 });
 
             // popup for passenger manifest warning

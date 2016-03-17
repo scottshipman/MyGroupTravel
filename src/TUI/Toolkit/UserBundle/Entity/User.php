@@ -60,12 +60,14 @@ class User extends BaseUser
     /**
      * @ORM\Column(type="string", nullable=true)
      * @GRID\Column(visible=false, filterable=false, export=true)
+     * @Assert\NotBlank()
      */
     protected $firstName = null;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      * @GRID\Column(visible=false, filterable=false, export=true)
+     * @Assert\NotBlank()
      */
     protected $lastName = null;
 

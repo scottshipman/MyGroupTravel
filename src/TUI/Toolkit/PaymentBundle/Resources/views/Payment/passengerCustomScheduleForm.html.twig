@@ -48,7 +48,8 @@
                     $("#loader").hide();
                     var parsed = $.parseJSON(response.responseText);
                     $.each(parsed, function(i, item) {
-                        console.log(i);
+                        field= '#form_' + i;
+                        $(field).parent().after('<p class="errors" style="color:red;">'+ item + '</p>');
                     });
                 });
             });

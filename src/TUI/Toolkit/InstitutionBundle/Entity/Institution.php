@@ -8,6 +8,7 @@ use Application\Sonata\MediaBundle;
 use Gedmo\Mapping\Annotation as Gedmo;
 use APY\DataGridBundle\Grid\Mapping as GRID;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Institution
@@ -47,6 +48,7 @@ class Institution
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     * @Assert\NotBlank()
      * @GRID\Column(title="Name", visible=true, filterable=true, operatorsVisible=false, export=true)
      */
     private $name;
@@ -69,7 +71,7 @@ class Institution
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="city", type="string", length=255, nullable=true)
      * @GRID\Column(visible=false, filterable=false, export=true)
      */
@@ -93,7 +95,7 @@ class Institution
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="post_code", type="string", length=255, nullable=true)
      * @GRID\Column(visible=false, filterable=false, export=true)
      */

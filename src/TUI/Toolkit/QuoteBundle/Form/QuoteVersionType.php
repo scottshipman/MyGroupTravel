@@ -10,6 +10,9 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Collection;
+
 class QuoteVersionType extends AbstractType
 {
 

@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Collection;
 
 
@@ -218,8 +219,8 @@ class PassengerController extends Controller
 
         }
 
-        $errors = $this->get("passenger.actions")->getErrorMessages($form);
-
+        //$errors = $this->get("passenger.actions")->getErrorMessages($form);
+        $errors = $this->get("app.form.validation")->getNestedErrorMessages($form);
         $serializer = $this->container->get('jms_serializer');
         $errors = $serializer->serialize($errors, 'json');
 
@@ -478,9 +479,7 @@ class PassengerController extends Controller
 
         }
 
-        $errors = $this->get("passenger.actions")->getErrorMessages($editForm);
-
-
+        $errors = $this->get("app.form.validation")->getErrorMessages($editForm);
         $serializer = $this->container->get('jms_serializer');
         $errors = $serializer->serialize($errors, 'json');
 
@@ -948,11 +947,32 @@ class PassengerController extends Controller
             'method' => 'POST',
             'attr'  => array (
                 'id' => 'ajax_invite_organizer'
-            ),))
-            ->add('email', 'email', array('label' => $this->get('translator')->trans('passenger.form.invite.email')))
-            ->add('firstname', 'text', array('label' => $this->get('translator')->trans('passenger.form.invite.first')))
-            ->add('lastname', 'text', array('label' => $this->get('translator')->trans('passenger.form.invite.last')))
-            ->add('message', 'textarea', array('label' => $this->get('translator')->trans('passenger.form.invite.message')))
+            )))
+            ->add('email', 'email', array(
+                'label' => $this->get('translator')->trans('passenger.form.invite.email'),
+                'constraints' => array(
+                    new NotBlank(array('message' => 'Email is a required field')),
+                    new Email(array('message' => 'Please use a valid email address')),
+                 ),
+                ))
+            ->add('firstname', 'text', array(
+                'label' => $this->get('translator')->trans('passenger.form.invite.organizer_first'),
+                'constraints' => array(
+                    new NotBlank(array('message' => 'First Name is a required field')),
+                ),
+            ))
+            ->add('lastname', 'text', array(
+                 'label' => $this->get('translator')->trans('passenger.form.invite.organizer_last'),
+                 'constraints' => array(
+                    new NotBlank(array('message' => 'Last Name is a required field')),
+                 ),
+            ))
+            ->add('message', 'textarea', array(
+                'label' => $this->get('translator')->trans('passenger.form.invite.message'),
+                'constraints' => array(
+                    new NotBlank(array('message' => 'Please provide a custom message to this recipient.')),
+                    ),
+            ))
             ->add('tourId', 'hidden', array(
                 'data' => $tourId,
             ))
@@ -1094,9 +1114,7 @@ class PassengerController extends Controller
             );
         }
 
-        $errors = $this->get("passenger.actions")->getErrorMessages($form);
-
-
+        $errors = $this->get("app.form.validation")->getErrorMessages($form);
         $serializer = $this->container->get('jms_serializer');
         $errors = $serializer->serialize($errors, 'json');
 

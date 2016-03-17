@@ -68,19 +68,7 @@ class PaymentController extends Controller
             return $response;
         }
 
-        $errors = array();
-        foreach ($form->getErrors() as $key => $error) {
-            if ($form->isRoot()) {
-                $errors['#'][] = $error->getMessage();
-            } else {
-                $errors[] = $error->getMessage();
-            }
-        }
-        foreach ($form->all() as $child) {
-            if (!$child->isValid()) {
-                $errors[$child->getName()] = $this->getErrorMessages($child);
-            }
-        }
+        $errors = $this->get("app.form.validation")->getErrorMessages($form);
         $serializer = $this->container->get('jms_serializer');
         $errors = $serializer->serialize($errors, 'json');
         $response = new Response($errors);
@@ -129,19 +117,7 @@ class PaymentController extends Controller
             return $response;
         }
 
-        $errors = array();
-        foreach ($form->getErrors() as $key => $error) {
-            if ($form->isRoot()) {
-                $errors['#'][] = $error->getMessage();
-            } else {
-                $errors[] = $error->getMessage();
-            }
-        }
-        foreach ($form->all() as $child) {
-            if (!$child->isValid()) {
-                $errors[$child->getName()] = $this->getErrorMessages($child);
-            }
-        }
+        $errors = $this->get("app.form.validation")->getErrorMessages($form);
         $serializer = $this->container->get('jms_serializer');
         $errors = $serializer->serialize($errors, 'json');
         $response = new Response($errors);
@@ -538,7 +514,10 @@ class PaymentController extends Controller
         $locale = $this->container->getParameter('locale');
         $setupForm = $this->createForm(new TourSetupType($locale), $entity, array(
             'action' => $this->generateUrl('manage_tour_setup', array('id' => $entity->getId())),
-            'method' => 'PUT',
+            'method' => 'POST',
+            'attr'  => array(
+                'id' => 'ajax_tour_setup_form'
+            )
         ));
 
         $setupForm->add('submit', 'submit', array('label' => $this->get('translator')->trans('tour.actions.save')));

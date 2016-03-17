@@ -7,6 +7,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use libphonenumber\PhoneNumberUtils;
 use libphonenumber\PhoneNumberFormat;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\Collection;
 
 class AjaxuserType extends AbstractType
 {
@@ -65,6 +67,9 @@ class AjaxuserType extends AbstractType
             'label' => 'user.form.email',
             'translation_domain'  => 'messages',
             'required'  => true,
+              'constraints' => new Email(array(
+                  'message' => 'Please enter a valid email address.'
+              )),
 
           ))
           ->add('phoneNumber', 'text', array(
