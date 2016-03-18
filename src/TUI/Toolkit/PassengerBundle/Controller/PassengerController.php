@@ -1003,21 +1003,27 @@ class PassengerController extends Controller
 
             $data = $form->getData();
 
-            $user = new User();
-            $user->setUsername($data['email']);
-            $user->setPassword('');
-            $user->setEmail($data['email']);
-            $user->setFirstName($data['firstname']);
-            $user->setLastName($data['lastname']);
-            $user->setRoles(array('ROLE_CUSTOMER'));
+            // check for existing user acct first
+            $exists = $em->getRepository('TUIToolkitUserBundle:User')->findBy(array('email' => $data['email']));
+            if(!empty($exists)){
+                $user = array_shift($exists);
+            } else {
+                $user = new User();
+                $user->setUsername($data['email']);
+                $user->setPassword('');
+                $user->setEmail($data['email']);
+                $user->setFirstName($data['firstname']);
+                $user->setLastName($data['lastname']);
+                $user->setRoles(array('ROLE_CUSTOMER'));
 
 
-            // Create token
-            $tokenGenerator = $this->container->get('fos_user.util.token_generator');
-            $user->setConfirmationToken($tokenGenerator->generateToken());
+                // Create token
+                $tokenGenerator = $this->container->get('fos_user.util.token_generator');
+                $user->setConfirmationToken($tokenGenerator->generateToken());
 
-            $em->persist($user);
-            $em->flush();
+                $em->persist($user);
+                $em->flush();
+            }
 
             // create permission for new user as assistant
             $assistant = new Permission();
