@@ -29,6 +29,11 @@
         });
     }
 
+    //force numeric on amount fields
+    $('input[type="number"]').keypress(function(key) {
+        if(key.charCode == 101) return false;
+    });
+
 
 
     // *
