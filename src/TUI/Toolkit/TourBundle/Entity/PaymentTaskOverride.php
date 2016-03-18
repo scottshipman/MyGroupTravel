@@ -3,6 +3,7 @@
 namespace TUI\Toolkit\TourBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * PaymentOverride
@@ -23,7 +24,7 @@ class PaymentTaskOverride
 
     /**
      * @var float
-     *
+     * @Assert\GreaterThanOrEqual(value = 0)
      * @ORM\Column(name="value", type="float")
      */
     private $value;
