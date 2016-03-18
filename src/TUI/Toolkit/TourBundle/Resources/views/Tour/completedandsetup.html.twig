@@ -208,7 +208,7 @@
     {% if entity.passportDate is defined and entity.passportDate != null %}
         {% if (entity.payingPlaces - passengerData.completedPassengerData['passport']|length)  > 0 %}
         <div class="tour-edit mdl-card mdl-shadow--2dp">
-            <a class ="dashboard-titles" href="{{ path('manage_tour_tasks_dashboard', { 'id': entity.id }) }}" title="{% trans %}tour.dashboard.task_dashboard{% endtrans %}">
+            <a class ="dashboard-titles" href="{{ path('manage_tour_tasks_dashboard', { 'id': entity.id }) }}#passport" title="{% trans %}tour.dashboard.task_dashboard{% endtrans %}">
                 <div class="mdl-card__title">
                     <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.passport_data{% endtrans %} {{ entity.passPortDate|date(shortFormat) }}</h3>
                     <span class="tour-dashboard-cta"><i class="material-icons">arrow_forward</i></span>
@@ -246,7 +246,7 @@
     {% if entity.emergencyDate is defined and entity.emergencyDate != null %}
         {% if (entity.payingPlaces - passengerData.completedPassengerData['emergency']|length)  > 0 %}
             <div class="tour-edit mdl-card mdl-shadow--2dp">
-                <a class ="dashboard-titles" href="{{ path('manage_tour_tasks_dashboard', { 'id': entity.id }) }}" title="{% trans %}tour.dashboard.task_dashboard{% endtrans %}">
+                <a class ="dashboard-titles" href="{{ path('manage_tour_tasks_dashboard', { 'id': entity.id }) }}#emergency" title="{% trans %}tour.dashboard.task_dashboard{% endtrans %}">
                     <div class="mdl-card__title">
                         <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.passenger_data{% endtrans %} {{ entity.emergencyDate|date(shortFormat) }}</h3>
                         <span class="tour-dashboard-cta"><i class="material-icons">arrow_forward</i></span>
@@ -284,7 +284,7 @@
     {% if entity.medicalDate is defined and entity.medicalDate != null %}
         {% if (entity.payingPlaces - passengerData.completedPassengerData['medical']|length)  > 0 %}
             <div class="tour-edit mdl-card mdl-shadow--2dp">
-                <a class ="dashboard-titles" href="{{ path('manage_tour_tasks_dashboard', { 'id': entity.id }) }}" title="{% trans %}tour.dashboard.task_dashboard{% endtrans %}">
+                <a class ="dashboard-titles" href="{{ path('manage_tour_tasks_dashboard', { 'id': entity.id }) }}#medical" title="{% trans %}tour.dashboard.task_dashboard{% endtrans %}">
                     <div class="mdl-card__title">
                         <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.medical_data{% endtrans %} {{ entity.medicalDate|date(shortFormat) }}</h3>
                         <span class="tour-dashboard-cta"><i class="material-icons">arrow_forward</i></span>
@@ -322,7 +322,7 @@
     {% if entity.dietaryDate is defined and entity.dietaryDate != null %}
         {% if (entity.payingPlaces - passengerData.completedPassengerData['dietary']|length)  > 0 %}
             <div class="tour-edit mdl-card mdl-shadow--2dp">
-                <a class ="dashboard-titles" href="{{ path('manage_tour_tasks_dashboard', { 'id': entity.id }) }}" title="{% trans %}tour.dashboard.task_dashboard{% endtrans %}">
+                <a class ="dashboard-titles" href="{{ path('manage_tour_tasks_dashboard', { 'id': entity.id }) }}#dietary" title="{% trans %}tour.dashboard.task_dashboard{% endtrans %}">
                     <div class="mdl-card__title">
                         <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.dietary_data{% endtrans %} {{ entity.dietaryDate|date(shortFormat) }}</h3>
                         <span class="tour-dashboard-cta"><i class="material-icons">arrow_forward</i></span>
