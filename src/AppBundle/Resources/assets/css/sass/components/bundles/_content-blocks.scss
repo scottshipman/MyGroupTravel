@@ -222,7 +222,10 @@ td .layout-icons.image_bottom {
 .content-block-layout-image_left {
 
   .content-block-media {
-    width: 50%;
+    @include breakpoint_tablet() {
+      width: 50%;
+    }
+    width: 100%;
 
     .pdf-layout & {
       width: 100%;
@@ -233,7 +236,10 @@ td .layout-icons.image_bottom {
   }
 
   .content-block-body {
-    width: 50%;
+    @include breakpoint_tablet() {
+      width: 50%;
+    }
+      width: 100%;
 
     .pdf-layout & {
       width: 100%;
@@ -248,12 +254,19 @@ td .layout-icons.image_bottom {
 .content-block-layout-image_right {
 
   .content-block-media {
-    float: right;
-    padding-left: 2em;
+    @include breakpoint_tablet() {
+      float: right;
+      padding-left: 2em;
+    }
+
+    float: none;
   }
 
   .content-block-body {
-    float: left;
+    @include breakpoint_tablet() {
+      float: left;
+    }
+    float: none;
   }
 
 }
@@ -261,12 +274,19 @@ td .layout-icons.image_bottom {
 .content-block-layout-image_left {
 
   .content-block-media {
-    float: left;
-    padding-right: 2em;
+    @include breakpoint_tablet() {
+      float: left;
+      padding-right: 2em;
+    }
+    float: none;
   }
 
   .content-block-body {
-    float: right;
+    @include breakpoint_tablet() {
+      float: right;
+    }
+
+    float: none;
   }
 
 }
