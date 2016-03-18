@@ -9,10 +9,12 @@
         <li><a href="{{ path('manage_passenger_show', { 'id': passengerId }) }}" class="mdl-menu__item">{% trans %}passenger.actions.view_passenger{% endtrans %}</a></li>
 
         {#Activation Email for Users#}
-        {% if parent is defined and parent.enabled == false %}
-            <li><a href="{{ path('parent_user_registration_confirmation', { 'id': parent.id, 'tourId': tour.id }) }}" class="mdl-menu__item">{% trans %}passenger.actions.send_activation{% endtrans %}</a></li>
-        {% elseif user is defined and user.enabled == false %}
-            <li><a href="{{ path('parent_user_registration_confirmation', { 'id': user.id, 'tourId': tour.id }) }}" class="mdl-menu__item">{% trans %}passenger.actions.send-notification{% endtrans %}</a></li>
+        {% if passengerStatus != "waitlist" %}
+            {% if parent is defined and parent.enabled == false %}
+                <li><a href="{{ path('parent_user_registration_confirmation', { 'id': parent.id, 'tourId': tour.id }) }}" class="mdl-menu__item">{% trans %}passenger.actions.send_activation{% endtrans %}</a></li>
+            {% elseif user is defined and user.enabled == false %}
+                <li><a href="{{ path('parent_user_registration_confirmation', { 'id': user.id, 'tourId': tour.id }) }}" class="mdl-menu__item">{% trans %}passenger.actions.send-notification{% endtrans %}</a></li>
+            {% endif %}
         {% endif %}
 
         {# Accepted Menu Item #}
