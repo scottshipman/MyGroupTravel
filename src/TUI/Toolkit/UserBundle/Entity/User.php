@@ -166,7 +166,12 @@ class User extends BaseUser
 
   public function __toString()
   {
-    return $this->firstName . ' ' . $this->lastName . ' <'. $this->email . '>';
+    if (!empty($this->email)){
+      $email = ' <'. $this->email . '>';
+    } else {
+      $email = '';
+    }
+    return $this->firstName . ' ' . $this->lastName .  $email;
   }
 
 

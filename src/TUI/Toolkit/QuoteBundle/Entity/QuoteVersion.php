@@ -41,7 +41,7 @@ class QuoteVersion
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="name", type="string", length=255)
      * @GRID\Column(title="Quote Name", filterable=true, operatorsVisible=false, export=true)
      *

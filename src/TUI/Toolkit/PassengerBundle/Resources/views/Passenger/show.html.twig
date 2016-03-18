@@ -61,10 +61,10 @@
                 </ul>
                 <p style="font-weight:600;">Payment Methods</p>
                 <ul style="list-style:none;">
-                    <li> {{ entity.tourReference.bankTransferPaymentDescription }}</li>
-                    <li>  {{ entity.tourReference.onlinePaymentDescription }}</li>
-                    <li>  {{ entity.tourReference.cashPaymentDescription }}</li>
-                    <li>  {{ entity.tourReference.otherPaymentDescription }}</li>
+                    <li> {% if entity.tourReference.bankTransferPayment is sameas(TRUE) %}Bank Transfers {% if entity.tourReference.bankTransferPaymentDescription != '' %} - {{ entity.tourReference.bankTransferPaymentDescription }} {% endif %}{% endif %}</li>
+                    <li>  {% if entity.tourReference.onlinePayment is sameas(TRUE) %}Online Payments {% if entity.tourReference.onlinePaymentDescription != '' %} -  {{ entity.tourReference.onlinePaymentDescription }} {% endif %}{% endif %}</li>
+                    <li>   {% if entity.tourReference.cashPayment is sameas(TRUE) %}Cash Payments {% if entity.tourReference.cashPaymentDescription != '' %} - {{ entity.tourReference.cashPaymentDescription }} {% endif %}{% endif %}</li>
+                    <li>   {% if entity.tourReference.otherPayment is sameas(TRUE) %} {{ entity.tourReference.otherPaymentDescription }} {% endif %}</li>
                 </ul>
             </li>
 

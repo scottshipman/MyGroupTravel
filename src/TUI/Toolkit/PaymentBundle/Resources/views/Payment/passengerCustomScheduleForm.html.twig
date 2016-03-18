@@ -25,6 +25,7 @@
             //Bind the ajax form
             $('#ajax_custom_schedule_form').on('submit', function(e) {
                 $("#loader").css("display", "block");
+                $('.errors').remove();
                 e.preventDefault();
                 var formAction = $(this).attr('action');
                 var form =$(this);
