@@ -222,7 +222,9 @@
                     console.log(parsed);
                     $.each(parsed, function(i, item) {
                         field= '#tui_toolkit_tourbundle_toursetup_' + i;
-                        $(field).parent().after('<div class="errors" style="color:red;">'+ item + '</div>');
+                        //$(field).parent().after('<div class="errors" style="color:red;">'+ item + '</div>');
+                        $(field).parent().parent().append('<div class="errors" style="color:red;">'+ item + '</div>');
+
                     });
                 });
             });

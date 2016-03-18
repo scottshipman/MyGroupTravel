@@ -41,13 +41,13 @@ class Passenger
 
     /**
      * @ORM\Column(type="string", nullable=true)
-     * @Assert\NotBlank()
+     *
      */
     protected $fName = null;
 
     /**
      * @ORM\Column(type="string", nullable=true)
-     * @Assert\NotBlank()
+     *
      */
     protected $lName = null;
 
@@ -62,7 +62,7 @@ class Passenger
 
     /**
      * @var datetime
-     * @Assert\NotBlank()
+     *
      * @Assert\Date()
      * @ORM\Column(name="dob", type="date", nullable=true)
      */

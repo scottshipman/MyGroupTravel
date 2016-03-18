@@ -6,6 +6,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Collection;
 
 
 class PassengerType extends AbstractType
@@ -41,10 +43,16 @@ class PassengerType extends AbstractType
             ->add('fName', 'text', array(
                 'required' => true,
                 'label' => 'passenger.form.invite.first',
+                'constraints' => new NotBlank(array(
+                    'message' => 'Please enter a First Name'
+                )),
             ))
             ->add('lName', 'text', array(
                 'required' => true,
                 'label' => 'passenger.form.invite.last',
+                'constraints' => new NotBlank(array(
+                    'message' => 'Please enter a Last Name'
+                )),
             ))
             ->add('dateOfBirth', 'birthday', array(
                 'format' => $date_format,

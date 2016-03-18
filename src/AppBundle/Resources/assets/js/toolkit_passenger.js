@@ -124,7 +124,7 @@ function filterPassengers(elemID) {
 
 
 $(document).ready(function () {
-    // Do the resize content block stuff - on the fly!
+    // move passenger to new lists links
     $(document).on('click', 'a.move-to-accepted', function (e) {
         var t = $(this);
         e.preventDefault();
