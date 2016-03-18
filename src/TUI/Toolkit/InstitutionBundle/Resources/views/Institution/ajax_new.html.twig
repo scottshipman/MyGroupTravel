@@ -30,7 +30,6 @@
                 var parsed = $.parseJSON(response.responseText);
                 $.each(parsed, function(i, item) {
                     field = '#tui_toolkit_institutionbundle_institution_' + i;
-                    console.log(field);
                     $(field).parent().parent().prepend('<p style="color:red;">'+ i.toUpperCase() + ': ' + item + '</p>');
                 });
             },

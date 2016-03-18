@@ -29,7 +29,6 @@
                     var parsed = $.parseJSON(response.responseText);
                     $.each(parsed, function(i, item) {
                         field = '#tui_toolkit_ajax_userbundle_user_' + i;
-                        console.log(field);
                         $(field).parent().parent().prepend('<p style="color:red;">'+ i.toUpperCase() + ': ' + item + '</p>');
                     });
                 }

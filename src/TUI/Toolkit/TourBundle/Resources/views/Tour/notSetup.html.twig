@@ -138,8 +138,6 @@
             e.preventDefault();
             $('.errors').remove();
             $data = $('#ajax_tour_setup_form').serialize();
-            console.log('form submit');
-            console.log($data);
             var formAction = $(this).attr('action');
             var form =$(this);
             $.ajax({
@@ -157,7 +155,6 @@
             }).error(function (response) {
                 $("#loader").hide();
                 var parsed = $.parseJSON(response.responseText);
-                console.log(parsed);
                 $.each(parsed, function(i, item) {
                     field= '#tui_toolkit_tourbundle_toursetup_' + i;
                     $(field).parent().after('<p class="errors" style="color:red;">'+ item + '</p>');

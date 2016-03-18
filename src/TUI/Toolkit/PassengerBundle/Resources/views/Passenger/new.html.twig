@@ -87,7 +87,6 @@
                 e.preventDefault();
                 var formAction = $(this).attr('action');
                 var form =$(this);
-                console.log($('#ajax_passenger_form').serialize());
                 $.ajax({
                     url: formAction,
                     type: 'POST',

@@ -40,7 +40,6 @@
             e.preventDefault();
             var formAction = $(this).attr('action');
             var form =$(this);
-            console.log('before ajax');
             $.ajax({
                 url: formAction,
                 type: 'POST',
