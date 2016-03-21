@@ -85,6 +85,9 @@ class DietaryController extends Controller
         $form = $this->createForm(new DietaryType(), $entity, array(
             'action' => $this->generateUrl('dietary_create'),
             'method' => 'POST',
+            'attr'  => array (
+                'id' => 'ajax_new_dietary_form'
+            ),
         ));
 
         $form->add('submit', 'submit', array('label' => 'Save'));

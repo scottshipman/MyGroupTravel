@@ -34,6 +34,7 @@ class Dietary
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      * @GRID\Column(title="Description", export=true)
+     * @Assert\NotBlank()
      */
     protected $description;
 

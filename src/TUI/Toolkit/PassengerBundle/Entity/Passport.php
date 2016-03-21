@@ -32,12 +32,14 @@ class Passport
      *
      * @ORM\Column(name="passport_number", type="text", nullable=true)
      * @GRID\Column(title="Passport Number", export=true)
+     * @Assert\NotBlank()
      */
     private $passportNumber;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      * @GRID\Column(visible=false, filterable=false, export=true)
+     * @Assert\NotBlank()
      */
     private $passportFirstName;
 
@@ -50,54 +52,71 @@ class Passport
     /**
      * @ORM\Column(type="string", nullable=true)
      * @GRID\Column(visible=false, filterable=false, export=true)
+     * @Assert\NotBlank()
      */
     private $passportLastName;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      * @GRID\Column(visible=false, filterable=false, export=true)
+     * @Assert\NotBlank()
      */
     private $passportTitle;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      * @GRID\Column(visible=false, filterable=false, export=true)
+     * @Assert\NotBlank()
      */
     private $passportGender;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      * @GRID\Column(visible=false, filterable=false, export=true)
+     * @Assert\NotBlank()
      */
     private $passportNationality;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      * @GRID\Column(visible=false, filterable=false, export=true)
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 3,
+     *      minMessage = "Your Issuing State must be at least {{ limit }} characters long",
+     *      maxMessage = "Your Issuing State cannot be longer than {{ limit }} characters"
+     * )
      */
     private $passportIssuingState;
 
     /**
      * @var date
      *
+     * @Assert\Date(message="Please enter a valid date")
      * @ORM\Column(name="date_of_issue", type="date", nullable=true)
      * @GRID\Column(visible=true, export=true, operatorsVisible=false)
+     * @Assert\NotBlank()
      */
     private $passportDateOfIssue;
 
     /**
      * @var date
      *
+     * @Assert\Date(message="Please enter a valid date")
      * @ORM\Column(name="date_of_expiry", type="date", nullable=true)
      * @GRID\Column(visible=true, export=true, operatorsVisible=false)
+     * @Assert\NotBlank()
      */
     private $passportDateOfExpiry;
 
     /**
      * @var date
      *
+     * @Assert\Date(message="Please enter a valid date")
      * @ORM\Column(name="date_of_birth", type="date", nullable=true)
      * @GRID\Column(visible=true, export=true, operatorsVisible=false)
+     * @Assert\NotBlank()
      */
     private $passportDateOfBirth;
 

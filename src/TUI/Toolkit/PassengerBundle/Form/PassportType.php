@@ -86,7 +86,8 @@ class PassportType extends AbstractType
                 'attr' => array(
                     'class' => 'dateOfBirth',
                 ),
-                'years' => range(date('Y') - 60, date('Y') - 1)
+                'invalid_message' => 'Please enter a valid date',
+                'years' => range(date('Y') - 60, date('Y') - 1),
             ))
             ->add('passportDateOfIssue', 'birthday', array(
                 'format' => $date_format,
@@ -94,7 +95,8 @@ class PassportType extends AbstractType
                 'attr' => array(
                     'class' => 'dateOfIssue',
                 ),
-                'years' => range(date('Y') - 60, date('Y') - 1)
+                'invalid_message' => 'Please enter a valid date',
+                'years' => range(date('Y') - 60, date('Y') - 1),
             ))
             ->add('passportDateOfExpiry', 'birthday', array(
                 'format' => $date_format,
@@ -102,7 +104,8 @@ class PassportType extends AbstractType
                 'attr' => array(
                     'class' => 'dateOfExpiry',
                 ),
-                'years' => range(date('Y'), date('Y') + 20)
+                'invalid_message' => 'Please enter a valid date',
+                'years' => range(date('Y'), date('Y') + 20),
             ))
             ->add('passengerReference', 'hidden', array(
                 'required' => true,

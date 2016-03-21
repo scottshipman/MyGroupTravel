@@ -90,6 +90,9 @@ class EmergencyController extends Controller
         $form = $this->createForm(new EmergencyType($locale), $entity, array(
             'action' => $this->generateUrl('emergency_create'),
             'method' => 'POST',
+            'attr'  => array (
+                'id' => 'ajax_new_emergency_form'
+            ),
         ));
 
         $form->add('submit', 'submit', array('label' => 'Save'));

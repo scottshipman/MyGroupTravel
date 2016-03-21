@@ -62,15 +62,16 @@ class PassportController extends Controller
 
         }
 
-        $errorString = "";
-        $translator = $this->get('translator');
-        $errors = $this->get("passenger.actions")->getErrorMessages($form);
+        $errors = $this->get("app.form.validation")->getErrorMessages($form);
 
-        $errorString = $this->get("passenger.actions")->getFlashErrorMessages($errors, $form, $translator);
+        $serializer = $this->container->get('jms_serializer');
+        $errors = $serializer->serialize($errors, 'json');
 
-        $this->get('ras_flash_alert.alert_reporter')->addError($this->get('translator')->trans('passenger.form.error.message.passport')." ".$errorString);
+        $response = new Response($errors);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setStatusCode('400');
+        return $response;
 
-        return $this->redirect($this->generateUrl('manage_passenger_show', array('id' => $reference)));
     }
 
     /**
@@ -86,6 +87,9 @@ class PassportController extends Controller
         $form = $this->createForm(new PassportType($locale), $entity, array(
             'action' => $this->generateUrl('passport_create'),
             'method' => 'POST',
+            'attr'  => array (
+                'id' => 'ajax_new_passport_form'
+            ),
         ));
 
         $form->add('submit', 'submit', array('label' => 'Save'));
@@ -169,7 +173,7 @@ class PassportController extends Controller
             'action' => $this->generateUrl('passport_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr'  => array (
-                'id' => 'ajax_passport_form'
+                'id' => 'ajax_new_passport_form'
             ),
         ));
 
@@ -243,7 +247,7 @@ class PassportController extends Controller
         }
 
 
-        $errors = $this->get("passenger.actions")->getErrorMessages($editForm);
+        $errors = $this->get("app.form.validation")->getErrorMessages($editForm);
 
 
         $serializer = $this->container->get('jms_serializer');

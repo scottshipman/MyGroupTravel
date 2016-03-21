@@ -76,11 +76,11 @@ class MedicalController extends Controller
 
         $errorString = "";
         $translator = $this->get('translator');
-        $errors = $this->get("passenger.actions")->getErrorMessages($form);
+        $errors = $this->get("app.form.validation")->getErrorMessages($form);
 
-        $errorString = $this->get("passenger.actions")->getFlashErrorMessages($errors, $form, $translator);
+//        $errorString = $this->get("passenger.actions")->getFlashErrorMessages($errors, $form, $translator);
 
-        $this->get('ras_flash_alert.alert_reporter')->addError($this->get('translator')->trans('passenger.form.error.message.medical')." ".$errorString);
+//        $this->get('ras_flash_alert.alert_reporter')->addError($this->get('translator')->trans('passenger.form.error.message.medical')." ".$errorString);
 
         return $this->redirect($this->generateUrl('manage_passenger_show', array('id' => $reference)));
 
@@ -99,6 +99,9 @@ class MedicalController extends Controller
         $form = $this->createForm(new MedicalType($locale), $entity, array(
             'action' => $this->generateUrl('medical_create'),
             'method' => 'POST',
+            'attr'  => array (
+                'id' => 'ajax_new_medical_form'
+            ),
         ));
 
         $form->add('submit', 'submit', array('label' => 'Save'));
