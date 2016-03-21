@@ -31,7 +31,7 @@
 
     //force numeric on amount fields
     $('input[type="number"]').keypress(function(key) {
-        if(key.charCode == 101) return false;
+        if(key.charCode == 101 || key.charCode == 69) return false;
     });
 
 
