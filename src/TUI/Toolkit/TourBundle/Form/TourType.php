@@ -218,7 +218,7 @@ class TourType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'TUI\Toolkit\TourBundle\Entity\Tour',
-          //  'cascade_validation' => true,
+            'cascade_validation' => true,
         ));
     }
 

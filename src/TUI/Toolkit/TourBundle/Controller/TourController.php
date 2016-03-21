@@ -899,6 +899,7 @@ class TourController extends Controller
             }
 
         }
+        $errors = $this->get("app.form.validation")->getNestedErrorMessages($editForm);
 
         return $this->render('TourBundle:Tour:edit.html.twig', array(
             'entity' => $entity,
@@ -906,6 +907,7 @@ class TourController extends Controller
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
             'date_format' => $date_format,
+            'errors' => $errors,
         ));
     }
 

@@ -17,6 +17,7 @@
     <div class = "tour-edit mdl-card mdl-shadow--2dp">
         <div class="mdl-card__supporting-text">
             <h3 class="mdl-card__title">{% trans %}tour.edit.summary{% endtrans %}</h3>
+           {% if errors is defined %} {{ dump(errors) }} {% endif %}
             {{ form_row(edit_form.tripStatus) }}
             {{ form_row(edit_form.name) }}
             {{ form_row(edit_form.displayName) }}
@@ -310,6 +311,17 @@
         }
     </script>
 
+    {% if errors is defined %}
+    <script>
+        $(document).ready( function() {
+            {% for key, error in errors %}
+            console.log('{{ error }}');
+            $('#tui_toolkit_tourbundle_tour_{{ key }}').parent().after('<p class="errors" style="color:red;">{{ error }}</p>');
+            {% endfor %}
+        });
+    </script>
+    {% endif %}
+
     <script>
         $(document).on('click', '.existing-delete', function (e) {
             e.preventDefault();
@@ -341,5 +353,7 @@
             });
         });
     </script>
+
+
 
 {% endblock %}

@@ -52,9 +52,9 @@
                 </ul>
                 <p style="font-weight:600;">Payment Methods</p>
                 <ul style="list-style:none;">
-                    <li> {% if tour.bankTransferPayment is sameas(TRUE) %}Bank Transfers {% if tour.bankTransferPaymentDescription != '' %} - {{ tour.bankTransferPaymentDescription }} {% endif %}{% endif %}</li>
-                    <li>  {% if tour.onlinePayment is sameas(TRUE) %}Online Payments {% if tour.onlinePaymentDescription != '' %} -  {{ tour.onlinePaymentDescription }} {% endif %}{% endif %}</li>
-                    <li>   {% if tour.cashPayment is sameas(TRUE) %}Cash Payments {% if tour.cashPaymentDescription != '' %} - {{ tour.cashPaymentDescription }} {% endif %}{% endif %}</li>
+                    <li> {% if tour.bankTransferPayment is sameas(TRUE) %}{% trans %}tour.form.tour_setup.bank{% endtrans %} {% if tour.bankTransferPaymentDescription != '' %} - {{ tour.bankTransferPaymentDescription }} {% endif %}{% endif %}</li>
+                    <li>  {% if tour.onlinePayment is sameas(TRUE) %}{% trans %}tour.form.tour_setup.online{% endtrans %} {% if tour.onlinePaymentDescription != '' %} -  {{ tour.onlinePaymentDescription }} {% endif %}{% endif %}</li>
+                    <li>   {% if tour.cashPayment is sameas(TRUE) %}{% trans %}tour.form.tour_setup.cash{% endtrans %} {% if tour.cashPaymentDescription != '' %} - {{ tour.cashPaymentDescription }} {% endif %}{% endif %}</li>
                     <li>   {% if tour.otherPayment is sameas(TRUE) %} {{ tour.otherPaymentDescription }} {% endif %}</li>
                 </ul>
             </li>
