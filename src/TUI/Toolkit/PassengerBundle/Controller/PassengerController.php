@@ -654,6 +654,7 @@ class PassengerController extends Controller
             $user = $organizer->getId();
             $passenger = $this->get("permission.set_permission")->getObject('parent', $user, 'passenger');
             $isOrganizer = TRUE;
+            $paxCheck = TRUE;
 
             if (!empty($passenger)){
                 // could be more than one passenger object
@@ -666,14 +667,20 @@ class PassengerController extends Controller
                         $tourId == $paxObject->getTourReference()->getId())
                     {
                         $passengerObject = $paxObject;
-                        $break;
+                        $paxCheck = TRUE;
+                        break;
+                    }else {
+                        $paxCheck = FALSE;
                     }
                 }
 
-            } else {
+            }
+            if (empty($passenger) || $paxCheck === FALSE) {
                 // need to add name data to fake passenger data
                 $passengerObject->setfName($organizer->getFirstName());
                 $passengerObject->setlname($organizer->getLastName());
+                $passengerObject->setStatus('Pending Invite');
+
 
             }
             $combinedObjects[]= array($passengerObject, $organizer, $isOrganizer);

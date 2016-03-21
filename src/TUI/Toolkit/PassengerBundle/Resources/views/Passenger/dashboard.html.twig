@@ -166,10 +166,10 @@
                         {% if tour.organizer.id == passenger[1].id %}
                             {% set signedUp = 'passenger.labels.primary-organizer' | trans %}
                         {% else %}
-                            {% if passenger[1].enabled is sameas(false) %} {# Pending Invite #}
+                            {% if passenger[0].signUpDate == null %} {# Pending Invite #}
                                 {% set statusicon = '<a class="' ~ passenger[0].status ~ 'icon" title = "' ~ passenger[0].status | paxLabel ~ '"><i class="material-icons">live_help</i></a>' %}
                                 {% set signedUp = 'passenger.labels.invite-pending' | trans %}  {% endif %}
-                            {% if passenger[1].enabled is sameas(true) %}
+                            {% if passenger[1].enabled is sameas(true) and passenger[0].signUpDate != null %}
                                 {% set signedUp = 'passenger.labels.assistant-organizer' | trans %}  {% endif %}
                         {% endif %}
                     {% else %}
