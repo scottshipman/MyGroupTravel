@@ -289,7 +289,7 @@ $(document).ready(function () {
             $("#loader").hide();
             var parsed = $.parseJSON(response.responseText);
             $.each(parsed, function(i, item) {
-                field= '#tui_toolkit_passengerbundle_medical_' + i;
+                var field = '#tui_toolkit_passengerbundle_medical_' + i;
                 if($(field).is('input')){
                     $(field).parent().after('<p class="errors" style="color:red;">'+ item + '</p>');
                 }
@@ -369,7 +369,7 @@ $(document).ready(function () {
             $("#loader").hide();
             var parsed = $.parseJSON(response.responseText);
             $.each(parsed, function(i, item) {
-                field= '#tui_toolkit_passengerbundle_dietary_' + i;
+                var field = '#tui_toolkit_passengerbundle_dietary_' + i;
                 if($(field).is('input')){
                     $(field).parent().after('<p class="errors" style="color:red;">'+ item + '</p>');
                 }
