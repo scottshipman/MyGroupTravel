@@ -52,11 +52,10 @@ class Payment
 
     /**
      * @var \TUI\Toolkit\PassengerBundle\Entity\Passenger
-     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\PassengerBundle\Entity\Passenger", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\PassengerBundle\Entity\Passenger", inversedBy="payments", cascade={"persist"})
      * @ORM\JoinColumn(name="passenger", referencedColumnName="id")
      */
     private $passenger;
-
 
     /**
      * Get id

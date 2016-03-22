@@ -310,6 +310,17 @@
         }
     </script>
 
+    {% if errors is defined %}
+    <script>
+        $(document).ready( function() {
+            {% for key, error in errors %}
+            console.log('{{ error }}');
+            $('#tui_toolkit_tourbundle_tour_{{ key }}').parent().after('<p class="errors" style="color:red;">{{ error }}</p>');
+            {% endfor %}
+        });
+    </script>
+    {% endif %}
+
     <script>
         $(document).on('click', '.existing-delete', function (e) {
             e.preventDefault();
@@ -341,5 +352,7 @@
             });
         });
     </script>
+
+
 
 {% endblock %}
