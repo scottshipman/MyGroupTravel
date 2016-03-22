@@ -655,7 +655,6 @@ class PassengerController extends Controller
             $user = $organizer->getId();
             $passenger = $this->get("permission.set_permission")->getObject('parent', $user, 'passenger');
             $isOrganizer = TRUE;
-            $paxCheck = TRUE;
 
             if (!empty($passenger)){
                 // could be more than one passenger object
@@ -668,67 +667,15 @@ class PassengerController extends Controller
                         $tourId == $paxObject->getTourReference()->getId())
                     {
                         $passengerObject = $paxObject;
-                        $paxCheck = TRUE;
                         break;
-                    }else {
-                        $paxCheck = FALSE;
                     }
                 }
 
-            }
-            if (empty($passenger) || $paxCheck === FALSE) {
-                $user = $em->getRepository('TUIToolkitUserBundle:User')->find($user);
-                // if an assisstant we need to create a new passenger record if they are already registered
-                $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
-                $newPassenger = new Passenger();
-                $newPassenger->setStatus("waitlist");
-                $newPassenger->setFree(false);
-                $newPassenger->setFName($user->getFirstName());
-                $newPassenger->setLName($user->getLastName());
-                $newPassenger->setTourReference($tour);
-                $newPassenger->setGender('undefined');
-                $newPassenger->setDateOfBirth(new \DateTime("1987-01-01"));
-                $newPassenger->setSignUpDate(new \DateTime("now"));
-                $newPassenger->setSelf(TRUE);
+            } else{
 
-                $em->persist($newPassenger);
-                $em->flush($newPassenger);
-
-                //get locale and date format for emails sent
-                $locale = $this->container->getParameter('locale');
-                $date_format = $this->container->getParameter('date_format');
-
-                //brand stuff
-                $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
-
-                // look for a configured brand
-                if($brand_id = $this->container->getParameter('brand_id')){
-                    $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
-                }
-
-                if(!$brand) {
-                    $brand = $default_brand;
-                }
-
-                //send another email to the organizer just to confirm because they have already registered.
-
-                $message = \Swift_Message::newInstance()
-                    ->setSubject($this->get('translator')->trans('passenger.emails.notifications'))
-                    ->setFrom($this->container->getParameter('user_system_email'))
-                    ->setTo($organizer->getEmail())
-                    ->setBody(
-                        $this->renderView(
-                            'PassengerBundle:Emails:activatedPassengerOrganizerNotificationEmail.html.twig',
-                            array(
-                                'brand' => $brand,
-                                'tour' => $tour,
-                                'user' => $user,
-                                'tour_name' => $tour->getName(),
-                                'locale' => $locale,
-                                'date_format' => $date_format,
-                            )
-                        ), 'text/html');
-                $this->get('mailer')->send($message);
+                // need to add name data to fake passenger data
+                $passengerObject->setfName($organizer->getFirstName());
+                $passengerObject->setlname($organizer->getLastName());
 
             }
             $combinedObjects[]= array($passengerObject, $organizer, $isOrganizer);
@@ -1052,6 +999,32 @@ class PassengerController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
+        //get locale and date format for emails sent
+        $locale = $this->container->getParameter('locale');
+        $date_format = $this->container->getParameter('date_format');
+
+        //brand stuff
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
+
+        //get current tour
+        $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
+
+        //get tour organizer
+        $organizer = $tour->getOrganizer();
+
+
+        //get current user in case they arent the primary organizer
+        $currUser = $this->get('security.context')->getToken()->getUser();
+
         $form = $this->createInviteForm($tourId);
         $form->handleRequest($request);
         if($form->isValid()) {
@@ -1062,6 +1035,56 @@ class PassengerController extends Controller
             $exists = $em->getRepository('TUIToolkitUserBundle:User')->findBy(array('email' => $data['email']));
             if(!empty($exists)){
                 $user = array_shift($exists);
+
+                // if an assisstant we need to create a new passenger record if they are already registered
+                $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
+                $newPassenger = new Passenger();
+                $newPassenger->setStatus("waitlist");
+                $newPassenger->setFree(false);
+                $newPassenger->setFName($data['firstname']);
+                $newPassenger->setLName($data['lastname']);
+                $newPassenger->setTourReference($tour);
+                $newPassenger->setGender('undefined');
+                $newPassenger->setDateOfBirth(new \DateTime("1987-01-01"));
+                $newPassenger->setSignUpDate(new \DateTime("now"));
+                $newPassenger->setSelf(TRUE);
+
+                $em->persist($newPassenger);
+                $em->flush($newPassenger);
+
+                $newPermission = new Permission();
+                $newPermission->setUser($user);
+                $newPermission->setClass('passenger');
+                $newPermission->setGrants('parent');
+                $newPermission->setObject($newPassenger->getId());
+
+
+                $em->persist($newPermission);
+                $em->flush($newPermission);
+
+                //send another email to the organizer just to confirm because they have already registered.
+
+                $message = \Swift_Message::newInstance()
+                    ->setSubject($this->get('translator')->trans('passenger.emails.notifications'))
+                    ->setFrom($this->container->getParameter('user_system_email'))
+                    ->setTo($user->getEmail())
+                    ->setBody(
+                        $this->renderView(
+                            'PassengerBundle:Emails:activatedPassengerOrganizerNotificationEmail.html.twig',
+                            array(
+                                'brand' => $brand,
+                                'tour' => $tour,
+                                'user' => $user,
+                                'tour_name' => $tour->getName(),
+                                'locale' => $locale,
+                                'date_format' => $date_format,
+                                'note' => $data['message'],
+                                'inviter' => $currUser
+                            )
+                        ), 'text/html');
+                $this->get('mailer')->send($message);
+
+
             } else {
                 $user = new User();
                 $user->setUsername($data['email']);
@@ -1078,6 +1101,28 @@ class PassengerController extends Controller
 
                 $em->persist($user);
                 $em->flush();
+
+                //Send Email to whoever was invited
+                $newEmail = $user->getEmail();
+
+                $message = \Swift_Message::newInstance()
+                    ->setSubject($this->get('translator')
+                        ->trans('passenger.emails.invite-organizer.new-user-subject'))
+                    ->setFrom($this->container->getParameter('user_system_email'))
+                    ->setTo($newEmail)
+                    ->setBody(
+                        $this->renderView(
+                            'PassengerBundle:Emails:inviteOrganizerRegistrationEmail.html.twig',
+                            array(
+                                'brand' => $brand,
+                                'tour' => $tour,
+                                'user' => $user,
+                                'currUser' => $currUser,
+                                'organizer' => $organizer,
+                                'message' => $data['message'],
+                            )
+                        ), 'text/html');
+                $this->get('mailer')->send($message);
             }
 
             // create permission for new user as assistant
@@ -1089,30 +1134,10 @@ class PassengerController extends Controller
             $em->persist($assistant);
             $em->flush();
 
-            //get current tour
-            $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
-
-            //brand stuff
-            $default_brand = $em->getRepository('BrandBundle:Brand')
-                ->findOneByName('ToolkitDefaultBrand');
-            // look for a configured brand
-            if ($brand_id = $this->container->getParameter('brand_id')) {
-                $brand = $em->getRepository('BrandBundle:Brand')
-                    ->find($brand_id);
-            }
-            if (!$brand) {
-                $brand = $default_brand;
-            }
-
-            //get current user in case they arent the primary organizer
-            $currUser = $this->get('security.context')->getToken()->getUser();
-
-            //get tour organizer
-            $organizer = $tour->getOrganizer();
-
             //get organizer count to update on response
             $organizers = $this->get("passenger.actions")->getOrganizers($tourId);
             $organizersCount = count($organizers);
+
 
             //Send email to the organizer if the organizer account the organizer account is enabled
             $organizerEmail = $organizer->getEmail();
@@ -1137,29 +1162,6 @@ class PassengerController extends Controller
                     ), 'text/html');
             $this->get('mailer')->send($message);
 
-
-            //Send Email to whoever was invited
-            $newEmail = $user->getEmail();
-
-            $message = \Swift_Message::newInstance()
-                ->setSubject($this->get('translator')
-                    ->trans('passenger.emails.invite-organizer.new-user-subject'))
-                ->setFrom($this->container->getParameter('user_system_email'))
-                ->setTo($newEmail)
-                ->setBody(
-                    $this->renderView(
-                        'PassengerBundle:Emails:inviteOrganizerRegistrationEmail.html.twig',
-                        array(
-                            'brand' => $brand,
-                            'tour' => $tour,
-                            'user' => $user,
-                            'currUser' => $currUser,
-                            'organizer' => $organizer,
-                            'message' => $data['message'],
-                        )
-                    ), 'text/html');
-            $this->get('mailer')->send($message);
-
             //return successful ajax response
             $data = array(
                 $user->getEmail(),
@@ -1167,7 +1169,7 @@ class PassengerController extends Controller
                 $user->getLastName(),
                 $organizersCount + 1,
             );
-            $this->get('ras_flash_alert.alert_reporter')->addSuccess("An email invitation has been sent to " . $user->getFirstName() . " " . $user->getLastName() . " at " . $newEmail .".");
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess("An email invitation has been sent to " . $user->getFirstName() . " " . $user->getLastName() . " at " . $user->getEmail() .".");
             $responseContent = json_encode($data);
             return new Response($responseContent,
                 Response::HTTP_OK,

@@ -349,17 +349,12 @@
                                                 <td valign="top" class="bodyContent">
                                                     <div><br>
                                                         <h2 class="h2">You Have Been Added as an Organiser</h2>
-                                                        <p>You have been added as an organiser to {{ tour_name }}</p>
-                                                        {#<h4><strong>Parent Information</strong></h4>#}
-                                                        {#<p>{{ user.firstName }} {{ user.lastName }}</p>#}
-                                                        {#<p>{{ user.Email }}</p>#}
-
-                                                        {#<h4><strong>Passenger sign ups</strong></h4>#}
-                                                        {#{% for passenger in newPassengers %}#}
-                                                            {#<p>{{ passenger.fName }} {{ passenger.lName }} has signed up.</p>#}
-                                                        {#{% endfor %}#}
-
-                                                        {#<p>There are <strong>{{ remainingSpots }}</strong> places left to fill.</p>#}
+                                                        <p>You have been added as an organiser to {{ tour_name }} by {{ inviter.firstName }} {{ inviter.lastName }}</p>
+                                                        <p></p>
+                                                        {% if note %}
+                                                            <h4><strong>Message from {{ inviter.firstName }} {{ inviter.lastName }}</strong></h4>
+                                                            <p>{{ note }}</p>
+                                                        {% endif %}
                                                     </div>
                                                 </td>
                                             </tr>
@@ -368,7 +363,7 @@
                                                     <table border="0" cellpadding="15" cellspacing="0" class="templateButton">
                                                         <tr>
                                                             <td valign="middle" class="templateButtonContent">
-                                                                <div><a href="{{ absolute_url('/tour/dashboard/' ~ tour.id ~ '/show') }}">Look at your Tour</a></div>
+                                                                <div><a href="{{ absolute_url('/tour/dashboard/' ~ tour.id ~ '/show') }}">Go to your Tour</a></div>
                                                             </td>
                                                         </tr>
                                                     </table>
