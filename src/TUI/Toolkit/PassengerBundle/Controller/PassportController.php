@@ -69,7 +69,7 @@ class PassportController extends Controller
 
         $response = new Response($errors);
         $response->headers->set('Content-Type', 'application/json');
-        $response->setStatusCode('400');
+        $response->setStatusCode('403');
         return $response;
 
     }
@@ -255,7 +255,7 @@ class PassportController extends Controller
 
         $response = new Response($errors);
         $response->headers->set('Content-Type', 'application/json');
-        $response->setStatusCode('400');
+        $response->setStatusCode('403');
         return $response;
     }
     /**

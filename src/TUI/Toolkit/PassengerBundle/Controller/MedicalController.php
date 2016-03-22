@@ -74,15 +74,16 @@ class MedicalController extends Controller
 
         }
 
-        $errorString = "";
-        $translator = $this->get('translator');
         $errors = $this->get("app.form.validation")->getErrorMessages($form);
 
-//        $errorString = $this->get("passenger.actions")->getFlashErrorMessages($errors, $form, $translator);
+        $serializer = $this->container->get('jms_serializer');
+        $errors = $serializer->serialize($errors, 'json');
 
-//        $this->get('ras_flash_alert.alert_reporter')->addError($this->get('translator')->trans('passenger.form.error.message.medical')." ".$errorString);
+        $response = new Response($errors);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setStatusCode('403');
+        return $response;
 
-        return $this->redirect($this->generateUrl('manage_passenger_show', array('id' => $reference)));
 
     }
 
@@ -238,7 +239,7 @@ class MedicalController extends Controller
 
         }
 
-        $errors = $this->get("passenger.actions")->getErrorMessages($editForm);
+        $errors = $this->get("app.form.validation")->getErrorMessages($editForm);
 
 
         $serializer = $this->container->get('jms_serializer');
@@ -246,7 +247,7 @@ class MedicalController extends Controller
 
         $response = new Response($errors);
         $response->headers->set('Content-Type', 'application/json');
-        $response->setStatusCode('400');
+        $response->setStatusCode('403');
         return $response;
     }
     /**
