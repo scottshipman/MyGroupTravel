@@ -6,6 +6,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Validator\Constraints\Callback;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use TUI\Toolkit\TourBundle\Entity\Tour;
 use TUI\Toolkit\CurrencyBundle\Entity\Currency;
 
@@ -42,7 +44,12 @@ class PaymentType extends AbstractType
                 'label' => 'payment.form.value',
                 'translation_domain'  => 'messages',
                 'required' => true,
-                'currency' => $this->tour->getCurrency()->getCode()
+                'currency' => $this->tour->getCurrency()->getCode(),
+                'constraints' => array(
+                  new Callback(array(
+                    'callback' => array($this, 'validateValueTotal')
+                  ))
+                )
             ))
             ->add('date', 'genemu_jquerydate', array(
                 'widget' => 'single_text',
@@ -62,6 +69,30 @@ class PaymentType extends AbstractType
                 'data' => $this->passenger->getId()
     ))
         ;
+    }
+
+    /**
+     * The total of all payments for the passenger should always be positive.
+     *
+     * @param $object
+     * @param \Symfony\Component\Validator\Context\ExecutionContextInterface $context
+     */
+    public function validateValueTotal($object, ExecutionContextInterface $context)
+    {
+        $payments = $this->passenger->getPayments();
+        $total = $object;
+
+        // Work out the total value of all payments for the passenger.
+        foreach($payments as $payment) {
+            $total += $payment->getValue();
+        }
+
+        // If the total is less than or equal to
+        if ($total < 0) {
+            $context->buildViolation('You cannot refund more than has been paid.' . $total)
+              ->atPath('value')
+              ->addViolation();
+        }
     }
     
     /**
