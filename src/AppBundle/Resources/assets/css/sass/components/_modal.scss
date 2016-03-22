@@ -323,3 +323,16 @@
     }
 
 }
+
+// Fix for Modals on small screens.
+@include breakpoint_phone_down {
+  .ui-dialog {
+    position: fixed;
+    top: 0 !important;
+    bottom: 0;
+
+    &.has-mdl-submit-row {
+      margin-top: 0;
+    }
+  }
+}
