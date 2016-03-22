@@ -126,7 +126,7 @@ $tertiaryArray = explode(',', str_replace(array('rgb(', ')'), array('', ''), $te
 ?><style>
 /* MDL color overrides */
 a {
-  color: <?php echo hsl_rgb(hsl_text(rgb_hsl($secondaryArray), 0.25)) ?>;
+  color: <?php echo $secondary ?>;
 }
 
 .mdl-color-text--primary-contrast {
