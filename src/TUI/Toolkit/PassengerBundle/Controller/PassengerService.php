@@ -440,10 +440,58 @@ class PassengerService
 
             }
             if (empty($passenger) || $paxCheck === FALSE) {
-                // need to add name data to fake passenger data
-                $passengerObject->setfName($organizer->getFirstName());
-                $passengerObject->setlname($organizer->getLastName());
-                $passengerObject->setStatus('Pending Invite');
+                $user = $em->getRepository('TUIToolkitUserBundle:User')->find($user);
+                // if an assisstant we need to create a new passenger record if they are already registered
+                $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
+                $newPassenger = new Passenger();
+                $newPassenger->setStatus("waitlist");
+                $newPassenger->setFree(false);
+                $newPassenger->setFName($user->getFirstName());
+                $newPassenger->setLName($user->getLastName());
+                $newPassenger->setTourReference($tour);
+                $newPassenger->setGender('undefined');
+                $newPassenger->setDateOfBirth(new \DateTime("1987-01-01"));
+                $newPassenger->setSignUpDate(new \DateTime("now"));
+                $newPassenger->setSelf(TRUE);
+
+                $em->persist($newPassenger);
+                $em->flush($newPassenger);
+
+                //get locale and date format for emails sent
+                $locale = $this->container->getParameter('locale');
+                $date_format = $this->container->getParameter('date_format');
+
+                //brand stuff
+                $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+                // look for a configured brand
+                if($brand_id = $this->container->getParameter('brand_id')){
+                    $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+                }
+
+                if(!$brand) {
+                    $brand = $default_brand;
+                }
+
+                //send another email to the organizer just to confirm because they have already registered.
+
+                $message = \Swift_Message::newInstance()
+                    ->setSubject($this->get('translator')->trans('passenger.emails.notifications'))
+                    ->setFrom($this->container->getParameter('user_system_email'))
+                    ->setTo($organizer->getEmail())
+                    ->setBody(
+                        $this->renderView(
+                            'PassengerBundle:Emails:activatedPassengerOrganizerNotificationEmail.html.twig',
+                            array(
+                                'brand' => $brand,
+                                'tour' => $tour,
+                                'user' => $user,
+                                'tour_name' => $tour->getName(),
+                                'locale' => $locale,
+                                'date_format' => $date_format,
+                            )
+                        ), 'text/html');
+                $this->get('mailer')->send($message);
 
             }
             $combinedObjects[]= array($passengerObject, $organizer, $isOrganizer);
