@@ -144,8 +144,8 @@ class PassengerService
 //        }
 
         //Get Organizers
-        $organizerCount = $container->get("permission.set_permission")->getUser('organizer', $tour->getId(), 'tour');
-        $assistantCount = $container->get("permission.set_permission")->getUser('assistant', $tour->getId(), 'tour');
+        $organizerCount = $container->get("permission.set_permission")->getUsers('organizer', $tour->getId(), 'tour');
+        $assistantCount = $container->get("permission.set_permission")->getUsers('assistant', $tour->getId(), 'tour');
         $totalOrganizerCount = count($organizerCount) + count($assistantCount);
         $passengerData->totalOrganizerCount = $totalOrganizerCount;
 
@@ -418,7 +418,6 @@ class PassengerService
             $user = $organizer->getId();
             $passenger = $this->get("permission.set_permission")->getObject('parent', $user, 'passenger');
             $isOrganizer = TRUE;
-            $paxCheck = TRUE;
 
             if (!empty($passenger)){
                 // could be more than one passenger object
@@ -431,19 +430,15 @@ class PassengerService
                         $tourId == $paxObject->getTourReference()->getId())
                     {
                         $passengerObject = $paxObject;
-                        $paxCheck = TRUE;
                         break;
-                    }else {
-                        $paxCheck = FALSE;
                     }
                 }
 
             }
-            if (empty($passenger) || $paxCheck === FALSE) {
+            else {
                 // need to add name data to fake passenger data
                 $passengerObject->setfName($organizer->getFirstName());
                 $passengerObject->setlname($organizer->getLastName());
-                $passengerObject->setStatus('Pending Invite');
 
             }
             $combinedObjects[]= array($passengerObject, $organizer, $isOrganizer);
@@ -470,10 +465,12 @@ class PassengerService
             $object = $acceptedUser->getId();
             $users = $container->get("permission.set_permission")->getUser('parent', $object, 'passenger');
 
-            foreach ($users as $user) {
-                $user = $em->getRepository('TUIToolkitUserBundle:User')->find($user);
-                if ($user->isEnabled() == false) {
-                    $unactivated[] = $user;
+            if ($users) {
+                foreach ($users as $user) {
+                    $user = $em->getRepository('TUIToolkitUserBundle:User')->find($user);
+                    if ($user->isEnabled() == false) {
+                        $unactivated[] = $user;
+                    }
                 }
             }
         }

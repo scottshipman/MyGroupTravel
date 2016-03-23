@@ -558,6 +558,12 @@ class PassengerController extends Controller
 
         //combine all lists and get parents
         $all = $this->get("passenger.actions")->getPassengersByStatus('all', $tourId);
+
+//        foreach ($all as $key => $a){
+//            if ($a->getSelf() == true){
+//                unset($all[$key]);
+//            }
+//        }
         $passengers = $this->addPassengerParents($all, $em);
 
         // get counts of status for passengers and organizers
@@ -575,7 +581,7 @@ class PassengerController extends Controller
         $unactivatedCount = $this->get("passenger.actions")->getUnActivatedUsers($tourId);
 
         // merge all records
-        $passengers = array_merge($passengers, $organizersObjects);
+//        $passengers = array_merge($passengers, $organizersObjects);
 
         //brand stuff
         $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
@@ -623,8 +629,22 @@ class PassengerController extends Controller
             } else {
                 $parentObject = "";
             }
-                $isOrganizer = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $parentObject)[0]=='organizer' ? TRUE : FALSE;
-                $isOrganizer = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $parentObject)[0]=='assistant' ? TRUE : $isOrganizer;
+                $permissions = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $parentObject);
+
+                if (is_array($permissions)){
+                    foreach($permissions as $permission){
+                        if ($permission == 'organizer' && $passenger->getSelf() == true){
+                            $isOrganizer = TRUE;
+                        }elseif ($permission == 'assistant' && $passenger->getSelf() == true){
+                            $isOrganizer = TRUE;
+                        }else {
+                            $isOrganizer = FALSE;
+                        }
+                    }
+                }
+
+//                $isOrganizer = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $parentObject)[0]=='organizer' ? TRUE : FALSE;
+//                $isOrganizer = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $parentObject)[0]=='assistant' ? TRUE : $isOrganizer;
 
 
                 $combinedObjects[]= array($passenger, $parentObject, $isOrganizer);
@@ -1036,7 +1056,7 @@ class PassengerController extends Controller
             if(!empty($exists)){
                 $user = array_shift($exists);
 
-                // if an assisstant we need to create a new passenger record if they are already registered
+                // if an assistant we need to create a new passenger record if they are already registered
                 $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
                 $newPassenger = new Passenger();
                 $newPassenger->setStatus("waitlist");
@@ -1047,10 +1067,19 @@ class PassengerController extends Controller
                 $newPassenger->setGender('undefined');
                 $newPassenger->setDateOfBirth(new \DateTime("1987-01-01"));
                 $newPassenger->setSignUpDate(new \DateTime("now"));
-                $newPassenger->setSelf(TRUE);
+                $newPassenger->setSelf(true);
 
                 $em->persist($newPassenger);
                 $em->flush($newPassenger);
+
+                // create permission for new user as assistant
+                $assistant = new Permission();
+                $assistant->setUser($user);
+                $assistant->setClass('tour');
+                $assistant->setObject($tourId);
+                $assistant->setGrants('assistant');
+                $em->persist($assistant);
+                $em->flush();
 
                 $newPermission = new Permission();
                 $newPermission->setUser($user);
@@ -1102,6 +1131,15 @@ class PassengerController extends Controller
                 $em->persist($user);
                 $em->flush();
 
+                // create permission for new user as assistant
+                $assistant = new Permission();
+                $assistant->setUser($user);
+                $assistant->setClass('tour');
+                $assistant->setObject($tourId);
+                $assistant->setGrants('assistant');
+                $em->persist($assistant);
+                $em->flush();
+
                 //Send Email to whoever was invited
                 $newEmail = $user->getEmail();
 
@@ -1124,15 +1162,6 @@ class PassengerController extends Controller
                         ), 'text/html');
                 $this->get('mailer')->send($message);
             }
-
-            // create permission for new user as assistant
-            $assistant = new Permission();
-            $assistant->setUser($user);
-            $assistant->setClass('tour');
-            $assistant->setObject($tourId);
-            $assistant->setGrants('assistant');
-            $em->persist($assistant);
-            $em->flush();
 
             //get organizer count to update on response
             $organizers = $this->get("passenger.actions")->getOrganizers($tourId);
