@@ -125,3 +125,32 @@ form > .form-row > ul > li {
     display: none;
   }
 }
+
+form[name=tui_toolkit_tourbundle_toursetup] {
+  .setup-form-list {
+    li {
+      clear: both;
+    }
+
+    .price-per-person {
+      display: block;
+      float: left;
+      max-width: 75%;
+      margin-right: 0.5em;
+
+      .mdl-textfield {
+        max-width: 100%;
+      }
+    }
+
+    .price-per-person-suffix {
+      line-height: 64px; // Match mdl input height to ensure vertical alignment.
+
+      p {
+        margin-bottom: 0;
+        display: inline;
+        font-size: 16px;
+      }
+    }
+  }
+}
