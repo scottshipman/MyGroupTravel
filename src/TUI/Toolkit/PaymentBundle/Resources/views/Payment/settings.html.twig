@@ -72,8 +72,8 @@
                                 <p> = </p>{% if tour.currency %}<p id="currency">{{ tour.currency.htmlSymbol | raw }}</p>{% endif %}
                                 <p id="adjusted-price">{{ tour.payingPlaces * tour.pricePerson }}</p>
                                 {# @TODO What is this and is it still needed? (All inline style display none) #}
-                                {#<p style="display:none; font-size: 16px;" id="total">{{ tour.payingPlaces * tour.pricePerson }}</p>#}
-                                {#{% if tour.currency %}<p id="currency" style="display: none">{{ tour.currency.htmlSymbol | raw }}</p>{% endif %}#}
+                                <p style="display:none; font-size: 16px;" id="total">{{ tour.payingPlaces * tour.pricePerson }}</p>
+                                {% if tour.currency %}<p id="currency" style="display: none">{{ tour.currency.htmlSymbol | raw }}</p>{% endif %}
                             </div>
                         </li>
 
