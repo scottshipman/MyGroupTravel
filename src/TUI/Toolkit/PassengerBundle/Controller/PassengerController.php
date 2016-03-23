@@ -559,11 +559,6 @@ class PassengerController extends Controller
         //combine all lists and get parents
         $all = $this->get("passenger.actions")->getPassengersByStatus('all', $tourId);
 
-//        foreach ($all as $key => $a){
-//            if ($a->getSelf() == true){
-//                unset($all[$key]);
-//            }
-//        }
         $passengers = $this->addPassengerParents($all, $em);
 
         // get counts of status for passengers and organizers
