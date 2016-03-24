@@ -31,6 +31,7 @@ payment:
 
     labels:
         payment: Payment
+        payments: Payments
         add: Add Payment
         balances: Passenger Balances
         due: Due
