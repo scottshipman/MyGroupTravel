@@ -12,10 +12,13 @@ use Symfony\Component\Form\FormEvents;
 
 class PaymentTaskType extends AbstractType
 {
+  private $locale;
+  private $tour;
 
-  public function __construct ($locale = null)
+  public function __construct ($locale = null, $tour)
   {
     $this->locale = $locale;
+    $this->tour = $tour;
   }
     /**
      * @param FormBuilderInterface $builder
@@ -40,9 +43,9 @@ class PaymentTaskType extends AbstractType
             ))
             ->add('value', 'money', array(
                 'label' =>  'tour.form.payment_task.value',
+                'currency' => $this->tour->getCurrency()->getCode(),
                 'scale' => 2,
             ))
-
             ->add('dueDate', 'genemu_jquerydate', array(
               'widget' => 'single_text',
               'required' => true,

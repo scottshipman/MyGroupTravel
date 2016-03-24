@@ -1532,7 +1532,7 @@ class TourController extends Controller
     function createTourSetupForm(Tour $entity)
     {
         $locale = $this->container->getParameter('locale');
-        $setupForm = $this->createForm(new TourSetupType($locale), $entity, array(
+        $setupForm = $this->createForm(new TourSetupType($locale, $entity), $entity, array(
             'action' => $this->generateUrl('manage_tour_setup', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr'  => array(
