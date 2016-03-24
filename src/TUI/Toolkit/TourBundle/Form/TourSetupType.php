@@ -47,7 +47,7 @@ class TourSetupType extends AbstractType
                 'constraints' => array(new NotBlank(array('message' => 'Price per Person can not be blank'))),
             ))
             ->add('paymentTasksPassenger', 'collection', array(
-                'type' => new PaymentTaskType($this->locale, $this->tour),
+                'type' => new PaymentTaskType($this->tour),
                 'allow_add'    => true,
                 'allow_delete' => true,
                 'by_reference' => false,

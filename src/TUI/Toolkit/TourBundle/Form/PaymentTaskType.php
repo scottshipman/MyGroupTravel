@@ -5,19 +5,14 @@ namespace TUI\Toolkit\TourBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Doctrine\ORM\EntityRepository;
-
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
+use TUI\Toolkit\TourBundle\Entity\Tour;
 
 class PaymentTaskType extends AbstractType
 {
-  private $locale;
   private $tour;
 
-  public function __construct ($locale = null, $tour)
+  public function __construct (Tour $tour)
   {
-    $this->locale = $locale;
     $this->tour = $tour;
   }
     /**
@@ -26,17 +21,6 @@ class PaymentTaskType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-      switch (true) {
-        case strstr($this->locale, 'en_GB'):
-          $date_label = '(DD-MM-YYYY)';
-          $date_format = 'dd-MM-yyyy';
-          break;
-        default:
-          $date_label = '(MM-DD-YYYY)';
-          $date_format = 'MM-dd-yyyy';
-          break;
-      }
-
         $builder
             ->add('name', 'text', array(
                 'label' => 'tour.form.payment_task.type',
@@ -50,7 +34,6 @@ class PaymentTaskType extends AbstractType
               'widget' => 'single_text',
               'required' => true,
               'label' => 'tour.form.payment_task.date',
-              'format' => $date_format,
             ))
 
 
