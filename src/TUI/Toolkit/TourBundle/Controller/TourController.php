@@ -1570,7 +1570,9 @@ class TourController extends Controller
             $permission = $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
             $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.save') . $entity->getName());
 
-            $response = new Response($entity);
+            $serializer = $this->container->get('jms_serializer');
+            $serialized = $serializer->serialize($entity, 'json');
+            $response = new Response($serialized);
             $response->headers->set('Content-Type', 'application/json');
             $response->setStatusCode('200');
             return $response;
