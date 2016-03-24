@@ -12,10 +12,12 @@ use TUI\Toolkit\TourBundle\Entity\Tour;
 class TourType extends AbstractType
 {
    private $tour;
+    private $locale;
 
-    public function __construct(Tour $tour)
+    public function __construct(Tour $tour, $locale)
     {
       $this->tour = $tour;
+      $this->locale = $locale;
     }
 
     /**
@@ -24,7 +26,18 @@ class TourType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
+      switch (true) {
+        case strstr($this->locale, 'en_GB'):
+          $date_label = '(DD-MM-YYYY)';
+          $date_format = 'dd-MM-yyyy';
+          break;
+        default:
+          $date_label = '(MM-DD-YYYY)';
+          $date_format = 'MM-dd-yyyy';
+          break;
+      }
+
+      $builder
           ->add('name', 'text', array(
             'label' => 'tour.form.tour.name',
           ))
@@ -67,6 +80,7 @@ class TourType extends AbstractType
             'widget' => 'single_text',
             'required' => false,
             'label' => 'tour.form.tour.expiration',
+            'format' => $date_format,
           ))
           ->add('institution', 'genemu_jqueryautocomplete_entity', array(
             'class' => 'TUI\Toolkit\InstitutionBundle\Entity\Institution',
@@ -111,11 +125,13 @@ class TourType extends AbstractType
             'widget' => 'single_text',
             'required' => false,
             'label' => 'tour.form.tour.departure',
+            'format' => $date_format,
           ))
           ->add('returnDate', 'genemu_jquerydate', array(
             'widget' => 'single_text',
             'required' => false,
             'label' => 'tour.form.tour.return',
+            'format' => $date_format,
           ))
           ->add('duration')
           ->add('transportType', 'entity', array(
@@ -150,7 +166,7 @@ class TourType extends AbstractType
             'label' => 'tour.form.tour.price_per_person',
           ))
           ->add('paymentTasks', 'collection', array(
-            'type' => new PaymentTaskType($this->tour),
+            'type' => new PaymentTaskType($this->tour, $this->locale),
             'allow_add'    => true,
             'allow_delete' => true,
             'by_reference' => false,
@@ -160,24 +176,28 @@ class TourType extends AbstractType
             'widget' => 'single_text',
             'required' => false,
             'label' => 'tour.form.tour.passenger_date',
+            'format' => $date_format,
           ))
 
           ->add('passportDate', 'genemu_jquerydate', array(
             'widget' => 'single_text',
             'required' => false,
             'label' => 'tour.form.tour.passport_date',
+            'format' => $date_format,
           ))
 
           ->add('medicalDate', 'genemu_jquerydate', array(
             'widget' => 'single_text',
             'required' => false,
             'label' => 'tour.form.tour.medical_date',
+            'format' => $date_format,
           ))
 
           ->add('dietaryDate', 'genemu_jquerydate', array(
             'widget' => 'single_text',
             'required' => false,
             'label' => 'tour.form.tour.dietary_date',
+            'format' => $date_format,
           ))
             ->add('media', 'hidden', array(
                 'required' => false,
