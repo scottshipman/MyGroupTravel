@@ -1311,6 +1311,9 @@ class TourController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('TourBundle:Tour')->find($id);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Tour entity.');
+        }
         $editForm = $this->createEditForm($entity);
         $date_format = $this->container->getParameter('date_format');
         $locale = $this->container->getParameter('locale');
