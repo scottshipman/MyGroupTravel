@@ -71,7 +71,7 @@
 
         <div class="tour-show-right-column">
             {# Passenger CTA Card #}
-            <div class="passenger-cta-card tour-edit mdl-card mdl-shadow--2dp passenger-dashboard-cta-card">
+            <div id="passenger-card" class="passenger-cta-card tour-edit mdl-card mdl-shadow--2dp passenger-dashboard-cta-card">
 
                 <div class="mdl-card__title">
                     <h3 id="card-title" class="mdl-card__title-text">{% trans %}passenger.labels.passenger_list{% endtrans %}</h3>
@@ -293,6 +293,15 @@
 
             $(document).on('click', '.passenger-filter', function (e){
                     e.preventDefault();
+
+                    //Scroll functionality if at tablet breakpoint
+                    if (parseInt($(window).width()) < 900) {
+                        var target = $('#passenger-card');
+                        $('html, body').animate({
+                            scrollTop: target.offset().top
+                        }, 1000);
+                    }
+
                     var elemID = this.getAttribute('data-id');
                     window.location.hash = elemID;
                     filterPassengers(elemID);
