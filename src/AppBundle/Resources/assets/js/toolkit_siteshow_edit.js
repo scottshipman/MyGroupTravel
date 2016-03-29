@@ -376,12 +376,6 @@ $(document).ready(function () {
                         $('#site-header-summary').show();
                         $('#site-header-slideshow').show();
                         $('.item-edit').show();
-                        // Copy to Clipboard
-                        ZeroClipboard.config({swfPath: "//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf"});
-                        var client = new ZeroClipboard(document.getElementById("copy-button"));
-                        client.on('aftercopy', function (event) {
-                            $('#copy-button').css('background-color', 'green');
-                        });
                     });
                 }
             });

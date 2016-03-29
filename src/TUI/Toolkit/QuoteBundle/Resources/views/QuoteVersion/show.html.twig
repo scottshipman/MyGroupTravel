@@ -300,7 +300,6 @@
      </div>
 
 {% endif %}
-       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.js"></script>
         {% javascripts '@toolkit_siteshow' %}
             <script type="text/javascript" src="{{ asset_url }}"></script>
         {% endjavascripts %}
@@ -375,11 +374,9 @@
                                     '<p>You should also provide the Quote Number: <strong>{{ entity.quoteNumber }}<strong></p>';
                    toolkitStaticPopup("Quote Link", link_html);
                    // Copy to Clipboard
-                   ZeroClipboard.config( { swfPath: "//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf" } );
-                   var client = new ZeroClipboard( document.getElementById("copy-button") );
-                   client.on('aftercopy', function(event) {
-                       $('#copy-button').css('background-color', 'green');
-                   });
+                   var trigger_btn = document.getElementById("copy-button");
+                   trigger_btn.setAttribute("brandPrimaryColor", "{{ brand.primaryColor }}");
+                   trigger_btn.addEventListener('click', copyToClipboard, false);
                });
 
 
