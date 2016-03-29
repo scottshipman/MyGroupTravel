@@ -1311,6 +1311,9 @@ class TourController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('TourBundle:Tour')->find($id);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Tour entity.');
+        }
         $editForm = $this->createEditForm($entity);
         $date_format = $this->container->getParameter('date_format');
         $locale = $this->container->getParameter('locale');
@@ -1490,6 +1493,9 @@ class TourController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('TourBundle:Tour')->find($id);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Tour entity.');
+        }
         $date_format = $this->container->getParameter('date_format');
         $locale = $this->container->getParameter('locale');
         $setupForm = $this->createTourSetupForm($entity);
@@ -1570,7 +1576,9 @@ class TourController extends Controller
             $permission = $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
             $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.save') . $entity->getName());
 
-            $response = new Response($entity);
+            $serializer = $this->container->get('jms_serializer');
+            $serialized = $serializer->serialize($entity, 'json');
+            $response = new Response($serialized);
             $response->headers->set('Content-Type', 'application/json');
             $response->setStatusCode('200');
             return $response;

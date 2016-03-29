@@ -60,15 +60,18 @@ class DietaryController extends Controller
             return $this->redirect($this->generateUrl('manage_passenger_show', array('id' => $passenger->getId())));
         }
 
-        $errorString = "";
-        $translator = $this->get('translator');
-        $errors = $this->get("passenger.actions")->getErrorMessages($form);
+        $errors = $this->get("app.form.validation")->getErrorMessages($form);
 
-        $errorString = $this->get("passenger.actions")->getFlashErrorMessages($errors, $form, $translator);
 
-        $this->get('ras_flash_alert.alert_reporter')->addError($this->get('translator')->trans('passenger.form.error.message.dietary')." ".$errorString);
+        $serializer = $this->container->get('jms_serializer');
+        $errors = $serializer->serialize($errors, 'json');
 
-        return $this->redirect($this->generateUrl('manage_passenger_show', array('id' => $reference)));
+        $response = new Response($errors);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setStatusCode('403');
+        return $response;
+
+
 
 
     }
@@ -85,6 +88,9 @@ class DietaryController extends Controller
         $form = $this->createForm(new DietaryType(), $entity, array(
             'action' => $this->generateUrl('dietary_create'),
             'method' => 'POST',
+            'attr'  => array (
+                'id' => 'ajax_new_dietary_form'
+            ),
         ));
 
         $form->add('submit', 'submit', array('label' => 'Save'));
@@ -207,7 +213,7 @@ class DietaryController extends Controller
         }
 
 
-        $errors = $this->get("passenger.actions")->getErrorMessages($editForm);
+        $errors = $this->get("app.form.validation")->getErrorMessages($editForm);
 
 
         $serializer = $this->container->get('jms_serializer');
@@ -215,7 +221,7 @@ class DietaryController extends Controller
 
         $response = new Response($errors);
         $response->headers->set('Content-Type', 'application/json');
-        $response->setStatusCode('400');
+        $response->setStatusCode('403');
         return $response;
     }
     /**
