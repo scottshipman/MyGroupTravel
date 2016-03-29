@@ -1,13 +1,15 @@
 #app/Resources/translations/exceptions-bundle.en.ym
 sorry:
     title: Sorry!
-    footer: We apologize for the inconvenience!
+    footer: We apologise for the inconvenience!
 
 tryAgain:
     text: Please verify the requested address:
     button: Try again
 
 error:
+    400:
+        title: Bad Request
     403:
         title: Access denied
         description: You do not have the required permissions to access this page.

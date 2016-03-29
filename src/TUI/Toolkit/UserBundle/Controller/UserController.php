@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -662,11 +663,11 @@ class UserController extends Controller
         $entity = $em->getRepository('TUIToolkitUserBundle:User')->findByConfirmationToken($token);
 
         if (!$entity) {
-            throw $this->createNotFoundException('This is no longer a valid One Time Use login token.');
+            throw new HttpException(400, 'This link has expired or does not exist. Please request another from your administrator.');
         }
 
         if(true===$entity[0]->isEnabled()){
-            throw $this->createNotFoundException('This activation link is no longer valid because the account is already activated.');
+            throw new HttpException(400, 'This activation link is no longer valid because the account is already activated.');
         }
         $setForm = $this->createActivateUserForm($entity[0]);
 

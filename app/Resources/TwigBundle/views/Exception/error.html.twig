@@ -31,7 +31,7 @@
     <link rel="stylesheet" href="//storage.googleapis.com/code.getmdl.io/1.0.0/material.indigo-pink.min.css">
 
     {% stylesheets filter="compass" "@AppBundle/Resources/assets/css/sass/main.scss" %}
-        <link rel="stylesheet" type="text/css" href="{{ asset_url }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset_url }}"/>
     {% endstylesheets %}
 
     {{ render(controller('BrandBundle:Default:colors')) }}
@@ -41,58 +41,54 @@
 <body class="user_0">
 {# <body class="user_{% if is_granted('IS_AUTHENTICATED_REMEMBERED') and app.user %}{{ app.user.id }}{% else %}0{% endif %}"> #}
 
-    <div class="mdl-layout mdl-js-layout">
+<div class="mdl-layout mdl-js-layout">
 
-        <main class="mdl-layout__content">
-
-
-            <div class="brand_logo_login">
-
-                {{ render(controller('BrandBundle:Default:index')) }}
+    <main class="mdl-layout__content">
 
 
-            </div>
+        <div class="brand_logo_login">
 
-            <div class="content">
-                <div class="inner">
+            {{ render(controller('BrandBundle:Default:index')) }}
 
-                    <div class="exceptions-block">
+
+        </div>
+
+        <div class="content">
+            <div class="inner">
+
+                <div class="exceptions-block">
                     {% use "WebfactoryExceptionsBundle:Exception:blocks.html.twig" %}
 
                     {% block myMainContentContainer %}
-                      {# {{ block('webfactory_exceptions_standardExceptionPage') }} #}
+                        {# {{ block('webfactory_exceptions_standardExceptionPage') }} #}
 
                         {% block webfactory_exceptions_standardExceptionPage %}
                             <h2><i class="fa fa-exclamation-triangle"></i> {{ block('webfactory_exceptions_error_headline') }}</h2>
-                                <p>
-                                    {{ ("error." ~ exception.getStatusCode ~ ".description")|trans({}, 'webfactory-exceptions-bundle')|nl2br }}
-                                    {% if exception.getMessage != "Something has intentionally gone wrong." %}
-                                        {{ exception.getMessage }}
-                                    {% endif %}
-                               </p>
+                            <p>
+                                {{ exception.getMessage }}
+                            </p>
 
-
-                                <h3 class="h3">{{ "alternatives.title"|trans({},'webfactory-exceptions-bundle') }}</h3>
-                                <p>{{ "alternatives.description"|trans({},'webfactory-exceptions-bundle') }}</p>
-                                <ul class="bulleted">
-                                    <li>{{ block('webfactory_exceptions_actionBack') }}</li>
-                                    <li>{{ block('webfactory_exceptions_actionGetToHomepage') }}</li>
-                                    {% if contactUrl is defined %}
-                                        <li>{{ block('webfactory_exceptions_actionGetInContact') }}</li>
-                                    {% endif %}
-                                </ul>
+                            <h3 class="h3">{{ "alternatives.title"|trans({},'webfactory-exceptions-bundle') }}</h3>
+                            <p>{{ "alternatives.description"|trans({},'webfactory-exceptions-bundle') }}</p>
+                            <ul class="bulleted">
+                                <li>{{ block('webfactory_exceptions_actionBack') }}</li>
+                                <li>{{ block('webfactory_exceptions_actionGetToHomepage') }}</li>
+                                {% if contactUrl is defined %}
+                                    <li>{{ block('webfactory_exceptions_actionGetInContact') }}</li>
+                                {% endif %}
+                            </ul>
 
 
                             <strong>{{ block('webfactory_exceptions_sorry_footer') }}</strong>
                         {% endblock %}
 
                     {% endblock %}
-                    </div>
                 </div>
-
             </div>
-        </main>
-    </div>
+
+        </div>
+    </main>
+</div>
 
 </body>
 
