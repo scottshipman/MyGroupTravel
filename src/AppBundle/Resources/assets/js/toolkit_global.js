@@ -53,7 +53,7 @@ var ajaxFormErrors = function(response, attribute){
             var fullAttribute = attribute + i;
             var Field = $("label[for='" + fullAttribute +"']");
             var fieldParent = Field.parent();
-            fieldParent.prepend('<p class="errors" style="color:red;">'+ child + '</p>');
+            fieldParent.parent().prepend('<p class="errors" style="color:red;">'+ child + '</p>');
         });
     });
     $("#loader").css("display", "none");
