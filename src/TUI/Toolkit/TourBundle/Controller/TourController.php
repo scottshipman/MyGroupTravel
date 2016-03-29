@@ -1659,12 +1659,24 @@ class TourController extends Controller
             }
         };
 
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // Look for a configured brand.
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
+
         return $this->render('TourBundle:Tour:contactorganizer.html.twig', array(
             'notify_form' => $notifyForm->createView(),
             'entity' => $entity,
             'locale' => $locale,
             'date_format' => $date_format,
             'organizer' => $organizer,
+            'brand' => $brand,
         ));
     }
 
