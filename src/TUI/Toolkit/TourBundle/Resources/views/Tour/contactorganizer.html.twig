@@ -28,20 +28,14 @@
     <script>
         $(document).ready(function () {
             // Copy to Clipboard
-            ZeroClipboard.config({swfPath: "//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf"});
-            var shareButton = new ZeroClipboard(document.getElementById("share_button"));
-            shareButton.on('aftercopy', function (event) {
-                $('#share_button').css('background-color', 'green');
-            });
-            var signupButton = new ZeroClipboard(document.getElementById("signup_button"));
-            signupButton.on('aftercopy', function (event) {
-                $('#signup_button').css('background-color', 'green');
-            });
-            // Remove the CopytoClipboard button if not Flash
-            if (navigator.mimeTypes["application/x-shockwave-flash"] == undefined) {
-                $(".copy-button").addClass('hidden');
-                $('.input input').css('width', '80%');
-            };
+            var trigger_btn = document.getElementById("share_button");
+            trigger_btn.setAttribute("brandPrimaryColor", "{{ brand.primaryColor }}");
+            trigger_btn.addEventListener('click', copyToClipboard, false);
+            var trigger_btn1 = document.getElementById("signup_button");
+            trigger_btn1.setAttribute("brandPrimaryColor", "{{ brand.primaryColor }}");
+            trigger_btn1.addEventListener('click', copyToClipboard, false);
         });
+
+
     </script>
 {% endblock %}
