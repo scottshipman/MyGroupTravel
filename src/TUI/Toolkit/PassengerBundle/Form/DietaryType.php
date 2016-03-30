@@ -18,6 +18,7 @@ class DietaryType extends AbstractType
         $builder
             ->add('description', 'text', array(
                 'required' => true,
+                'empty_data' => "N/A",
             ))
             ->add('passengerReference', 'hidden', array(
                 'required' => true,
