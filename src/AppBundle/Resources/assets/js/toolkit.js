@@ -170,3 +170,33 @@
     });
 
 })(jQuery);
+
+// Event handler for copy to clipboard button
+function copyToClipboard(e) {
+    e.preventDefault();
+    // Find target element.
+    var
+        trigger = e.currentTarget,
+        target_id = trigger.dataset.clipboardTarget,
+        target_element = (target_id ? document.querySelector('#' + target_id) : null);
+
+    // Is element selectable?
+    if (target_element && target_element.select) {
+        // Select text
+        target_element.select();
+
+        try {
+            // Copy text
+            document.execCommand('copy');
+            target_element.blur();
+
+            // Copied animation
+            if (e.currentTarget.hasAttribute("brandPrimaryColor")) {
+                trigger.style.backgroundColor = e.currentTarget.getAttribute("brandPrimaryColor");
+            }
+        }
+        catch (err) {
+            alert('Please press Ctrl/Cmd+C to copy');
+        }
+    }
+}
