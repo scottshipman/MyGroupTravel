@@ -1,6 +1,6 @@
 {% block dropzone %}
 
-<form enctype="multipart/form-data" class="dropzone dropzone_form" action="{{ oneup_uploader_endpoint('brand') }}" method="post" name="dropzone_{{ context }}" id="dropzone_{{ context }}">
+<form enctype="multipart/form-data" class="dropzone dropzone-form" action="{{ oneup_uploader_endpoint('brand') }}" method="post" name="dropzone-{{ context }}" id="dropzone-{{ context }}">
     {{ form_widget(form) }}
 </form>
 
@@ -8,7 +8,7 @@
 
 <script type="text/javascript">
 $(function () {
-    $('#dropzone_{{ context }}').dropzone({
+    $('#dropzone-{{ context }}').dropzone({
         maxFiles: 1,
         acceptedMimeTypes: 'image/jpeg,image/png,image/jpg',
         addRemoveLinks: true,
@@ -21,13 +21,13 @@ $(function () {
                 }
             });
             this.on("addedfile", function () {
-                $('#dropzone_{{ context }} .dropzone-form-close').css({"display": "none"});
+                $('#dropzone-{{ context }} .dropzone-form-close').css({"display": "none"});
                 if (this.files[1] != null) {
                     this.removeFile(this.files[0]);
                 }
             });
             this.on("removedfile", function (file) {
-                $('#dropzone_{{ context }} .dropzone-form-close').css({"display": "block"});
+                $('#dropzone-{{ context }} .dropzone-form-close').css({"display": "block"});
             });
         }
     });

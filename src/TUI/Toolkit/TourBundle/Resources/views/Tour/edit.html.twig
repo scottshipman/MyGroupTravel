@@ -183,7 +183,7 @@
 
             Dropzone.autoDiscover = false;
 
-            $("#dropzone_form").dropzone({
+            $("#dropzone-form").dropzone({
                 maxFiles: 1,
                 acceptedMimeTypes: 'application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation, application/pdf',
                 uploadMultiple: false,
@@ -346,7 +346,7 @@
             toolkitStaticPopup("{% trans %}tour.edit.promo_assets{% endtrans %}", "");
             $("#dialog").append(div);
             div.show();
-            $("#dropzone_form").css({
+            $("#dropzone-form").css({
                 "display": "block",
                 "margin": "auto"
             });

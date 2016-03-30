@@ -89,12 +89,12 @@
         // Dropzone manipulation
         $(document).on('click', '.media-placeholder-image', function () {
             $(this).css({"display": "none"});
-            $(this).parents('.brand-logo').find('.dropzone_form').css({"display": "block"});
+            $(this).parents('.brand-logo').find('.dropzone-form').css({"display": "block"});
             $(this).parents('.brand-logo').find('.dropzone-form-close').css({"display": "block"});
         });
         $(document).on('click', '.avatar-label', function () {
             $(this).parents('.brand-logo').find('.media-placeholder-image').css({"display": "block"});
-            $(this).parents('.brand-logo').find('.dropzone_form').css({"display": "none"});
+            $(this).parents('.brand-logo').find('.dropzone-form').css({"display": "none"});
             $(this).parents('.brand-logo').find('.dropzone-form-close').css({"display": "none"});
         });
     });
