@@ -24,14 +24,14 @@
                     this.on("error", function (file, response) {
                     });
                     this.on("addedfile", function () {
-                        $("#dropzone-form-close").css({"display":"none"});
+                        $(".dropzone-form-close").css({"display":"none"});
                         if (this.files[1] != null) {
                             this.removeFile(this.files[0]);
 
                         }
                     });
                     this.on("removedfile", function (file) {
-                        $("#dropzone-form-close").css({"display":"inline-block"});
+                        $(".dropzone-form-close").css({"display":"inline-block"});
 /*
                         var name = {file: file.name}
                         $.ajax({

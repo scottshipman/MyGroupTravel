@@ -13,7 +13,7 @@
             <p>{% trans %}contentBlocks.label.terms{% endtrans %} <a href="{{ path('terms_of_service') }}" target="_blank">Terms of Use.</a></p>
 
             <div id="avatar-label">
-                <div style="display: none;" id="dropzone-form-close"><i class="fa fa-times-circle"></i></div>
+                <div style="display: none;" id="dropzone-form-close" class="dropzone-form-close"><i class="fa fa-times-circle"></i></div>
             </div>
 
             {{ render(controller('MediaBundle:Media:createDropzoneLightForm', {'context':'contentblock'})) }}
