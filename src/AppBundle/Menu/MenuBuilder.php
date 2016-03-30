@@ -25,7 +25,7 @@ class MenuBuilder
   {
     $menu = $this->factory->createItem('root');
 
-    $menu->addChild('Home', array('route' => '_homepage'))
+    $menu->addChild('My Profile', array('route' => '_homepage'))
           ->setLinkAttribute('class', 'mdl-navigation__link');
     $menu->addChild('Quotes', array('route' => 'manage_quote'))
           ->setLinkAttribute('class', 'mdl-navigation__link');
