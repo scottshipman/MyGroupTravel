@@ -31,7 +31,7 @@
 
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
 
-    {% javascripts '@jquery' '@jqueryui' %}
+    {% javascripts '@jquery' '@jqueryui' '@AppBundle/Resources/assets/js/dropzone.js' %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
@@ -141,7 +141,7 @@
     {% endif %}
 </script>
 
-{% javascripts '@toolkit' '@AppBundle/Resources/assets/js/dropzone.js' %}
+{% javascripts '@toolkit' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 
