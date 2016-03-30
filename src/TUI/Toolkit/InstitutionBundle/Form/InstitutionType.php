@@ -77,7 +77,7 @@ class InstitutionType extends AbstractType
                 'required' => false,
                 'data_class' => 'TUI\Toolkit\MediaBundle\Entity\Media',
                 'attr' => array(
-                    'class' => 'media-placeholder',
+                    'class' => 'media-placeholder dropzone-form-primary',
                 )
             ))
         ;
