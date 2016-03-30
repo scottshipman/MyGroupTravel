@@ -116,8 +116,13 @@
 .dropzone-form-close {
   position: absolute;
   right: 0;
-  top: 100%;
+  top: 0;
   z-index: 11;
-  cursor: pointer;
+  cursor: pointer !important;
   padding: 10px;
+  display: none;
+
+  * {
+    cursor: pointer !important;
+  }
 }

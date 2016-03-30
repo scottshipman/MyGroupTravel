@@ -1,6 +1,7 @@
 {% block dropzone %}
 
 <form enctype="multipart/form-data" class="dropzone dropzone-form" action="{{ oneup_uploader_endpoint(context) }}" method="post" name="dropzone-form-{{ identifier }}" id="dropzone-form-{{ identifier }}">
+    <div class="dropzone-form-close dropzone-form-{{ identifier }}"><i class="fa fa-times-circle"></i></div>
     {{ form_widget(form) }}
 </form>
 

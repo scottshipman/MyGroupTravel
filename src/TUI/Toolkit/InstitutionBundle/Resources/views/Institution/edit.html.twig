@@ -3,9 +3,7 @@
 {% block page_title %}{% trans %}institution.page_title.edit{% endtrans %} {{ entity.name }}{% endblock %}
 
 {% block body -%}
-    <div id="avatar-label" class="mdl-label-mimic">{% trans %}institution.avatar.label{% endtrans %}
-        <div style="display:none;" id="dropzone-form-close" class="dropzone-form-close"><i class="fa fa-times-circle"></i></div>
-    </div>
+    <div id="avatar-label" class="mdl-label-mimic">{% trans %}institution.avatar.label{% endtrans %}</div>
     {{ render(controller('MediaBundle:Media:createDropzoneForm', {'context':'institution'})) }}
     {{ form_start(edit_form) }}
 

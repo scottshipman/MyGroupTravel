@@ -4,9 +4,7 @@
     <div class="errors">
         {{ form_errors(edit_form) }}
     </div>
-    <div id="avatar-label" class="mdl-label-mimic">{% trans %}user.avatar.label{% endtrans %}
-        <div style="display:none;" id="dropzone-form-close" class="dropzone-form-close"><i class="fa fa-times-circle"></i></div>
-    </div>
+    <div id="avatar-label" class="mdl-label-mimic">{% trans %}user.avatar.label{% endtrans %}</div>
 
 
     {{ render(controller('MediaBundle:Media:createDropzoneForm', {'context':'passenger'})) }}
