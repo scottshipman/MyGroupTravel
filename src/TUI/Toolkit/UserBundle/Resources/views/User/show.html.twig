@@ -36,8 +36,6 @@
             <td class="mdl-data-table__cell--non-numeric th-mimic">{% trans %}user.table.label.avatar{% endtrans %}</td>
             <td class="mdl-data-table__cell--non-numeric center">
                 <div id="user_dropzone">
-                    {{ render(controller('MediaBundle:Media:createDropzoneForm', {'context':'user'})) }}
-
                     <div id="user_media">
                         {% if entity.media %}
                             <img src="{{ ( entity.media.getRelativePath ~ "/" ~ entity.media.getHashedFilename ) | imagine_filter('thumbnail') }}">
