@@ -220,6 +220,7 @@ $(document).ready(function () {
 
         var formAction = $(this).attr('action');
         var form = $(this);
+        $('.errors').remove();
         $("#loader").css("display", "block");
         e.preventDefault();
         $.ajax({
@@ -254,10 +255,56 @@ $(document).ready(function () {
         })
     });
 
+
+    $('#ajax_new_medical_form').on('submit', function(e) {
+
+        var formAction = $(this).attr('action');
+        var form = $(this);
+        $('.errors').remove();
+        $("#loader").css("display", "block");
+        e.preventDefault();
+        $.ajax({
+            url: formAction,
+            type: 'POST',
+            headers: {
+                "Pragma": "no-cache",
+                "Expires": -1,
+                "Cache-Control": "no-cache"
+            },
+            data: $('#ajax_new_medical_form').serialize(),
+            contentType: "application/x-www-form-urlencoded",
+        }).success(function (response) {
+            $("#loader").css("display", "none");
+            window.location.reload(true);
+            $(".medical-form").removeClass('expanded');
+            $('#medical').css({
+                "color": "grey",
+                "position": "absolute",
+                "right": "15px",
+                "display": "inline-block"
+            });
+            $('#medical-close').css("display", "none");
+
+        }).error(function (response) {
+            $("#loader").hide();
+            var parsed = $.parseJSON(response.responseText);
+            $.each(parsed, function(i, item) {
+                var field = '#tui_toolkit_passengerbundle_medical_' + i;
+                if($(field).is('input')){
+                    $(field).parent().after('<p class="errors" style="color:red;">'+ item + '</p>');
+                }
+                else if($(field).is('div')){
+                    $(field).append('<p class="errors" style="color:red;">'+ item + '</p>');
+                }
+            });
+        })
+    });
+
     $('#ajax_dietary_form').on('submit', function(e) {
 
         var formAction = $(this).attr('action');
         var form = $(this);
+        $('.errors').remove();
         $("#loader").css("display", "block");
         e.preventDefault();
         $.ajax({
@@ -289,6 +336,50 @@ $(document).ready(function () {
         })
     });
 
+    $('#ajax_new_dietary_form').on('submit', function(e) {
+
+        var formAction = $(this).attr('action');
+        var form = $(this);
+        $('.errors').remove();
+        $("#loader").css("display", "block");
+        e.preventDefault();
+        $.ajax({
+            url: formAction,
+            type: 'POST',
+            headers: {
+                "Pragma": "no-cache",
+                "Expires": -1,
+                "Cache-Control": "no-cache"
+            },
+            data: $('#ajax_dietary_form').serialize(),
+            contentType: "application/x-www-form-urlencoded",
+        }).success(function (response) {
+            $("#loader").css("display", "none");
+            window.location.reload(true);
+            $(".dietary-form").removeClass('expanded');
+            $('#dietary').css({
+                "color": "grey",
+                "position": "absolute",
+                "right": "15px",
+                "display": "inline-block"
+            });
+            $('#dietary-close').css("display", "none");
+
+        }).error(function (response) {
+            $("#loader").hide();
+            var parsed = $.parseJSON(response.responseText);
+            $.each(parsed, function(i, item) {
+                var field = '#tui_toolkit_passengerbundle_dietary_' + i;
+                if($(field).is('input')){
+                    $(field).parent().after('<p class="errors" style="color:red;">'+ item + '</p>');
+                }
+                else if($(field).is('div')){
+                    $(field).append('<p class="errors" style="color:red;">'+ item + '</p>');
+                }
+            });
+        })
+    });
+
     $('#dietary').click(function(e) {
         e.preventDefault();
         $('.dietary-form').addClass('expanded');
@@ -317,6 +408,7 @@ $(document).ready(function () {
 
         var formAction = $(this).attr('action');
         var form = $(this);
+        $('.errors').remove();
         $("#loader").css("display", "block");
         e.preventDefault();
         $.ajax({
@@ -358,6 +450,48 @@ $(document).ready(function () {
         })
     });
 
+    $('#ajax_new_passport_form').on('submit', function(e) {
+
+        var formAction = $(this).attr('action');
+        var form = $(this);
+        $('.errors').remove();
+        $("#loader").css("display", "block");
+        e.preventDefault();
+        $.ajax({
+            url: formAction,
+            type: 'POST',
+            headers: {
+                "Pragma": "no-cache",
+                "Expires": -1,
+                "Cache-Control": "no-cache"
+            },
+            data: $('#ajax_new_passport_form').serialize(),
+            contentType: "application/x-www-form-urlencoded",
+        }).success(function (response) {
+            $("#loader").css("display", "none");
+            window.location.reload(true);
+            $(".passport-form").removeClass('expanded');
+            $('#passport').css({
+                "color": "grey",
+                "position": "absolute",
+                "right": "15px",
+                "display": "inline-block"
+            });
+        }).error(function (response) {
+            $("#loader").hide();
+            var parsed = $.parseJSON(response.responseText);
+            $.each(parsed, function(i, item) {
+                var field = '#tui_toolkit_passengerbundle_passport_' + i;
+                if($(field).is('input')){
+                    $(field).parent().after('<p class="errors" style="color:red;">'+ item + '</p>');
+                }
+                else if($(field).is('div')){
+                    $(field).append('<p class="errors" style="color:red;">'+ item + '</p>');
+                }
+            });
+        })
+    });
+
     $('#passport').click(function(e) {
         e.preventDefault();
         $('.passport-form').addClass('expanded');
@@ -385,6 +519,7 @@ $(document).ready(function () {
     $('#ajax_emergency_form').on('submit', function(e) {
 
         var formAction = $(this).attr('action');
+        $('.errors').remove();
         var form = $(this);
         $("#loader").css("display", "block");
         e.preventDefault();
@@ -417,6 +552,54 @@ $(document).ready(function () {
         }).error(function (response) {
             var attribute = 'tui_toolkit_passengerbundle_emergency_';
             ajaxFormErrors(response, attribute);
+        })
+    });
+
+    $('#ajax_new_emergency_form').on('submit', function(e) {
+
+        var formAction = $(this).attr('action');
+        $('.errors').remove();
+        var form = $(this);
+        $("#loader").css("display", "block");
+        e.preventDefault();
+        $.ajax({
+            url: formAction,
+            type: 'POST',
+            headers: {
+                "Pragma": "no-cache",
+                "Expires": -1,
+                "Cache-Control": "no-cache"
+            },
+            data: $('#ajax_new_emergency_form').serialize(),
+            contentType: "application/x-www-form-urlencoded",
+        }).success(function (response) {
+            $("#loader").css("display", "none");
+            //window.location.reload(true);
+            $(".emergency-form").removeClass('expanded');
+            $('#emergency').css({
+                "color": "grey",
+                "position": "absolute",
+                "right": "15px",
+                "display": "inline-block"
+            });
+            $('#emergency-close').css("display", "none");
+            $('.emergency-name').html(response[0]);
+            $('.emergency-relationship').html(response[1]);
+            $('.emergency-number').html(response[2]);
+            $('.emergency-email').html(response[3]);
+
+        }).error(function (response) {
+            $("#loader").hide();
+            var parsed = $.parseJSON(response.responseText);
+            $.each(parsed, function(i, item) {
+                var field = '#tui_toolkit_passengerbundle_emergency_' + i;
+                if($(field).is('input')){
+                    $(field).parent().after('<p class="errors" style="color:red;">'+ item + '</p>');
+                }
+                else if($(field).is('div')){
+                    $(field).append('<p class="errors" style="color:red;">'+ item + '</p>');
+                }
+            });
         })
     });
 

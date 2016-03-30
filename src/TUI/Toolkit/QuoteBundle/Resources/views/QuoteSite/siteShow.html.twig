@@ -269,8 +269,6 @@
         </div>
     </div><!-- view-mode -->
 
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.js"></script>
-
     {% javascripts '@toolkit_siteshow' %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -285,21 +283,10 @@
         $(document).ready(function () {
             // hide any youtube embedd metainfo
             $('.noembed-meta-info').remove();
-
-            // Remove the CopytoClipboard button if not Flash
-            if (navigator.mimeTypes["application/x-shockwave-flash"] == undefined) {
-                $("#copy-button").addClass('hidden');
-            };
-
             // Copy to Clipboard
-            $("#copy-button").on('click', function(e) {
-                e.preventDefault();
-            });
-            ZeroClipboard.config({swfPath: "//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf"});
-            var client = new ZeroClipboard(document.getElementById("copy-button"));
-            client.on('aftercopy', function (event) {
-                $('#copy-button').css('background-color', 'green');
-            });
+            var trigger_btn = document.getElementById("copy-button");
+            trigger_btn.setAttribute("brandPrimaryColor", "{{ brand.primaryColor }}");
+            trigger_btn.addEventListener('click', copyToClipboard, false);
         });
     </script>
 

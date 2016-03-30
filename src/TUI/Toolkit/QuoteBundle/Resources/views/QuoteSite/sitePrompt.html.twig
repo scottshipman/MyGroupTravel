@@ -4,6 +4,11 @@
 {% block page_institution %}<div id="site-quote-name">{% if entity.quoteReference.institution %}{{ entity.quoteReference.institution.name  }}{% endif %} </div>{% endblock %}
 {% block page_title %}{{ entity.quoteReference.name  }}, {{ entity.name  }} {% endblock %}
 
+{% block prompt_header -%}
+    <div class="brand_logo_login">
+        {{ render(controller('BrandBundle:Default:index')) }}
+    </div>
+{% endblock %}
 
 {% block body -%}
     <div class="login-block">
@@ -15,5 +20,22 @@
         {{ form(form) }}
 
     </div>
+
+    <script>
+
+        //Some js to get this page to look right without completely overriding the style sheet
+        $(document).ready(function () {
+            $('.inner').css({'padding-top': '32px'});
+            $('main').css({'height': '100%'});
+            $('.marketing-site').css({'height': '100%'});
+            $('body').css({'height': '100%'});
+            $('footer').css({
+                'position': 'fixed',
+                'width': '100%'
+            });
+            $('.footer-editor').css({'text-align': 'center'});
+            $('footer').css({'display': 'none'});
+        });
+    </script>
 
 {% endblock %}

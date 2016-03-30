@@ -465,6 +465,9 @@ class PaymentController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
+        if (!$tour) {
+            throw $this->createNotFoundException('Unable to find Tour entity.');
+        }
         $date_format = $this->container->getParameter('date_format');
         $locale = $this->container->getParameter('locale');
         $setupForm = $this->createTourSetupForm($tour);

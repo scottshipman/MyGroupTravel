@@ -258,9 +258,8 @@
                     {% set activeTab = '' %}
             {% endfor %}
         </div>
-    </div><!-- view-mode -->
 
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.js"></script>
+    </div><!-- view-mode -->
 
     {% javascripts '@toolkit_siteshow' %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -322,17 +321,9 @@
                                       '</a></div>';
                     toolkitStaticPopup("Promote the Tour", link_html);
                     // Copy to Clipboard
-                    ZeroClipboard.config({swfPath: "//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf"});
-                    var client = new ZeroClipboard(document.getElementById("copy-button"));
-                    client.on('aftercopy', function (event) {
-                        $('#copy-button').css('background-color', 'green');
-                    });
-                    //remove the CopytoClipboard button if not Flash
-                    if (navigator.mimeTypes["application/x-shockwave-flash"] == undefined) {
-                        $("#copy-button").addClass('hidden');
-                        $('share_url').css('width', '80%');
-                    };
-
+                    var trigger_btn = document.getElementById("copy-button");
+                    trigger_btn.setAttribute("brandPrimaryColor", "{{ brand.primaryColor }}");
+                    trigger_btn.addEventListener('click', copyToClipboard, false);
                 });
 
             {% endif %}

@@ -1311,6 +1311,9 @@ class TourController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('TourBundle:Tour')->find($id);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Tour entity.');
+        }
         $editForm = $this->createEditForm($entity);
         $date_format = $this->container->getParameter('date_format');
         $locale = $this->container->getParameter('locale');
@@ -1490,6 +1493,9 @@ class TourController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('TourBundle:Tour')->find($id);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Tour entity.');
+        }
         $date_format = $this->container->getParameter('date_format');
         $locale = $this->container->getParameter('locale');
         $setupForm = $this->createTourSetupForm($entity);
@@ -1661,12 +1667,24 @@ class TourController extends Controller
             }
         };
 
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // Look for a configured brand.
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
+
         return $this->render('TourBundle:Tour:contactorganizer.html.twig', array(
             'notify_form' => $notifyForm->createView(),
             'entity' => $entity,
             'locale' => $locale,
             'date_format' => $date_format,
             'organizer' => $organizer,
+            'brand' => $brand,
         ));
     }
 
