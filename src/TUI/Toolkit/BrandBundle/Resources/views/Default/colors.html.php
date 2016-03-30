@@ -241,7 +241,6 @@ a {
 }
 
 .media-placeholder-image,
-#dropzone-form,
 .dropzone-form {
   border-color: <?php echo $primary ?>;
 }

@@ -183,7 +183,7 @@
 
             Dropzone.autoDiscover = false;
 
-            $("#dropzone-form").dropzone({
+            $(".dropzone-form").dropzone({
                 maxFiles: 1,
                 acceptedMimeTypes: 'application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation, application/pdf',
                 uploadMultiple: false,
@@ -342,11 +342,11 @@
         //Add new promo items popup because we can't render a dropzone form within another form
         $(document).on('click', '#promo-assets-upload', function (e) {
             e.preventDefault();
-            var div = $("#dropzone-dialog");
+            var div = $(".dropzone-dialog");
             toolkitStaticPopup("{% trans %}tour.edit.promo_assets{% endtrans %}", "");
             $("#dialog").append(div);
             div.show();
-            $("#dropzone-form").css({
+            $(".dropzone-form").css({
                 "display": "block",
                 "margin": "auto"
             });
