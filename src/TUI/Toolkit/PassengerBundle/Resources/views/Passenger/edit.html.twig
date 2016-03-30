@@ -13,7 +13,7 @@
 
     <div id="user_media" class="is-dirty mdl-textfield--floating-label">
         {% if entity.media %}
-            <div class="media-placeholder-image edit">
+            <div class="media-placeholder-image edit dropzone-form-primary">
                 <div id="overlay">
                     <i style="color:red;" class="fa fa-times fa-2x"></i>
                 </div>
@@ -37,7 +37,7 @@
                 });
             </script>
         {% else %}
-            <span class="media-placeholder-image new">
+            <span class="media-placeholder-image new dropzone-form-primary">
                 <i class="fa fa-picture-o fa-3x"></i>
                 <span>{% trans %}user.media.label{% endtrans %}</span>
             </span>

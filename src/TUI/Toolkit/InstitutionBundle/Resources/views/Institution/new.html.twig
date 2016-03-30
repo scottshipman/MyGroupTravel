@@ -10,15 +10,10 @@
 
 
     <div id="user_media" class="is-dirty mdl-textfield--floating-label">
-        {% if entity.media %}
-            <div class="media-placeholder-image">
-                <div id="overlay">
-                    <i class="fa fa-pencil-square-o fa-2x"></i>
-                </div>
-            </div>
-        {% else %}
-            <i class="media-placeholder-image fa fa-picture-o fa-5x"></i>
-        {% endif %}
+        <span class="media-placeholder-image new dropzone-form-primary">
+            <i class="fa fa-picture-o fa-3x"></i>
+            <span>Click to upload</span>
+        </span>
     </div>
     {{ form_widget(form) }}
     {{ form_end(form) }}
