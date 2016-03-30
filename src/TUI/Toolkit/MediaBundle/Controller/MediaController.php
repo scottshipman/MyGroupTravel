@@ -99,13 +99,14 @@ use TUI\Toolkit\MediaBundle\Form\MediaType;
    *
    * @return \Symfony\Component\Form\Form The form
    */
-  public function createDropzoneFormAction(Request $request, $context)
+  public function createDropzoneFormAction(Request $request, $context, $identifier = 'primary')
   {
     $form = $this->createFormBuilder()->getForm();
 
     $form->handleRequest($request);
     return $this->render('MediaBundle:Media:dropzone.html.twig', array(
-      'context'=>$context,
+      'context' => $context,
+      'identifier' => $identifier,
       'form' => $form->createView(),
     ));
   }
