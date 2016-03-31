@@ -4,25 +4,27 @@
 
 {% block body -%}
 
-    <div id = "avatar-label" class="mdl-label-mimic">Profile Image</div>
-    {{ render(controller('MediaBundle:Media:createDropzoneForm', {'context':'brand'})) }}
-    {{ form_start(form) }}
+    <div class="brand-logo" id="brand-logo-1" logo="primary">
+        <div id="avatar-label-1" class="avatar-label mdl-label-mimic">Brand Logo</div>
 
-
-    <div id="user_media" class="is-dirty mdl-textfield--floating-label">
-        <span class="media-placeholder-image new dropzone-form-primary">
-            <i class="fa fa-picture-o fa-3x"></i>
-            <span>Click to upload</span>
-        </span>
+        {{ render(controller('MediaBundle:Media:createDropzoneForm', {'context':'brand'})) }}
     </div>
 
+    <div class="brand-logo" id="brand-logo-2" logo="email">
+        <div id="avatar-label-2" class="avatar-label mdl-label-mimic">Brand Email Logo</div>
+
+        {{ render(controller('MediaBundle:Media:createDropzoneForm', {'context':'brand', 'identifier':'email'})) }}
+    </div>
+
+    {{ form_start(form) }}
     {{ form_widget(form) }}
     {{ form_end(form) }}
-        <ul class="record_actions">
-    <li>
-        <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('_manage_brand') }}">
-            <i class="fa fa-arrow-circle-left"></i> Back to the list
-        </a>
-    </li>
-</ul>
+
+    <ul class="record_actions">
+        <li>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('_manage_brand') }}">
+                <i class="fa fa-arrow-circle-left"></i> Back to the list
+            </a>
+        </li>
+    </ul>
 {% endblock %}

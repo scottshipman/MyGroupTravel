@@ -5,18 +5,13 @@
 {% block body -%}
 
     <div id="avatar-label" class="mdl-label-mimic">{% trans %}institution.avatar.label{% endtrans %}</div>
+
     {{ render(controller('MediaBundle:Media:createDropzoneForm', {'context':'institution'})) }}
+
     {{ form_start(form) }}
-
-
-    <div id="user_media" class="is-dirty mdl-textfield--floating-label">
-        <span class="media-placeholder-image new dropzone-form-primary">
-            <i class="fa fa-picture-o fa-3x"></i>
-            <span>Click to upload</span>
-        </span>
-    </div>
     {{ form_widget(form) }}
     {{ form_end(form) }}
+
     <ul class="record_actions">
         <li>
             <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"

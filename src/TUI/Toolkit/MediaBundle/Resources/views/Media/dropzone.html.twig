@@ -5,6 +5,21 @@
     {{ form_widget(form) }}
 </form>
 
+<div class="is-dirty mdl-textfield--floating-label">
+    {% if existing_media %}
+        <div class="media-placeholder-image edit dropzone-form-{{ identifier }}">
+            <div id="overlay">
+                <i style="color:red;" class="fa fa-times fa-2x"></i>
+            </div>
+        </div>
+    {% else %}
+        <span class="media-placeholder-image new dropzone-form-{{ identifier }}">
+            <i class="fa fa-picture-o fa-3x"></i>
+            <span>Click to upload</span>
+        </span>
+    {% endif %}
+</div>
+
 {% endblock %}
 
 {% javascripts '@toolkit_dropzone' %}
