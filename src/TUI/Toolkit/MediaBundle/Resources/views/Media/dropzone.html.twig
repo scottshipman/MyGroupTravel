@@ -5,19 +5,21 @@
     {{ form_widget(form) }}
 </form>
 
-<div class="is-dirty mdl-textfield--floating-label">
-    <div class="media-placeholder-image dropzone-form-{{ identifier }}">
-        <div class="edit">
-            <div id="overlay">
-                <i style="color:red;" class="fa fa-times fa-2x"></i>
+{% if media_placeholder_image %}
+    <div class="is-dirty mdl-textfield--floating-label">
+        <div class="media-placeholder-image dropzone-form-{{ identifier }}">
+            <div class="edit">
+                <div id="overlay">
+                    <i style="color:red;" class="fa fa-times fa-2x"></i>
+                </div>
+            </div>
+            <div class="new">
+                <i class="fa fa-picture-o fa-3x"></i>
+                <span>Click to upload</span>
             </div>
         </div>
-        <div class="new">
-            <i class="fa fa-picture-o fa-3x"></i>
-            <span>Click to upload</span>
-        </div>
     </div>
-</div>
+{% endif %}
 
 {% endblock %}
 
