@@ -26,12 +26,6 @@
     {% endembed %}
 {% endblock %}
 
-{% block back_link %}
-
-        <a class="back-link" href="{{ path('manage_tour_show', { 'id': tour.id }) }}"><i class="fa fa-arrow-left"></i> {% trans %}passenger.actions.back{% endtrans %}</a>
-
-{% endblock %}
-
 {% block body -%}
 
     <div class="tour-show-wrapper site-show" entityId="{{ tour.id }}">
