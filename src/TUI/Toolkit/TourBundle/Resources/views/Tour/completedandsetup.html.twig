@@ -5,28 +5,44 @@
 {% if entity.passportDate is defined and entity.passportDate != null %}
     {% set passDtg  = date(entity.passPortDate).diff(date("now")) %}
     {% set passTime  = date(entity.created.date).diff(date(entity.passPortDate))%}
-    {% set passPercent = (passengerData.completedPassengerData['passport']|length/passengerData.travellingUsers|length) * 100  %}
+    {% if passengerData.travellingUsers|length == 0 %}
+        {% set passPercent == 0 %}
+    {% else %}
+        {% set passPercent = (passengerData.completedPassengerData['passport']|length/passengerData.travellingUsers|length) * 100  %}
+    {% endif %}
     {% if passDtg.days < 1 %} {%  set passDtgFinal = 0  %} {% else %} {% set passDtgFinal = passDtg.days %}{% endif %}
 {% endif %}
 
 {% if entity.emergencyDate is defined and entity.emergencyDate != null %}
     {% set emergencyDtg  = date(entity.emergencyDate).diff(date("now")) %}
     {% set emergencyTime  = date(entity.created.date).diff(date(entity.emergencyDate))%}
-    {% set emergencyPercent = (passengerData.completedPassengerData['emergency']|length/passengerData.travellingUsers|length) * 100  %}
+    {% if passengerData.travellingUsers|length == 0 %}
+        {% set emergencyPercent == 0 %}
+    {% else %}
+        {% set emergencyPercent = (passengerData.completedPassengerData['emergency']|length/passengerData.travellingUsers|length) * 100  %}
+    {% endif %}
     {% if emergencyDtg.days < 1 %} {%  set emergecyDtgFinal = 0  %} {% else %} {% set emergencyDtgFinal = emergencyDtg.days %}{% endif %}
 {% endif %}
 
 {% if entity.medicalDate is defined and entity.medicalDate != null%}
     {% set medDtg  = date(entity.medicalDate).diff(date("now")) %}
     {% set medTime  = date(entity.created.date).diff(date(entity.medicalDate))%}
-    {% set medPercent = (passengerData.completedPassengerData['medical']|length/passengerData.travellingUsers|length) * 100  %}
+    {% if passengerData.travellingUsers|length == 0 %}
+        {% set medPercent == 0 %}
+    {% else %}
+        {% set medPercent = (passengerData.completedPassengerData['medical']|length/passengerData.travellingUsers|length) * 100  %}
+    {% endif %}
     {% if medDtg.days < 1 %} {%  set medDtgFinal = 0  %} {% else %} {% set medDtgFinal = medDtg.days %}{% endif %}
 {% endif %}
 
 {% if entity.dietaryDate is defined and entity.dietaryDate != null%}
     {% set dietDtg  = date(entity.dietaryDate).diff(date("now")) %}
     {% set dietTime  = date(entity.created.date).diff(date(entity.dietaryDate))%}
-    {% set dietPercent = (passengerData.completedPassengerData['dietary']|length/passengerData.travellingUsers|length) * 100  %}
+    {% if passengerData.travellingUsers|length == 0 %}
+        {% set dietPercent == 0 %}
+    {% else %}
+        {% set dietPercent = (passengerData.completedPassengerData['dietary']|length/passengerData.travellingUsers|length) * 100  %}
+    {% endif %}
     {% if dietDtg.days < 1 %} {%  set dietDtgFinal = 0  %} {% else %} {% set dietDtgFinal = dietDtg.days %}{% endif %}
 {% endif %}
 
