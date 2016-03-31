@@ -68,6 +68,8 @@
       $(media_placeholder_image).css({"display": "none"});
       $(dropzone_form).css({"display": "block"});
       $(dropzone_form_close).css({"display": "block"});
+      existing_media = {};
+      mediaUpdate();
     });
 
     $(dropzone_form_close).click(function() {
