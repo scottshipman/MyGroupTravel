@@ -10,11 +10,16 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 
+use TUI\Toolkit\TourBundle\Entity\Tour;
+
 class PaymentTaskType extends AbstractType
 {
+  private $locale;
+  private $tour;
 
-  public function __construct ($locale = null)
+  public function __construct (Tour $tour, $locale)
   {
+    $this->tour = $tour;
     $this->locale = $locale;
   }
     /**
@@ -34,15 +39,15 @@ class PaymentTaskType extends AbstractType
           break;
       }
 
-        $builder
+      $builder
             ->add('name', 'text', array(
                 'label' => 'tour.form.payment_task.type',
             ))
             ->add('value', 'money', array(
                 'label' =>  'tour.form.payment_task.value',
+                'currency' => $this->tour->getCurrency()->getCode(),
                 'scale' => 2,
             ))
-
             ->add('dueDate', 'genemu_jquerydate', array(
               'widget' => 'single_text',
               'required' => true,

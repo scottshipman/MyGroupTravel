@@ -11,13 +11,16 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Collection;
+use TUI\Toolkit\TourBundle\Entity\Tour;
 
 class TourSetupType extends AbstractType
 {
+    private $tour;
     private $locale;
 
-    public function __construct($locale)
+    public function __construct(Tour $tour, $locale)
     {
+        $this->tour = $tour;
         $this->locale = $locale;
     }
 
@@ -45,7 +48,7 @@ class TourSetupType extends AbstractType
                 'constraints' => array(new NotBlank(array('message' => 'Price per Person can not be blank'))),
             ))
             ->add('paymentTasksPassenger', 'collection', array(
-                'type' => new PaymentTaskType($this->locale),
+                'type' => new PaymentTaskType($this->tour, $this->locale),
                 'allow_add'    => true,
                 'allow_delete' => true,
                 'by_reference' => false,
