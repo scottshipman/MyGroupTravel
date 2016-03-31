@@ -367,7 +367,7 @@
                    e.preventDefault();
                    // todo Get item.id and item.name
                    var link_html = '<p>{% trans %}quote.modals.message.promote{% endtrans %}</p>'+
-                                   '<p><input size="35" type="text" id="quote-link-input" name="quote-link-input" class="form-control" value="{{ url('quote_site_action_show', {'id': entity.id}) }}" disabled>'+
+                                   '<p><input size="35" type="text" id="quote-link-input" name="quote-link-input" class="form-control" value="{{ url('quote_site_action_show', {'id': entity.id}) }}" readonly="readonly">'+
                                    '<a href="#" id="copy-button" data-clipboard-target="quote-link-input" title="Click to copy Quote URL" class="not-full mdl-button mdl-js-button mdl-button--raised mdl-button--colored">'+
                                         '<i class="fa fa-sign-in fa-stack"></i>' +
                                     '</a></p>'+
