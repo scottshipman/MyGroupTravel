@@ -29,11 +29,15 @@
         $(document).ready(function () {
             // Copy to Clipboard
             var trigger_btn = document.getElementById("share_button");
-            trigger_btn.setAttribute("brandPrimaryColor", "{{ brand.primaryColor }}");
-            trigger_btn.addEventListener('click', copyToClipboard, false);
+            if (typeof trigger_btn !== 'undefined' && trigger_btn !== null) {
+                trigger_btn.setAttribute("brandPrimaryColor", "{{ brand.primaryColor }}");
+                trigger_btn.addEventListener('click', copyToClipboard, false);
+            }
             var trigger_btn1 = document.getElementById("signup_button");
-            trigger_btn1.setAttribute("brandPrimaryColor", "{{ brand.primaryColor }}");
-            trigger_btn1.addEventListener('click', copyToClipboard, false);
+            if (typeof trigger_btn1 !== 'undefined' && trigger_btn1 !== null) {
+                trigger_btn1.setAttribute("brandPrimaryColor", "{{ brand.primaryColor }}");
+                trigger_btn1.addEventListener('click', copyToClipboard, false);
+            }
         });
 
 

@@ -285,8 +285,10 @@
             $('.noembed-meta-info').remove();
             // Copy to Clipboard
             var trigger_btn = document.getElementById("copy-button");
-            trigger_btn.setAttribute("brandPrimaryColor", "{{ brand.primaryColor }}");
-            trigger_btn.addEventListener('click', copyToClipboard, false);
+            if (typeof trigger_btn !== 'undefined' && trigger_btn !== null) {
+                trigger_btn.setAttribute("brandPrimaryColor", "{{ brand.primaryColor }}");
+                trigger_btn.addEventListener('click', copyToClipboard, false);
+            }
         });
     </script>
 
