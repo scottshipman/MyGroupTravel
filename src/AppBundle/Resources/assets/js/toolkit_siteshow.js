@@ -16,14 +16,14 @@ $(document).ready(function () {
     $(document).on('click', '#change-request', function (e) {
         e.preventDefault();
         var entityId = $('.site-show').attr('entityId');
-        toolkitStandardPopup( "I'd like to make some changes", "/quote/view/change-request/form/" + entityId );
+        toolkitStandardPopup( "Request changes", "/quote/view/change-request/form/" + entityId );
     });
 
     // Accept quote popup
     $(document).on('click', '#accept-quote', function (e) {
         e.preventDefault();
         var entityId = $('.site-show').attr('entityId');
-        toolkitStandardPopup( "I like this quote, what's next?", "/quote/view/accepted/form/" + entityId );
+        toolkitStandardPopup( "Accept Quote", "/quote/view/accepted/form/" + entityId );
     });
 
     // Tour Sign Up popup
