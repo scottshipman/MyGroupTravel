@@ -6,13 +6,11 @@
 
     <div class="brand-logo" id="brand-logo-1" logo="primary">
         <div id="avatar-label-1" class="avatar-label mdl-label-mimic">Brand Logo</div>
-
         {{ render(controller('MediaBundle:Media:createDropzoneForm', {'context':'brand', 'media_field_id':'tui_toolkit_brandbundle_brand_media'})) }}
     </div>
 
     <div class="brand-logo" id="brand-logo-2" logo="email">
         <div id="avatar-label-2" class="avatar-label mdl-label-mimic">Brand Email Logo</div>
-
         {{ render(controller('MediaBundle:Media:createDropzoneForm', {'context':'brand', 'media_field_id':'tui_toolkit_brandbundle_brand_mediaEmail', 'identifier':'email'})) }}
     </div>
 
@@ -27,4 +25,5 @@
             </a>
         </li>
     </ul>
+
 {% endblock %}

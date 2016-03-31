@@ -6,20 +6,16 @@
 
     <div class="brand-logo" id="brand-logo-1" logo="primary">
         <div id="avatar-label-1" class="avatar-label mdl-label-mimic">Brand Logo</div>
-
         {{ render(controller('MediaBundle:Media:createDropzoneForm', {'context':'brand', 'media_field_id':'tui_toolkit_brandbundle_brand_media', 'existing_media':entity.media})) }}
     </div>
 
     <div class="brand-logo" id="brand-logo-2" logo="email">
         <div id="avatar-label-2" class="avatar-label mdl-label-mimic">Brand Email Logo</div>
-
         {{ render(controller('MediaBundle:Media:createDropzoneForm', {'context':'brand', 'media_field_id':'tui_toolkit_brandbundle_brand_mediaEmail', 'identifier':'email', 'existing_media':entity.mediaEmail})) }}
     </div>
 
     {{ form_start(edit_form) }}
-
-        {{ form_widget(edit_form) }}
-
+    {{ form_widget(edit_form) }}
     {{ form_end(edit_form) }}
 
     <ul class="record_actions">
@@ -28,30 +24,5 @@
         </li>
         <li>{{ form(delete_form) }}</li>
     </ul>
-
-    <script>
-    $(document).ready(function () {
-        {% if entity.media %}
-            var bUrl1 = '{{ asset(".." ~ entity.media.getRelativePath ~ "/" ~ entity.media.getHashedFilename ) }}';
-            $(".media-placeholder-image.dropzone-form-primary").css({
-                "background-image": "url(" + bUrl1 + ")"
-            });
-            $("#tui_toolkit_brandbundle_brand_media").val('{{ entity.media.id }}');
-            $(document).on('click', '.media-placeholder-image.dropzone-form-primary', function(e) {
-                $("#tui_toolkit_brandbundle_brand_media").val('');
-            });
-        {% endif %}
-        {% if entity.mediaEmail %}
-            var bUrl2 = '{{ asset(".." ~ entity.mediaEmail.getRelativePath ~ "/" ~ entity.mediaEmail.getHashedFilename ) }}';
-            $(".media-placeholder-image.dropzone-form-email").css({
-                "background-image": "url(" + bUrl2 + ")"
-            });
-            $("#tui_toolkit_brandbundle_brand_mediaEmail").val('{{ entity.mediaEmail.id }}');
-            $(document).on('click', '.media-placeholder-image.dropzone-form-email', function(e) {
-                $("#tui_toolkit_brandbundle_brand_mediaEmail").val('');
-            });
-        {% endif %}
-    });
-    </script>
 
 {% endblock %}

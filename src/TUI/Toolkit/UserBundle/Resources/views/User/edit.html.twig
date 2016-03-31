@@ -11,32 +11,12 @@
 
     {{ form_start(edit_form) }}
 
-    {% if entity.media %}
-        <script>
-            $(document).ready(function () {
-                var bUrl = '{{ asset(".." ~ entity.media.getRelativePath ~ "/" ~ entity.media.getHashedFilename ) }}';
-                $(".media-placeholder-image").css({
-                    "background-image": "url(" + bUrl + ")",
-                    "background-position": "50%",
-                    "background-repeat": "no-repeat",
-                    "background-size": "contain",
-                    "width": "300px",
-                    "height": "160px"
-                });
-                $("#tui_toolkit_passengerbundle_passenger_media").val('{{ entity.media.id }}');
-
-                $(document).on('click', '.media-placeholder-image', function(e) {
-                    $("#tui_toolkit_passengerbundle_passenger_media").val('');
-                });
-            });
-        </script>
-    {% endif %}
-
     {% if app.user.id == entity.id %}
         <div id="security-edit-link">
             {% trans %}user.form.resetlink{% endtrans %}, <a href="{{ path('user_security_reset', {'id' : entity.id}) }}">click here</a>.
         </div>
     {% endif %}
+
     {{ form_widget(edit_form) }}
 
     {{ form_end(edit_form) }}
