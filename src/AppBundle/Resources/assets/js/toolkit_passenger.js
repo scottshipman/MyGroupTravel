@@ -720,4 +720,17 @@ $(document).ready(function () {
         $('#passenger-close').css("display", "none");
     });
 
+    $('#passenger-name-filter').change(function() {
+        var name = $(this).val(),
+            $items = $('.free, .organizers, .waitlist, .organizer-cta-card, .accepted.passengers'),
+            $itemsToShow = $items.filter(function() {
+                $contains = $(this).find('.pcardname:contains("' + name + '")');
+                return $contains.length > 0;
+            });
+
+        $items.remove($itemsToShow).slideUp(400, function () {
+            $itemsToShow.slideDown(400);
+        });
+    });
+
 });
