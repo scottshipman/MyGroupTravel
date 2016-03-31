@@ -7,18 +7,18 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityRepository;
 
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
-use TUI\Toolkit\UserBundle\Form\UserType;
+use TUI\Toolkit\TourBundle\Entity\Tour;
 
 class TourType extends AbstractType
 {
-     private $locale;
+   private $tour;
+    private $locale;
 
-        public function __construct($locale)
-      {
+    public function __construct(Tour $tour, $locale)
+    {
+      $this->tour = $tour;
       $this->locale = $locale;
-      }
+    }
 
     /**
      * @param FormBuilderInterface $builder
@@ -37,7 +37,7 @@ class TourType extends AbstractType
           break;
       }
 
-        $builder
+      $builder
           ->add('name', 'text', array(
             'label' => 'tour.form.tour.name',
           ))
@@ -166,7 +166,7 @@ class TourType extends AbstractType
             'label' => 'tour.form.tour.price_per_person',
           ))
           ->add('paymentTasks', 'collection', array(
-            'type' => new PaymentTaskType($this->locale),
+            'type' => new PaymentTaskType($this->tour, $this->locale),
             'allow_add'    => true,
             'allow_delete' => true,
             'by_reference' => false,

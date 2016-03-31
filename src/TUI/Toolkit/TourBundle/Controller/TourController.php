@@ -456,7 +456,7 @@ class TourController extends Controller
         $em = $this->getDoctrine()->getManager();
         $currency = $em->getRepository('CurrencyBundle:Currency')->findByCode($currency_code);
         $currency = array_shift($currency);
-        $form = $this->createForm(new TourType($locale), $entity, array(
+        $form = $this->createForm(new TourType($entity, $locale), $entity, array(
             'action' => $this->generateUrl('manage_tour_create'),
             'method' => 'POST',
         ));
@@ -711,7 +711,7 @@ class TourController extends Controller
     private function createEditForm(Tour $entity)
     {
         $locale = $this->container->getParameter('locale');
-        $form = $this->createForm(new TourType($locale), $entity, array(
+        $form = $this->createForm(new TourType($entity, $locale), $entity, array(
             'action' => $this->generateUrl('manage_tour_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
@@ -1538,7 +1538,7 @@ class TourController extends Controller
     function createTourSetupForm(Tour $entity)
     {
         $locale = $this->container->getParameter('locale');
-        $setupForm = $this->createForm(new TourSetupType($locale), $entity, array(
+        $setupForm = $this->createForm(new TourSetupType($entity, $locale), $entity, array(
             'action' => $this->generateUrl('manage_tour_setup', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr'  => array(
