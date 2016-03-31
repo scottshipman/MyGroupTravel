@@ -374,11 +374,7 @@
                                     '<p>You should also provide the Quote Number: <strong>{{ entity.quoteNumber }}<strong></p>';
                    toolkitStaticPopup("Quote Link", link_html);
                    // Copy to Clipboard
-                   var trigger_btn = document.getElementById("copy-button");
-                   if (typeof trigger_btn !== 'undefined' && trigger_btn !== null) {
-                       trigger_btn.setAttribute("brandPrimaryColor", "{{ brand.primaryColor }}");
-                       trigger_btn.addEventListener('click', copyToClipboard, false);
-                   }
+                   $('#copy-button').add('#copy-button').attr('brandPrimaryColor', '{{ brand.primaryColor }}').click(copyToClipboard);
                });
 
 
