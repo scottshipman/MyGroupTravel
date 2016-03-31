@@ -267,9 +267,8 @@
                                       '<i class="fa fa-sign-in fa-stack"></i>' +
                                       '</a></div>';
                     toolkitStaticPopup("Promote the Tour", link_html);
-                    var trigger_btn = document.getElementById("copy-button");
-                    trigger_btn.setAttribute("brandPrimaryColor", "{{ brand.primaryColor }}");
-                    trigger_btn.addEventListener('click', copyToClipboard, false);
+                    // Copy to Clipboard
+                    $('#copy-button').attr('brandPrimaryColor', '{{ brand.primaryColor }}').click(copyToClipboard);
                 });
 
             // Tour Sign Up popup

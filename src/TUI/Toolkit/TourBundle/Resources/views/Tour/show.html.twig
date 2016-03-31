@@ -129,9 +129,7 @@
                     '</a></div>';
             toolkitStaticPopup("Promote the Tour", link_html);
             // Copy to Clipboard
-            var trigger_btn = document.getElementById("copy-button");
-            trigger_btn.setAttribute("brandPrimaryColor", "{{ brand.primaryColor }}");
-            trigger_btn.addEventListener('click', copyToClipboard, false);
+            $('#copy-button').attr('brandPrimaryColor', '{{ brand.primaryColor }}').click(copyToClipboard);
         });
 
         //brand_payment popup

@@ -280,14 +280,14 @@
     {% endif %}
 
     <script>
-        $(document).ready(function () {
-            // hide any youtube embedd metainfo
-            $('.noembed-meta-info').remove();
-            // Copy to Clipboard
-            var trigger_btn = document.getElementById("copy-button");
-            trigger_btn.setAttribute("brandPrimaryColor", "{{ brand.primaryColor }}");
-            trigger_btn.addEventListener('click', copyToClipboard, false);
-        });
+        (function($) {
+            $(document).ready(function () {
+                // hide any youtube embedd metainfo
+                $('.noembed-meta-info').remove();
+                // Copy to Clipboard
+                $('#copy-button').attr('brandPrimaryColor', '{{ brand.primaryColor }}').click(copyToClipboard);
+            });
+        })(jQuery);
     </script>
 
 {% endblock %}
