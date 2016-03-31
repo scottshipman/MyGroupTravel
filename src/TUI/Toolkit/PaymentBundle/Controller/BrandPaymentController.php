@@ -11,7 +11,6 @@ use TUI\Toolkit\PaymentBundle\Entity\BrandPayment;
 use TUI\Toolkit\PaymentBundle\Form\BrandPaymentType;
 
 use TUI\Toolkit\TourBundle\Entity\Tour;
-use TUI\Toolkit\TourBundle\Form\TourSetupType;
 use TUI\Toolkit\TourBundle\Controller\TourController;
 
 /**
