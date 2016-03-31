@@ -59,7 +59,6 @@
       position: relative;
       margin: (((56px * 1.35) - 32px) / 2) 0;
       width: auto;
-      background: rgba(255, 255, 255, 0.2);
 
       &,
       .mdl-button__ripple-container {
@@ -67,6 +66,9 @@
       }
 
       &:after {
+        font-size: 18px;
+        line-height: 32px;
+        font-weight: normal;
         padding: 0 20px 0 30px;
         content: 'Menu';
       }
