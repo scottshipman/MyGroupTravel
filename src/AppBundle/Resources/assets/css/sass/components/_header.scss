@@ -44,12 +44,6 @@
       padding-right: 0.125em;
     }
 
-    .title-menu-drop {
-      float: right;
-      position: relative;
-      margin: (((56px * 1.35) - 32px) / 2) 0;
-    }
-
     .material-icons {
       font-size: 36px;
       width: 32px;
@@ -58,6 +52,24 @@
       left: 0;
       top: 0;
       transform: translate(-2px, 0);
+    }
+
+    .title-menu-drop {
+      float: right;
+      position: relative;
+      margin: (((56px * 1.35) - 32px) / 2) 0;
+      width: auto;
+      background: rgba(255, 255, 255, 0.2);
+
+      &,
+      .mdl-button__ripple-container {
+        @include border-radius(5px);
+      }
+
+      &:after {
+        padding: 0 20px 0 30px;
+        content: 'Menu';
+      }
     }
 
   }

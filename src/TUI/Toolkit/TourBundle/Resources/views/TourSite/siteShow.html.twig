@@ -23,7 +23,7 @@
 
     {% elseif "tour" | getRoles(entity.id) != "" or is_granted("ROLE_BRAND")%}
 
-    <button id="tour-title-drop" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-menu-drop">
+    <button id="tour-title-drop" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-menu-drop mdl-shadow--2dp">
         <i class="material-icons">arrow_drop_down</i>
     </button>
     {% embed "TourBundle:Tour:tourMenu.html.twig" %}
