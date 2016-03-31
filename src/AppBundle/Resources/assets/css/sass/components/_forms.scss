@@ -128,7 +128,7 @@ form > .form-row > ul > li {
 
 form[name=tui_toolkit_tourbundle_toursetup] {
   .setup-form-list {
-    li {
+    & > li {
       clear: both;
     }
 
@@ -144,7 +144,8 @@ form[name=tui_toolkit_tourbundle_toursetup] {
     }
 
     .price-per-person-suffix {
-      line-height: 64px; // Match mdl input height to ensure vertical alignment.
+      padding: 24px 0;
+      line-height: 19px; // Match mdl input height to ensure vertical alignment.
 
       p {
         margin-bottom: 0;
@@ -164,4 +165,11 @@ form[name=tui_toolkit_tourbundle_toursetup] {
     padding-top: 24px;
     position: relative;
   }
+}
+
+.currency-symbol {
+  padding: 28px 0 20px 0;
+  line-height: 19px;
+  float: left;
+  margin: 0 0.3em;
 }
