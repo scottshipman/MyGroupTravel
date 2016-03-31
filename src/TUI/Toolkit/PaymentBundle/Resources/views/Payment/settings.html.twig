@@ -64,10 +64,17 @@
                         <li>
                             <strong>{% trans %}tour.not_setup.how_much{% endtrans %}</strong>
                             <p>{% trans %}tour.not_setup.pass_price{% endtrans %}</p>
-                            {{ form_widget(setup_form.pricePersonPublic) }}<p style="display: inline; font-size: 16px;"> x </p><p style="display:inline; font-size: 16px;" id="passengers">{{ tour.payingPlaces }}</p><p style="display: inline; font-size: 16px;"> = </p>
-                            {% if tour.currency %}<p id="currency" style="display: inline; font-size: inherit;">{{ tour.currency.htmlSymbol | raw }}</p>{% endif %}<p style="display: inline; font-size: 16px; color: green;" id="adjusted-price">{{ tour.payingPlaces * tour.pricePerson }}</p>
-                            <p style="display:none; font-size: 16px;" id="total">{{ tour.payingPlaces * tour.pricePerson }}</p>
-                            {% if tour.currency %}<p id="currency" style="display: none">{{ tour.currency.htmlSymbol | raw }}</p>{% endif %}
+                            <div class="price-per-person">
+                                {{ form_widget(setup_form.pricePersonPublic) }}
+                            </div>
+                            <div class="price-per-person-suffix">
+                                <p> x </p><p id="passengers">{{ tour.payingPlaces }}</p>
+                                <p> = </p>{% if tour.currency %}<p id="currency">{{ tour.currency.htmlSymbol | raw }}</p>{% endif %}
+                                <p id="adjusted-price">{{ tour.payingPlaces * tour.pricePerson }}</p>
+                                {# @TODO What is this and is it still needed? (All inline style display none) #}
+                                <p style="display:none; font-size: 16px;" id="total">{{ tour.payingPlaces * tour.pricePerson }}</p>
+                                {% if tour.currency %}<p id="currency" style="display: none">{{ tour.currency.htmlSymbol | raw }}</p>{% endif %}
+                            </div>
                         </li>
 
                         <li>

@@ -16,28 +16,33 @@
   list-style-type: none;
   margin: 0;
   padding: 0;
+  clear: both;
 
   li {
-    display: inline;
-
-    .mdl-textfield {
-      width: 135px;
-    }
-
   }
 
 }
 
+.payment_task,
 .new_payment_task {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  clear: both;
+
+  li,
   .form-row {
-    display: inline;
-    list-style-type: none;
+    display: block;
+    float: left;
+    margin-right: 0.5em;
+
+    .fam-delete {
+      padding: 28px 0 20px 0;
+    }
+
     .mdl-textfield {
       width: 135px;
     }
-  }
-  li {
-    display: inline;
   }
 }
 
