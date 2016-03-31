@@ -630,16 +630,11 @@ class PassengerController extends Controller
 
                 if (is_array($permissions)){
                     foreach($permissions as $permission){
-                        if ($permission == 'organizer' && $passenger->getSelf() == true){
-                            $isOrganizer = TRUE;
-                        }elseif ($permission == 'assistant' && $passenger->getSelf() == true){
+                        if (($permission == 'organizer' || $permission == 'assistant') && $passenger->getSelf() == true) {
                             $isOrganizer = TRUE;
                         }
                     }
                 }
-
-//                $isOrganizer = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $parentObject)[0]=='organizer' ? TRUE : FALSE;
-//                $isOrganizer = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $parentObject)[0]=='assistant' ? TRUE : $isOrganizer;
 
 
                 $combinedObjects[]= array($passenger, $parentObject, $isOrganizer);

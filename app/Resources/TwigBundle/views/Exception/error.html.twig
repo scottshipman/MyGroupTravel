@@ -39,7 +39,6 @@
 </head>
 
 <body class="user_0">
-{# <body class="user_{% if is_granted('IS_AUTHENTICATED_REMEMBERED') and app.user %}{{ app.user.id }}{% else %}0{% endif %}"> #}
 
 <div class="mdl-layout mdl-js-layout">
 
@@ -60,7 +59,6 @@
                     {% use "WebfactoryExceptionsBundle:Exception:blocks.html.twig" %}
 
                     {% block myMainContentContainer %}
-                        {# {{ block('webfactory_exceptions_standardExceptionPage') }} #}
 
                         {% block webfactory_exceptions_standardExceptionPage %}
                             <h2><i class="fa fa-exclamation-triangle"></i> {{ block('webfactory_exceptions_error_headline') }}</h2>
