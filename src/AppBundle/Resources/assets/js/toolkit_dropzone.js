@@ -5,7 +5,7 @@
 
   // Define a jquery function for dropzone.
   // This allows us to override default options.
-  $.fn.toolkitDropzone = function(media_field_id, options) {
+  $.fn.toolkitDropzone = function(media_field_id, options, existing_media) {
     var dropzone_form = $(this);
     var dropzone_form_id = $(this).attr('id');
     var dropzone_form_close = $('.dropzone-form-close.' + dropzone_form_id);
@@ -19,7 +19,13 @@
       init: function () {
         this.hiddenFileInput.removeAttribute('multiple');
         this.on("success", function (file, response) {
-          $(media_field).val(response.id);
+          mediaUpdate(
+            {
+              id: response.id,
+              path: response.relativepath,
+              filename: response.filename
+            }
+          );
         });
         this.on("addedfile", function () {
           $(dropzone_form_close).css({"display": "none"});
@@ -29,7 +35,31 @@
         });
         this.on("removedfile", function (file) {
           $(dropzone_form_close).css({"display": "block"});
+
+          // Revert media to existing.
+          mediaUpdate();
         });
+      }
+    };
+
+    var mediaUpdate = function(new_media) {
+      var media = new_media ? new_media : existing_media;
+
+      if (media.id && media.path && media.filename) {
+        $(media_placeholder_image).find('.edit').show();
+        $(media_placeholder_image).find('.new').hide();
+        $(media_placeholder_image).css({
+          "background-image": "url(" + media.path + "/" + media.filename + ")"
+        });
+        $(media_field).val(media.id);
+      }
+      else {
+        $(media_placeholder_image).find('.edit').hide();
+        $(media_placeholder_image).find('.new').show();
+        $(media_placeholder_image).css({
+          "background-image": "none"
+        });
+        $(media_field).val('');
       }
     };
 
@@ -45,6 +75,9 @@
       $(dropzone_form).css({"display": "none"});
       $(dropzone_form_close).css({"display": "none"});
     });
+
+    // Update media with existing.
+    mediaUpdate();
 
     return this.dropzone($.extend(default_options, options));
   };
