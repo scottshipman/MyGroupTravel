@@ -26,9 +26,12 @@
     <script type="text/javascript" src="{{ asset_url }}"></script>
     <script type="text/javascript">
         $(document).ready(function() {
-            $("#dropzone-form-{{ identifier }}").toolkitDropzone({
-                dictDefaultMessage: "{% trans %}media.dropzone.default_message{% endtrans %}"
-            });
+            $("#dropzone-form-{{ identifier }}").toolkitDropzone(
+                "{{ media_field_id }}",
+                {
+                    dictDefaultMessage: "{% trans %}media.dropzone.default_message{% endtrans %}"
+                }
+            );
         });
     </script>
 {% endjavascripts %}

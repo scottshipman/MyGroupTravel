@@ -36,14 +36,14 @@ class BrandType extends AbstractType
                 'required' => false,
                 'data_class' => 'TUI\Toolkit\MediaBundle\Entity\Media',
                 'attr' => array(
-                    'class' => 'media-placeholder dropzone-form-primary',
+                    'class' => 'media-placeholder',
                 )
             ))
             ->add('mediaEmail', 'hidden', array(
                 'required' => false,
                 'data_class' => 'TUI\Toolkit\MediaBundle\Entity\Media',
                 'attr' => array(
-                    'class' => 'media-placeholder dropzone-form-email',
+                    'class' => 'media-placeholder',
                 )
             ))
         ;

@@ -87,7 +87,7 @@ class PassengerType extends AbstractType
                 'required' => false,
                 'data_class' => 'TUI\Toolkit\MediaBundle\Entity\Media',
                 'attr' => array(
-                    'class' => 'media-placeholder dropzone-form-primary',
+                    'class' => 'media-placeholder',
                 )
             ))
         ;

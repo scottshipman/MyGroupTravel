@@ -5,11 +5,11 @@
 
   // Define a jquery function for dropzone.
   // This allows us to override default options.
-  $.fn.toolkitDropzone = function(options) {
+  $.fn.toolkitDropzone = function(media_field_id, options) {
     var dropzone_form = $(this);
     var dropzone_form_id = $(this).attr('id');
     var dropzone_form_close = $('.dropzone-form-close.' + dropzone_form_id);
-    var media_placeholder = $('.media-placeholder.' + dropzone_form_id);
+    var media_field = $('#' + media_field_id);
     var media_placeholder_image = $('.media-placeholder-image.' + dropzone_form_id);
 
     var default_options = {
@@ -19,7 +19,7 @@
       init: function () {
         this.hiddenFileInput.removeAttribute('multiple');
         this.on("success", function (file, response) {
-          $(media_placeholder).val(response.id);
+          $(media_field).val(response.id);
         });
         this.on("addedfile", function () {
           $(dropzone_form_close).css({"display": "none"});

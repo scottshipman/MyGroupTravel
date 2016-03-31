@@ -7,7 +7,7 @@
 {% block body -%}
     <div id="avatar-label" class="mdl-label-mimic">{% trans %}user.avatar.label{% endtrans %}</div>
 
-    {{ render(controller('MediaBundle:Media:createDropzoneForm', {'context':'user', 'existing_media':entity.media})) }}
+    {{ render(controller('MediaBundle:Media:createDropzoneForm', {'context':'user', 'media_field_id':'tui_toolkit_userbundle_user_media', 'existing_media':entity.media})) }}
 
     {{ form_start(edit_form) }}
 
