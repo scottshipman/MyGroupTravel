@@ -29,8 +29,7 @@
         (function($) {
             $(document).ready(function () {
                 // Copy to Clipboard
-                $('#share_button').add('#share_button').attr('brandPrimaryColor', '{{ brand.primaryColor }}').click(copyToClipboard);
-                $('#signup_button').add('#signup_button').attr('brandPrimaryColor', '{{ brand.primaryColor }}').click(copyToClipboard);
+                $('#share_button').add('#signup_button').attr('brandPrimaryColor', '{{ brand.primaryColor }}').click(copyToClipboard);
             });
         })(jQuery);
     </script>
