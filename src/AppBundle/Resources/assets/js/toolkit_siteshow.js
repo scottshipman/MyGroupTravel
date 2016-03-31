@@ -23,7 +23,7 @@ $(document).ready(function () {
     $(document).on('click', '#accept-quote', function (e) {
         e.preventDefault();
         var entityId = $('.site-show').attr('entityId');
-        toolkitStandardPopup( "Accept Quote", "/quote/view/accepted/form/" + entityId );
+        toolkitStandardPopup( "Like Quote", "/quote/view/accepted/form/" + entityId );
     });
 
     // Tour Sign Up popup
