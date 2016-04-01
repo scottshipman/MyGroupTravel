@@ -80,8 +80,13 @@ function filterPassengersByString($items, string) {
 /**
  * filterPassenger
  * @param elemID = the elemID to filter by, reflects status
+ * @param resetSearch = whether to reset the text search.
  */
-function filterPassengers(elemID) {
+function filterPassengers(elemID, resetSearch = true) {
+    if (resetSearch) {
+        $('#passenger-name-filter').val('');
+    }
+
     var config = getPassengerFilterConfig(),
         currentElement = config[elemID],
         $items = $('.passengers').add('.organizers'),
@@ -743,34 +748,18 @@ $(document).ready(function () {
     });
 
     // Filter passengers by search
-    $('#passenger-name-filter').change(function() {
-
+    var delayTimer;
+    $('#passenger-name-filter').keyup(function() {
         if ($('.passenger-filter').filter('.active').length > 0) {
             var elemID = $('.passenger-filter').filter('.active').attr('data-id');
-            filterPassengers(elemID);
+        } else {
+            elemID = 'showEveryone';
         }
-        else {
-            var name = $(this).val(),
-                $items = $('.passengers').add('.organizers');
 
-            // Filter the items to show.
-            // If the search is empty then everything should be shown.
-            var $itemsToShow = filterPassengersByString($items, name);
-
-            // Create the items to hide collection.
-            // This is done by removing all items we are set to show from the complete collection.
-            var $itemsToHide = $items.filter(function(index, el) {
-                return $itemsToShow.index(el) < 0;
-            });
-
-            // Execute the show / hide.
-            $itemsToHide.slideUp(400);
-            $itemsToShow.slideDown(400);
-        }
-    });
-
-    $('#clear-filters').click(function() {
-        // Reset the name filter.
-        $('#passenger-name-filter').val('');
+        // Don't do this after every keypress, delay the search.
+        clearTimeout(delayTimer);
+        delayTimer = setTimeout(function() {
+            filterPassengers(elemID, false);
+        }, 100);
     });
 });
