@@ -1,8 +1,7 @@
+// Disable auto discover for dropzone.
+Dropzone.autoDiscover = false;
+
 (function ($) {
-
-  // Disable auto discover for dropzone.
-  Dropzone.autoDiscover = false;
-
   // Define a jquery function for dropzone.
   // This allows us to override default options.
   $.fn.toolkitDropzone = function(media_field_id, options, existing_media) {
