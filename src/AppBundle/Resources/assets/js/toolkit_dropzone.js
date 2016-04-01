@@ -61,8 +61,8 @@ Dropzone.autoDiscover = false;
     if ($.inArray("addedfile", disabled_events) == -1) {
       dropzone.on("addedfile", function () {
         $(dropzone_form_close).css({"display": "none"});
-        if (this.files[1] != null) {
-          this.removeFile(this.files[0]);
+        if (dropzone.files[1] != null) {
+          dropzone.removeFile(dropzone.files[0]);
         }
       });
     }
