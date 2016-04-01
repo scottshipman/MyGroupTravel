@@ -16,7 +16,7 @@
 {% endblock %}
 
 {% block page_title_menu %}
-    <button id="tour-title-drop" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-menu-drop">
+    <button id="tour-title-drop" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-menu-drop mdl-button--raised mdl-button--colored">
         <i class="material-icons">arrow_drop_down</i>
     </button>
     {% embed "TourBundle:Tour:tourMenu.html.twig" %}
@@ -267,9 +267,8 @@
                                       '<i class="fa fa-sign-in fa-stack"></i>' +
                                       '</a></div>';
                     toolkitStaticPopup("Promote the Tour", link_html);
-                    var trigger_btn = document.getElementById("copy-button");
-                    trigger_btn.setAttribute("brandPrimaryColor", "{{ brand.primaryColor }}");
-                    trigger_btn.addEventListener('click', copyToClipboard, false);
+                    // Copy to Clipboard
+                    $('#copy-button').attr('brandPrimaryColor', '{{ brand.primaryColor }}').click(copyToClipboard);
                 });
 
             // Tour Sign Up popup

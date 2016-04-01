@@ -43,6 +43,5 @@ class PaymentTaskOverrideType extends AbstractType
     public function getName()
     {
         return 'tui_toolkit_tourbundle_paymenttaskoverride';
-        'cascade_validation' => true,
     }
 }

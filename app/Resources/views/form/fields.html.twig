@@ -121,3 +121,7 @@
         {{ form_widget(form) }}
     </div>
 {% endblock button_row %}
+
+{%- block money_widget -%}
+    <span class="currency-symbol">{{ money_pattern|replace({ '{{ widget }}':''}) }}</span>{{ block('form_widget_simple')|raw }}
+{%- endblock money_widget -%}

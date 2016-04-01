@@ -17,10 +17,17 @@
             <li>
                 <strong>{% trans %}tour.not_setup.how_much{% endtrans %}</strong>
                 <p>{% trans %}tour.not_setup.pass_price{% endtrans %}</p>
-                {{ form_widget(setup_form.pricePersonPublic) }}<p style="display: inline; font-size: 16px;"> x </p><p style="display:inline; font-size: 16px;" id="passengers">{{ entity.payingPlaces }}</p><p style="display: inline; font-size: 16px;"> = </p>
-                {% if entity.currency %}<p id="currency" style="display: inline; font-size: inherit;">{{ entity.currency.htmlSymbol | raw }}</p>{% endif %}<p style="display: inline; font-size: 16px; color: green;" id="adjusted-price">{{ entity.payingPlaces * entity.pricePerson }}</p>
-                <p style="display:none; font-size: 16px;" id="total">{{ entity.payingPlaces * entity.pricePerson }}</p>
-                {% if entity.currency %}<p id="currency" style="display: none">{{ entity.currency.htmlSymbol | raw }}</p>{% endif %}
+                <div class="price-per-person">
+                    {{ form_widget(setup_form.pricePersonPublic) }}
+                </div>
+                <div class="price-per-person-suffix">
+                    <p> x </p><p id="passengers">{{ entity.payingPlaces }}</p>
+                    <p> = </p>{% if entity.currency %}<p id="currency">{{ entity.currency.htmlSymbol | raw }}</p>{% endif %}
+                    <p id="adjusted-price">{{ entity.payingPlaces * entity.pricePerson }}</p>
+                    {# @TODO What is this and is it still needed? (All inline style display none) #}
+                    <p style="display:none; font-size: 16px;" id="total">{{ entity.payingPlaces * entity.pricePerson }}</p>
+                    {% if entity.currency %}<p id="currency" style="display: none">{{ entity.currency.htmlSymbol | raw }}</p>{% endif %}
+                </div>
             </li>
 
             <li>
