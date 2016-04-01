@@ -11,6 +11,7 @@
     var dropzone_form_close = $('.dropzone-form-close.' + dropzone_form_id);
     var media_field = $('#' + media_field_id);
     var media_placeholder_image = $('.media-placeholder-image.' + dropzone_form_id);
+    var existing_media = existing_media || {};
 
     var default_options = {
       maxFiles: 1,
