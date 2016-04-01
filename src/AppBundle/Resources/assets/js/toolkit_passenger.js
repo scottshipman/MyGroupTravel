@@ -2,6 +2,9 @@
  * @param elemID = the elemID to filter by, reflects status
  */
 function filterPassengers(elemID) {
+    // Reset the name filter.
+    $('#passenger-name-filter').val('');
+
     switch(elemID) {
         case 'showAcceptedPassengers':
             $('.free, .organizers, .waitlist, .organizer-cta-card').slideUp(400, function () {
@@ -720,17 +723,25 @@ $(document).ready(function () {
         $('#passenger-close').css("display", "none");
     });
 
+    // Filter passengers by search
     $('#passenger-name-filter').change(function() {
-        var name = $(this).val(),
-            $items = $('.free, .organizers, .waitlist, .organizer-cta-card, .accepted.passengers'),
-            $itemsToShow = $items.filter(function() {
-                $contains = $(this).find('.pcardname:contains("' + name + '")');
-                return $contains.length > 0;
-            });
+        // Get the value from the input and the full collection of items to search.
+        var name = $(this).val().toUpperCase(),
+            $items = $('.passengers');
 
-        $items.remove($itemsToShow).slideUp(400, function () {
-            $itemsToShow.slideDown(400);
+        // Filter the items to show.
+        // If the search is empty then everything should be shown.
+        var $itemsToShow = $items.filter(function() {
+            return $(this).find('.pcardname').text().toUpperCase().indexOf(name) >= 0;
         });
-    });
 
+        // Creare the items to hide collection by removing all of the elements that should be shown.
+        var $itemsToHide = $items.filter(function(index, el) {
+            return $itemsToShow.index(el) < 0;
+        });
+
+        // Execute the show / hide.
+        $itemsToHide.slideUp(400);
+        $itemsToShow.slideDown(400);
+    });
 });
