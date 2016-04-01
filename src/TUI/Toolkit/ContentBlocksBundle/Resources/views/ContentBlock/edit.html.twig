@@ -15,8 +15,8 @@
                     <a class="existing-delete" href="#"><i class="fa fa-times-circle"></i></a>
                     <div style="display: none" class="caption-textfield mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                         <input class="caption mdl-textfield__input" type="text" data="{{ mediaWrapper.id }}" value="{{ mediaWrapper.title }}" name="caption" id="{{ mediaWrapper.id }}-caption">
-                        <label class="mdl-textfield__label" for="{{ mediaWrapper.id }}">{% trans %}contentBlocks.upload_form.caption_label{% endtrans %}</label></div>
-                    <div id="{{ mediaWrapper.id }}-label" style="display: none" class="caption-label mdl-textfield mdl-js-textfield mdl-textfield--floating-label"></div>
+                        <label class="mdl-textfield__label" for="{{ mediaWrapper.id }}">{% trans %}contentBlocks.upload_form.caption_label{% endtrans %}</label>
+                    </div>
                 </div>
                 {% endfor %}
             {% endfor %}
@@ -196,7 +196,6 @@
                 var values = [];
                 if ( value != 0 ) {
                     $(".caption-textfield").css({"display":"block"});
-                    $(".caption-label").css({"display":"block"});
                     $(".sortable-images").sortable("enable");
                     updateMediaWrapper($(".existing-media-wrapper"));
                     if (values.length >= 15) {
