@@ -440,3 +440,7 @@ a.organizer-card {
 .dashboard-titles:hover {
   background-color: #eee;
 }
+
+.passenger-task-card .mdl-card__supporting-text {
+  min-height: 69px;
+}
