@@ -240,10 +240,6 @@
                             $("#dialog").dialog('close');
 
                         });
-                        this.on("error", function (file, response) {
-                            this.removeFile(file);
-                            alert('Error: ' + response);
-                        });
                     }
                 },
                 {},
