@@ -116,7 +116,7 @@
     {{ form_rest(edit_form) }}
     {{ form_end(edit_form) }}
     <div id="dropzone-dialog" style="display: none;">
-        {{ render(controller('MediaBundle:Media:createDropzoneLightForm', {'context':'tourassets'})) }}
+        {{ render(controller('MediaBundle:Media:createDropzoneForm', {'context':'tourassets', 'media_field_id':'tui_toolkit_tourbundle_tour_media', 'media_placeholder_image':FALSE, 'close_button':FALSE, 'auto_implementation':FALSE})) }}
     </div>
     {{ form_javascript(edit_form) }}
     <ul class="mdl-card__actions record_actions">
@@ -181,73 +181,72 @@
                 addPaymentTaskForm($collectionHolder, $newLinkDiv);
             });
 
-            Dropzone.autoDiscover = false;
-
-            $(".dropzone-form").dropzone({
-                maxFiles: 1,
-                acceptedMimeTypes: 'application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation, application/pdf',
-                uploadMultiple: false,
-                dictDefaultMessage: "{% trans %}media.dropzone.default_message{% endtrans %}",
-                init: function () {
-                    var value = $(".media-placeholder").val();
-                    var values = [];
-                    if (value != 0) {
-                        values = value.split(',').map(Number);
-                        if (values.length >= 10) {
-                            $("#promo-assets-upload").css({"display": "none"});
-                            $("#promo-assets-closed").css({"display": "inline-block"});
-                        }
-                    }
-                    this.on("success", function (file, response) {
-                        if ($(".media-placeholder").val().length > 0) {
-                            var value = $(".media-placeholder").val();
-                            var values = [];
-                            if (value != 0) {
-                                values = value.split(',').map(Number);
-                                values.push(response.id);
-                                if (values.length >= 10) {
-                                    $("#promo-assets-upload").css({"display": "none"});
-                                    $("#promo-assets-closed").css({"display": "inline-block"});
-                                }
+            $("#dropzone-form-primary").toolkitDropzone(
+                "tui_toolkit_tourbundle_tour_media",
+                {
+                    dictDefaultMessage: "{% trans %}media.dropzone.default_message{% endtrans %}",
+                    acceptedMimeTypes: 'application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation, application/pdf',
+                    init: function () {
+                        var value = $(".media-placeholder").val();
+                        var values = [];
+                        if (value != 0) {
+                            values = value.split(',').map(Number);
+                            if (values.length >= 10) {
+                                $("#promo-assets-upload").css({"display": "none"});
+                                $("#promo-assets-closed").css({"display": "inline-block"});
                             }
-                            $(".media-placeholder").val(values);
-                        } else {
-                            $(".media-placeholder").val(response.id);
                         }
-                        $('.existing-media-wrapper').find('.none').hide();
-                        var type = response.mime_type;
-                        if (type == 'application/pdf') {
-                            var iconColor = "red";
-                            var faIcon = "fa-file-pdf-o";
-                        }
-                        else if (type == 'application/msword' || type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
-                            var iconColor = "blue";
-                            var faIcon = "fa-file-word-o";
-                        }
-                        else if (type == 'application/vnd.ms-excel' || type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
-                            var iconColor = "green";
-                            var faIcon = "fa-file-excel-o";
-                        }
-                        else if (type == 'application/vnd.ms-powerpoint' || type == 'application/vnd.openxmlformats-officedocument.presentationml.presentation') {
-                            var iconColor = "orange";
-                            var faIcon = "fa-file-powerpoint-o"
-                        }
-                        $('.existing-media-wrapper').append('<div style ="border-radius: 0px;" class="existing-media-item promo-asset">' +
-                        '<i style ="color:' + iconColor + ';' + '" class="fa ' + faIcon + ' fa-3x' + '"></i>' +
-                        '<a id="'+ response.id + '" href="' + response.relativepath + '/' + response.filename + '"></a>' +
-                        '<a class="existing-delete" style= "top: 5px; right: -10px;" href="#"><i class="fa fa-trash-o fa-2x"></i></a></div></br>');
-                        var id = '#' + response.id;
-                        $(id).html(response.original_filename);
-                        this.removeFile(file);
-                        $("#dialog").dialog('close');
+                        this.on("success", function (file, response) {
+                            if ($(".media-placeholder").val().length > 0) {
+                                var value = $(".media-placeholder").val();
+                                var values = [];
+                                if (value != 0) {
+                                    values = value.split(',').map(Number);
+                                    values.push(response.id);
+                                    if (values.length >= 10) {
+                                        $("#promo-assets-upload").css({"display": "none"});
+                                        $("#promo-assets-closed").css({"display": "inline-block"});
+                                    }
+                                }
+                                $(".media-placeholder").val(values);
+                            } else {
+                                $(".media-placeholder").val(response.id);
+                            }
+                            $('.existing-media-wrapper').find('.none').hide();
+                            var type = response.mime_type;
+                            if (type == 'application/pdf') {
+                                var iconColor = "red";
+                                var faIcon = "fa-file-pdf-o";
+                            }
+                            else if (type == 'application/msword' || type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+                                var iconColor = "blue";
+                                var faIcon = "fa-file-word-o";
+                            }
+                            else if (type == 'application/vnd.ms-excel' || type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+                                var iconColor = "green";
+                                var faIcon = "fa-file-excel-o";
+                            }
+                            else if (type == 'application/vnd.ms-powerpoint' || type == 'application/vnd.openxmlformats-officedocument.presentationml.presentation') {
+                                var iconColor = "orange";
+                                var faIcon = "fa-file-powerpoint-o"
+                            }
+                            $('.existing-media-wrapper').append('<div style ="border-radius: 0px;" class="existing-media-item promo-asset">' +
+                            '<i style ="color:' + iconColor + ';' + '" class="fa ' + faIcon + ' fa-3x' + '"></i>' +
+                            '<a id="'+ response.id + '" href="' + response.relativepath + '/' + response.filename + '"></a>' +
+                            '<a class="existing-delete" style= "top: 5px; right: -10px;" href="#"><i class="fa fa-trash-o fa-2x"></i></a></div></br>');
+                            var id = '#' + response.id;
+                            $(id).html(response.original_filename);
+                            this.removeFile(file);
+                            $("#dialog").dialog('close');
 
-                    });
-                    this.on("error", function (file, response) {
-                        this.removeFile(file);
-                        alert('Error: ' + response);
-                    });
+                        });
+                        this.on("error", function (file, response) {
+                            this.removeFile(file);
+                            alert('Error: ' + response);
+                        });
+                    }
                 }
-            });
+            );
         });
         function addPaymentTaskForm($collectionHolder, $newLinkDiv) {
             // Get the data-prototype explained earlier
