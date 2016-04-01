@@ -344,7 +344,7 @@ class PassengerService
                 $parentObject = "";
             }
 
-            $permissions = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $parentObject);
+            $permissions = $container->get("permission.set_permission")->getPermission($tourId, 'tour', $parentObject);
 
             $isOrganizer = FALSE;
 
@@ -426,7 +426,7 @@ class PassengerService
             $passengerObject->setStatus('Pending Invite');
 
             $user = $organizer->getId();
-            $passenger = $this->get("permission.set_permission")->getObject('parent', $user, 'passenger');
+            $passenger = $container->get("permission.set_permission")->getObject('parent', $user, 'passenger');
             $isOrganizer = TRUE;
 
             if (!empty($passenger)){
