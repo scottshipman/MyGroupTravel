@@ -1635,8 +1635,11 @@ class TourController extends Controller
 
     public function createNotifyOrganizerFormAction($id)
     {
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('TourBundle:Tour')->find($id);
+        $active_organizer = $entity->getOrganizer()->isEnabled();
         $locale = $this->container->getParameter('locale');
-        $notifyForm = $this->createForm(new ContactOrganizerType($locale), array(), array(
+        $notifyForm = $this->createForm(new ContactOrganizerType($locale, $active_organizer), array(), array(
             'action' => $this->generateUrl('manage_tour_notify_organizers', array('id' => $id)),
             'method' => 'POST',
         ));

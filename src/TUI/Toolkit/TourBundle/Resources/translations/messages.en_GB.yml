@@ -314,7 +314,7 @@ tour:
         media: Avatar
         password: Password
         contact_organizer:
-            message: Message to the organiser
+            label: Message to the organiser
         payment_task:
             value: Amount
             type: Payment Type
