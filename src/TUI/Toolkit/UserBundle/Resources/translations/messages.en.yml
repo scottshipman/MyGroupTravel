@@ -89,7 +89,7 @@ user:
         registration:
             subject: Toolkit Registration Confirmation
         password_reset:
-            subject: Toolkit Password Reset
+            subject: Password Reset
             action: Set Password
     form:
         honorific: Title
@@ -100,16 +100,18 @@ user:
         phone: Phone Number
         media: Avatar
         password: Password
-        question: Please enter a ecurity Question.
-        question_prompt: Please answer your pre-selected Security Question.
-        answer: Your Security Question's answer.
+        question: Please enter a security question.
+        question_prompt: Please provide the answer to your security question.
+        answer: Your security question's answer.
         terms_agree: I have read and agree to the %link_start%Terms of Service%link_end%
         resetting:
             submit: Submit
+            securityprompt: Please provide the answer to your security question:
         activate:
             submit: Submit
+        resetlink: To edit your account password or security question
         error:
-            deleted: This user exists and has been deleted.  Please contact and administrator to re-enable this user.
+            deleted: This user exists and has been deleted. Please contact and administrator to re-enable this user.
         delete:
             prompt: "Are you sure you wish to delete this user?"
 
