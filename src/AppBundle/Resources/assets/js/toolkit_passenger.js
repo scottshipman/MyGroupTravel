@@ -351,7 +351,7 @@ $(document).ready(function () {
                 "Expires": -1,
                 "Cache-Control": "no-cache"
             },
-            data: $('#ajax_dietary_form').serialize(),
+            data: $('#ajax_new_dietary_form').serialize(),
             contentType: "application/x-www-form-urlencoded",
         }).success(function (response) {
             $("#loader").css("display", "none");
