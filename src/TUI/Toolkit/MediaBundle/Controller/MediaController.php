@@ -117,24 +117,6 @@ use TUI\Toolkit\MediaBundle\Form\MediaType;
   }
 
   /**
-   * Creates a form (light) to create a Media entity.
-   *
-   * @param Media $entity The entity
-   *
-   * @return \Symfony\Component\Form\Form The form
-   */
-  public function createDropzoneLightFormAction(Request $request, $context)
-  {
-    $form = $this->createFormBuilder()->getForm();
-
-    $form->handleRequest($request);
-    return $this->render('MediaBundle:Media:dropzone_light.html.twig', array(
-      'context'=>$context,
-      'form' => $form->createView(),
-    ));
-  }
-
-  /**
    * Displays a form to create a new Media entity.
    *
    * @Route("/new", name="media_new")
