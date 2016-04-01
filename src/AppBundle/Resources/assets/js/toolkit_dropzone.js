@@ -8,6 +8,7 @@ Dropzone.autoDiscover = false;
     var dropzone_form = $(this);
     var dropzone_form_id = $(this).attr('id');
     var dropzone_form_close = $('.dropzone-form-close.' + dropzone_form_id);
+    var dropzone_form_errors = $('.dropzone-form-errors.' + dropzone_form_id);
     var media_field = $('#' + media_field_id);
     var media_placeholder_image = $('.media-placeholder-image.' + dropzone_form_id);
     var existing_media = existing_media || {};
@@ -55,6 +56,7 @@ Dropzone.autoDiscover = false;
             filename: response.filename
           }
         );
+        $(dropzone_form_errors).css({"display": "none"});
       });
     }
 
@@ -73,6 +75,14 @@ Dropzone.autoDiscover = false;
 
         // Revert media to existing.
         mediaUpdate();
+      });
+    }
+
+    if ($.inArray("error", disabled_events) == -1) {
+      dropzone.on("error", function (file, response) {
+        dropzone.removeFile(file);
+        $(dropzone_form_errors).css({"display": "block"});
+        $(dropzone_form_errors).html(response);
       });
     }
 
