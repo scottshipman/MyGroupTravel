@@ -25,21 +25,23 @@
 
 {% javascripts '@toolkit_dropzone' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $("#dropzone-form-{{ identifier }}").toolkitDropzone(
-                "{{ media_field_id }}",
-                {
-                    dictDefaultMessage: "{% trans %}media.dropzone.default_message{% endtrans %}"
-                }
-                {% if existing_media %}
-                ,{
-                    id: {{ existing_media.id }},
-                    path: "{{ existing_media.getRelativePath }}",
-                    filename: "{{ existing_media.getHashedFilename }}"
-                }
-                {% endif %}
-            );
-        });
-    </script>
+    {% if auto_implementation %}
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $("#dropzone-form-{{ identifier }}").toolkitDropzone(
+                    "{{ media_field_id }}",
+                    {
+                        dictDefaultMessage: "{% trans %}media.dropzone.default_message{% endtrans %}"
+                    }
+                    {% if existing_media %}
+                    ,{
+                        id: {{ existing_media.id }},
+                        path: "{{ existing_media.getRelativePath }}",
+                        filename: "{{ existing_media.getHashedFilename }}"
+                    }
+                    {% endif %}
+                );
+            });
+        </script>
+    {% endif %}
 {% endjavascripts %}

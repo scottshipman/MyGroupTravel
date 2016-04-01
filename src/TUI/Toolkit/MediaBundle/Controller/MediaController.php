@@ -99,7 +99,7 @@ use TUI\Toolkit\MediaBundle\Form\MediaType;
    *
    * @return \Symfony\Component\Form\Form The form
    */
-  public function createDropzoneFormAction(Request $request, $context, $media_field_id, $identifier = 'primary', $existing_media = FALSE, $media_placeholder_image = TRUE, $close_button = TRUE)
+  public function createDropzoneFormAction(Request $request, $context, $media_field_id, $identifier = 'primary', $existing_media = FALSE, $media_placeholder_image = TRUE, $close_button = TRUE, $auto_implementation = TRUE)
   {
     $form = $this->createFormBuilder()->getForm();
 
@@ -111,6 +111,7 @@ use TUI\Toolkit\MediaBundle\Form\MediaType;
       'existing_media' => $existing_media,
       'media_placeholder_image' => $media_placeholder_image,
       'close_button' => $close_button,
+      'auto_implementation' => $auto_implementation,
       'form' => $form->createView(),
     ));
   }
