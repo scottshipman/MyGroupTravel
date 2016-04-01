@@ -343,8 +343,18 @@ class PassengerService
             } else {
                 $parentObject = "";
             }
-            $isOrganizer = $container->get("permission.set_permission")->getPermission($tourId, 'tour', $parentObject)[0]=='organizer' ? TRUE : FALSE;
-            $isOrganizer = $container->get("permission.set_permission")->getPermission($tourId, 'tour', $parentObject)[0]=='assistant' ? TRUE : $isOrganizer;
+
+            $permissions = $container->get("permission.set_permission")->getPermission($tourId, 'tour', $parentObject);
+
+            $isOrganizer = FALSE;
+
+            if (is_array($permissions)){
+                foreach($permissions as $permission){
+                    if (($permission == 'organizer' || $permission == 'assistant') && $passenger->getSelf() == true) {
+                        $isOrganizer = TRUE;
+                    }
+                }
+            }
 
 
             $combinedObjects[]= array($passenger, $parentObject, $isOrganizer);
@@ -416,7 +426,7 @@ class PassengerService
             $passengerObject->setStatus('Pending Invite');
 
             $user = $organizer->getId();
-            $passenger = $this->get("permission.set_permission")->getObject('parent', $user, 'passenger');
+            $passenger = $container->get("permission.set_permission")->getObject('parent', $user, 'passenger');
             $isOrganizer = TRUE;
 
             if (!empty($passenger)){
