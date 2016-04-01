@@ -228,10 +228,13 @@
 
   .mdl-card__title {
     color:grey;
-  }
 
-  #passenger-export-menu {
-    top: 16px;
+    .title-button {
+      position: absolute;
+      right: 20px;
+      top: 16px;
+      margin-top: 0;
+    }
   }
 
   a {
