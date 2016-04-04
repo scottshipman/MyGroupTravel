@@ -297,7 +297,7 @@
       removedfile: function(file) {
         var _ref;
         if (file.previewElement) {
-          if ((_ref = file.previewElement) != null) {
+          if (((_ref = file.previewElement) != null) && file.previewElement.parentNode) {
             _ref.parentNode.removeChild(file.previewElement);
           }
         }

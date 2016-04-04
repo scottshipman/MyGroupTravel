@@ -41,7 +41,13 @@
                         path: "{{ existing_media.getRelativePath }}",
                         filename: "{{ existing_media.getHashedFilename }}"
                     }
+                    {% else %}
+                   , null
                     {% endif %}
+                   , null
+                {% if context == 'user' %}
+                , 1
+                {% endif %}
                 );
             });
         </script>

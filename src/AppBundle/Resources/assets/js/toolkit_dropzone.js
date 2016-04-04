@@ -1,3 +1,14 @@
+// transform cropper dataURI output to a Blob which Dropzone accepts
+function dataURItoBlob(dataURI) {
+  var byteString = atob(dataURI.split(',')[1]);
+  var ab = new ArrayBuffer(byteString.length);
+  var ia = new Uint8Array(ab);
+  for (var i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i);
+  }
+  return new Blob([ab], { type: 'image/jpeg' });
+}
+
 // Disable auto discover for dropzone.
 Dropzone.autoDiscover = false;
 
@@ -62,7 +73,7 @@ Dropzone.autoDiscover = false;
     }
 
     if ($.inArray("addedfile", disabled_events) == -1) {
-      dropzone.on("addedfile", function () {
+      dropzone.on("addedfile", function (file) {
         $(dropzone_form_close).css({"display": "none"});
         if (dropzone.files[1] != null) {
           dropzone.removeFile(dropzone.files[0]);
@@ -81,23 +92,22 @@ Dropzone.autoDiscover = false;
 
     if ($.inArray("error", disabled_events) == -1) {
       dropzone.on("error", function (file, response) {
-        var error_message = response;
+        if(file.thumbnail != 'thumbnail_process'){
+          var error_message = response;
+          // If the response is an object provide a generic error message.
+          if (typeof response === 'object' && response.error.code) {
+            error_message = 'Could not upload (error code ' + response.error.code + ').';
+          }
 
-        // If the response is an object provide a generic error message.
-        if (typeof response === 'object' && response.error.code) {
-          error_message = 'Could not upload (error code ' + response.error.code + ').';
+          dropzone.removeFile(file);
+          $(dropzone_form_errors).css({"display": "block"});
+          $(dropzone_form_errors).html(error_message);
         }
-
-        dropzone.removeFile(file);
-        $(dropzone_form_errors).css({"display": "block"});
-        $(dropzone_form_errors).html(error_message);
       });
     }
 
     if ($.inArray("thumbnail", disabled_events) == -1) {
       dropzone.on("thumbnail", function (file) {
-
-        console.log('dropzone thumbnail event');
         var myDropzone = this;
         // ignore files which were already cropped and re-rendered
         // to prevent infinite loop
@@ -112,12 +122,12 @@ Dropzone.autoDiscover = false;
 
         // cache filename to re-assign it to cropped file
         var cachedFilename = file.name;
-        console.log(cachedFilename);
+        file.thumbnail = 'thumbnail_process';
         // remove not cropped file from dropzone (we will replace it later)
         myDropzone.removeFile(file);
 
         // dynamically create divs to allow multiple files processing
-        var $cropperDiv = $('<div><div class="image-container"><!-- Cropper Container Here --></div><a class="crop-upload mdl-button">Crop and Upload</a></div>');
+        var $cropperDiv = $('<div><div class="image-container"><!-- Cropper Container Here --></div><a class="crop-upload mdl-button mdl-button--raised mdl-button--colored">Crop and Upload</a></div>');
         // 'Crop and Upload' button in a modal
         var $uploadCrop = $cropperDiv.find('.crop-upload');
 
@@ -125,11 +135,9 @@ Dropzone.autoDiscover = false;
         // initialize FileReader which reads uploaded file
         var reader = new FileReader();
         reader.onloadend = function () {
-          console.log('reader.onloadend event');
           // add uploaded and read image to modal
           $cropperDiv.find('.image-container').html($img);
           $img.attr('src', reader.result);
-          console.log($img);
           // initialize cropper for uploaded image
           $img.cropper({
                aspectRatio: aspect_ratio,
@@ -137,9 +145,8 @@ Dropzone.autoDiscover = false;
             movable: false,
             cropBoxResizable: true,
             minContainerWidth: 120,
-            autoCrop: false
+            autoCrop: true
           });
-          console.log('cropper initialized');
         };
         // read uploaded file (triggers code above)
         reader.readAsDataURL(file);
@@ -147,7 +154,8 @@ Dropzone.autoDiscover = false;
         $("#dialog").html($cropperDiv);
         $("#dialog").dialog("option", "title", "Crop Image");
         $("#dialog").dialog("open");
-        //$('#dropzone_form').parent().append($cropperDiv);
+        var dialogtop = $(".ui-dialog").position().top - 200;
+        $(".ui-dialog").css('top', dialogtop + 'px');
 
         // listener for 'Crop and Upload' button in modal
         $uploadCrop.on('click', function() {
@@ -165,7 +173,9 @@ Dropzone.autoDiscover = false;
           myDropzone.addFile(newFile);
           // upload cropped file with dropzone
           myDropzone.processQueue();
-          $cropperDiv.remove();
+          $("#dialog").html('');
+          $("#dialog").dialog("option", "title", "");
+          $("#dialog").dialog("close");
         });
 
     });
