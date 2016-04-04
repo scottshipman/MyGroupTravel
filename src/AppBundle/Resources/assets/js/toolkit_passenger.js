@@ -73,17 +73,17 @@ function filterPassengersByString($items, string) {
     // If the search is empty then everything should be shown.
     string = string.toUpperCase();
     return $items.filter(function() {
-        return $(this).find('.pcardname').text().toUpperCase().indexOf(string) >= 0;
+        return $(this).find('.mini-card-title').text().toUpperCase().indexOf(string) >= 0;
     });
 }
 
 /**
- * filterPassenger
+ * filterPassengers
  * @param elemID = the elemID to filter by, reflects status
  * @param resetSearch = whether to reset the text search.
  */
-function filterPassengers(elemID, resetSearch = true) {
-    if (resetSearch) {
+function filterPassengers(elemID, resetSearch) {
+    if (resetSearch === undefined || resetSearch) {
         $('#passenger-name-filter').val('');
     }
 
@@ -747,6 +747,23 @@ $(document).ready(function () {
         $('#passenger-close').css("display", "none");
     });
 
+    // See if there is a name search.
+    var parts = window.location.href.split('?');
+    for (var i = 1; i < parts.length; i++) {
+        var query = parts[i].split('=');
+        if (query[0] == 'search') {
+            $('#passenger-name-filter').val(query[1]);
+
+            if ($('.passenger-filter').filter('.active').length > 0) {
+                var elemID = $('.passenger-filter').filter('.active').attr('data-id');
+            } else {
+                elemID = 'showEveryone';
+            }
+
+            filterPassengers(elemID, false);
+        }
+    }
+
     // Filter passengers by search
     var delayTimer;
     $('#passenger-name-filter').keyup(function() {
@@ -761,5 +778,14 @@ $(document).ready(function () {
         delayTimer = setTimeout(function() {
             filterPassengers(elemID, false);
         }, 100);
+    });
+
+    // On change track the search in the url.
+    $('#passenger-name-filter').change(function() {
+        var search = $('#passenger-name-filter').val(),
+            parts = window.location.href.split('?'),
+            href = search !== '' ? parts[0] + '?search=' + search : parts[0];
+
+        window.history.pushState({}, "Search " + search, href);
     });
 });
