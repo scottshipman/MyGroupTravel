@@ -6,6 +6,9 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Collection;
 
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -49,6 +52,9 @@ class TourPassengerType extends AbstractType
                 'translation_domain'  => 'messages',
                 'required' => true,
                 'mapped' => false,
+                'constraints' => new NotBlank(array(
+                    'message' => 'Please enter a Parent / Guardian First Name'
+                )),
 
             ))
             ->add('lastName', 'text', array(
@@ -56,6 +62,9 @@ class TourPassengerType extends AbstractType
                 'translation_domain'  => 'messages',
                 'required' => true,
                 'mapped' => false,
+                'constraints' => new NotBlank(array(
+                    'message' => 'Please enter a Parent / Guardian Last Name'
+                )),
 
             ))
             ->add('email', 'email', array(
@@ -63,7 +72,14 @@ class TourPassengerType extends AbstractType
                 'translation_domain'  => 'messages',
                 'required'  => true,
                 'mapped' => false,
-
+                'constraints' => array(
+                    new Email(array(
+                    'message' => 'Please enter a valid Parent / Guardian email address'
+                    )),
+                    new NotBlank(array(
+                        'message' => 'Please enter a Parent / Guardian email address'
+                    )),
+                ),
 
             ))
             ->add('passengers', 'collection', array(

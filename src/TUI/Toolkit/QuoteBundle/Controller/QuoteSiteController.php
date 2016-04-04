@@ -310,6 +310,9 @@ class QuoteSiteController extends Controller
         $changeForm = $this->createForm(new QuoteChangeRequestType(), array(), array(
             'action' => $this->generateUrl('quote_site_change_request', array('id' => $id)),
             'method' => 'POST',
+            'attr' => array(
+                'id' => 'ajax_change_quote_form'
+            ),
         ));
 
         $changeForm->add('submit', 'submit', array('label' => $this->get('translator')->trans('quote.actions.change_request')));
@@ -384,34 +387,50 @@ class QuoteSiteController extends Controller
             $brand = $default_brand;
         }
 
-        $message = \Swift_Message::newInstance()
-            ->setSubject($this->get('translator')->trans('quote.email.change_request.subject') .' '. $tourName)
-            ->setFrom($this->container->getParameter('user_system_email'))
-            ->setTo($agentEmail)
-            ->setBody(
-                $this->renderView(
-                    'QuoteBundle:Emails:changerequest.html.twig',
-                    array(
-                        'brand' => $brand,
-                        'entity' => $entity,
-                        'changes' => $changes,
-                        'additional' => $additional,
-                        'departure' => $departure,
-                        'tour_name' => $tourName,
-                        'locale' => $locale,
-                        'date_format' => $date_format,
-                    )
-                ), 'text/html');
+        if ($changeForm->isValid()){
+            $message = \Swift_Message::newInstance()
+                ->setSubject($this->get('translator')->trans('quote.email.change_request.subject') .' '. $tourName)
+                ->setFrom($this->container->getParameter('user_system_email'))
+                ->setTo($agentEmail)
+                ->setBody(
+                    $this->renderView(
+                        'QuoteBundle:Emails:changerequest.html.twig',
+                        array(
+                            'brand' => $brand,
+                            'entity' => $entity,
+                            'changes' => $changes,
+                            'additional' => $additional,
+                            'departure' => $departure,
+                            'tour_name' => $tourName,
+                            'locale' => $locale,
+                            'date_format' => $date_format,
+                        )
+                    ), 'text/html');
 
-        foreach($toArray as $user) {
-            $message->setTo($user);
-            $this->get('mailer')->send($message);
+            foreach($toArray as $user) {
+                $message->setTo($user);
+                $this->get('mailer')->send($message);
+            }
+
+
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('quote.flash.change_request') . ' '. $tourName);
+
+            return $this->redirect($this->generateUrl('quote_site_show', array('id' => $id, "quoteNumber" => $entity->getQuoteNumber())));
+        } else {
+            //return errors
+
+            //$errors = $this->get("passenger.actions")->getErrorMessages($form);
+            $errors = $this->get("app.form.validation")->getErrorMessages($changeForm);
+            $serializer = $this->container->get('jms_serializer');
+            $errors = $serializer->serialize($errors, 'json');
+
+            $response = new Response($errors);
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setStatusCode('400');
+            return $response;
         }
 
 
-        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('quote.flash.change_request') . ' '. $tourName);
-
-        return $this->redirect($this->generateUrl('quote_site_show', array('id' => $id, "quoteNumber" => $entity->getQuoteNumber())));
 
     }
 

@@ -5,6 +5,7 @@ namespace TUI\Toolkit\TourBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 
 class PaymentTaskOverrideType extends AbstractType
 {
@@ -15,7 +16,12 @@ class PaymentTaskOverrideType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('value')
+            ->add('value', 'float', array(
+                'constraints' => new GreaterThanOrEqual(array(
+                    'message' => 'Value must be greater than 0',
+                    'value' => 0,
+                )),
+            ))
             ->add('passenger')
             ->add('paymentTaskSource')
         ;

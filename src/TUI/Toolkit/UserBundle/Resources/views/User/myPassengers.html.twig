@@ -43,7 +43,21 @@
             {#<li><label>{% trans %}tour.show.number{% endtrans %}</label><strong>{{ entity.tourReference}}</strong></li>#}
             {#{% endif %}#}
             <li><label>{% trans %}tour.show.departure{% endtrans %}</label><strong>{{ tour.departureDate|date(format) }}</strong></li>
-
+            <li><label>{% trans %}tour.show.payment_instructions{% endtrans %}</label>
+                <p style="font-weight:600;">Payment Schedule</p>
+                <ul style="list-style:none;">
+                    {% for payments in tour.paymentTasksPassenger %}
+                        <li>{{ payments.name }} {% if tour.currency %}{{ tour.currency.htmlSymbol | raw }}{% endif %}{{ payments.value }} due {{ payments.dueDate | date(format)}}</li>
+                    {% endfor %}
+                </ul>
+                <p style="font-weight:600;">Payment Methods</p>
+                <ul style="list-style:none;">
+                    <li> {% if tour.bankTransferPayment is sameas(TRUE) %}{% trans %}tour.form.tour_setup.bank{% endtrans %} {% if tour.bankTransferPaymentDescription != '' %} - {{ tour.bankTransferPaymentDescription }} {% endif %}{% endif %}</li>
+                    <li>  {% if tour.onlinePayment is sameas(TRUE) %}{% trans %}tour.form.tour_setup.online{% endtrans %} {% if tour.onlinePaymentDescription != '' %} -  {{ tour.onlinePaymentDescription }} {% endif %}{% endif %}</li>
+                    <li>   {% if tour.cashPayment is sameas(TRUE) %}{% trans %}tour.form.tour_setup.cash{% endtrans %} {% if tour.cashPaymentDescription != '' %} - {{ tour.cashPaymentDescription }} {% endif %}{% endif %}</li>
+                    <li>   {% if tour.otherPayment is sameas(TRUE) %} {{ tour.otherPaymentDescription }} {% endif %}</li>
+                </ul>
+            </li>
         </ul>
 
         {#<div class="tour-edit-organizer-left">#}

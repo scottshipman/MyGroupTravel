@@ -4,7 +4,7 @@
     {% if is_granted("ROLE_BRAND") %}
         {% trans %}tour.page_title.site_view{% endtrans %}
     {% else %}
-        {{ entity.quoteReference.name }}, {{ entity.name }}
+         {{ entity.name }}
     {% endif %}
 {% endblock %}
 
@@ -23,7 +23,7 @@
 
     {% elseif "tour" | getRoles(entity.id) != "" or is_granted("ROLE_BRAND")%}
 
-    <button id="tour-title-drop" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-menu-drop">
+    <button id="tour-title-drop" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-menu-drop mdl-button--raised mdl-button--colored">
         <i class="material-icons">arrow_drop_down</i>
     </button>
     {% embed "TourBundle:Tour:tourMenu.html.twig" %}
@@ -34,20 +34,6 @@
         {% endif %}
     {% endembed %}
     {% endif %}
-{% endblock %}
-
-{% block back_link %}
-
-{% if "tour" | getRoles(entity.id) == "parent" or  "tour" | getRoles(entity.id) == "" %}
-
-    <a class="back-link" href="/profile"><i class="fa fa-arrow-left"></i> Back To Home</a>
-
-{% elseif "tour" | getRoles(entity.id) != "" or is_granted("ROLE_BRAND") %}
-
-    <a class="back-link" href="{{ path('manage_tour_show', { 'id': entity.id }) }}"><i class="fa fa-arrow-left"></i> {% trans %}tour.actions.back_dashboard{% endtrans %}</a>
-
-{% endif %}
-
 {% endblock %}
 
 {% block edit_link %}
@@ -258,9 +244,8 @@
                     {% set activeTab = '' %}
             {% endfor %}
         </div>
-    </div><!-- view-mode -->
 
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.js"></script>
+    </div><!-- view-mode -->
 
     {% javascripts '@toolkit_siteshow' %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -322,17 +307,7 @@
                                       '</a></div>';
                     toolkitStaticPopup("Promote the Tour", link_html);
                     // Copy to Clipboard
-                    ZeroClipboard.config({swfPath: "//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf"});
-                    var client = new ZeroClipboard(document.getElementById("copy-button"));
-                    client.on('aftercopy', function (event) {
-                        $('#copy-button').css('background-color', 'green');
-                    });
-                    //remove the CopytoClipboard button if not Flash
-                    if (navigator.mimeTypes["application/x-shockwave-flash"] == undefined) {
-                        $("#copy-button").addClass('hidden');
-                        $('share_url').css('width', '80%');
-                    };
-
+                    $('#copy-button').attr('brandPrimaryColor', '{{ brand.primaryColor }}').click(copyToClipboard);
                 });
 
             {% endif %}
@@ -357,7 +332,7 @@
 
 
 {% block footer_left %}
-    {% if app.user.email == entity.organizer.email%} {# Show Sales Agent Info to an Organizer#}
+    {% if app.user != NULL and app.user.email == entity.organizer.email%} {# Show Sales Agent Info to an Organizer#}
         {% if entity.salesAgent %}
             <span class="intro">
                     {{ brand.name }} {% trans %}tour.show.footer.intro_org{% endtrans %}

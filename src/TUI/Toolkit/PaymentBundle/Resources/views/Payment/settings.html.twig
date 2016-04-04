@@ -15,7 +15,7 @@
 {% endblock %}
 
 {% block page_title_menu %}
-    <button id="tour-title-drop" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-menu-drop">
+    <button id="tour-title-drop" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-menu-drop mdl-button--raised mdl-button--colored ">
         <i class="material-icons">arrow_drop_down</i>
     </button>
     {% embed "TourBundle:Tour:tourMenu.html.twig" %}
@@ -64,10 +64,17 @@
                         <li>
                             <strong>{% trans %}tour.not_setup.how_much{% endtrans %}</strong>
                             <p>{% trans %}tour.not_setup.pass_price{% endtrans %}</p>
-                            {{ form_widget(setup_form.pricePersonPublic) }}<p style="display: inline; font-size: 16px;"> x </p><p style="display:inline; font-size: 16px;" id="passengers">{{ tour.payingPlaces }}</p><p style="display: inline; font-size: 16px;"> = </p>
-                            {% if tour.currency %}<p id="currency" style="display: inline; font-size: inherit;">{{ tour.currency.htmlSymbol | raw }}</p>{% endif %}<p style="display: inline; font-size: 16px; color: green;" id="adjusted-price">{{ tour.payingPlaces * tour.pricePerson }}</p>
-                            <p style="display:none; font-size: 16px;" id="total">{{ tour.payingPlaces * tour.pricePerson }}</p>
-                            {% if tour.currency %}<p id="currency" style="display: none">{{ tour.currency.htmlSymbol | raw }}</p>{% endif %}
+                            <div class="price-per-person">
+                                {{ form_widget(setup_form.pricePersonPublic) }}
+                            </div>
+                            <div class="price-per-person-suffix">
+                                <p> x </p><p id="passengers">{{ tour.payingPlaces }}</p>
+                                <p> = </p>{% if tour.currency %}<p id="currency">{{ tour.currency.htmlSymbol | raw }}</p>{% endif %}
+                                <p id="adjusted-price">{{ tour.payingPlaces * tour.pricePerson }}</p>
+                                {# @TODO What is this and is it still needed? (All inline style display none) #}
+                                <p style="display:none; font-size: 16px;" id="total">{{ tour.payingPlaces * tour.pricePerson }}</p>
+                                {% if tour.currency %}<p id="currency" style="display: none">{{ tour.currency.htmlSymbol | raw }}</p>{% endif %}
+                            </div>
                         </li>
 
                         <li>
@@ -121,10 +128,6 @@
 
     </div>
 
-    <script type="text/javascript"
-            src="https://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.js">
-    </script>
-
     <script>
         var $collectionHolder;
 
@@ -136,13 +139,17 @@
 
             //To expose the payment type description fields if there is already a value there
             $('.mdl-checkbox').each( function() {
-                var something = $(this).next().children(":first");
-                console.log(something);
                 if ($(this).next().children(":first").val().length > 0) {
                     $(this).next().css({"display": "inline-block"});
                 }
 
             });
+
+            //add some padding on the Textarea for IOS
+            $('#tui_toolkit_tourbundle_toursetup_cashPaymentDescription').css({'margin-top': '10px'});
+            $('#tui_toolkit_tourbundle_toursetup_bankTransferPaymentDescription').css({'margin-top': '10px'});
+            $('#tui_toolkit_tourbundle_toursetup_onlinePaymentDescription').css({'margin-top': '10px'});
+            $('#tui_toolkit_tourbundle_toursetup_otherPaymentDescription').css({'margin-top': '10px'});
 
             //toggle showing and hiding text fields based on input
             $('.mdl-checkbox').on( 'change', 'input:checkbox', function() {
@@ -188,8 +195,40 @@
             });
 
             $('#tui_toolkit_tourbundle_toursetup_submit').on('click', function() {
-                console.log($('form'));
             });
+
+            //Bind the tour settings ajax form
+            $('#ajax_tour_setup_form').on('submit', function(e) {
+                $("#loader").css("display", "block");
+                e.preventDefault();
+                $('.errors').remove();
+                $data = $('#ajax_tour_setup_form').serialize();
+                var formAction = $(this).attr('action');
+                var form =$(this);
+                $.ajax({
+                    url: formAction,
+                    type: 'POST',
+                    headers: {
+                        "Pragma": "no-cache",
+                        "Expires": -1,
+                        "Cache-Control": "no-cache"
+                    },
+                    data: $data,
+                    contentType: "application/x-www-form-urlencoded",
+                }).success(function (response) {
+                    window.location.reload(true);
+                }).error(function (response) {
+                    $("#loader").hide();
+                    var parsed = $.parseJSON(response.responseText);
+                    $.each(parsed, function(i, item) {
+                        field= '#tui_toolkit_tourbundle_toursetup_' + i;
+                        //$(field).parent().after('<div class="errors" style="color:red;">'+ item + '</div>');
+                        $(field).parent().parent().append('<div class="errors" style="color:red;">'+ item + '</div>');
+
+                    });
+                });
+            });
+
 
         });
         function addPaymentTaskForm($collectionHolder, $newLinkDiv) {
@@ -198,7 +237,6 @@
 
             // get the new index
             var index = $collectionHolder.data('index');
-            console.log(index);
 
             // Replace '__name__' in the prototype's HTML to
             // instead be a number based on how many items we have
@@ -254,36 +292,6 @@
         }
 
     </script>
-    {#<script>#}
-        {#$(document).ready(function () {#}
-            {#// Promote Popup#}
-            {#$(document).on('click', '#promote-tour', function (e) {#}
-                {#e.preventDefault();#}
-                {#var shareValue = "{{ url('tour_site_show', { 'id': tour.id, 'quoteNumber' : tour.quoteNumber }) }}";#}
-                {#var link_html = '<h3>Share this Tour with others</h3>' +#}
-                        {#'<div><p>To send this tour to others, copy the URL below.</p></div>' +#}
-                        {#'<div class="input"><input style="width:70%; padding:.25em; margin:1em;" type="text" id="share_url" name="share_url" value="' + shareValue + '" readonly="readonly">' +#}
-                        {#'<a href="#" id="copy-button" data-clipboard-target="share_url"' +#}
-                        {#'title="Click to copy Tour URL"' +#}
-                        {#'class="not-full mdl-button mdl-js-button mdl-button--raised mdl-button--colored">' +#}
-                        {#'<i class="fa fa-sign-in fa-stack"></i>' +#}
-                        {#'</a></div>';#}
-                {#toolkitStaticPopup("Promote the Tour", link_html);#}
-                {#// Copy to Clipboard#}
-                {#ZeroClipboard.config({swfPath: "//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf"});#}
-                {#var client = new ZeroClipboard(document.getElementById("copy-button"));#}
-                {#client.on('aftercopy', function (event) {#}
-                    {#$('#copy-button').css('background-color', 'green');#}
-                {#});#}
-                {#//remove the CopytoClipboard button if not Flash#}
-                {#if (navigator.mimeTypes["application/x-shockwave-flash"] == undefined) {#}
-                    {#$("#copy-button").addClass('hidden');#}
-                    {#$('share_url').css('width', '80%');#}
-                {#};#}
-
-            {#});#}
-        {#});#}
-    {#</script>#}
 
 {% endblock %}
 

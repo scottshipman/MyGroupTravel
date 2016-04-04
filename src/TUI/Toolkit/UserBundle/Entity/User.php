@@ -60,12 +60,14 @@ class User extends BaseUser
     /**
      * @ORM\Column(type="string", nullable=true)
      * @GRID\Column(visible=false, filterable=false, export=true)
+     * @Assert\NotBlank()
      */
     protected $firstName = null;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      * @GRID\Column(visible=false, filterable=false, export=true)
+     * @Assert\NotBlank()
      */
     protected $lastName = null;
 
@@ -164,7 +166,12 @@ class User extends BaseUser
 
   public function __toString()
   {
-    return $this->firstName . ' ' . $this->lastName . ' <'. $this->email . '>';
+    if (!empty($this->email)){
+      $email = ' <'. $this->email . '>';
+    } else {
+      $email = '';
+    }
+    return $this->firstName . ' ' . $this->lastName .  $email;
   }
 
 

@@ -16,7 +16,7 @@
 {% endblock %}
 
 {% block page_title_menu %}
-    <button id="tour-title-drop" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-menu-drop">
+    <button id="tour-title-drop" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-menu-drop mdl-button--raised mdl-button--colored">
         <i class="material-icons">arrow_drop_down</i>
     </button>
     {% embed "TourBundle:Tour:tourMenu.html.twig" %}
@@ -26,20 +26,14 @@
     {% endembed %}
 {% endblock %}
 
-{% block back_link %}
-
-        <a class="back-link" href="{{ path('manage_tour_show', { 'id': tour.id }) }}"><i class="fa fa-arrow-left"></i> {% trans %}passenger.actions.back{% endtrans %}</a>
-
-{% endblock %}
-
 {% block body -%}
 
     <div class="tour-show-wrapper site-show" entityId="{{ tour.id }}">
 
         <div class="tour-show-left-column">
 
-            <h3>{{ tour.name|capitalize }}</h3>
-            <a href="" style="float:right;" class="passenger-filter" data-id="showEveryone"><i class="material-icons md-18">undo</i> {% trans %} passenger.labels.show-everyone{% endtrans %}</a><br>
+            <h3>{{ tour.name|title }}</h3>
+            <a href="" style="float:right; text-decoration: none; color: {{ brand.secondaryColor }} !important;" class="passenger-filter" id="clear-filters" data-id="showEveryone"><i class="material-icons md-18">undo</i> {% trans %} passenger.labels.show-everyone{% endtrans %}</a><br>
             <div class="list-header" style="color: {{ brand.secondaryColor }}"><i class="material-icons">flight_takeoff</i> {% trans %} passenger.labels.passengers_for{% endtrans %}</div>
             <ul class="tour-show-submenu list-indent">
                 <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" data-id="showAllPassengers"><strong>{% trans %}passenger.labels.all-passengers{% endtrans %} <span id="allPassengers">({{ statusCounts.passenger.accepted + statusCounts.organizer.accepted + statusCounts.passenger.free + statusCounts.organizer.free }})</span></strong></a></li>
@@ -55,27 +49,27 @@
                 <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" data-id="showFreeOrganizers"><strong>{{ "free" | paxLabel }} <span id="freeOrganizers">({{ statusCounts.organizer.free  }})</span></strong></a></li>
             </ul>
 
-            <div class="tour-edit-organizer-left">
-                <label>{% trans %}tour.show.organizers{% endtrans %}</label><br>
-                {% if tour.organizer.media %}
-                    <img class="tui-image-avatar" src="{{ ( tour.organizer.media.getRelativePath ~ "/" ~ tour.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ tour.organizer.username }}">
-                {% elseif tour.organizer.firstName and tour.organizer.lastName %}
-                    <span class="tui-text-avatar mdl-typography--headline">{{ tour.organizer.firstName[:1] }}{{ tour.organizer.lastName[:1] }}</span>
-                {% else %}
-                    <span class="tui-text-avatar mdl-typography--headline">{{ tour.organizer.username[:1] }}</span>
-                {% endif %}
+            {#<div class="tour-edit-organizer-left">#}
+                {#<label>{% trans %}tour.show.organizers{% endtrans %}</label><br>#}
+                {#{% if tour.organizer.media %}#}
+                    {#<img class="tui-image-avatar" src="{{ ( tour.organizer.media.getRelativePath ~ "/" ~ tour.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ tour.organizer.username }}">#}
+                {#{% elseif tour.organizer.firstName and tour.organizer.lastName %}#}
+                    {#<span class="tui-text-avatar mdl-typography--headline">{{ tour.organizer.firstName[:1] }}{{ tour.organizer.lastName[:1] }}</span>#}
+                {#{% else %}#}
+                    {#<span class="tui-text-avatar mdl-typography--headline">{{ tour.organizer.username[:1] }}</span>#}
+                {#{% endif %}#}
                 {#<a class="add-organizer" href="#"><i class="add-icon fa fa-plus"></i></a>#}
                 {#<a class="add-organizer mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">Add/remove organizers</a>#}
-            </div>
+            {#</div>#}
         </div>
 
         <div class="tour-show-right-column">
             {# Passenger CTA Card #}
-            <div class="passenger-cta-card tour-edit mdl-card mdl-shadow--2dp passenger-dashboard-cta-card">
+            <div id="passenger-card" class="passenger-cta-card tour-edit mdl-card mdl-shadow--2dp passenger-dashboard-cta-card">
 
                 <div class="mdl-card__title">
                     <h3 id="card-title" class="mdl-card__title-text">{% trans %}passenger.labels.passenger_list{% endtrans %}</h3>
-                    <button style="position: absolute; right: 20px; color:grey;" id="passenger-export-menu" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+                    <button style="color:grey;" id="passenger-export-menu" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-button">
                         <i class="material-icons">more_vert</i>
                     </button>
                     <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="passenger-export-menu">
@@ -91,7 +85,7 @@
                 </div>
 
                 <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
-                        <div class="paying-passengers-title"><h3>{% trans %}passenger.labels.add_paying{% endtrans %}</h3></div>
+                        {#<div class="paying-passengers-title"><h3>{% trans %}passenger.labels.add_paying{% endtrans %}</h3></div>#}
                         <div class="passenger-count">
                             {# Accepted/Paying Summary #}
                             <div style="display: inline-block; margin-right: 20px;" class="payingspots-remaining">
@@ -150,25 +144,26 @@
             </div>
                 {% for passenger in passengers %}
 
-                    {% set signedUp = 'Signed up on ' ~ passenger[0].signUpDate|date(format)  %}
+                    {% set signedUp = '' %}
                     {% if passenger[0].status == "accepted" %}
                         {% set statusicon =  '<a class="' ~ passenger[0].status ~ 'icon" title = "' ~ passenger[0].status | paxLabel ~ '"><i class="material-icons statusicon">verified_user</i></a>'%}
                         {% set status = 'accepted' %}
                     {% else %}
                         {% set statusicon = '<a class="' ~ passenger[0].status ~ 'icon" title = "' ~ passenger[0].status | paxLabel ~ '"><i class="material-icons statusicon">list</i></a>'%}
                         {% set status = 'waitlist' %}
+                        {% set signedUp = 'Signed up on ' ~ passenger[0].signUpDate|date(format)  %}
                     {% endif %}
 
                     {% if passenger[2] is sameas(TRUE) %} {# is this an organizer? #}
-                        {% set organizericon = '<a class="organizer-card" title = "Organizer"><i class="material-icons">group_add</i></a>' %}
+                        {% set organizericon = '<a class="organizer-card" title = "' ~ 'passenger.labels.organizer' | trans ~ '"><i class="material-icons">group_add</i></a>' %}
                         {% set paxClass = "organizers" %}
                         {% if tour.organizer.id == passenger[1].id %}
                             {% set signedUp = 'passenger.labels.primary-organizer' | trans %}
                         {% else %}
-                            {% if passenger[1].enabled is sameas(false) %} {# Pending Invite #}
+                            {% if passenger[0].signUpDate == null %} {# Pending Invite #}
                                 {% set statusicon = '<a class="' ~ passenger[0].status ~ 'icon" title = "' ~ passenger[0].status | paxLabel ~ '"><i class="material-icons">live_help</i></a>' %}
                                 {% set signedUp = 'passenger.labels.invite-pending' | trans %}  {% endif %}
-                            {% if passenger[1].enabled is sameas(true) %}
+                            {% if passenger[1].enabled is sameas(true) and passenger[0].signUpDate != null %}
                                 {% set signedUp = 'passenger.labels.assistant-organizer' | trans %}  {% endif %}
                         {% endif %}
                     {% else %}
@@ -182,6 +177,7 @@
                         {%  set freeClass = "free" %}
                         {% set statusicon = '' %}
                         {% set status = '' %}
+                        {% set signedUp = '' %}
                     {% else %}
                         {% set freeClass = '' %}
                         {% set freeicon = '' %}
@@ -199,7 +195,7 @@
                             <p class="mini-card-title"><strong>{{ passenger[0].fName }}</strong></p>
                             <p class="mini-card-title"><strong>{{ passenger[0].lName }}</strong></p>
                             <p class="mini-card-title"><strong><a href="mailto:{{ passenger[1].email }}">{{ passenger[1].email }}</a></strong></p>
-                            <label style="display: block; margin-left: 63px; min-width: 100%;">{{ statusicon | raw }} {{ freeicon | raw }}{{ organizericon | raw }} {{ signedUp }}</label>
+                            <label style="display: block; margin-left: 63px; min-width: 100%;">{{ statusicon | raw }} {{ freeicon | raw }}{#{{ organizericon | raw }}#} {{ signedUp }}</label>
                             </div>
                             {% if  passenger[0].status != "Pending Invite"%}
                                 <button style="position: absolute; right: 20px; color:grey; margin-top:10px;" id="passenger-actions-menu-drop-{{ passenger[0].id }}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
@@ -216,16 +212,8 @@
                 {#{% embed "PassengerBundle:Passenger:organizerList.html.twig" %} {% endembed %}#}
 
                 <div style="clear: both; height: 150px;"></div>
-            </div>
         </div>
-
     </div>
-
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.js"></script>
-
-    {% javascripts '@toolkit_siteshow' %}
-        <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
 
     {% javascripts '@toolkit_passenger' %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -274,21 +262,28 @@
                                       '</a></div>';
                     toolkitStaticPopup("Promote the Tour", link_html);
                     // Copy to Clipboard
-                    ZeroClipboard.config({swfPath: "//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf"});
-                    var client = new ZeroClipboard(document.getElementById("copy-button"));
-                    client.on('aftercopy', function (event) {
-                        $('#copy-button').css('background-color', 'green');
-                    });
-                    //remove the CopytoClipboard button if not Flash
-                    if (navigator.mimeTypes["application/x-shockwave-flash"] == undefined) {
-                        $("#copy-button").addClass('hidden');
-                        $('share_url').css('width', '80%');
-                    };
-
+                    $('#copy-button').attr('brandPrimaryColor', '{{ brand.primaryColor }}').click(copyToClipboard);
                 });
 
-                $(document).on('click', '.passenger-filter', function (e){
+            // Tour Sign Up popup
+            $(document).on('click', '#accept-tour', function (e) {
+                e.preventDefault();
+                var entityId = $('.site-show').attr('entityId');
+                toolkitStandardPopup("Sign Up", '/passenger/new/' + entityId);
+
+            });
+
+            $(document).on('click', '.passenger-filter', function (e){
                     e.preventDefault();
+
+                    //Scroll functionality if at tablet breakpoint
+                    if (parseInt($(window).width()) < 900) {
+                        var target = $('#passenger-card');
+                        $('html, body').animate({
+                            scrollTop: target.offset().top
+                        }, 1000);
+                    }
+
                     var elemID = this.getAttribute('data-id');
                     window.location.hash = elemID;
                     filterPassengers(elemID);
@@ -322,16 +317,20 @@
 //                        $('.errors').html('<div id="invite-org-success" style="display:none;">An email invitation has been sent to ' + response[1] + ' ' + response[2] + '  at ' + response[0] + '.</div>');
 //                        $('#invite-org-success').slideDown(400);
                         // increment organizer count
-                        $('#organizerPassengers').html('(' + response[3] + ')')
+                        $('#organizerPassengers').html('(' + response[3] + ')');
                         // add an organizer card with waitlist and pending invite status
                         $('#organizer-cards-wrapper').prepend('<div class="tour-edit mdl-shadow--2dp" style="background-color:white; margin-bottom: 0;"><div class="mdl-card__supporting-text mdl-card--border" style="color:grey;"><div style="float: left; color: grey;"><span class="tui-text-avatar mdl-typography--headline">' + response[1].charAt(0) + response[1].charAt(0) + '</span><p style="display: inline-block"><strong>' + response[1] + '&nbsp;</strong></p><p style="display: inline-block"><strong>' + response[2] + '&nbsp;</strong></p><p style="display: inline-block"><strong>(Invited - Not yet responded.)</strong></p><p style="display: inline-block" class="organizer-Not Travelling "></p><p><a href="' + response[0] + '">' + response[0] + '</a></p></div></div></div>');
 //                        $('#loader').hide();
                         location.reload(true);
                     },
                     error : function (response) {
-                        console.log(response);
-
-                    },
+                        $("#loader").hide();
+                        var parsed = $.parseJSON(response.responseText);
+                        $.each(parsed, function(i, item) {
+                            field= '#form_' + i;
+                            $(field).parent().parent().append('<p class="errors" style="color:red;">'+ item + '</p>');
+                        });
+                    }
                 });
 
             // popup for passenger manifest warning

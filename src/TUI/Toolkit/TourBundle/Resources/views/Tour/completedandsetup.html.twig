@@ -5,28 +5,44 @@
 {% if entity.passportDate is defined and entity.passportDate != null %}
     {% set passDtg  = date(entity.passPortDate).diff(date("now")) %}
     {% set passTime  = date(entity.created.date).diff(date(entity.passPortDate))%}
-    {% set passPercent = (passengerData.completedPassengerData['passport']|length/entity.payingPlaces) * 100  %}
+    {% if passengerData.travellingUsers|length == 0 %}
+        {% set passPercent = 0 %}
+    {% else %}
+        {% set passPercent = (passengerData.completedPassengerData['passport']|length/passengerData.travellingUsers|length) * 100  %}
+    {% endif %}
     {% if passDtg.days < 1 %} {%  set passDtgFinal = 0  %} {% else %} {% set passDtgFinal = passDtg.days %}{% endif %}
 {% endif %}
 
 {% if entity.emergencyDate is defined and entity.emergencyDate != null %}
     {% set emergencyDtg  = date(entity.emergencyDate).diff(date("now")) %}
     {% set emergencyTime  = date(entity.created.date).diff(date(entity.emergencyDate))%}
-    {% set emergencyPercent = (passengerData.completedPassengerData['emergency']|length/entity.payingPlaces) * 100  %}
+    {% if passengerData.travellingUsers|length == 0 %}
+        {% set emergencyPercent = 0 %}
+    {% else %}
+        {% set emergencyPercent = (passengerData.completedPassengerData['emergency']|length/passengerData.travellingUsers|length) * 100  %}
+    {% endif %}
     {% if emergencyDtg.days < 1 %} {%  set emergecyDtgFinal = 0  %} {% else %} {% set emergencyDtgFinal = emergencyDtg.days %}{% endif %}
 {% endif %}
 
 {% if entity.medicalDate is defined and entity.medicalDate != null%}
     {% set medDtg  = date(entity.medicalDate).diff(date("now")) %}
     {% set medTime  = date(entity.created.date).diff(date(entity.medicalDate))%}
-    {% set medPercent = (passengerData.completedPassengerData['medical']|length/entity.payingPlaces) * 100  %}
+    {% if passengerData.travellingUsers|length == 0 %}
+        {% set medPercent = 0 %}
+    {% else %}
+        {% set medPercent = (passengerData.completedPassengerData['medical']|length/passengerData.travellingUsers|length) * 100  %}
+    {% endif %}
     {% if medDtg.days < 1 %} {%  set medDtgFinal = 0  %} {% else %} {% set medDtgFinal = medDtg.days %}{% endif %}
 {% endif %}
 
 {% if entity.dietaryDate is defined and entity.dietaryDate != null%}
     {% set dietDtg  = date(entity.dietaryDate).diff(date("now")) %}
     {% set dietTime  = date(entity.created.date).diff(date(entity.dietaryDate))%}
-    {% set dietPercent = (passengerData.completedPassengerData['dietary']|length/entity.payingPlaces) * 100  %}
+    {% if passengerData.travellingUsers|length == 0 %}
+        {% set dietPercent = 0 %}
+    {% else %}
+        {% set dietPercent = (passengerData.completedPassengerData['dietary']|length/passengerData.travellingUsers|length) * 100  %}
+    {% endif %}
     {% if dietDtg.days < 1 %} {%  set dietDtgFinal = 0  %} {% else %} {% set dietDtgFinal = dietDtg.days %}{% endif %}
 {% endif %}
 
@@ -70,7 +86,7 @@
         <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
             <ul>
                 <li>
-                    <div class="profile-list-item item-1 tour-dashboard four-column">
+                    <div class="profile-list-item item-1 tour-dashboard">
                         {% if entity.tripStatus.name == "Provisional" %}
                             <span class="date-span">{{ signupNumber }}</span>
                             <label>{% trans %}tour.dashboard.registrations{% endtrans %}</label>
@@ -81,7 +97,7 @@
                     </div>
                 </li>
                 <li>
-                    <div class="profile-list-item item-2 tour-dashboard four-column">
+                    <div class="profile-list-item item-2 tour-dashboard">
                         <span class="date-span">{{ entity.views }}</span>
                         <label>{% trans %}tour.dashboard.views{% endtrans %}</label>
                     </div>
@@ -89,7 +105,7 @@
                 <li>
                     {# if Provisional and not yet expired, show days till expired, else show days to departure #}
                     {# if there is no expiry, show day till departure #}
-                    <div class="profile-list-item item-3 tour-dashboard four-column">
+                    <div class="profile-list-item item-3 tour-dashboard">
                         {% if entity.tripStatus.name == "Provisional" and entity.expiryDate %}
                             {% if dteFinal<1 %}
                                 <span class="date-span" style="color:red;"><i class="fa fa-exclamation-circle"> Expired</i></span>
@@ -115,7 +131,7 @@
 
     {% if signupPercent is defined and signupPercent != 100 %}
             <div class="tour-edit mdl-card mdl-shadow--2dp">
-                <a class ="dashboard-titles" href="{{ path('manage_passenger_dashboard', { 'tourId': entity.id }) }}">
+                <a class ="dashboard-titles" href="{{ path('manage_passenger_dashboard', { 'tourId': entity.id }) }}" title="{% trans %}tour.dashboard.passenger_dashboard{% endtrans %}">
                     <div class="mdl-card__title">
                         <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.sign_up{% endtrans %} {{ entity.payingPlaces }} {% trans %}tour.dashboard.passengers{% endtrans %}</h3>
                         <span class="tour-dashboard-cta"><i class="material-icons">arrow_forward</i></span>
@@ -127,7 +143,13 @@
                         <li>
                             <div class="profile-list-item item-1 tour-dashboard four-column">
                                 <span class="date-span">{{ passengerData.totalOrganizerCount }}</span>
-                                <label>{% transchoice passengerData.totalOrganizerCount %}{0} Organizers|{1} Organizer|]1,Inf[  Organizers}{% endtranschoice %}</label>
+                                <label>
+                                    {% if passengerData.totalOrganizerCount==1 %}
+                                        {% trans %}tour.dashboard.organizer_count_single{% endtrans %}
+                                    {% else %}
+                                        {% trans %}tour.dashboard.organizer_count_plural{% endtrans %}
+                                    {% endif %}
+                                </label>
                             </div>
                         </li>
                         <li>
@@ -200,14 +222,14 @@
 
     {#Passport Date info task#}
     {% if entity.passportDate is defined and entity.passportDate != null %}
-        {% if (entity.payingPlaces - passengerData.completedPassengerData['passport']|length)  > 0 %}
+        {% if (passengerData.travellingUsers|length - passengerData.completedPassengerData['passport']|length)  > 0 %}
         <div class="tour-edit mdl-card mdl-shadow--2dp">
-            {#<a class ="dashboard-titles" href="#">#}
+            <a class ="dashboard-titles" href="{{ path('manage_tour_tasks_dashboard', { 'id': entity.id }) }}#passport" title="{% trans %}tour.dashboard.task_dashboard{% endtrans %}">
                 <div class="mdl-card__title">
                     <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.passport_data{% endtrans %} {{ entity.passPortDate|date(shortFormat) }}</h3>
-                    <span class="tour-dashboard-cta"></span>
+                    <span class="tour-dashboard-cta"><i class="material-icons">arrow_forward</i></span>
                 </div>
-            {#</a>#}
+            </a>
             <div id="passport-progress" class="mdl-progress mdl-js-progress" style="width: 100%;"></div>
             <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
                 <ul>
@@ -219,7 +241,7 @@
                     </li>
                     <li>
                         <div class="profile-list-item item-2 tour-dashboard">
-                            <span class="date-span">{{ entity.payingPlaces - passengerData.completedPassengerData['passport']|length }}</span>
+                            <span class="date-span">{{ passengerData.travellingUsers|length - passengerData.completedPassengerData['passport']|length }}</span>
                             <label>{% trans %}tour.dashboard.outstanding{% endtrans %}</label>
                         </div>
                     </li>
@@ -238,14 +260,14 @@
 
 {#Emergency Contact Data info task#}
     {% if entity.emergencyDate is defined and entity.emergencyDate != null %}
-        {% if (entity.payingPlaces - passengerData.completedPassengerData['emergency']|length)  > 0 %}
+        {% if (passengerData.travellingUsers|length - passengerData.completedPassengerData['emergency']|length)  > 0 %}
             <div class="tour-edit mdl-card mdl-shadow--2dp">
-                {#<a class ="dashboard-titles" href="#">#}
+                <a class ="dashboard-titles" href="{{ path('manage_tour_tasks_dashboard', { 'id': entity.id }) }}#emergency" title="{% trans %}tour.dashboard.task_dashboard{% endtrans %}">
                     <div class="mdl-card__title">
                         <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.passenger_data{% endtrans %} {{ entity.emergencyDate|date(shortFormat) }}</h3>
-                        <span class="tour-dashboard-cta"></span>
+                        <span class="tour-dashboard-cta"><i class="material-icons">arrow_forward</i></span>
                     </div>
-                {#</a>#}
+                </a>
                 <div id="emergency-progress" class="mdl-progress mdl-js-progress" style="width: 100%;"></div>
                 <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
                     <ul>
@@ -257,7 +279,7 @@
                         </li>
                         <li>
                             <div class="profile-list-item item-2 tour-dashboard">
-                                <span class="date-span">{{ entity.payingPlaces - passengerData.completedPassengerData['emergency']|length }}</span>
+                                <span class="date-span">{{ passengerData.travellingUsers|length - passengerData.completedPassengerData['emergency']|length }}</span>
                                 <label>{% trans %}tour.dashboard.outstanding{% endtrans %}</label>
                             </div>
                         </li>
@@ -276,14 +298,14 @@
 
 {#Medical Date info task#}
     {% if entity.medicalDate is defined and entity.medicalDate != null %}
-        {% if (entity.payingPlaces - passengerData.completedPassengerData['medical']|length)  > 0 %}
+        {% if (passengerData.travellingUsers|length - passengerData.completedPassengerData['medical']|length)  > 0 %}
             <div class="tour-edit mdl-card mdl-shadow--2dp">
-                {#<a class ="dashboard-titles" href="#">#}
+                <a class ="dashboard-titles" href="{{ path('manage_tour_tasks_dashboard', { 'id': entity.id }) }}#medical" title="{% trans %}tour.dashboard.task_dashboard{% endtrans %}">
                     <div class="mdl-card__title">
                         <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.medical_data{% endtrans %} {{ entity.medicalDate|date(shortFormat) }}</h3>
-                        <span class="tour-dashboard-cta"></span>
+                        <span class="tour-dashboard-cta"><i class="material-icons">arrow_forward</i></span>
                     </div>
-                {#</a>#}
+                </a>
                 <div id="medical-progress" class="mdl-progress mdl-js-progress" style="width: 100%;"></div>
                 <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
                     <ul>
@@ -295,7 +317,7 @@
                         </li>
                         <li>
                             <div class="profile-list-item item-2 tour-dashboard">
-                                <span class="date-span">{{ entity.payingPlaces - passengerData.completedPassengerData['medical']|length }}</span>
+                                <span class="date-span">{{ passengerData.travellingUsers|length - passengerData.completedPassengerData['medical']|length }}</span>
                                 <label>{% trans %}tour.dashboard.outstanding{% endtrans %}</label>
                             </div>
                         </li>
@@ -314,14 +336,14 @@
 
     {#Dietary Date Task#}
     {% if entity.dietaryDate is defined and entity.dietaryDate != null %}
-        {% if (entity.payingPlaces - passengerData.completedPassengerData['dietary']|length)  > 0 %}
+        {% if (passengerData.travellingUsers|length - passengerData.completedPassengerData['dietary']|length)  > 0 %}
             <div class="tour-edit mdl-card mdl-shadow--2dp">
-                {#<a class ="dashboard-titles" href="#">#}
+                <a class ="dashboard-titles" href="{{ path('manage_tour_tasks_dashboard', { 'id': entity.id }) }}#dietary" title="{% trans %}tour.dashboard.task_dashboard{% endtrans %}">
                     <div class="mdl-card__title">
                         <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.dietary_data{% endtrans %} {{ entity.dietaryDate|date(shortFormat) }}</h3>
-                        <span class="tour-dashboard-cta"></span>
+                        <span class="tour-dashboard-cta"><i class="material-icons">arrow_forward</i></span>
                     </div>
-                {#</a>#}
+                </a>
                 <div id="dietary-progress" class="mdl-progress mdl-js-progress" style="width: 100%;"></div>
                 <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
                     <ul>
@@ -333,7 +355,7 @@
                         </li>
                         <li>
                             <div class="profile-list-item item-2 tour-dashboard">
-                                <span class="date-span">{{ entity.payingPlaces - passengerData.completedPassengerData['dietary']|length }}</span>
+                                <span class="date-span">{{ passengerData.travellingUsers|length - passengerData.completedPassengerData['dietary']|length }}</span>
                                 <label>{% trans %}tour.dashboard.outstanding{% endtrans %}</label>
                             </div>
                         </li>
@@ -369,7 +391,7 @@
 
     {#Passport Data completed#}
     {% if entity.passportDate is defined and entity.passportDate != null %}
-        {% if (entity.payingPlaces - passengerData.completedPassengerData['passport']|length)  <= 0 %}
+        {% if (passengerData.travellingUsers|length - passengerData.completedPassengerData['passport']|length)  <= 0 %}
             <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
                  <div class="mdl-card__title">
                     <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.completed_passport_data{% endtrans %}</h3>
@@ -381,7 +403,7 @@
 
     {#Emergency Data completed#}
     {% if entity.emergencyDate is defined and entity.emergencyDate != null %}
-        {% if (entity.payingPlaces - passengerData.completedPassengerData['emergency']|length)  <= 0 %}
+        {% if (passengerData.travellingUsers|length - passengerData.completedPassengerData['emergency']|length)  <= 0 %}
             <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
                 <div class="mdl-card__title">
                     <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.completed_passenger_data{% endtrans %}</h3>
@@ -393,7 +415,7 @@
 
     {#Medical Data completed#}
     {% if entity.medicalDate is defined and entity.medicalDate != null %}
-        {% if (entity.payingPlaces - passengerData.completedPassengerData['medical']|length)  <= 0 %}
+        {% if (passengerData.travellingUsers|length - passengerData.completedPassengerData['medical']|length)  <= 0 %}
             <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
                 <div class="mdl-card__title">
                     <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.completed_medical_data{% endtrans %}</h3>
@@ -405,7 +427,7 @@
 
     {#Dietary Data completed#}
     {% if entity.dietaryDate is defined and entity.dietaryDate != null %}
-        {% if (entity.payingPlaces - passengerData.completedPassengerData['dietary']|length)  <= 0 %}
+        {% if (passengerData.travellingUsers|length - passengerData.completedPassengerData['dietary']|length)  <= 0 %}
             <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
                 <div class="mdl-card__title">
                     <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.completed_dietary_data{% endtrans %}</h3>
@@ -465,7 +487,7 @@
     $(document).ready(function() {
 
         //Passenger Sign up progress bar
-        {% if signupPercent is defined %}
+        {% if signupPercent is defined  and signupPercent != 100 %}
             var signupPercent = {{ signupPercent }};
             document.querySelector('#signup-progress').addEventListener('mdl-componentupgraded', function() {
                 this.MaterialProgress.setProgress(signupPercent);
@@ -473,7 +495,7 @@
         {% endif %}
 
         //Emergency Contact Information progress bar
-        {% if emergencyPercent is defined %}
+        {% if emergencyPercent is defined  and emergencyPercent != 100 %}
             var emergencyPercent = {{ emergencyPercent }};
             document.querySelector('#emergency-progress').addEventListener('mdl-componentupgraded', function() {
                 this.MaterialProgress.setProgress(emergencyPercent);
@@ -481,7 +503,7 @@
         {% endif %}
 
         //Dietary Info progress bar
-        {% if dietPercent is defined %}
+        {% if dietPercent is defined  and dietPercent != 100 %}
             var dietPercent = {{ dietPercent }};
             document.querySelector('#dietary-progress').addEventListener('mdl-componentupgraded', function() {
                 this.MaterialProgress.setProgress(dietPercent);
@@ -489,7 +511,7 @@
         {% endif %}
 
         //Medical Info Progress Bar
-        {% if medPercent is defined %}
+        {% if medPercent is defined  and medPercent != 100 %}
             var medPercent = {{ medPercent }};
             document.querySelector('#medical-progress').addEventListener('mdl-componentupgraded', function() {
                 this.MaterialProgress.setProgress(medPercent);
@@ -497,7 +519,7 @@
         {% endif %}
 
         //Passport Info progress bar
-        {% if passPercent is defined %}
+        {% if passPercent is defined  and passPercent != 100 %}
             var passPercent = {{ passPercent }};
             document.querySelector('#passport-progress').addEventListener('mdl-componentupgraded', function() {
                 this.MaterialProgress.setProgress(passPercent);
@@ -529,15 +551,6 @@
                 '<div id="tabs-drawer-2" class="mdl-tabs__panel content-blocks-drawer">' + something + '</div>';
         toolkitStaticPopup("Promote the Tour", link_html);
         // Copy to Clipboard
-        ZeroClipboard.config({swfPath: "//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf"});
-        var client = new ZeroClipboard(document.getElementById("copy-button"));
-        client.on('aftercopy', function (event) {
-            $('#copy-button').css('background-color', 'green');
-        });
-        //remove the CopytoClipboard button if not Flash
-        if (navigator.mimeTypes["application/x-shockwave-flash"] == undefined) {
-            $("#copy-button").addClass('hidden');
-            $('share_url').css('width', '80%');
-        };
+        $('#copy-button').attr('brandPrimaryColor', '{{ brand.primaryColor }}').click(copyToClipboard);
     });
 </script>

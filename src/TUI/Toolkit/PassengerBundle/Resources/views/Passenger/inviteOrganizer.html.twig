@@ -11,8 +11,8 @@
             {{ form_row(form.email) }}
         </span>
         <span style="display:inline;">
-            {{ form_row(form.firstname) }}
-            {{ form_row(form.lastname) }}
+            {{ form_row(form.firstname, {'label' : 'passenger.labels.organizer_first_name'|trans}) }}
+            {{ form_row(form.lastname, {'label' : 'passenger.labels.organizer_last_name'|trans}) }}
         </span>
         <span>
             {{ form_row(form.message) }}

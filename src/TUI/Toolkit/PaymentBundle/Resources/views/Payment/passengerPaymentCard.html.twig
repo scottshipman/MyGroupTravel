@@ -96,7 +96,7 @@
                 var passengerId = t.attr('passenger');
                 var tourId = t.attr('tour');
                 //$("#loader").css("display", "block");
-                toolkitStandardPopup("Customize {{ passenger.fname }}'s Payment Schedule", '/payment/tour/' + tourId + '/passenger/' + passengerId + '/customize' );
+                toolkitStandardPopup("Edit {{ passenger.fname }}'s Payment Schedule", '/payment/tour/' + tourId + '/passenger/' + passengerId + '/customize' );
             });
 
 
@@ -106,7 +106,6 @@
                 $('#payment-history').toggle(400, function(){
                     if ($('#toggle-payment-history').text()=='Payment History expand_more') {
                         $('#toggle-payment-history').html('{% trans %}payment.labels.payment_history{% endtrans %} <br /><i class="material-icons">expand_less</i>');
-                        console.log($('#toggle-payment-history').html());
                     } else if ($('#toggle-payment-history').text()=='Payment History expand_less') {
                         $('#toggle-payment-history').html('{% trans %}payment.labels.payment_history{% endtrans %} <br /><i class="material-icons">expand_more</i>');
                     }

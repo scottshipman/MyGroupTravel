@@ -33,6 +33,7 @@ class Emergency
      *
      * @ORM\Column(name="emergencyName", type="text", nullable=true)
      * @GRID\Column(title="Emergency Contact Name", export=true)
+     * @Assert\NotBlank()
      */
     private $emergencyName;
 
@@ -41,11 +42,13 @@ class Emergency
      *
      * @ORM\Column(name="emergencyRelationship", type="text", nullable=true)
      * @GRID\Column(title="Emergency Relationship", export=true)
+     * @Assert\NotBlank()
      */
     private $emergencyRelationship;
 
     /**
      * @ORM\Column(type="string", nullable=true)
+     * @Assert\NotBlank()
      */
     private $emergencyNumber;
 
@@ -55,6 +58,11 @@ class Emergency
      *
      * @ORM\Column(name="emergencyEmail", type="text", nullable=true)
      * @GRID\Column(title="Emergency Email", export=true)
+     * @Assert\NotBlank()
+     * @Assert\Email(
+     *   message = "The email '{{ value }}' is not a valid email."
+     * )
+     *
      */
     private $emergencyEmail;
 

@@ -14,3 +14,6 @@ services:
     arguments: ['@service_container']
     tags:
       - { name: trsteel_ckeditor.transformer, alias: tuihtmlpurifier}
+
+  app.form.validation:
+    class: AppBundle\Controller\DefaultController

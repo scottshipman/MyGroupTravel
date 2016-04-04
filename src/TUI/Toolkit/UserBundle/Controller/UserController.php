@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -341,14 +342,14 @@ class UserController extends Controller
 
         }
 
+        //return errors
+        $errors = $this->get("app.form.validation")->getErrorMessages($form);
+        $serializer = $this->container->get('jms_serializer');
+        $errors = $serializer->serialize($errors, 'json');
 
-        $response = new Response($this->renderView('TUIToolkitUserBundle:User:ajax_new.html.twig', array(
-            'entity' => $entity,
-            'form' => $form->createView(),
-        )));
-        $response->headers->set('Content-Type', 'text/html');
-        $response->setStatusCode('406');
-
+        $response = new Response($errors);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setStatusCode('400');
         return $response;
     }
 
@@ -662,11 +663,11 @@ class UserController extends Controller
         $entity = $em->getRepository('TUIToolkitUserBundle:User')->findByConfirmationToken($token);
 
         if (!$entity) {
-            throw $this->createNotFoundException('This is no longer a valid One Time Use login token.');
+            throw new HttpException(400, 'This link has expired or does not exist. Please request another from your administrator.');
         }
 
         if(true===$entity[0]->isEnabled()){
-            throw $this->createNotFoundException('This activation link is no longer valid because the account is already activated.');
+            throw new HttpException(400, 'This activation link is no longer valid because the account is already activated.');
         }
         $setForm = $this->createActivateUserForm($entity[0]);
 
@@ -771,6 +772,8 @@ class UserController extends Controller
                 $newPassenger->setGender('undefined');
                 $newPassenger->setDateOfBirth(new \DateTime("1987-01-01"));
                 $newPassenger->setSignUpDate(new \DateTime("now"));
+                $newPassenger->setSelf(TRUE);
+
 
                 $em->persist($newPassenger);
                 $em->flush($newPassenger);
@@ -1467,11 +1470,25 @@ class UserController extends Controller
     public function getQuotesAction($id)
     {
         $locale = $this->container->getParameter('locale');
+        $em = $this->getDoctrine()->getManager();
         // if user is brand or admin, list quotes where they are salesAgent or SecondaryContact
         // dont show expired or converted quotes for brand/admins either
         // if user is customer, list quotes by Permission Entity
         $quotes = array();
         $securityContext = $this->get('security.context');
+
+        //brand stuff
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
+
         if ($securityContext->isGranted('ROLE_BRAND')) {
             $today = new \DateTime();
             $limit = $this->container->hasParameter('profile_query_limit') ? $this->container->getParameter('profile_query_limit') : 5;
@@ -1518,11 +1535,25 @@ class UserController extends Controller
     public function getToursAction($id)
     {
         $locale = $this->container->getParameter('locale');
+        $em = $this->getDoctrine()->getManager();
         // if user is brand or admin, list quotes where they are salesAgent or SecondaryContact
         // if user is customer, list quotes by Permission Entity
         $tours = array();
         $data = array();
         $securityContext = $this->get('security.context');
+
+        //brand stuff
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // look for a configured brand
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
+
         if ($securityContext->isGranted('ROLE_BRAND')) {
             $limit = $this->container->hasParameter('profile_query_limit') ? $this->container->getParameter('profile_query_limit') : 5;
             $qb = $this->getDoctrine()->getManager()->createQueryBuilder();
@@ -1555,6 +1586,7 @@ class UserController extends Controller
 
         $data['tours'] = $tours;
         $data['locale'] = $locale;
+        $data['brand'] = $brand;
 
         return $this->render('TUIToolkitUserBundle:User:myTours.html.twig', $data);
     }
@@ -1571,32 +1603,39 @@ class UserController extends Controller
         $data = array();
         $em = $this->getDoctrine()->getManager();
         $passengers = $em->getRepository('PermissionBundle:Permission')->findBy(array('user' => $id, 'class' => 'passenger', 'grants' => 'parent'));
-
         foreach ($passengers as $passenger) {
 
             if ($object = $em->getRepository('PassengerBundle:Passenger')->find($passenger->getObject())) {
-                $completedTasks = array();
-                $tour = $em->getRepository('TourBundle:Tour')->find($object->getTourReference()->getId());
+                if($object->getSelf() == FALSE ) {
+                    // dont add passenger objects where they are an organizer or assistant (flagged as self)
 
 
-                //Find the possible Passenger Tasks for the tour
-                $possibleTasksCount = $this->get("passenger.actions")->getPossibleTourTasks($tour->getId());
+                    $completedTasks = array();
+                    $tour = $em->getRepository('TourBundle:Tour')
+                        ->find($object->getTourReference()->getId());
 
-                //Only add to array if unique
-                if (!in_array($tour, $parents)) {
-                    $parents[] = $tour;
+
+                    //Find the possible Passenger Tasks for the tour
+                    $possibleTasksCount = $this->get("passenger.actions")
+                        ->getPossibleTourTasks($tour->getId());
+
+                    //Only add to array if unique
+                    if (!in_array($tour, $parents)) {
+                        $parents[] = $tour;
+                    }
+
+                    //Then find the tasks that the passengers have completed Id= Pa
+                    $completedTasksCount = $this->get("passenger.actions")
+                        ->getPassengerCompletedTasks($object->getId());
+
+                    //Grab counts of completed tasks for each passenger
+                    $object->completedTasksCount = $completedTasksCount;
+
+                    //Grab count of possible tasks
+                    $object->possibleTasksCount = $possibleTasksCount;
+
+                    $data['passengerObjects'][] = $object;
                 }
-
-                //Then find the tasks that the passengers have completed Id= Pa
-                $completedTasksCount = $this->get("passenger.actions")->getPassengerCompletedTasks($object->getId());
-
-                //Grab counts of completed tasks for each passenger
-                $object->completedTasksCount = $completedTasksCount;
-
-                //Grab count of possible tasks
-                $object->possibleTasksCount = $possibleTasksCount;
-
-                $data['passengerObjects'][] = $object;
             }
         }
 
@@ -1604,18 +1643,22 @@ class UserController extends Controller
             $passengers = array();
             $possible = '';
             $completed = '';
+            $completedCount = 0;
+            $possibleCount = 0;
             foreach ($data['passengerObjects'] as $passengerObject) {
                 if ($passengerObject->getTourReference()->getId() == $parent->getId()) {
                     $passengers[] = $passengerObject;
                     $completed = $passengerObject->completedTasksCount;
                     $completed = count($completed);
+                    $completedCount += $completed;
                     $possible = $passengerObject->possibleTasksCount;
                     $possible = count($possible);
+                    $possibleCount += $possible;
                 }
             }
             $parent->passengers = $passengers;
-            $parent->possible = $possible;
-            $parent->completed = $completed;
+            $parent->possible = $possibleCount;
+            $parent->completed = $completedCount;
         }
         $data['parents'] = $parents;
         $data['locale'] = $locale;
@@ -1678,12 +1721,12 @@ class UserController extends Controller
         $totalCompletedTasks = 0;
 
 
-        foreach ($passengerObjects as $passengerObject){
+        foreach ($passengerObjects as $key => $passengerObject){
 
             //Get completed tasks on the tour for each passenger
             $completedTasksCount = $this->get("passenger.actions")->getPassengerCompletedTasks($passengerObject['passenger']->getId());
-            $passengerObject['completedTasksCount'] = $completedTasksCount;
             $completedTasksCount = count($completedTasksCount);
+            $passengerObjects[$key]['completedTasksCount'] = $completedTasksCount;
             $totalCompletedTasks += $completedTasksCount;
 
         }

@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Form\Form;
 
 class DefaultController extends Controller
 {
@@ -81,5 +82,54 @@ class DefaultController extends Controller
 
       $response = new Response("<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction($funcNum, '$url', '$message');</script>");
       return $response;
+    }
+
+
+    public function getErrorMessages(Form $form) {
+        $errors = array();
+        foreach ($form->getErrors() as $key => $error) {
+            if ($form->isRoot()) {
+                $errors['#'][] = $error->getMessage();
+            } else {
+                $errors[] = $error->getMessage();
+            }
+        }
+        foreach ($form->all() as $child) {
+            if (!$child->isValid()) {
+                $errors[$child->getName()] = $this->getErrorMessages($child);
+            }
+        }
+        return $errors;
+    }
+
+    public function getNestedErrorMessages(Form $form){
+        $formattedErrors = NULL;
+        $errors = $form->getErrors(true);
+        foreach($errors as $error){
+            $cause = $error->getCause();
+            $path = $cause->getPropertyPath();
+            $path = str_replace(']', '', $path);
+            $path = str_replace('children[', '', $path);
+            $path = explode('.', $path);
+
+
+            // children[passengers].children[0].children[dateOfBirth]
+            // children[passengers].children[0].children[fName].data
+            // tui_toolkit_passengerbundle_tourpassenger_passengers_0_dateOfBirth
+            //$path[0] = str_replace('children[', '', $path[0]);
+            if(isset($path[1])) {
+                if(!isset($path[2])){
+                    unset($path[1]);
+                } else {
+                    $path[1] = str_replace('[', '', $path[1]);
+                    unset($path[3]);
+                }
+
+            $path[1] = str_replace('data', '', $path[1]);
+            }
+            $field = implode($path, '_');
+            $formattedErrors[$field] = $error->getMessage();
+        }
+        return $formattedErrors;
     }
 }

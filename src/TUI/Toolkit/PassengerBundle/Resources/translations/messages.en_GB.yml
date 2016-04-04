@@ -16,7 +16,7 @@ passenger:
         deleted: User Dashboard - Deleted
 
     actions:
-        back: Back to the Dashboard
+        back: Back to Passengers
         edit: Edit
         update: Update
         create: Create
@@ -112,6 +112,8 @@ passenger:
         emergency_number: Telephone
         emergency_email: Email
         payments: Payments
+        organizer_first_name: Organiser's First Name
+        organizer_last_name: Organiser's Last Name
 
 
 
@@ -127,6 +129,8 @@ passenger:
             email: Email
             first: Passenger's First Name
             last: Passenger's Last Name
+            organizer_first: New Organiser's First Name
+            organizer_last: New Organiser's Last Name
             message: Message
             gender: Gender
             age: Age

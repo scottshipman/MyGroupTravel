@@ -11,7 +11,6 @@ use TUI\Toolkit\PaymentBundle\Entity\BrandPayment;
 use TUI\Toolkit\PaymentBundle\Form\BrandPaymentType;
 
 use TUI\Toolkit\TourBundle\Entity\Tour;
-use TUI\Toolkit\TourBundle\Form\TourSetupType;
 use TUI\Toolkit\TourBundle\Controller\TourController;
 
 /**
@@ -63,19 +62,7 @@ class BrandPaymentController extends Controller
             return $response;
         }
 
-        $errors = array();
-        foreach ($form->getErrors() as $key => $error) {
-            if ($form->isRoot()) {
-                $errors['#'][] = $error->getMessage();
-            } else {
-                $errors[] = $error->getMessage();
-            }
-        }
-        foreach ($form->all() as $child) {
-            if (!$child->isValid()) {
-                $errors[$child->getName()] = $this->getErrorMessages($child);
-            }
-        }
+        $errors = $this->get("app.form.validation")->getErrorMessages($form);
         $serializer = $this->container->get('jms_serializer');
         $errors = $serializer->serialize($errors, 'json');
         $response = new Response($errors);

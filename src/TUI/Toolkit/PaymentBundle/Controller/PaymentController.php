@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Form\FormError;
 
 use TUI\Toolkit\PaymentBundle\Entity\Payment;
 use TUI\Toolkit\PaymentBundle\Form\PaymentType;
@@ -68,19 +69,7 @@ class PaymentController extends Controller
             return $response;
         }
 
-        $errors = array();
-        foreach ($form->getErrors() as $key => $error) {
-            if ($form->isRoot()) {
-                $errors['#'][] = $error->getMessage();
-            } else {
-                $errors[] = $error->getMessage();
-            }
-        }
-        foreach ($form->all() as $child) {
-            if (!$child->isValid()) {
-                $errors[$child->getName()] = $this->getErrorMessages($child);
-            }
-        }
+        $errors = $this->get("app.form.validation")->getErrorMessages($form);
         $serializer = $this->container->get('jms_serializer');
         $errors = $serializer->serialize($errors, 'json');
         $response = new Response($errors);
@@ -129,19 +118,7 @@ class PaymentController extends Controller
             return $response;
         }
 
-        $errors = array();
-        foreach ($form->getErrors() as $key => $error) {
-            if ($form->isRoot()) {
-                $errors['#'][] = $error->getMessage();
-            } else {
-                $errors[] = $error->getMessage();
-            }
-        }
-        foreach ($form->all() as $child) {
-            if (!$child->isValid()) {
-                $errors[$child->getName()] = $this->getErrorMessages($child);
-            }
-        }
+        $errors = $this->get("app.form.validation")->getErrorMessages($form);
         $serializer = $this->container->get('jms_serializer');
         $errors = $serializer->serialize($errors, 'json');
         $response = new Response($errors);
@@ -326,6 +303,14 @@ class PaymentController extends Controller
         $form = $this->createCustomScheduleForm($tour->getId(), $passenger);
         $form->handleRequest($request);
         $updated=array();
+        $vdata = $form->getData();
+        foreach($vdata as $data => $value){
+            if((strpos($data, 'task') !== false) and $value < 0){
+                $form[$data]->addError(new FormError('Value must be greater than 0'));
+            }
+        }
+
+
         if ($form->isValid()) {
             $data = $form->getData();
             foreach($paymentTasks as $paymentTask) {
@@ -376,24 +361,12 @@ class PaymentController extends Controller
         }
 
         // form not valid or has errors
-        $errors = array();
-        foreach ($form->getErrors() as $key => $error) {
-            if ($form->isRoot()) {
-                $errors['#'][] = $error->getMessage();
-            } else {
-                $errors[] = $error->getMessage();
-            }
-        }
-        foreach ($form->all() as $child) {
-            if (!$child->isValid()) {
-                $errors[$child->getName()] = $this->getErrorMessages($child);
-            }
-        }
+        $errors = $this->get("app.form.validation")->getErrorMessages($form);
         $serializer = $this->container->get('jms_serializer');
         $errors = $serializer->serialize($errors, 'json');
         $response = new Response($errors);
         $response->headers->set('Content-Type', 'application/json');
-        $response->setStatusCode('400');
+        $response->setStatusCode('403');
         return $response;
 
     }
@@ -492,6 +465,9 @@ class PaymentController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
+        if (!$tour) {
+            throw $this->createNotFoundException('Unable to find Tour entity.');
+        }
         $date_format = $this->container->getParameter('date_format');
         $locale = $this->container->getParameter('locale');
         $setupForm = $this->createTourSetupForm($tour);
@@ -536,9 +512,12 @@ class PaymentController extends Controller
     public function createTourSetupForm(Tour $entity)
     {
         $locale = $this->container->getParameter('locale');
-        $setupForm = $this->createForm(new TourSetupType($locale), $entity, array(
+        $setupForm = $this->createForm(new TourSetupType($entity, $locale), $entity, array(
             'action' => $this->generateUrl('manage_tour_setup', array('id' => $entity->getId())),
-            'method' => 'PUT',
+            'method' => 'POST',
+            'attr'  => array(
+                'id' => 'ajax_tour_setup_form'
+            )
         ));
 
         $setupForm->add('submit', 'submit', array('label' => $this->get('translator')->trans('tour.actions.save')));

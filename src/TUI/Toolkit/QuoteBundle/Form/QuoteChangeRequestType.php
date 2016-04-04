@@ -7,6 +7,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityRepository;
 
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Collection;
+
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use TUI\Toolkit\UserBundle\Form\UserType;
@@ -29,9 +32,12 @@ class QuoteChangeRequestType extends AbstractType
                 ),
                 'multiple' => true,
                 'expanded' => true,
-                'required' => false,
+                'required' => true,
                 'mapped' => false,
                 'translation_domain'  => 'messages',
+                'constraints' => new NotBlank(array(
+                    'message' => 'Please select at least one option.'
+                )),
 
             ))
             ->add('additional', 'textarea', array(

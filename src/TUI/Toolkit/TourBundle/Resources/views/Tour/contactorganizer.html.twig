@@ -26,22 +26,11 @@
         </div>
     </div>
     <script>
-        $(document).ready(function () {
-            // Copy to Clipboard
-            ZeroClipboard.config({swfPath: "//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf"});
-            var shareButton = new ZeroClipboard(document.getElementById("share_button"));
-            shareButton.on('aftercopy', function (event) {
-                $('#share_button').css('background-color', 'green');
+        (function($) {
+            $(document).ready(function () {
+                // Copy to Clipboard
+                $('#share_button').add('#signup_button').attr('brandPrimaryColor', '{{ brand.primaryColor }}').click(copyToClipboard);
             });
-            var signupButton = new ZeroClipboard(document.getElementById("signup_button"));
-            signupButton.on('aftercopy', function (event) {
-                $('#signup_button').css('background-color', 'green');
-            });
-            // Remove the CopytoClipboard button if not Flash
-            if (navigator.mimeTypes["application/x-shockwave-flash"] == undefined) {
-                $(".copy-button").addClass('hidden');
-                $('.input input').css('width', '80%');
-            };
-        });
+        })(jQuery);
     </script>
 {% endblock %}

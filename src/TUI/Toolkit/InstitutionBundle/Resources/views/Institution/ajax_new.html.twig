@@ -24,7 +24,15 @@
                 elem.parent().removeClass('is-invalid');
                 // add the value to the field
                 elem.val(response);
-            }
+            },
+            error : function (response) {
+                $("#loader").hide();
+                var parsed = $.parseJSON(response.responseText);
+                $.each(parsed, function(i, item) {
+                    field = '#tui_toolkit_institutionbundle_institution_' + i;
+                    $(field).parent().parent().prepend('<p style="color:red;">'+ i.toUpperCase() + ': ' + item + '</p>');
+                });
+            },
         })
     });
 </script>

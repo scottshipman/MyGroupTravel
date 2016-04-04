@@ -3,6 +3,7 @@
 namespace TUI\Toolkit\PaymentBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Payment
@@ -23,14 +24,14 @@ class Payment
 
     /**
      * @var float
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="value", type="float")
      */
     private $value;
 
     /**
      * @var \DateTime
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="date", type="date")
      */
     private $date;
@@ -51,11 +52,10 @@ class Payment
 
     /**
      * @var \TUI\Toolkit\PassengerBundle\Entity\Passenger
-     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\PassengerBundle\Entity\Passenger", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="TUI\Toolkit\PassengerBundle\Entity\Passenger", inversedBy="payments", cascade={"persist"})
      * @ORM\JoinColumn(name="passenger", referencedColumnName="id")
      */
     private $passenger;
-
 
     /**
      * Get id

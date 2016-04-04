@@ -3,6 +3,7 @@
 namespace TUI\Toolkit\TourBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * PaymentTask
@@ -23,21 +24,23 @@ class PaymentTask
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
 
     /**
      * @var float
-     *
+     * @Assert\NotBlank()
+     * @Assert\GreaterThanOrEqual(value = 0)
      * @ORM\Column(name="value", type="float")
      */
     private $value;
 
     /**
      * @var \DateTime
-     *
+     * @Assert\NotBlank(message="Please enter a valid date.")
+     * @Assert\Date()
      * @ORM\Column(name="dueDate", type="date")
      */
     private $dueDate;

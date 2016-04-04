@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Annotations;
 use Gedmo\Mapping\Annotation as Gedmo;
 use APY\DataGridBundle\Grid\Mapping as GRID;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Quote
@@ -32,6 +33,7 @@ class Quote
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     * @Assert\NotBlank()
      * @GRID\Column(title="Tour Name", filterable=true, operatorsVisible=false, export=true)
      *
      */
@@ -40,6 +42,7 @@ class Quote
 
     /**
      * @var integer
+     *
      * @ORM\ManyToOne(targetEntity="TUI\Toolkit\UserBundle\Entity\User", cascade={"persist"})
      * @ORM\JoinColumn(name="organizer", referencedColumnName="id")
      * @GRID\Column(field="organizer.firstName", type="text", title="Organizer First", export=true)
@@ -66,7 +69,7 @@ class Quote
 
     /**
      * @var integer
-     *
+     * @Assert\NotBlank()
      * @ORM\ManyToOne(targetEntity="TUI\Toolkit\UserBundle\Entity\User", cascade={"persist"})
      * @ORM\JoinColumn(name="salesAgent", referencedColumnName="id")
      * @GRID\Column(field="salesAgent.firstName", type="text", title="Business Admin first", filterable=false, export=true)

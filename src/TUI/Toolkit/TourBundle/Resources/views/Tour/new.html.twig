@@ -20,9 +20,7 @@
         $( document ).ready(function() {
            $( ".hasDatepicker" ).datepicker( "option", "dateFormat", "{{ date_format }}" );
             $( ".hasDatepicker" ).change(function(){
-                console.log(this);
                 if ($(this).val()){
-                    console.log ('has value');
                     $(this).parent().addClass('is-dirty');
                 } else if (!$(this).val()) {
                     $(this).parent().removeClass('is-dirty');

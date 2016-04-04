@@ -2,7 +2,7 @@
 
 {%  for tour in tours %}
     {% if tour.departureDate is defined %}
-        {% set dtg  = date(tour.departureDate).diff(date("now")) %}
+        {% set dtg  = date(tour.departureDate).diff(date("now - 1 day")) %}
         {% if dtg.days < 1 %} {%  set dtgFinal = 0  %} {% else %} {% set dtgFinal = dtg.days %}{% endif %}
     {% else %} {% set dtgFinal = 'n/a' %}
     {% endif %}
@@ -29,7 +29,7 @@
 
             {% endif %}
 
-            <h2 class="mdl-card__title-text"><a href="{{ tourlink }}">{% trans %}user.profile.my_quotes.tour{% endtrans %}: {{ tour.name }} <i class="fa fa-arrow-right"></i></a></h2>
+            <h2 class="mdl-card__title-text"><a href="{{ tourlink }}">{% trans %}user.profile.my_quotes.tour{% endtrans %}: {{ tour.name }} </a></h2>
 
             {% if is_granted("ROLE_BRAND") %}
                 <a href="{{ tourEdit }}" tourid="{{ tour.id }}" class="profile-tour-edit"><i class="profile-quote-edit-link fa fa-pencil"></i> Edit</a>
@@ -60,7 +60,7 @@
                    <div class="profile-list-item item-3">
                        {% if tour.organizer.id == app.user.id %}
                             {% if tour.salesAgent.media %}
-                                <span class="tui-image-avatar">
+                                <span class="tui-image-avatar" style="float: left; margin-right: 5px;">
                                     <img src="{{ ( tour.salesAgent.media.getRelativePath ~ "/" ~ tour.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ tour.salesAgent.username }}"></span>
                             {% elseif tour.salesAgent.firstName and tour.salesAgent.lastName %}
                                 <span class="tui-text-avatar mdl-typography--headline">{{ tour.salesAgent.firstName[:1] }}{{ tour.salesAgent.lastName[:1] }}</span>
@@ -69,11 +69,13 @@
 
                             {% endif %}
                         {{ tour.salesAgent.firstName }} {{ tour.salesAgent.lastName }} <br /> <a style="text-decoration: none;" href="mailto:{{ tour.salesAgent.email }}">{{ tour.salesAgent.email }}</a><br />
-                           <span style="margin-left:57px;"><tel>{{ tour.salesAgent.phoneNumber }}</tel></span>
-                           <label>{% trans %}user.profile.my_quotes.salesAgent{% endtrans %}</label>
+                           {% if tour.salesAgent.phoneNumber %}
+                               <span style="margin-left:57px;"><tel>{{ tour.salesAgent.phoneNumber }}</tel></span>
+                           {% endif %}
+                           <label>{{ brand.name }} {% trans %}user.profile.my_quotes.contact{% endtrans %}</label>
                         {% else %}
                             {% if tour.organizer.media %}
-                                <span class="tui-image-avatar">
+                                <span class="tui-image-avatar" style="float: left; margin-right: 5px;">
                                     <img src="{{ ( tour.organizer.media.getRelativePath ~ "/" ~ tour.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ tour.organizer.username }}"></span>
                             {% elseif tour.organizer.firstName and tour.organizer.lastName %}
                                 <span class="tui-text-avatar mdl-typography--headline">{{ tour.organizer.firstName[:1] }}{{ tour.organizer.lastName[:1] }}</span>
@@ -82,12 +84,17 @@
 
                             {% endif %}
                              {{ tour.organizer.firstName }} {{ tour.organizer.lastName }}  <br /> <a style="text-decoration: none;" href="mailto:{{ tour.organizer.email }}">{{ tour.organizer.email }}</a><br />
-                            <span style="margin-left:57px;"><tel>{{ tour.organizer.phoneNumber }}</tel></span>
+                            {% if tour.organizer.phoneNumber %}
+                                <span style="margin-left:57px;"><tel>{{ tour.organizer.phoneNumber }}</tel></span>
+                            {% endif %}
                             <label>{% trans %}user.profile.my_quotes.organizer{% endtrans %}</label>
                         {% endif %}
                    </div>
                </li>
            </ul>
         </div>
+        <a href="{{ tourlink }}" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" style="width: 85%; margin: 10px auto 15px;">
+            {% trans %}user.actions.view_tour{% endtrans %} <i class="material-icons" style="vertical-align: middle;">arrow_forward</i>
+        </a>
     </div>
 {% endfor %}

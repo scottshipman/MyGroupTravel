@@ -43,11 +43,13 @@ class Medical
      *
      * @ORM\Column(name="doctorName", type="text", nullable=true)
      * @GRID\Column(title="Display Name", export=true)
+     * @Assert\NotBlank()
      */
     private $doctorName;
 
     /**
      * @ORM\Column(type="string", nullable=true)
+     * @Assert\NotBlank()
      */
     private $doctorNumber;
 
@@ -56,6 +58,7 @@ class Medical
      *
      * @ORM\Column(name="conditions", type="text", nullable=true)
      * @GRID\Column(title="Conditions", export=true)
+     * @Assert\NotBlank()
      */
     private $conditions;
 
@@ -64,6 +67,7 @@ class Medical
      *
      * @ORM\Column(name="medications", type="text", nullable=true)
      * @GRID\Column(title="Medications", export=true)
+     * @Assert\NotBlank()
      */
     private $medications;
 

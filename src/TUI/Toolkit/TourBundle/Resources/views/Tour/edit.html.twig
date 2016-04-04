@@ -310,11 +310,21 @@
         }
     </script>
 
+    {% if errors is defined %}
+    <script>
+        $(document).ready( function() {
+            {% for key, error in errors %}
+            console.log('{{ error }}');
+            $('#tui_toolkit_tourbundle_tour_{{ key }}').parent().after('<p class="errors" style="color:red;">{{ error }}</p>');
+            {% endfor %}
+        });
+    </script>
+    {% endif %}
+
     <script>
         $(document).on('click', '.existing-delete', function (e) {
             e.preventDefault();
             var remove = $(this).parent().find('a').attr('id');
-            console.log(remove)
             var value = $(".media-placeholder").val();
             var values = [];
             values = value.split(',').map(Number);
@@ -342,5 +352,7 @@
             });
         });
     </script>
+
+
 
 {% endblock %}

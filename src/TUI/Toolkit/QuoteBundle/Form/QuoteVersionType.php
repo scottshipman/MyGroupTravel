@@ -10,6 +10,9 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Collection;
+
 class QuoteVersionType extends AbstractType
 {
 
@@ -118,17 +121,32 @@ class QuoteVersionType extends AbstractType
                 'translation_domain'  => 'messages',
             ))
             // now the versionable fields
+
             ->add('name', 'text', array(
                 'label' => 'quote.form.quote_version.name',
                 'translation_domain'  => 'messages',
                 'required' => $require_qn,
-            ))
-            ->add('quoteNumber', 'text', array(
+            ));
+
+        if($require_qn==TRUE){
+            $builder->add('quoteNumber', 'text', array(
                 'label' => 'quote.form.quote_version.quoteNumber',
                 'translation_domain'  => 'messages',
                 'required' => $require_qn,
-            ))
+                'constraints' => new NotBlank(array(
+                    'message' => 'Please enter a Quote Number'
+                )),
+            ));
+        } else {
+            $builder->add('quoteNumber', 'text', array(
+                'label' => 'quote.form.quote_version.quoteNumber',
+                'translation_domain'  => 'messages',
+                'required' => $require_qn,
+            ));
+        }
 
+
+        $builder
             ->add('description', 'textarea', array(
                 'label' => 'quote.form.quote_version.description',
                 'translation_domain'  => 'messages',

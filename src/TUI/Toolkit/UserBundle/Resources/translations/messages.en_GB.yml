@@ -5,7 +5,7 @@ user:
         index: User Dashboard
         new: Create New User
         show: User
-        layout_auth: Home
+        layout_auth: My Profile
         layout_anon: User Login
         deleted: User Dashboard - Deleted
 
@@ -14,7 +14,7 @@ user:
         index: User
         new: Create New User
         show: User
-        layout_auth: Home
+        layout_auth: My Profile
         layout_anon: User Login
         deleted: User Dashboard - Deleted
 
@@ -30,6 +30,8 @@ user:
         notify: Send User a Notification
         activate: Submit
         security: Reset Security Info
+        view_tour: View Tour
+        view_quote: View Quote
 
     table:
         label:
@@ -134,6 +136,7 @@ user:
             tour: Tour
             days: Days to go
             no_price: N/A
+            contact: Contact
 
     activate:
         brand: "Please create a password and security question to finish setting up your account."

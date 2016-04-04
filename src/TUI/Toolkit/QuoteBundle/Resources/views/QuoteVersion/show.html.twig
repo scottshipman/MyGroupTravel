@@ -300,7 +300,6 @@
      </div>
 
 {% endif %}
-       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.js"></script>
         {% javascripts '@toolkit_siteshow' %}
             <script type="text/javascript" src="{{ asset_url }}"></script>
         {% endjavascripts %}
@@ -338,7 +337,6 @@
                        },
                        axis: 'y',
                        update: function(e, ui) {
-                           console.log(ui);
                            var pathArray = window.location.pathname.split( '/' );
                            contentBlocksUpdate(pathArray[3], 'QuoteVersion'); // fourth [3] part in the path should be quote ID to pass in
                        }
@@ -369,18 +367,14 @@
                    e.preventDefault();
                    // todo Get item.id and item.name
                    var link_html = '<p>{% trans %}quote.modals.message.promote{% endtrans %}</p>'+
-                                   '<p><input size="35" type="text" id="quote-link-input" name="quote-link-input" class="form-control" value="{{ url('quote_site_action_show', {'id': entity.id}) }}" disabled>'+
+                                   '<p><input size="35" type="text" id="quote-link-input" name="quote-link-input" class="form-control" value="{{ url('quote_site_action_show', {'id': entity.id}) }}" readonly="readonly">'+
                                    '<a href="#" id="copy-button" data-clipboard-target="quote-link-input" title="Click to copy Quote URL" class="not-full mdl-button mdl-js-button mdl-button--raised mdl-button--colored">'+
                                         '<i class="fa fa-sign-in fa-stack"></i>' +
                                     '</a></p>'+
                                     '<p>You should also provide the Quote Number: <strong>{{ entity.quoteNumber }}<strong></p>';
                    toolkitStaticPopup("Quote Link", link_html);
                    // Copy to Clipboard
-                   ZeroClipboard.config( { swfPath: "//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf" } );
-                   var client = new ZeroClipboard( document.getElementById("copy-button") );
-                   client.on('aftercopy', function(event) {
-                       $('#copy-button').css('background-color', 'green');
-                   });
+                   $('#copy-button').attr('brandPrimaryColor', '{{ brand.primaryColor }}').click(copyToClipboard);
                });
 
 
@@ -428,7 +422,6 @@
                        editBlock.load("/manage/headerblock/" + headerBlockId + "/header/edit/" + entityId + entityClass, function () {
                            doMDLpopup(editBlock); // run the function to add appropriate MDL classes to form elements
 //                           originalDiv.hide();
-                           console.log("something");
                            editBlock.show();
                            $("#loader").css("display", "none");
                            $('.content-block-actions').hide();

@@ -8,6 +8,8 @@ tryAgain:
     button: Try again
 
 error:
+    400:
+        title: Bad Request
     403:
         title: Access denied
         description: You do not have the required permissions to access this page.

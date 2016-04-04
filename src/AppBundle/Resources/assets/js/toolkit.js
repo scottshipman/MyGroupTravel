@@ -29,6 +29,11 @@
         });
     }
 
+    //force numeric on amount fields
+    $('input[type="number"]').keypress(function(key) {
+        if(key.charCode == 101 || key.charCode == 69) return false;
+    });
+
 
 
     // *
@@ -63,7 +68,7 @@
                 // Modal to full screen on phone
                 $("#dialog")
                     .dialog("option", "width", "100%")
-                    .dialog("option", "height", $(window).height() );
+                    .dialog("option", "height", 'auto' );
             } else {
                 $("#dialog")
                     .dialog("option", "width", "620px")
@@ -76,7 +81,6 @@
         var modal_form = e.currentTarget.id;
         var parts = modal_form.split("-add");
         var form_type = parts[0].toLowerCase();
-        console.log(locale);
         //var locale = $('#locale').text();
         if (locale == 'en_GB'){
             toolkitStandardPopup( "Create New Organiser", "/ajax/" + form_type + "/new");
@@ -166,3 +170,33 @@
     });
 
 })(jQuery);
+
+// Event handler for copy to clipboard button
+function copyToClipboard(e) {
+    e.preventDefault();
+    // Find target element.
+    var
+        trigger = e.currentTarget,
+        target_id = trigger.dataset.clipboardTarget,
+        target_element = (target_id ? document.querySelector('#' + target_id) : null);
+
+    // Is element selectable?
+    if (target_element && target_element.select) {
+        // Select text
+        target_element.select();
+
+        try {
+            // Copy text
+            document.execCommand('copy');
+            target_element.blur();
+
+            // Copied animation
+            if (e.currentTarget.hasAttribute("brandPrimaryColor")) {
+                trigger.style.backgroundColor = e.currentTarget.getAttribute("brandPrimaryColor");
+            }
+        }
+        catch (err) {
+            alert('Please press Ctrl/Cmd+C to copy');
+        }
+    }
+}

@@ -17,7 +17,6 @@
                     if ($('#tui_toolkit_tourbundle_tour_organizer').length>0) {
                         var elem = $('#tui_toolkit_tourbundle_tour_organizer');
                     }
-                    console.log(elem);
                     $('#dialog').dialog( "close" );
                     // make the floating label leave the field and change to valid color
                     elem.parent().addClass('is-dirty');
@@ -26,9 +25,12 @@
                     elem.val(response);
                 },
                 error : function (response) {
-                    console.log(response);
-                    $('#dialog').html(response.responseText);
-                    doMDLpopup($("#dialog"));
+                    $("#loader").hide();
+                    var parsed = $.parseJSON(response.responseText);
+                    $.each(parsed, function(i, item) {
+                        field = '#tui_toolkit_ajax_userbundle_user_' + i;
+                        $(field).parent().parent().prepend('<p style="color:red;">'+ i.toUpperCase() + ': ' + item + '</p>');
+                    });
                 }
             })
         });

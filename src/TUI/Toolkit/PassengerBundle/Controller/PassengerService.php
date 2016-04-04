@@ -84,34 +84,15 @@ class PassengerService
 
         foreach($results as $result) {
             if ($orgUser = $result->getUser()) {
-                if ($orgUser->isEnabled() == FALSE) {
+//                if ($orgUser->isEnabled() == FALSE) {
                     $organizers[] = $result->getUser();
-                }
+//                }
             }
         }
 
         return $organizers;
     }
 
-    public function getErrorMessages(Form $form) {
-        $errors = array();
-
-        foreach ($form->getErrors() as $key => $error) {
-            if ($form->isRoot()) {
-                $errors['#'][] = $error->getMessage();
-            } else {
-                $errors[] = $error->getMessage();
-            }
-        }
-
-        foreach ($form->all() as $child) {
-            if (!$child->isValid()) {
-                $errors[$child->getName()] = $this->getErrorMessages($child);
-            }
-        }
-
-        return $errors;
-    }
 
     public function getFlashErrorMessages($errors, $form, $translator){
 
@@ -163,8 +144,8 @@ class PassengerService
 //        }
 
         //Get Organizers
-        $organizerCount = $container->get("permission.set_permission")->getUser('organizer', $tour->getId(), 'tour');
-        $assistantCount = $container->get("permission.set_permission")->getUser('assistant', $tour->getId(), 'tour');
+        $organizerCount = $container->get("permission.set_permission")->getUsers('organizer', $tour->getId(), 'tour');
+        $assistantCount = $container->get("permission.set_permission")->getUsers('assistant', $tour->getId(), 'tour');
         $totalOrganizerCount = count($organizerCount) + count($assistantCount);
         $passengerData->totalOrganizerCount = $totalOrganizerCount;
 
@@ -362,8 +343,18 @@ class PassengerService
             } else {
                 $parentObject = "";
             }
-            $isOrganizer = $container->get("permission.set_permission")->getPermission($tourId, 'tour', $parentObject)[0]=='organizer' ? TRUE : FALSE;
-            $isOrganizer = $container->get("permission.set_permission")->getPermission($tourId, 'tour', $parentObject)[0]=='assistant' ? TRUE : $isOrganizer;
+
+            $permissions = $container->get("permission.set_permission")->getPermission($tourId, 'tour', $parentObject);
+
+            $isOrganizer = FALSE;
+
+            if (is_array($permissions)){
+                foreach($permissions as $permission){
+                    if (($permission == 'organizer' || $permission == 'assistant') && $passenger->getSelf() == true) {
+                        $isOrganizer = TRUE;
+                    }
+                }
+            }
 
 
             $combinedObjects[]= array($passenger, $parentObject, $isOrganizer);
@@ -449,11 +440,12 @@ class PassengerService
                         $tourId == $paxObject->getTourReference()->getId())
                     {
                         $passengerObject = $paxObject;
-                        $break;
+                        break;
                     }
                 }
 
-            } else {
+            }
+            else {
                 // need to add name data to fake passenger data
                 $passengerObject->setfName($organizer->getFirstName());
                 $passengerObject->setlname($organizer->getLastName());
@@ -483,10 +475,12 @@ class PassengerService
             $object = $acceptedUser->getId();
             $users = $container->get("permission.set_permission")->getUser('parent', $object, 'passenger');
 
-            foreach ($users as $user) {
-                $user = $em->getRepository('TUIToolkitUserBundle:User')->find($user);
-                if ($user->isEnabled() == false) {
-                    $unactivated[] = $user;
+            if ($users) {
+                foreach ($users as $user) {
+                    $user = $em->getRepository('TUIToolkitUserBundle:User')->find($user);
+                    if ($user->isEnabled() == false) {
+                        $unactivated[] = $user;
+                    }
                 }
             }
         }

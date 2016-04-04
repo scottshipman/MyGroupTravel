@@ -456,7 +456,7 @@ class TourController extends Controller
         $em = $this->getDoctrine()->getManager();
         $currency = $em->getRepository('CurrencyBundle:Currency')->findByCode($currency_code);
         $currency = array_shift($currency);
-        $form = $this->createForm(new TourType($locale), $entity, array(
+        $form = $this->createForm(new TourType($entity, $locale), $entity, array(
             'action' => $this->generateUrl('manage_tour_create'),
             'method' => 'POST',
         ));
@@ -711,7 +711,7 @@ class TourController extends Controller
     private function createEditForm(Tour $entity)
     {
         $locale = $this->container->getParameter('locale');
-        $form = $this->createForm(new TourType($locale), $entity, array(
+        $form = $this->createForm(new TourType($entity, $locale), $entity, array(
             'action' => $this->generateUrl('manage_tour_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
@@ -750,9 +750,12 @@ class TourController extends Controller
             if (NULL !== $entities) {
                 $organizer = array_shift($entities);
                 $editForm->getData()->setOrganizer($organizer);
+            } else {
+                $editForm['organizer']->addError(new FormError($this->get('translator')
+                    ->trans('quote.exception.organizer')));
             }
 
-        }else {
+        } else {
             $editForm['organizer']->addError(new FormError($this->get('translator')->trans('quote.exception.organizer')));
         }
         //handling ajax request for SalesAgent same as we did with organizer
@@ -761,11 +764,15 @@ class TourController extends Controller
             $agentEmail = $a_matches[1];
             $agentEntities = $em->getRepository('TUIToolkitUserBundle:User')
                 ->findByEmail($agentEmail);
-            if (NULL !== $agentEntities) {
+            if (NULL !== $agentEntities and !empty($agentEntities)) {
                 $salesAgent = array_shift($agentEntities);
                 $editForm->getData()->setSalesAgent($salesAgent);
+            } else {
+                $editForm->getData()->setSalesAgent($oldOrganizer);
+                $editForm['salesAgent']->addError(new FormError($this->get('translator')->trans('quote.exception.salesagent')));
             }
-        }else {
+        } else {
+
             $editForm['salesAgent']->addError(new FormError($this->get('translator')->trans('quote.exception.salesagent')));
         }
 
@@ -788,7 +795,7 @@ class TourController extends Controller
 
         //Handling the request for institution a little different than we did for the other 2.
         $institutionParts = explode(' - ', $editForm->getData()->getInstitution());
-            if (count($institutionParts) == 2 ) {
+        if (count($institutionParts) == 2 ) {
             $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findBy(
                 array('name' => $institutionParts[0], 'city' => $institutionParts[1])
             );
@@ -796,7 +803,7 @@ class TourController extends Controller
                 $institution = array_shift($institutionEntities);
                 $editForm->getData()->setInstitution($institution);
             }
-        }else {
+        } else {
             $editForm['institution']->addError(new FormError($this->get('translator')->trans('quote.exception.institution')));
         }
 
@@ -864,7 +871,14 @@ class TourController extends Controller
                     $passengerPaymentTasksStorage[] = $newPaymentTaskPassenger;
                 }
             }
-            $entity->setPaymentTasksPassenger($passengerPaymentTasksStorage);
+
+            // sync payment tasks for instution and passengers if still Not Setup complete
+            if ($entity->getSetupComplete() == FALSE && $entity->getIsComplete() == FALSE) {
+                // Step 1 purge existing passenger payment schedules
+                if(!empty($passengerPaymentTasksStorage)){$entity->setPaymentTasksPassenger($passengerPaymentTasksStorage);}
+            }
+
+
             $em->persist($entity);
             $em->flush();
             $permission = $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
@@ -885,7 +899,7 @@ class TourController extends Controller
             }
 
         }
-
+        $errors = $this->get("app.form.validation")->getNestedErrorMessages($editForm);
 
         return $this->render('TourBundle:Tour:edit.html.twig', array(
             'entity' => $entity,
@@ -893,6 +907,7 @@ class TourController extends Controller
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
             'date_format' => $date_format,
+            'errors' => $errors,
         ));
     }
 
@@ -970,7 +985,7 @@ class TourController extends Controller
      */
 
     public function purgePassengerPaymentSchedule($paymentTasksPassenger, $entity) {
-        if ($paymentTasksPassenger->count() >= 1 ){
+        if (!empty($paymentTasksPassenger) ){
             $em = $this->getDoctrine()->getManager();
             $tasks=$paymentTasksPassenger->toArray();
             foreach($tasks as $task) {
@@ -1296,6 +1311,9 @@ class TourController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('TourBundle:Tour')->find($id);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Tour entity.');
+        }
         $editForm = $this->createEditForm($entity);
         $date_format = $this->container->getParameter('date_format');
         $locale = $this->container->getParameter('locale');
@@ -1475,6 +1493,9 @@ class TourController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('TourBundle:Tour')->find($id);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Tour entity.');
+        }
         $date_format = $this->container->getParameter('date_format');
         $locale = $this->container->getParameter('locale');
         $setupForm = $this->createTourSetupForm($entity);
@@ -1517,9 +1538,12 @@ class TourController extends Controller
     function createTourSetupForm(Tour $entity)
     {
         $locale = $this->container->getParameter('locale');
-        $setupForm = $this->createForm(new TourSetupType($locale), $entity, array(
+        $setupForm = $this->createForm(new TourSetupType($entity, $locale), $entity, array(
             'action' => $this->generateUrl('manage_tour_setup', array('id' => $entity->getId())),
-            'method' => 'PUT',
+            'method' => 'POST',
+            'attr'  => array(
+                'id' => 'ajax_tour_setup_form'
+            )
         ));
 
         $setupForm->add('submit', 'submit', array('label' => $this->get('translator')->trans('tour.actions.save')));
@@ -1540,8 +1564,6 @@ class TourController extends Controller
         $setupForm = $this->createTourSetupForm($entity);
         $setupForm->handleRequest($request);
 
-        $entity->setSetupComplete(true);
-
         $payments = $setupForm->getData()->getPaymentTasksPassenger();
 
         foreach ($payments as $payment) {
@@ -1549,23 +1571,36 @@ class TourController extends Controller
         }
 
         if ($setupForm->isValid()) {
+            $entity->setSetupComplete(true);
             $em->flush();
             $permission = $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
             $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.save') . $entity->getName());
 
+            $serializer = $this->container->get('jms_serializer');
+            $serialized = $serializer->serialize($entity, 'json');
+            $response = new Response($serialized);
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setStatusCode('200');
+            return $response;
 
-            // smarter redirect
-            if(isset($_SESSION["tour_settings_referer"]) && $_SESSION["tour_settings_referer"] != ''){
-                $referer = $_SESSION["tour_settings_referer"];
-                unset($_SESSION["tour_settings_referer"]);
-                return $this->redirect($referer);
-            } else {
-                return $this->redirect($this->generateUrl('manage_tour_show', array('id' => $id)));
-            }
+//            // smarter redirect
+//            if(isset($_SESSION["tour_settings_referer"]) && $_SESSION["tour_settings_referer"] != ''){
+//                $referer = $_SESSION["tour_settings_referer"];
+//                unset($_SESSION["tour_settings_referer"]);
+//                return $this->redirect($referer);
+//            } else {
+//                return $this->redirect($referer);
+//            }
         }
 
-        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.not_saved') . $entity->getName());
-        return $this->redirect($this->generateUrl('manage_tour_show', array('id' => $id)));
+        $errors = $this->get("app.form.validation")->getNestedErrorMessages($setupForm);
+
+        $serializer = $this->container->get('jms_serializer');
+        $errors = $serializer->serialize($errors, 'json');
+        $response = new Response($errors);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setStatusCode('403');
+        return $response;
 
 
     }
@@ -1632,12 +1667,24 @@ class TourController extends Controller
             }
         };
 
+        $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
+
+        // Look for a configured brand.
+        if($brand_id = $this->container->getParameter('brand_id')){
+            $brand = $em->getRepository('BrandBundle:Brand')->find($brand_id);
+        }
+
+        if(!$brand) {
+            $brand = $default_brand;
+        }
+
         return $this->render('TourBundle:Tour:contactorganizer.html.twig', array(
             'notify_form' => $notifyForm->createView(),
             'entity' => $entity,
             'locale' => $locale,
             'date_format' => $date_format,
             'organizer' => $organizer,
+            'brand' => $brand,
         ));
     }
 

@@ -151,7 +151,7 @@
     -o-transition: max-height 1s;
     transition: max-height 1s;
     overflow: hidden;
-    max-height: 900px !important;
+    max-height: 1150px !important;
     //padding: 0;
     opacity: 1;
   }
@@ -181,7 +181,7 @@
     -o-transition: max-height 1s;
     transition: max-height 1s;
     overflow: hidden;
-    max-height: 400px !important;
+    max-height: 5500px !important;
     //padding: 0;
     opacity: 1;
   }
@@ -207,7 +207,7 @@
     -o-transition: max-height 1s;
     transition: max-height 1s;
     overflow: hidden;
-    max-height: 550px !important;
+    max-height: 630px !important;
     //padding: 0;
     opacity: 1;
     margin-top: 10px;
@@ -228,6 +228,13 @@
 
   .mdl-card__title {
     color:grey;
+
+    .title-button {
+      position: absolute;
+      right: 20px;
+      top: 16px;
+      margin-top: 0;
+    }
   }
 
   a {
@@ -432,4 +439,8 @@ a.organizer-card {
 
 .dashboard-titles:hover {
   background-color: #eee;
+}
+
+.passenger-task-card .mdl-card__supporting-text {
+  min-height: 69px;
 }

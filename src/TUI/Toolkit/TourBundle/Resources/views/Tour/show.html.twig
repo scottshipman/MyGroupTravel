@@ -15,7 +15,7 @@
 {% endblock %}
 
 {% block page_title_menu %}
-    <button id="tour-title-drop" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-menu-drop">
+    <button id="tour-title-drop" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-menu-drop mdl-button--raised mdl-button--colored ">
         <i class="material-icons">arrow_drop_down</i>
     </button>
     {% embed "TourBundle:Tour:tourMenu.html.twig" %}
@@ -113,9 +113,6 @@
 
     </div>
 
-<script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.js">
-</script>
 <script>
     $(document).ready(function () {
         // Promote Popup
@@ -132,17 +129,7 @@
                     '</a></div>';
             toolkitStaticPopup("Promote the Tour", link_html);
             // Copy to Clipboard
-            ZeroClipboard.config({swfPath: "//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf"});
-            var client = new ZeroClipboard(document.getElementById("copy-button"));
-            client.on('aftercopy', function (event) {
-                $('#copy-button').css('background-color', 'green');
-            });
-            //remove the CopytoClipboard button if not Flash
-            if (navigator.mimeTypes["application/x-shockwave-flash"] == undefined) {
-                $("#copy-button").addClass('hidden');
-                $('share_url').css('width', '80%');
-            };
-
+            $('#copy-button').attr('brandPrimaryColor', '{{ brand.primaryColor }}').click(copyToClipboard);
         });
 
         //brand_payment popup

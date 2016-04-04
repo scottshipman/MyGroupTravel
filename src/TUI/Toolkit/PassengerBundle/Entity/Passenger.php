@@ -27,7 +27,6 @@ class Passenger
      */
     private $id;
 
-
     /**
      * Get id
      *
@@ -41,11 +40,13 @@ class Passenger
 
     /**
      * @ORM\Column(type="string", nullable=true)
+     *
      */
     protected $fName = null;
 
     /**
      * @ORM\Column(type="string", nullable=true)
+     *
      */
     protected $lName = null;
 
@@ -61,6 +62,7 @@ class Passenger
     /**
      * @var datetime
      *
+     * @Assert\Date()
      * @ORM\Column(name="dob", type="date", nullable=true)
      */
     protected $dateOfBirth;
@@ -137,6 +139,13 @@ class Passenger
      * @ORM\Column(name="free", type="boolean")
      */
     protected $free;
+
+    /**
+     * @var \TUI\Toolkit\PaymentBundle\Entity\Payment
+     *
+     * @ORM\OneToMany(targetEntity="TUI\Toolkit\PaymentBundle\Entity\Payment", mappedBy="passenger", cascade={"persist"})
+     */
+    protected $payments;
 
 
     public function __construct()  {
@@ -405,5 +414,13 @@ class Passenger
     public function getSelf()
     {
         return $this->self;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPayments()
+    {
+        return $this->payments;
     }
 }

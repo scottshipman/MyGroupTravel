@@ -39,7 +39,7 @@ tour:
                 actions: Actions
 
     actions:
-        home: Home
+        home: My Profile
         back: Back to the list
         back_dashboard: Back to Tour Dashboard
         edit: Edit
@@ -111,6 +111,7 @@ tour:
             intro_org: Contact:
             price: Price per person:
        expiry: Tour valid until
+       payment_instructions: Payment Instructions
 
 
     contact_organizer:
@@ -125,6 +126,8 @@ tour:
         message_text: Message Text:
 
     dashboard:
+        organizer_count_single: Organizer
+        organizer_count_plural: Organizers
         status: Status
         complete: Complete
         not-complete: Not Complete
@@ -186,6 +189,9 @@ tour:
         registrations: Registrations
         passengers: Passengers
         parent_price: Paid / Total Tour Price
+        view_passenger: View Passenger
+        passenger_dashboard: Go to Passenger Dashboard
+        task_dashboard: Go to Task Dashboard
 
     edit:
         summary: Summary
