@@ -31,7 +31,7 @@ class MedicalType extends AbstractType
                 'required' => true,
                 'label' => 'passenger.labels.doctor_name',
             ))
-            ->add('DoctorNumber', 'text', array(
+            ->add('doctorNumber', 'text', array(
                 'required' => true,
                 'label' => 'passenger.labels.doctor_number',
             ))

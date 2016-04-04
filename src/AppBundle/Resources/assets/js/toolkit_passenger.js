@@ -289,7 +289,9 @@ $(document).ready(function () {
             $("#loader").hide();
             var parsed = $.parseJSON(response.responseText);
             $.each(parsed, function(i, item) {
+                console.log(i);
                 var field = '#tui_toolkit_passengerbundle_medical_' + i;
+                console.log(field);
                 if($(field).is('input')){
                     $(field).parent().after('<p class="errors" style="color:red;">'+ item + '</p>');
                 }
@@ -535,7 +537,7 @@ $(document).ready(function () {
             contentType: "application/x-www-form-urlencoded",
         }).success(function (response) {
             $("#loader").css("display", "none");
-            //window.location.reload(true);
+            window.location.reload(true);
             $(".emergency-form").removeClass('expanded');
             $('#emergency').css({
                 "color": "grey",
@@ -574,7 +576,7 @@ $(document).ready(function () {
             contentType: "application/x-www-form-urlencoded",
         }).success(function (response) {
             $("#loader").css("display", "none");
-            //window.location.reload(true);
+            window.location.reload(true);
             $(".emergency-form").removeClass('expanded');
             $('#emergency').css({
                 "color": "grey",
