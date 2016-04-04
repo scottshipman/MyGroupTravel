@@ -95,11 +95,13 @@
 
             // Customize a passenger's payment schedule
             $(document).on('click', 'a.edit-payment-schedule', function (e) {
-                var t = $(this);
+                var t = $(this),
+                    forename = t.parents('.tour-edit').find('.forename').text();
+
                 e.preventDefault();
                 var passengerId = t.attr('passenger');
                 var tourId = t.attr('tour');
-                toolkitStandardPopup("Custom Payment Schedule", '/payment/tour/' + tourId + '/passenger/' + passengerId + '/customize' );
+                toolkitStandardPopup('Edit ' + forename + '\'s Payment Schedule', '/payment/tour/' + tourId + '/passenger/' + passengerId + '/customize' );
             });
 
             // Refund a payment
