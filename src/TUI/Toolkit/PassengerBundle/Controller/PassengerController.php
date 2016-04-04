@@ -180,9 +180,10 @@ class PassengerController extends Controller
 
                 $parentEmail = $user->getEmail();
                 $tourName = $tour->getName();
-
+                $institution = $tour->getInstitution();
+                $organizer_name = $tour->getOrganizer() != null ? $tour->getOrganizer()->getLastName() . ' ' . $tour->getOrganizer()->getFirstName(): NULL;
                 $message = \Swift_Message::newInstance()
-                    ->setSubject($this->get('translator')->trans('passenger.emails.thank_you'))
+                    ->setSubject($this->get('translator')->trans('passenger.emails.thank_you') . ' ' . $tourName . ', ' . $institution)
                     ->setFrom($this->container->getParameter('user_system_email'))
                     ->setTo($parentEmail)
                     ->setBody(
@@ -196,6 +197,7 @@ class PassengerController extends Controller
                                 'newPassengers' => $newPassengers,
                                 'locale' => $locale,
                                 'date_format' => $date_format,
+                                'organizer_name' => $organizer_name,
                             )
                         ), 'text/html');
                 $this->get('mailer')->send($message);
