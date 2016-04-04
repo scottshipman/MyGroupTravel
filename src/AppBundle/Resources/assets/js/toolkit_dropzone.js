@@ -93,6 +93,83 @@ Dropzone.autoDiscover = false;
       });
     }
 
+    if ($.inArray("thumbnail", disabled_events) == -1) {
+      dropzone.on("thumbnail", function (file) {
+
+        console.log('dropzone thumbnail event');
+        var myDropzone = this;
+        // ignore files which were already cropped and re-rendered
+        // to prevent infinite loop
+        if (file.cropped) {
+          return;
+        }
+//                        if (file.width < 800) {
+//                            // validate width to prevent too small files to be uploaded
+//                            // .. add some error message here
+//                            return;
+//                        }
+
+        // cache filename to re-assign it to cropped file
+        var cachedFilename = file.name;
+        console.log(cachedFilename);
+        // remove not cropped file from dropzone (we will replace it later)
+        myDropzone.removeFile(file);
+
+        // dynamically create divs to allow multiple files processing
+        var $cropperDiv = $('<div><div class="image-container"><!-- Cropper Container Here --></div><a class="crop-upload mdl-button">Crop and Upload</a></div>');
+        // 'Crop and Upload' button in a modal
+        var $uploadCrop = $cropperDiv.find('.crop-upload');
+
+        var $img = $('<img />');
+        // initialize FileReader which reads uploaded file
+        var reader = new FileReader();
+        reader.onloadend = function () {
+          console.log('reader.onloadend event');
+          // add uploaded and read image to modal
+          $cropperDiv.find('.image-container').html($img);
+          $img.attr('src', reader.result);
+          console.log($img);
+          // initialize cropper for uploaded image
+          $img.cropper({
+            //   aspectRatio: 16 / 9,
+            //    autoCropArea: 1,
+            movable: false,
+            cropBoxResizable: true,
+            minContainerWidth: 120,
+            autoCrop: false
+          });
+          console.log('cropper initialized');
+        };
+        // read uploaded file (triggers code above)
+        reader.readAsDataURL(file);
+
+        $("#dialog").html($cropperDiv);
+        $("#dialog").dialog("option", "title", "Crop Image");
+        $("#dialog").dialog("open");
+        //$('#dropzone_form').parent().append($cropperDiv);
+
+        // listener for 'Crop and Upload' button in modal
+        $uploadCrop.on('click', function() {
+          $("#dialog").dialog("open");
+          // get cropped image data
+          var blob = $img.cropper('getCroppedCanvas').toDataURL();
+          // transform it to Blob object
+          var newFile = dataURItoBlob(blob);
+          // set 'cropped to true' (so that we don't get to that listener again)
+          newFile.cropped = true;
+          // assign original filename
+          newFile.name = cachedFilename;
+
+          // add cropped file to dropzone
+          myDropzone.addFile(newFile);
+          // upload cropped file with dropzone
+          myDropzone.processQueue();
+          $cropperDiv.remove();
+        });
+
+    });
+    }
+
     $(media_placeholder_image).click(function() {
       $(media_placeholder_image).css({"display": "none"});
       $(dropzone_form).css({"display": "block"});
