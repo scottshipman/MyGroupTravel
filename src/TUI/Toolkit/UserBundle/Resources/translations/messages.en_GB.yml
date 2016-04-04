@@ -5,7 +5,7 @@ user:
         index: User Dashboard
         new: Create New User
         show: User
-        layout_auth: Home
+        layout_auth: My Profile
         layout_anon: User Login
         deleted: User Dashboard - Deleted
 
@@ -14,7 +14,7 @@ user:
         index: User
         new: Create New User
         show: User
-        layout_auth: Home
+        layout_auth: My Profile
         layout_anon: User Login
         deleted: User Dashboard - Deleted
 
