@@ -16,7 +16,7 @@ passenger:
         deleted: User Dashboard - Deleted
 
     actions:
-        back: Back to the Dashboard
+        back: Back to Passengers
         edit: Edit
         update: Update
         create: Create
