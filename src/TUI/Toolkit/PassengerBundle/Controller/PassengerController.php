@@ -1043,6 +1043,7 @@ class PassengerController extends Controller
 
             $data = $form->getData();
             $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
+            $subject = $this->get('translator')->trans('passenger.emails.invite-organizer.new-user-subject') . ' ' . $tour->getName();
             // check for existing user acct first
             $exists = $em->getRepository('TUIToolkitUserBundle:User')->findBy(array('email' => $data['email']));
             if(!empty($exists)){
@@ -1085,7 +1086,7 @@ class PassengerController extends Controller
                 //send another email to the organizer just to confirm because they have already registered.
 
                 $message = \Swift_Message::newInstance()
-                    ->setSubject($this->get('translator')->trans('passenger.emails.notifications'))
+                    ->setSubject($subject)
                     ->setFrom($this->container->getParameter('user_system_email'))
                     ->setTo($user->getEmail())
                     ->setBody(
@@ -1133,7 +1134,7 @@ class PassengerController extends Controller
 
                 //Send Email to whoever was invited
                 $newEmail = $user->getEmail();
-                $subject = $this->get('translator')->trans('passenger.emails.invite-organizer.new-user-subject') . ' ' . $tour->getName();
+
                 $message = \Swift_Message::newInstance()
                     ->setSubject($subject)
                     ->setFrom($this->container->getParameter('user_system_email'))

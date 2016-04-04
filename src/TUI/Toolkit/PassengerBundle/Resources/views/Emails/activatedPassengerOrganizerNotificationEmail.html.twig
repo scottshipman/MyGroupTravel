@@ -349,12 +349,15 @@
                                                 <td valign="top" class="bodyContent">
                                                     <div><br>
                                                         <h2 class="h2">You Have Been Added as an Organiser</h2>
+                                                        <p>Hi {{ user.firstName|capitalize }} {{ user.lastName|capitalize }},</p>
                                                         <p>You have been added as an organiser to {{ tour_name }} by {{ inviter.firstName }} {{ inviter.lastName }}</p>
-                                                        <p></p>
+
                                                         {% if note %}
-                                                            <h4><strong>Message from {{ inviter.firstName }} {{ inviter.lastName }}</strong></h4>
+                                                            <h4>Message from {{ inviter.firstName }} {{ inviter.lastName }}</h4>
                                                             <p>{{ note }}</p>
                                                         {% endif %}
+
+                                                        <p>Log in to view and manage the tour</p>
                                                     </div>
                                                 </td>
                                             </tr>
