@@ -37,7 +37,7 @@ tour:
                 actions: Actions
 
     actions:
-        home: Home
+        home: My Profile
         back: Back to the list
         back_dashboard: Back to Tour Dashboard
         edit: Edit
