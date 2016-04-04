@@ -1255,9 +1255,11 @@ class PassengerController extends Controller
         if(!$brand) {
             $brand = $default_brand;
         }
+        $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
+        $subject = $tour->getName() . ', ' . $tour->getInstitution() . ' - ' . $this->get('translator')->trans('tour.email.registration.parent_subject');
 
         $message = \Swift_Message::newInstance()
-            ->setSubject($this->get('translator')->trans('user.email.registration.subject'))
+            ->setSubject($subject)
             ->setFrom($this->container->getParameter('user_system_email'))
             ->setTo($userEmail)
             ->setBody(
@@ -1276,7 +1278,6 @@ class PassengerController extends Controller
 
         $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('user.flash.registration_notification') . ' ' .$user->getEmail());
 
-//        return $this->redirect($this->generateUrl('user'));
         return $this->redirect($_SERVER['HTTP_REFERER']);
 
     }

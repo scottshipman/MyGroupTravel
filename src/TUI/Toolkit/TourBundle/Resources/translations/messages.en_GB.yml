@@ -300,6 +300,7 @@ tour:
     email:
         registration:
             subject: Toolkit Registration Confirmation
+            parent_subject: Activate your account
         password_reset:
             subject: Password Reset
             action: Set Password
