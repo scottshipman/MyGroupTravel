@@ -1042,14 +1042,13 @@ class PassengerController extends Controller
         if($form->isValid()) {
 
             $data = $form->getData();
-
+            $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
             // check for existing user acct first
             $exists = $em->getRepository('TUIToolkitUserBundle:User')->findBy(array('email' => $data['email']));
             if(!empty($exists)){
                 $user = array_shift($exists);
 
                 // if an assistant we need to create a new passenger record if they are already registered
-                $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
                 $newPassenger = new Passenger();
                 $newPassenger->setStatus("waitlist");
                 $newPassenger->setFree(false);
@@ -1134,10 +1133,9 @@ class PassengerController extends Controller
 
                 //Send Email to whoever was invited
                 $newEmail = $user->getEmail();
-
+                $subject = $this->get('translator')->trans('passenger.emails.invite-organizer.new-user-subject') . ' ' . $tour->getName();
                 $message = \Swift_Message::newInstance()
-                    ->setSubject($this->get('translator')
-                        ->trans('passenger.emails.invite-organizer.new-user-subject'))
+                    ->setSubject($subject)
                     ->setFrom($this->container->getParameter('user_system_email'))
                     ->setTo($newEmail)
                     ->setBody(
