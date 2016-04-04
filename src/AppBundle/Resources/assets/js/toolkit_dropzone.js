@@ -4,7 +4,7 @@ Dropzone.autoDiscover = false;
 (function ($) {
   // Define a jquery function for dropzone.
   // This allows us to override default options.
-  $.fn.toolkitDropzone = function(media_field_id, options, existing_media, disabled_events) {
+  $.fn.toolkitDropzone = function(media_field_id, options, existing_media, disabled_events, aspect_ratio) {
     var dropzone_form = $(this);
     var dropzone_form_id = $(this).attr('id');
     var dropzone_form_close = $('.dropzone-form-close.' + dropzone_form_id);
@@ -13,6 +13,7 @@ Dropzone.autoDiscover = false;
     var media_placeholder_image = $('.media-placeholder-image.' + dropzone_form_id);
     var existing_media = existing_media || {};
     var disabled_events = disabled_events || [];
+    var aspect_ratio = aspect_ratio || 16 / 9;
     var default_options = {
       maxFiles: 1,
       acceptedMimeTypes: 'image/jpeg,image/png,image/jpg',
@@ -131,7 +132,7 @@ Dropzone.autoDiscover = false;
           console.log($img);
           // initialize cropper for uploaded image
           $img.cropper({
-            //   aspectRatio: 16 / 9,
+               aspectRatio: aspect_ratio,
             //    autoCropArea: 1,
             movable: false,
             cropBoxResizable: true,
