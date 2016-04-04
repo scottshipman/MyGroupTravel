@@ -80,9 +80,16 @@ Dropzone.autoDiscover = false;
 
     if ($.inArray("error", disabled_events) == -1) {
       dropzone.on("error", function (file, response) {
+        var error_message = response;
+
+        // If the response is an object provide a generic error message.
+        if (typeof response === 'object' && response.error.code) {
+          error_message = 'Could not upload (error code ' + response.error.code + ').';
+        }
+
         dropzone.removeFile(file);
         $(dropzone_form_errors).css({"display": "block"});
-        $(dropzone_form_errors).html(response);
+        $(dropzone_form_errors).html(error_message);
       });
     }
 
