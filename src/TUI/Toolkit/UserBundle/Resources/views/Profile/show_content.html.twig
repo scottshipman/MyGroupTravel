@@ -34,9 +34,14 @@
 
                     {#<p>{% trans %}user.profile.label.created{% endtrans %}: {{ user.created |date (format) }}</p>#}
 
-                    <p><a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+                    <p>
+                        <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
                           href="/user/{{ user.id }}/edit"><i class="fa fa-pencil"></i> {% trans %}
-                            user.actions.edit_profile{% endtrans %}</a></p>
+                            user.actions.edit_profile{% endtrans %}</a>
+                        <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+                           href="/logout"><i class="fa fa-sign-out"></i> {% trans %}
+                            user.actions.logout{% endtrans %}</a>
+                    </p>
                 {#</div>#}
                 {% if is_granted("ROLE_BRAND") %}
                     <div class="profile-tabs">

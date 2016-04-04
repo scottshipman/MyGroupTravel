@@ -27,6 +27,7 @@ user:
         create_new: Create a new user
         password: Set password
         edit_profile: Edit my profile
+        logout: Log out
         notify: Send User a Notification
         activate: Submit
         security: Reset Security Info
