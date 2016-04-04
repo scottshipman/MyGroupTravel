@@ -22,7 +22,11 @@
             <p class="mini-card-title email"><strong><a href="mailto:{{ user.email }}">{{ user.email }}</a></strong></p>
             <label style="display: block; margin-left: 63px; min-width: 100%;">
                 <i style="color:{{ color }};" class="material-icons" >{{ icon }}</i>
-                <span>{{ currency.htmlSymbol | raw  }}{{ payments['total'] }} / {{ currency.htmlSymbol | raw  }}{{ due.total }}</span>
+                {% if due.total > 0 %}
+                    <span>{{ currency.htmlSymbol | raw  }}{{ payments['total'] }} / {{ currency.htmlSymbol | raw  }}{{ due.total }}</span>
+                {% else %}
+                    <span>Free Place</span>
+                {% endif %}
                 {% if overdue > 0 %}
                     <span style="color:{{ color }}; margin-left: 1em;"> {{ currency.htmlSymbol | raw  }}{{ overdue }} Past Due </span>
                 {% endif %}
