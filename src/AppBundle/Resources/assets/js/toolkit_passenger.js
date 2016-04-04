@@ -85,6 +85,9 @@ function filterPassengersByString($items, string) {
 function filterPassengers(elemID, resetSearch) {
     if (resetSearch === undefined || resetSearch) {
         $('#passenger-name-filter').val('');
+
+        var parts = window.location.href.split('?');
+        window.history.pushState({}, "All Tour Passengers", parts[0]);
     }
 
     var config = getPassengerFilterConfig(),

@@ -274,8 +274,6 @@ $(document).ready(function () {
                 return $itemsToShow.index(el) < 0;
             });
 
-        console.log($items);
-
             // Execute the show / hide.
             $itemsToHide.slideUp(400);
             $itemsToShow.slideDown(400);
@@ -306,6 +304,9 @@ $(document).ready(function () {
     $('.task-filter').add('#clear').click(function() {
         $('#passenger-task-filter').val('');
         $('.tour-edit').slideDown(400);
+
+        var parts = window.location.href.split('?');
+        window.history.pushState({}, "All Tour Tasks", parts[0]);
     });
 
     // On change track the search in the url.
@@ -314,7 +315,7 @@ $(document).ready(function () {
                 parts = window.location.href.split('?'),
                 href = search !== '' ? parts[0] + '?search=' + search : parts[0];
 
-        window.history.pushState({}, "Search " + search, href);
+        window.history.pushState({}, "Tour Tasks Search " + search, href);
     });
 });
     </script>
