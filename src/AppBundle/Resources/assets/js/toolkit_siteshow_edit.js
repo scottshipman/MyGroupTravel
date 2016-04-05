@@ -120,8 +120,8 @@ $(document).ready(function () {
                             $('#site-header-slideshow').show();
                             $('.item-edit').show();
                             $('.flexslider').flexslider({
-                                directionNav: false,
-                                controlNav: false,
+                                directionNav: true,
+                                controlNav: true,
                                 smoothHeight: true
                             });
                         });
@@ -163,8 +163,8 @@ $(document).ready(function () {
                             $('#site-header-slideshow').show();
                             $('.item-edit').show();
                             $('.flexslider').flexslider({
-                                directionNav: false,
-                                controlNav: false,
+                                directionNav: true,
+                                controlNav: true,
                                 smoothHeight: true
                             });
                             $('#site-header-slideshow').prepend(
