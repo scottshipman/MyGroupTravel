@@ -74,4 +74,8 @@ html {
   background: #ffffff;
   margin-bottom: 1em;
   margin-left: -20px;
+
+  & > :last-child {
+    margin-bottom: 0;
+  }
 }
