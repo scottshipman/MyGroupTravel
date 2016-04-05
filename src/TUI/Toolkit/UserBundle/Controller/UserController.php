@@ -335,6 +335,7 @@ class UserController extends Controller
                 $entity->setPassword('');
                 $entity->setUsername($entity->getEmail());
                 $entity->setRoles(array('ROLE_CUSTOMER'));
+                $entity->setRolesString('ROLE_CUSTOMER');
                 $em->persist($entity);
                 $em->flush();
 
