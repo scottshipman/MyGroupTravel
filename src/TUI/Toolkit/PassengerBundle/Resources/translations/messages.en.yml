@@ -5,6 +5,7 @@ passenger:
         index: Passengers
         new: Create New Passenger
         show: Passengers
+        manage: Manage Passengers
 
     page_title:
         edit: Edit Passenger
