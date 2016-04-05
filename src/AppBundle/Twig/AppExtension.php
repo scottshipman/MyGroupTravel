@@ -21,6 +21,7 @@ class AppExtension extends \Twig_Extension {
         return array(
             new \Twig_SimpleFilter('paxLabel', array($this, 'paxLabel')),
             new \Twig_SimpleFilter('getRoles', array($this, 'getRoles')),
+            new \Twig_SimpleFilter('getAllRoles', array($this, 'getAllRoles')),
             new \Twig_SimpleFilter('getClass', array($this, 'getClass')),
         );
     }
@@ -44,6 +45,20 @@ class AppExtension extends \Twig_Extension {
         $user = $this->container->get('security.context')->getToken()->getUser();
 
         $roles = $this->container->get("permission.set_permission")->getPermission($objectId, $class, $user);
+        if ($roles == NULL) { $roles = array();}
+        return array_shift($roles);
+    }
+
+    /**
+     * Get all Roles for a type.
+     *
+     * @param $class
+     * @return mixed
+     */
+    public function getAllRoles($class) {
+        $user = $this->container->get('security.context')->getToken()->getUser();
+
+        $roles = $this->container->get("permission.set_permission")->getAllPermissions($class, $user);
         if ($roles == NULL) { $roles = array();}
         return array_shift($roles);
     }

@@ -7,6 +7,19 @@
 
             <div class="tour-show-left-column" style="margin-top: 0;">
                 {#<div class="profile-details-card">#}
+
+                <div class="intro-text">
+                    {% if "tour" | getAllRoles() == "organizer" %}
+                        <p>Welcome {{ user.firstName }},<br />
+                        Your tours are listed here. Click on 'View Tour' to view, edit and manage your Tour....</p>
+                    {% elseif "tour" | getAllRoles() == "parent" %}
+                        <p>Welcome {{ user.firstName }},<br />
+                                Here are your tours....<br />
+                                Click on 'Manage passengers' to add important details for passengers, and view your payment schedule. You can also view the Tour Website.</p>
+                                <p>Choose 'Edit my profile' to change your password</p>
+                    {% endif %}
+                </div>
+
                     <ul class="tour-show-submenu">
                         <li><h2 class="mdl-card__title-text">{% trans %}user.profile.label.account_details{% endtrans %}</h2>
                         </li>
