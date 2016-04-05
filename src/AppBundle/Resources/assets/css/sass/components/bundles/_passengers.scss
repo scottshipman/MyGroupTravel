@@ -444,3 +444,23 @@ a.organizer-card {
 .passenger-task-card .mdl-card__supporting-text {
   min-height: 69px;
 }
+
+.passenger-profile-tour-card-buttons {
+  list-style: none;
+  padding: 0 7px;
+  margin: 0;
+
+  li {
+    width: 50%;
+    padding: 7px;
+    float: left;
+
+    a {
+      width: 100%;
+
+      .material-icons {
+        vertical-align: middle;
+      }
+    }
+  }
+}
