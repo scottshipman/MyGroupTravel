@@ -1,5 +1,13 @@
 
 /*
+ * DO NOT UPDATE THIS FILE UNTIL THE FOLLOWING ISSUE HAS BEEN ADDRESSED
+ *
+ * https://github.com/enyo/dropzone/issues/1255
+ * re: RemoveFile() fails to verify that a parentContainer object exists before calling methods on it
+ */
+
+
+/*
  *
  * More info at [www.dropzonejs.com](http://www.dropzonejs.com)
  *
