@@ -173,3 +173,11 @@ form[name=tui_toolkit_tourbundle_toursetup] {
   float: left;
   margin: 0 0.3em;
 }
+
+.form-errors {
+  color:red;
+
+  ul {
+    list-style: none;
+  }
+}

@@ -315,15 +315,6 @@
   }
 }
 
-.form-errors {
-  color:red;
-
-    ul {
-    list-style: none;
-    }
-
-}
-
 // Fix for Modals on small screens.
 @include breakpoint_phone_down {
   .ui-dialog {

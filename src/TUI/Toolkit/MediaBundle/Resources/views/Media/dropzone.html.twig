@@ -1,60 +1,55 @@
 {% block dropzone %}
-<form enctype="multipart/form-data" class="dropzone" action="{{ oneup_uploader_endpoint(context) }}" method="post"
-      name="dropzone_form" id="dropzone_form">
+
+<form enctype="multipart/form-data" class="dropzone dropzone-form" action="{{ oneup_uploader_endpoint(context) }}" method="post" name="dropzone-form-{{ identifier }}" id="dropzone-form-{{ identifier }}">
+    {% if close_button %}
+        <div class="dropzone-form-close dropzone-form-{{ identifier }}"><i class="fa fa-times-circle"></i></div>
+    {% endif %}
     {{ form_widget(form) }}
-    {{ form_end(form) }}
-    {% endblock %}
+</form>
 
-    <script type="text/javascript">
-        $(function () {
-            Dropzone.options.dropzoneForm = {
-                maxFiles: 1,
-                acceptedMimeTypes: 'image/jpeg,image/png,image/jpg',
-                addRemoveLinks: true,
-                dictDefaultMessage: "{% trans %}media.dropzone.default_message{% endtrans %}",
-                init: function () {
-                    this.hiddenFileInput.removeAttribute('multiple');
-                    this.on("success", function (file, response) {
-//                        file.serverId = response;
-                        if (".media-placeholder".length > 0) {
-                            $(".media-placeholder").val(response.id);
-                        }
-                    });
+<div class="dropzone-form-errors form-errors dropzone-form-{{ identifier }}"></div>
 
-                    this.on("error", function (file, response) {
-                    });
-                    this.on("addedfile", function () {
-                        $("#dropzone-form-close").css({"display":"none"});
-                        if (this.files[1] != null) {
-                            this.removeFile(this.files[0]);
+{% if media_placeholder_image %}
+    <div class="media-placeholder-image dropzone-form-{{ identifier }}">
+        <div class="edit">
+            <div id="overlay">
+                <i style="color:red;" class="fa fa-times fa-2x"></i>
+            </div>
+        </div>
+        <div class="new">
+            <i class="fa fa-picture-o fa-3x"></i>
+            <span>Click to upload</span>
+        </div>
+    </div>
+{% endif %}
 
-                        }
-                    });
-                    this.on("removedfile", function (file) {
-                        $("#dropzone-form-close").css({"display":"inline-block"});
-/*
-                        var name = {file: file.name}
-                        $.ajax({
-                            type: 'DELETE',
-                            url: '{{ oneup_uploader_cancel(context) }}',
-                            contentType: 'application/json',
-                            data: JSON.stringify(name),
-                            dataType: 'json',
-                            success: function (e) {
-                            }
-                        });
-                        var _ref;
-                        return (_ref = file) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
-*/
-
-                    });
-                }
-            }
-        });
-
-
-    </script>
+{% endblock %}
 
 {% javascripts '@toolkit_dropzone' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% if auto_implementation %}
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $("#dropzone-form-{{ identifier }}").toolkitDropzone(
+                    "{{ media_field_id }}",
+                    {
+                        dictDefaultMessage: "{% trans %}media.dropzone.default_message{% endtrans %}"
+                    }
+                    {% if existing_media %}
+                    ,{
+                        id: {{ existing_media.id }},
+                        path: "{{ existing_media.getRelativePath }}",
+                        filename: "{{ existing_media.getHashedFilename }}"
+                    }
+                    {% else %}
+                   , null
+                    {% endif %}
+                   , null
+                {% if context == 'user' %}
+                , 1
+                {% endif %}
+                );
+            });
+        </script>
+    {% endif %}
 {% endjavascripts %}
