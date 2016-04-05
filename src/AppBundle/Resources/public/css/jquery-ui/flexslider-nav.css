@@ -1,13 +1,13 @@
 .flex-control-nav {
-    bottom:15px;
-li a {
+    bottom: 15px;
+}
+.flex-control-nav li a  {
     width: 13px;
     height: 13px;
     display: block;
     background: url(images/bg_control_nav.png) no-repeat 0 0;
     cursor: pointer;
     text-indent: -9999px;
-}
 }
 
 .flex-direction-nav li a {
