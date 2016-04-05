@@ -1,12 +1,12 @@
 // transform cropper dataURI output to a Blob which Dropzone accepts
-function dataURItoBlob(dataURI) {
+function dataURItoBlob(dataURI, mime_type) {
   var byteString = atob(dataURI.split(',')[1]);
   var ab = new ArrayBuffer(byteString.length);
   var ia = new Uint8Array(ab);
   for (var i = 0; i < byteString.length; i++) {
     ia[i] = byteString.charCodeAt(i);
   }
-  return new Blob([ab], { type: 'image/jpeg' });
+  return new Blob([ab], { type: mime_type });
 }
 
 // Disable auto discover for dropzone.
@@ -122,6 +122,7 @@ Dropzone.autoDiscover = false;
 
         // cache filename to re-assign it to cropped file
         var cachedFilename = file.name;
+        var mime_type = file.type;
         file.thumbnail = 'thumbnail_process';
         // remove not cropped file from dropzone (we will replace it later)
         myDropzone.removeFile(file);
@@ -163,7 +164,7 @@ Dropzone.autoDiscover = false;
           // get cropped image data
           var blob = $img.cropper('getCroppedCanvas').toDataURL();
           // transform it to Blob object
-          var newFile = dataURItoBlob(blob);
+          var newFile = dataURItoBlob(blob, mime_type);
           // set 'cropped to true' (so that we don't get to that listener again)
           newFile.cropped = true;
           // assign original filename
