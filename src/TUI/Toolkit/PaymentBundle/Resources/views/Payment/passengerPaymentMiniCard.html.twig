@@ -28,7 +28,7 @@
                     <span>Free Place</span>
                 {% endif %}
                 {% if overdue > 0 %}
-                    <span style="color:{{ color }}; margin-left: 1em;"> {{ currency.htmlSymbol | raw  }}{{ overdue }} Past Due </span>
+                    <span style="color:{{ color }}; margin-left: 1em;"> {{ currency.htmlSymbol | raw  }}{{ overdue }} {% trans %}payment.labels.past_due{% endtrans %}</span>
                 {% endif %}
 
             </label>

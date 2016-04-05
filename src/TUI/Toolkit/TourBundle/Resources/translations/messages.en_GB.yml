@@ -149,7 +149,7 @@ tour:
         tasks: Tasks
         passenger_tasks: Passenger Tasks
         due: due by
-        overdue: Amount Past Due
+        overdue: Amount Overdue
         no_payments: No payments due at this time
         na: N/A
         signups: Sign-ups
