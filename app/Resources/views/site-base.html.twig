@@ -19,7 +19,7 @@
           href="//fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
 
     {# Dropzone and Flexslider CSS #}
-    {% stylesheets filter='cssrewrite' '@AppBundle/Resources/assets/css/flexslider.css' '@AppBundle/Resources/assets/css/dropzone.css' %}
+    {% stylesheets filter='cssrewrite' '@AppBundle/Resources/assets/css/flexslider.css' '@AppBundle/Resources/assets/css/dropzone.css' '@AppBundle/Resources/assets/css/cropper.css' %}
         <link rel="stylesheet" href="{{ asset_url }}">
     {% endstylesheets %}
 
@@ -31,7 +31,7 @@
 
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
 
-    {% javascripts '@jquery' '@jqueryui' '@AppBundle/Resources/assets/js/dropzone.js' %}
+    {% javascripts '@jquery' '@jqueryui' '@AppBundle/Resources/assets/js/dropzone.js' '@AppBundle/Resources/assets/js/cropper.js' %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
