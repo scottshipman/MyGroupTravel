@@ -1,126 +1,156 @@
-/* filterPassenger
- * @param elemID = the elemID to filter by, reflects status
+
+/**
+ * get the config for the passenger list.
  */
-function filterPassengers(elemID) {
-    switch(elemID) {
-        case 'showAcceptedPassengers':
-            $('.free, .organizers, .waitlist, .organizer-cta-card').slideUp(400, function () {
-                $('.accepted.passengers, .passenger-cta-card').slideDown(400);
-            });
-            $('.passenger-filter').css("color", passengerStatus.primaryColor);
-            $("a[data-id='" + elemID + "']").css("color", passengerStatus.secondaryColor);
-            $('#card-title').html(passengerStatus.accepted + ' ' + passengerStatus.passenger + ' List');
-            $('#clear-filters').css("color", passengerStatus.secondaryColor);
-            break;
-        case 'showWaitlistPassengers':
-            $('.accepted, .organizers, .free, .organizer-cta-card').slideUp(400, function () {
-                $('.waitlist.passengers, .passenger-cta-card').slideDown(400);
-            });
-            $('.passenger-filter').css("color", passengerStatus.primaryColor);
-            $("a[data-id='" + elemID + "']").css("color", passengerStatus.secondaryColor);
-            $('#card-title').html(passengerStatus.waitlist + ' ' + passengerStatus.passenger + ' List');
-            $('#clear-filters').css("color", passengerStatus.secondaryColor);
-            break;
-        case 'showFreePassengers':
-            $('.accepted, .waitlist, .organizers,  .organizer-cta-card').slideUp(400, function () {
-                $('.free.passengers, .passenger-cta-card').slideDown(400);
-            });
-            $('.passenger-filter').css("color", passengerStatus.primaryColor);
-            $("a[data-id='" + elemID + "']").css("color", passengerStatus.secondaryColor);
-            $('#card-title').html(passengerStatus.free + ' ' + passengerStatus.passenger + ' List');
-            $('#clear-filters').css("color", passengerStatus.secondaryColor);
-            break;
-        case 'showAllPassengers':
-            $('.organizers, .passengers, .organizer-cta-card').slideUp(400, function () {
-                $(' .accepted.passengers, .free.passengers, .accepted.organizers, .passenger-cta-card, .free.organizers, .passenger-dashboard-buttons').slideDown(400);
-            });
-            $('.passenger-filter').css("color", passengerStatus.primaryColor);
-            $("a[data-id='" + elemID + "']").css("color", passengerStatus.secondaryColor);
-            $('#card-title').html(passengerStatus.passenger + ' List');
-            $('#clear-filters').css("color", passengerStatus.secondaryColor);
-            break;
-        case 'showAllOrganizers':
-            $('.passengers, .passenger-cta-card').slideUp(400, function () {
-                $('.organizers, .organizer-cta-card').slideDown(400);
-            });
-            $('.passenger-filter').css("color", passengerStatus.primaryColor);
-            $("a[data-id='" + elemID + "']").css("color", passengerStatus.secondaryColor);
-            $('#organizer-card-title').html(passengerStatus.organizer + ' List');
-            $('.organizer-cta-card').css("display", "block");
-            $('#clear-filters').css("color", passengerStatus.secondaryColor);
-            break;
-        case 'showAcceptedOrganizers':
-            $('.waitlist, .free,  .passenger-cta-card, .passengers').slideUp(400, function () {
-                $('.accepted.organizers, .organizer-cta-card').slideDown(400);
-            });
-            $('.passenger-filter').css("color", passengerStatus.primaryColor);
-            $("a[data-id='" + elemID + "']").css("color", passengerStatus.secondaryColor);
-            $('#organizer-card-title').html(passengerStatus.accepted + ' ' + passengerStatus.organizer + ' List');
-            $('.organizer-cta-card').css("display", "block");
-            $('#clear-filters').css("color", passengerStatus.secondaryColor);
-            break;
-        case 'showWaitlistOrganizers':
-            $('.accepted, .free,  .passenger-cta-card, .passengers').slideUp(400, function () {
-                $('.waitlist.organizers, .organizer-cta-card').slideDown(400);
-            });
-            $('.passenger-filter').css("color", passengerStatus.primaryColor);
-            $("a[data-id='" + elemID + "']").css("color", passengerStatus.secondaryColor);
-            $('#organizer-card-title').html(passengerStatus.waitlist + ' ' + passengerStatus.organizer + ' List');
-            $('.organizer-cta-card').css("display", "block");
-            $('#clear-filters').css("color", passengerStatus.secondaryColor);
-            break;
-        case 'showFreeOrganizers':
-            $('.accepted, .waitlist, .passenger-cta-card, .passengers').slideUp(400, function () {
-                $('.free.organizers, .organizer-cta-card').slideDown(400);
-            });
-            $('.passenger-filter').css("color", passengerStatus.primaryColor);
-            $("a[data-id='" + elemID + "']").css("color", passengerStatus.secondaryColor);
-            $('#organizer-card-title').html(passengerStatus.free + ' ' + passengerStatus.organizer + ' List');
-            $('.organizer-cta-card').css("display", "block");
-            $('#clear-filters').css("color", passengerStatus.secondaryColor);
-            break;
-        case 'showEveryone':
-            $('.organizer-cta-card').slideUp(400, function () {
-                $('.accepted, .waitlist, .free, .passenger-cta-card').slideDown(400);
-            });
-            $('.passenger-filter').css("color", passengerStatus.primaryColor);
-            $('#card-title').html(passengerStatus.all);
-            $('#clear-filters').css("color", passengerStatus.secondaryColor);
-            break;
-        default:
-            // do nothing
-            break;
+function getPassengerFilterConfig() {
+    var $free = $('.free'),
+        $waitlist = $('.waitlist'),
+        $accepted = $('.accepted'),
+        $organizerCtaCard = $('.organizer-cta-card'),
+        $passengerCtaCard = $('.passenger-cta-card'),
+        $passengers = $('.passengers'),
+        $acceptedPassengers = $passengers.filter('.accepted'),
+        $waitlistPassengers = $passengers.filter('.waitlist'),
+        $freePassengers = $passengers.filter('.free'),
+        $organizers = $('.organizers'),
+        $acceptedOrganizers = $organizers.filter('.accepted'),
+        $freeOrganizers = $organizers.filter('.free'),
+        $waitlistOrganizers = $organizers.filter('.waitlist');
+
+    var config = {
+        showAllPassengers: {
+            cards: $passengerCtaCard,
+            title: passengerStatus.passenger + ' List',
+            items: $acceptedPassengers.add($freePassengers).add($acceptedOrganizers).add($freeOrganizers)
+        },
+        showAcceptedPassengers: {
+            cards: $passengerCtaCard,
+            title: passengerStatus.accepted + ' ' + passengerStatus.passenger + ' List',
+            items: $acceptedPassengers
+        },
+        showWaitlistPassengers: {
+            cards: $passengerCtaCard,
+            title: passengerStatus.waitlist + ' ' + passengerStatus.passenger + ' List',
+            items: $waitlistPassengers
+        },
+        showFreePassengers: {
+            cards: $passengerCtaCard,
+            title: passengerStatus.free + ' ' + passengerStatus.passenger + ' List',
+            items: $freePassengers
+        },
+        showAllOrganizers: {
+            cards: $organizerCtaCard,
+            title: passengerStatus.organizer + ' List',
+            items: $organizers
+        },
+        showAcceptedOrganizers: {
+            cards: $organizerCtaCard,
+            title: passengerStatus.accepted + ' ' + passengerStatus.organizer + ' List',
+            items: $acceptedOrganizers
+        },
+        showWaitlistOrganizers: {
+            cards: $organizerCtaCard,
+            title: passengerStatus.waitlist + ' ' + passengerStatus.organizer + ' List',
+            items: $waitlistOrganizers
+        },
+        showFreeOrganizers: {
+            cards: $organizerCtaCard,
+            title: passengerStatus.free + ' ' + passengerStatus.organizer + ' List',
+            items: $freeOrganizers
+        },
+        showEveryone: {
+            cards: $passengerCtaCard,
+            title: passengerStatus.all,
+            items: $accepted.add($waitlist).add($free)
         }
+    };
+
+    return config;
+}
+
+function filterPassengersByString($items, string) {
+    // Filter the items to show.
+    // If the search is empty then everything should be shown.
+    string = string.toUpperCase();
+    return $items.filter(function() {
+        return $(this).find('.mini-card-title').text().toUpperCase().indexOf(string) >= 0;
+    });
+}
+
+/**
+ * filterPassengers
+ * @param elemID = the elemID to filter by, reflects status
+ * @param resetSearch = whether to reset the text search.
+ */
+function filterPassengers(elemID, resetSearch) {
+    if (resetSearch === undefined || resetSearch) {
+        $('#passenger-name-filter').val('');
+
+        var parts = window.location.href.split('?');
+        window.history.pushState({}, "All Tour Passengers", parts[0]);
     }
 
-    function updateCounts(response, paxId) {
-        // When Passengers moved across lists, update Counts on front-end real time
-        // response = 0 : passenger object
-        //            1 : statusCounts (organizer=>accepted,waitlist,free; passenger=>accepted,waitlist,free)
-        //            2 : payingPLaces (int)
-        //            3 : freePlaces (int)
-        //            4 : passengers array
+    var config = getPassengerFilterConfig(),
+        currentElement = config[elemID],
+        $items = $('.passengers').add('.organizers'),
+        $itemsToShow = currentElement.items,
+        $cards = $('.passenger-cta-card').add('.organizer-cta-card'),
+        $cardsToShow = currentElement.cards,
+        textSearch = $('#passenger-name-filter').val();
 
-
-        //$("#loader").css("display", "none");
-        var passDiv = $('div[passenger="'+paxId+'"]');
-        passDiv.slideUp(400);
-        var payingSpots = response[2] - (response[1]['organizer']['accepted'] + response[1]['passenger']['accepted']);
-        var freeSpots = response[3] - (response[1]['organizer']['free'] + response[1]['passenger']['free']);
-        var organizerAll = (response[1]['organizer']['accepted'] + response[1]['organizer']['waitlist'] + response[1]['organizer']['free']);
-        var passengerAll = (response[1]['passenger']['accepted'] + response[1]['passenger']['waitlist'] + response[1]['passenger']['free']);
-        $("#allPassengers").html('(' + passengerAll + ')');
-        $("#acceptedPassengers").html('(' + response[1]['passenger']['accepted'] + ')');
-        $("#waitlistPassengers").html('(' + response[1]['passenger']['waitlist'] + ')');
-        $("#freePassengers").html('(' + response[1]['passenger']['free'] + ')');
-        $("#allOrganizers").html('(' + organizerAll + ')');
-        $("#acceptedOrganizers").html('(' + response[1]['organizer']['accepted'] + ')');
-        $("#waitlistOrganizers").html('(' + response[1]['organizer']['waitlist'] + ')');
-        $("#freeOrganizers").html('(' + response[1]['organizer']['free'] + ')');
-        $(".payingspots-remaining").html(payingSpots);
-        $(".freespots-remaining").html(freeSpots);
-        location.reload(true);
+    // See if there is an active name filter.
+    if (textSearch !== 'undefined') {
+        $itemsToShow = filterPassengersByString($itemsToShow, textSearch);
     }
+
+    var $itemsToHide = $items.filter(function(index, el) {
+            return $itemsToShow.index(el) < 0;
+        }),
+        $cardsToHide = $cards.filter(function(index, el) {
+            return $cardsToShow.index(el) < 0;
+        });
+
+    // Execute the show / hide.
+    $itemsToHide.slideUp(400);
+    $itemsToShow.slideDown(400);
+
+    $cardsToHide.hide();
+    $cardsToShow.show();
+
+    $('.passenger-filter').css("color", passengerStatus.primaryColor).removeClass('active');
+    $("a[data-id='" + elemID + "']").css("color", passengerStatus.secondaryColor).addClass('active');
+    $cards.find('.mdl-card__title-text').html(currentElement.title);
+    $('#clear-filters').css("color", passengerStatus.secondaryColor);
+}
+
+function updateCounts(response, paxId) {
+    // When Passengers moved across lists, update Counts on front-end real time
+    // response = 0 : passenger object
+    //            1 : statusCounts (organizer=>accepted,waitlist,free; passenger=>accepted,waitlist,free)
+    //            2 : payingPLaces (int)
+    //            3 : freePlaces (int)
+    //            4 : passengers array
+
+
+    //$("#loader").css("display", "none");
+    var passDiv = $('div[passenger="'+paxId+'"]');
+    passDiv.slideUp(400);
+    var payingSpots = response[2] - (response[1]['organizer']['accepted'] + response[1]['passenger']['accepted']);
+    var freeSpots = response[3] - (response[1]['organizer']['free'] + response[1]['passenger']['free']);
+    var organizerAll = (response[1]['organizer']['accepted'] + response[1]['organizer']['waitlist'] + response[1]['organizer']['free']);
+    var passengerAll = (response[1]['passenger']['accepted'] + response[1]['passenger']['waitlist'] + response[1]['passenger']['free']);
+    $("#allPassengers").html('(' + passengerAll + ')');
+    $("#acceptedPassengers").html('(' + response[1]['passenger']['accepted'] + ')');
+    $("#waitlistPassengers").html('(' + response[1]['passenger']['waitlist'] + ')');
+    $("#freePassengers").html('(' + response[1]['passenger']['free'] + ')');
+    $("#allOrganizers").html('(' + organizerAll + ')');
+    $("#acceptedOrganizers").html('(' + response[1]['organizer']['accepted'] + ')');
+    $("#waitlistOrganizers").html('(' + response[1]['organizer']['waitlist'] + ')');
+    $("#freeOrganizers").html('(' + response[1]['organizer']['free'] + ')');
+    $(".payingspots-remaining").html(payingSpots);
+    $(".freespots-remaining").html(freeSpots);
+    location.reload(true);
+}
 
 
 $(document).ready(function () {
@@ -722,4 +752,45 @@ $(document).ready(function () {
         $('#passenger-close').css("display", "none");
     });
 
+    // See if there is a name search.
+    var parts = window.location.href.split('?');
+    for (var i = 1; i < parts.length; i++) {
+        var query = parts[i].split('=');
+        if (query[0] == 'search') {
+            $('#passenger-name-filter').val(query[1]);
+
+            if ($('.passenger-filter').filter('.active').length > 0) {
+                var elemID = $('.passenger-filter').filter('.active').attr('data-id');
+            } else {
+                elemID = 'showEveryone';
+            }
+
+            filterPassengers(elemID, false);
+        }
+    }
+
+    // Filter passengers by search
+    var delayTimer;
+    $('#passenger-name-filter').keyup(function() {
+        if ($('.passenger-filter').filter('.active').length > 0) {
+            var elemID = $('.passenger-filter').filter('.active').attr('data-id');
+        } else {
+            elemID = 'showEveryone';
+        }
+
+        // Don't do this after every keypress, delay the search.
+        clearTimeout(delayTimer);
+        delayTimer = setTimeout(function() {
+            filterPassengers(elemID, false);
+        }, 100);
+    });
+
+    // On change track the search in the url.
+    $('#passenger-name-filter').change(function() {
+        var search = $('#passenger-name-filter').val(),
+            parts = window.location.href.split('?'),
+            href = search !== '' ? parts[0] + '?search=' + search : parts[0];
+
+        window.history.pushState({}, "Search " + search, href);
+    });
 });

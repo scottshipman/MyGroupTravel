@@ -33,6 +33,12 @@
         <div class="tour-show-left-column">
 
             <h3>{{ tour.name|title }}</h3>
+            <div class="text-search">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input id="passenger-name-filter" class="mdl-textfield__input" type="text" />
+                    <label class="mdl-textfield__label" for="passenger-name-filter">Enter name or email...</label>
+                </div>
+            </div>
             <a href="" style="float:right; text-decoration: none; color: {{ brand.secondaryColor }} !important;" class="passenger-filter" id="clear-filters" data-id="showEveryone"><i class="material-icons md-18">undo</i> {% trans %} passenger.labels.show-everyone{% endtrans %}</a><br>
             <div class="list-header" style="color: {{ brand.secondaryColor }}"><i class="material-icons">flight_takeoff</i> {% trans %} passenger.labels.passengers_for{% endtrans %}</div>
             <ul class="tour-show-submenu list-indent">
@@ -114,7 +120,7 @@
             </div>
 
             {# Organizer CTA Card #}
-            <div class="organizer-cta-card organizers tour-edit mdl-card mdl-shadow--2dp" style="margin-bottom: 0; box-shadow: none; display:none;">
+            <div class="organizer-cta-card tour-edit mdl-card mdl-shadow--2dp" style="margin-bottom: 0; box-shadow: none; display:none;">
 
                 <div class="mdl-card__title">
                     <h3 id="organizer-card-title" class="mdl-card__title-text">{% trans %}passenger.labels.passenger_list{% endtrans %}</h3>
