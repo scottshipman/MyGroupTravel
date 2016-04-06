@@ -345,8 +345,8 @@
                                         <table border="0" cellpadding="20" cellspacing="0" width="100%">
                                             <tr>
                                                 <td valign="top" class="bodyContent">
-                                                    <div><br>
-                                                        <h2 class="h2">{{ entity.name }}</h2>
+                                                    <h2 class="h2">{{ entity.name }}</h2>
+                                                    <div>
                                                         <p>Institution Name: {{ entity.quoteReference.institution }}</p>
                                                         <p>Tour Name : {{ entity.name }}</p>
                                                         <p>Quote Number: {{ entity.quoteNumber }}</p>
@@ -363,7 +363,7 @@
                                                     <table border="0" cellpadding="15" cellspacing="0" class="templateButton">
                                                         <tr>
                                                             <td valign="middle" class="templateButtonContent">
-                                                                <div><a href="{{ absolute_url('/tour/dashboard/' ~ entity.id ~ '/show') }}">Manage your tour</a></div>
+                                                                <div><a href="{{ absolute_url('/tour/dashboard/' ~ entity.id ~ '/show') }}">Set up your tour</a></div>
                                                             </td>
                                                         </tr>
                                                     </table>

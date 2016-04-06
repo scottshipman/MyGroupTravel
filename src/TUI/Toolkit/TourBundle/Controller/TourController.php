@@ -1723,11 +1723,12 @@ class TourController extends Controller
 
         $departure = $entity->getDepartureDate();
         $tourName = $entity->getName();
+        $subject = $this->get('translator')->trans('tour.email.setup.subject') . ' ' . $brand->getName() . ' tour';
 
         if ($entity->getOrganizer()->isEnabled() == true) {
 
             $message = \Swift_Message::newInstance()
-                ->setSubject($this->get('translator')->trans('tour.email.setup.subject'))
+                ->setSubject($subject)
                 ->setFrom($this->container->getParameter('user_system_email'))
                 ->setTo($organizerEmail)
                 ->setBody(
@@ -1753,7 +1754,7 @@ class TourController extends Controller
             $user->setConfirmationToken($tokenGenerator->generateToken());
 
             $message = \Swift_Message::newInstance()
-                ->setSubject($this->get('translator')->trans('tour.email.setup.subject'))
+                ->setSubject($subject)
                 ->setFrom($this->container->getParameter('user_system_email'))
                 ->setTo($organizerEmail)
                 ->setBody(

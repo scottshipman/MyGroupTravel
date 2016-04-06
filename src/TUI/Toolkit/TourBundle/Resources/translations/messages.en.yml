@@ -303,7 +303,7 @@ tour:
             subject: Toolkit Password Reset
             action: Set Password
         setup:
-            subject: Set Up Your Tour
+            subject: Set Up Your
     form:
         honorific: Title
         fname: First Name
