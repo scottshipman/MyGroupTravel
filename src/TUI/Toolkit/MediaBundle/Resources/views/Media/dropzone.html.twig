@@ -45,7 +45,7 @@
                    , null
                     {% endif %}
                    , null
-                {% if context == 'user' %}
+                {% if context == 'user' || context == 'passenger'%}
                 , 1
                 {% endif %}
                 );
