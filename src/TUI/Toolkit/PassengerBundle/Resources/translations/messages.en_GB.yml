@@ -122,7 +122,7 @@ passenger:
         notifications: You have new Tour Sign Ups
         invite-organizer:
             organizer-subject: A new organiser has been invited to your tour
-            new-user-subject: You have been added as an Organiser for
+            new-user-subject: You have been added as an Organiser
 
     form:
         invite:
