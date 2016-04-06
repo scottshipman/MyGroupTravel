@@ -8,18 +8,30 @@
         <span>
             {% if is_granted("ROLE_BRAND") or "tour" | getRoles(tourId) == "organizer" or "tour" | getRoles(tourId) == "assistant"%}
                 {% block tour_dashboard_link %}
+                    {#Tour Dashboard#}
                     <li><a href="{{ path('manage_tour_show', { 'id': tourId }) }}" class="mdl-menu__item">{% trans %}tour.title.index{% endtrans %}</a></li>
                 {% endblock %}
             {% endif %}
+
+            {#Tour Website#}
             <li><a href="{{ path('tour_site_action_show', { 'id': tourId }) }}" class="mdl-menu__item">{% trans %}tour.menu.preview{% endtrans %}</a></li>
+
             {%  if is_granted('ROLE_BRAND') %}
+                {#Edit Tour Details#}
                 <li><a href="{{ path('manage_tour_edit', { 'id': tourId }) }}" class="mdl-menu__item">{% trans %}tour.menu.brand_edit{% endtrans %}</a></li>
             {% endif %}
-            {% if "tour" | getRoles(entity.id) == "parent" %}
+
+            {% if "tour" | getRoles(tourId) == "parent" %}
+                {#Manage Passengers#}
                 <li><a href="{{ path('manage_parent_passenger_dashboard', {'tourId': tourId, 'parentId': app.user.id}) }}" class="mdl-menu__item">{% trans %}passenger.title.manage{% endtrans %}</a></li>
-            {% elseif "tour" | getRoles(entity.id) != "" or is_granted("ROLE_BRAND")%}
+            {% else %}
+                {#Passengers#}
                 <li><a href="{{ path('manage_passenger_dashboard', { 'tourId': tourId }) }}" class="mdl-menu__item">{% trans %}passenger.title.index{% endtrans %}</a></li>
+
+                {#Payments#}
                 <li><a href="{{ path('manage_payment_dashboard', { 'tourId': tourId }) }}" class="mdl-menu__item">{% trans %}payment.title.index{% endtrans %}</a></li>
+
+                {#Tasks#}
                 <li><a href="{{ path('manage_tour_tasks_dashboard', { 'id': tourId }) }}" class="mdl-menu__item">{% trans %}tour.dashboard.tasks{% endtrans %}</a></li>
             {% endif %}
         </span>
