@@ -138,6 +138,9 @@ user:
             days: Days to go
             no_price: N/A
             contact: Contact
+        intro:
+            organizer: <p>Welcome %name%,<br /> Your tours are listed here. Click on 'View Tour' to view, edit and manage your tour....</p>
+            parent: <p>Welcome %name%,<br />Here are your tours....<br />Click on 'Manage passengers' to add important details for passengers, and view your payment schedule. You can also view the Tour Website.</p><p>Choose 'Edit my profile' to change your password</p>
 
     activate:
         brand: "Please create a password and security question to finish setting up your account."

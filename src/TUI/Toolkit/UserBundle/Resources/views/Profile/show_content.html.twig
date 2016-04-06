@@ -10,13 +10,9 @@
 
                 <div class="intro-text">
                     {% if "tour" | getAllRoles() == "organizer" %}
-                        <p>Welcome {{ user.firstName }},<br />
-                        Your tours are listed here. Click on 'View Tour' to view, edit and manage your tour....</p>
+                        {{ "user.profile.intro.organizer"|trans({'%name%': user.firstName})|raw }}
                     {% elseif "tour" | getAllRoles() == "parent" %}
-                        <p>Welcome {{ user.firstName }},<br />
-                                Here are your tours....<br />
-                                Click on 'Manage passengers' to add important details for passengers, and view your payment schedule. You can also view the Tour Website.</p>
-                                <p>Choose 'Edit my profile' to change your password</p>
+                        {{ "user.profile.intro.parent"|trans({'%name%': user.firstName})|raw }}
                     {% endif %}
                 </div>
 
