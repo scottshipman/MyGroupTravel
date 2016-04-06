@@ -30,24 +30,6 @@
         <script type="text/javascript">
             $(document).ready(function() {
 
-                switch ('{{ context }}') {
-                    case 'user':
-                        aspect_ratio = 1;
-                        break;
-                    case 'passenger':
-                        aspect_ratio = 1;
-                        break;
-                    case 'institution':
-                        aspect_ratio = null;
-                        break;
-                    case 'brand':
-                        aspect_ratio = null;
-                        break;
-                    default:
-                        aspect_ratio = 16/9;
-                }
-
-
                 $("#dropzone-form-{{ identifier }}").toolkitDropzone(
                     "{{ media_field_id }}",
                     {
@@ -63,7 +45,7 @@
                    , null
                     {% endif %}
                    , null
-                   , aspect_ratio
+                   , '{{ context }}'
                 );
             });
         </script>

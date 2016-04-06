@@ -15,7 +15,7 @@ Dropzone.autoDiscover = false;
 (function ($) {
   // Define a jquery function for dropzone.
   // This allows us to override default options.
-  $.fn.toolkitDropzone = function(media_field_id, options, existing_media, disabled_events, aspect_ratio) {
+  $.fn.toolkitDropzone = function(media_field_id, options, existing_media, disabled_events, context) {
     var dropzone_form = $(this);
     var dropzone_form_id = $(this).attr('id');
     var dropzone_form_close = $('.dropzone-form-close.' + dropzone_form_id);
@@ -24,7 +24,28 @@ Dropzone.autoDiscover = false;
     var media_placeholder_image = $('.media-placeholder-image.' + dropzone_form_id);
     var existing_media = existing_media || {};
     var disabled_events = disabled_events || [];
-    var aspect_ratio = aspect_ratio || NaN;
+
+    switch(context) {
+      case 'user':
+        aspect_ratio=1;
+        break;
+      case 'passenger':
+        aspect_ratio=1;
+        break;
+      case 'brand':
+        aspect_ratio=NaN;
+        break;
+      case 'institution':
+        aspect_ratio=NaN;
+        break;
+      default:
+        aspect_ratio= 16/9;
+        break;
+    }
+
+
+
+
     var default_options = {
       maxFiles: 1,
       acceptedMimeTypes: 'image/jpeg,image/png,image/jpg',
