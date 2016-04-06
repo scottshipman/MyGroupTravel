@@ -24,7 +24,7 @@ Dropzone.autoDiscover = false;
     var media_placeholder_image = $('.media-placeholder-image.' + dropzone_form_id);
     var existing_media = existing_media || {};
     var disabled_events = disabled_events || [];
-    var aspect_ratio = aspect_ratio || 16 / 9;
+    var aspect_ratio = aspect_ratio || NaN;
     var default_options = {
       maxFiles: 1,
       acceptedMimeTypes: 'image/jpeg,image/png,image/jpg',
