@@ -15,18 +15,13 @@
 {% endblock %}
 
 {% block page_title_menu %}
-    {% if  is_granted("ROLE_BRAND") or "tour" | getRoles(entity.tourReference.id) == "organizer" or "tour" | getRoles(entity.tourReference.id) == "assistant"%}
-        {% embed "TourBundle:Tour:tourMenu.html.twig" %}
-        {% endembed %}
-    {% endif %}
+    {% embed "TourBundle:Tour:tourMenu.html.twig" %}
+    {% endembed %}
 {% endblock %}
 
 {% block back_link %}
     {% if "passenger" | getRoles(entity.id) == "parent" %}
         <a class="back-link" href="{{ path('manage_parent_passenger_dashboard', {'tourId': entity.tourReference.id, 'parentId': app.user.id}) }}"><i class="fa fa-arrow-left"></i> Back To Your Passengers</a>
-    {% else %}
-        <a class="back-link" href="{{ path('manage_passenger_dashboard', { 'tourId': entity.tourReference.id }) }}"><i class="fa fa-arrow-left"></i> {% trans %}passenger.actions.back{% endtrans %}</a>
-
     {% endif %}
 {% endblock %}
 
