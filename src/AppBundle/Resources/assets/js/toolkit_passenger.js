@@ -793,4 +793,35 @@ $(document).ready(function () {
 
         window.history.pushState({}, "Search " + search, href);
     });
+
+    // Order the passengers
+    $('#passenger-order').change(function() {
+        var $items = $('.passengers').add('.organizers');
+        $items.remove();
+
+        // Sort the elements
+        if ($(this).val() == 'name') {
+            // Sort by surname then forename
+            $items = $items.sort(function(a, b) {
+                var vA = $('.surname', a).text() + $('.forename', a).text();
+                var vB = $('.surname', b).text() + $('.forename', a).text();
+                return (vA < vB) ? -1 : (vA > vB) ? 1 : 0;
+            });
+            console.log($items);
+        }
+        else if ($(this).val() == 'date') {
+            $items = $items.sort(function(a, b) {
+                var vA = $('.date', a).data('signup-date');
+                var vB = $('.date', b).data('signup-date');
+                return (vA < vB) ? -1 : (vA > vB) ? 1 : 0;
+            });
+        }
+        else {
+            // Do nothing.
+            return;
+        }
+
+        // Re-add the items in the new order.
+        $('.tour-show-right-column').append($items);
+    });
 });
