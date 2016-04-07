@@ -6,7 +6,7 @@
 
 <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="passenger-actions-menu-drop-{{ passengerId }}">
     <span>
-        <li><a href="{{ path('manage_passenger_show', { 'id': passengerId }) }}" class="mdl-menu__item">{% trans %}passenger.actions.view_passenger{% endtrans %}</a></li>
+        <li><a href="{{ path('manage_passenger_show', { 'id': passengerId }) }}" class="mdl-menu__item caller-btn">{% trans %}passenger.actions.view_passenger{% endtrans %}</a></li>
 
         {#Activation Email for Users#}
         {% if passengerStatus != "waitlist" %}

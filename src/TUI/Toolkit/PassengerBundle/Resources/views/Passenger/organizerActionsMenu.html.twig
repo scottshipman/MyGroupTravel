@@ -5,9 +5,9 @@
 
 <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="organizer-actions-menu-drop-{{ organizerId }}">
     <span>
-        {% if organizer[0].status != "Pending Invite" %}
-            <li><a href="{{ path('manage_passenger_show', { 'id': organizerId }) }}" class="mdl-menu__item">View Passenger</a></li>
 
+        {% if organizer[0].status != "Pending Invite" %}
+            <li><a href="{{ path('manage_passenger_show', { 'id': organizerId }) }}" class="mdl-menu__item caller-btn">View Passenger</a></li>
             {# Accepted Menu Item #}
             {% if organizerStatus  == "waitlist" or free == TRUE %}
                 <li><a href="#accepted" style="display: block;"class="mdl-menu__item move-to-accepted" tour="{{ tourId }}" passenger="Move to {{ organizerId }}">Move to {{ "accepted" | paxLabel }}</a></li>

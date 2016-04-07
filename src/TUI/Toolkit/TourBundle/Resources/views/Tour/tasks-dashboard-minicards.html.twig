@@ -27,7 +27,7 @@
             </a>
             <p class="mini-card-title"><strong>{{ passenger.fName }}</strong></p>
             <p class="mini-card-title"><strong>{{ passenger.lName }}</strong></p>
-            <a href="{{ path('manage_passenger_show', {'id': passenger.id }) }}" title="{% trans %}tour.dashboard.view_passenger{% endtrans %}">
+            <a href="{{ path('manage_passenger_show', {'id': passenger.id }) }}" title="{% trans %}tour.dashboard.view_passenger{% endtrans %}" class="caller-btn">
                 {% if passenger.completedTasks|length  ==  passenger.possibleTasks|length %}
                     <i style="color:green; border-radius:25px; border: 1px solid green; padding:10px; position:absolute; right:20px;" class="material-icons">done</i>
                     <i style=" display:none; position:absolute; right:20px; padding:10px;" class="material-icons">arrow_forward</i>
