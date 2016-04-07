@@ -287,22 +287,6 @@
 
             });
 
-            $(document).on('click', '.passenger-filter', function (e){
-                    e.preventDefault();
-
-                    //Scroll functionality if at tablet breakpoint
-                    if (parseInt($(window).width()) < 900) {
-                        var target = $('#passenger-card');
-                        $('html, body').animate({
-                            scrollTop: target.offset().top
-                        }, 1000);
-                    }
-
-                    var elemID = this.getAttribute('data-id');
-                    window.location.hash = elemID;
-                    filterPassengers(elemID);
-                });
-
                 // toggle invite form display
                 $(document).on('click', '.show-invite-form', function (e) {
                     e.preventDefault();

@@ -1,3 +1,108 @@
+/**
+ * Helper functions for working with the current uri.
+ */
+var Location;
+Location = function (uri) {
+
+    /**
+     * Uri can be set by constructor but will default to the current uri.
+     *
+     * @type {string}
+     */
+    uri = uri !== undefined ? uri : window.location.href;
+
+    /**
+     * Get a query parameter by key.
+     *
+     * @param key
+     * @returns {*}
+     */
+    this.getQueryParam = function (key) {
+        var uri = window.location.href,
+            re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+
+        if (uri.match(re)) {
+            return uri.match(re)[0].split('=')[1].replace('&', '');
+        }
+    };
+
+    /**
+     * Set a query parameter by key.
+     *
+     * @param key
+     * @param value
+     */
+    this.setQueryParam = function (key, value) {
+        var uri = window.location.href,
+            re = new RegExp("([?&])" + key + "=.*?(&|$)", "i"),
+            separator = uri.indexOf('?') !== -1 ? "&" : "?",
+            newUri = uri + separator + key + "=" + value;
+
+        if (uri.match(re)) {
+            // If the value is blank, this is the first parameter and there are other parameters.
+            if (value === '' && separator === '&') {
+                // Replace the value with ? and replace the first &
+                newUri = uri.replace(re, '?').replace('&', '');
+            }
+            else if (value === '') {
+                newUri = uri.replace(re, '');
+                console.log(newUri);
+            }
+            else {
+                // If there is a value replace it, otherwise remove this key.
+                newUri = uri.replace(re, '$1' + key + "=" + value + '$2')
+            }
+        }
+
+        window.history.pushState({}, '', newUri);
+    };
+
+    /**
+     * Get the location hash.
+     *
+     * @returns {string}
+     */
+    this.getHash = function () {
+        var re = new RegExp('#([^;]*)?');
+
+        return uri.match(re) ? uri.match(re)[0].replace('#', '') : '';
+    };
+
+    /**
+     * Set the location hash.
+     *
+     * @param value
+     */
+    this.setHash = function (value) {
+        // Default the value to #value.
+        value = value !== '' ? '#' + value : value;
+
+        var re = new RegExp('#([^;]*)(?==)'),
+            newUri;
+
+        // If there is currently a hash in the url.
+        if (uri.match(re)) {
+            newUri = uri.replace(re, value);
+        }
+        else {
+            // If there are query params.
+            console.log(uri);
+            console.log(uri.indexOf('?'));
+            if (uri.indexOf('?') !== -1) {
+                // Slide the hash into the middle.
+                var parts = uri.split('?');
+                newUri = parts[0] + value + '?' + parts[1];
+            }
+            else {
+                newUri = uri + value;
+            }
+        }
+
+        console.log(newUri);
+
+        window.history.pushState({}, '', newUri);
+    };
+};
 
 /**
  * get the config for the passenger list.
@@ -79,6 +184,7 @@ function filterPassengersByString($items, string) {
 
 /**
  * filterPassengers
+ *
  * @param elemID = the elemID to filter by, reflects status
  * @param resetSearch = whether to reset the text search.
  */
@@ -86,8 +192,8 @@ function filterPassengers(elemID, resetSearch) {
     if (resetSearch === undefined || resetSearch) {
         $('#passenger-name-filter').val('');
 
-        var parts = window.location.href.split('?');
-        window.history.pushState({}, "All Tour Passengers", parts[0]);
+        var location = new Location();
+            location.setQueryParam('search', '');
     }
 
     var config = getPassengerFilterConfig(),
@@ -319,9 +425,9 @@ $(document).ready(function () {
             $("#loader").hide();
             var parsed = $.parseJSON(response.responseText);
             $.each(parsed, function(i, item) {
-                console.log(i);
+
                 var field = '#tui_toolkit_passengerbundle_medical_' + i;
-                console.log(field);
+
                 if($(field).is('input')){
                     $(field).parent().after('<p class="errors" style="color:red;">'+ item + '</p>');
                 }
@@ -753,21 +859,13 @@ $(document).ready(function () {
     });
 
     // See if there is a name search.
-    var parts = window.location.href.split('?');
-    for (var i = 1; i < parts.length; i++) {
-        var query = parts[i].split('=');
-        if (query[0] == 'search') {
-            $('#passenger-name-filter').val(query[1]);
+    var location = new Location(),
+        hash = location.getHash(),
+        search = location.getQueryParam('search'),
+        elemID = hash !== '' ? hash : 'showEveryone';
 
-            if ($('.passenger-filter').filter('.active').length > 0) {
-                var elemID = $('.passenger-filter').filter('.active').attr('data-id');
-            } else {
-                elemID = 'showEveryone';
-            }
-
-            filterPassengers(elemID, false);
-        }
-    }
+    $('#passenger-name-filter').val(search);
+    filterPassengers(elemID, false);
 
     // Filter passengers by search
     var delayTimer;
@@ -788,10 +886,9 @@ $(document).ready(function () {
     // On change track the search in the url.
     $('#passenger-name-filter').change(function() {
         var search = $('#passenger-name-filter').val(),
-            parts = window.location.href.split('?'),
-            href = search !== '' ? parts[0] + '?search=' + search : parts[0];
+            location = new Location();
 
-        window.history.pushState({}, "Search " + search, href);
+        location.setQueryParam('search', search);
     });
 
     // Order the passengers
@@ -807,7 +904,6 @@ $(document).ready(function () {
                 var vB = $('.surname', b).text() + $('.forename', a).text();
                 return (vA < vB) ? -1 : (vA > vB) ? 1 : 0;
             });
-            console.log($items);
         }
         else if ($(this).val() == 'date') {
             $items = $items.sort(function(a, b) {
@@ -823,5 +919,30 @@ $(document).ready(function () {
 
         // Re-add the items in the new order.
         $('.tour-show-right-column').append($items);
+
+        // Update the url
+        var order = $(this).val(),
+            location = new Location;
+
+        location.setQueryParam('orderBy', order);
+    });
+
+    // Clicking a passenger filter.
+    $('.passenger-filter').click(function (e) {
+        e.preventDefault();
+
+        //Scroll functionality if at tablet breakpoint
+        if (parseInt($(window).width()) < 900) {
+            var target = $('#passenger-card');
+            $('html, body').animate({
+                scrollTop: target.offset().top
+            }, 1000);
+        }
+
+        var elemID = this.getAttribute('data-id'),
+            location = new Location;
+            location.setHash(elemID);
+
+        filterPassengers(elemID);
     });
 });
