@@ -99,50 +99,19 @@ use TUI\Toolkit\MediaBundle\Form\MediaType;
    *
    * @return \Symfony\Component\Form\Form The form
    */
-  public function createDropzoneFormAction(Request $request, $context)
+  public function createDropzoneFormAction(Request $request, $context, $media_field_id, $identifier = 'primary', $existing_media = FALSE, $media_placeholder_image = TRUE, $close_button = TRUE, $auto_implementation = TRUE)
   {
     $form = $this->createFormBuilder()->getForm();
 
     $form->handleRequest($request);
     return $this->render('MediaBundle:Media:dropzone.html.twig', array(
-      'context'=>$context,
-      'form' => $form->createView(),
-    ));
-  }
-
-  /**
-   * Creates a form (light) to create a Media entity.
-   *
-   * @param Media $entity The entity
-   *
-   * @return \Symfony\Component\Form\Form The form
-   */
-  public function createDropzoneLightFormAction(Request $request, $context)
-  {
-    $form = $this->createFormBuilder()->getForm();
-
-    $form->handleRequest($request);
-    return $this->render('MediaBundle:Media:dropzone_light.html.twig', array(
-      'context'=>$context,
-      'form' => $form->createView(),
-    ));
-  }
-
-  /**
-   * Creates a form (brand) to create a Media entity.
-   *
-   * @param Media $entity The entity
-   *
-   * @return \Symfony\Component\Form\Form The form
-   */
-  public function createDropzoneBrandFormAction(Request $request, $context, $identifier = 'primary')
-  {
-    $form = $this->createFormBuilder()->getForm();
-
-    $form->handleRequest($request);
-    return $this->render('MediaBundle:Media:dropzone_brand.html.twig', array(
       'context' => $context,
+      'media_field_id' => $media_field_id,
       'identifier' => $identifier,
+      'existing_media' => $existing_media,
+      'media_placeholder_image' => $media_placeholder_image,
+      'close_button' => $close_button,
+      'auto_implementation' => $auto_implementation,
       'form' => $form->createView(),
     ));
   }
