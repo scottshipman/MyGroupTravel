@@ -22,7 +22,6 @@
         </div>
     </div>
 {% endif %}
-
 {% endblock %}
 
 {% javascripts '@toolkit_dropzone' %}
@@ -30,6 +29,7 @@
     {% if auto_implementation %}
         <script type="text/javascript">
             $(document).ready(function() {
+
                 $("#dropzone-form-{{ identifier }}").toolkitDropzone(
                     "{{ media_field_id }}",
                     {
@@ -45,9 +45,7 @@
                    , null
                     {% endif %}
                    , null
-                {% if context == 'user' %}
-                , 1
-                {% endif %}
+                   , '{{ context }}'
                 );
             });
         </script>
