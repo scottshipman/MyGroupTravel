@@ -29,52 +29,52 @@
 
     <div class="tour-show-wrapper site-show" entityId="{{ entity.tourReference.id }}" passengerId="{{ entity.Id }}">
 
-    <div class="tour-show-left-column">
-        <ul class="tour-show-submenu">
+        <div class="tour-show-left-column">
+            <ul class="tour-show-submenu">
                 <li><strong>{% trans %}passenger.labels.passenger_for{% endtrans %} {{ entity.tourReference.name }}</strong></li>
-            <li><label>{% trans %}tour.show.institution{% endtrans %}</label><strong>{{ entity.tourReference.institution.name }}</strong></li>
-            <li><label>{% trans %}tour.show.name{% endtrans %}</label><strong>{{ entity.tourReference.name}}</strong></li>
-            <li><label>{% trans %}tour.show.departure{% endtrans %}</label><strong>{{ entity.tourReference.departureDate|date(format) }}</strong></li>
-            <li><label>{% trans %}tour.show.payment_instructions{% endtrans %}</label>
-                <p style="font-weight:600;">Payment Schedule</p>
-                <ul style="list-style:none;">
-                    {% for payments in entity.tourReference.paymentTasksPassenger %}
-                        <li>{{ payments.name }} {% if entity.tourReference.currency %}{{ entity.tourReference.currency.htmlSymbol | raw }}{% endif %}{{ payments.value }} due {{ payments.dueDate | date(format)}}</li>
-                    {% endfor %}
-                </ul>
-                <p style="font-weight:600;">Payment Methods</p>
-                <ul style="list-style:none;">
-                    <li> {% if entity.tourReference.bankTransferPayment is sameas(TRUE) %}{% trans %}tour.form.tour_setup.bank{% endtrans %} {% if entity.tourReference.bankTransferPaymentDescription != '' %} - {{ entity.tourReference.bankTransferPaymentDescription }} {% endif %}{% endif %}</li>
-                    <li>  {% if entity.tourReference.onlinePayment is sameas(TRUE) %}{% trans %}tour.form.tour_setup.online{% endtrans %} {% if entity.tourReference.onlinePaymentDescription != '' %} -  {{ entity.tourReference.onlinePaymentDescription }} {% endif %}{% endif %}</li>
-                    <li>   {% if entity.tourReference.cashPayment is sameas(TRUE) %}{% trans %}tour.form.tour_setup.cash{% endtrans %} {% if entity.tourReference.cashPaymentDescription != '' %} - {{ entity.tourReference.cashPaymentDescription }} {% endif %}{% endif %}</li>
-                    <li>   {% if entity.tourReference.otherPayment is sameas(TRUE) %} {{ entity.tourReference.otherPaymentDescription }} {% endif %}</li>
-                </ul>
-            </li>
+                <li><label>{% trans %}tour.show.institution{% endtrans %}</label><strong>{{ entity.tourReference.institution.name }}</strong></li>
+                <li><label>{% trans %}tour.show.name{% endtrans %}</label><strong>{{ entity.tourReference.name}}</strong></li>
+                <li><label>{% trans %}tour.show.departure{% endtrans %}</label><strong>{{ entity.tourReference.departureDate|date(format) }}</strong></li>
+                <li><label>{% trans %}tour.show.payment_instructions{% endtrans %}</label>
+                    <p style="font-weight:600;">Payment Schedule</p>
+                    <ul style="list-style:none;">
+                        {% for payments in entity.tourReference.paymentTasksPassenger %}
+                            <li>{{ payments.name }} {% if entity.tourReference.currency %}{{ entity.tourReference.currency.htmlSymbol | raw }}{% endif %}{{ payments.value }} due {{ payments.dueDate | date(format)}}</li>
+                        {% endfor %}
+                    </ul>
+                    <p style="font-weight:600;">Payment Methods</p>
+                    <ul style="list-style:none;">
+                        <li> {% if entity.tourReference.bankTransferPayment is sameas(TRUE) %}{% trans %}tour.form.tour_setup.bank{% endtrans %} {% if entity.tourReference.bankTransferPaymentDescription != '' %} - {{ entity.tourReference.bankTransferPaymentDescription }} {% endif %}{% endif %}</li>
+                        <li>  {% if entity.tourReference.onlinePayment is sameas(TRUE) %}{% trans %}tour.form.tour_setup.online{% endtrans %} {% if entity.tourReference.onlinePaymentDescription != '' %} -  {{ entity.tourReference.onlinePaymentDescription }} {% endif %}{% endif %}</li>
+                        <li>   {% if entity.tourReference.cashPayment is sameas(TRUE) %}{% trans %}tour.form.tour_setup.cash{% endtrans %} {% if entity.tourReference.cashPaymentDescription != '' %} - {{ entity.tourReference.cashPaymentDescription }} {% endif %}{% endif %}</li>
+                        <li>   {% if entity.tourReference.otherPayment is sameas(TRUE) %} {{ entity.tourReference.otherPaymentDescription }} {% endif %}</li>
+                    </ul>
+                </li>
 
-        </ul>
-    </div>
+            </ul>
+        </div>
 
         <div class="tour-show-right-column">
-        {#Passenger Information Card#}
-                    {% if entity.status == "accepted" %}
-                        {% set statusicon =  '<a class="' ~ entity.status ~ 'icon" title = "' ~ entity.status ~ '"><i class="material-icons">verified_user</i></a>'%}
-                    {% else %}
-                        {% set statusicon = '<a class="' ~ entity.status ~ 'icon" title = "' ~ entity.status ~ '"><i class="material-icons">list</i></a>'%}
-                    {% endif %}
+            {#Passenger Information Card#}
+            {% if entity.status == "accepted" %}
+                {% set statusicon =  '<a class="' ~ entity.status ~ 'icon" title = "' ~ entity.status ~ '"><i class="material-icons">verified_user</i></a>'%}
+            {% else %}
+                {% set statusicon = '<a class="' ~ entity.status ~ 'icon" title = "' ~ entity.status ~ '"><i class="material-icons">list</i></a>'%}
+            {% endif %}
 
-                    {% if isOrganizer %}
-                        {% set organizericon = '<a class="organizer-card" title = "' ~ isOrganizer ~ '"><i class="material-icons">group_add</i></a>' %}
-                    {% else %}
-                        {% set organizericon = '' %}
-                    {% endif %}
+            {% if isOrganizer %}
+                {% set organizericon = '<a class="organizer-card" title = "' ~ isOrganizer ~ '"><i class="material-icons">group_add</i></a>' %}
+            {% else %}
+                {% set organizericon = '' %}
+            {% endif %}
 
-                    {% if entity.free == 1 %}
-                        {% set freeicon = '<a class="freeicon" title = "Free"><i class="material-icons">money_off</i></a>' %}
-                        {% set statusicon = '' %}
-                        {% set status = '' %}
-                    {% else %}
-                        {% set freeicon = '' %}
-                    {% endif %}
+            {% if entity.free == 1 %}
+                {% set freeicon = '<a class="freeicon" title = "Free"><i class="material-icons">money_off</i></a>' %}
+                {% set statusicon = '' %}
+                {% set status = '' %}
+            {% else %}
+                {% set freeicon = '' %}
+            {% endif %}
             <div class="waitlist tour-edit mdl-card mdl-shadow--2dp">
                 <div class="mdl-card__title">
                     <h3 class="mdl-card__title-text">{% trans %}passenger.labels.passenger{% endtrans %}</h3>
@@ -110,8 +110,6 @@
             {% if entity.status == 'accepted' or payments !=null%}
                 {{ render(controller('PaymentBundle:Payment:getPassengerPaymentCard', { 'passengerId': entity.id })) }}
             {% endif %}
-
-
 
             {#Passenger Task Card#}
             <div class="waitlist tour-edit mdl-card mdl-shadow--2dp passenger-task-card">
@@ -175,7 +173,7 @@
             </div>
 
             {#Passenger Medical Information Card#}
-           {% if entity.tourReference.medicalDate != null %}
+            {% if entity.tourReference.medicalDate != null %}
                 {% if entity.medicalReference != null %}
                     <div class="waitlist tour-edit mdl-card mdl-shadow--2dp">
                         <div class="mdl-card__title">
@@ -209,7 +207,7 @@
                         </div>
                     </div>
                 {% endif %}
-           {% endif %}
+            {% endif %}
 
             {% if entity.tourReference.dietaryDate != null %}
                 {% if entity.dietaryReference != null %}
