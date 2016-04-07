@@ -10,6 +10,7 @@ use Doctrine\Common\Annotations;
 use Gedmo\Mapping\Annotation as Gedmo;
 use APY\DataGridBundle\Grid\Mapping as GRID;
 use Doctrine\Common\Collections\ArrayCollection;
+use Ambta\DoctrineEncryptBundle\Configuration\Encrypted;
 
 /**
  * Dietary
@@ -35,6 +36,7 @@ class Dietary
      * @ORM\Column(name="description", type="text", nullable=true)
      * @GRID\Column(title="Description", export=true)
      * @Assert\NotBlank()
+     * @Encrypted
      */
     protected $description;
 

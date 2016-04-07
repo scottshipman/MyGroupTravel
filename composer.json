@@ -12,8 +12,8 @@
     "require": {
         "php": ">=5.3.9",
         "symfony/symfony": "2.7.*",
-        "doctrine/orm": "~2.2,>=2.2.3,<2.5",
-        "doctrine/dbal": "<2.5",
+        "doctrine/orm": "~2.2,>=2.2.3",
+        "doctrine/dbal": "~2.5",
         "doctrine/doctrine-bundle": "~1.4",
         "doctrine/data-fixtures": "~1.0",
         "doctrine/doctrine-cache-bundle": "~1.0",
@@ -24,7 +24,7 @@
         "sensio/framework-extra-bundle": "~3.0,>=3.0.2",
         "incenteev/composer-parameter-handler": "~2.0",
         "twig/extensions": "~1.0",
-        "jackalope/jackalope-doctrine-dbal": "1.0.*",
+        "jackalope/jackalope-doctrine-dbal": "1.*",
         "nelmio/alice": "~1.0",
         "doctrine/doctrine-fixtures-bundle": "^2.2",
         "friendsofsymfony/user-bundle": "~2.0@dev",
@@ -47,7 +47,8 @@
         "eo/honeypot-bundle": "^1.0",
         "knplabs/knp-snappy-bundle": "^1.3",
         "evheniy/gtm-bundle": "1.*",
-        "ras/flash-alert-bundle": "^2.1"
+        "ras/flash-alert-bundle": "^2.1",
+        "ambta/doctrine-encrypt-bundle": "2.4.*"
     },
     "require-dev": {
         "liip/functional-test-bundle": "~1.0",
