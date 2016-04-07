@@ -29,15 +29,11 @@
 
     <div class="tour-show-wrapper site-show" entityId="{{ entity.tourReference.id }}" passengerId="{{ entity.Id }}">
 
-
     <div class="tour-show-left-column">
         <ul class="tour-show-submenu">
                 <li><strong>{% trans %}passenger.labels.passenger_for{% endtrans %} {{ entity.tourReference.name }}</strong></li>
             <li><label>{% trans %}tour.show.institution{% endtrans %}</label><strong>{{ entity.tourReference.institution.name }}</strong></li>
             <li><label>{% trans %}tour.show.name{% endtrans %}</label><strong>{{ entity.tourReference.name}}</strong></li>
-            {#{% if entity.tourReference != null %}#}
-                {#<li><label>{% trans %}tour.show.number{% endtrans %}</label><strong>{{ entity.tourReference}}</strong></li>#}
-            {#{% endif %}#}
             <li><label>{% trans %}tour.show.departure{% endtrans %}</label><strong>{{ entity.tourReference.departureDate|date(format) }}</strong></li>
             <li><label>{% trans %}tour.show.payment_instructions{% endtrans %}</label>
                 <p style="font-weight:600;">Payment Schedule</p>
@@ -56,19 +52,6 @@
             </li>
 
         </ul>
-
-        {#<div class="tour-edit-organizer-left">#}
-            {#<label>{% trans %}tour.show.organizers{% endtrans %}</label><br>#}
-            {#{% if entity.tourReference.organizer.media %}#}
-                {#<img class="tui-image-avatar" src="{{ ( entity.tourReference.organizer.media.getRelativePath ~ "/" ~ entity.tourReference.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.tourReference.organizer.username }}">#}
-            {#{% elseif entity.tourReference.organizer.firstName and entity.tourReference.organizer.lastName %}#}
-                {#<span class="tui-text-avatar mdl-typography--headline">{{ entity.tourReference.organizer.firstName[:1] }}{{ entity.tourReference.organizer.lastName[:1] }}</span>#}
-            {#{% else %}#}
-                {#<span class="tui-text-avatar mdl-typography--headline">{{ entity.tourReference.organizer.username[:1] }}</span>#}
-            {#{% endif %}#}
-            {#<a class="add-organizer" href="#"><i class="add-icon fa fa-plus"></i></a>#}
-            {#<a class="add-organizer mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">Add/remove organizers</a>#}
-        {#</div>#}
     </div>
 
         <div class="tour-show-right-column">
