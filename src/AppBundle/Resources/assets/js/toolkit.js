@@ -169,6 +169,13 @@
         $('.snack-wrap').fadeOut('slow', 'linear');
     });
 
+    $(document).on('click', '.caller-btn', function(e) {
+        var pageURL = $(location).attr("href");
+        var pageTitle = $("h1").text().trim();
+        var href = $(this).attr('href');
+        $(this).attr('href', href + '?ref=' + pageURL + '&title=' + pageTitle);
+    });
+
 })(jQuery);
 
 // Event handler for copy to clipboard button
