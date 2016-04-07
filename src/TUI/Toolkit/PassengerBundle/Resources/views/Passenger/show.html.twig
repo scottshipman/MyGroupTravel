@@ -20,8 +20,8 @@
 {% endblock %}
 
 {% block back_link %}
-    {% if "passenger" | getRoles(entity.id) == "parent" %}
-        <a class="back-link" href="{{ path('manage_parent_passenger_dashboard', {'tourId': entity.tourReference.id, 'parentId': app.user.id}) }}"><i class="fa fa-arrow-left"></i> Back To Your Passengers</a>
+    {% if "tour" | getRoles(entity.tourReference.id) == "parent" %}
+        <a class="mdl-button--colored" href="{{ path('manage_parent_passenger_dashboard', {'tourId': entity.tourReference.id, 'parentId': app.user.id}) }}"><i class="fa fa-arrow-left"></i> Back To Your Passengers</a>
     {% endif %}
 {% endblock %}
 
