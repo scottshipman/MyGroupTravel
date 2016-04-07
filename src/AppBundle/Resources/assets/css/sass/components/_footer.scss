@@ -117,23 +117,23 @@
   @include clear-fix();
 
   .footer-block-left {
-    text-align: center;
-
-    @include breakpoint_tablet() {
-      float: left;
-      width: $column_total_width * 2;
-    }
-
+    float: left;
+    text-align: left;
   }
 
   .footer-block-right {
-    text-align: center;
-
-    @include breakpoint_tablet() {
-      float: right;
-      width: $column_total_width * 2;
-    }
-
+    float: right;
+    text-align: right;
   }
 
+  .footer-block-left,
+  .footer-block-right {
+    width: 50%;
+
+    @include breakpoint_phone_down {
+      float: none;
+      width: 100%;
+      text-align: center;
+    }
+  }
 }
