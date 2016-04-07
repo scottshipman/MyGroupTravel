@@ -1685,7 +1685,7 @@ class UserController extends Controller
         foreach ($passengers as $passenger) {
             $paxPrice = 0; $paxCredit = 0; $paxOverdue = 0;
             $object = $em->getRepository('PassengerBundle:Passenger')->find($passenger->getObject());
-            if ($object->getTourReference()->getId() == $tourId) {
+            if (!empty($object) && $object->getTourReference()->getId() == $tourId) {
                 $cashBalance = $this->get('payment.GetPayments')->getPassengersPaymentsPaid($object->getId());
                 // add payment details to object also
                 $payments = $this->get('payment.getPayments')->getPassengersPaymentTasks($object->getId());
