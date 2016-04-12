@@ -35,6 +35,7 @@ security:
 
     access_control:
             - { path: ^/admin/, role: ROLE_ADMIN }
+            - { path: ^/manage/contentblocks/$, role: ROLE_SUPER_ADMIN }
             - { path: ^/manage/contentblocks/, role: ROLE_CUSTOMER }
             - { path: ^/manage/headerblock/, role: ROLE_CUSTOMER }
             - { path: ^/manage/, role: ROLE_BRAND }
@@ -50,10 +51,46 @@ security:
             - { path: ^/profile/, role: ROLE_CUSTOMER }
             - { path: ^/tour/dashboard, role: ROLE_CUSTOMER }
             - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+            - { path: ^/register/$, role: ROLE_SUPER_ADMIN }
             - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
             - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
-            - { path: ^/efconnect, role: ROLE_USER }
-            - { path: ^/elfinder, role: ROLE_USER }
+            - { path: ^/efconnect, role: ROLE_CUSTOMER }
+            - { path: ^/elfinder, role: ROLE_CUSTOMER }
             - { path: ^/brand_payment, role: ROLE_BRAND }
-
-
+            - { path: ^/_ckeditor/upload, role: ROLE_CUSTOMER }
+            - { path: ^/_uploader, role: ROLE_CUSTOMER }
+            - { path: ^/ajax/institution, role: ROLE_BRAND }
+            - { path: ^/ajax/organizer, role: ROLE_BRAND }
+            - { path: ^/ajax, role: ROLE_CUSTOMER }
+            - { path: ^/brand_payment/[0-9]+/edit$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/brand_payment/[0-9]+/show$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/genemu_change_image, role: ROLE_SUPER_ADMIN }
+            - { path: ^/passenger/$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/passenger/[0-9]+/delete$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/passenger/dietary/$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/passenger/dietary/[0-9]+/delete$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/passenger/emergency/$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/passenger/emergency/[0-9]+/delete$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/passenger/medical/$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/passenger/medical/[0-9]+/delete$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/passenger/passport/$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/passenger/passport/[0-9]+/delete$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/passenger/new/[0-9]+$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+            - { path: ^/passenger/, role: ROLE_CUSTOMER }
+            - { path: ^/payment/$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/payment/[0-9]+/delete$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/payment/[0-9]+/edit$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/payment/[0-9]+/show$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/payment/, role: ROLE_CUSTOMER }
+            - { path: ^/paymenttask/$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/paymenttask/[0-9]+/show$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/paymenttask/, role: ROLE_CUSTOMER }
+            - { path: ^/paymenttaskoverride/$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/paymenttaskoverride/[0-9]+/delete$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/paymenttaskoverride/, role: ROLE_CUSTOMER }
+            - { path: ^/permission, role: ROLE_SUPER_ADMIN }
+            - { path: ^/quote/view/summary/edit/[0-9]+$, role: ROLE_BRAND }
+            - { path: ^/quote/view/summary/update/[0-9]+$, role: ROLE_BRAND }
+            - { path: ^/tour/view/summary/edit/[0-9]+$, role: ROLE_CUSTOMER }
+            - { path: ^/tour/view/summary/update/[0-9]+$, role: ROLE_CUSTOMER }
+            - { path: ^/tour/view/update/name/[0-9]+$, role: ROLE_CUSTOMER }
