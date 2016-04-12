@@ -1,7 +1,3 @@
 transport_manage_transport:
     resource: "@TransportBundle/Resources/config/routing/transport.yml"
     prefix:   /manage/transport
-
-transport_homepage:
-    path:     /hello/{name}
-    defaults: { _controller: TransportBundle:Default:index }
