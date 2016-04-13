@@ -226,7 +226,7 @@ class PassengerController extends Controller
 
         $response = new Response($errors);
         $response->headers->set('Content-Type', 'application/json');
-        $response->setStatusCode('403');
+        $response->setStatusCode('400');
         return $response;
 
     }
@@ -485,8 +485,7 @@ class PassengerController extends Controller
 
         $response = new Response($errors);
         $response->headers->set('Content-Type', 'application/json');
-        $response->setStatusCode('403
-        ');
+        $response->setStatusCode('400');
         return $response;
 
     }
@@ -1202,7 +1201,7 @@ class PassengerController extends Controller
 
         $response = new Response($errors);
         $response->headers->set('Content-Type', 'application/json');
-        $response->setStatusCode('403');
+        $response->setStatusCode('400');
         return $response;
     }
 

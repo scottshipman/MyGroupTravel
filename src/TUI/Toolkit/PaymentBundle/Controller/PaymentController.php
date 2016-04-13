@@ -366,7 +366,7 @@ class PaymentController extends Controller
         $errors = $serializer->serialize($errors, 'json');
         $response = new Response($errors);
         $response->headers->set('Content-Type', 'application/json');
-        $response->setStatusCode('403');
+        $response->setStatusCode('400');
         return $response;
 
     }
