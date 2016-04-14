@@ -44,6 +44,16 @@ class PaymentController extends Controller
      */
     public function createAction(Request $request, $tourId, $passengerId)
     {
+        // Check context permissions.
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permission = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $user->getId());
+            if ($permission == NULL || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+                throw $this->createAccessDeniedException();
+            }
+        }
+
         $entity = new Payment();
         $em = $this->getDoctrine()->getManager();
 
@@ -85,6 +95,16 @@ class PaymentController extends Controller
      */
     public function refundAction(Request $request, $tourId)
     {
+        // Check context permissions.
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permission = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $user->getId());
+            if ($permission == NULL || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+                throw $this->createAccessDeniedException();
+            }
+        }
+
         $entity = new Payment();
         $em = $this->getDoctrine()->getManager();
 
@@ -183,6 +203,16 @@ class PaymentController extends Controller
      */
     public function newAction($tourId, $passengerId)
     {
+        // Check context permissions.
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permission = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $user->getId());
+            if ($permission == NULL || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+                throw $this->createAccessDeniedException();
+            }
+        }
+
         $entity = new Payment();
 
         $em = $this->getDoctrine()->getManager();
@@ -205,6 +235,16 @@ class PaymentController extends Controller
      */
     public function newRefundAction($tourId)
     {
+        // Check context permissions.
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permission = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $user->getId());
+            if ($permission == NULL || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+                throw $this->createAccessDeniedException();
+            }
+        }
+
         $entity = new Payment();
 
         $em = $this->getDoctrine()->getManager();
@@ -297,10 +337,22 @@ class PaymentController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $paymentTasks = $this->get("payment.getPayments")->getPassengersPaymentTasks($passengerId);
         $passenger = $em->getRepository('PassengerBundle:Passenger')->find($passengerId);
         $tour = $passenger->getTourReference();
-        $form = $this->createCustomScheduleForm($tour->getId(), $passenger);
+        $tourId = $tour->getId();
+
+        // Check context permissions.
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permission = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $user->getId());
+            if ($permission == NULL || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+                throw $this->createAccessDeniedException();
+            }
+        }
+
+        $paymentTasks = $this->get("payment.getPayments")->getPassengersPaymentTasks($passengerId);
+        $form = $this->createCustomScheduleForm($tourId, $passenger);
         $form->handleRequest($request);
         $updated=array();
         $vdata = $form->getData();
@@ -309,7 +361,6 @@ class PaymentController extends Controller
                 $form[$data]->addError(new FormError('Value must be greater than 0'));
             }
         }
-
 
         if ($form->isValid()) {
             $data = $form->getData();
@@ -419,15 +470,16 @@ class PaymentController extends Controller
 
     public function getPaymentDashboardAction($tourId)
     {
-        //check permissions first
-        $currUser = $this->get('security.context')->getToken()->getUser();
-        $currRole =  $this->get("permission.set_permission")->getPermission($tourId, 'tour', $currUser);
-
-        if(!$this->get('security.context')->isGranted('ROLE_BRAND')){
-            if(!in_array('assistant', $currRole) && !in_array('organizer', $currRole)) {
-                throw $this->createAccessDeniedException('You are not authorized to manage payments for this tour!');
+        // Check context permissions.
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permission = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $user->getId());
+            if ($permission == null || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+                throw $this->createAccessDeniedException();
             }
         }
+
         $locale = $this->container->getParameter('locale');
         $em = $this->getDoctrine()->getManager();
         $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
@@ -463,6 +515,16 @@ class PaymentController extends Controller
 
     public function getEditPaymentSettingsAction(Request $request, $tourId)
     {
+        // Check context permissions.
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permission = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $user->getId());
+            if ($permission == null || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+                throw $this->createAccessDeniedException();
+            }
+        }
+
         $em = $this->getDoctrine()->getManager();
         $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
         if (!$tour) {
@@ -609,6 +671,16 @@ class PaymentController extends Controller
      * @return mixed
      */
     public function customizeScheduleAction($tourId, $passengerId) {
+        // Check context permissions.
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permission = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $user->getId());
+            if ($permission == NULL || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+                throw $this->createAccessDeniedException();
+            }
+        }
+
         $em = $this->getDoctrine()->getManager();
         $paymentTasks = $this->get("payment.getPayments")->getPassengersPaymentTasks($passengerId);
         $passenger = $em->getRepository('PassengerBundle:Passenger')->find($passengerId);

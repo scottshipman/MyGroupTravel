@@ -130,6 +130,30 @@ class EmergencyController extends Controller
             throw $this->createNotFoundException('Unable to find Emergency entity.');
         }
 
+        $passengerId = $entity->getPassengerReference()->getId();
+        $tourId = $entity->getPassengerReference()->getTourReference()->getId();
+
+        // Check context permissions.
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $tour_permission = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $user->getId());
+            $passenger_permission = $this->get("permission.set_permission")->getPermission($passengerId, 'passenger', $user->getId());
+            $permission_pass = FALSE;
+
+            if ($passenger_permission != NULL && in_array('parent', $passenger_permission)) {
+                $permission_pass = TRUE;
+            }
+
+            if ($tour_permission != NULL && (in_array('organizer', $tour_permission) || in_array('assistant', $tour_permission))) {
+                $permission_pass = TRUE;
+            }
+
+            if (!$permission_pass) {
+                throw $this->createAccessDeniedException();
+            }
+        }
+
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('PassengerBundle:Emergency:show.html.twig', array(
@@ -150,6 +174,30 @@ class EmergencyController extends Controller
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Emergency entity.');
+        }
+
+        $passengerId = $entity->getPassengerReference()->getId();
+        $tourId = $entity->getPassengerReference()->getTourReference()->getId();
+
+        // Check context permissions.
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $tour_permission = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $user->getId());
+            $passenger_permission = $this->get("permission.set_permission")->getPermission($passengerId, 'passenger', $user->getId());
+            $permission_pass = FALSE;
+
+            if ($passenger_permission != NULL && in_array('parent', $passenger_permission)) {
+                $permission_pass = TRUE;
+            }
+
+            if ($tour_permission != NULL && (in_array('organizer', $tour_permission) || in_array('assistant', $tour_permission))) {
+                $permission_pass = TRUE;
+            }
+
+            if (!$permission_pass) {
+                throw $this->createAccessDeniedException();
+            }
         }
 
         $editForm = $this->createEditForm($entity);
@@ -197,6 +245,30 @@ class EmergencyController extends Controller
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Emergency entity.');
+        }
+
+        $passengerId = $entity->getPassengerReference()->getId();
+        $tourId = $entity->getPassengerReference()->getTourReference()->getId();
+
+        // Check context permissions.
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $tour_permission = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $user->getId());
+            $passenger_permission = $this->get("permission.set_permission")->getPermission($passengerId, 'passenger', $user->getId());
+            $permission_pass = FALSE;
+
+            if ($passenger_permission != NULL && in_array('parent', $passenger_permission)) {
+                $permission_pass = TRUE;
+            }
+
+            if ($tour_permission != NULL && (in_array('organizer', $tour_permission) || in_array('assistant', $tour_permission))) {
+                $permission_pass = TRUE;
+            }
+
+            if (!$permission_pass) {
+                throw $this->createAccessDeniedException();
+            }
         }
 
         $deleteForm = $this->createDeleteForm($id);
