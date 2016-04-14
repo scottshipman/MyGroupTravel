@@ -33,6 +33,7 @@ class AppKernel extends Kernel
             new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
             new Evheniy\GtmBundle\GtmBundle(),
             new Ras\Bundle\FlashAlertBundle\RasFlashAlertBundle(),
+            new Ambta\DoctrineEncryptBundle\AmbtaDoctrineEncryptBundle(),
 
 
 

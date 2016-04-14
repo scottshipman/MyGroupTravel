@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Ambta\DoctrineEncryptBundle\Configuration\Encrypted;
 
 
 /**
@@ -40,13 +41,13 @@ class Passenger
 
     /**
      * @ORM\Column(type="string", nullable=true)
-     *
+     * @Encrypted
      */
     protected $fName = null;
 
     /**
      * @ORM\Column(type="string", nullable=true)
-     *
+     * @Encrypted
      */
     protected $lName = null;
 
@@ -55,6 +56,7 @@ class Passenger
      * @var string
      *
      * @ORM\Column(name="gender", nullable=true, type="string")
+     * @Encrypted
      */
     protected $gender;
 
@@ -64,6 +66,7 @@ class Passenger
      *
      * @Assert\Date()
      * @ORM\Column(name="dob", type="date", nullable=true)
+     *
      */
     protected $dateOfBirth;
 
