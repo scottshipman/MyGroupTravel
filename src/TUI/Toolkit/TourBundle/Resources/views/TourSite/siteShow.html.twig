@@ -134,7 +134,7 @@
                         </div>
                     {% endif %}
                     <div id="site-header-slideshow-content">
-                        {{ render(controller('ContentBlocksBundle:HeaderBlock:show', {'id':  entity.headerBlock.id  })) }}
+                        {{ render(controller('ContentBlocksBundle:HeaderBlock:show', {'id': entity.headerBlock.id, 'quoteVersion': entity.id, 'class': 'tour'})) }}
                     </div>
                 {% else %}
                     {% if editable %}
@@ -226,7 +226,7 @@
 
                                     {# render the actual content block #}
                                     <div id="previewable-content-blocks-{{ items[item].id }}">
-                                        {{ render(controller('ContentBlocksBundle:ContentBlock:show', {'id':  items[item].id  })) }}
+                                        {{ render(controller('ContentBlocksBundle:ContentBlock:show', {'id':  items[item].id, 'quoteVersion': entity.id, 'class': 'tour'})) }}
                                     </div>
 
                                     {# give a placeholder for the editable version #}

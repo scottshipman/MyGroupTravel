@@ -37,6 +37,21 @@ class ContentBlockController extends Controller
      */
     public function createAction(Request $request, $class = null, $quoteVersion = null, $tabId = null)
     {
+        // Check context permissions.
+        $permission_class = strtolower($class);
+        if ($permission_class == 'quoteversion') {
+          $permission_class = 'quote';
+        }
+
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+          $user = $this->get('security.token_storage')->getToken()->getUser();
+          $permission = $this->get("permission.set_permission")->getPermission($quoteVersion, $permission_class, $user->getId());
+          if ($permission == NULL || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+            throw $this->createAccessDeniedException();
+          }
+        }
+
         $entity = new ContentBlock();
         $medias = array();
         $em = $this->getDoctrine()->getManager();
@@ -147,6 +162,21 @@ class ContentBlockController extends Controller
      */
     public function newAction($class=null, $quoteVersion=null, $tabId=null)
     {
+        // Check context permissions.
+        $permission_class = strtolower($class);
+        if ($permission_class == 'quoteversion') {
+          $permission_class = 'quote';
+        }
+
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+          $user = $this->get('security.token_storage')->getToken()->getUser();
+          $permission = $this->get("permission.set_permission")->getPermission($quoteVersion, $permission_class, $user->getId());
+          if ($permission == NULL || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+            throw $this->createAccessDeniedException();
+          }
+        }
+
         $entity = new ContentBlock();
         $form = $this->createCreateForm($entity, $class, $quoteVersion, $tabId);
         $em = $this->getDoctrine()->getManager();
@@ -165,8 +195,23 @@ class ContentBlockController extends Controller
      * Finds and displays a ContentBlock entity.
      *
      */
-    public function showAction($id)
+    public function showAction($id, $quoteVersion=null, $class=null)
     {
+        // Check context permissions.
+        $permission_class = strtolower($class);
+        if ($permission_class == 'quoteversion') {
+          $permission_class = 'quote';
+        }
+
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+          $user = $this->get('security.token_storage')->getToken()->getUser();
+          $permission = $this->get("permission.set_permission")->getPermission($quoteVersion, $permission_class, $user->getId());
+          if ($permission == NULL || (!in_array('organizer', $permission) && !in_array('assistant', $permission) && !in_array('parent', $permission))) {
+            throw $this->createAccessDeniedException();
+          }
+        }
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($id);
@@ -199,6 +244,21 @@ class ContentBlockController extends Controller
      */
     public function editAction($id, $quoteVersion=null, $class=null)
     {
+        // Check context permissions.
+        $permission_class = strtolower($class);
+        if ($permission_class == 'quoteversion') {
+          $permission_class = 'quote';
+        }
+
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+          $user = $this->get('security.token_storage')->getToken()->getUser();
+          $permission = $this->get("permission.set_permission")->getPermission($quoteVersion, $permission_class, $user->getId());
+          if ($permission == NULL || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+            throw $this->createAccessDeniedException();
+          }
+        }
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($id);
@@ -270,6 +330,21 @@ class ContentBlockController extends Controller
      */
     public function updateAction(Request $request, $id, $quoteVersion=null, $class=null)
     {
+        // Check context permissions.
+        $permission_class = strtolower($class);
+        if ($permission_class == 'quoteversion') {
+          $permission_class = 'quote';
+        }
+
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+          $user = $this->get('security.token_storage')->getToken()->getUser();
+          $permission = $this->get("permission.set_permission")->getPermission($quoteVersion, $permission_class, $user->getId());
+          if ($permission == NULL || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+            throw $this->createAccessDeniedException();
+          }
+        }
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($id);
@@ -356,6 +431,21 @@ class ContentBlockController extends Controller
      */
     public function deleteAction(Request $request, $id, $quoteVersion, $class)
     {
+      // Check context permissions.
+      $permission_class = strtolower($class);
+      if ($permission_class == 'quoteversion') {
+        $permission_class = 'quote';
+      }
+
+      $securityContext = $this->container->get('security.authorization_checker');
+      if (!$securityContext->isGranted('ROLE_BRAND')) {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $permission = $this->get("permission.set_permission")->getPermission($quoteVersion, $permission_class, $user->getId());
+        if ($permission == NULL || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+          throw $this->createAccessDeniedException();
+        }
+      }
+
         $error = false;
 
             $em = $this->getDoctrine()->getManager();
@@ -420,6 +510,21 @@ class ContentBlockController extends Controller
    */
   public function lockAction(Request $request, $id, $quoteVersion=null, $class=null)
   {
+    // Check context permissions.
+    $permission_class = strtolower($class);
+    if ($permission_class == 'quoteversion') {
+      $permission_class = 'quote';
+    }
+
+    $securityContext = $this->container->get('security.authorization_checker');
+    if (!$securityContext->isGranted('ROLE_BRAND')) {
+      $user = $this->get('security.token_storage')->getToken()->getUser();
+      $permission = $this->get("permission.set_permission")->getPermission($quoteVersion, $permission_class, $user->getId());
+      if ($permission == NULL || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+        throw $this->createAccessDeniedException();
+      }
+    }
+
     $error = false;
 
     $em = $this->getDoctrine()->getManager();
@@ -452,6 +557,21 @@ class ContentBlockController extends Controller
    */
   public function resizeAction(Request $request, $id, $quoteVersion=null, $class=null)
   {
+    // Check context permissions.
+    $permission_class = strtolower($class);
+    if ($permission_class == 'quoteversion') {
+      $permission_class = 'quote';
+    }
+
+    $securityContext = $this->container->get('security.authorization_checker');
+    if (!$securityContext->isGranted('ROLE_BRAND')) {
+      $user = $this->get('security.token_storage')->getToken()->getUser();
+      $permission = $this->get("permission.set_permission")->getPermission($quoteVersion, $permission_class, $user->getId());
+      if ($permission == NULL || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+        throw $this->createAccessDeniedException();
+      }
+    }
+
     $error = false;
 
     $em = $this->getDoctrine()->getManager();
@@ -487,6 +607,21 @@ class ContentBlockController extends Controller
    */
   public function hideAction(Request $request, $id, $quoteVersion=null, $class=null)
   {
+    // Check context permissions.
+    $permission_class = strtolower($class);
+    if ($permission_class == 'quoteversion') {
+      $permission_class = 'quote';
+    }
+
+    $securityContext = $this->container->get('security.authorization_checker');
+    if (!$securityContext->isGranted('ROLE_BRAND')) {
+      $user = $this->get('security.token_storage')->getToken()->getUser();
+      $permission = $this->get("permission.set_permission")->getPermission($quoteVersion, $permission_class, $user->getId());
+      if ($permission == NULL || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+        throw $this->createAccessDeniedException();
+      }
+    }
+
     $error = false;
 
     $em = $this->getDoctrine()->getManager();
@@ -543,6 +678,20 @@ class ContentBlockController extends Controller
    */
   public function newTabAction(Request $request, $id, $class)
   {
+    // Check context permissions.
+    $permission_class = strtolower($class);
+    if ($permission_class == 'quoteversion') {
+      $permission_class = 'quote';
+    }
+
+    $securityContext = $this->container->get('security.authorization_checker');
+    if (!$securityContext->isGranted('ROLE_BRAND')) {
+      $user = $this->get('security.token_storage')->getToken()->getUser();
+      $permission = $this->get("permission.set_permission")->getPermission($id, $permission_class, $user->getId());
+      if ($permission == NULL || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+        throw $this->createAccessDeniedException();
+      }
+    }
 
     $em = $this->getDoctrine()->getManager();
       if ($class == "QuoteVersion") {
@@ -592,6 +741,20 @@ class ContentBlockController extends Controller
      */
     public function newSiteTabAction(Request $request, $id, $class)
     {
+        // Check context permissions.
+        $permission_class = strtolower($class);
+        if ($permission_class == 'quoteversion') {
+          $permission_class = 'quote';
+        }
+
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+          $user = $this->get('security.token_storage')->getToken()->getUser();
+          $permission = $this->get("permission.set_permission")->getPermission($id, $permission_class, $user->getId());
+          if ($permission == NULL || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+            throw $this->createAccessDeniedException();
+          }
+        }
 
         $em = $this->getDoctrine()->getManager();
         if ($class == "quoteversion") {

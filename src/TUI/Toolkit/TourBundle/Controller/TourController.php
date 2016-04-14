@@ -496,20 +496,13 @@ class TourController extends Controller
         $editable = FALSE;
         $permission = array();
 
-        //Check to see if the user is allowed to view the dashboard
-
-        $securityContext = $this->get('security.context');
-        $user = $securityContext->getToken()->getUser();
-        if ($user != 'anon.') {
-            $permission = $this->get("permission.set_permission")->getPermission($id, 'tour', $user->getId());
-        }
-
+        // Check context permissions.
+        $securityContext = $this->container->get('security.authorization_checker');
         if (!$securityContext->isGranted('ROLE_BRAND')) {
-            if ($permission != null && !in_array('organizer', $permission) && !in_array('assistant', $permission)) {
-                throw $this->createAccessDeniedException('You are not authorized to view this tour!');
-            }
-            elseif ($permission == null ) {
-                throw $this->createAccessDeniedException('You are not authorized to view this tour!');
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permission = $this->get("permission.set_permission")->getPermission($id, 'tour', $user->getId());
+            if ($permission == null || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+                throw $this->createAccessDeniedException();
             }
         }
 
@@ -1308,6 +1301,16 @@ class TourController extends Controller
 
     public function getTourTasksDashboardAction($id)
     {
+        // Check context permissions.
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permission = $this->get("permission.set_permission")->getPermission($id, 'tour', $user->getId());
+            if ($permission == null || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+                throw $this->createAccessDeniedException();
+            }
+        }
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('TourBundle:Tour')->find($id);
@@ -1386,6 +1389,16 @@ class TourController extends Controller
 
     public function getTourCompletedAndSetupAction($id)
     {
+        // Check context permissions.
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permission = $this->get("permission.set_permission")->getPermission($id, 'tour', $user->getId());
+            if ($permission == null || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+                throw $this->createAccessDeniedException();
+            }
+        }
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('TourBundle:Tour')->find($id);
@@ -1425,6 +1438,16 @@ class TourController extends Controller
 
     public function getTourNotCompletedAndSetupAction($id)
     {
+        // Check context permissions.
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permission = $this->get("permission.set_permission")->getPermission($id, 'tour', $user->getId());
+            if ($permission == null || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+                throw $this->createAccessDeniedException();
+            }
+        }
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('TourBundle:Tour')->find($id);
@@ -1461,6 +1484,16 @@ class TourController extends Controller
 
     public function getTourNotSetupAction($id)
     {
+        // Check context permissions.
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permission = $this->get("permission.set_permission")->getPermission($id, 'tour', $user->getId());
+            if ($permission == null || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+                throw $this->createAccessDeniedException();
+            }
+        }
+
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('TourBundle:Tour')->find($id);
         $date_format = $this->container->getParameter('date_format');
@@ -1491,6 +1524,16 @@ class TourController extends Controller
 
     public function getEditPaymentsAction($id)
     {
+        // Check context permissions.
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permission = $this->get("permission.set_permission")->getPermission($id, 'tour', $user->getId());
+            if ($permission == null || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+                throw $this->createAccessDeniedException();
+            }
+        }
+
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('TourBundle:Tour')->find($id);
         if (!$entity) {
@@ -1554,6 +1597,16 @@ class TourController extends Controller
 
     public function TourSetupAction(Request $request, $id)
     {
+        // Check context permissions.
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permission = $this->get("permission.set_permission")->getPermission($id, 'tour', $user->getId());
+            if ($permission == null || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+                throw $this->createAccessDeniedException();
+            }
+        }
+
         $date_format = $this->container->getParameter('date_format');
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('TourBundle:Tour')->find($id);
@@ -1599,7 +1652,7 @@ class TourController extends Controller
         $errors = $serializer->serialize($errors, 'json');
         $response = new Response($errors);
         $response->headers->set('Content-Type', 'application/json');
-        $response->setStatusCode('403');
+        $response->setStatusCode('400');
         return $response;
 
 
@@ -1607,6 +1660,16 @@ class TourController extends Controller
 
     public function setupCompleteAction($id, $quoteNumber)
     {
+        // Check context permissions.
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permission = $this->get("permission.set_permission")->getPermission($id, 'tour', $user->getId());
+            if ($permission == null || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+                throw $this->createAccessDeniedException();
+            }
+        }
+
         $locale = $this->container->getParameter('locale');
         $date_format = $this->container->getParameter('date_format');
 

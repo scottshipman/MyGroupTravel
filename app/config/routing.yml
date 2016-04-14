@@ -79,18 +79,6 @@ tui_toolkit_mediawrapper:
     resource: "@MediaBundle/Resources/config/routing/mediawrapper.yml"
     prefix:   /manage/mediawrapper
 
-# temporary routes until real ones are implemented
-# @todo REMOVE THESE WITH REAL FUNCTIONALITY LATER
-
-_manage_tour_home:
-  path: /
-_tui_toolkit_reports_modification:
-  path: /
-_tui_toolkit_reports_opportunity:
-  path: /
-_tui_toolkit_manage_company_currency:
-  path: /
-
 _ckeditor_upload:
    path:     /_ckeditor/upload
    defaults: { _controller: "AppBundle:Default:ckeditorUpload" }

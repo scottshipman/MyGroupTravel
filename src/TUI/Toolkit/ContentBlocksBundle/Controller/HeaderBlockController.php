@@ -23,6 +23,21 @@ class HeaderBlockController extends Controller
      */
     public function createAction(Request $request, $quoteVersion = null, $class = null)
     {
+        // Check context permissions.
+        $permission_class = strtolower($class);
+        if ($permission_class == 'quoteversion') {
+            $permission_class = 'quote';
+        }
+
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permission = $this->get("permission.set_permission")->getPermission($quoteVersion, $permission_class, $user->getId());
+            if ($permission == NULL || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+                throw $this->createAccessDeniedException();
+            }
+        }
+
         $entity = new ContentBlock();
         $medias = array();
         $em = $this->getDoctrine()->getManager();
@@ -125,6 +140,21 @@ class HeaderBlockController extends Controller
      */
     public function newAction($quoteVersion, $class)
     {
+        // Check context permissions.
+        $permission_class = strtolower($class);
+        if ($permission_class == 'quoteversion') {
+            $permission_class = 'quote';
+        }
+
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permission = $this->get("permission.set_permission")->getPermission($quoteVersion, $permission_class, $user->getId());
+            if ($permission == NULL || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+                throw $this->createAccessDeniedException();
+            }
+        }
+
         $entity = new ContentBlock();
         $form = $this->createCreateForm($entity, $quoteVersion, $class);
 
@@ -164,6 +194,21 @@ class HeaderBlockController extends Controller
      */
     public function editAction($id, $quoteVersion = null, $class = null)
     {
+        // Check context permissions.
+        $permission_class = strtolower($class);
+        if ($permission_class == 'quoteversion') {
+            $permission_class = 'quote';
+        }
+
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permission = $this->get("permission.set_permission")->getPermission($quoteVersion, $permission_class, $user->getId());
+            if ($permission == NULL || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+                throw $this->createAccessDeniedException();
+            }
+        }
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($id);
@@ -286,6 +331,21 @@ class HeaderBlockController extends Controller
      */
     public function updateAction(Request $request, $id, $quoteVersion = null, $class = null)
     {
+        // Check context permissions.
+        $permission_class = strtolower($class);
+        if ($permission_class == 'quoteversion') {
+            $permission_class = 'quote';
+        }
+
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permission = $this->get("permission.set_permission")->getPermission($quoteVersion, $permission_class, $user->getId());
+            if ($permission == NULL || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+                throw $this->createAccessDeniedException();
+            }
+        }
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($id);

@@ -1668,6 +1668,26 @@ class UserController extends Controller
     }
 
     public function getTourPassengersAction($tourId, $parentId){
+        // Check context permissions.
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $tour_permission = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $user->getId());
+            $permission_pass = FALSE;
+
+            if ($user->getId() == $parentId) {
+                $permission_pass = TRUE;
+            }
+
+            if ($tour_permission != NULL && (in_array('organizer', $tour_permission) || in_array('assistant', $tour_permission))) {
+                $permission_pass = TRUE;
+            }
+
+            if (!$permission_pass) {
+                throw $this->createAccessDeniedException();
+            }
+        }
+
         $locale = $this->container->getParameter('locale');
         $em = $this->getDoctrine()->getManager();
         $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
