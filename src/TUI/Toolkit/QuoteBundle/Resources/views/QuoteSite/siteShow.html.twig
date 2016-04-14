@@ -211,7 +211,7 @@
 
                                         {# render the actual content block #}
                                         <div id="previewable-content-blocks-{{ items[item].id }}">
-                                            {{ render(controller('ContentBlocksBundle:ContentBlock:show', {'id':  items[item].id  })) }}
+                                            {{ render(controller('ContentBlocksBundle:ContentBlock:show', {'id':  items[item].id, 'quoteVersion': entity.id, 'class': 'quote'})) }}
                                         </div>
 
                                         {# give a placeholder for the editable version #}
