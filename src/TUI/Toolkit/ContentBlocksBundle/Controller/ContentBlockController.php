@@ -197,21 +197,6 @@ class ContentBlockController extends Controller
      */
     public function showAction($id, $quoteVersion=null, $class=null)
     {
-        // Check context permissions.
-        $permission_class = strtolower($class);
-        if ($permission_class == 'quoteversion') {
-          $permission_class = 'quote';
-        }
-
-        $securityContext = $this->container->get('security.authorization_checker');
-        if (!$securityContext->isGranted('ROLE_BRAND')) {
-          $user = $this->get('security.token_storage')->getToken()->getUser();
-          $permission = $this->get("permission.set_permission")->getPermission($quoteVersion, $permission_class, $user->getId());
-          if ($permission == NULL || (!in_array('organizer', $permission) && !in_array('assistant', $permission) && !in_array('parent', $permission))) {
-            throw $this->createAccessDeniedException();
-          }
-        }
-
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($id);
