@@ -56,8 +56,7 @@
 }
 
 .media-placeholder-image,
-#dropzone_form,
-.dropzone_form {
+.dropzone-form {
   width: 300px;
   height: 160px;
   background: transparent;
@@ -67,8 +66,7 @@
   margin-bottom: 20px;
 }
 
-#dropzone_form,
-.dropzone_form {
+.dropzone-form {
   display: none;
   padding: 20px;
 }
@@ -89,7 +87,7 @@
     bottom: 50%;
   }
 
-  &.edit .fa {
+  .edit .fa {
     top: 50%;
     bottom: auto;
     margin-top: -0.5em;
@@ -115,12 +113,32 @@
   position: relative;
 }
 
-#dropzone-form-close,
 .dropzone-form-close {
   position: absolute;
   right: 0;
-  top: 100%;
+  top: 0;
   z-index: 11;
-  cursor: pointer;
+  cursor: pointer !important;
   padding: 10px;
+  display: none;
+
+  * {
+    cursor: pointer !important;
+  }
+}
+
+.dropzone-form-errors {
+  display: none;
+  margin: 20px 0;
+}
+
+#dropzone-dialog {
+  .dropzone-form {
+    display: block;
+    margin: auto;
+  }
+
+  .dropzone-form-errors {
+    text-align: center;
+  }
 }

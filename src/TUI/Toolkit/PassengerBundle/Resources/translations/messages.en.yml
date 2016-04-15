@@ -115,11 +115,11 @@ passenger:
 
 
     emails:
-        thank_you: Thank you for your submission
-        notifications: You have new notifications
+        thank_you: Thank you for your Sign up to
+        notifications: You have new Tour Sign Ups
         invite-organizer:
             organizer-subject: A new organizer has been invited to your tour
-            new-user-subject: You have been invited to help manage a tour
+            new-user-subject: You have been added as an Organizer
 
     form:
         invite:

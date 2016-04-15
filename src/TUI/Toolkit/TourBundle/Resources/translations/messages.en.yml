@@ -148,7 +148,7 @@ tour:
         tasks: Tasks
         passenger_tasks: Passenger Tasks
         due: due by
-        overdue: Amount Past Due
+        overdue: Amount Overdue
         no_payments: No payments due at this time
         na: N/A
         signups: Sign-ups
@@ -298,11 +298,12 @@ tour:
     email:
         registration:
             subject: Toolkit Registration Confirmation
+            parent_subject: Activate your account
         password_reset:
             subject: Toolkit Password Reset
             action: Set Password
         setup:
-            subject: Set Up Your Tour
+            subject: Set Up Your
     form:
         honorific: Title
         fname: First Name
@@ -312,7 +313,7 @@ tour:
         media: Avatar
         password: Password
         contact_organizer:
-            message: Message to the organiser
+            label: Message to the organizer
         payment_task:
             value: Amount
             type: Payment Type

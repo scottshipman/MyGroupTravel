@@ -17,14 +17,18 @@
             {% else %}
                 <span style="float: left; margin-right: 15px;"  class="tui-text-avatar mdl-typography--headline">{{ passenger.fName[:1] }}</span>
             {% endif %}
-            <p class="mini-card-title"><strong>{{ passenger.fName }}</strong></p>
-            <p class="mini-card-title"><strong>{{ passenger.lName }}</strong></p>
+            <p class="mini-card-title forename"><strong>{{ passenger.fName }}</strong></p>
+            <p class="mini-card-title surname"><strong>{{ passenger.lName }}</strong></p>
             <p class="mini-card-title email"><strong><a href="mailto:{{ user.email }}">{{ user.email }}</a></strong></p>
             <label style="display: block; margin-left: 63px; min-width: 100%;">
                 <i style="color:{{ color }};" class="material-icons" >{{ icon }}</i>
-                <span>{{ currency.htmlSymbol | raw  }}{{ payments['total'] }} / {{ currency.htmlSymbol | raw  }}{{ due.total }}</span>
+                {% if due.total > 0 %}
+                    <span>{{ currency.htmlSymbol | raw  }}{{ payments['total'] }} / {{ currency.htmlSymbol | raw  }}{{ due.total }}</span>
+                {% else %}
+                    <span>Free Place</span>
+                {% endif %}
                 {% if overdue > 0 %}
-                    <span style="color:{{ color }}; margin-left: 1em;"> {{ currency.htmlSymbol | raw  }}{{ overdue }} Past Due </span>
+                    <span style="color:{{ color }}; margin-left: 1em;"> {{ currency.htmlSymbol | raw  }}{{ overdue }} {% trans %}payment.labels.past_due{% endtrans %}</span>
                 {% endif %}
 
             </label>

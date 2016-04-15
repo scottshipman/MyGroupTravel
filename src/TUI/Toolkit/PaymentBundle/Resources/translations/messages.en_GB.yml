@@ -40,7 +40,7 @@ payment:
         paid: Paid
         total_paid: Total Paid
         total_due: Total Due
-        past_due: Past Due
+        past_due: Overdue
         payment_history: Payment History
         collected: Collected
         schedule: Payment Schedule
