@@ -64,10 +64,12 @@ class AppExtension extends \Twig_Extension {
 
         $user_roles = $this->container->get("permission.set_permission")->getAllPermissions($class, $user);
 
-        foreach($user_roles as $user_role) {
+        if (!is_null($user_roles)) {
+          foreach($user_roles as $user_role) {
             if (in_array($user_role, $roles)) {
-                return TRUE;
+              return TRUE;
             }
+          }
         }
 
         return FALSE;
