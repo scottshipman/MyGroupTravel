@@ -313,7 +313,7 @@ tour:
         media: Avatar
         password: Password
         contact_organizer:
-            label: Message to the organiser
+            label: Message to the organizer
         payment_task:
             value: Amount
             type: Payment Type
