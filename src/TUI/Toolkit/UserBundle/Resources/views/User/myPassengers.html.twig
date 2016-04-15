@@ -22,7 +22,8 @@
 {% endblock %}
 
 {% block page_title_menu %}
-
+    {% embed "TourBundle:Tour:tourMenu.html.twig" %}
+    {% endembed %}
 {% endblock %}
 
 {% block back_link %}
