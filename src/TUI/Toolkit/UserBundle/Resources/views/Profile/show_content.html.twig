@@ -9,9 +9,9 @@
                 {#<div class="profile-details-card">#}
 
                 <div class="intro-text">
-                    {% if ("tour" | getAllRoles() == "organizer" or "tour" | getAllRoles() == "assistant") %}
+                    {% if ("tour" | checkAllRoles(["organizer", "assistant"])) %}
                         {{ "user.profile.intro.organizer"|trans({'%name%': user.firstName})|raw }}
-                    {% elseif "tour" | getAllRoles() == "parent" %}
+                    {% elseif "tour" | checkAllRoles("parent") %}
                         {{ "user.profile.intro.parent"|trans({'%name%': user.firstName})|raw }}
                     {% endif %}
                 </div>
