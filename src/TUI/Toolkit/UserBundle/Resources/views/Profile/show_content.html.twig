@@ -8,13 +8,15 @@
             <div class="tour-show-left-column" style="margin-top: 0;">
                 {#<div class="profile-details-card">#}
 
-                <div class="intro-text">
-                    {% if ("tour" | checkAllRoles(["organizer", "assistant"])) %}
-                        {{ "user.profile.intro.organizer"|trans({'%name%': user.firstName})|raw }}
-                    {% elseif "tour" | checkAllRoles("parent") %}
-                        {{ "user.profile.intro.parent"|trans({'%name%': user.firstName})|raw }}
-                    {% endif %}
-                </div>
+                {% if ("tour" | checkAllRoles(["organizer", "assistant", "parent"])) %}
+                    <div class="intro-text">
+                        {% if ("tour" | checkAllRoles(["organizer", "assistant"])) %}
+                            {{ "user.profile.intro.organizer"|trans({'%name%': user.firstName})|raw }}
+                        {% elseif "tour" | checkAllRoles("parent") %}
+                            {{ "user.profile.intro.parent"|trans({'%name%': user.firstName})|raw }}
+                        {% endif %}
+                    </div>
+                {% endif %}
 
                     <ul class="tour-show-submenu">
                         <li><h2 class="mdl-card__title-text">{% trans %}user.profile.label.account_details{% endtrans %}</h2>
