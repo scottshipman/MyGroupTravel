@@ -16,7 +16,7 @@
     <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
         <div style="float: left; color: grey;" class="pcardname">
             <div class="{{ emergency }} {{ medical }} {{ passport }} {{ dietary }} {{ complete }}"></div>
-            <a href="{{ path('manage_passenger_show', {'id': passenger.id }) }}" title="{% trans %}tour.dashboard.view_passenger{% endtrans %}">
+            <a href="{{ path('manage_passenger_show', {'id': passenger.id }) }}" title="{% trans %}tour.dashboard.view_passenger{% endtrans %}" class="caller-btn">
                 {% if passenger.media %}
                     <img style="float: left; margin-right: 15px;"  class="tui-image-avatar" src="{{ ( passenger.media.getRelativePath ~ "/" ~ passenger.media.getHashedFilename ) | imagine_filter('thumbnail') }}">
                 {% elseif passenger.fName and passenger.lName %}
