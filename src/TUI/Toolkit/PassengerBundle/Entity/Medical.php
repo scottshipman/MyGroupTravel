@@ -10,6 +10,8 @@ use Doctrine\Common\Annotations;
 use Gedmo\Mapping\Annotation as Gedmo;
 use APY\DataGridBundle\Grid\Mapping as GRID;
 use Doctrine\Common\Collections\ArrayCollection;
+use Ambta\DoctrineEncryptBundle\Configuration\Encrypted;
+
 /**
  * Medical
  *
@@ -44,12 +46,14 @@ class Medical
      * @ORM\Column(name="doctorName", type="text", nullable=true)
      * @GRID\Column(title="Display Name", export=true)
      * @Assert\NotBlank()
+     * @Encrypted
      */
     private $doctorName;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
+     * @Encrypted
      */
     private $doctorNumber;
 
@@ -59,6 +63,7 @@ class Medical
      * @ORM\Column(name="conditions", type="text", nullable=true)
      * @GRID\Column(title="Conditions", export=true)
      * @Assert\NotBlank()
+     * @Encrypted
      */
     private $conditions;
 
@@ -68,6 +73,7 @@ class Medical
      * @ORM\Column(name="medications", type="text", nullable=true)
      * @GRID\Column(title="Medications", export=true)
      * @Assert\NotBlank()
+     * @Encrypted
      */
     private $medications;
 

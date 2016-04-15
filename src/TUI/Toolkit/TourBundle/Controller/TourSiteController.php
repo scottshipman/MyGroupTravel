@@ -383,6 +383,15 @@ class TourSiteController extends Controller
    * Edit summary data on Site Show page using ajaxForm
    */
   public function editSummaryAction($id) {
+    // Check context permissions.
+    $securityContext = $this->container->get('security.authorization_checker');
+    if (!$securityContext->isGranted('ROLE_BRAND')) {
+      $user = $this->get('security.token_storage')->getToken()->getUser();
+      $permission = $this->get("permission.set_permission")->getPermission($id, 'tour', $user->getId());
+      if ($permission == null || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+        throw $this->createAccessDeniedException();
+      }
+    }
 
     $em = $this->getDoctrine()->getManager();
 
@@ -433,13 +442,22 @@ class TourSiteController extends Controller
    */
   public function updateSummaryAction(Request $request, $id)
   {
+    // Check context permissions.
+    $securityContext = $this->container->get('security.authorization_checker');
+    if (!$securityContext->isGranted('ROLE_BRAND')) {
+      $user = $this->get('security.token_storage')->getToken()->getUser();
+      $permission = $this->get("permission.set_permission")->getPermission($id, 'tour', $user->getId());
+      if ($permission == null || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+        throw $this->createAccessDeniedException();
+      }
+    }
+
     $date_format = $this->container->getParameter('date_format');
     $em = $this->getDoctrine()->getManager();
     $entity = $em->getRepository('TourBundle:Tour')->find($id);
     if (!$entity) {
       throw $this->createNotFoundException('Unable to find Tour entity.');
     }
-
 
     $editForm = $this->createSummaryEditForm($entity);
     $editForm->handleRequest($request);
@@ -468,6 +486,15 @@ class TourSiteController extends Controller
    *
    */
   public function updateTourDisplayNameAction($id) {
+    // Check context permissions.
+    $securityContext = $this->container->get('security.authorization_checker');
+    if (!$securityContext->isGranted('ROLE_BRAND')) {
+      $user = $this->get('security.token_storage')->getToken()->getUser();
+      $permission = $this->get("permission.set_permission")->getPermission($id, 'tour', $user->getId());
+      if ($permission == null || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+        throw $this->createAccessDeniedException();
+      }
+    }
 
     $value=htmlspecialchars($_POST['value']);
     $em = $this->getDoctrine()->getManager();

@@ -38,3 +38,6 @@ parameters:
 
     # JPEG Quality 0-100 for Liip Imagine Bundle
     image_quality: 75
+
+    # Encryption of Data
+    ambta_doctrine_encrypt_secret_key:

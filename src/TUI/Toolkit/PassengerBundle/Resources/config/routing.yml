@@ -17,7 +17,3 @@ passenger_medical:
 passenger_manage_passenger:
     resource: "@PassengerBundle/Resources/config/routing/passenger.yml"
     prefix:   /passenger
-
-passenger_homepage:
-    path:     /hello/{name}
-    defaults: { _controller: PassengerBundle:Default:index }

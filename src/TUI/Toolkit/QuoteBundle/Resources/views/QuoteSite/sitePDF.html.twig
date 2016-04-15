@@ -58,7 +58,7 @@
                     {% if items[item] != null %}
                 {# render the actual content block #}
                         <div class="pdf-content-block">
-                            {{ render(controller('ContentBlocksBundle:ContentBlock:show', {'id':  items[item].id })) }}
+                            {{ render(controller('ContentBlocksBundle:ContentBlock:show', {'id':  items[item].id, 'quoteVersion': entity.id, 'class': 'quote'})) }}
                         </div>
                     {% endif %}
                 {% endfor %}

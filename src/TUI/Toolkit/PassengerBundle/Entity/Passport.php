@@ -10,6 +10,8 @@ use Doctrine\Common\Annotations;
 use Gedmo\Mapping\Annotation as Gedmo;
 use APY\DataGridBundle\Grid\Mapping as GRID;
 use Doctrine\Common\Collections\ArrayCollection;
+use Ambta\DoctrineEncryptBundle\Configuration\Encrypted;
+
 /**
  * Passport
  *
@@ -33,6 +35,7 @@ class Passport
      * @ORM\Column(name="passport_number", type="text", nullable=true)
      * @GRID\Column(title="Passport Number", export=true)
      * @Assert\NotBlank()
+     * @Encrypted
      */
     private $passportNumber;
 
@@ -40,12 +43,14 @@ class Passport
      * @ORM\Column(type="string", nullable=true)
      * @GRID\Column(visible=false, filterable=false, export=true)
      * @Assert\NotBlank()
+     * @Encrypted
      */
     private $passportFirstName;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      * @GRID\Column(visible=false, filterable=false, export=true)
+     * @Encrypted
      */
     private $passportMiddleName;
 
@@ -53,6 +58,7 @@ class Passport
      * @ORM\Column(type="string", nullable=true)
      * @GRID\Column(visible=false, filterable=false, export=true)
      * @Assert\NotBlank()
+     * @Encrypted
      */
     private $passportLastName;
 
@@ -60,6 +66,7 @@ class Passport
      * @ORM\Column(type="string", nullable=true)
      * @GRID\Column(visible=false, filterable=false, export=true)
      * @Assert\NotBlank()
+     * @Encrypted
      */
     private $passportTitle;
 
@@ -67,6 +74,7 @@ class Passport
      * @ORM\Column(type="string", nullable=true)
      * @GRID\Column(visible=false, filterable=false, export=true)
      * @Assert\NotBlank()
+     * @Encrypted
      */
     private $passportGender;
 
@@ -74,6 +82,7 @@ class Passport
      * @ORM\Column(type="string", nullable=true)
      * @GRID\Column(visible=false, filterable=false, export=true)
      * @Assert\NotBlank()
+     * @Encrypted
      */
     private $passportNationality;
 
@@ -87,6 +96,7 @@ class Passport
      *      minMessage = "Your Issuing State must be at least {{ limit }} characters long",
      *      maxMessage = "Your Issuing State cannot be longer than {{ limit }} characters"
      * )
+     * @Encrypted
      */
     private $passportIssuingState;
 
@@ -97,6 +107,7 @@ class Passport
      * @ORM\Column(name="date_of_issue", type="date", nullable=true)
      * @GRID\Column(visible=true, export=true, operatorsVisible=false)
      * @Assert\NotBlank()
+     *
      */
     private $passportDateOfIssue;
 
@@ -107,6 +118,7 @@ class Passport
      * @ORM\Column(name="date_of_expiry", type="date", nullable=true)
      * @GRID\Column(visible=true, export=true, operatorsVisible=false)
      * @Assert\NotBlank()
+     *
      */
     private $passportDateOfExpiry;
 
@@ -117,6 +129,7 @@ class Passport
      * @ORM\Column(name="date_of_birth", type="date", nullable=true)
      * @GRID\Column(visible=true, export=true, operatorsVisible=false)
      * @Assert\NotBlank()
+     *
      */
     private $passportDateOfBirth;
 
