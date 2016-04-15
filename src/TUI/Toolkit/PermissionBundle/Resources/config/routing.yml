@@ -1,7 +1,3 @@
 permission_permission:
     resource: "@PermissionBundle/Resources/config/routing/permission.yml"
     prefix:   /permission
-
-permission_homepage:
-    path:     /hello/{name}
-    defaults: { _controller: PermissionBundle:Default:index }

@@ -53,7 +53,7 @@ class ContentBlockType extends AbstractType
               $builder
                 ->add('layoutType', 'entity', array(
                   'class' => 'ContentBlocksBundle:LayoutType',
-                  'data_class' => 'TUI\Toolkit\ContentBlocksBundle\Entity\LayoutType',
+               //   'data_class' => 'TUI\Toolkit\ContentBlocksBundle\Entity\LayoutType',
                   'choice_label' => 'name',
                   'expanded' => TRUE,
                   'multiple' => FALSE,
@@ -67,7 +67,7 @@ class ContentBlockType extends AbstractType
                   'required' => false,
                   'label' => 'This is a Slideshow',
                 ));
-              }
+            }
             $builder
               ->add('mediaWrapper', 'hidden', array(
                 'required' => false,
@@ -76,10 +76,10 @@ class ContentBlockType extends AbstractType
                     'class' => 'media-placeholder',
 //                    'multiple' => true
                 )
-            ))
+              ))
 
-            ->getForm()
-        ;
+                ->getForm()
+            ;
     }
 
     /**

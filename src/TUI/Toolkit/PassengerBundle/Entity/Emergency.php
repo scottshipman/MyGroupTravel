@@ -10,6 +10,7 @@ use Doctrine\Common\Annotations;
 use Gedmo\Mapping\Annotation as Gedmo;
 use APY\DataGridBundle\Grid\Mapping as GRID;
 use Doctrine\Common\Collections\ArrayCollection;
+use Ambta\DoctrineEncryptBundle\Configuration\Encrypted;
 
 /**
  * Emergency
@@ -34,6 +35,7 @@ class Emergency
      * @ORM\Column(name="emergencyName", type="text", nullable=true)
      * @GRID\Column(title="Emergency Contact Name", export=true)
      * @Assert\NotBlank()
+     * @Encrypted
      */
     private $emergencyName;
 
@@ -43,12 +45,14 @@ class Emergency
      * @ORM\Column(name="emergencyRelationship", type="text", nullable=true)
      * @GRID\Column(title="Emergency Relationship", export=true)
      * @Assert\NotBlank()
+     * @Encrypted
      */
     private $emergencyRelationship;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
+     * @Encrypted
      */
     private $emergencyNumber;
 
@@ -62,7 +66,7 @@ class Emergency
      * @Assert\Email(
      *   message = "The email '{{ value }}' is not a valid email."
      * )
-     *
+     * @Encrypted
      */
     private $emergencyEmail;
 

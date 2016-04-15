@@ -101,6 +101,17 @@ class PaymentTaskOverrideController extends Controller
             throw $this->createNotFoundException('Unable to find PaymentTaskOverride entity.');
         }
 
+        $tourId = $entity->getPassenger()->getTourReference()->getId();
+
+        // Check context permissions.
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permission = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $user->getId());
+            if ($permission == NULL || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+                throw $this->createAccessDeniedException();
+            }
+        }
 
         return $this->render('TourBundle:PaymentTaskOverride:show.html.twig', array(
             'entity'      => $entity,
@@ -119,6 +130,18 @@ class PaymentTaskOverrideController extends Controller
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find PaymentTaskOverride entity.');
+        }
+
+        $tourId = $entity->getPassenger()->getTourReference()->getId();
+
+        // Check context permissions.
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permission = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $user->getId());
+            if ($permission == NULL || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+                throw $this->createAccessDeniedException();
+            }
         }
 
         $editForm = $this->createEditForm($entity);
@@ -159,6 +182,18 @@ class PaymentTaskOverrideController extends Controller
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find PaymentTaskOverride entity.');
+        }
+
+        $tourId = $entity->getPassenger()->getTourReference()->getId();
+
+        // Check context permissions.
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permission = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $user->getId());
+            if ($permission == NULL || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+                throw $this->createAccessDeniedException();
+            }
         }
 
         $editForm = $this->createEditForm($entity);
