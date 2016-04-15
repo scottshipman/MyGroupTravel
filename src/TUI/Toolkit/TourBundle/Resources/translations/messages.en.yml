@@ -188,7 +188,7 @@ tour:
         departure: Days until departure
         registrations: Registrations
         passengers: Passengers
-        parent_price: Paid / Total Tour Price
+        parent_price: Paid
         view_passenger: View Passenger
         passenger_dashboard: Go to Passenger Dashboard
         task_dashboard: Go to Task Dashboard
