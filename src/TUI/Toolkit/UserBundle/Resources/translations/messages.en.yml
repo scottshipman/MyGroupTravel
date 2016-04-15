@@ -133,6 +133,7 @@ user:
             days: Days to go
             no_price: N/A
             contact: Contact
+        intro: <p>Your passengers for this trip are listed here, giving you an overview of the tour, including the number of tasks to be completed and price.<br />Click on the menu for each passenger to add important information and view their payment schedule</p>
 
 
     activate:
