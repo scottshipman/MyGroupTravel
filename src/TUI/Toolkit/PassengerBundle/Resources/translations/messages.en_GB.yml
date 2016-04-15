@@ -67,9 +67,9 @@ passenger:
         show-everyone: Clear Filters
         passengers_for: Passengers
         organizers_for: Organisers
-        passenger_for: Passenger For
         all-passengers: All Travellers
         all-organizers: All Organisers
+        passenger_for: Passenger For
         waitlist: Wait List
         accepted: Accepted
         free: Free
@@ -118,11 +118,11 @@ passenger:
 
 
     emails:
-        thank_you: Thank you for your submission
-        notifications: You have new notifications
+        thank_you: Thank you for your Sign up to
+        notifications: You have new Tour Sign Ups
         invite-organizer:
             organizer-subject: A new organiser has been invited to your tour
-            new-user-subject: You have been invited to help manage a tour
+            new-user-subject: You have been added as an Organiser
 
     form:
         invite:
