@@ -135,7 +135,6 @@ user:
             contact: Contact
         intro: <p>Your passengers for this trip are listed here, giving you an overview of the tour, including the number of tasks to be completed and price.<br />Click on the menu for each passenger to add important information and view their payment schedule</p>
 
-
     activate:
         brand: "Its time to set up your account so you can start managing Tours. Just setup your password and security question and you'll be on your way."
         organizer: "Its time to set up your account so you can start promoting your tour to passengers. Just setup your password and security question and you'll be on your way."
