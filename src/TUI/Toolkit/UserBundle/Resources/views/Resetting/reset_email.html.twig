@@ -349,7 +349,7 @@
 
                                                         <div><br>
                                                             Hi {{ user.firstName|capitalize }} {{ user.lastName|capitalize }}, <br><br>
-                                                            We've received a request to change your password. <br>
+                                                            We've received a request to reset your password. <br>
                                                             Click on the button below and follow the instructions to change your password.
                                                         </div>
                                                 </td>
@@ -359,7 +359,7 @@
                                                     <table border="0" cellpadding="15" cellspacing="0" class="templateButton">
                                                         <tr>
                                                             <td valign="middle" class="templateButtonContent">
-                                                                    <div><a href="{{ absolute_url("/user/password/reset/" ~ user.confirmationToken) }}" target="_blank">Choose a password</a></div>
+                                                                    <div><a href="{{ absolute_url("/user/password/reset/" ~ user.confirmationToken) }}" target="_blank">Reset Password</a></div>
                                                             </td>
                                                         </tr>
                                                     </table>

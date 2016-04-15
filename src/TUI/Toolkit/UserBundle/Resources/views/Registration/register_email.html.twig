@@ -347,11 +347,19 @@
                                                 <td valign="top" class="bodyContent">
                                                     <h2 class="h2">Activate your account</h2>
 
-                                                    <div><br>
-                                                        Hi {{ user.firstName|capitalize }} {{ user.lastName|capitalize }}</br>
-                                                        An account has been created for you for {{ brand.name }}'s Tour management application.</br>
-                                                        Your login will be your email address: {{ user.email }}</br>
-                                                        To finish activating your account please click the button below.
+                                                    <div>
+                                                        <p>Hi {{ user.firstName|capitalize }} {{ user.lastName|capitalize }},</p>
+                                                        <p>An account has been created for you for {{ brand.name }}'s Tour management application.</p>
+
+                                                        <p>You will now be able to add the required information for your passenger in your own secure area:</p>
+                                                        <p>Medical Information</p>
+                                                        <p>Dietary Information</p>
+                                                        <p>Emergency Contact Information</p>
+                                                        <p>Passport Information</p>
+                                                        <p>You will also be able to keep track of payments that you have made towards the trip</p>
+
+                                                        <p>Your log in will be your email address: {{ user.email }}</p>
+                                                        <p>To finish activating your account please click the button below</p>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -360,7 +368,7 @@
                                                     <table border="0" cellpadding="15" cellspacing="0" class="templateButton">
                                                         <tr>
                                                             <td valign="middle" class="templateButtonContent">
-                                                                <div><a href="{{ absolute_url("/user/register/confirm/" ~ user.confirmationToken) }}">Activate</a></div>
+                                                                <div><a href="{{ absolute_url("/user/register/confirm/" ~ user.confirmationToken) }}">Activate Account</a></div>
                                                             </td>
                                                         </tr>
                                                     </table>

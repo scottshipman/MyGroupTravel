@@ -15,9 +15,10 @@ class ContactOrganizerType extends AbstractType
 
     private $locale;
 
-    public function __construct($locale)
+    public function __construct($locale, $active_organizer)
     {
         $this->locale = $locale;
+        $this->active_organizer = $active_organizer;
     }
     /**
      * @param FormBuilderInterface $builder
@@ -36,18 +37,29 @@ class ContactOrganizerType extends AbstractType
                 $date_format = 'MM-dd-yyyy';
                 break;
         }
-        $builder
 
+        $label = 'tour.form.contact_organizer.label';
+
+        // Send different message if organizer is active.
+        if ($this->active_organizer) {
+            $message = 'We have created a set of tools to help you manage your tour online and you need to log in to start using them.';
+        }
+        else {
+            $message = 'We have created a set of tools to help you manage your tour online and you need to activate your account to start using them.';
+        }
+
+        $builder
             ->add('message', 'textarea', array(
-                'label' => 'tour.form.contact_organizer.message',
+                'label' => $label,
                 'mapped' => false,
                 'required' => false,
-                'data' => 'We have created a set of tools to help you manage your tour online and you need to activate your account to start using them.',
+                'data' => $message,
                 'attr' => array(
                     'maxlength' => 800,
-                )
+                ),
             ))
         ;
+
     }
 
     /**
@@ -55,10 +67,7 @@ class ContactOrganizerType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-//            'data_class' => 'TUI\Toolkit\TourBundle\Entity\Tour',
-//            'cascade_validation' => true
-        ));
+        $resolver->setDefaults(array());
     }
 
     /**
