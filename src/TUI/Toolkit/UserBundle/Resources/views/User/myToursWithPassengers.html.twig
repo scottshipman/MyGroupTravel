@@ -34,10 +34,6 @@
                 {% endif %}
                 {% set passengersLink = path('manage_parent_passenger_dashboard', {'tourId': parent.id, 'parentId': app.user.id}) %}
 
-
-                <h6 style="position: absolute; right: 10px; top: 10px; color: white;" class="mdl-card_title-text"><a style="text-decoration: none; color:white;" href="{{ passengersLink }}"><i class="material-icons">edit</i>Manage Passengers</a></h6>
-
-
                 <h2 class="mdl-card__title-text"><a href="{{ tourlink }}">{% trans %}user.profile.my_quotes.tour{% endtrans %}: {{ parent.name }} </a></h2>
 
                 {#<h4 class="mdl-card_title-text"><a href="{{ passengersLink }}">Something Something</a></h4>#}
@@ -93,9 +89,14 @@
                     </li>
                 </ul>
             </div>
-            <a href="{{ tourlink }}" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" style="width: 85%; margin: 10px auto 15px;">
-                {% trans %}user.actions.view_tour{% endtrans %} <i class="material-icons" style="vertical-align: middle;">arrow_forward</i>
-            </a>
+            <ul class="passenger-profile-tour-card-buttons">
+                <li><a href="{{ passengersLink }}" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" >
+                    <i class="material-icons">edit</i>{% trans %}user.actions.manage_passengers{% endtrans %}
+                </a></li>
+                <li><a href="{{ tourlink }}" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                    {% trans %}user.actions.view_tour_website{% endtrans %} <i class="material-icons">arrow_forward</i>
+                </a></li>
+            </ul>
         </div>
     {% endif %}
 {% endfor %}

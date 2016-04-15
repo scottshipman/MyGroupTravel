@@ -32,7 +32,9 @@ user:
         activate: Submit
         security: Reset Security Info
         view_tour: View Tour
+        view_tour_website: View Tour Website
         view_quote: View Quote
+        manage_passengers: Manage Passengers
 
     table:
         label:
