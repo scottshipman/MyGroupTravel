@@ -62,6 +62,7 @@ security:
             - { path: ^/passenger/passport/$, role: ROLE_SUPER_ADMIN }
             - { path: ^/passenger/passport/.+/delete$, role: ROLE_SUPER_ADMIN }
             - { path: ^/passenger/new/.+$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+            - { path: ^/passenger/create/.+$, role: IS_AUTHENTICATED_ANONYMOUSLY }
             - { path: ^/passenger/, role: ROLE_CUSTOMER }
             - { path: ^/payment/$, role: ROLE_SUPER_ADMIN }
             - { path: ^/payment/.+/delete$, role: ROLE_SUPER_ADMIN }
