@@ -56,20 +56,30 @@ class AppExtension extends \Twig_Extension {
      * @param $roles
      * @return mixed
      */
-    public function checkUserPermissions($class, $roles) {
-        if (!is_array($roles)) {
-            $roles = array($roles);
+    public function checkUserPermissions($class, $objectId = NULL, $roles = NULL) {
+        if (is_string($roles)) {
+          $roles = array($roles);
         }
 
         $user = $this->container->get('security.context')->getToken()->getUser();
 
-        $user_roles = $this->container->get("permission.set_permission")->getAllPermissions($class, $user);
+        if (!is_null($objectId)) {
+          $user_roles = $this->container->get("permission.set_permission")->getPermission($objectId, $class, $user);
+        }
+        else {
+          $user_roles = $this->container->get("permission.set_permission")->getAllPermissions($class, $user);
+        }
 
-        if (!is_null($user_roles)) {
-          foreach($user_roles as $user_role) {
-            if (in_array($user_role, $roles)) {
-              return TRUE;
+        if (!empty($user_roles)) {
+          if (!empty($roles)) {
+            foreach($user_roles as $user_role) {
+              if (in_array($user_role, $roles)) {
+                return TRUE;
+              }
             }
+          }
+          else {
+            return TRUE;
           }
         }
 
