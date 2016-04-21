@@ -21,7 +21,7 @@ class AppExtension extends \Twig_Extension {
         return array(
             new \Twig_SimpleFilter('paxLabel', array($this, 'paxLabel')),
             new \Twig_SimpleFilter('getRoles', array($this, 'getRoles')),
-            new \Twig_SimpleFilter('checkAllRoles', array($this, 'checkAllRoles')),
+            new \Twig_SimpleFilter('checkUserPermissions', array($this, 'checkUserPermissions')),
             new \Twig_SimpleFilter('getClass', array($this, 'getClass')),
         );
     }
@@ -50,12 +50,13 @@ class AppExtension extends \Twig_Extension {
     }
 
     /**
-     * Check all roles for a class.
+     * Check user permissions.
      *
      * @param $class
+     * @param $roles
      * @return mixed
      */
-    public function checkAllRoles($class, $roles) {
+    public function checkUserPermissions($class, $roles) {
         if (!is_array($roles)) {
             $roles = array($roles);
         }
