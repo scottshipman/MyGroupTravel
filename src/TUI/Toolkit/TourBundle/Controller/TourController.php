@@ -452,17 +452,27 @@ class TourController extends Controller
     private function createCreateForm(Tour $entity)
     {
         $locale = $this->container->getParameter('locale');
-        $currency_code = $this->container->getParameter('currency');
-        $em = $this->getDoctrine()->getManager();
-        $currency = $em->getRepository('CurrencyBundle:Currency')->findByCode($currency_code);
-        $currency = array_shift($currency);
+
         $form = $this->createForm(new TourType($entity, $locale), $entity, array(
-            'action' => $this->generateUrl('manage_tour_create'),
+            'action' => $this->generateUrl('manage_tour_new', array('entity' => $entity)),
             'method' => 'POST',
         ));
-        $form->get('quoteReference')->get('salesAgent')->setData($this->get('security.token_storage')->getToken()->getUser());
-        $form->get('currency')->setdata($currency);
-       // $form->get('expiryDate')->setdata(new \DateTime('now + 30 days'));
+
+        $entity_salesAgent = &$form->get('quoteReference')->get('salesAgent');
+        $entity_currency = &$form->get('currency');
+
+        if (empty($entity_salesAgent)) {
+          $form->get('quoteReference')->get('salesAgent')->setData($this->get('security.token_storage')->getToken()->getUser());
+        }
+
+        if (empty($entity_currency)) {
+            $currency_code = $this->container->getParameter('currency');
+            $em = $this->getDoctrine()->getManager();
+            $currency = $em->getRepository('CurrencyBundle:Currency')->findByCode($currency_code);
+            $currency = array_shift($currency);
+            $entity_currency->setdata($currency);
+        }
+
         $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('tour.actions.create')));
 
         return $form;
