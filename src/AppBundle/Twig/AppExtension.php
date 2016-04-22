@@ -62,10 +62,10 @@ class AppExtension extends \Twig_Extension {
 
         if (!empty($user_roles)) {
           if (!empty($roles)) {
-            foreach($user_roles as $user_role) {
-              if (in_array($user_role, $roles)) {
-                return TRUE;
-              }
+            $matched_roles = array_intersect($roles, $user_roles);
+
+            if (!empty($matched_roles)) {
+              return TRUE;
             }
           }
           else {
