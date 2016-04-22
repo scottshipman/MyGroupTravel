@@ -6,7 +6,7 @@
     </button>
     <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="tour-title-drop">
         <span>
-            {% if is_granted("ROLE_BRAND") or "tour" | getRoles(tourId) == "organizer" or "tour" | getRoles(tourId) == "assistant"%}
+            {% if is_granted("ROLE_BRAND") or "tour" | checkUserPermissions(tourId, ["organizer", "assistant"]) %}
                 {% block tour_dashboard_link %}
                     {#Tour Dashboard#}
                     <li><a href="{{ path('manage_tour_show', { 'id': tourId }) }}" class="mdl-menu__item">{% trans %}tour.title.index{% endtrans %}</a></li>
@@ -21,10 +21,7 @@
                 <li><a href="{{ path('manage_tour_edit', { 'id': tourId }) }}" class="mdl-menu__item">{% trans %}tour.menu.brand_edit{% endtrans %}</a></li>
             {% endif %}
 
-            {% if "tour" | getRoles(tourId) == "parent" %}
-                {#Manage Passengers#}
-                <li><a href="{{ path('manage_parent_passenger_dashboard', {'tourId': tourId, 'parentId': app.user.id}) }}" class="mdl-menu__item">{% trans %}passenger.title.manage{% endtrans %}</a></li>
-            {% else %}
+            {% if is_granted("ROLE_BRAND") or "tour" | checkUserPermissions(tourId, ["organizer", "assistant"]) %}
                 {#Passengers#}
                 <li><a href="{{ path('manage_passenger_dashboard', { 'tourId': tourId }) }}" class="mdl-menu__item">{% trans %}passenger.title.index{% endtrans %}</a></li>
 
@@ -33,6 +30,9 @@
 
                 {#Tasks#}
                 <li><a href="{{ path('manage_tour_tasks_dashboard', { 'id': tourId }) }}" class="mdl-menu__item">{% trans %}tour.dashboard.tasks{% endtrans %}</a></li>
+            {% elseif "tour" | checkUserPermissions(tourId, "parent") %}
+                {#Manage Passengers#}
+                <li><a href="{{ path('manage_parent_passenger_dashboard', {'tourId': tourId, 'parentId': app.user.id}) }}" class="mdl-menu__item">{% trans %}passenger.title.manage{% endtrans %}</a></li>
             {% endif %}
         </span>
     </ul>
