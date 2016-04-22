@@ -20,7 +20,6 @@ class AppExtension extends \Twig_Extension {
     public function getFilters() {
         return array(
             new \Twig_SimpleFilter('paxLabel', array($this, 'paxLabel')),
-            new \Twig_SimpleFilter('getRoles', array($this, 'getRoles')),
             new \Twig_SimpleFilter('checkUserPermissions', array($this, 'checkUserPermissions')),
             new \Twig_SimpleFilter('getClass', array($this, 'getClass')),
         );
@@ -35,18 +34,6 @@ class AppExtension extends \Twig_Extension {
         } else {
             return ucfirst($status);
         }
-    }
-
-    /*
-     * TWIG usage Ex: {% set role = 'tour' | getRoles(tour.id) %}
-     *            Ex2: {% if 'passenger' | getRoles(passenger.id)=='parent' %}
-     */
-    public function getRoles($class, $objectId) {
-        $user = $this->container->get('security.context')->getToken()->getUser();
-
-        $roles = $this->container->get("permission.set_permission")->getPermission($objectId, $class, $user);
-        if ($roles == NULL) { $roles = array();}
-        return array_shift($roles);
     }
 
     /**
