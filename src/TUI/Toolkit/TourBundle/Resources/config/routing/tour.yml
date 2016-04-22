@@ -68,6 +68,10 @@ manage_tour_notify_organizers:
     path:      /notify/organizers/{id}
     defaults:  { _controller: "TourBundle:Tour:organizerNotify" }
 
+manage_tour_convert_quote:
+    path:   /convert/quote/{id}
+    defaults: {_controller: "TourBundle:Tour:convertQuote" }
+    methods: [GET]
 
 
 

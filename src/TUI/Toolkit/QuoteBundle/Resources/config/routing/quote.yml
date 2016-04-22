@@ -75,11 +75,6 @@ manage_quote_clone:
     defaults: { _controller: "QuoteBundle:QuoteVersion:clone" }
     methods:  [POST, GET]
 
-manage_quote_convert:
-    path:   /convert/{id}
-    defaults: {_controller: "QuoteBundle:Quote:convert" }
-    methods: [GET]
-
 manage_quote_clonetemplate:
     path: /{id}/duplicate-template
     defaults: {_controller: "QuoteBundle:QuoteVersion:cloneTemplate" }
