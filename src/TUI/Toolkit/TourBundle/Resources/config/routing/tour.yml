@@ -6,6 +6,11 @@ manage_tour_new:
     path:     /new
     defaults: { _controller: "TourBundle:Tour:new" }
 
+manage_tour_create:
+    path:     /create
+    defaults: { _controller: "TourBundle:Tour:create" }
+    methods:  POST
+
 manage_tour_edit:
     path:     /{id}/edit
     defaults: { _controller: "TourBundle:Tour:edit" }
