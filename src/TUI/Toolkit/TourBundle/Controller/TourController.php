@@ -485,7 +485,7 @@ class TourController extends Controller
         ));
     }
 
-  public function convertAction(Request $request, $id)
+  public function convertQuoteAction(Request $request, $id)
   {
 
     $em = $this->getDoctrine()->getManager();
