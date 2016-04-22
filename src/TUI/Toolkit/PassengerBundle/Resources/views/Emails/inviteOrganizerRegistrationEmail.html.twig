@@ -347,21 +347,17 @@
                                                 <td valign="top" class="bodyContent">
                                                     <h2 class="h2">{{ 'passenger.emails.invite-organizer.new-user-subject' | trans }}</h2>
 
-                                                    <div><br>
-                                                        Hi {{ user.firstName|capitalize }} {{ user.lastName|capitalize }}</br></br>
-                                                        You have been invited to participate in {{ brand.name }}'s Tour management application,
-                                                        with privileges to help manage tour preparation activities.
-                                                        </br></br>View the Tour:
-                                                        <a title="Preview Tour:{{ tour.name }}" href="{{ absolute_url("/tour/view/" ~ tour.id) }}">{{ tour.name }}</a>
+                                                    <div>
+                                                        <p>Hi {{ user.firstName|capitalize }} {{ user.lastName|capitalize }},</p>
+                                                        <p>You have been added as an organiser to {{ tour.name }} by {{ currUser.firstName }} {{ currUser.lastName }}</p>
 
-                                                        </br></br>Your login will be your email address: {{ user.email }}</br>
-                                                        To accept this invitation and finish activating your account, please click the button below.
-                                                        </br></br><h4><strong>Invited By</strong></h4>
-                                                        <p>{{ currUser.firstName }} {{ currUser.lastName }}</br>
-                                                        {{ currUser.Email }}</p>
-                                                        {% if message is not empty %}<strong>With the message:</strong>
-                                                        {{ message }}
+                                                        {% if message is not empty %}<p>Message from {{ currUser.firstName }} {{ currUser.lastName }}</p>
+                                                            {{ message }}
                                                         {% endif %}
+
+                                                        <p>You will need to activate your account to manage the tour. </p>
+                                                        <p>Your login will be your email address: {{ user.email }}</p>
+                                                        <p>To finish activating your account, please click on the button below</p>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -370,7 +366,7 @@
                                                     <table border="0" cellpadding="15" cellspacing="0" class="templateButton">
                                                         <tr>
                                                             <td valign="middle" class="templateButtonContent">
-                                                                <div><a href="{{ absolute_url("/user/register/confirm/" ~ user.confirmationToken) }}">Activate</a></div>
+                                                                <div><a href="{{ absolute_url("/user/register/confirm/" ~ user.confirmationToken) }}">Activate account</a></div>
                                                             </td>
                                                         </tr>
                                                     </table>

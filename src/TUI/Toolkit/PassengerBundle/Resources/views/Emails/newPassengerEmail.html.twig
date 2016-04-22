@@ -348,8 +348,13 @@
                                             <tr>
                                                 <td valign="top" class="bodyContent">
                                                     <div><br>
-                                                        <h2 class="h2">Thank You For Your Submission</h2>
-                                                        <p>Thank you for registering interest in the tour.  Below is a copy of the information that has been sent to the tour organiser.</p>
+                                                        <h2 class="h2">Thank You For Your Sign Up</h2>
+                                                        <p>You have signed up for the below tour</p>
+                                                        <p>{{ tour_name }}</p>
+                                                        <p>Institution Name: {{ tour.institution }}</p>
+                                                        <p>Destination: {{ tour.destination }}</p>
+
+                                                        <p>Below is a copy of the information that has been sent to the tour organiser{% if organizer_name %} ({{ organizer_name }}){% endif %}.</p>
                                                         <h4><strong>Parent Information</strong></h4>
                                                         <p>{{ user.firstName }} {{ user.lastName }}</p>
                                                         <p>{{ user.Email }}</p>

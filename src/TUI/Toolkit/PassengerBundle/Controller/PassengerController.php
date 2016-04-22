@@ -180,9 +180,10 @@ class PassengerController extends Controller
 
                 $parentEmail = $user->getEmail();
                 $tourName = $tour->getName();
-
+                $institution = $tour->getInstitution();
+                $organizer_name = $tour->getOrganizer() != null ? $tour->getOrganizer()->getLastName() . ' ' . $tour->getOrganizer()->getFirstName(): NULL;
                 $message = \Swift_Message::newInstance()
-                    ->setSubject($this->get('translator')->trans('passenger.emails.thank_you'))
+                    ->setSubject($this->get('translator')->trans('passenger.emails.thank_you') . ' ' . $tourName . ', ' . $institution)
                     ->setFrom($this->container->getParameter('user_system_email'))
                     ->setTo($parentEmail)
                     ->setBody(
@@ -196,6 +197,7 @@ class PassengerController extends Controller
                                 'newPassengers' => $newPassengers,
                                 'locale' => $locale,
                                 'date_format' => $date_format,
+                                'organizer_name' => $organizer_name,
                             )
                         ), 'text/html');
                 $this->get('mailer')->send($message);
@@ -1126,14 +1128,14 @@ class PassengerController extends Controller
         if($form->isValid()) {
 
             $data = $form->getData();
-
+            $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
+            $subject = $this->get('translator')->trans('passenger.emails.invite-organizer.new-user-subject') . ' ' . $tour->getName();
             // check for existing user acct first
             $exists = $em->getRepository('TUIToolkitUserBundle:User')->findBy(array('email' => $data['email']));
             if(!empty($exists)){
                 $user = array_shift($exists);
 
                 // if an assistant we need to create a new passenger record if they are already registered
-                $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
                 $newPassenger = new Passenger();
                 $newPassenger->setStatus("waitlist");
                 $newPassenger->setFree(false);
@@ -1170,7 +1172,7 @@ class PassengerController extends Controller
                 //send another email to the organizer just to confirm because they have already registered.
 
                 $message = \Swift_Message::newInstance()
-                    ->setSubject($this->get('translator')->trans('passenger.emails.notifications'))
+                    ->setSubject($subject)
                     ->setFrom($this->container->getParameter('user_system_email'))
                     ->setTo($user->getEmail())
                     ->setBody(
@@ -1220,8 +1222,7 @@ class PassengerController extends Controller
                 $newEmail = $user->getEmail();
 
                 $message = \Swift_Message::newInstance()
-                    ->setSubject($this->get('translator')
-                        ->trans('passenger.emails.invite-organizer.new-user-subject'))
+                    ->setSubject($subject)
                     ->setFrom($this->container->getParameter('user_system_email'))
                     ->setTo($newEmail)
                     ->setBody(
@@ -1338,9 +1339,11 @@ class PassengerController extends Controller
         if(!$brand) {
             $brand = $default_brand;
         }
+        $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
+        $subject = $tour->getName() . ', ' . $tour->getInstitution() . ' - ' . $this->get('translator')->trans('tour.email.registration.parent_subject');
 
         $message = \Swift_Message::newInstance()
-            ->setSubject($this->get('translator')->trans('user.email.registration.subject'))
+            ->setSubject($subject)
             ->setFrom($this->container->getParameter('user_system_email'))
             ->setTo($userEmail)
             ->setBody(
@@ -1359,7 +1362,6 @@ class PassengerController extends Controller
 
         $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('user.flash.registration_notification') . ' ' .$user->getEmail());
 
-//        return $this->redirect($this->generateUrl('user'));
         return $this->redirect($_SERVER['HTTP_REFERER']);
 
     }
