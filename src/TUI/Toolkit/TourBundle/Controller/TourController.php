@@ -494,36 +494,39 @@ class TourController extends Controller
         ));
     }
 
+  /*
+   * Helper function to convert quote to a tour.
+   */
   public function convertQuoteAction(Request $request, $id)
   {
+      $em = $this->getDoctrine()->getManager();
 
-    $em = $this->getDoctrine()->getManager();
+      $quoteVersion = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
 
-    $quoteVersion = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
-
-    if (!$quoteVersion) {
-      throw $this->createNotFoundException('Unable to find Quote Version while converting to tour.');
-    }
-
-    $quoteReference = $quoteVersion->getQuoteReference();
-    $quote = $em->getRepository('QuoteBundle:Quote')->find($quoteReference);
-
-    if (!$quote) {
-      throw $this->createNotFoundException('Unable to find Quote while converting to tour.');
-    }
-
-    // just in case - dont convert if the following rules fail
-
-    if($quote->getConverted() == TRUE ){
-      throw $this->createNotFoundException($this->get('translator')->trans('quote.exception.convert'));
-    }
-
-    $siblings = $em->getRepository('QuoteBundle:QuoteVersion')->findBy(array('quoteReference' => $quoteReference));
-    foreach($siblings as $sibling){
-      if($sibling->getConverted() == TRUE){
-        throw $this->createNotFoundException($this->get('translator')->trans('quote.exception.convert_sibling'));
+      // Check if the quoteVersion still exists.
+      if (!$quoteVersion) {
+        throw $this->createNotFoundException('Unable to find Quote Version while converting to tour.');
       }
-    }
+
+      $quoteReference = $quoteVersion->getQuoteReference();
+      $quote = $em->getRepository('QuoteBundle:Quote')->find($quoteReference);
+
+      // Check if the quote still exists.
+      if (!$quote) {
+        throw $this->createNotFoundException('Unable to find Quote while converting to tour.');
+      }
+
+      // Check if quote is already converted.
+      if($quote->getConverted() == TRUE ){
+        throw $this->createNotFoundException($this->get('translator')->trans('quote.exception.convert'));
+      }
+
+      $siblings = $em->getRepository('QuoteBundle:QuoteVersion')->findBy(array('quoteReference' => $quoteReference));
+      foreach($siblings as $sibling){
+        if($sibling->getConverted() == TRUE){
+          throw $this->createNotFoundException($this->get('translator')->trans('quote.exception.convert_sibling'));
+        }
+      }
 
     $quote->setConverted(TRUE);
     $quoteVersion->setConverted(TRUE);
