@@ -52,6 +52,9 @@ class AppExtension extends \Twig_Extension {
     /**
      * Check user permissions.
      *
+     * TWIG usage Ex: {% set role = 'tour' | checkUserPermissions(tour.id, ["parent", "organizer", "assistant"]) %}
+     *            Ex2: {% if 'passenger' | checkUserPermissions(passenger.id, ["parent", "organizer", "assistant"]) %}
+     *
      * @param $class
      * @param $roles
      * @return mixed
