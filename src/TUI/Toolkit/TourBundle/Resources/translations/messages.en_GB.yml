@@ -42,7 +42,7 @@ tour:
         back_dashboard: Back to Tour Dashboard
         edit: Edit
         update: Update
-        create: Create
+        create: Create tour
         delete: Delete
         create_new: Create a New Tour
         password: Set Password
