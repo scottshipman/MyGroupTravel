@@ -534,64 +534,57 @@ class TourController extends Controller
     $em->persist($quote);
     $em->persist($quoteVersion);
 
-    // get first trip status from doctrine
-    $tripStatus = $em->createQueryBuilder()
-      ->select('e')
-      ->from('TripStatusBundle:TripStatus', 'e')
-      ->orderBy('e.id', 'ASC')
-      ->where('e.visible = TRUE')
-      ->setMaxResults(1)
-      ->getQuery()
-      ->getOneOrNullResult();
+      // Get first trip status from doctrine.
+      $tripStatus = $em->createQueryBuilder()
+        ->select('e')
+        ->from('TripStatusBundle:TripStatus', 'e')
+        ->orderBy('e.id', 'ASC')
+        ->where('e.visible = TRUE')
+        ->setMaxResults(1)
+        ->getQuery()
+        ->getOneOrNullResult();
 
-    $tour = new Tour();
-    $tour->setTripStatus($tripStatus);
-    $tour->setQuoteNumber($quoteVersion->getQuoteNumber());
-    $tour->setQuoteReference($quote);
-    $tour->setQuoteVersionReference($quoteVersion);
+      $tour = new Tour();
+      $tour->setTripStatus($tripStatus);
+      $tour->setQuoteNumber($quoteVersion->getQuoteNumber());
+      $tour->setQuoteReference($quote);
+      $tour->setQuoteVersionReference($quoteVersion);
+      $tour->setBoardBasis($quoteVersion->getBoardBasis());
+      $tour->getCreated(new \DateTime());
+      $tour->setCurrency($quoteVersion->getCurrency());
+      $tour->setDepartureDate($quoteVersion->getDepartureDate());
+      $tour->setDestination($quote->getDestination());
+      $tour->setDuration($quoteVersion->getDuration());
+      $tour->setDisplayName($quoteVersion->getDisplayName());
+      $tour->setExpiryDate($quoteVersion->getExpiryDate());
+      $tour->setFreePlaces($quoteVersion->getFreePlaces());
+      $tour->setInstitution($quote->getInstitution());
+      $tour->setLocked(FALSE);
+      $tour->setName($quote->getName() . ' - ' . $quoteVersion->getName());
+      $tour->setOrganizer($quote->getOrganizer());
+      $tour->setPayingPlaces($quoteVersion->getPayingPlaces());
+      $tour->setPricePerson($quoteVersion->getPricePerson());
+      $tour->setPricePersonPublic($quoteVersion->getPricePerson());
+      $tour->setReturnDate($quoteVersion->getReturnDate());
+      $tour->setSalesAgent($quote->getSalesAgent());
+      $tour->setSecondaryContact($quote->getSecondaryContact());
+      $tour->setTotalPrice(0);
+      $tour->setTransportType($quoteVersion->getTransportType());
+      $tour->setWelcomeMsg($quoteVersion->getWelcomeMsg());
+      $tour->setCashPayment(false);
+      $tour->setBankTransferPayment(false);
+      $tour->setOnlinePayment(false);
+      $tour->setOtherPayment(false);
+      $tour->setRegistrations(0);
+      $headerBlock = $quoteVersion->getHeaderBlock();
+      if($headerBlock !== NULL){ $blockId = $headerBlock->getId();}
+      if(isset($blockId)) {
+        $headerBlock = $this->cloneHeaderBlock($blockId);
+        $tour->setHeaderBlock($headerBlock);
+      }
+      $content = $this->cloneContentBlocks($quoteVersion->getContent());
+      $tour->setContent($content);
 
-    $tour->setBoardBasis($quoteVersion->getBoardBasis());
-    $tour->getCreated(new \DateTime());
-    $tour->setCurrency($quoteVersion->getCurrency());
-    $tour->setDepartureDate($quoteVersion->getDepartureDate());
-    $tour->setDestination($quote->getDestination());
-    $tour->setDuration($quoteVersion->getDuration());
-    $tour->setDisplayName($quoteVersion->getDisplayName());
-    $tour->setExpiryDate($quoteVersion->getExpiryDate());
-    $tour->setFreePlaces($quoteVersion->getFreePlaces());
-
-    $tour->setInstitution($quote->getInstitution());
-    $tour->setLocked(FALSE);
-    $tour->setName($quote->getName() . ' - ' . $quoteVersion->getName());
-    $tour->setOrganizer($quote->getOrganizer());
-    $tour->setPayingPlaces($quoteVersion->getPayingPlaces());
-    $tour->setPricePerson($quoteVersion->getPricePerson());
-    $tour->setPricePersonPublic($quoteVersion->getPricePerson());
-    $tour->setReturnDate($quoteVersion->getReturnDate());
-    $tour->setSalesAgent($quote->getSalesAgent());
-    $tour->setSecondaryContact($quote->getSecondaryContact());
-    $tour->setTotalPrice(0);
-    $tour->setTransportType($quoteVersion->getTransportType());
-    //$tour->setTripStatus();
-    $tour->setWelcomeMsg($quoteVersion->getWelcomeMsg());
-    $tour->setCashPayment(false);
-    $tour->setBankTransferPayment(false);
-    $tour->setOnlinePayment(false);
-    $tour->setOtherPayment(false);
-    $tour->setRegistrations(0);
-
-
-    //  $tour->setContent()
-    //  $tour->setHeaderBlock();
-    $headerBlock = $quoteVersion->getHeaderBlock();
-    if($headerBlock !== NULL){ $blockId = $headerBlock->getId();}
-    if(isset($blockId)) {
-      $headerBlock = $this->cloneHeaderBlock($blockId);
-      $tour->setHeaderBlock($headerBlock);
-    }
-
-    $content = $this->cloneContentBlocks($quoteVersion->getContent());
-    $tour->setContent($content);
 
     $em->persist($tour);
     $em->flush();
