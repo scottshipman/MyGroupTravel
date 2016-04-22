@@ -430,6 +430,38 @@ class TourController extends Controller
             $permission = $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
             $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.save') . $entity->getName());
 
+            // Stub out passenger record and parent permission for passenger for organizer.
+            $organizer = $entity->getOrganizer();
+            $newPassenger = new Passenger();
+            $newPassenger->setFName($organizer->getFirstName());
+            $newPassenger->setLName($organizer->getLastName());
+            $newPassenger->setStatus("waitlist");
+            $newPassenger->setSignUpDate(new \DateTime());
+            $newPassenger->setTourReference($entity);
+            $newPassenger->setFree(FALSE);
+            $newPassenger->setSelf(TRUE);
+            $em->persist($newPassenger);
+            $em->flush();
+
+            $permission = new Permission();
+            $permission->setClass('passenger');
+            $permission->setObject($newPassenger->getId());
+            $permission->setGrants('parent');
+            $permission->setUser($organizer);
+            $em->persist($permission);
+            $em->flush();
+
+            // Update quote and quoteVersion.
+            $quoteId = $entity->getQuoteVersionReference();
+            $quoteVersion = $em->getRepository('QuoteBundle:QuoteVersion')->find($quoteId);
+            $quoteReference = $quoteVersion->getQuoteReference();
+            $quote = $em->getRepository('QuoteBundle:Quote')->find($quoteReference);
+            $quote->setConverted(TRUE);
+            $quoteVersion->setConverted(TRUE);
+
+            $em->persist($quote);
+            $em->persist($quoteVersion);
+
             return $this->redirect($this->generateUrl('manage_tour'));
         }
         $date_format = $this->container->getParameter('date_format');
@@ -528,12 +560,6 @@ class TourController extends Controller
         }
       }
 
-    $quote->setConverted(TRUE);
-    $quoteVersion->setConverted(TRUE);
-
-    $em->persist($quote);
-    $em->persist($quoteVersion);
-
       // Get first trip status from doctrine.
       $tripStatus = $em->createQueryBuilder()
         ->select('e')
@@ -589,28 +615,6 @@ class TourController extends Controller
     $em->persist($tour);
     $em->flush();
 
-    // stub out passenger record and parent permission for passenger for organizer
-    $organizer = $tour->getOrganizer();
-    $newPassenger = new Passenger();
-    //$newPassenger->setDateOfBirth(); // we dont know what this is here
-    $newPassenger->setFName($organizer->getFirstName());
-    //$newPassenger->setGender(); // we dont know what this is here
-    $newPassenger->setLName($organizer->getLastName());
-    $newPassenger->setStatus("waitlist");
-    $newPassenger->setSignUpDate(new \DateTime());
-    $newPassenger->setTourReference($tour);
-    $newPassenger->setFree(FALSE);
-    $newPassenger->setSelf(TRUE);
-    $em->persist($newPassenger);
-    $em->flush();
-
-    $permission = new Permission();
-    $permission->setClass('passenger');
-    $permission->setObject($newPassenger->getId());
-    $permission->setGrants('parent');
-    $permission->setUser($organizer);
-    $em->persist($permission);
-    $em->flush();
 
     return $this->redirect($this->generateUrl('manage_tour_edit', array('id' => $tour->getId())));
 
