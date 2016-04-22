@@ -356,15 +356,18 @@ class TourController extends Controller
      * Creates a new Tour entity.
      *
      */
-    public function createAction(Request $request)
+    public function createAction(Request $request, Tour $entity)
     {
-//      //Handling the autocomplete field for organizer.  We need to convert the string from organizer into the object.
-        $entity = new Tour();
+
+        if (!$entity) {
+          $entity = new Tour();
+        }
+
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
         $em = $this->getDoctrine()->getManager();
 
-        //handling ajax request for organizer
+        // Handling ajax request for organizer.
         $o_data = $form->getData()->getOrganizer();
         if (preg_match('/<+(.*?)>/', $o_data, $o_matches)) {
             $email = $o_matches[1];
@@ -377,7 +380,7 @@ class TourController extends Controller
         }else {
             $form['organizer']->addError(new FormError($this->get('translator')->trans('quote.exception.organizer')));
         }
-        //handling ajax request for SalesAgent same as we did with organizer
+        // Handling ajax request for SalesAgent same as we did with organizer.
         $a_data = $form->getData()->getSalesAgent();
         if (preg_match('/<+(.*?)>/', $a_data, $a_matches)) {
             $agentEmail = $a_matches[1];
@@ -392,7 +395,7 @@ class TourController extends Controller
             $form['salesAgent']->addError(new FormError($this->get('translator')->trans('quote.exception.salesagent')));
         }
 
-        //handling ajax request for SecondaryContact same as we did with organizer
+        // Handling ajax request for SecondaryContact same as we did with organizer.
         $s_data = $form->getData()->getSecondaryContact();
         if ( $s_data != null) {
             if (preg_match('/<+(.*?)>/', $s_data, $s_matches)) {
@@ -409,7 +412,7 @@ class TourController extends Controller
             $form['secondaryContact']->addError(new FormError($this->get('translator')->trans('quote.exception.secondaryagent')));
         }
 
-        //Handling the request for institution a little different than we did for the other 2.
+        // Handling the request for institution a little different than we did for the other 2.
         $institutionParts = explode(' - ', $form->getData()->getQuoteReference()->getInstitution());
         if (count($institutionParts) == 2 ) {
             $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findBy(
@@ -426,7 +429,8 @@ class TourController extends Controller
         if ($form->isValid()) {
             $em->persist($entity);
             $em->flush();
-            // Create organizer permission
+
+            // Create organizer permission.
             $permission = $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
             $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.save') . $entity->getName());
 
@@ -464,7 +468,9 @@ class TourController extends Controller
 
             return $this->redirect($this->generateUrl('manage_tour'));
         }
+
         $date_format = $this->container->getParameter('date_format');
+
         return $this->render('TourBundle:Tour:new.html.twig', array(
             'entity' => $entity,
             'form' => $form->createView(),
