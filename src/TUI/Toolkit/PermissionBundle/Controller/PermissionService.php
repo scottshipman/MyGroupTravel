@@ -102,6 +102,34 @@ class PermissionService
   }
 
   /**
+   * @param $class
+   * @param $user
+   * @return array|null
+   */
+  public function getAllPermissions($class, $user) {
+    // return grants based on user, object and class
+    $em = $this->em;
+    $qb = $em->createQueryBuilder();
+    $qb->select('p.grants')
+      ->from('PermissionBundle:Permission', 'p')
+      ->where($qb->expr()->andX(
+        $qb->expr()->eq('p.class', '?1'),
+        $qb->expr()->eq('p.user', '?2')
+      ));
+
+    $qb->setParameters(array(1 => $class, 2 => $user ));
+    $query = $qb->getQuery();
+    $result = $query->getScalarResult();
+
+    if(!$result){
+      return Null;
+    } else {
+      $permission = array_column($result, 'grants');
+      return $permission;
+    }
+  }
+
+  /**
    * Parameters - Object ID; Class; Grants
    *
    * @return User

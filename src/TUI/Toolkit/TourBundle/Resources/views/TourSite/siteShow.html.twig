@@ -9,31 +9,15 @@
 {% endblock %}
 
 {% block page_title %}
-    {% if "tour" | getRoles(entity.id) == "parent" %}
+    {% if is_granted("ROLE_BRAND") or "tour" | checkUserPermissions(entity.id) %}
         <span>{% trans %}tour.title.site_view{% endtrans %}</span>
-
-    {% elseif "tour" | getRoles(entity.id) != "" or is_granted("ROLE_BRAND")%}
-            <span>{% trans %}tour.title.site_view{% endtrans %}</span>
     {% endif %}
 {% endblock %}
 
 
 {% block page_title_menu %}
-    {% if "tour" | getRoles(entity.id) == "parent" %}
-
-    {% elseif "tour" | getRoles(entity.id) != "" or is_granted("ROLE_BRAND")%}
-
-    <button id="tour-title-drop" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-menu-drop mdl-button--raised mdl-button--colored">
-        <i class="material-icons">arrow_drop_down</i>
-    </button>
     {% embed "TourBundle:Tour:tourMenu.html.twig" %}
-        {% if editable %}
-            {% block tour_dashboard_link %}
-                <li><a href="{{ path('manage_tour_show', { 'id': entity.id }) }}" class="mdl-menu__item">{% trans %}tour.title.index{% endtrans %}</a></li>
-            {% endblock %}
-        {% endif %}
     {% endembed %}
-    {% endif %}
 {% endblock %}
 
 {% block edit_link %}

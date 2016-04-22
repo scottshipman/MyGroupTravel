@@ -17,20 +17,8 @@
 {% endblock %}
 
 {% block page_title_menu %}
-    <button id="tour-title-drop" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-menu-drop mdl-button--raised mdl-button--colored ">
-        <i class="material-icons">arrow_drop_down</i>
-    </button>
     {% embed "TourBundle:Tour:tourMenu.html.twig" %}
-            {% block tour_dashboard_link %}
-                <li><a href="{{ path('manage_tour_show', { 'id': entity.id }) }}" class="mdl-menu__item">{% trans %}tour.title.index{% endtrans %}</a></li>
-            {% endblock %}
     {% endembed %}
-{% endblock %}
-
-{% block back_link %}
-    {% if is_granted("ROLE_BRAND") %}
-        <a class="back-link" href="{{ path('manage_tour') }}"><i class="fa fa-arrow-left"></i> {% trans %}tour.actions.back_to_tours{% endtrans %}</a>
-    {% endif %}
 {% endblock %}
 
 {% block body -%}
@@ -38,6 +26,12 @@
 
         <div class="tour-show-left-column">
             <h3>{{ entity.name|capitalize }}</h3>
+            <div class="text-search">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input id="passenger-task-filter" class="mdl-textfield__input" type="text" />
+                    <label class="mdl-textfield__label" for="passenger-name-filter">Enter name or email...</label>
+                </div>
+            </div>
             <a href="#all" style="float:right; text-decoration: none; color:{{ brand.secondaryColor }};" id="clear"><i class="material-icons md-18">undo</i> {% trans %} passenger.labels.show-everyone{% endtrans %}</a><br>
             <div class="list-header" style="color: {{ brand.secondaryColor }}"><i class="material-icons">assignment</i> {% trans %}tour.dashboard.passenger_tasks{% endtrans %} ({{ passengerData.possibleTasksCount }})</div>
             <ul class="tour-show-submenu">
@@ -252,6 +246,63 @@ $(document).ready(function () {
                 break;
         }
     }
+
+    // Filter Passengers.
+    function filterPassengerTasks() {
+        var search = $('#passenger-task-filter').val().toUpperCase(),
+            $items = $('.tour-edit').filter(function() {
+                return !$(this).hasClass('passenger-cta-card');
+            }),
+            $itemsToShow = $items.filter(function() {
+                return $(this).find('.pcardname').text().toUpperCase().indexOf(search) >= 0;
+            }),
+            $itemsToHide = $items.filter(function(index, el) {
+                return $itemsToShow.index(el) < 0;
+            });
+
+            // Execute the show / hide.
+            $itemsToHide.slideUp(400);
+            $itemsToShow.slideDown(400);
+    }
+
+    // See if there is a name search.
+    var parts = window.location.href.split('?'),
+        searchPresent = false;
+    for (var i = 1; i < parts.length; i++) {
+        var query = parts[i].split('=');
+        if (query[0] == 'search') {
+            searchPresent = true;
+            $('#passenger-task-filter').val(query[1]);
+            filterPassengerTasks();
+        }
+    }
+
+    // Filter tasks by search
+    var delayTimer;
+    $('#passenger-task-filter').keyup(function() {
+        // Don't do this after every keypress, delay the search.
+
+        clearTimeout(delayTimer);
+        delayTimer = setTimeout(filterPassengerTasks, 100);
+    });
+
+    // reset-search on filter.
+    $('.task-filter').add('#clear').click(function() {
+        $('#passenger-task-filter').val('');
+        $('.tour-edit').slideDown(400);
+
+        var parts = window.location.href.split('?');
+        window.history.pushState({}, "All Tour Tasks", parts[0]);
+    });
+
+    // On change track the search in the url.
+    $('#passenger-task-filter').change(function() {
+        var search = $('#passenger-task-filter').val(),
+                parts = window.location.href.split('?'),
+                href = search !== '' ? parts[0] + '?search=' + search : parts[0];
+
+        window.history.pushState({}, "Tour Tasks Search " + search, href);
+    });
 });
     </script>
 

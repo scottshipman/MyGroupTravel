@@ -20,7 +20,7 @@ class AppExtension extends \Twig_Extension {
     public function getFilters() {
         return array(
             new \Twig_SimpleFilter('paxLabel', array($this, 'paxLabel')),
-            new \Twig_SimpleFilter('getRoles', array($this, 'getRoles')),
+            new \Twig_SimpleFilter('checkUserPermissions', array($this, 'checkUserPermissions')),
             new \Twig_SimpleFilter('getClass', array($this, 'getClass')),
         );
     }
@@ -36,16 +36,44 @@ class AppExtension extends \Twig_Extension {
         }
     }
 
-    /*
-     * TWIG usage Ex: {% set role = 'tour' | getRoles(tour.id) %}
-     *            Ex2: {% if 'passenger' | getRoles(passenger.id)=='parent' %}
+    /**
+     * Check user permissions.
+     *
+     * TWIG usage Ex: {% set role = 'tour' | checkUserPermissions(tour.id, ["parent", "organizer", "assistant"]) %}
+     *            Ex2: {% if 'passenger' | checkUserPermissions(passenger.id, ["parent", "organizer", "assistant"]) %}
+     *
+     * @param $class
+     * @param $roles
+     * @return mixed
      */
-    public function getRoles($class, $objectId) {
+    public function checkUserPermissions($class, $objectId = NULL, $roles = NULL) {
+        if (is_string($roles)) {
+          $roles = array($roles);
+        }
+
         $user = $this->container->get('security.context')->getToken()->getUser();
 
-        $roles = $this->container->get("permission.set_permission")->getPermission($objectId, $class, $user);
-        if ($roles == NULL) { $roles = array();}
-        return array_shift($roles);
+        if (!is_null($objectId)) {
+          $user_roles = $this->container->get("permission.set_permission")->getPermission($objectId, $class, $user);
+        }
+        else {
+          $user_roles = $this->container->get("permission.set_permission")->getAllPermissions($class, $user);
+        }
+
+        if (!empty($user_roles)) {
+          if (!empty($roles)) {
+            $matched_roles = array_intersect($roles, $user_roles);
+
+            if (!empty($matched_roles)) {
+              return TRUE;
+            }
+          }
+          else {
+            return TRUE;
+          }
+        }
+
+        return FALSE;
     }
 
     public function getName()

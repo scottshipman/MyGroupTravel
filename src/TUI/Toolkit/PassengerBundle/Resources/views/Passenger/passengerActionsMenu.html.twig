@@ -6,7 +6,7 @@
 
 <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="passenger-actions-menu-drop-{{ passengerId }}">
     <span>
-        <li><a href="{{ path('manage_passenger_show', { 'id': passengerId }) }}" class="mdl-menu__item">{% trans %}passenger.actions.view_passenger{% endtrans %}</a></li>
+        <li><a href="{{ path('manage_passenger_show', { 'id': passengerId }) }}" class="mdl-menu__item caller-btn">{% trans %}passenger.actions.view_passenger{% endtrans %}</a></li>
 
         {#Activation Email for Users#}
         {% if passengerStatus != "waitlist" %}
@@ -46,7 +46,7 @@
 
         {# make payment menu item #}
         {% if passengerStatus ==  "accepted" and free is sameas(false) %}
-            {% if is_granted("ROLE_BRAND") or "tour" | getRoles(tourId) == "organizer" or "tour" | getRoles(tourId) == "assistant"%}
+            {% if is_granted("ROLE_BRAND") or "tour" | checkUserPermissions(tourId, ["organizer", "assistant"]) %}
                 <li><a style="display: block;" href="#payment" class="mdl-menu__item make-a-payment" tour="{{ tourId }}" passenger="{{ passengerId }}">Log a Payment</a></li>
             {% endif %}
         {% endif %}
