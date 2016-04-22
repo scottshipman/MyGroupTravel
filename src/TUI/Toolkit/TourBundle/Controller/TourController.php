@@ -454,7 +454,7 @@ class TourController extends Controller
         $locale = $this->container->getParameter('locale');
 
         $form = $this->createForm(new TourType($entity, $locale), $entity, array(
-            'action' => $this->generateUrl('manage_tour_new', array('entity' => $entity)),
+            'action' => $this->generateUrl('manage_tour_create', array('entity' => $entity)),
             'method' => 'POST',
         ));
 
