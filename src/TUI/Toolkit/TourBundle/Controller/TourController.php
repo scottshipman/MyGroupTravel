@@ -611,13 +611,14 @@ class TourController extends Controller
       $content = $this->cloneContentBlocks($quoteVersion->getContent());
       $tour->setContent($content);
 
+      $date_format = $this->container->getParameter('date_format');
+      $form = $this->createCreateForm($tour);
 
-    $em->persist($tour);
-    $em->flush();
-
-
-    return $this->redirect($this->generateUrl('manage_tour_edit', array('id' => $tour->getId())));
-
+      return $this->render('TourBundle:Tour:new.html.twig', array(
+        'entity' => $tour,
+        'form' => $form->createView(),
+        'date_format' => $date_format,
+      ));
   }
   
   /**
