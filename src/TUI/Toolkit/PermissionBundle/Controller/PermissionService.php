@@ -3,6 +3,7 @@
 namespace TUI\Toolkit\PermissionBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use TUI\Toolkit\PermissionBundle\Entity\Permission;
@@ -262,5 +263,20 @@ class PermissionService
     }
 
     return FALSE;
+  }
+
+  /**
+   * Check user access.
+   *
+   * @param $class
+   * @param $object
+   * @param $grants
+   * @param $role_override
+   * @return mixed
+   */
+  public function checkUserAccess($class, $object = NULL, $grants = NULL, $role_override = NULL) {
+    if (!$this->checkUserPermissions($class, $object, $grants, $role_override)) {
+      throw new AccessDeniedException();
+    }
   }
 }
