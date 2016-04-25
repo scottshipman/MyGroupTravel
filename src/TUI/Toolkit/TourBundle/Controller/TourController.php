@@ -354,127 +354,34 @@ class TourController extends Controller
 
     /**
      * Creates a new Tour entity.
-     *
      */
-    public function createAction(Request $request, Tour $entity)
+    public function createAction(Request $request, $id)
     {
-
-        if (!$entity) {
-          $entity = new Tour();
-        }
-
-        $form = $this->createCreateForm($entity);
-        $form->handleRequest($request);
-        $em = $this->getDoctrine()->getManager();
-
-        // Handling ajax request for organizer.
-        $o_data = $form->getData()->getOrganizer();
-        if (preg_match('/<+(.*?)>/', $o_data, $o_matches)) {
-            $email = $o_matches[1];
-            $entities = $em->getRepository('TUIToolkitUserBundle:User')
-                ->findByEmail($email);
-            if (NULL !== $entities) {
-                $organizer = array_shift($entities);
-                $form->getData()->setOrganizer($organizer);
-            }
-        }else {
-            $form['organizer']->addError(new FormError($this->get('translator')->trans('quote.exception.organizer')));
-        }
-        // Handling ajax request for SalesAgent same as we did with organizer.
-        $a_data = $form->getData()->getSalesAgent();
-        if (preg_match('/<+(.*?)>/', $a_data, $a_matches)) {
-            $agentEmail = $a_matches[1];
-
-            $agentEntities = $em->getRepository('TUIToolkitUserBundle:User')
-                ->findByEmail($agentEmail);
-            if (NULL !== $agentEntities) {
-                $salesAgent = array_shift($agentEntities);
-                $form->getData()->setSalesAgent($salesAgent);
-            }
-        }else {
-            $form['salesAgent']->addError(new FormError($this->get('translator')->trans('quote.exception.salesagent')));
-        }
-
-        // Handling ajax request for SecondaryContact same as we did with organizer.
-        $s_data = $form->getData()->getSecondaryContact();
-        if ( $s_data != null) {
-            if (preg_match('/<+(.*?)>/', $s_data, $s_matches)) {
-                $secondEmail = $s_matches[1];
-                $secondEntities = $em->getRepository('TUIToolkitUserBundle:User')
-                    ->findByEmail($secondEmail);
-                if (NULL !== $secondEntities) {
-                    $secondAgent = array_shift($secondEntities);
-                    $form->getData()
-                        ->setSecondaryContact($secondAgent);
-                }
-            }
-        } else {
-            $form['secondaryContact']->addError(new FormError($this->get('translator')->trans('quote.exception.secondaryagent')));
-        }
-
-        // Handling the request for institution a little different than we did for the other 2.
-        $institutionParts = explode(' - ', $form->getData()->getQuoteReference()->getInstitution());
-        if (count($institutionParts) == 2 ) {
-            $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findBy(
-                array('name' => $institutionParts[0], 'city' => $institutionParts[1])
-            );
-            if (null !== $institutionEntities) {
-                $institution = array_shift($institutionEntities);
-                $form->getData()->setInstitution($institution);
-            }
-        }else {
-            $form['institution']->addError(new FormError($this->get('translator')->trans('quote.exception.institution')));
-        }
-
-        if ($form->isValid()) {
-            $em->persist($entity);
-            $em->flush();
-
-            // Create organizer permission.
-            $permission = $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
-            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.save') . $entity->getName());
-
-            // Stub out passenger record and parent permission for passenger for organizer.
-            $organizer = $entity->getOrganizer();
-            $newPassenger = new Passenger();
-            $newPassenger->setFName($organizer->getFirstName());
-            $newPassenger->setLName($organizer->getLastName());
-            $newPassenger->setStatus("waitlist");
-            $newPassenger->setSignUpDate(new \DateTime());
-            $newPassenger->setTourReference($entity);
-            $newPassenger->setFree(FALSE);
-            $newPassenger->setSelf(TRUE);
-            $em->persist($newPassenger);
-            $em->flush();
-
-            $permission = new Permission();
-            $permission->setClass('passenger');
-            $permission->setObject($newPassenger->getId());
-            $permission->setGrants('parent');
-            $permission->setUser($organizer);
-            $em->persist($permission);
-            $em->flush();
-
-            // Update quote and quoteVersion.
-            $quoteId = $entity->getQuoteVersionReference();
-            $quoteVersion = $em->getRepository('QuoteBundle:QuoteVersion')->find($quoteId);
-            $quoteReference = $quoteVersion->getQuoteReference();
-            $quote = $em->getRepository('QuoteBundle:Quote')->find($quoteReference);
-            $quote->setConverted(TRUE);
-            $quoteVersion->setConverted(TRUE);
-
-            $em->persist($quote);
-            $em->persist($quoteVersion);
-
-            return $this->redirect($this->generateUrl('manage_tour'));
-        }
+        $entity = new Tour();
 
         $date_format = $this->container->getParameter('date_format');
+
+        $form = $this->createCreateForm($entity, $id);
+        $form->handleRequest($request);
+
+        $form = $this->processTour($form, $entity);
+
+        if ($form->isValid()) {
+            return $this->redirect($this->generateUrl('tour_site_show', array(
+                    'id' => $entity->getId(),
+                    'quoteNumber' => $entity->getQuoteNumber()
+                    )
+                )
+            );
+        }
+
+        $errors = $this->get("app.form.validation")->getNestedErrorMessages($form);
 
         return $this->render('TourBundle:Tour:new.html.twig', array(
             'entity' => $entity,
             'form' => $form->createView(),
             'date_format' => $date_format,
+            'errors' => $errors,
         ));
     }
 
