@@ -49,7 +49,7 @@ class AppExtension extends \Twig_Extension {
      * @return mixed
      */
     public function checkUserPermissions($class, $object = NULL, $grants = NULL, $role_override = NULL) {
-        return $this->container->get("permission.set_permission")->checkUserPermissions($class, $object, $grants, $role_override);
+        return $this->container->get("permission.set_permission")->checkUserPermissions(FALSE, $class, $object, $grants, $role_override);
     }
 
     public function getName()

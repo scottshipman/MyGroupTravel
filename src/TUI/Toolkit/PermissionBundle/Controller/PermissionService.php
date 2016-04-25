@@ -225,13 +225,14 @@ class PermissionService
   /**
    * Check user permissions.
    *
+   * @param $throw_exception
    * @param $class
    * @param $object
    * @param $grants
    * @param $role_override
    * @return mixed
    */
-  public function checkUserPermissions($class, $object = NULL, $grants = NULL, $role_override = NULL) {
+  public function checkUserPermissions($throw_exception, $class, $object = NULL, $grants = NULL, $role_override = NULL) {
     $user = $this->container->get('security.token_storage')->getToken()->getUser();
 
     if (!is_null($role_override) && $this->container->get("security.authorization_checker")->isGranted($role_override, $user)) {
@@ -262,21 +263,11 @@ class PermissionService
       }
     }
 
-    return FALSE;
-  }
-
-  /**
-   * Check user access.
-   *
-   * @param $class
-   * @param $object
-   * @param $grants
-   * @param $role_override
-   * @return mixed
-   */
-  public function checkUserAccess($class, $object = NULL, $grants = NULL, $role_override = NULL) {
-    if (!$this->checkUserPermissions($class, $object, $grants, $role_override)) {
+    if ($throw_exception) {
       throw new AccessDeniedException();
+    }
+    else {
+      return FALSE;
     }
   }
 }
