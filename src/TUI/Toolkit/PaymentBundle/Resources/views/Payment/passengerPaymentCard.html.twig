@@ -5,7 +5,7 @@
         <h3 class="mdl-card__title-text">{% trans %}passenger.labels.payments{% endtrans %}</h3>
 
           {# only if an organizer or brand and not free status#}
-        {% if is_granted("ROLE_BRAND") or "tour" | checkUserPermissions(tourId, ["organizer", "assistant"]) %}
+        {% if "tour" | checkUserPermissions(tourId, ["organizer", "assistant"], "ROLE_BRAND") %}
             {% if passenger.free is sameas(false) %}
                     <button id="payment-actions-menu-drop-{{ passenger.id }}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-button">
                         <i class="material-icons">more_vert</i>
