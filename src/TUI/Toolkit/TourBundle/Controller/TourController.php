@@ -364,7 +364,7 @@ class TourController extends Controller
         $form = $this->createCreateForm($entity, $id);
         $form->handleRequest($request);
 
-        $form = $this->processTour($form, $entity);
+        $form = $this->processTour($form, $entity, null, true);
 
         if ($form->isValid()) {
             return $this->redirect($this->generateUrl('tour_site_show', array(
@@ -796,7 +796,7 @@ class TourController extends Controller
     /**
      * Helper function to validate and set fields on tour form.
      */
-    protected function processTour(&$form, $entity, $oldOrganizerID = null) {
+    protected function processTour(&$form, $entity, $oldOrganizerID = null, $converted = false) {
         $em = $this->getDoctrine()->getManager();
 
         if (!empty($oldOrganizerID)) {
@@ -944,6 +944,32 @@ class TourController extends Controller
                 // Step 1 purge existing passenger payment schedules
                 if(!empty($passengerPaymentTasksStorage)){$entity->setPaymentTasksPassenger($passengerPaymentTasksStorage);}
             }
+
+            if ($converted) {
+                // Handling quote and quote version.
+                $quoteNumber = $form->getData()->getQuoteNumber();
+                if($quoteNumber) {
+                    $quoteVersion = $em->getRepository('QuoteBundle:QuoteVersion')->findOneBy(array('quoteNumber' => $quoteNumber));
+
+                    if (!$quoteVersion) {
+                        $form['quoteNumber']->addError(new FormError($this->get('translator')->trans('quote.exception.prompt_error')));
+                    }
+                    $quoteReference = $quoteVersion->getQuoteReference();
+                    $quote = $em->getRepository('QuoteBundle:Quote')->find($quoteReference);
+
+                    if (!$quote) {
+                        $form['quoteNumber']->addError(new FormError($this->get('translator')->trans('quote.exception.prompt_error')));
+                    }
+
+                    // Update quote and quoteVersion.
+                    $quote->setConverted(TRUE);
+                    $quoteVersion->setConverted(TRUE);
+
+                    $em->persist($quote);
+                    $em->persist($quoteVersion);
+                }
+            }
+
 
             $em->persist($entity);
             $em->flush();
