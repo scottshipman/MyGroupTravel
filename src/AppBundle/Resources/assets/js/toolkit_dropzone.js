@@ -52,16 +52,17 @@ Dropzone.autoDiscover = false;
       addRemoveLinks: true
     };
 
-    var mediaUpdate = function(new_media) {
-      var media = new_media ? new_media : existing_media;
-
+    var mediaUpdate = function(media, update_field_value) {
       if (media.id && media.path && media.filename) {
         $(media_placeholder_image).find('.edit').show();
         $(media_placeholder_image).find('.new').hide();
         $(media_placeholder_image).css({
           "background-image": "url(" + media.path + "/" + media.filename + ")"
         });
-        $(media_field).val(media.id);
+
+        if (update_field_value) {
+          $(media_field).val(media.id);
+        }
       }
       else {
         $(media_placeholder_image).find('.edit').hide();
@@ -69,12 +70,15 @@ Dropzone.autoDiscover = false;
         $(media_placeholder_image).css({
           "background-image": "none"
         });
-        $(media_field).val('');
+
+        if (update_field_value) {
+          $(media_field).val('');
+        }
       }
     };
 
     // Update media with existing.
-    mediaUpdate();
+    mediaUpdate(existing_media, false);
 
     // Implement dropzone.
     var dropzone = new Dropzone("#" + dropzone_form_id, jQuery.extend(default_options, options));
@@ -87,7 +91,8 @@ Dropzone.autoDiscover = false;
             id: response.id,
             path: response.relativepath,
             filename: response.filename
-          }
+          },
+          true
         );
         $(dropzone_form_errors).css({"display": "none"});
       });
@@ -107,7 +112,7 @@ Dropzone.autoDiscover = false;
         $(dropzone_form_close).css({"display": "block"});
 
         // Revert media to existing.
-        mediaUpdate();
+        mediaUpdate(existing_media, true);
       });
     }
 
@@ -207,8 +212,7 @@ Dropzone.autoDiscover = false;
       $(media_placeholder_image).css({"display": "none"});
       $(dropzone_form).css({"display": "block"});
       $(dropzone_form_close).css({"display": "block"});
-      existing_media = {};
-      mediaUpdate();
+      mediaUpdate({}, false);
     });
 
     $(dropzone_form_close).click(function() {
