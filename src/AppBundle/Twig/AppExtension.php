@@ -39,16 +39,17 @@ class AppExtension extends \Twig_Extension {
     /**
      * Check user permissions.
      *
-     * TWIG usage Ex: {% set role = 'tour' | checkUserPermissions(tour.id, ["parent", "organizer", "assistant"]) %}
-     *            Ex2: {% if 'passenger' | checkUserPermissions(passenger.id, ["parent", "organizer", "assistant"]) %}
+     * TWIG usage Ex: {% set role = 'tour' | checkUserPermissions(tour.id, ["parent", "organizer", "assistant"], "ROLE_BRAND") %}
+     *            Ex2: {% if 'passenger' | checkUserPermissions(passenger.id, ["parent", "organizer", "assistant"], "ROLE_BRAND") %}
      *
      * @param $class
      * @param $object
      * @param $grants
+     * @param $role_override
      * @return mixed
      */
-    public function checkUserPermissions($class, $object = NULL, $grants = NULL) {
-        return $this->container->get("permission.set_permission")->checkUserPermissions($class, $object, $grants);
+    public function checkUserPermissions($class, $object = NULL, $grants = NULL, $role_override = NULL) {
+        return $this->container->get("permission.set_permission")->checkUserPermissions($class, $object, $grants, $role_override);
     }
 
     public function getName()

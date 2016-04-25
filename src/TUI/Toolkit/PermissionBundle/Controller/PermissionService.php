@@ -227,14 +227,19 @@ class PermissionService
    * @param $class
    * @param $object
    * @param $grants
+   * @param $role_override
    * @return mixed
    */
-  public function checkUserPermissions($class, $object = NULL, $grants = NULL) {
+  public function checkUserPermissions($class, $object = NULL, $grants = NULL, $role_override = NULL) {
+    $user = $this->container->get('security.token_storage')->getToken()->getUser();
+
+    if (!is_null($role_override) && $this->container->get("security.authorization_checker")->isGranted($role_override, $user)) {
+      return TRUE;
+    }
+
     if (!is_null($grants) && !is_array($grants)) {
       $grants = array($grants);
     }
-
-    $user = $this->container->get('security.context')->getToken()->getUser();
 
     if (!is_null($object)) {
       $user_grants = $this->container->get("permission.set_permission")->getPermission($object, $class, $user);
