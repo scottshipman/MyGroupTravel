@@ -9,11 +9,8 @@
 {% endblock %}
 
 {% block page_title %}
-    {% if "tour" | getRoles(entity.id) == "parent" %}
+    {% if is_granted("ROLE_BRAND") or "tour" | checkUserPermissions(entity.id) %}
         <span>{% trans %}tour.title.site_view{% endtrans %}</span>
-
-    {% elseif "tour" | getRoles(entity.id) != "" or is_granted("ROLE_BRAND")%}
-            <span>{% trans %}tour.title.site_view{% endtrans %}</span>
     {% endif %}
 {% endblock %}
 

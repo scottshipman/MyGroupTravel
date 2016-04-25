@@ -8,11 +8,11 @@
             <div class="tour-show-left-column" style="margin-top: 0;">
                 {#<div class="profile-details-card">#}
 
-                {% if ("tour" | checkAllRoles(["organizer", "assistant", "parent"])) %}
+                {% if ("tour" | checkUserPermissions(NULL, ["organizer", "assistant", "parent"])) %}
                     <div class="intro-text">
-                        {% if ("tour" | checkAllRoles(["organizer", "assistant"])) %}
+                        {% if ("tour" | checkUserPermissions(NULL, ["organizer", "assistant"])) %}
                             {{ "user.profile.intro.organizer"|trans({'%name%': user.firstName})|raw }}
-                        {% elseif "tour" | checkAllRoles("parent") %}
+                        {% elseif "tour" | checkUserPermissions(NULL, "parent") %}
                             {{ "user.profile.intro.parent"|trans({'%name%': user.firstName})|raw }}
                         {% endif %}
                     </div>
