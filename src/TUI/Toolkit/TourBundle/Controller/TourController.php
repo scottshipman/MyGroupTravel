@@ -532,100 +532,24 @@ class TourController extends Controller
         ));
     }
 
-  /*
-   * Helper function to convert quote to a tour.
-   */
-  public function convertQuoteAction(Request $request, $id)
-  {
-      $em = $this->getDoctrine()->getManager();
+    /*
+    * Helper function to convert quote to a tour.
+    */
+    public function convertQuoteAction(Request $request, $id)
+    {
+        $date_format = $this->container->getParameter('date_format');
+        $entity = new Tour();
+        $form = $this->createCreateForm($entity, $id);
 
-      $quoteVersion = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+        $errors = $this->get("app.form.validation")->getNestedErrorMessages($form);
 
-      // Check if the quoteVersion still exists.
-      if (!$quoteVersion) {
-        throw $this->createNotFoundException('Unable to find Quote Version while converting to tour.');
-      }
-
-      $quoteReference = $quoteVersion->getQuoteReference();
-      $quote = $em->getRepository('QuoteBundle:Quote')->find($quoteReference);
-
-      // Check if the quote still exists.
-      if (!$quote) {
-        throw $this->createNotFoundException('Unable to find Quote while converting to tour.');
-      }
-
-      // Check if quote is already converted.
-      if($quote->getConverted() == TRUE ){
-        throw $this->createNotFoundException($this->get('translator')->trans('quote.exception.convert'));
-      }
-
-      $siblings = $em->getRepository('QuoteBundle:QuoteVersion')->findBy(array('quoteReference' => $quoteReference));
-      foreach($siblings as $sibling){
-        if($sibling->getConverted() == TRUE){
-          throw $this->createNotFoundException($this->get('translator')->trans('quote.exception.convert_sibling'));
-        }
-      }
-
-      // Get first trip status from doctrine.
-      $tripStatus = $em->createQueryBuilder()
-        ->select('e')
-        ->from('TripStatusBundle:TripStatus', 'e')
-        ->orderBy('e.id', 'ASC')
-        ->where('e.visible = TRUE')
-        ->setMaxResults(1)
-        ->getQuery()
-        ->getOneOrNullResult();
-
-      $tour = new Tour();
-      $tour->setTripStatus($tripStatus);
-      $tour->setQuoteNumber($quoteVersion->getQuoteNumber());
-      $tour->setQuoteReference($quote);
-      $tour->setQuoteVersionReference($quoteVersion);
-      $tour->setBoardBasis($quoteVersion->getBoardBasis());
-      $tour->getCreated(new \DateTime());
-      $tour->setCurrency($quoteVersion->getCurrency());
-      $tour->setDepartureDate($quoteVersion->getDepartureDate());
-      $tour->setDestination($quote->getDestination());
-      $tour->setDuration($quoteVersion->getDuration());
-      $tour->setDisplayName($quoteVersion->getDisplayName());
-      $tour->setExpiryDate($quoteVersion->getExpiryDate());
-      $tour->setFreePlaces($quoteVersion->getFreePlaces());
-      $tour->setInstitution($quote->getInstitution());
-      $tour->setLocked(FALSE);
-      $tour->setName($quote->getName() . ' - ' . $quoteVersion->getName());
-      $tour->setOrganizer($quote->getOrganizer());
-      $tour->setPayingPlaces($quoteVersion->getPayingPlaces());
-      $tour->setPricePerson($quoteVersion->getPricePerson());
-      $tour->setPricePersonPublic($quoteVersion->getPricePerson());
-      $tour->setReturnDate($quoteVersion->getReturnDate());
-      $tour->setSalesAgent($quote->getSalesAgent());
-      $tour->setSecondaryContact($quote->getSecondaryContact());
-      $tour->setTotalPrice(0);
-      $tour->setTransportType($quoteVersion->getTransportType());
-      $tour->setWelcomeMsg($quoteVersion->getWelcomeMsg());
-      $tour->setCashPayment(false);
-      $tour->setBankTransferPayment(false);
-      $tour->setOnlinePayment(false);
-      $tour->setOtherPayment(false);
-      $tour->setRegistrations(0);
-      $headerBlock = $quoteVersion->getHeaderBlock();
-      if($headerBlock !== NULL){ $blockId = $headerBlock->getId();}
-      if(isset($blockId)) {
-        $headerBlock = $this->cloneHeaderBlock($blockId);
-        $tour->setHeaderBlock($headerBlock);
-      }
-      $content = $this->cloneContentBlocks($quoteVersion->getContent());
-      $tour->setContent($content);
-
-      $date_format = $this->container->getParameter('date_format');
-      $form = $this->createCreateForm($tour);
-
-      return $this->render('TourBundle:Tour:new.html.twig', array(
-        'entity' => $tour,
-        'form' => $form->createView(),
-        'date_format' => $date_format,
-      ));
-  }
+        return $this->render('TourBundle:Tour:new.html.twig', array(
+          'entity' => $entity,
+          'form' => $form->createView(),
+          'date_format' => $date_format,
+          'errors' => $errors,
+        ));
+    }
   
   /**
      * Finds and displays a Tour entity.
