@@ -479,34 +479,112 @@ class TourController extends Controller
     }
 
     /**
-     *
-    /**
      * Creates a form to create a Tour entity.
      *
      * @param Tour $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Tour $entity)
+    private function createCreateForm(Tour $entity, $id = null)
     {
         $locale = $this->container->getParameter('locale');
-        $entity_salesAgent = $entity->getSalesAgent();
-        $entity_currency = $entity->getCurrency();
+        $em = $this->getDoctrine()->getManager();
 
-        if (empty($entity_salesAgent)) {
-            $entity->setSalesAgent($this->get('security.token_storage')->getToken()->getUser());
+        if ($id) {
+            $quoteVersion = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+
+            // Check if the quoteVersion still exists.
+            if (!$quoteVersion) {
+                throw $this->createNotFoundException('Unable to find Quote Version while converting to tour.');
+            }
+
+            $quoteReference = $quoteVersion->getQuoteReference();
+            $quote = $em->getRepository('QuoteBundle:Quote')->find($quoteReference);
+
+            // Check if the quote still exists.
+            if (!$quote) {
+                throw $this->createNotFoundException('Unable to find Quote while converting to tour.');
+            }
+
+            // Check if quote is already converted.
+            if($quote->getConverted() == TRUE ){
+                throw $this->createNotFoundException($this->get('translator')->trans('quote.exception.convert'));
+            }
+
+            $siblings = $em->getRepository('QuoteBundle:QuoteVersion')->findBy(array('quoteReference' => $quoteReference));
+            foreach($siblings as $sibling){
+                if($sibling->getConverted() == TRUE){
+                    throw $this->createNotFoundException($this->get('translator')->trans('quote.exception.convert_sibling'));
+                }
+            }
+
+            // Get first trip status from doctrine.
+            $tripStatus = $em->createQueryBuilder()
+                ->select('e')
+                ->from('TripStatusBundle:TripStatus', 'e')
+                ->orderBy('e.id', 'ASC')
+                ->where('e.visible = TRUE')
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult();
+
+            $entity->setTripStatus($tripStatus);
+            $entity->setQuoteNumber($quoteVersion->getQuoteNumber());
+            $entity->setQuoteReference($quote);
+            $entity->setQuoteVersionReference($quoteVersion);
+            $entity->setBoardBasis($quoteVersion->getBoardBasis());
+            $entity->getCreated(new \DateTime());
+            $entity->setCurrency($quoteVersion->getCurrency());
+            $entity->setDepartureDate($quoteVersion->getDepartureDate());
+            $entity->setDestination($quote->getDestination());
+            $entity->setDuration($quoteVersion->getDuration());
+            $entity->setDisplayName($quoteVersion->getDisplayName());
+            $entity->setExpiryDate($quoteVersion->getExpiryDate());
+            $entity->setFreePlaces($quoteVersion->getFreePlaces());
+            $entity->setInstitution($quote->getInstitution());
+            $entity->setLocked(FALSE);
+            $entity->setName($quote->getName() . ' - ' . $quoteVersion->getName());
+            $entity->setOrganizer($quote->getOrganizer());
+            $entity->setPayingPlaces($quoteVersion->getPayingPlaces());
+            $entity->setPricePerson($quoteVersion->getPricePerson());
+            $entity->setPricePersonPublic($quoteVersion->getPricePerson());
+            $entity->setReturnDate($quoteVersion->getReturnDate());
+            $entity->setSalesAgent($quote->getSalesAgent());
+            $entity->setSecondaryContact($quote->getSecondaryContact());
+            $entity->setTotalPrice(0);
+            $entity->setTransportType($quoteVersion->getTransportType());
+            $entity->setWelcomeMsg($quoteVersion->getWelcomeMsg());
+            $entity->setCashPayment(false);
+            $entity->setBankTransferPayment(false);
+            $entity->setOnlinePayment(false);
+            $entity->setOtherPayment(false);
+            $entity->setRegistrations(0);
+            $headerBlock = $quoteVersion->getHeaderBlock();
+            if($headerBlock !== NULL){
+                $blockId = $headerBlock->getId();
+            }
+            if(isset($blockId)) {
+                $headerBlock = $this->cloneHeaderBlock($blockId);
+                $entity->setHeaderBlock($headerBlock);
+            }
+            $content = $this->cloneContentBlocks($quoteVersion->getContent());
+            $entity->setContent($content);
         }
-
-        if (empty($entity_currency)) {
+        else {
+            $entity->setSalesAgent($this->get('security.token_storage')->getToken()->getUser());
+            $entity->setRegistrations(0);
+            $entity->setCashPayment(false);
+            $entity->setBankTransferPayment(false);
+            $entity->setOnlinePayment(false);
+            $entity->setOtherPayment(false);
             $currency_code = $this->container->getParameter('currency');
-            $em = $this->getDoctrine()->getManager();
             $currency = $em->getRepository('CurrencyBundle:Currency')->findByCode($currency_code);
             $currency = array_shift($currency);
             $entity->setCurrency($currency);
         }
 
         $form = $this->createForm(new TourType($entity, $locale), $entity, array(
-            'action' => $this->generateUrl('manage_tour_create', array('entity' => $entity)),
+            'action' => $this->generateUrl('manage_tour_create', array('id' => $id)),
             'method' => 'POST',
         ));
 
