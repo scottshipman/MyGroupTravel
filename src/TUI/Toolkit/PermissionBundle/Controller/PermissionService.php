@@ -277,4 +277,43 @@ class PermissionService
       return FALSE;
     }
   }
+
+  /**
+   * Check multiple user permissions.
+   *
+   * @param $throw_exception
+   * @param $permissions
+   * @return mixed
+   */
+  public function checkUserPermissionsMultiple($throw_exception, $permissions) {
+    foreach ($permissions as $permission) {
+      if (!isset($permission['class'])) {
+        $permission['class'] = NULL;
+      }
+
+      if (!isset($permission['object'])) {
+        $permission['object'] = NULL;
+      }
+
+      if (!isset($permission['grants'])) {
+        $permission['grants'] = NULL;
+      }
+
+      if (!isset($permission['role_override'])) {
+        $permission['role_override'] = NULL;
+      }
+
+      if ($this->checkUserPermissions(FALSE, $permission['class'], $permission['object'], $permission['grants'], $permission['role_override'])) {
+        return TRUE;
+      }
+    }
+
+    // Nothing has returned true, assume permission denied.
+    if ($throw_exception) {
+      throw new AccessDeniedException();
+    }
+    else {
+      return FALSE;
+    }
+  }
 }
