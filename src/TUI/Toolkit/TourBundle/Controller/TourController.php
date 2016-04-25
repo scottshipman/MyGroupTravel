@@ -813,7 +813,7 @@ class TourController extends Controller
     /**
      * Helper function to validate and set fields on tour form.
      */
-    protected function processTour(&$form, $entity, $oldOrganizerID) {
+    protected function processTour(&$form, $entity, $oldOrganizerID = null) {
         $em = $this->getDoctrine()->getManager();
 
         if (!empty($oldOrganizerID)) {
@@ -971,7 +971,7 @@ class TourController extends Controller
             // if new organizer, then check for / add passenger record and permissions
             // stub out passenger record and parent permission for passenger for organizer
             $organizer = $entity->getOrganizer();
-            if($organizer->getEmail() != $oldOrganizer->getEmail()) {
+            if(!empty($oldOrganizer) && $organizer->getEmail() != $oldOrganizer->getEmail()) {
                 $this->changeOrganizer($organizer, $entity, $oldOrganizer);
             }
         }
