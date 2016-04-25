@@ -226,28 +226,28 @@ class PermissionService
    *
    * @param $class
    * @param $object
-   * @param $roles
+   * @param $grants
    * @return mixed
    */
-  public function checkUserPermissions($class, $object = NULL, $roles = NULL) {
-    if (is_string($roles)) {
-      $roles = array($roles);
+  public function checkUserPermissions($class, $object = NULL, $grants = NULL) {
+    if (is_string($grants)) {
+      $grants = array($grants);
     }
 
     $user = $this->container->get('security.context')->getToken()->getUser();
 
     if (!is_null($object)) {
-      $user_roles = $this->container->get("permission.set_permission")->getPermission($object, $class, $user);
+      $user_grants = $this->container->get("permission.set_permission")->getPermission($object, $class, $user);
     }
     else {
-      $user_roles = $this->container->get("permission.set_permission")->getAllPermissions($class, $user);
+      $user_grants = $this->container->get("permission.set_permission")->getAllPermissions($class, $user);
     }
 
-    if (!empty($user_roles)) {
-      if (!empty($roles)) {
-        $matched_roles = array_intersect($roles, $user_roles);
+    if (!empty($user_grants)) {
+      if (!empty($grants)) {
+        $matched_grants = array_intersect($grants, $user_grants);
 
-        if (!empty($matched_roles)) {
+        if (!empty($matched_grants)) {
           return TRUE;
         }
       }
