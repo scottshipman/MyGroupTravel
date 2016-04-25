@@ -8,6 +8,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use TUI\Toolkit\PermissionBundle\Entity\Permission;
 use TUI\Toolkit\PermissionBundle\Form\PermissionType;
 
+use Symfony\Component\DependencyInjection\ContainerInterface as Container;
+
 /**
  * Permission Service controller.
  *
@@ -16,10 +18,12 @@ class PermissionService
 {
 
   protected $em;
+  protected $container;
 
-  public function __construct(\Doctrine\ORM\EntityManager $em)
+  public function __construct(\Doctrine\ORM\EntityManager $em, Container $container)
   {
     $this->em = $em;
+    $this->container = $container;
   }
 
   /**
