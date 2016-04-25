@@ -807,6 +807,9 @@ class TourController extends Controller
         if (!empty($oldOrganizerID)) {
             $oldOrganizer = $em->getRepository('TUIToolkitUserBundle:User')->find($oldOrganizerID);
         }
+        else {
+            $oldOrganizer = null;
+        }
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Tour entity.');
@@ -950,9 +953,12 @@ class TourController extends Controller
                 if(!empty($passengerPaymentTasksStorage)){$entity->setPaymentTasksPassenger($passengerPaymentTasksStorage);}
             }
 
+            $em->persist($entity);
+            $em->flush();
+
             if ($converted) {
                 // Handling quote and quote version.
-                $quoteNumber = $form->getData()->getQuoteNumber();
+                $quoteNumber = $entity->getQuoteNumber();
                 if($quoteNumber) {
                     $quoteVersion = $em->getRepository('QuoteBundle:QuoteVersion')->findOneBy(array('quoteNumber' => $quoteNumber));
 
@@ -975,19 +981,15 @@ class TourController extends Controller
                 }
             }
 
-
-            $em->persist($entity);
-            $em->flush();
-
-            $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
-            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.save') . $entity->getName());
-
             // if new organizer, then check for / add passenger record and permissions
             // stub out passenger record and parent permission for passenger for organizer
             $organizer = $entity->getOrganizer();
-            if(!empty($oldOrganizer) && $organizer->getEmail() != $oldOrganizer->getEmail()) {
+            if(empty($oldOrganizer) || $organizer->getEmail() != $oldOrganizer->getEmail()) {
                 $this->changeOrganizer($organizer, $entity, $oldOrganizer);
             }
+
+            $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.save') . $entity->getName());
         }
 
         return $form;
