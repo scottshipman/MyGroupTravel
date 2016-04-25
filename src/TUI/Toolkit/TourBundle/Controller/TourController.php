@@ -396,6 +396,9 @@ class TourController extends Controller
     {
         $locale = $this->container->getParameter('locale');
         $em = $this->getDoctrine()->getManager();
+        $currency_code = $this->container->getParameter('currency');
+        $currency = $em->getRepository('CurrencyBundle:Currency')->findByCode($currency_code);
+        $currency = array_shift($currency);
 
         if ($id) {
             $quoteVersion = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
@@ -441,7 +444,15 @@ class TourController extends Controller
             $entity->setQuoteVersionReference($quoteVersion);
             $entity->setBoardBasis($quoteVersion->getBoardBasis());
             $entity->getCreated(new \DateTime());
-            $entity->setCurrency($quoteVersion->getCurrency());
+
+            $quote_currency = $quoteVersion->getCurrency();
+            if (!empty($quote_currency)) {
+                $entity->setCurrency($quote_currency);
+            }
+            else {
+                $entity->setCurrency($currency);
+            }
+
             $entity->setDepartureDate($quoteVersion->getDepartureDate());
             $entity->setDestination($quote->getDestination());
             $entity->setDuration($quoteVersion->getDuration());
@@ -461,11 +472,7 @@ class TourController extends Controller
             $entity->setTotalPrice(0);
             $entity->setTransportType($quoteVersion->getTransportType());
             $entity->setWelcomeMsg($quoteVersion->getWelcomeMsg());
-            $entity->setCashPayment(false);
-            $entity->setBankTransferPayment(false);
-            $entity->setOnlinePayment(false);
-            $entity->setOtherPayment(false);
-            $entity->setRegistrations(0);
+
             $headerBlock = $quoteVersion->getHeaderBlock();
             if($headerBlock !== NULL){
                 $blockId = $headerBlock->getId();
@@ -479,16 +486,14 @@ class TourController extends Controller
         }
         else {
             $entity->setSalesAgent($this->get('security.token_storage')->getToken()->getUser());
-            $entity->setRegistrations(0);
-            $entity->setCashPayment(false);
-            $entity->setBankTransferPayment(false);
-            $entity->setOnlinePayment(false);
-            $entity->setOtherPayment(false);
-            $currency_code = $this->container->getParameter('currency');
-            $currency = $em->getRepository('CurrencyBundle:Currency')->findByCode($currency_code);
-            $currency = array_shift($currency);
             $entity->setCurrency($currency);
         }
+        
+        $entity->setRegistrations(0);
+        $entity->setCashPayment(false);
+        $entity->setBankTransferPayment(false);
+        $entity->setOnlinePayment(false);
+        $entity->setOtherPayment(false);
 
         $form = $this->createForm(new TourType($entity, $locale), $entity, array(
             'action' => $this->generateUrl('manage_tour_create', array('id' => $id)),
