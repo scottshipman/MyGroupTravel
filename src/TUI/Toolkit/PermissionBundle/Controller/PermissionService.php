@@ -230,7 +230,7 @@ class PermissionService
    * @return mixed
    */
   public function checkUserPermissions($class, $object = NULL, $grants = NULL) {
-    if (is_string($grants)) {
+    if (!is_null($grants) && !is_array($grants)) {
       $grants = array($grants);
     }
 
