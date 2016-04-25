@@ -3,7 +3,7 @@ manage_tour:
     defaults: { _controller: "TourBundle:Tour:index" }
 
 manage_tour_create:
-    path:     /create
+    path:     /create/{id}
     defaults: { _controller: "TourBundle:Tour:create" }
     methods:  POST
 
