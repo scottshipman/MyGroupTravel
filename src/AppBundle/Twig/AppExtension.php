@@ -43,37 +43,12 @@ class AppExtension extends \Twig_Extension {
      *            Ex2: {% if 'passenger' | checkUserPermissions(passenger.id, ["parent", "organizer", "assistant"]) %}
      *
      * @param $class
+     * @param $objectId
      * @param $roles
      * @return mixed
      */
     public function checkUserPermissions($class, $objectId = NULL, $roles = NULL) {
-        if (is_string($roles)) {
-          $roles = array($roles);
-        }
-
-        $user = $this->container->get('security.context')->getToken()->getUser();
-
-        if (!is_null($objectId)) {
-          $user_roles = $this->container->get("permission.set_permission")->getPermission($objectId, $class, $user);
-        }
-        else {
-          $user_roles = $this->container->get("permission.set_permission")->getAllPermissions($class, $user);
-        }
-
-        if (!empty($user_roles)) {
-          if (!empty($roles)) {
-            $matched_roles = array_intersect($roles, $user_roles);
-
-            if (!empty($matched_roles)) {
-              return TRUE;
-            }
-          }
-          else {
-            return TRUE;
-          }
-        }
-
-        return FALSE;
+        return $this->container->get("permission.set_permission")->checkUserPermissions($class, $objectId, $roles);
     }
 
     public function getName()
