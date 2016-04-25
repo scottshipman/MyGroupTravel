@@ -225,19 +225,19 @@ class PermissionService
    * Check user permissions.
    *
    * @param $class
-   * @param $objectId
+   * @param $object
    * @param $roles
    * @return mixed
    */
-  public function checkUserPermissions($class, $objectId = NULL, $roles = NULL) {
+  public function checkUserPermissions($class, $object = NULL, $roles = NULL) {
     if (is_string($roles)) {
       $roles = array($roles);
     }
 
     $user = $this->container->get('security.context')->getToken()->getUser();
 
-    if (!is_null($objectId)) {
-      $user_roles = $this->container->get("permission.set_permission")->getPermission($objectId, $class, $user);
+    if (!is_null($object)) {
+      $user_roles = $this->container->get("permission.set_permission")->getPermission($object, $class, $user);
     }
     else {
       $user_roles = $this->container->get("permission.set_permission")->getAllPermissions($class, $user);
