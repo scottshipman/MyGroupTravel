@@ -500,23 +500,6 @@ class TourController extends Controller
         return $form;
     }
 
-    /**
-     * Displays a form to create a new Tour entity.
-     *
-     */
-    public function newAction()
-    {
-        $date_format = $this->container->getParameter('date_format');
-        $entity = new Tour();
-        $form = $this->createCreateForm($entity);
-
-        return $this->render('TourBundle:Tour:new.html.twig', array(
-            'entity' => $entity,
-            'form' => $form->createView(),
-            'date_format' => $date_format,
-        ));
-    }
-
     /*
     * Helper function to convert quote to a tour.
     */

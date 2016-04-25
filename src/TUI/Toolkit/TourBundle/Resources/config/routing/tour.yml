@@ -2,10 +2,6 @@ manage_tour:
     path:     /
     defaults: { _controller: "TourBundle:Tour:index" }
 
-manage_tour_new:
-    path:     /new
-    defaults: { _controller: "TourBundle:Tour:new" }
-
 manage_tour_create:
     path:     /create
     defaults: { _controller: "TourBundle:Tour:create" }
