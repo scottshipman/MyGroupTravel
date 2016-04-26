@@ -233,6 +233,7 @@ class PermissionService
    * @return mixed
    */
   public function checkUserPermissions($throw_exception, $class = NULL, $object = NULL, $grants = NULL, $role_override = NULL) {
+    // Get the current user.
     $user = $this->container->get('security.token_storage')->getToken()->getUser();
 
     // If there is a role override, check the users role immediately.
@@ -242,6 +243,9 @@ class PermissionService
 
     // If a class has been provided check the permissions table for grants.
     if (!is_null($class)) {
+      // Make sure the class is lowercase.
+      $class = strtolower($class);
+
       if (!is_null($grants) && !is_array($grants)) {
         $grants = array($grants);
       }
