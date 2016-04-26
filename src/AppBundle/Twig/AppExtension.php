@@ -22,6 +22,7 @@ class AppExtension extends \Twig_Extension {
             new \Twig_SimpleFilter('paxLabel', array($this, 'paxLabel')),
             new \Twig_SimpleFilter('checkUserPermissions', array($this, 'checkUserPermissions')),
             new \Twig_SimpleFilter('getClass', array($this, 'getClass')),
+            new \Twig_SimpleFilter('price', array($this, 'getTourPrice')),
         );
     }
 
@@ -84,5 +85,22 @@ class AppExtension extends \Twig_Extension {
     public function getClass($object)
     {
         return (new \ReflectionClass($object))->getShortName();
+    }
+
+    /**
+     * Get tour price.
+     *
+     * TWIG usage Ex: {{ entity |price }}
+     */
+    public function getTourPrice($tour) {
+        $tour_pricePerson = $tour->getPricePerson();
+        $tour_pricePersonPublic = $tour->getPricePersonPublic();
+
+        if (empty($tour_pricePersonPublic)) {
+            return $tour_pricePerson;
+        }
+        else {
+            return $tour_pricePersonPublic;
+        }
     }
 }
