@@ -900,6 +900,14 @@ class TourController extends Controller
 
         }
 
+        // Handling pricePersonPublic.
+        if ($converted) {
+            $form_price_person = $form->getData()->getPricePerson();
+            if (!empty($form_price_person)) {
+                $entity->setPricePersonPublic($form_price_person);
+            }
+        }
+
         if ($form->isValid()) {
 
             if (NULL != $form->getData()->getMedia()) {
@@ -921,8 +929,7 @@ class TourController extends Controller
                     $zip->addFromString($c->gethashedFilename(), file_get_contents($c->getfilepath() . "/" . $c->gethashedFilename()));
                     $zip->renameName($c->gethashedFilename(),$c->getFilename());
                 }
-
-
+                
                 $zip->close();
                 $em->flush();
             }
