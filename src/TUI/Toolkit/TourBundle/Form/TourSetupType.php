@@ -45,6 +45,7 @@ class TourSetupType extends AbstractType
         $builder
             ->add('pricePersonPublic', 'number', array(
                 'label' => 'tour.form.tour_setup.price',
+                'data' => $this->tour->getPricePerson(),
                 'constraints' => array(new NotBlank(array('message' => 'Price per Person can not be blank'))),
             ))
             ->add('paymentTasksPassenger', 'collection', array(
