@@ -38,11 +38,15 @@ class MedicalController extends Controller
      */
     public function createAction(Request $request)
     {
+        $reference = $request->request->get('tui_toolkit_passengerbundle_medical')['passengerReference'];
+
+        if (empty($reference)) {
+            throw $this->createAccessDeniedException('passengerReference is missing from the request.');
+        }
+
         $entity = new Medical();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-        $reference = $form['passengerReference']->getData();
-
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();

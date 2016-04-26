@@ -41,11 +41,15 @@ class EmergencyController extends Controller
      */
     public function createAction(Request $request)
     {
+        $reference = $request->request->get('tui_toolkit_passengerbundle_emergency')['passengerReference'];
+
+        if (empty($reference)) {
+            throw $this->createAccessDeniedException('passengerReference is missing from the request.');
+        }
+
         $entity = new Emergency();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-        $reference = $form['passengerReference']->getData();
-
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
