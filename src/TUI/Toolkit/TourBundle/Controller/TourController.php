@@ -903,9 +903,7 @@ class TourController extends Controller
         // Handling pricePersonPublic.
         if ($converted) {
             $form_price_person = $form->getData()->getPricePerson();
-            if (!empty($form_price_person)) {
-                $entity->setPricePersonPublic($form_price_person);
-            }
+            $entity->setPricePersonPublic($form_price_person);
         }
 
         if ($form->isValid()) {
