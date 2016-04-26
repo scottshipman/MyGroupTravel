@@ -24,7 +24,7 @@ manage_headerblock_update:
     methods:  [POST]
 
 manage_headerblock_layout_update:
-    path:     /update/layout-editor/{id}
+    path:     /{id}/update/layout-editor
     defaults: { _controller: "ContentBlocksBundle:HeaderBlock:updateLayout" }
     methods:  [POST]
 
