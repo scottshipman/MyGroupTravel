@@ -246,6 +246,11 @@ class PermissionService
       // Make sure the class is lowercase.
       $class = strtolower($class);
 
+      // If the class is for quoteversion check for quote.
+      if ($class == 'quoteversion') {
+        $class = 'quote';
+      }
+
       if (!is_null($grants) && !is_array($grants)) {
         $grants = array($grants);
       }
