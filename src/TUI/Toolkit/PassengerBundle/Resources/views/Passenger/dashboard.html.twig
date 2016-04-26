@@ -394,11 +394,8 @@
 {% block footer_right %}
     <div class="quote-info">
         <span class="quote-label">{% trans %}tour.show.footer.price{% endtrans %}</span>
-
         <span class="quote-price">
-            {% if tour.pricePerson %}
-                <strong>{% if tour.currency %}{{ tour.currency.htmlSymbol | raw }}{% endif %}{{ tour.pricePersonPublic }}</strong>
-            {% endif %}
+            <strong>{% if tour.currency %}{{ tour.currency.htmlSymbol | raw }}{% endif %}{{ tour|price }}</strong>
         </span>
     </div>
 {% endblock %}
