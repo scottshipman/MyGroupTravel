@@ -22,7 +22,7 @@ class AppExtension extends \Twig_Extension {
             new \Twig_SimpleFilter('paxLabel', array($this, 'paxLabel')),
             new \Twig_SimpleFilter('checkUserPermissions', array($this, 'checkUserPermissions')),
             new \Twig_SimpleFilter('getClass', array($this, 'getClass')),
-            new \Twig_SimpleFilter('price', array($this, 'getTourPrice')),
+            new \Twig_SimpleFilter('price', array($this, 'getPrice')),
         );
     }
 
@@ -93,18 +93,26 @@ class AppExtension extends \Twig_Extension {
      * TWIG usage Ex: {{ entity|price }}
      * TWIG usage Ex: {{ tour|price }}
      *
-     * @param $tour
+     * @param $entity
      * @return $price_value
      */
-    public function getTourPrice($tour) {
-        $tour_pricePerson = $tour->getPricePerson();
-        $tour_pricePersonPublic = $tour->getPricePersonPublic();
+    public function getPrice($entity) {
+        $entity_type = $this->getClass($entity);
+        $entity_pricePerson = $entity->getPricePerson();
 
-        if (empty($tour_pricePersonPublic)) {
-            return $tour_pricePerson;
+        if ($entity_type == 'Tour') {
+
+            $tour_pricePersonPublic = $entity->getPricePersonPublic();
+
+            if (empty($tour_pricePersonPublic)) {
+                return $entity_pricePerson;
+            }
+            else {
+                return $tour_pricePersonPublic;
+            }
         }
-        else {
-            return $tour_pricePersonPublic;
+        elseif ($entity_type == 'QuoteVersion') {
+            return $entity_pricePerson;
         }
     }
 }
