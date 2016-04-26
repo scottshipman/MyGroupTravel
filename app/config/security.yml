@@ -73,10 +73,7 @@ security:
             - { path: ^/payment/.+/edit$, role: ROLE_SUPER_ADMIN }
             - { path: ^/payment/.+/show$, role: ROLE_SUPER_ADMIN }
             - { path: ^/payment/, role: ROLE_CUSTOMER }
-            - { path: ^/paymenttask/$, role: ROLE_SUPER_ADMIN }
-            - { path: ^/paymenttask/.+/show$, role: ROLE_SUPER_ADMIN }
-            - { path: ^/paymenttask/new$, role: ROLE_SUPER_ADMIN }
-            - { path: ^/paymenttask/, role: ROLE_CUSTOMER }
+            - { path: ^/paymenttask/, role: ROLE_SUPER_ADMIN }
             - { path: ^/paymenttaskoverride/$, role: ROLE_SUPER_ADMIN }
             - { path: ^/paymenttaskoverride/.+/delete$, role: ROLE_SUPER_ADMIN }
             - { path: ^/paymenttaskoverride/new$, role: ROLE_SUPER_ADMIN }
