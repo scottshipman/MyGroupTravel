@@ -636,7 +636,7 @@ class ContentBlockController extends Controller
    * Generate a New Contentblock via ajax call.
    *
    */
-  public function ajaxNewAction(Request $request)
+  public function ajaxNewAction(Request $request, $class = null, $quoteVersion = null)
   {
     $error = false;
 

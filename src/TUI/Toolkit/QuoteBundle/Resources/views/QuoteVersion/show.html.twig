@@ -470,7 +470,7 @@
                $(".tab-new").on('click', function(){
                    var ancestorTabElement=$(this).closest('.content-blocks-tab').children('.sortable-items');
                    $.ajax({
-                       url: window.location.protocol + '//' + window.location.hostname + '/manage/contentblocks/ajax/new',
+                       url: '/manage/contentblocks/ajax/new/QuoteVersion/{{ entity.id }}',
                        headers: {
                            "Pragma": "no-cache",
                            "Expires": -1,
