@@ -44,13 +44,35 @@ class DietaryController extends Controller
             throw $this->createAccessDeniedException('passengerReference is missing from the request.');
         }
 
+        $em = $this->getDoctrine()->getManager();
+        $passenger = $em->getRepository('PassengerBundle:Passenger')->find($reference);
+        $passengerId = $passenger->getId();
+        $tourId = $passenger->getTourReference()->getId();
+
+        // Check context permissions.
+        $this->get("permission.set_permission")->checkUserPermissionsMultiple(
+          TRUE,
+          array(
+            array(
+              'class' => 'passenger',
+              'object' => $passengerId,
+              'grants' => ['parent'],
+              'role_override' => 'ROLE_BRAND',
+            ),
+            array(
+              'class' => 'tour',
+              'object' => $tourId,
+              'grants' => ['organizer', 'assistant'],
+              'role_override' => 'ROLE_BRAND',
+            ),
+          )
+        );
+
         $entity = new Dietary();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $passenger = $em->getRepository('PassengerBundle:Passenger')->find($reference);
             $entity->setPassengerReference($passenger);
             $em->persist($entity);
             $em->flush();
