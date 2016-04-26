@@ -638,7 +638,8 @@ class ContentBlockController extends Controller
    */
   public function ajaxNewAction(Request $request, $class = null, $quoteVersion = null)
   {
-    $error = false;
+    // Check context permissions.
+    $this->get("permission.set_permission")->checkUserPermissions(TRUE, $class, $quoteVersion, ['organizer', 'assistant'], 'ROLE_BRAND');
 
     $em = $this->getDoctrine()->getManager();
     $entity = new ContentBlock();
