@@ -90,7 +90,11 @@ class AppExtension extends \Twig_Extension {
     /**
      * Get tour price.
      *
-     * TWIG usage Ex: {{ entity |price }}
+     * TWIG usage Ex: {{ entity|price }}
+     * TWIG usage Ex: {{ tour|price }}
+     *
+     * @param $tour
+     * @return $price_value
      */
     public function getTourPrice($tour) {
         $tour_pricePerson = $tour->getPricePerson();
