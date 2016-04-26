@@ -9,7 +9,7 @@ manage_headerblock_edit:
     methods:  [GET]
 
 manage_headerblock_layout_edit:
-    path:   /edit/layout-editor/{id}
+    path:   /{id}/edit/layout-editor
     defaults: { _controller: "ContentBlocksBundle:HeaderBlock:editLayout" }
     methods:  [GET]
 

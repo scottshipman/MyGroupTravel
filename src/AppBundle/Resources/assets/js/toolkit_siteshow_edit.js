@@ -95,7 +95,7 @@ $(document).ready(function () {
         e.preventDefault();
         $("#loader").css("display", "block");
         var blockId = $('#header-block-content-item').attr('blockId')
-        $("#site-header-editForm").load('/manage/headerblock/edit/layout-editor/' + blockId, function () {
+        $("#site-header-editForm").load('/manage/headerblock/' + blockId + '/edit/layout-editor', function () {
             $('#site-header-editForm .button-row').append( '<a id ="site-header-editForm-header-cancel" tabId="header" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored content-block-cancel" style="background-color: red; color: white;" href="#">Cancel</a>' );
             $('.item-edit').hide(); // hide ALL edit buttons for all content blocks
             $('.add-content-block').hide();
