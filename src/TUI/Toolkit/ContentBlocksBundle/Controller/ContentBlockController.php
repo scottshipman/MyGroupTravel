@@ -195,7 +195,7 @@ class ContentBlockController extends Controller
      * Finds and displays a ContentBlock entity.
      *
      */
-    public function showAction($id, $quoteVersion=null, $class=null)
+    public function showAction($id, $quoteVersion=null, $class=null, $skipPermissions=false)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -212,6 +212,11 @@ class ContentBlockController extends Controller
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ContentBlock entity.');
+        }
+
+        // Check context permissions.
+        if (!$skipPermissions) {
+          $this->get("permission.set_permission")->checkUserPermissions(TRUE, $class, $quoteVersion, ['organizer', 'assistant'], 'ROLE_BRAND');
         }
 
         $collection = $entity->getMediaWrapper()->toArray() ? $entity->getMediaWrapper()->toArray() : NULL;
