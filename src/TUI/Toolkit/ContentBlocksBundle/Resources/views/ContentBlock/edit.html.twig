@@ -62,7 +62,7 @@
                     var classtype = "QuoteVersion";
                 }
                 if($(this).closest('form').attr('id')=='ajax_headerblock_layout_form'){ //header slideshow content block
-                    $('#site-header-slideshow-content').load('/manage/headerblock/show/' + blockID, function () {
+                    $('#site-header-slideshow-content').load('/manage/headerblock/' + blockID + '/show', function () {
                         $('#site-header-editForm').empty();
                         $('#site-header-editForm').hide();
                         $('#site-header-slideshow').show();

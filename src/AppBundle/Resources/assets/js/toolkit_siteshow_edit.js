@@ -114,7 +114,7 @@ $(document).ready(function () {
                         $('#site-header-editForm').hide();
                         window.location.reload(true);
                     }else {
-                        $('#site-header-slideshow-content').load('/manage/headerblock/show/' + blockId, function () {
+                        $('#site-header-slideshow-content').load('/manage/headerblock/' + blockId + '/show', function () {
                             $('#site-header-editForm').empty();
                             $('#site-header-editForm').hide();
                             $('#site-header-slideshow').show();
@@ -157,7 +157,7 @@ $(document).ready(function () {
                         window.location.reload(true);
                     }else {
                         // redraw the area by loading a twig file
-                        $('#site-header-slideshow-content').load('/manage/headerblock/show/' + blockId, function () {
+                        $('#site-header-slideshow-content').load('/manage/headerblock/' + blockId + '/show', function () {
                             $('#site-header-editForm').empty();
                             $('#site-header-editForm').hide();
                             $('#site-header-slideshow').show();

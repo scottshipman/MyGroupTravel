@@ -1,5 +1,5 @@
 manage_headerblock_show:
-    path:     /show/{id}
+    path:     /{id}/show
     defaults: { _controller: "ContentBlocksBundle:HeaderBlock:show" }
     methods:  GET
 
