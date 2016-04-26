@@ -76,6 +76,7 @@ security:
             - { path: ^/paymenttask/, role: ROLE_SUPER_ADMIN }
             - { path: ^/paymenttaskoverride/$, role: ROLE_SUPER_ADMIN }
             - { path: ^/paymenttaskoverride/.+/delete$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/paymenttaskoverride/create, role: ROLE_SUPER_ADMIN }
             - { path: ^/paymenttaskoverride/new$, role: ROLE_SUPER_ADMIN }
             - { path: ^/paymenttaskoverride/, role: ROLE_CUSTOMER }
             - { path: ^/permission, role: ROLE_SUPER_ADMIN }
