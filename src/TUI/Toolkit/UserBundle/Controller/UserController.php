@@ -366,27 +366,10 @@ class UserController extends Controller
     {
         $locale = $this->container->getParameter('locale');
         $form = $this->createForm(new UserType($locale), $entity, array(
+            'user' => $this->getUser(),
             'action' => $this->generateUrl('user_create'),
             'method' => 'POST',
         ));
-
-        // get current user's roles and add form elements
-
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
-            $form->add('enabled', 'checkbox', array(
-                'required' => false,
-            ))
-                ->add('roles', 'choice', array(
-                    'choices' => array('ROLE_CUSTOMER' => 'CUSTOMER', 'ROLE_BRAND' => 'BRAND', 'ROLE_ADMIN' => 'ADMIN',),
-                    'multiple' => true,
-                    'expanded' => TRUE,
-                ));
-        }
-
-        if ($this->get('security.context')->isGranted('ROLE_BRAND')) {
-            //what does Brand add?
-        }
-
 
         $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('user.actions.create')));
 
@@ -540,44 +523,10 @@ class UserController extends Controller
     {
         $locale = $this->container->getParameter('locale');
         $form = $this->createForm(new UserType($locale), $entity, array(
+            'user' => $this->getUser(),
             'action' => $this->generateUrl('user_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
-
-        // get current user's roles and add form elements
-
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
-            $form->add('enabled', 'checkbox', array(
-                'required' => FALSE,
-            ))
-                ->add('roles', 'choice', array(
-                    'choices' => array(
-                      //  'ROLE_USER' => 'User',
-                        'ROLE_CUSTOMER' => 'CUSTOMER',
-                        'ROLE_BRAND' => 'BRAND',
-                        'ROLE_ADMIN' => 'ADMIN',
-                    ),
-                    'multiple' => TRUE,
-                    'expanded' => TRUE,
-                ));
-        }
-
-        if ($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
-            $form->add('enabled', 'checkbox', array(
-                'required' => FALSE,
-            ))
-                ->add('roles', 'choice', array(
-                    'choices' => array(
-                     //   'ROLE_USER' => 'User',
-                        'ROLE_CUSTOMER' => 'CUSTOMER',
-                        'ROLE_BRAND' => 'BRAND',
-                        'ROLE_ADMIN' => 'ADMIN',
-                        'ROLE_SUPER_ADMIN' => 'SUPER_ADMIN',
-                    ),
-                    'multiple' => TRUE,
-                    'expanded' => TRUE,
-                ));
-        }
 
         $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('user.actions.update')));
 
