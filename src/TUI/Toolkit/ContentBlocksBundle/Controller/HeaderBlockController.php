@@ -252,6 +252,9 @@ class HeaderBlockController extends Controller
      */
     public function editLayoutAction($id, $quoteVersion = null, $class = null)
     {
+        // Check context permissions.
+        $this->get("permission.set_permission")->checkUserPermissions(TRUE, $class, $quoteVersion, ['organizer', 'assistant'], 'ROLE_BRAND');
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($id);
@@ -436,6 +439,9 @@ class HeaderBlockController extends Controller
      */
     public function updateLayoutAction(Request $request, $id, $quoteVersion = null, $class = null)
     {
+        // Check context permissions.
+        $this->get("permission.set_permission")->checkUserPermissions(TRUE, $class, $quoteVersion, ['organizer', 'assistant'], 'ROLE_BRAND');
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($id);
