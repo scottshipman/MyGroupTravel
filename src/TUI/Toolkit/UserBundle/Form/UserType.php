@@ -28,54 +28,57 @@ class UserType extends AbstractType
     {
       // todo: Add logic so you cant add any role greater than your own
         $builder
-          ->add('honorific', 'choice', array(
+        ->add('honorific', 'choice', array(
             'required' => false,
             'placeholder' => 'Select',
             'label' => 'user.form.honorific',
             'translation_domain'  => 'messages',
-              'choices' => array(
+                'choices' => array(
                 'Mr.' => 'Mr.',
                 'Mrs.' => 'Mrs.',
                 'Ms.' => 'Ms.',
                 'Miss' => 'Miss',
                 'Dr.' => 'Dr.',
                 )
-              ))
-          ->add('firstName', 'text', array(
+            )
+        )
+        ->add('firstName', 'text', array(
             'label' => 'user.form.fname',
             'translation_domain'  => 'messages',
             'required' => true,
-
-              ))
-          ->add('lastName', 'text', array(
+            )
+        )
+        ->add('lastName', 'text', array(
             'label' => 'user.form.lname',
             'translation_domain'  => 'messages',
             'required' => true,
-              ))
-          ->add('displayName', 'text', array(
+            )
+        )
+        ->add('displayName', 'text', array(
             'label' => 'user.form.display_name',
             'translation_domain'  => 'messages',
             'required' => false,
-          ))
-          ->add('email', 'email', array(
+            )
+        )
+        ->add('email', 'email', array(
             'label' => 'user.form.email',
             'translation_domain'  => 'messages',
             'required'  => true,
+            )
+        )
+        ->add('phoneNumber', 'text', array(
+            'label' => 'user.form.phone',
+            'translation_domain'  => 'messages',
+            'required' => false,
+            )
+        )
+        ->add('media', 'hidden', array(
+            'required' => false,
+            'data_class' => 'TUI\Toolkit\MediaBundle\Entity\Media',
+            'attr' => array('class' => 'media-placeholder')
+            )
+        );
 
-          ))
-            ->add('phoneNumber', 'text', array(
-                'label' => 'user.form.phone',
-                'translation_domain'  => 'messages',
-                'required' => false,
-            ))
-            ->add('media', 'hidden', array(
-                'required' => false,
-                'data_class' => 'TUI\Toolkit\MediaBundle\Entity\Media',
-                'attr' => array(
-                  'class' => 'media-placeholder',
-                )
-            ))
-        ;
         $user = $options['user'];
         if (!empty($user)) {
             $roles = $user->getRoles();
@@ -90,7 +93,8 @@ class UserType extends AbstractType
                     ),
                     'multiple' => TRUE,
                     'expanded' => TRUE,
-                ));
+                    )
+                );
             }
             elseif (in_array('ROLE_ADMIN', $roles)) {
                 $builder->add('roles', 'choice', array(
@@ -101,7 +105,8 @@ class UserType extends AbstractType
                     ),
                     'multiple' => TRUE,
                     'expanded' => TRUE,
-                ));
+                    )
+                );
             }
         }
     }
