@@ -61,6 +61,21 @@ class TourSiteController extends Controller
         ->getPermission($id, 'tour', $user->getId());
     }
 
+    if($quoteNumber===NULL) {
+      throw $this->createNotFoundException('Make sure there is a correct Quote number.');
+    }
+    else {
+      $quoteVersion = $em->getRepository('QuoteBundle:QuoteVersion')->findOneBy(array('quoteNumber' => $quoteNumber));
+
+      if (!$quoteVersion) {
+        throw $this->createNotFoundException('Unable to find Quote number provided.');
+      }
+      else {
+        if ($entity->getQuoteNumber() != $quoteVersion->getQuoteNumber()) {
+          throw $this->createNotFoundException('Quote number doesn\'t match tour quote number.');
+        }
+      }
+    }
 
     //Get all brand stuff
     $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
