@@ -44,6 +44,7 @@ class QuoteType extends AbstractType
               'configs' => array('minLength' => 3),
               'attr' => array(
                 'class' => 'suggest',
+                'data-modal-title' => 'Organizer',
               ),
             ))
             ->add('institution', 'genemu_jqueryautocomplete_entity', array(
@@ -55,6 +56,7 @@ class QuoteType extends AbstractType
               'configs' => array('minLength' => 3),
               'attr' => array(
                 'class' => 'suggest',
+                'data-modal-title' => 'Institution',
               ),
 
             ));
