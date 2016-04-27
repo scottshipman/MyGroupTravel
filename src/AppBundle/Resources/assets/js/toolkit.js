@@ -74,7 +74,9 @@
 
     $(".modal").on("click", function (e) {
         var $modal_title = $(this).data("modal-title");
-        toolkitStandardPopup("Create New " + $modal_title, "/ajax/" + $modal_title.toLowerCase() + "/new");
+        if ($modal_title) {
+            toolkitStandardPopup("Create New " + $modal_title, "/ajax/" + $modal_title.toLowerCase() + "/new");
+        }
     });
 
     /*
