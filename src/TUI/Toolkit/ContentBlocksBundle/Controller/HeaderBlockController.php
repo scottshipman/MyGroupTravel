@@ -170,7 +170,7 @@ class HeaderBlockController extends Controller
      * Finds and displays a ContentBlock entity.
      *
      */
-    public function showAction($id)
+    public function showAction($id, $quoteVersion = null, $class = null)
     {
         $em = $this->getDoctrine()->getManager();
 

@@ -94,7 +94,9 @@ $(document).ready(function () {
     $(document).on('click', '#edit-header-block', function (e) {
         e.preventDefault();
         $("#loader").css("display", "block");
-        var blockId = $('#header-block-content-item').attr('blockId')
+        var blockId = $('#header-block-content-item').attr('blockId');
+        var entityId = $('.site-show').attr('entityId');
+        var entityClass = $('.site-show').attr('entityClass');
         $("#site-header-editForm").load('/manage/headerblock/' + blockId + '/edit/layout-editor', function () {
             $('#site-header-editForm .button-row').append( '<a id ="site-header-editForm-header-cancel" tabId="header" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored content-block-cancel" style="background-color: red; color: white;" href="#">Cancel</a>' );
             $('.item-edit').hide(); // hide ALL edit buttons for all content blocks
@@ -114,7 +116,7 @@ $(document).ready(function () {
                         $('#site-header-editForm').hide();
                         window.location.reload(true);
                     }else {
-                        $('#site-header-slideshow-content').load('/manage/headerblock/' + blockId + '/show', function () {
+                        $('#site-header-slideshow-content').load('/manage/headerblock/' + blockId + '/show/' + entityId + '/' + entityClass, function () {
                             $('#site-header-editForm').empty();
                             $('#site-header-editForm').hide();
                             $('#site-header-slideshow').show();
@@ -157,7 +159,7 @@ $(document).ready(function () {
                         window.location.reload(true);
                     }else {
                         // redraw the area by loading a twig file
-                        $('#site-header-slideshow-content').load('/manage/headerblock/' + blockId + '/show', function () {
+                        $('#site-header-slideshow-content').load('/manage/headerblock/' + blockId + '/show/' + entityId + '/' + entityClass, function () {
                             $('#site-header-editForm').empty();
                             $('#site-header-editForm').hide();
                             $('#site-header-slideshow').show();
