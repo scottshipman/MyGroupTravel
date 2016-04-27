@@ -89,30 +89,32 @@ class UserType extends AbstractType
             ))
         ;
         $user = $options['user'];
-        $roles = $user->getRoles();
+        if (!empty($user)) {
+            $roles = $user->getRoles();
 
-        if (in_array('ROLE_SUPER_ADMIN', $roles)) {
-            $builder->add('roles', 'choice', array(
-                'choices' => array(
-                    'ROLE_CUSTOMER' => 'CUSTOMER',
-                    'ROLE_BRAND' => 'BRAND',
-                    'ROLE_ADMIN' => 'ADMIN',
-                    'ROLE_SUPER_ADMIN' => 'SUPER_ADMIN',
-                ),
-                'multiple' => TRUE,
-                'expanded' => TRUE,
-            ));
-        }
-        elseif (in_array('ROLE_ADMIN', $roles)) {
-            $builder->add('roles', 'choice', array(
-                'choices' => array(
-                    'ROLE_CUSTOMER' => 'CUSTOMER',
-                    'ROLE_BRAND' => 'BRAND',
-                    'ROLE_ADMIN' => 'ADMIN',
-                ),
-                'multiple' => TRUE,
-                'expanded' => TRUE,
-            ));
+            if (in_array('ROLE_SUPER_ADMIN', $roles)) {
+                $builder->add('roles', 'choice', array(
+                    'choices' => array(
+                        'ROLE_CUSTOMER' => 'CUSTOMER',
+                        'ROLE_BRAND' => 'BRAND',
+                        'ROLE_ADMIN' => 'ADMIN',
+                        'ROLE_SUPER_ADMIN' => 'SUPER_ADMIN',
+                    ),
+                    'multiple' => TRUE,
+                    'expanded' => TRUE,
+                ));
+            }
+            elseif (in_array('ROLE_ADMIN', $roles)) {
+                $builder->add('roles', 'choice', array(
+                    'choices' => array(
+                        'ROLE_CUSTOMER' => 'CUSTOMER',
+                        'ROLE_BRAND' => 'BRAND',
+                        'ROLE_ADMIN' => 'ADMIN',
+                    ),
+                    'multiple' => TRUE,
+                    'expanded' => TRUE,
+                ));
+            }
         }
     }
 
