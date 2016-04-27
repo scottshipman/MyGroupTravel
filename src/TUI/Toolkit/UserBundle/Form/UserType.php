@@ -80,22 +80,6 @@ class UserType extends AbstractType
                 'translation_domain'  => 'messages',
                 'required' => false,
             ))
-//          ->add('phoneNumber', 'tel', array(
-//            'label' => 'user.form.phone',
-//            'translation_domain'  => 'messages',
-//            'required' => false,
-//            'default_region' => $defaultRegion,
-//            'format' => $phoneFormat
-//              ))
-           // ->add('username')
-/*            ->add('plainPassword', 'repeated', array(
-                'type' => 'password',
-                'options' => array('translation_domain' => 'FOSUserBundle'),
-                'first_options' => array('label' => 'form.new_password'),
-                'second_options' => array('label' => 'form.new_password_confirmation'),
-                'invalid_message' => 'fos_user.password.mismatch',
-                'required' => false,
-              ))*/
             ->add('media', 'hidden', array(
                 'required' => false,
                 'data_class' => 'TUI\Toolkit\MediaBundle\Entity\Media',
