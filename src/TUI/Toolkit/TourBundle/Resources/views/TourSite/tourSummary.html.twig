@@ -16,6 +16,11 @@
                        href="#">
                         <i class="fa fa-calendar-times-o"></i> {% trans %}tour.tour_summary.expired{% endtrans %}
                     </a>
+                {% elseif (date(tour.departureDate) < date('now')) %}
+                    <a class="expired-tour mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+                       href="#">
+                        <i class="fa fa-calendar-times-o"></i> {% trans %}tour.tour_summary.departed{% endtrans %}
+                    </a>
                 {% else %}
                     <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
                        id="accept-tour" href="#">

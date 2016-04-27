@@ -222,6 +222,7 @@ tour:
     tour_summary:
         signup: Sign up
         expired: Expired
+        departed: Departed
         departing: Departing:
         duration: Duration:
         display_name: Display Name:
