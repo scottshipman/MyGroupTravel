@@ -9,7 +9,7 @@ manage_headerblock_edit:
     methods:  [GET]
 
 manage_headerblock_layout_edit:
-    path:   /{id}/edit/layout-editor
+    path:   /{id}/edit/layout-editor/{quoteVersion}/{class}
     defaults: { _controller: "ContentBlocksBundle:HeaderBlock:editLayout" }
     methods:  [GET]
 
@@ -24,7 +24,7 @@ manage_headerblock_update:
     methods:  [POST]
 
 manage_headerblock_layout_update:
-    path:     /{id}/update/layout-editor
+    path:     /{id}/update/layout-editor/{quoteVersion}/{class}
     defaults: { _controller: "ContentBlocksBundle:HeaderBlock:updateLayout" }
     methods:  [POST]
 
