@@ -70,10 +70,8 @@ class TourSiteController extends Controller
       if (!$quoteVersion) {
         throw $this->createNotFoundException('Unable to find Quote number provided.');
       }
-      else {
-        if ($entity->getQuoteNumber() != $quoteVersion->getQuoteNumber()) {
-          throw $this->createNotFoundException('Quote number doesn\'t match tour quote number.');
-        }
+      elseif ($entity->getQuoteNumber() != $quoteVersion->getQuoteNumber()) {
+        throw $this->createNotFoundException('Quote number doesn\'t match tour quote number.');
       }
     }
 
