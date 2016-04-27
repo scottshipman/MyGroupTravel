@@ -40,16 +40,11 @@
     // "Add New" Link and Dialog modal for New Quote form
     // *
     $('body').append('<div id="dialog"></div>');
-    var elements = {
-        '#tui_toolkit_quotebundle_quoteversion_quoteReference_organizer': 'Organizer',
-        '#tui_toolkit_quotebundle_quoteversion_quoteReference_institution': 'Institution',
-        '#tui_toolkit_tourbundle_tour_organizer': 'Organizer',
-        '#tui_toolkit_tourbundle_tour_institution': 'Institution'
-    };
-    $.each(elements, function (element, type) {
-        if (element.length) {
-            //  source a button or glyph here
-            $(element).parent('div').parent('div').append('<div id= "' + type.toLowerCase() + '-add-new-link" class="add-new modal"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-plus fa-stack-1x fa-inverse"></i></span></div>');
+
+    $("input[data-modal-title]").each(function () {
+        var $type = $(this).data('modal-title');
+        if ($type) {
+            $(this).parent('div').parent('div').append('<div id= "' + $type.toLowerCase() + '-add-new-link" class="add-new modal" data-modal-title="' + $type + '"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-plus fa-stack-1x fa-inverse"></i></span></div>');
         }
     });
 
@@ -78,15 +73,8 @@
     });
 
     $(".modal").on("click", function (e) {
-        var modal_form = e.currentTarget.id;
-        var parts = modal_form.split("-add");
-        var form_type = parts[0].toLowerCase();
-        //var locale = $('#locale').text();
-        if (locale == 'en_GB'){
-            toolkitStandardPopup( "Create New Organiser", "/ajax/" + form_type + "/new");
-        }else {
-            toolkitStandardPopup("Create New " + parts[0], "/ajax/" + form_type + "/new");
-        }
+        var $modal_title = $(this).data("modal-title");
+        toolkitStandardPopup("Create New " + $modal_title, "/ajax/" + $modal_title.toLowerCase() + "/new");
     });
 
     /*
