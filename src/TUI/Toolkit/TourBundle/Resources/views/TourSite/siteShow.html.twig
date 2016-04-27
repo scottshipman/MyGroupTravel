@@ -118,7 +118,7 @@
                         </div>
                     {% endif %}
                     <div id="site-header-slideshow-content">
-                        {{ render(controller('ContentBlocksBundle:HeaderBlock:show', {'id': entity.headerBlock.id, 'quoteVersion': entity.id, 'class': 'tour'})) }}
+                        {{ render(controller('ContentBlocksBundle:HeaderBlock:show', {'id': entity.headerBlock.id, 'quoteVersion': entity.id, 'class': 'tour', 'skipPermissions': true})) }}
                     </div>
                 {% else %}
                     {% if editable %}
