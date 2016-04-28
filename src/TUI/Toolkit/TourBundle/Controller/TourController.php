@@ -355,22 +355,25 @@ class TourController extends Controller
     /**
      * Creates a new Tour entity.
      */
-    public function createAction(Request $request)
+    public function createAction(Request $request, $convert_quote = true)
     {
         $entity = new Tour();
+        $quoteNumber = null;
 
-        $quoteNumber = $request->request->get('tui_toolkit_tourbundle_tour')['quoteNumber'];
+        if ($convert_quote) {
+            $quoteNumber = $request->request->get('tui_toolkit_tourbundle_tour')['quoteNumber'];
 
-        if (empty($quoteNumber)) {
-            throw $this->createAccessDeniedException('quoteNumber is missing from the request.');
+            if (empty($quoteNumber)) {
+                throw $this->createAccessDeniedException('quoteNumber is missing from the request.');
+            }
         }
 
         $date_format = $this->container->getParameter('date_format');
 
-        $form = $this->createCreateForm($entity, $quoteNumber);
+        $form = $this->createCreateForm($entity, $convert_quote, $quoteNumber);
         $form->handleRequest($request);
 
-        $form = $this->processTour($form, $entity, null, true);
+        $form = $this->processTour($form, $entity, null, $convert_quote);
 
         if ($form->isValid()) {
             return $this->redirect($this->generateUrl('tour_site_show', array(
@@ -388,6 +391,7 @@ class TourController extends Controller
             'form' => $form->createView(),
             'date_format' => $date_format,
             'errors' => $errors,
+            'convert_quote' => $convert_quote,
         ));
     }
 
@@ -398,7 +402,7 @@ class TourController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Tour $entity, $quoteNumber = null)
+    private function createCreateForm(Tour $entity, $convert_quote, $quoteNumber = null)
     {
         $locale = $this->container->getParameter('locale');
         $em = $this->getDoctrine()->getManager();
@@ -518,7 +522,7 @@ class TourController extends Controller
     {
         $date_format = $this->container->getParameter('date_format');
         $entity = new Tour();
-        $form = $this->createCreateForm($entity, $quoteNumber);
+        $form = $this->createCreateForm($entity, true, $quoteNumber);
 
         $errors = $this->get("app.form.validation")->getNestedErrorMessages($form);
 
@@ -527,6 +531,7 @@ class TourController extends Controller
           'form' => $form->createView(),
           'date_format' => $date_format,
           'errors' => $errors,
+          'convert_quote' => true,
         ));
     }
   
@@ -807,7 +812,7 @@ class TourController extends Controller
     /**
      * Helper function to validate and set fields on tour form.
      */
-    protected function processTour(&$form, $entity, $oldOrganizerID = null, $converted = false) {
+    protected function processTour(&$form, $entity, $oldOrganizerID = null, $convert_quote = false) {
         $em = $this->getDoctrine()->getManager();
 
         if (!empty($oldOrganizerID)) {
@@ -962,7 +967,7 @@ class TourController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            if ($converted) {
+            if ($convert_quote) {
                 // Handling quote and quote version.
                 $quoteNumber = $entity->getQuoteNumber();
                 if($quoteNumber) {
