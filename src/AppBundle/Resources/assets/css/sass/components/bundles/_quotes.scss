@@ -218,6 +218,10 @@
       min-width: auto;
     }
 
+    &.expired-tour,
+    &.departed-tour {
+      cursor: default;
+    }
   }
 
   .not-full {
