@@ -30,7 +30,7 @@
                 <li><label>{% trans %}tour.show.number{% endtrans %}</label><strong>{{ entity.tourReference }}</strong></li>
                 <li><label>{% trans %}tour.show.departure{% endtrans %}</label><strong>{{ entity.departureDate|date(format) }}</strong></li>
                 <li><label>{% trans %}tour.show.passengers{% endtrans %}</label><strong>{{ entity.payingPlaces }} paying passengers {% if entity.freePlaces > 0 %} and {{ entity.freePlaces }} free passengers{% endif %}</strong></li>
-                <li><label>{% trans %}tour.show.price{% endtrans %}</label><strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong></li>
+                <li><label>{% trans %}tour.show.price{% endtrans %}</label><strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity|price }}</strong></li>
                 <li>
                     <label>{% trans %}tour.show.schedule{% endtrans %}</label>
                     {% for payment in passenger_payment_tasks %}
@@ -123,5 +123,10 @@
 {% endblock %}
 
 {% block footer_right %}
-    <div class="quote-info"><span class="quote-label">{% trans %}tour.show.footer.price{% endtrans %}</span><span class="quote-price">{% if entity.pricePerson %}<strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong>{% endif %}</span></div>
+    <div class="quote-info">
+        <span class="quote-label">{% trans %}tour.show.footer.price{% endtrans %}</span>
+        <span class="quote-price">
+            <strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity|price }}</strong>
+        </span>
+    </div>
 {% endblock %}
