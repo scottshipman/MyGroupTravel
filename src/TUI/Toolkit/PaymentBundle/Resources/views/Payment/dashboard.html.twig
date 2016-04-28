@@ -1,7 +1,7 @@
 {% extends '::site-base.html.twig' %}
 {% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
 
-{% if tour.payingPlaces != null and tour.pricePersonPublic != null %}{% set totalDue = (tour.pricePersonPublic * tour.payingPlaces) %}{% else %}{% set totalDue = 0%}{% endif %}
+{% if tour.payingPlaces != null and tour|price != null %}{% set totalDue = (tour|price * tour.payingPlaces) %}{% else %}{% set totalDue = 0%}{% endif %}
 
 {% block title %}
     {% if is_granted("ROLE_BRAND") %}
@@ -238,11 +238,8 @@
 {% block footer_right %}
     <div class="quote-info">
         <span class="quote-label">{% trans %}tour.show.footer.price{% endtrans %}</span>
-
         <span class="quote-price">
-            {% if tour.pricePerson %}
-                <strong>{% if tour.currency %}{{ tour.currency.htmlSymbol | raw }}{% endif %}{{ tour.pricePersonPublic }}</strong>
-            {% endif %}
+            <strong>{% if tour.currency %}{{ tour.currency.htmlSymbol | raw }}{% endif %}{{ tour|price }}</strong>
         </span>
     </div>
 {% endblock %}

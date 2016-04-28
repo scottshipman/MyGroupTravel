@@ -56,9 +56,9 @@
                             <div class="price-per-person-suffix">
                                 <p> x </p><p id="passengers">{{ tour.payingPlaces }}</p>
                                 <p> = </p>{% if tour.currency %}<p id="currency">{{ tour.currency.htmlSymbol | raw }}</p>{% endif %}
-                                <p id="adjusted-price">{{ tour.payingPlaces * tour.pricePerson }}</p>
+                                <p id="adjusted-price">{{ tour.payingPlaces * tour|price }}</p>
                                 {# @TODO What is this and is it still needed? (All inline style display none) #}
-                                <p style="display:none; font-size: 16px;" id="total">{{ tour.payingPlaces * tour.pricePerson }}</p>
+                                <p style="display:none; font-size: 16px;" id="total">{{ tour.payingPlaces * tour|price }}</p>
                                 {% if tour.currency %}<p id="currency" style="display: none">{{ tour.currency.htmlSymbol | raw }}</p>{% endif %}
                             </div>
                         </li>
@@ -307,5 +307,10 @@
 {% endblock %}
 
 {% block footer_right %}
-    <div class="quote-info"><span class="quote-label">{% trans %}tour.show.footer.price{% endtrans %}</span><span class="quote-price">{% if tour.pricePerson %}<strong>{% if tour.currency %}{{ tour.currency.htmlSymbol | raw }}{% endif %}{{ tour.pricePerson }}</strong>{% endif %}</span></div>
+    <div class="quote-info">
+        <span class="quote-label">{% trans %}tour.show.footer.price{% endtrans %}</span>
+        <span class="quote-price">
+            <strong>{% if tour.currency %}{{ tour.currency.htmlSymbol | raw }}{% endif %}{{ tour|price }}</strong>
+        </span>
+    </div>
 {% endblock %}

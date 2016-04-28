@@ -22,6 +22,7 @@ class AppExtension extends \Twig_Extension {
             new \Twig_SimpleFilter('paxLabel', array($this, 'paxLabel')),
             new \Twig_SimpleFilter('checkUserPermissions', array($this, 'checkUserPermissions')),
             new \Twig_SimpleFilter('getClass', array($this, 'getClass')),
+            new \Twig_SimpleFilter('price', array($this, 'getPrice')),
         );
     }
 
@@ -39,41 +40,17 @@ class AppExtension extends \Twig_Extension {
     /**
      * Check user permissions.
      *
-     * TWIG usage Ex: {% set role = 'tour' | checkUserPermissions(tour.id, ["parent", "organizer", "assistant"]) %}
-     *            Ex2: {% if 'passenger' | checkUserPermissions(passenger.id, ["parent", "organizer", "assistant"]) %}
+     * TWIG usage Ex: {% set role = 'tour' | checkUserPermissions(tour.id, ["parent", "organizer", "assistant"], "ROLE_BRAND") %}
+     *            Ex2: {% if 'passenger' | checkUserPermissions(passenger.id, ["parent", "organizer", "assistant"], "ROLE_BRAND") %}
      *
      * @param $class
-     * @param $roles
+     * @param $object
+     * @param $grants
+     * @param $role_override
      * @return mixed
      */
-    public function checkUserPermissions($class, $objectId = NULL, $roles = NULL) {
-        if (is_string($roles)) {
-          $roles = array($roles);
-        }
-
-        $user = $this->container->get('security.context')->getToken()->getUser();
-
-        if (!is_null($objectId)) {
-          $user_roles = $this->container->get("permission.set_permission")->getPermission($objectId, $class, $user);
-        }
-        else {
-          $user_roles = $this->container->get("permission.set_permission")->getAllPermissions($class, $user);
-        }
-
-        if (!empty($user_roles)) {
-          if (!empty($roles)) {
-            $matched_roles = array_intersect($roles, $user_roles);
-
-            if (!empty($matched_roles)) {
-              return TRUE;
-            }
-          }
-          else {
-            return TRUE;
-          }
-        }
-
-        return FALSE;
+    public function checkUserPermissions($class, $object = NULL, $grants = NULL, $role_override = NULL) {
+        return $this->container->get("permission.set_permission")->checkUserPermissions(FALSE, $class, $object, $grants, $role_override);
     }
 
     public function getName()
@@ -84,5 +61,34 @@ class AppExtension extends \Twig_Extension {
     public function getClass($object)
     {
         return (new \ReflectionClass($object))->getShortName();
+    }
+
+    /**
+     * Get tour price.
+     *
+     * TWIG usage Ex: {{ entity|price }}
+     * TWIG usage Ex: {{ tour|price }}
+     *
+     * @param $entity
+     * @return $price_value
+     */
+    public function getPrice($entity) {
+        $entity_type = $this->getClass($entity);
+        $entity_pricePerson = $entity->getPricePerson();
+
+        if ($entity_type == 'Tour') {
+
+            $tour_pricePersonPublic = $entity->getPricePersonPublic();
+
+            if (empty($tour_pricePersonPublic)) {
+                return $entity_pricePerson;
+            }
+            else {
+                return $tour_pricePersonPublic;
+            }
+        }
+        elseif ($entity_type == 'QuoteVersion') {
+            return $entity_pricePerson;
+        }
     }
 }

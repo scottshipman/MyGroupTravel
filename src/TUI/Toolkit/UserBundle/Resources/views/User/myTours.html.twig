@@ -42,11 +42,15 @@
            <ul>
                <li>
                    <div class="profile-list-item item-1">
-                        {% if (tour.organizer.id == app.user.id) or (tour.salesAgent.id == app.user.id) %}
-                            {% if tour.currency %}{{ tour.currency.htmlSymbol | raw}}{% endif %}{% if tour.pricePerson %}{{ tour.pricePerson }}{% else %}{% trans %}user.profile.my_quotes.no_price{% endtrans %}{% endif %}<br /><label>{% trans %}user.profile.my_quotes.price{% endtrans %}</label>
-                        {% else %} {# show the Public price for passenger/parents#}
-                       {% if tour.currency %}{{ tour.currency.htmlSymbol | raw}}{% endif %}{% if tour.pricePersonPublic %}{{ tour.pricePersonPublic }}{% else %}{% trans %}user.profile.my_quotes.no_price{% endtrans %}{% endif %}<br /><label>{% trans %}user.profile.my_quotes.price{% endtrans %}</label>
+                        {% if tour.currency %}
+                            {{ tour.currency.htmlSymbol | raw}}
                         {% endif %}
+                        {% if tour|price %}
+                            {{ tour|price }}
+                        {% else %}
+                            {% trans %}user.profile.my_quotes.no_price{% endtrans %}
+                        {% endif %}<br />
+                        <label>{% trans %}user.profile.my_quotes.price{% endtrans %}</label>
                    </div>
                </li>
                <li>
