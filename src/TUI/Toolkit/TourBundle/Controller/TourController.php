@@ -354,94 +354,47 @@ class TourController extends Controller
 
     /**
      * Creates a new Tour entity.
-     *
      */
-    public function createAction(Request $request)
+    public function createAction(Request $request, $convert_quote = true)
     {
-//      //Handling the autocomplete field for organizer.  We need to convert the string from organizer into the object.
         $entity = new Tour();
-        $form = $this->createCreateForm($entity);
+        $quoteNumber = null;
+
+        if ($convert_quote) {
+            $quoteNumber = $request->request->get('tui_toolkit_tourbundle_tour')['quoteNumber'];
+
+            if (empty($quoteNumber)) {
+                throw $this->createAccessDeniedException('quoteNumber is missing from the request.');
+            }
+        }
+
+        $date_format = $this->container->getParameter('date_format');
+
+        $form = $this->createCreateForm($entity, $convert_quote, $quoteNumber);
         $form->handleRequest($request);
-        $em = $this->getDoctrine()->getManager();
 
-        //handling ajax request for organizer
-        $o_data = $form->getData()->getOrganizer();
-        if (preg_match('/<+(.*?)>/', $o_data, $o_matches)) {
-            $email = $o_matches[1];
-            $entities = $em->getRepository('TUIToolkitUserBundle:User')
-                ->findByEmail($email);
-            if (NULL !== $entities) {
-                $organizer = array_shift($entities);
-                $form->getData()->setOrganizer($organizer);
-            }
-        }else {
-            $form['organizer']->addError(new FormError($this->get('translator')->trans('quote.exception.organizer')));
-        }
-        //handling ajax request for SalesAgent same as we did with organizer
-        $a_data = $form->getData()->getSalesAgent();
-        if (preg_match('/<+(.*?)>/', $a_data, $a_matches)) {
-            $agentEmail = $a_matches[1];
-
-            $agentEntities = $em->getRepository('TUIToolkitUserBundle:User')
-                ->findByEmail($agentEmail);
-            if (NULL !== $agentEntities) {
-                $salesAgent = array_shift($agentEntities);
-                $form->getData()->setSalesAgent($salesAgent);
-            }
-        }else {
-            $form['salesAgent']->addError(new FormError($this->get('translator')->trans('quote.exception.salesagent')));
-        }
-
-        //handling ajax request for SecondaryContact same as we did with organizer
-        $s_data = $form->getData()->getSecondaryContact();
-        if ( $s_data != null) {
-            if (preg_match('/<+(.*?)>/', $s_data, $s_matches)) {
-                $secondEmail = $s_matches[1];
-                $secondEntities = $em->getRepository('TUIToolkitUserBundle:User')
-                    ->findByEmail($secondEmail);
-                if (NULL !== $secondEntities) {
-                    $secondAgent = array_shift($secondEntities);
-                    $form->getData()
-                        ->setSecondaryContact($secondAgent);
-                }
-            }
-        } else {
-            $form['secondaryContact']->addError(new FormError($this->get('translator')->trans('quote.exception.secondaryagent')));
-        }
-
-        //Handling the request for institution a little different than we did for the other 2.
-        $institutionParts = explode(' - ', $form->getData()->getQuoteReference()->getInstitution());
-        if (count($institutionParts) == 2 ) {
-            $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findBy(
-                array('name' => $institutionParts[0], 'city' => $institutionParts[1])
-            );
-            if (null !== $institutionEntities) {
-                $institution = array_shift($institutionEntities);
-                $form->getData()->setInstitution($institution);
-            }
-        }else {
-            $form['institution']->addError(new FormError($this->get('translator')->trans('quote.exception.institution')));
-        }
+        $form = $this->processTour($form, $entity, null, $convert_quote);
 
         if ($form->isValid()) {
-            $em->persist($entity);
-            $em->flush();
-            // Create organizer permission
-            $permission = $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
-            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.save') . $entity->getName());
-
-            return $this->redirect($this->generateUrl('manage_tour'));
+            return $this->redirect($this->generateUrl('tour_site_show', array(
+                    'id' => $entity->getId(),
+                    'quoteNumber' => $entity->getQuoteNumber()
+                    )
+                )
+            );
         }
-        $date_format = $this->container->getParameter('date_format');
+
+        $errors = $this->get("app.form.validation")->getNestedErrorMessages($form);
+
         return $this->render('TourBundle:Tour:new.html.twig', array(
             'entity' => $entity,
             'form' => $form->createView(),
             'date_format' => $date_format,
+            'errors' => $errors,
+            'convert_quote' => $convert_quote,
         ));
     }
 
-    /**
-     *
     /**
      * Creates a form to create a Tour entity.
      *
@@ -449,43 +402,145 @@ class TourController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Tour $entity)
+    private function createCreateForm(Tour $entity, $convert_quote, $quoteNumber = null)
     {
         $locale = $this->container->getParameter('locale');
-        $currency_code = $this->container->getParameter('currency');
         $em = $this->getDoctrine()->getManager();
+        $currency_code = $this->container->getParameter('currency');
         $currency = $em->getRepository('CurrencyBundle:Currency')->findByCode($currency_code);
         $currency = array_shift($currency);
+
+        if ($quoteNumber) {
+            $quoteVersion = $em->getRepository('QuoteBundle:QuoteVersion')->findOneBy(array('quoteNumber' => $quoteNumber));
+
+            // Check if the quoteVersion still exists.
+            if (!$quoteVersion) {
+                throw $this->createNotFoundException('Unable to find Quote Version while converting to tour.');
+            }
+
+            $quoteReference = $quoteVersion->getQuoteReference();
+            $quote = $em->getRepository('QuoteBundle:Quote')->find($quoteReference);
+
+            // Check if the quote still exists.
+            if (!$quote) {
+                throw $this->createNotFoundException('Unable to find Quote while converting to tour.');
+            }
+
+            // Check if quote is already converted.
+            if($quote->getConverted() == TRUE ){
+                throw $this->createNotFoundException($this->get('translator')->trans('quote.exception.convert'));
+            }
+
+            $siblings = $em->getRepository('QuoteBundle:QuoteVersion')->findBy(array('quoteReference' => $quoteReference));
+            foreach($siblings as $sibling){
+                if($sibling->getConverted() == TRUE){
+                    throw $this->createNotFoundException($this->get('translator')->trans('quote.exception.convert_sibling'));
+                }
+            }
+
+            // Get first trip status from doctrine.
+            $tripStatus = $em->createQueryBuilder()
+                ->select('e')
+                ->from('TripStatusBundle:TripStatus', 'e')
+                ->orderBy('e.id', 'ASC')
+                ->where('e.visible = TRUE')
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult();
+
+            $entity->setTripStatus($tripStatus);
+            $entity->setQuoteNumber($quoteVersion->getQuoteNumber());
+            $entity->setQuoteReference($quote);
+            $entity->setQuoteVersionReference($quoteVersion);
+            $entity->setBoardBasis($quoteVersion->getBoardBasis());
+            $entity->getCreated(new \DateTime());
+
+            $quote_currency = $quoteVersion->getCurrency();
+            if (!empty($quote_currency)) {
+                $entity->setCurrency($quote_currency);
+            }
+            else {
+                $entity->setCurrency($currency);
+            }
+
+            $entity->setDepartureDate($quoteVersion->getDepartureDate());
+            $entity->setDestination($quote->getDestination());
+            $entity->setDuration($quoteVersion->getDuration());
+            $entity->setDisplayName($quoteVersion->getDisplayName());
+            $entity->setExpiryDate($quoteVersion->getExpiryDate());
+            $entity->setFreePlaces($quoteVersion->getFreePlaces());
+            $entity->setInstitution($quote->getInstitution());
+            $entity->setLocked(FALSE);
+            $entity->setName($quote->getName() . ' - ' . $quoteVersion->getName());
+            $entity->setOrganizer($quote->getOrganizer());
+            $entity->setPayingPlaces($quoteVersion->getPayingPlaces());
+            $entity->setPricePerson($quoteVersion->getPricePerson());
+            $entity->setPricePersonPublic($quoteVersion->getPricePerson());
+            $entity->setReturnDate($quoteVersion->getReturnDate());
+            $entity->setSalesAgent($quote->getSalesAgent());
+            $entity->setSecondaryContact($quote->getSecondaryContact());
+            $entity->setTotalPrice(0);
+            $entity->setTransportType($quoteVersion->getTransportType());
+            $entity->setWelcomeMsg($quoteVersion->getWelcomeMsg());
+
+            $headerBlock = $quoteVersion->getHeaderBlock();
+            if($headerBlock !== NULL){
+                $blockId = $headerBlock->getId();
+            }
+            if(isset($blockId)) {
+                $headerBlock = $this->cloneHeaderBlock($blockId);
+                $entity->setHeaderBlock($headerBlock);
+            }
+            $content = $this->cloneContentBlocks($quoteVersion->getContent());
+            $entity->setContent($content);
+        }
+        else {
+            $entity->setSalesAgent($this->get('security.token_storage')->getToken()->getUser());
+            $entity->setCurrency($currency);
+        }
+        
+        $entity->setRegistrations(0);
+        $entity->setCashPayment(false);
+        $entity->setBankTransferPayment(false);
+        $entity->setOnlinePayment(false);
+        $entity->setOtherPayment(false);
+
         $form = $this->createForm(new TourType($entity, $locale), $entity, array(
             'action' => $this->generateUrl('manage_tour_create'),
             'method' => 'POST',
         ));
-        $form->get('quoteReference')->get('salesAgent')->setData($this->get('security.token_storage')->getToken()->getUser());
-        $form->get('currency')->setdata($currency);
-       // $form->get('expiryDate')->setdata(new \DateTime('now + 30 days'));
-        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('tour.actions.create')));
+        
+        if ($convert_quote) {
+            $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('tour.actions.convert_quote')));
+        }
+        else {
+            $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('tour.actions.create')));
+        }
 
         return $form;
     }
 
-    /**
-     * Displays a form to create a new Tour entity.
-     *
-     */
-    public function newAction()
+    /*
+    * Helper function to convert quote to a tour.
+    */
+    public function convertQuoteAction(Request $request, $quoteNumber)
     {
         $date_format = $this->container->getParameter('date_format');
         $entity = new Tour();
-        $form = $this->createCreateForm($entity);
+        $form = $this->createCreateForm($entity, true, $quoteNumber);
+
+        $errors = $this->get("app.form.validation")->getNestedErrorMessages($form);
 
         return $this->render('TourBundle:Tour:new.html.twig', array(
-            'entity' => $entity,
-            'form' => $form->createView(),
-            'date_format' => $date_format,
+          'entity' => $entity,
+          'form' => $form->createView(),
+          'date_format' => $date_format,
+          'errors' => $errors,
+          'convert_quote' => true,
         ));
     }
-
-    /**
+  
+  /**
      * Finds and displays a Tour entity.
      *
      * param $id tour id
@@ -720,57 +775,101 @@ class TourController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
-        $date_format = $this->container->getParameter('date_format');
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('TourBundle:Tour')->find($id);
         $oldOrganizerID = $entity->getOrganizer()->getID();
-        $oldOrganizer = $em->getRepository('TUIToolkitUserBundle:User')->find($oldOrganizerID);
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Tour entity.');
-        }
+        $date_format = $this->container->getParameter('date_format');
         $collection = $entity->getMedia()->toArray();
 
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
-        //handling ajax request for organizer
-        $o_data = $editForm->getData()->getOrganizer();
+        $editForm = $this->processTour($editForm, $entity, $oldOrganizerID);
+
+        if ($editForm->isValid()) {
+            if ($entity->getSetupComplete() == false and $entity->getIsComplete() == false) {
+
+                return $this->redirect($this->generateUrl('tour_site_show', array(
+                            'id' => $entity->getId(),
+                            'quoteNumber' => $entity->getQuoteNumber()
+                        )
+                    )
+                );
+
+            } else {
+                return $this->redirect($this->generateUrl('manage_tour'));
+            }
+        }
+
+        $errors = $this->get("app.form.validation")->getNestedErrorMessages($editForm);
+
+        return $this->render('TourBundle:Tour:edit.html.twig', array(
+            'entity' => $entity,
+            'collection' => $collection,
+            'edit_form' => $editForm->createView(),
+            'delete_form' => $deleteForm->createView(),
+            'date_format' => $date_format,
+            'errors' => $errors,
+        ));
+    }
+
+    /**
+     * Helper function to validate and set fields on tour form.
+     */
+    protected function processTour(&$form, $entity, $oldOrganizerID = null, $convert_quote = false) {
+        $em = $this->getDoctrine()->getManager();
+
+        if (!empty($oldOrganizerID)) {
+            $oldOrganizer = $em->getRepository('TUIToolkitUserBundle:User')->find($oldOrganizerID);
+        }
+        else {
+            $oldOrganizer = null;
+        }
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Tour entity.');
+        }
+
+        // Handling ajax request for organizer.
+        $o_data = $form->getData()->getOrganizer();
         if (preg_match('/<+(.*?)>/', $o_data, $o_matches)) {
             $email = $o_matches[1];
             $entities = $em->getRepository('TUIToolkitUserBundle:User')
                 ->findByEmail($email);
             if (NULL !== $entities) {
                 $organizer = array_shift($entities);
-                $editForm->getData()->setOrganizer($organizer);
+                $form->getData()->setOrganizer($organizer);
             } else {
-                $editForm['organizer']->addError(new FormError($this->get('translator')
+                $form['organizer']->addError(new FormError($this->get('translator')
                     ->trans('quote.exception.organizer')));
             }
-
         } else {
-            $editForm['organizer']->addError(new FormError($this->get('translator')->trans('quote.exception.organizer')));
+            $form['organizer']->addError(new FormError($this->get('translator')->trans('quote.exception.organizer')));
         }
-        //handling ajax request for SalesAgent same as we did with organizer
-        $a_data = $editForm->getData()->getSalesAgent();
+
+        // Handling ajax request for SalesAgent same as we did with organizer.
+        $a_data = $form->getData()->getSalesAgent();
         if (preg_match('/<+(.*?)>/', $a_data, $a_matches)) {
             $agentEmail = $a_matches[1];
             $agentEntities = $em->getRepository('TUIToolkitUserBundle:User')
                 ->findByEmail($agentEmail);
             if (NULL !== $agentEntities and !empty($agentEntities)) {
                 $salesAgent = array_shift($agentEntities);
-                $editForm->getData()->setSalesAgent($salesAgent);
+                $form->getData()->setSalesAgent($salesAgent);
             } else {
-                $editForm->getData()->setSalesAgent($oldOrganizer);
-                $editForm['salesAgent']->addError(new FormError($this->get('translator')->trans('quote.exception.salesagent')));
+                if (!empty($oldOrganizer)) {
+                    $form->getData()->setSalesAgent($oldOrganizer);
+                }
+                $form['salesAgent']->addError(new FormError($this->get('translator')->trans('quote.exception.salesagent')));
             }
         } else {
 
-            $editForm['salesAgent']->addError(new FormError($this->get('translator')->trans('quote.exception.salesagent')));
+            $form['salesAgent']->addError(new FormError($this->get('translator')->trans('quote.exception.salesagent')));
         }
 
-        //handling ajax request for SecondaryContact same as we did with organizer
-        $s_data = $editForm->getData()->getSecondaryContact();
+        // Handling ajax request for SecondaryContact same as we did with organizer.
+        $s_data = $form->getData()->getSecondaryContact();
         if ( $s_data != null) {
             if (preg_match('/<+(.*?)>/', $s_data, $s_matches)) {
                 $secondEmail = $s_matches[1];
@@ -778,32 +877,32 @@ class TourController extends Controller
                     ->findByEmail($secondEmail);
                 if (NULL !== $secondEntities) {
                     $secondAgent = array_shift($secondEntities);
-                    $editForm->getData()
+                    $form->getData()
                         ->setSecondaryContact($secondAgent);
                 }
             }else {
-                $editForm['secondaryContact']->addError(new FormError($this->get('translator')->trans('quote.exception.secondaryagent')));
+                $form['secondaryContact']->addError(new FormError($this->get('translator')->trans('quote.exception.secondaryagent')));
             }
         }
 
-        //Handling the request for institution a little different than we did for the other 2.
-        $institutionParts = explode(' - ', $editForm->getData()->getInstitution());
+        // Handling the request for institution a little different than we did for the other 2.
+        $institutionParts = explode(' - ', $form->getData()->getInstitution());
         if (count($institutionParts) == 2 ) {
             $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findBy(
                 array('name' => $institutionParts[0], 'city' => $institutionParts[1])
             );
             if (null !== $institutionEntities) {
                 $institution = array_shift($institutionEntities);
-                $editForm->getData()->setInstitution($institution);
+                $form->getData()->setInstitution($institution);
             }
         } else {
-            $editForm['institution']->addError(new FormError($this->get('translator')->trans('quote.exception.institution')));
+            $form['institution']->addError(new FormError($this->get('translator')->trans('quote.exception.institution')));
         }
 
+        // Handling media.
         $medias = array();
-
-        if (NULL != $editForm->getData()->getMedia()) {
-            $fileIdString = $editForm->getData()->getMedia();
+        if (NULL != $form->getData()->getMedia()) {
+            $fileIdString = $form->getData()->getMedia();
             $fileIds = explode(',', $fileIdString);
 
             foreach ($fileIds as $fileId) {
@@ -813,14 +912,13 @@ class TourController extends Controller
             }
         }
         if (!empty($medias)) {
-            $editForm->getData()->setMedia($medias);
+            $form->getData()->setMedia($medias);
 
         }
 
+        if ($form->isValid()) {
 
-        if ($editForm->isValid()) {
-
-            if (NULL != $editForm->getData()->getMedia()) {
+            if (NULL != $form->getData()->getMedia()) {
                 $web_dir = $_SERVER['DOCUMENT_ROOT'];
                 $exportsDir = $web_dir . "/static/exports/";
 
@@ -828,7 +926,7 @@ class TourController extends Controller
                     mkdir($exportsDir, 0755);
                 }
 
-                $collection = $editForm->getData()->getMedia();
+                $collection = $form->getData()->getMedia();
 
                 $zip = new \ZipArchive();
                 $fileName = $entity->getquoteNumber() . ".zip";
@@ -845,7 +943,7 @@ class TourController extends Controller
                 $em->flush();
             }
 
-          // sync payment tasks for instution and passengers if still Not Setup complete
+            // Sync payment tasks for instution and passengers if still Not Setup complete.
             if ($entity->getSetupComplete() == FALSE && $entity->getIsComplete() == FALSE) {
                 // Step 1 purge existing passenger payment schedules
                 $this->purgePassengerPaymentSchedule($entity->getPaymentTasksPassenger(), $entity->getId());
@@ -854,9 +952,9 @@ class TourController extends Controller
 
             $passengerPaymentTasksStorage = array();
 
-          // loop through payment tasks and set type to institution
-            foreach($editForm->getData()->getPaymentTasks() as $paymentTask){
-              $paymentTask->setType('institution');
+            // Loop through payment tasks and set type to institution.
+            foreach($form->getData()->getPaymentTasks() as $paymentTask){
+                $paymentTask->setType('institution');
                 if ($entity->getSetupComplete() == FALSE && $entity->getIsComplete() == FALSE) {
                     // Tour has not been setup by Organizer so sync Passenger payments with Institution Payments as Default values
                     // Step 2 copy values over for each Institution payment task.
@@ -865,43 +963,57 @@ class TourController extends Controller
                 }
             }
 
-            // sync payment tasks for instution and passengers if still Not Setup complete
+            // Sync payment tasks for instution and passengers if still Not Setup complete.
             if ($entity->getSetupComplete() == FALSE && $entity->getIsComplete() == FALSE) {
                 // Step 1 purge existing passenger payment schedules
                 if(!empty($passengerPaymentTasksStorage)){$entity->setPaymentTasksPassenger($passengerPaymentTasksStorage);}
             }
 
-
             $em->persist($entity);
             $em->flush();
-            $permission = $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
-            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.save') . $entity->getName());
+
+            if ($convert_quote) {
+                // Handling quote and quote version.
+                $quoteNumber = $entity->getQuoteNumber();
+                if($quoteNumber) {
+                    $quoteVersion = $em->getRepository('QuoteBundle:QuoteVersion')->findOneBy(array('quoteNumber' => $quoteNumber));
+
+                    if (!$quoteVersion) {
+                        $form['quoteNumber']->addError(new FormError($this->get('translator')->trans('quote.exception.prompt_error')));
+                    }
+                    else {
+                        $quoteVersion->setConverted(TRUE);
+                        $em->persist($quoteVersion);
+                        $em->flush();
+                    }
+
+
+                    $quoteReference = $quoteVersion->getQuoteReference();
+                    $quote = $em->getRepository('QuoteBundle:Quote')->find($quoteReference);
+
+                    if (!$quote) {
+                        $form['quoteNumber']->addError(new FormError($this->get('translator')->trans('quote.exception.prompt_error')));
+                    }
+                    else {
+                        $quote->setConverted(TRUE);
+                        $em->persist($quote);
+                        $em->flush();
+                    }
+                }
+            }
 
             // if new organizer, then check for / add passenger record and permissions
             // stub out passenger record and parent permission for passenger for organizer
-            if($organizer->getEmail() != $oldOrganizer->getEmail()) {
-                $changeOrganizer = $this->changeOrganizer($organizer, $entity, $oldOrganizer);
+            $organizer = $entity->getOrganizer();
+            if(empty($oldOrganizer) || $organizer->getEmail() != $oldOrganizer->getEmail()) {
+                $this->changeOrganizer($organizer, $entity, $oldOrganizer);
             }
 
-            if ( $entity->getSetupComplete() == false and $entity->getIsComplete() == false) {
-
-                return $this->redirect($this->generateUrl('tour_site_show', array('id' => $entity->getId(), 'quoteNumber' => $entity->getQuoteNumber())));
-
-            }else {
-                return $this->redirect($this->generateUrl('manage_tour'));
-            }
-
+            $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.save') . $entity->getName());
         }
-        $errors = $this->get("app.form.validation")->getNestedErrorMessages($editForm);
 
-        return $this->render('TourBundle:Tour:edit.html.twig', array(
-            'entity' => $entity,
-            'collection' => $collection,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-            'date_format' => $date_format,
-            'errors' => $errors,
-        ));
+        return $form;
     }
 
     /**
