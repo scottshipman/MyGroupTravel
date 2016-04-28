@@ -366,11 +366,8 @@
 {% block footer_right %}
     <div class="quote-info">
         <span class="quote-label">{% trans %}tour.site_show.footer.price{% endtrans %}</span>
-
         <span class="quote-price">
-            {% if entity.pricePerson %}
-                <strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePersonPublic }}</strong>
-            {% endif %}
+            <strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity|price }}</strong>
         </span>
     </div>
 {% endblock %}
