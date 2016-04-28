@@ -79,16 +79,6 @@
 <script>
     $(document).ready(function () {
 
-            // Payment popup
-            $(document).on('click', 'a.make-a-payment', function (e) {
-            var t = $(this);
-            e.preventDefault();
-            var passengerId = t.attr('passenger');
-            var tourId = t.attr('tour');
-            //$("#loader").css("display", "block");
-            toolkitStandardPopup("Log A Payment", '/payment/tour/' + tourId + '/passenger/' + passengerId + '/new' );
-            });
-
             // Customize a passenger's payment schedule
             $(document).on('click', 'a.edit-payment-schedule', function (e) {
                 var t = $(this);
