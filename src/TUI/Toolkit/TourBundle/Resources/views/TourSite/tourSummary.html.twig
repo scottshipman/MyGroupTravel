@@ -11,14 +11,12 @@
     <ul class="quote-site-actions">
         <li>
             {#{% if (tour.converted is sameas(false)) and (tour.tourReference.converted is sameas(false)) %}#}
-                {% if (date(tour.departureDate) < date('now')) %}
-                    <a class="expired-tour mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
-                       href="#">
+                {% if date(tour.departureDate) < date('now') %}
+                    <a class="departed-tour mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
                         <i class="fa fa-calendar-times-o"></i> {% trans %}tour.tour_summary.departed{% endtrans %}
                     </a>
                 {% elseif date(tour.expiryDate) < date('now') %}
-                    <a class="expired-tour mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
-                       href="#">
+                    <a class="expired-tour mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
                         <i class="fa fa-calendar-times-o"></i> {% trans %}tour.tour_summary.expired{% endtrans %}
                     </a>
                 {% else %}
