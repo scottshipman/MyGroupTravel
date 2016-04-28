@@ -981,19 +981,24 @@ class TourController extends Controller
                     if (!$quoteVersion) {
                         $form['quoteNumber']->addError(new FormError($this->get('translator')->trans('quote.exception.prompt_error')));
                     }
+                    else {
+                        $quoteVersion->setConverted(TRUE);
+                        $em->persist($quoteVersion);
+                        $em->flush();
+                    }
+
+
                     $quoteReference = $quoteVersion->getQuoteReference();
                     $quote = $em->getRepository('QuoteBundle:Quote')->find($quoteReference);
 
                     if (!$quote) {
                         $form['quoteNumber']->addError(new FormError($this->get('translator')->trans('quote.exception.prompt_error')));
                     }
-
-                    // Update quote and quoteVersion.
-                    $quote->setConverted(TRUE);
-                    $quoteVersion->setConverted(TRUE);
-
-                    $em->persist($quote);
-                    $em->persist($quoteVersion);
+                    else {
+                        $quote->setConverted(TRUE);
+                        $em->persist($quote);
+                        $em->flush();
+                    }
                 }
             }
 
