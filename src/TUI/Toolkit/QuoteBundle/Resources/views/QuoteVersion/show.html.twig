@@ -389,7 +389,7 @@
                    var editBlock = $("#editable-content-blocks-" + blockId);
                    var originalDiv = $('#content-blocks-' + blockId);
                    editBlock.html('');
-                   editBlock.load("/manage/headerblock/header/new/" + entityId + entityClass, function () {
+                   editBlock.load("/manage/headerblock/new/" + entityId + entityClass, function () {
                        doMDLpopup(editBlock); // run the function to add appropriate MDL classes to form elements
                        originalDiv.hide();
                        editBlock.show();
@@ -404,7 +404,7 @@
                    });
 
 
-                   {#toolkitStandardPopup( "{% trans %}quote.show.header_content.add{% endtrans %}", "/manage/headerblock/header/new/" + {{ entity.id}} + "/QuoteVersion" );#}
+                   {#toolkitStandardPopup( "{% trans %}quote.show.header_content.add{% endtrans %}", "/manage/headerblock/new/" + {{ entity.id}} + "/QuoteVersion" );#}
                });
 
                {% if entity.headerBlock %}
@@ -419,7 +419,7 @@
                        var editBlock = $("#headerblock-form");
 //                       var originalDiv = $('#content-blocks-' + blockId);
                        editBlock.html('');
-                       editBlock.load("/manage/headerblock/" + headerBlockId + "/header/edit/" + entityId + entityClass, function () {
+                       editBlock.load("/manage/headerblock/" + headerBlockId + "/edit/" + entityId + entityClass, function () {
                            doMDLpopup(editBlock); // run the function to add appropriate MDL classes to form elements
 //                           originalDiv.hide();
                            editBlock.show();
@@ -432,7 +432,7 @@
 
 
                        });
-                       {#toolkitStandardPopup( "{% trans %}quote.show.header_content.edit{% endtrans %}", "/manage/headerblock/" + {{ entity.headerBlock.id }} + "/header/edit/" + {{ entity.id}} + "/QuoteVersion" );#}
+                       {#toolkitStandardPopup( "{% trans %}quote.show.header_content.edit{% endtrans %}", "/manage/headerblock/" + {{ entity.headerBlock.id }} + "/edit/" + {{ entity.id}} + "/QuoteVersion" );#}
                    });
                {% endif %}
 
@@ -470,7 +470,8 @@
                $(".tab-new").on('click', function(){
                    var ancestorTabElement=$(this).closest('.content-blocks-tab').children('.sortable-items');
                    $.ajax({
-                       url: window.location.protocol + '//' + window.location.hostname + '/manage/contentblocks/ajax/new',
+                       method: 'POST',
+                       url: '/manage/contentblocks/ajax/new/QuoteVersion/{{ entity.id }}',
                        headers: {
                            "Pragma": "no-cache",
                            "Expires": -1,

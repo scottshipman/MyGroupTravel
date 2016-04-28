@@ -158,7 +158,7 @@
                                         <div class="inner-wrapper move-cursor">
                                             {# render the actual content block #}
                                             <div id="previewable-content-blocks-{{ items[item].id }}">
-                                                {{ render(controller('ContentBlocksBundle:ContentBlock:show', {'id':  items[item].id, 'quoteVersion': entity.id, 'class': 'quote' })) }}
+                                                {{ render(controller('ContentBlocksBundle:ContentBlock:show', {'id':  items[item].id, 'quoteVersion': entity.id, 'class': 'quote', 'skipPermissions': true})) }}
                                             </div>
 
                                         </div>

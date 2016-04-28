@@ -55,8 +55,8 @@ manage_contentblocks_hide:
     methods:  [POST, PUT, GET]
 
 manage_contentblocks_ajax_new:
-    path:     /ajax/new
+    path:     /ajax/new/{class}/{quoteVersion}
     defaults: { _controller: "ContentBlocksBundle:ContentBlock:ajaxNew" }
-    methods:  [GET]
+    methods:  [POST]
 
 

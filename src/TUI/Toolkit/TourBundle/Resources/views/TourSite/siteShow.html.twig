@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block page_title %}
-    {% if is_granted("ROLE_BRAND") or "tour" | checkUserPermissions(entity.id) %}
+    {% if "tour" | checkUserPermissions(entity.id, NULL, "ROLE_BRAND") %}
         <span>{% trans %}tour.title.site_view{% endtrans %}</span>
     {% endif %}
 {% endblock %}
@@ -118,7 +118,7 @@
                         </div>
                     {% endif %}
                     <div id="site-header-slideshow-content">
-                        {{ render(controller('ContentBlocksBundle:HeaderBlock:show', {'id': entity.headerBlock.id, 'quoteVersion': entity.id, 'class': 'tour'})) }}
+                        {{ render(controller('ContentBlocksBundle:HeaderBlock:show', {'id': entity.headerBlock.id, 'quoteVersion': entity.id, 'class': 'tour', 'skipPermissions': true})) }}
                     </div>
                 {% else %}
                     {% if editable %}
@@ -210,7 +210,7 @@
 
                                     {# render the actual content block #}
                                     <div id="previewable-content-blocks-{{ items[item].id }}">
-                                        {{ render(controller('ContentBlocksBundle:ContentBlock:show', {'id':  items[item].id, 'quoteVersion': entity.id, 'class': 'tour'})) }}
+                                        {{ render(controller('ContentBlocksBundle:ContentBlock:show', {'id':  items[item].id, 'quoteVersion': entity.id, 'class': 'tour', 'skipPermissions': true})) }}
                                     </div>
 
                                     {# give a placeholder for the editable version #}
