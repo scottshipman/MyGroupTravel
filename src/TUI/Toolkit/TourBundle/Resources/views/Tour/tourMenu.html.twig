@@ -1,4 +1,5 @@
 {% if entity.tourReference is defined and entity.tourReference.id is defined %}{% set tourId = entity.tourReference.id %}{% elseif tour is defined %}{% set tourId = tour.id %}{% else %}{% set tourId = entity.id %}{% endif %}
+{% if entity.tourReference is defined and entity.tourReference.quoteNumber is defined %}{% set quoteNumber = entity.tourReference.quoteNumber %}{% elseif tour is defined %}{% set quoteNumber = tour.quoteNumber %}{% else %}{% set quoteNumber = entity.quoteNumber %}{% endif %}
 {# Only logged-in can see this menu #}
 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
     <button id="tour-title-drop" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-menu-drop mdl-button--raised mdl-button--colored ">
@@ -14,7 +15,7 @@
             {% endif %}
 
             {#Tour Website#}
-            <li><a href="{{ path('tour_site_action_show', { 'id': tourId }) }}" class="mdl-menu__item">{% trans %}tour.menu.preview{% endtrans %}</a></li>
+            <li><a href="{{ path('tour_site_show', { 'id': tourId, 'quoteNumber': quoteNumber }) }}" class="mdl-menu__item">{% trans %}tour.menu.preview{% endtrans %}</a></li>
 
             {%  if is_granted('ROLE_BRAND') %}
                 {#Edit Tour Details#}

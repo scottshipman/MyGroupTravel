@@ -128,7 +128,8 @@ class TourController extends Controller
         $grid->addRowAction($editAction);
         $showAction = new RowAction('Dashboard', 'manage_tour_show');
         $grid->addRowAction($showAction);
-        $previewAction = new RowAction('Preview', 'tour_site_action_show');
+        $previewAction = new RowAction('Preview', 'tour_site_show');
+        $previewAction->setRouteParameters(array('id', 'quoteNumber'));
         $grid->addRowAction($previewAction);
         $deleteAction = new RowAction('Delete', 'manage_tour_quick_delete');
         $deleteAction->setRole('ROLE_ADMIN');
