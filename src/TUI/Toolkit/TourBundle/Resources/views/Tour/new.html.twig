@@ -340,5 +340,11 @@
             $("#dialog").append(div);
             div.show();
         });
+
+        {% if convert_quote %}
+            $(document).on('click', '#tui_toolkit_tourbundle_tour_submit', function () {
+                return confirm('{% trans %}quote.actions.confirm{% endtrans %}');
+            });
+        {% endif %}
     </script>
 {% endblock %}
