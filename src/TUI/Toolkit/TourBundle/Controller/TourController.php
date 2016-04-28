@@ -355,13 +355,19 @@ class TourController extends Controller
     /**
      * Creates a new Tour entity.
      */
-    public function createAction(Request $request, $id)
+    public function createAction(Request $request)
     {
         $entity = new Tour();
 
+        $quoteNumber = $request->request->get('tui_toolkit_tourbundle_tour')['quoteNumber'];
+
+        if (empty($quoteNumber)) {
+            throw $this->createAccessDeniedException('quoteNumber is missing from the request.');
+        }
+
         $date_format = $this->container->getParameter('date_format');
 
-        $form = $this->createCreateForm($entity, $id);
+        $form = $this->createCreateForm($entity, $quoteNumber);
         $form->handleRequest($request);
 
         $form = $this->processTour($form, $entity, null, true);
@@ -392,7 +398,7 @@ class TourController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Tour $entity, $id = null)
+    private function createCreateForm(Tour $entity, $quoteNumber = null)
     {
         $locale = $this->container->getParameter('locale');
         $em = $this->getDoctrine()->getManager();
@@ -400,8 +406,8 @@ class TourController extends Controller
         $currency = $em->getRepository('CurrencyBundle:Currency')->findByCode($currency_code);
         $currency = array_shift($currency);
 
-        if ($id) {
-            $quoteVersion = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+        if ($quoteNumber) {
+            $quoteVersion = $em->getRepository('QuoteBundle:QuoteVersion')->findOneBy(array('quoteNumber' => $quoteNumber));
 
             // Check if the quoteVersion still exists.
             if (!$quoteVersion) {
@@ -496,7 +502,7 @@ class TourController extends Controller
         $entity->setOtherPayment(false);
 
         $form = $this->createForm(new TourType($entity, $locale), $entity, array(
-            'action' => $this->generateUrl('manage_tour_create', array('id' => $id)),
+            'action' => $this->generateUrl('manage_tour_create'),
             'method' => 'POST',
         ));
 
@@ -508,11 +514,11 @@ class TourController extends Controller
     /*
     * Helper function to convert quote to a tour.
     */
-    public function convertQuoteAction(Request $request, $id)
+    public function convertQuoteAction(Request $request, $quoteNumber)
     {
         $date_format = $this->container->getParameter('date_format');
         $entity = new Tour();
-        $form = $this->createCreateForm($entity, $id);
+        $form = $this->createCreateForm($entity, $quoteNumber);
 
         $errors = $this->get("app.form.validation")->getNestedErrorMessages($form);
 
