@@ -355,16 +355,25 @@ class TourController extends Controller
     /**
      * Creates a new Tour entity.
      */
-    public function createAction(Request $request, $id)
+    public function createAction(Request $request, $convert_quote = true)
     {
         $entity = new Tour();
+        $quoteNumber = null;
+
+        if ($convert_quote) {
+            $quoteNumber = $request->request->get('tui_toolkit_tourbundle_tour')['quoteNumber'];
+
+            if (empty($quoteNumber)) {
+                throw $this->createAccessDeniedException('quoteNumber is missing from the request.');
+            }
+        }
 
         $date_format = $this->container->getParameter('date_format');
 
-        $form = $this->createCreateForm($entity, $id);
+        $form = $this->createCreateForm($entity, $convert_quote, $quoteNumber);
         $form->handleRequest($request);
 
-        $form = $this->processTour($form, $entity, null, true);
+        $form = $this->processTour($form, $entity, null, $convert_quote);
 
         if ($form->isValid()) {
             return $this->redirect($this->generateUrl('tour_site_show', array(
@@ -382,6 +391,7 @@ class TourController extends Controller
             'form' => $form->createView(),
             'date_format' => $date_format,
             'errors' => $errors,
+            'convert_quote' => $convert_quote,
         ));
     }
 
@@ -392,7 +402,7 @@ class TourController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Tour $entity, $id = null)
+    private function createCreateForm(Tour $entity, $convert_quote, $quoteNumber = null)
     {
         $locale = $this->container->getParameter('locale');
         $em = $this->getDoctrine()->getManager();
@@ -400,8 +410,8 @@ class TourController extends Controller
         $currency = $em->getRepository('CurrencyBundle:Currency')->findByCode($currency_code);
         $currency = array_shift($currency);
 
-        if ($id) {
-            $quoteVersion = $em->getRepository('QuoteBundle:QuoteVersion')->find($id);
+        if ($quoteNumber) {
+            $quoteVersion = $em->getRepository('QuoteBundle:QuoteVersion')->findOneBy(array('quoteNumber' => $quoteNumber));
 
             // Check if the quoteVersion still exists.
             if (!$quoteVersion) {
@@ -496,11 +506,16 @@ class TourController extends Controller
         $entity->setOtherPayment(false);
 
         $form = $this->createForm(new TourType($entity, $locale), $entity, array(
-            'action' => $this->generateUrl('manage_tour_create', array('id' => $id)),
+            'action' => $this->generateUrl('manage_tour_create'),
             'method' => 'POST',
         ));
-
-        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('tour.actions.create')));
+        
+        if ($convert_quote) {
+            $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('tour.actions.convert_quote')));
+        }
+        else {
+            $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('tour.actions.create')));
+        }
 
         return $form;
     }
@@ -508,11 +523,11 @@ class TourController extends Controller
     /*
     * Helper function to convert quote to a tour.
     */
-    public function convertQuoteAction(Request $request, $id)
+    public function convertQuoteAction(Request $request, $quoteNumber)
     {
         $date_format = $this->container->getParameter('date_format');
         $entity = new Tour();
-        $form = $this->createCreateForm($entity, $id);
+        $form = $this->createCreateForm($entity, true, $quoteNumber);
 
         $errors = $this->get("app.form.validation")->getNestedErrorMessages($form);
 
@@ -521,6 +536,7 @@ class TourController extends Controller
           'form' => $form->createView(),
           'date_format' => $date_format,
           'errors' => $errors,
+          'convert_quote' => true,
         ));
     }
   
@@ -801,7 +817,7 @@ class TourController extends Controller
     /**
      * Helper function to validate and set fields on tour form.
      */
-    protected function processTour(&$form, $entity, $oldOrganizerID = null, $converted = false) {
+    protected function processTour(&$form, $entity, $oldOrganizerID = null, $convert_quote = false) {
         $em = $this->getDoctrine()->getManager();
 
         if (!empty($oldOrganizerID)) {
@@ -961,7 +977,7 @@ class TourController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            if ($converted) {
+            if ($convert_quote) {
                 // Handling quote and quote version.
                 $quoteNumber = $entity->getQuoteNumber();
                 if($quoteNumber) {
@@ -970,19 +986,24 @@ class TourController extends Controller
                     if (!$quoteVersion) {
                         $form['quoteNumber']->addError(new FormError($this->get('translator')->trans('quote.exception.prompt_error')));
                     }
+                    else {
+                        $quoteVersion->setConverted(TRUE);
+                        $em->persist($quoteVersion);
+                        $em->flush();
+                    }
+
+
                     $quoteReference = $quoteVersion->getQuoteReference();
                     $quote = $em->getRepository('QuoteBundle:Quote')->find($quoteReference);
 
                     if (!$quote) {
                         $form['quoteNumber']->addError(new FormError($this->get('translator')->trans('quote.exception.prompt_error')));
                     }
-
-                    // Update quote and quoteVersion.
-                    $quote->setConverted(TRUE);
-                    $quoteVersion->setConverted(TRUE);
-
-                    $em->persist($quote);
-                    $em->persist($quoteVersion);
+                    else {
+                        $quote->setConverted(TRUE);
+                        $em->persist($quote);
+                        $em->flush();
+                    }
                 }
             }
 

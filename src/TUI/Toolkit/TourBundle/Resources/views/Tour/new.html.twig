@@ -1,6 +1,10 @@
 {% extends '::base.html.twig' %}
 
-{% set title_label = 'Create' %}
+{% if convert_quote %}
+    {% set title_label = 'Convert quote' %}
+{% else %}
+    {% set title_label = 'Create' %}
+{% endif %}
 
 {% block title %}{{ title_label }} {% trans %}tour.title.show{% endtrans %} {{ entity.name }}{% endblock %}
 {% block page_title %}{{ title_label }}
@@ -340,5 +344,11 @@
             $("#dialog").append(div);
             div.show();
         });
+
+        {% if convert_quote %}
+            $(document).on('click', '#tui_toolkit_tourbundle_tour_submit', function () {
+                return confirm('{% trans %}quote.actions.confirm{% endtrans %}');
+            });
+        {% endif %}
     </script>
 {% endblock %}

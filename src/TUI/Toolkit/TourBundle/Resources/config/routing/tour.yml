@@ -3,7 +3,7 @@ manage_tour:
     defaults: { _controller: "TourBundle:Tour:index" }
 
 manage_tour_create:
-    path:     /create/{id}
+    path:     /create
     defaults: { _controller: "TourBundle:Tour:create" }
     methods:  POST
 
@@ -70,7 +70,7 @@ manage_tour_notify_organizers:
     defaults:  { _controller: "TourBundle:Tour:organizerNotify" }
 
 manage_tour_convert_quote:
-    path:   /convert/quote/{id}
+    path:   /convert/quote/{quoteNumber}
     defaults: {_controller: "TourBundle:Tour:convertQuote" }
     methods: [GET]
 
