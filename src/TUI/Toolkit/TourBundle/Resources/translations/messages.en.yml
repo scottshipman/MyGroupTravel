@@ -45,6 +45,7 @@ tour:
         edit: Edit
         update: Update
         create: Create tour
+        convert_quote: Convert quote
         delete: Delete
         create_new: Create a New Tour
         password: Set Password

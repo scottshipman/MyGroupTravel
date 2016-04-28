@@ -1,6 +1,10 @@
 {% extends '::base.html.twig' %}
 
-{% set title_label = 'Create' %}
+{% if convert_quote %}
+    {% set title_label = 'Convert quote' %}
+{% else %}
+    {% set title_label = 'Create' %}
+{% endif %}
 
 {% block title %}{{ title_label }} {% trans %}tour.title.show{% endtrans %} {{ entity.name }}{% endblock %}
 {% block page_title %}{{ title_label }}

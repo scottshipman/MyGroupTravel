@@ -509,8 +509,13 @@ class TourController extends Controller
             'action' => $this->generateUrl('manage_tour_create'),
             'method' => 'POST',
         ));
-
-        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('tour.actions.create')));
+        
+        if ($convert_quote) {
+            $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('tour.actions.convert_quote')));
+        }
+        else {
+            $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('tour.actions.create')));
+        }
 
         return $form;
     }
