@@ -40,18 +40,11 @@
     // "Add New" Link and Dialog modal for New Quote form
     // *
     $('body').append('<div id="dialog"></div>');
-    var elements = {
-        '#tui_toolkit_quotebundle_quoteversion_quoteReference_organizer': 'Organizer',
-        '#tui_toolkit_quotebundle_quoteversion_quoteReference_institution': 'Institution',
-        '#tui_toolkit_tourbundle_tour_organizer': 'Organizer',
-        '#tui_toolkit_tourbundle_tour_institution': 'Institution'
-    };
-    $.each(elements, function (element, type) {
-        if (element.length) {
-            var modal_title = "Create New " + type;
-            var modal_url = "/ajax/" + type.toLowerCase() + "/new";
-            $(element).parent('div').parent('div').append('<div class="add-new modal" data-modal-title="' + modal_title + '" data-modal-url="' + modal_url + '"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-plus fa-stack-1x fa-inverse"></i></span></div>');
-        }
+    $("input[data-add-new-url]").each(function (index, element) {
+        var modal_title = $(element).attr('data-add-new-title');
+        var modal_url = $(element).attr('data-add-new-url');
+
+        $(element).parent('div').parent('div').append('<div class="add-new modal" data-modal-title="' + modal_title + '" data-modal-url="' + modal_url + '"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-plus fa-stack-1x fa-inverse"></i></span></div>');
     });
 
     $("#dialog").dialog({
@@ -80,9 +73,13 @@
 
     $(".modal").on("click", function (e) {
         var modal = e.currentTarget;
-        var modal_title = $(modal).attr('data-modal-title');
-        var modal_url = $(modal).attr('data-modal-url');
-        toolkitStandardPopup(modal_title, modal_url);
+
+        if ($(modal).attr('data-modal-url')) {
+            toolkitStandardPopup($(modal).attr('data-modal-title'), $(modal).attr('data-modal-url'));
+        }
+        else {
+            console.log('data-modal-url is missing.');
+        }
     });
 
     /*
