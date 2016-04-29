@@ -42,7 +42,8 @@ tour:
         back_dashboard: Back to Tour Dashboard
         edit: Edit
         update: Update
-        create: Create
+        create: Create tour
+        convert_quote: Convert quote
         delete: Delete
         create_new: Create a New Tour
         password: Set Password
@@ -149,7 +150,7 @@ tour:
         tasks: Tasks
         passenger_tasks: Passenger Tasks
         due: due by
-        overdue: Amount Past Due
+        overdue: Amount Overdue
         no_payments: No payments due at this time
         na: N/A
         signups: Sign-ups
@@ -189,7 +190,7 @@ tour:
         departure: Days until departure
         registrations: Registrations
         passengers: Passengers
-        parent_price: Paid / Total Tour Price
+        parent_price: Paid
         view_passenger: View Passenger
         passenger_dashboard: Go to Passenger Dashboard
         task_dashboard: Go to Task Dashboard
@@ -222,6 +223,7 @@ tour:
     tour_summary:
         signup: Sign up
         expired: Expired
+        departed: Departed
         departing: Departing:
         duration: Duration:
         display_name: Display Name:
@@ -300,11 +302,12 @@ tour:
     email:
         registration:
             subject: Toolkit Registration Confirmation
+            parent_subject: Activate your account
         password_reset:
             subject: Password Reset
             action: Set Password
         setup:
-            subject: Set Up Your Tour
+            subject: Set Up Your
     form:
         honorific: Title
         fname: First Name
@@ -314,7 +317,7 @@ tour:
         media: Avatar
         password: Password
         contact_organizer:
-            message: Message to the organiser
+            label: Message to the organiser
         payment_task:
             value: Amount
             type: Payment Type

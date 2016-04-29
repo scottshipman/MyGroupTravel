@@ -16,13 +16,7 @@
 {% endblock %}
 
 {% block page_title_menu %}
-    <button id="tour-title-drop" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-menu-drop mdl-button--raised mdl-button--colored">
-        <i class="material-icons">arrow_drop_down</i>
-    </button>
     {% embed "TourBundle:Tour:tourMenu.html.twig" %}
-            {% block tour_dashboard_link %}
-                <li><a href="{{ path('manage_tour_show', { 'id': tour.id }) }}" class="mdl-menu__item">{% trans %}tour.title.index{% endtrans %}</a></li>
-            {% endblock %}
     {% endembed %}
 {% endblock %}
 
@@ -33,6 +27,12 @@
         <div class="tour-show-left-column">
 
             <h3>{{ tour.name|title }}</h3>
+            <div class="text-search">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input id="passenger-name-filter" class="mdl-textfield__input" type="text" />
+                    <label class="mdl-textfield__label" for="passenger-name-filter">Enter name or email...</label>
+                </div>
+            </div>
             <a href="" style="float:right; text-decoration: none; color: {{ brand.secondaryColor }} !important;" class="passenger-filter" id="clear-filters" data-id="showEveryone"><i class="material-icons md-18">undo</i> {% trans %} passenger.labels.show-everyone{% endtrans %}</a><br>
             <div class="list-header" style="color: {{ brand.secondaryColor }}"><i class="material-icons">flight_takeoff</i> {% trans %} passenger.labels.passengers_for{% endtrans %}</div>
             <ul class="tour-show-submenu list-indent">
@@ -114,7 +114,7 @@
             </div>
 
             {# Organizer CTA Card #}
-            <div class="organizer-cta-card organizers tour-edit mdl-card mdl-shadow--2dp" style="margin-bottom: 0; box-shadow: none; display:none;">
+            <div class="organizer-cta-card tour-edit mdl-card mdl-shadow--2dp" style="margin-bottom: 0; box-shadow: none; display:none;">
 
                 <div class="mdl-card__title">
                     <h3 id="organizer-card-title" class="mdl-card__title-text">{% trans %}passenger.labels.passenger_list{% endtrans %}</h3>
@@ -394,11 +394,8 @@
 {% block footer_right %}
     <div class="quote-info">
         <span class="quote-label">{% trans %}tour.show.footer.price{% endtrans %}</span>
-
         <span class="quote-price">
-            {% if tour.pricePerson %}
-                <strong>{% if tour.currency %}{{ tour.currency.htmlSymbol | raw }}{% endif %}{{ tour.pricePersonPublic }}</strong>
-            {% endif %}
+            <strong>{% if tour.currency %}{{ tour.currency.htmlSymbol | raw }}{% endif %}{{ tour|price }}</strong>
         </span>
     </div>
 {% endblock %}

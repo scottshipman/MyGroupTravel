@@ -5,6 +5,7 @@ passenger:
         index: Passengers
         new: Create New Passenger
         show: Passengers
+        manage: Manage Passengers
 
     page_title:
         edit: Edit Passenger
@@ -14,6 +15,8 @@ passenger:
         layout_auth: My Tours
         layout_anon: User Login
         deleted: User Dashboard - Deleted
+
+    intro: <p>Your passengers for this trip are listed here, giving you an overview of the tour, including the number of tasks to be completed and price.<br />Click on the menu for each passenger to add important information and view their payment schedule</p>
 
     actions:
         back: Back to Passengers
@@ -115,11 +118,11 @@ passenger:
 
 
     emails:
-        thank_you: Thank you for your submission
-        notifications: You have new notifications
+        thank_you: Thank you for your Sign up to
+        notifications: You have new Tour Sign Ups
         invite-organizer:
             organizer-subject: A new organizer has been invited to your tour
-            new-user-subject: You have been invited to help manage a tour
+            new-user-subject: You have been added as an Organizer
 
     form:
         invite:

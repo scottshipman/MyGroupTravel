@@ -58,7 +58,7 @@
                     {% if items[item] != null %}
                     {# render the actual content block #}
                         <div class="pdf-content-block">
-                            {{ render(controller('ContentBlocksBundle:ContentBlock:show', {'id':  items[item].id, 'quoteVersion': entity.id, 'class': 'tour'})) }}
+                            {{ render(controller('ContentBlocksBundle:ContentBlock:show', {'id':  items[item].id, 'quoteVersion': entity.id, 'class': 'tour', 'skipPermissions': true})) }}
                         </div>
                     {% endif %}
                 {% endfor %}
@@ -117,11 +117,8 @@
 {% block footer_right %}
     <div class="quote-info">
         <span class="quote-label">{% trans %}tour.pdf.footer.price{% endtrans %}</span>
-
         <span class="quote-price">
-            {% if entity.pricePerson %}
-                <strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePersonPublic }}</strong>
-            {% endif %}
+            <strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity|price }}</strong>
         </span>
     </div>
 {% endblock %}

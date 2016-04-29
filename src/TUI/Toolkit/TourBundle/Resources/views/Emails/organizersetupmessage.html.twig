@@ -345,12 +345,15 @@
                                         <table border="0" cellpadding="20" cellspacing="0" width="100%">
                                             <tr>
                                                 <td valign="top" class="bodyContent">
-                                                    <h2 class="h2">Activate your account and set up your tour</h2>
-
-                                                    <div><br>
-                                                        Hi {{ user.firstName|capitalize }},</br>
+                                                    <h2 class="h2">{{ entity.name }}</h2>
+                                                    <div>
+                                                        <p>Institution Name: {{ entity.quoteReference.institution }}</p>
+                                                        <p>Tour Name : {{ entity.name }}</p>
+                                                        <p>Quote Number: {{ entity.quoteNumber }}</p>
+                                                        <p>Destination: {{ entity.destination }}</p>
                                                         {% if additional %}
-                                                            <p style="text-align: left;">{{ additional }}</p></br>
+                                                            <h2 class="h2">Message from {{ agent.firstName }} {{ agent.lastName }} at {{ brand.name }}</h2>
+                                                            <p>{{ additional }}</p>
                                                         {% endif %}
                                                     </div>
                                                 </td>
@@ -360,7 +363,7 @@
                                                     <table border="0" cellpadding="15" cellspacing="0" class="templateButton">
                                                         <tr>
                                                             <td valign="middle" class="templateButtonContent">
-                                                                <div><a href="{{ absolute_url("/user/register/confirm/" ~ user.confirmationToken) }}">Activate your account</a></div>
+                                                                <div><a href="{{ absolute_url("/user/register/confirm/" ~ user.confirmationToken) }}">Activate account</a></div>
                                                             </td>
                                                         </tr>
                                                     </table>

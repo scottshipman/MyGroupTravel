@@ -1,7 +1,7 @@
 {% extends '::site-base.html.twig' %}
 {% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
 
-{% if tour.payingPlaces != null and tour.pricePersonPublic != null %}{% set totalDue = (tour.pricePersonPublic * tour.payingPlaces) %}{% else %}{% set totalDue = 0%}{% endif %}
+{% if tour.payingPlaces != null and tour|price != null %}{% set totalDue = (tour|price * tour.payingPlaces) %}{% else %}{% set totalDue = 0%}{% endif %}
 
 {% block title %}
     {% if is_granted("ROLE_BRAND") %}
@@ -16,13 +16,7 @@
 {% endblock %}
 
 {% block page_title_menu %}
-    <button id="tour-title-drop" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-menu-drop mdl-button--raised mdl-button--colored">
-        <i class="material-icons">arrow_drop_down</i>
-    </button>
     {% embed "TourBundle:Tour:tourMenu.html.twig" %}
-        {% block tour_dashboard_link %}
-            <li><a href="{{ path('manage_tour_show', { 'id': tour.id }) }}" class="mdl-menu__item">{% trans %}tour.title.index{% endtrans %}</a></li>
-        {% endblock %}
     {% endembed %}
 {% endblock %}
 
@@ -33,6 +27,13 @@
         <div class="tour-show-left-column">
 
             <h3>{{ tour.name|capitalize }}</h3>
+            <div class="text-search">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input id="passenger-payment-filter" class="mdl-textfield__input" type="text" />
+                    <label class="mdl-textfield__label" for="passenger-name-filter">Enter name or email...</label>
+                </div>
+                <a href="#all" style="float:right; text-decoration: none; color:{{ brand.secondaryColor }};" id="clear"><i class="material-icons md-18">undo</i> {% trans %} passenger.labels.show-everyone{% endtrans %}</a>
+            </div>
             <ul class="tour-show-submenu">
                 <li><a href="{{ path('manage_payment_dashboard', { 'tourId': tour.id }) }}" style="text-decoration: none; color:{{ brand.secondaryColor }};"><strong>{% trans %}payment.labels.balances{% endtrans %}</strong></a></li>
                 <li><a href="{{ path('manage_payment_dashboard_edit_payments', { 'tourId': tour.id }) }}" style="text-decoration: none; color: inherit;"><strong>{% trans %}payment.labels.payment_settings{% endtrans %}</strong></a></li>
@@ -84,22 +85,15 @@
     <script>
         $(document).ready(function () {
 
-            // Payment popup
-            $(document).on('click', 'a.make-a-payment', function (e) {
-                var t = $(this);
-                e.preventDefault();
-                var passengerId = t.attr('passenger');
-                var tourId = t.attr('tour');
-                toolkitStandardPopup("Log A Payment", '/payment/tour/' + tourId + '/passenger/' + passengerId + '/new' );
-            });
-
             // Customize a passenger's payment schedule
             $(document).on('click', 'a.edit-payment-schedule', function (e) {
-                var t = $(this);
+                var t = $(this),
+                    forename = t.parents('.tour-edit').find('.forename').text();
+
                 e.preventDefault();
                 var passengerId = t.attr('passenger');
                 var tourId = t.attr('tour');
-                toolkitStandardPopup("Custom Payment Schedule", '/payment/tour/' + tourId + '/passenger/' + passengerId + '/customize' );
+                toolkitStandardPopup('Edit ' + forename + '\'s Payment Schedule', '/payment/tour/' + tourId + '/passenger/' + passengerId + '/customize' );
             });
 
             // Refund a payment
@@ -123,6 +117,62 @@
                 });
             });
 
+            // Filter Passengers.
+            function filterPassengerPayments() {
+                var search = $('#passenger-payment-filter').val().toUpperCase(),
+                        $items = $('.tour-edit').filter(function() {
+                            return !$(this).hasClass('passenger-cta-card');
+                        }),
+                        $itemsToShow = $items.filter(function() {
+                            return $(this).find('.pcardname').text().toUpperCase().indexOf(search) >= 0;
+                        }),
+                        $itemsToHide = $items.filter(function(index, el) {
+                            return $itemsToShow.index(el) < 0;
+                        });
+
+                // Execute the show / hide.
+                $itemsToHide.slideUp(400);
+                $itemsToShow.slideDown(400);
+            }
+
+            // See if there is a name search.
+            var parts = window.location.href.split('?'),
+                    searchPresent = false;
+            for (var i = 1; i < parts.length; i++) {
+                var query = parts[i].split('=');
+                if (query[0] == 'search') {
+                    searchPresent = true;
+                    $('#passenger-payment-filter').val(query[1]);
+                    filterPassengerPayments();
+                }
+            }
+
+            // Filter tasks by search
+            var delayTimer;
+            $('#passenger-payment-filter').keyup(function() {
+                // Don't do this after every keypress, delay the search.
+
+                clearTimeout(delayTimer);
+                delayTimer = setTimeout(filterPassengerPayments, 100);
+            });
+
+            // reset-search on filter.
+            $('#clear').click(function() {
+                $('#passenger-payment-filter').val('');
+                $('.tour-edit').slideDown(400);
+
+                var parts = window.location.href.split('?');
+                window.history.pushState({}, "All Tour Payments", parts[0]);
+            });
+
+            // On change track the search in the url.
+            $('#passenger-payment-filter').change(function() {
+                var search = $('#passenger-payment-filter').val(),
+                        parts = window.location.href.split('?'),
+                        href = search !== '' ? parts[0] + '?search=' + search : parts[0];
+
+                window.history.pushState({}, "Tou Payments Search " + search, href);
+            });
         });
     </script>
 
@@ -179,11 +229,8 @@
 {% block footer_right %}
     <div class="quote-info">
         <span class="quote-label">{% trans %}tour.show.footer.price{% endtrans %}</span>
-
         <span class="quote-price">
-            {% if tour.pricePerson %}
-                <strong>{% if tour.currency %}{{ tour.currency.htmlSymbol | raw }}{% endif %}{{ tour.pricePersonPublic }}</strong>
-            {% endif %}
+            <strong>{% if tour.currency %}{{ tour.currency.htmlSymbol | raw }}{% endif %}{{ tour|price }}</strong>
         </span>
     </div>
 {% endblock %}
