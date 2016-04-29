@@ -41,7 +41,8 @@
     // *
     $('body').append('<div id="dialog"></div>');
     $("input[data-add-new-url]").each(function (index, element) {
-        var modal_title = $(element).attr('data-add-new-title');
+        var label = $('label[for="'+$(this).attr('id')+'"]').text().trim();
+        var modal_title = 'Create New ' + label;
         var modal_url = $(element).attr('data-add-new-url');
 
         $(element).parent('div').parent('div').append('<div class="add-new modal" data-modal-title="' + modal_title + '" data-modal-url="' + modal_url + '"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-plus fa-stack-1x fa-inverse"></i></span></div>');

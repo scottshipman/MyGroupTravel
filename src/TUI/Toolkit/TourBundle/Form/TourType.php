@@ -90,7 +90,6 @@ class TourType extends AbstractType
             'configs' => array('minLength' => 3),
             'attr' => array(
               'class' => 'suggest',
-              'data-add-new-title' => 'Create New Institution',
               'data-add-new-url' => '/ajax/institution/new',
             )
           ))
@@ -101,7 +100,6 @@ class TourType extends AbstractType
             'configs' => array('minLength' => 3),
             'attr' => array(
               'class' => 'suggest',
-              'data-add-new-title' => 'Create New Organizer',
               'data-add-new-url' => '/ajax/organizer/new',
             ),
           ))
