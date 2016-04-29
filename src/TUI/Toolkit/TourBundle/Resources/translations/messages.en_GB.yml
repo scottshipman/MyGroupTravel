@@ -42,7 +42,8 @@ tour:
         back_dashboard: Back to Tour Dashboard
         edit: Edit
         update: Update
-        create: Create
+        create: Create tour
+        convert_quote: Convert quote
         delete: Delete
         create_new: Create a New Tour
         password: Set Password
@@ -222,6 +223,7 @@ tour:
     tour_summary:
         signup: Sign up
         expired: Expired
+        departed: Departed
         departing: Departing:
         duration: Duration:
         display_name: Display Name:

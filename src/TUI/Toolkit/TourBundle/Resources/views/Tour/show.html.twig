@@ -51,7 +51,7 @@
                 {%  endif %}
             </li>
 
-            <li><label>{% trans %}tour.show.price{% endtrans %}</label><strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong></li>
+            <li><label>{% trans %}tour.show.price{% endtrans %}</label><strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity|price }}</strong></li>
             {% if payment_tasks is not empty %}
                 <li>
                     <label>{% trans %}tour.show.schedule{% endtrans %}
@@ -186,11 +186,8 @@
 {% block footer_right %}
     <div class="quote-info">
         <span class="quote-label">{% trans %}tour.show.footer.price{% endtrans %}</span>
-
         <span class="quote-price">
-            {% if entity.pricePerson %}
-                <strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePersonPublic }}</strong>
-            {% endif %}
+            <strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity|price }}</strong>
         </span>
     </div>
 {% endblock %}

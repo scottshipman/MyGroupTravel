@@ -2,9 +2,10 @@ manage_tour:
     path:     /
     defaults: { _controller: "TourBundle:Tour:index" }
 
-manage_tour_new:
-    path:     /new
-    defaults: { _controller: "TourBundle:Tour:new" }
+manage_tour_create:
+    path:     /create
+    defaults: { _controller: "TourBundle:Tour:create" }
+    methods:  POST
 
 manage_tour_edit:
     path:     /{id}/edit
@@ -68,6 +69,10 @@ manage_tour_notify_organizers:
     path:      /notify/organizers/{id}
     defaults:  { _controller: "TourBundle:Tour:organizerNotify" }
 
+manage_tour_convert_quote:
+    path:   /convert/quote/{quoteNumber}
+    defaults: {_controller: "TourBundle:Tour:convertQuote" }
+    methods: [GET]
 
 
 
