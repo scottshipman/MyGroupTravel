@@ -40,7 +40,6 @@
     // "Add New" Link and Dialog modal for New Quote form
     // *
     $('body').append('<div id="dialog"></div>');
-
     var elements = {
         '#tui_toolkit_quotebundle_quoteversion_quoteReference_organizer': 'Organizer',
         '#tui_toolkit_quotebundle_quoteversion_quoteReference_institution': 'Institution',

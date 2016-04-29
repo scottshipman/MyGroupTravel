@@ -90,7 +90,7 @@ class TourType extends AbstractType
             'configs' => array('minLength' => 3),
             'attr' => array(
               'class' => 'suggest',
-            ),
+            )
           ))
           ->add('organizer', 'genemu_jqueryautocomplete_entity', array(
             'route_name' => 'retrieve_organizers_name',
