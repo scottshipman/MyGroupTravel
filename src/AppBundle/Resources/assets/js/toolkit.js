@@ -41,10 +41,17 @@
     // *
     $('body').append('<div id="dialog"></div>');
 
-    $("input[data-modal-title]").each(function () {
-        var $type = $(this).data('modal-title');
-        if ($type) {
-            $(this).parent('div').parent('div').append('<div id= "' + $type.toLowerCase() + '-add-new-link" class="add-new modal" data-modal-title="' + $type + '"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-plus fa-stack-1x fa-inverse"></i></span></div>');
+    var elements = {
+        '#tui_toolkit_quotebundle_quoteversion_quoteReference_organizer': 'Organizer',
+        '#tui_toolkit_quotebundle_quoteversion_quoteReference_institution': 'Institution',
+        '#tui_toolkit_tourbundle_tour_organizer': 'Organizer',
+        '#tui_toolkit_tourbundle_tour_institution': 'Institution'
+    };
+    $.each(elements, function (element, type) {
+        if (element.length) {
+            var modal_title = "Create New " + type;
+            var modal_url = "/ajax/" + type.toLowerCase() + "/new";
+            $(element).parent('div').parent('div').append('<div class="add-new modal" data-modal-title="' + modal_title + '" data-modal-url="' + modal_url + '"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-plus fa-stack-1x fa-inverse"></i></span></div>');
         }
     });
 
@@ -73,10 +80,10 @@
     });
 
     $(".modal").on("click", function (e) {
-        var $modal_title = $(this).data("modal-title");
-        if ($modal_title) {
-            toolkitStandardPopup("Create New " + $modal_title, "/ajax/" + $modal_title.toLowerCase() + "/new");
-        }
+        var modal = e.currentTarget;
+        var modal_title = $(modal).attr('data-modal-title');
+        var modal_url = $(modal).attr('data-modal-url');
+        toolkitStandardPopup(modal_title, modal_url);
     });
 
     /*

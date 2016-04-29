@@ -90,7 +90,6 @@ class TourType extends AbstractType
             'configs' => array('minLength' => 3),
             'attr' => array(
               'class' => 'suggest',
-              'data-modal-title' => 'Institution',
             ),
           ))
           ->add('organizer', 'genemu_jqueryautocomplete_entity', array(
@@ -100,7 +99,6 @@ class TourType extends AbstractType
             'configs' => array('minLength' => 3),
             'attr' => array(
               'class' => 'suggest',
-              'data-modal-title' => 'Organizer',
             ),
           ))
           ->add('salesAgent', 'genemu_jqueryautocomplete_entity', array(
