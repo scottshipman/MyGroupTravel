@@ -107,28 +107,31 @@ class DefaultController extends Controller
         $errors = $form->getErrors(true);
         foreach($errors as $error){
             $cause = $error->getCause();
-            $path = $cause->getPropertyPath();
-            $path = str_replace(']', '', $path);
-            $path = str_replace('children[', '', $path);
-            $path = explode('.', $path);
+            if ($cause) {
+                $path = $cause->getPropertyPath();
+                $path = str_replace(']', '', $path);
+                $path = str_replace('children[', '', $path);
+                $path = explode('.', $path);
 
 
-            // children[passengers].children[0].children[dateOfBirth]
-            // children[passengers].children[0].children[fName].data
-            // tui_toolkit_passengerbundle_tourpassenger_passengers_0_dateOfBirth
-            //$path[0] = str_replace('children[', '', $path[0]);
-            if(isset($path[1])) {
-                if(!isset($path[2])){
-                    unset($path[1]);
-                } else {
-                    $path[1] = str_replace('[', '', $path[1]);
-                    unset($path[3]);
+                // children[passengers].children[0].children[dateOfBirth]
+                // children[passengers].children[0].children[fName].data
+                // tui_toolkit_passengerbundle_tourpassenger_passengers_0_dateOfBirth
+                //$path[0] = str_replace('children[', '', $path[0]);
+                if(isset($path[1])) {
+                    if(!isset($path[2])){
+                        unset($path[1]);
+                    } else {
+                        $path[1] = str_replace('[', '', $path[1]);
+                        unset($path[3]);
+                    }
+
+                    $path[1] = str_replace('data', '', $path[1]);
                 }
-
-            $path[1] = str_replace('data', '', $path[1]);
+                $field = implode($path, '_');
+                $formattedErrors[$field] = $error->getMessage();
             }
-            $field = implode($path, '_');
-            $formattedErrors[$field] = $error->getMessage();
+
         }
         return $formattedErrors;
     }

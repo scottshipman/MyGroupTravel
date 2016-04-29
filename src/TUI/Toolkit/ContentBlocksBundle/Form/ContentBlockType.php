@@ -23,7 +23,7 @@ class ContentBlockType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
       $securityContext = $this->securityContext;
-      if(strpos($options['action'], '/header/')===false) {
+      if(strpos($options['action'], '/headerblock/')===false) {
 
         $builder
           ->add('title', 'text', array(
@@ -49,7 +49,7 @@ class ContentBlockType extends AbstractType
             }
 
             // only show Layout Type , double wide and slideshow for Content Blocks, not Header Blocks
-            if(strpos($options['action'], '/header/')===false) {
+            if(strpos($options['action'], '/headerblock/')===false) {
               $builder
                 ->add('layoutType', 'entity', array(
                   'class' => 'ContentBlocksBundle:LayoutType',

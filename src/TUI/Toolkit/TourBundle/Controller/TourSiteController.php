@@ -61,6 +61,19 @@ class TourSiteController extends Controller
         ->getPermission($id, 'tour', $user->getId());
     }
 
+    if($quoteNumber===NULL) {
+      throw $this->createNotFoundException('Make sure there is a correct Quote number.');
+    }
+    else {
+      $quoteVersion = $em->getRepository('QuoteBundle:QuoteVersion')->findOneBy(array('quoteNumber' => $quoteNumber));
+
+      if (!$quoteVersion) {
+        throw $this->createNotFoundException('Unable to find Quote number provided.');
+      }
+      elseif ($entity->getQuoteNumber() != $quoteVersion->getQuoteNumber()) {
+        throw $this->createNotFoundException('Quote number doesn\'t match tour quote number.');
+      }
+    }
 
     //Get all brand stuff
     $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
@@ -193,10 +206,8 @@ class TourSiteController extends Controller
     } else {
     //send back to form page
       $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.no_match'));
-      return $this->redirect($this->generateUrl('tour_site_action_show', array('id' => $id)));
-  }
-
-
+      return $this->redirect($this->generateUrl('tour_site_show', array('id' => $id, 'quoteNumber' => $quoteNumber)));
+    }
   }
 
   /**
