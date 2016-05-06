@@ -188,7 +188,7 @@ Dropzone.autoDiscover = false;
         $uploadCrop.on('click', function() {
           $("#dialog").dialog("open");
           // get cropped image data
-          var blob = $img.cropper('getCroppedCanvas').toDataURL();
+          var blob = $img.cropper('getCroppedCanvas').toDataURL(mime_type);
           // transform it to Blob object
           var newFile = dataURItoBlob(blob, mime_type);
           // set 'cropped to true' (so that we don't get to that listener again)
