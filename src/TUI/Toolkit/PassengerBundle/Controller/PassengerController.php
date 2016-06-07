@@ -1348,7 +1348,7 @@ class PassengerController extends Controller
             ->setTo($userEmail)
             ->setBody(
                 $this->renderView(
-                    'TUIToolkitUserBundle:Registration:register_email.html.twig',
+                    'PassengerBundle:Emails:inviteParentRegistrationEmail.html.twig',
                     array(
                         'brand' => $brand,
                         'user' => $user,
