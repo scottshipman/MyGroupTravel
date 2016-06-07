@@ -323,7 +323,7 @@ class UserController extends Controller
 
         if ($existingUser != null) {
             if ($existingUser->getDeleted() != null) {
-                $form->addError(new FormError($this->get('translator')->trans('user.form.error.deleted')));
+                $form['email']->addError(new FormError($this->get('translator')->trans('user.form.error.deleted')));
 
             } else {
                 return new Response($existingUser);
