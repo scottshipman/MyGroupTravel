@@ -54,7 +54,7 @@
                 {% if entity.isTemplate == 0 %}{# no Institutions on Templates #}
                         <div style="position: absolute; display: inline-block; right: 1em;">
                         {% if brand.media %}<img style="padding-right: 15px" src="{{ absolute_url(( brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) | imagine_filter('publicPdfLogo') ) }}">{% endif %}
-                        {% if entity.quoteReference.institution.media %}<img src="{{ absolute_url(( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('thumbnail') ) }}">{% endif %}
+                        {% if entity.quoteReference.institution.media %}<img src="{{ absolute_url(( entity.quoteReference.institution.media.getRelativePath ~ "/" ~ entity.quoteReference.institution.media.getHashedFilename ) | imagine_filter('publicPdfLogo') ) }}">{% endif %}
                         </div>
                 {% endif %}
 

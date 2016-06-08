@@ -50,7 +50,7 @@
             <div class="inner">
                 <div style="position: absolute; display: inline-block; right: 1em;">
                     {% if brand.media %}<img style="padding-right: 15px" src="{{ absolute_url(( brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) | imagine_filter('publicPdfLogo') ) }}">{% endif %}
-                    {% if entity.institution.media %}<img src="{{ absolute_url(( entity.institution.media.getRelativePath ~ "/" ~ entity.institution.media.getHashedFilename ) | imagine_filter('thumbnail') ) }}">{% endif %}
+                    {% if entity.institution.media %}<img src="{{ absolute_url(( entity.institution.media.getRelativePath ~ "/" ~ entity.institution.media.getHashedFilename ) | imagine_filter('publicPdfLogo') ) }}">{% endif %}
                 </div>
 
                 {% if entity.institution %}
