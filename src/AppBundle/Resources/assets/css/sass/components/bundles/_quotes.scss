@@ -41,7 +41,6 @@
   background: #fff;
   padding-top: $element-bottom;
   padding-bottom: $element-bottom;
-  margin-bottom: $element-bottom;
 
   .inner {
     @include span-all();
@@ -109,36 +108,27 @@
 }
 
 .quote-actions {
-  position: relative;
   margin: $element-bottom 0;
 
   &.has-logo {
+    position: relative;
+    margin: ($element-bottom * 1.5) 0;
 
-    @include breakpoint_phone() {
-      margin: ($element-bottom * 1.5) 0;
-      padding-right: 120px + 12px;
-    }
-
-  }
-
-  .institution-logo-action {
-    display: block;
-    width: 120px;
-    height: 100%;
-    margin-bottom: $element-bottom / 2;
-
-    @include breakpoint_phone() {
+    .institution-logo-action {
       position: absolute;
-      top: 0;
+      top: 50%;
+      -webkit-transform: translateY(-50%);
+      -ms-transform: translateY(-50%);
+      transform: translateY(-50%);
       right: 0;
-      margin-bottom: 0;
+      height: 120px;
 
       img {
         @include vertical-align();
+        max-height: 100%;
       }
 
     }
-
   }
 
   .button-row {
