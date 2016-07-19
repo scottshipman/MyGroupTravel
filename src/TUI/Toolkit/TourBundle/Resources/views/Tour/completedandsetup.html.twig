@@ -441,7 +441,7 @@
     {% if signupPercent is defined and signupPercent == 100%}
             <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
                 <div class="mdl-card__title">
-                    <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.sign_up{% endtrans %} {{ entity.payingPlaces }} {% trans %}tour.dashboard.passengers{% endtrans %}</h3>
+                    <h3 class="mdl-card__title-text">{{ entity.payingPlaces }}/{{ entity.payingPlaces }} {% trans %}tour.dashboard.sign_up_complete{% endtrans %}</h3>
                     <span style="color:green; border-radius:25px; border: 1px solid green; padding:10px; position:absolute; right:20px;" class="tour-dashboard-cta"><i class="material-icons">done</i></span>
                 </div>
             </div>

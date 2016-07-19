@@ -12,6 +12,9 @@
     {% if "tour" | checkUserPermissions(entity.id, NULL, "ROLE_BRAND") %}
         <span>{% trans %}tour.title.site_view{% endtrans %}</span>
     {% endif %}
+    {% if editable %}
+        <p>{% trans %}tour.title.preview_warning{% endtrans %}</p>
+    {% endif %}
 {% endblock %}
 
 
