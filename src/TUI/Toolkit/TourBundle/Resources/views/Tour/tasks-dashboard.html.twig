@@ -80,7 +80,6 @@
                     {% for passenger in passengerData.travellingUsers %}
                         {# render each accepted passenger mini-card #}
                         {{ render(controller('TourBundle:Tour:getPassengerTasksMiniCard', { 'passenger': passenger})) }}
-
                     {% endfor %}
 
                 </div>
