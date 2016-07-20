@@ -18,7 +18,14 @@ passenger:
 
     intro: <p>Your passengers for this trip are listed here, giving you an overview of the tour, including the number of tasks to be completed and price.<br />Click on the menu for each passenger to add important information and view their payment schedule</p>
 
+    instructions:
+        tasks: View passenger information on this page, using the 'Tasks' section, and see the information provided.
+        accuracy: All information must be accurate and checked before you send to %brandname%
+        payments: You can also log payments and edit an individual's payment schedule using the 'Payments' card
+
     actions:
+        view: View
+        view_all_passengers: View all passengers
         back: Back to Passengers
         edit: Edit
         update: Update
@@ -63,7 +70,7 @@ passenger:
     labels:
         export-manifest: Export Manifest
         export-organizer: Export Passenger List
-        passenger: Passenger
+        passenger: Passenger Details
         show-everyone: Clear Filters
         passengers_for: Passengers
         organizers_for: Organizers
