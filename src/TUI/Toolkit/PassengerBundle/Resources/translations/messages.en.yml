@@ -24,7 +24,7 @@ passenger:
         payments: You can also log payments and edit an individual's payment schedule using the 'Payments' card
 
     actions:
-        view: View
+        back_ref: Back to
         view_all_passengers: View all passengers
         back: Back to Passengers
         edit: Edit

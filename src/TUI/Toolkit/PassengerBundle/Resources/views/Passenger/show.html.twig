@@ -28,14 +28,12 @@
                 <p>{% trans %}passenger.instructions.tasks{% endtrans %}</p>
                 <p>{{ 'passenger.instructions.accuracy'|trans({'%brandname%' : brand.name})|raw }}</p>
                 <p>{% trans %}passenger.instructions.payments{% endtrans %}</p>
-
+                {% if app.request.get('ref') and app.request.get('title') %}
+                    <p><a href="{{ app.request.get('ref') }}" class="mdl-button mdl-button--raised mdl-button--colored">{% trans %}passenger.actions.back_ref{% endtrans %} {{ app.request.get('title') }}</a></p>
+                {% else %}
+                    <p><a href="{{ path('manage_passenger_dashboard', { 'tourId': entity.tourReference.id }) }}" class="mdl-button mdl-button--raised mdl-button--colored">{% trans %}passenger.actions.view_all_passengers{% endtrans %}</a></p>
+                {% endif %}
             </div>
-            {% if app.request.get('ref') and app.request.get('title') %}
-                <p><a href="{{ app.request.get('ref') }}" class="mdl-button mdl-button--raised mdl-button--colored">{% trans %}passenger.actions.view{% endtrans %} {{ app.request.get('title') }}</a></p>
-            {% else %}
-                <p><a href="{{ path('manage_passenger_dashboard', { 'tourId': entity.tourReference.id }) }}" class="mdl-button mdl-button--raised mdl-button--colored">{% trans %}passenger.actions.view_all_passengers{% endtrans %}</a></p>
-
-            {% endif %}
             <ul class="tour-show-submenu">
                 <li><strong>{% trans %}passenger.labels.passenger_for{% endtrans %} {{ entity.tourReference.name }}</strong></li>
                 <li><label>{% trans %}tour.show.institution{% endtrans %}</label><strong>{{ entity.tourReference.institution.name }}</strong></li>
