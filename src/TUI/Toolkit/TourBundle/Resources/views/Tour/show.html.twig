@@ -33,10 +33,10 @@
     <div class="tour-show-left-column">
         <div class="intro-text">
             {% if entity.SetupComplete %}
-                <p>{{ 'tour.show.setup_instructions_title'|trans({'%firstname%' : entity.organizer.firstName})|raw }}</p>
+                <p>{{ 'tour.show.setup_instructions_title'|trans({'%firstname%' : app.user.firstname})|raw }}</p>
                 <p>{% trans %}tour.show.setup_instructions_tasks{% endtrans %}</p>
             {% else %}
-                <p>{{ entity.organizer.firstName }}{% trans %}tour.not_setup.setup_instructions_title{% endtrans %}</p>
+                <p>{{ 'tour.not_setup.setup_instructions_title'|trans({'%firstname%' : app.user.firstname})|raw }}</p>
                 <p>{% trans %}tour.not_setup.setup_instructions_payment{% endtrans %}</p>
                 <p>{% trans %}tour.not_setup.setup_instructions_sharing{% endtrans %}</p>
             {% endif %}
