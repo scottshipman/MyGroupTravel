@@ -10,6 +10,7 @@ tour:
         restore: Restore
         site_view: Tour Website
         new_tour: New Tour
+        preview_warning: This is a preview, please use the promote/edit buttons to share or make changes
 
     page_title:
         edit: Edit Tour
@@ -53,7 +54,7 @@ tour:
         go: Go
         create_new_paymentTask: Create New Entry
         promote: Promote
-        edit_mode: Switch to Edit Mode
+        edit_mode: Edit
         print: Print
         pdf: PDF
         download_promo: Download Documents
@@ -94,6 +95,9 @@ tour:
        next: Next
        personalize: Personalise your website
        promote: Promote Your Tour
+       setup_instructions_title: %firstname%, this is your Tour Set Up page. The information below is a summary of your tour.
+       setup_instructions_payment: Before you share your Tour Website, set a price to charge your passengers (they won't see your original tour price) and set the payment schedule if you would like.
+       setup_instructions_sharing: Next you will need to personalise your website, before sharing the link with your passengers
 
     show:
        summary: Tour Summary
@@ -115,6 +119,8 @@ tour:
        price_based_on_freeonly: Based on <strong>%freeplaces%</strong> free places
        expiry: Tour valid until
        payment_instructions: Payment Instructions
+       setup_instructions_title: %firstname%, this is your Tour Dashboard, where your tour summary is listed below
+       setup_instructions_tasks: Use your 'To do list' actions to make progress on the tour organisation and tasks. Your completed tasks are listed underneath
 
     contact_organizer:
         name: Tour Name:
@@ -194,6 +200,7 @@ tour:
         view_passenger: View Passenger
         passenger_dashboard: Go to Passenger Dashboard
         task_dashboard: Go to Task Dashboard
+        sign_up_complete: paying passengers accepted
 
     edit:
         summary: Summary
