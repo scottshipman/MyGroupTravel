@@ -25,7 +25,11 @@
     <div class="tour-show-wrapper">
 
         <div class="tour-show-left-column">
-            <h3>{{ entity.name|capitalize }}</h3>
+            <div class="intro-text">
+                <p>{{ 'tour.dashboard.introduction_title'|trans({'%firstname%' : app.user.firstname})|raw }}</p>
+                <p>{% trans %}tour.dashboard.introduction_filters{% endtrans %}</p>
+                <p>{% trans %}tour.dashboard.introduction_passenger_view{% endtrans %}</p>
+            </div>
             <div class="text-search">
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <input id="passenger-task-filter" class="mdl-textfield__input" type="text" />
@@ -58,19 +62,6 @@
                     <div class="mdl-card__title">
                         <h3 id="card-title" class="mdl-card__title-text">{% trans %}tour.dashboard.passenger_tasks{% endtrans %}</h3>
                     </div>
-
-                    <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
-                        {% if passengerData.totalCompletedTasksCount == passengerData.possibleTasksCount %}
-                            <h3 style="float: left; font-weight:300; font-size:2em;">{% trans %}tour.dashboard.all_done{% endtrans %}</h3>
-                        {% else %}
-                            <h3 id="task-title" style="float: left; font-weight:300; font-size:2em;">{% trans %}tour.dashboard.in_progress{% endtrans %}</h3>
-                        {% endif %}
-                        <div style="float: right; margin-top:20px;">
-                            <span style="color:{{ brand.secondaryColor }}; font-size:3.5em; font-weight:100;"><p id="task-counter" style="display: inline; margin-left:5px; font-size:inherit; font-weight:inherit;">{{ passengerData.totalCompletedTasksCount }}/{{ passengerData.possibleTasksCount }}</p></span><br/>
-                            <span style="float:right;"><label><p style="display: inline; margin-left:5px; font-size:inherit; font-weight:inherit;">{% trans %}tour.dashboard.complete{% endtrans %}</p></label></span>
-                        </div>
-                        </div>
-
                         <div style="display:none; text-align: left;" id="payment-schedule">
                             <div class="mdl-card__title">
                                 <label class="mdl-radio mdl-js-radio" for="complete" style="margin: 0 auto; width:auto;">
@@ -89,6 +80,7 @@
                     {% for passenger in passengerData.travellingUsers %}
                         {# render each accepted passenger mini-card #}
                         {{ render(controller('TourBundle:Tour:getPassengerTasksMiniCard', { 'passenger': passenger})) }}
+
                     {% endfor %}
 
                 </div>

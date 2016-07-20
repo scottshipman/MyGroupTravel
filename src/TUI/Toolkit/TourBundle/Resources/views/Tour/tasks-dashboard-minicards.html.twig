@@ -27,15 +27,25 @@
             </a>
             <p class="mini-card-title"><strong>{{ passenger.fName }}</strong></p>
             <p class="mini-card-title"><strong>{{ passenger.lName }}</strong></p>
-            <a href="{{ path('manage_passenger_show', {'id': passenger.id }) }}" title="{% trans %}tour.dashboard.view_passenger{% endtrans %}" class="caller-btn">
-                {% if passenger.completedTasks|length  ==  passenger.possibleTasks|length %}
-                    <i style="color:green; border-radius:25px; border: 1px solid green; padding:10px; position:absolute; right:20px;" class="material-icons">done</i>
-                    <i style=" display:none; position:absolute; right:20px; padding:10px;" class="material-icons">arrow_forward</i>
-                {% else %}
-                    <i style="display:none; color:green; border-radius:25px; border: 1px solid green; padding:10px; position:absolute; right:20px;" class="material-icons">done</i>
-                    <i style="position:absolute; right:20px; padding:10px;" class="material-icons">arrow_forward</i>
-                {% endif %}
-            </a>
+            {% if passenger.completedTasks|length  ==  passenger.possibleTasks|length %}
+                <a href="{{ path('manage_passenger_show', {'id': passenger.id }) }}" title="{% trans %}tour.dashboard.view_passenger{% endtrans %}" class="caller-btn">
+                <i style="color:green; border-radius:25px; border: 1px solid green; padding:10px; position:absolute; right:20px;" class="material-icons">done</i></a>
+            {% else %}
+                <button id="view-passenger-menu-{{ passenger.id }}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
+                        style="position: absolute; right: 20px; color:grey; margin-top:10px;">
+                    <i class="material-icons">more_vert</i>
+                </button>
+
+                <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="view-passenger-menu-{{ passenger.id }}">
+                    <span>
+                    <li class="mdl-menu__item">
+                        <a href="{{ path('manage_passenger_show', {'id': passenger.id }) }}">{% trans %}tour.dashboard.view_passenger{% endtrans %}</a>
+                    </li>
+                    </span>
+                </ul>
+
+            {% endif %}
+
             <p class="mini-card-title email"><a style="color:{{ brand.secondaryColor }}" href="mailto:{{ passenger.parent.email }}"><strong>{{ passenger.parent.email }}</strong></a></p>
             <label style="display: block; margin-left: 63px; min-width: 100%;">
                 <p style="margin-bottom: 0;" class="info-bar">{{ passenger.completedTasks|length }}/{{ passenger.possibleTasks|length }} {% trans %}tour.dashboard.tasks_complete{% endtrans %}</p>
@@ -44,4 +54,9 @@
 
         </div>
     </div>
+
 </div>
+
+
+
+
