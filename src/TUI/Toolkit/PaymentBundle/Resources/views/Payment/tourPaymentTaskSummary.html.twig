@@ -4,9 +4,7 @@
 
         {% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
             {#{% if due.items is defined and due.items is not empty %}#}
-                <span id="payment-schedule-link" style="margin-bottom: 10px;">
-                    <a href="" id="toggle-payment-schedule" class="payment-schedule-link" style="color: {{ brand.secondaryColor }};">{% trans %}payment.labels.payment_history{% endtrans %} <br /><i class="material-icons">expand_more</i></a>
-                </span>
+
             {#{% endif %}#}
             <div style="display:none; text-align: left;" id="payment-schedule">
                 <div class="mdl-card__title">

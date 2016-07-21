@@ -25,8 +25,11 @@
     <div class="tour-show-wrapper site-show" entityId="{{ tour.id }}">
 
         <div class="tour-show-left-column">
-
-            <h3>{{ tour.name|capitalize }}</h3>
+            <div class="intro-text">
+                <p>{% trans %}payment.introduction.title{% endtrans %}</p>
+                <p>{% trans %}payment.introduction.schedule{% endtrans %}</p>
+                <p>{% trans %}payment.introduction.actions{% endtrans %}</p>
+            </div>
             <div class="text-search">
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <input id="passenger-payment-filter" class="mdl-textfield__input" type="text" />
@@ -34,11 +37,32 @@
                 </div>
                 <a href="#all" style="float:right; text-decoration: none; color:{{ brand.secondaryColor }};" id="clear"><i class="material-icons md-18">undo</i> {% trans %} passenger.labels.show-everyone{% endtrans %}</a>
             </div>
+
+            {% if due.items|length > 0 %}
+                <div class="passenger-cta-card tour-edit mdl-card passenger-dashboard-cta-card payment-schedule-card">
+                    <div class="mdl-card__title">
+                        <h3 class="mdl-card__title-text">{% trans %}payment.labels.schedule{% endtrans %}</h3>
+                    </div>
+                        {% for item in due.items %}
+                            {#{% set overdue = overdue + item.overdueAmt %}#}
+                            {%  set color = 'blue' %}{%  set icon = 'event' %}
+                            {% if item.status == "paid" %}{%  set color = 'green' %}{%  set icon = 'done' %} {% endif %}
+                            {% if item.status ==  "overdue" %}{%  set color = 'red' %}{%  set icon = 'warning' %}{% endif %}
+                            <div class="mdl-card__supporting-text mdl-card--border">
+                                {# need logic here to add the right task status icon based on item.status #}
+                                {% if item.task is defined and item.task is not empty %}
+                                    <label class="task-due-date payment-item"><i class="material-icons" style="color: {{ color }};">{{ icon }}</i>{{ item.task.name }}  {{ item.task.dueDate | date(format)}}</label>
+                                {% endif %}
+                                <p class="row-content indented">/ {{ tour.currency.htmlSymbol | raw  }}{{ item.total }}</p>
+                                <p class="row-content weighted">{{ tour.currency.htmlSymbol | raw  }}{{ item.credit }} </p>
+                            </div>
+                        {% endfor %}
+                </div>
+            {% endif %}
+
             <ul class="tour-show-submenu">
                 <li><a href="{{ path('manage_payment_dashboard', { 'tourId': tour.id }) }}" style="text-decoration: none; color:{{ brand.secondaryColor }};"><strong>{% trans %}payment.labels.balances{% endtrans %}</strong></a></li>
                 <li><a href="{{ path('manage_payment_dashboard_edit_payments', { 'tourId': tour.id }) }}" style="text-decoration: none; color: inherit;"><strong>{% trans %}payment.labels.payment_settings{% endtrans %}</strong></a></li>
-                <li><a class = "refund" tour="{{ tour.id }}" href="" style="text-decoration: none; color: inherit;"><strong>{% trans %}payment.labels.issue_refund{% endtrans %}</strong></a></li>
-
             </ul>
         </div>
 
