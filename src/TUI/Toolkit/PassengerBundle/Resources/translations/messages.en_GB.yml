@@ -17,7 +17,14 @@ passenger:
 
     intro: <p>Your passengers for this trip are listed here, giving you an overview of the tour, including the number of tasks to be completed and price.<br />Click on the menu for each passenger to add important information and view their payment schedule</p>
 
+    instructions:
+        tasks: View passenger information on this page, using the 'Tasks' section, and see the information provided.
+        accuracy: All information must be accurate and checked before you send to %brandname%
+        payments: You can also log payments and edit an individual's payment schedule using the 'Payments' card
+
     actions:
+        back_ref: Back to
+        view_all_passengers: View all passengers
         back: Back to Passengers
         edit: Edit
         update: Update
@@ -65,7 +72,7 @@ passenger:
     labels:
         export-manifest: Export Manifest
         export-organizer: Export Passenger List
-        passenger: Passenger
+        passenger: Passenger Details
         show-everyone: Clear Filters
         passengers_for: Passengers
         organizers_for: Organisers
@@ -76,7 +83,7 @@ passenger:
         accepted: Accepted
         free: Free
         organizer: Organisers
-        passenger_list: All Participants List
+        passenger_list: Passengers
         add_paying: Add Paying Passengers
         remaining: Remaining
         welcome: Welcome to the passenger dashboard.  Here you can invite, add, and manage all of your passengers.
@@ -116,8 +123,10 @@ passenger:
         payments: Payments
         organizer_first_name: Organiser's First Name
         organizer_last_name: Organiser's Last Name
-
-
+        welcome_title: Welcome to the Passengers page. Here you can manage, add and export data for your passengers.
+        welcome_invite_passengers: Invite passengers to register for the tour by sharing the Tour Website. When they complete the 'Sign up' form, they will appear on the Waitlist. You can then allocate them to the tour by moving them to the 'Accepted' list until all places are filled.
+        welcome_invite_organisers: You can also invite other organisers, by using the 'Organisers' section below.
+        welcome_parent_activation: When all of your tour places have been filled, you can send an activation email to Parents which will invite them to set up an account and add passenger information
 
     emails:
         thank_you: Thank you for your Sign up to

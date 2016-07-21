@@ -31,6 +31,16 @@
     <div class="tour-show-wrapper">
 
     <div class="tour-show-left-column">
+        <div class="intro-text">
+            {% if entity.SetupComplete %}
+                <p>{{ 'tour.show.setup_instructions_title'|trans({'%firstname%' : app.user.firstname})|raw }}</p>
+                <p>{% trans %}tour.show.setup_instructions_tasks{% endtrans %}</p>
+            {% else %}
+                <p>{{ 'tour.not_setup.setup_instructions_title'|trans({'%firstname%' : app.user.firstname})|raw }}</p>
+                <p>{% trans %}tour.not_setup.setup_instructions_payment{% endtrans %}</p>
+                <p>{% trans %}tour.not_setup.setup_instructions_sharing{% endtrans %}</p>
+            {% endif %}
+        </div>
         <ul class="tour-show-submenu">
             <li><strong>{% trans %}tour.show.summary{% endtrans %}</strong></li>
             <li><label>{% trans %}tour.show.institution{% endtrans %}</label><strong>{{ entity.institution.name }}</strong></li>

@@ -25,8 +25,26 @@
     <div class="tour-show-wrapper site-show" entityId="{{ tour.id }}">
 
         <div class="tour-show-left-column">
-
-            <h3>{{ tour.name|title }}</h3>
+            <div class="intro-text">
+                <p>{% trans %} passenger.labels.welcome_title {% endtrans %}</p>
+                <p>{% trans %} passenger.labels.welcome_invite_passengers {% endtrans %}</p>
+                <p>{% trans %} passenger.labels.welcome_invite_organisers {% endtrans %}</p>
+                <p>{% trans %} passenger.labels.welcome_parent_activation {% endtrans %}</p>
+                {% if unactivatedCount > 0 %}
+                    <a href="{{ path('activate_all_passengers', { 'tourId': tour.id }) }}"
+                       title ="{% trans %}passenger.actions.send_activation_description{% endtrans %}"
+                       class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+                       onclick="return confirm('{% trans %}passenger.actions.send_message{% endtrans %}')">
+                        <i style="vertical-align:middle;" class="material-icons">email</i> {% trans %}passenger.actions.send_activation{% endtrans %}
+                    </a>
+                {% endif %}
+                <a id="accept-tour" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="#"><i class="fa fa-user-plus"></i>{% trans %}passenger.labels.add{% endtrans %}</a>
+                <a class="mdl-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="{{ path('passenger_export', { 'type': 'organizer', 'tourId': tour.id }) }}"><i class="fa fa-download"></i>{% trans %}passenger.labels.export-organizer{% endtrans %}</a>
+                {% if is_granted('ROLE_BRAND') %}
+                    <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="{{ path('passenger_export', { 'type': 'brand', 'tourId': tour.id }) }}">{% trans %}passenger.labels.export-manifest{% endtrans %}</a>
+                    {% endif %}
+                <div style="clear: both"></div>
+            </div>
             <div class="text-search">
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <input id="passenger-name-filter" class="mdl-textfield__input" type="text" />
@@ -67,49 +85,46 @@
             {# Passenger CTA Card #}
             <div id="passenger-card" class="passenger-cta-card tour-edit mdl-card mdl-shadow--2dp passenger-dashboard-cta-card">
 
-                <div class="mdl-card__title">
-                    <h3 id="card-title" class="mdl-card__title-text">{% trans %}passenger.labels.passenger_list{% endtrans %}</h3>
-                    <button style="color:grey;" id="passenger-export-menu" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-button">
-                        <i class="material-icons">more_vert</i>
-                    </button>
-                    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="passenger-export-menu">
-                        {% if is_granted('ROLE_BRAND') %}
-                            <li>
-                                   <a class="pax-manifest mdl-menu__item" href="{{ path('passenger_export', { 'type': 'brand', 'tourId': tour.id }) }}">{% trans %}passenger.labels.export-manifest{% endtrans %}</a>
-                               </li>
-                            <li>
-                         {% endif %}
-                            <a class="mdl-menu__item" href="{{ path('passenger_export', { 'type': 'organizer', 'tourId': tour.id }) }}">{% trans %}passenger.labels.export-organizer{% endtrans %}</a>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="mdl-card__supporting-text mdl-card--border" style="color:grey;">
-                        {#<div class="paying-passengers-title"><h3>{% trans %}passenger.labels.add_paying{% endtrans %}</h3></div>#}
-                        <div class="passenger-count">
-                            {# Accepted/Paying Summary #}
-                            <div style="display: inline-block; margin-right: 20px;" class="payingspots-remaining">
-                                <p style="color: {{ brand.primaryColor }}" class="payingspots-remaining spots-remaining">{{ payingSpotsRemaining }}</p>
-                                <p class="spots-remaining-copy"><strong>{% trans %}passenger.labels.remaining{% endtrans %}<br>{{ 'accepted' | paxLabel }}</strong></p>
-                            </div>
-                            {# Free Summary #}
-                            <div style="display: inline-block;" class="freespots-remaining">
-                                <p style="color: {{ brand.primaryColor }}; padding-top:.5em;" class="freespots-remaining spots-remaining">{{ freeSpotsRemaining }}</p>
-                                <p class="spots-remaining-copy"><strong>{% trans %}passenger.labels.remaining{% endtrans %}<br>{{ 'free' | paxLabel }}</strong></p>
-                            </div>
+                <div class="tour-edit mdl-card mdl-shadow--2dp">
+                        <div class="mdl-card__title">
+                            <h3 class="mdl-card__title-text">{% trans %}passenger.labels.passenger_list{% endtrans %}</h3>
                         </div>
-                        <p class="passenger-dashboard-copy">{% trans %}passenger.labels.welcome{% endtrans %}</p>
-                        <div style="clear: both"></div>
-                        <a id="invite-passengers" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="#"><i class="fa fa-users"></i>{% trans %}passenger.labels.invite{% endtrans %}</a>
-                        <a id="accept-tour" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="#"><i class="fa fa-user-plus"></i>{% trans %}passenger.labels.add{% endtrans %}</a>
-                    {% if unactivatedCount > 0 %}
-                            <a href="{{ path('activate_all_passengers', { 'tourId': tour.id }) }}"
-                               title ="{% trans %}passenger.actions.send_activation_description{% endtrans %}"
-                               class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
-                               onclick="return confirm('{% trans %}passenger.actions.send_message{% endtrans %}')">
-                                <i style="vertical-align:middle;" class="material-icons">email</i> {% trans %}passenger.actions.send_activation{% endtrans %}
-                            </a>
-                        {% endif %}
+                    </a>
+                    <div id="signup-progress" class="mdl-progress mdl-js-progress" style="width: 100%;"></div>
+                    <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
+                        <ul>
+                            <li>
+                                <div class="profile-list-item item-1 tour-dashboard four-column">
+                                    <span class="date-span">{{ statusCounts.organizer.accepted + statusCounts.organizer.free }}</span>
+                                    <label>
+                                        {% if statusCounts.organizer.accepted + statusCounts.organizer.free == 1 %}
+                                            {% trans %}tour.dashboard.organizer_count_single{% endtrans %}
+                                        {% else %}
+                                            {% trans %}tour.dashboard.organizer_count_plural{% endtrans %}
+                                        {% endif %}
+                                    </label>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="profile-list-item item-2 tour-dashboard four-column">
+                                    <span class="date-span">{{ statusCounts.passenger.accepted }}</span>
+                                    <label>{{ "accepted" | paxLabel }} of {{ entity.payingPlaces }}</label>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="profile-list-item item-3 tour-dashboard four-column">
+                                    <span class="date-span">{{ statusCounts.passenger.free }}</span>
+                                    <label>{{ "free" | paxLabel }} of {{ entity.freePlaces }}</label>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="profile-list-item item-4 tour-dashboard four-column">
+                                    <span class="date-span">{{ statusCounts.passenger.waitlist  }} </span>
+                                    <label>{{ "waitlist" | paxLabel }}</label>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
 
