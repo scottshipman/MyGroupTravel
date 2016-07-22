@@ -82,7 +82,7 @@ quote:
         liked: Your Sales Contact has been notified that you liked this quote -
         lock: This quote's lock has been toggled.
         soft_delete: "A quote already exists with this Quote Number, but has been deleted (archived). <br>Please ask an administrator to remove this Quote permanently, or undelete it for editing."
-
+        already_converted: This quote has already been converted into a tour. Do you want to clone it to a new quote?
 
     grid:
         no_result: There are no quotes to show. Please check your filter settings and try again.
