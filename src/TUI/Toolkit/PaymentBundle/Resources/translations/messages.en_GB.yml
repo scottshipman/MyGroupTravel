@@ -61,3 +61,12 @@ payment:
 
         success:
             message: This payment has been logged.
+
+    introduction:
+        title: Set and edit your payment schedule in 'Payment settings' to show how much money you are due to collect.
+        schedule: You can edit the schedule for an individual passenger if required.
+        actions: Use the action menu next to each passenger to log a payment that you have received, and add a minus figure if you have issued a refund.
+
+brand_payment:
+    form:
+        message: "This payment is being logged for %iname% for the Tour: %tourname%."
