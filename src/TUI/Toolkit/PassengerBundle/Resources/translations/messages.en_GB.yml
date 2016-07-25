@@ -22,6 +22,11 @@ passenger:
         accuracy: All information must be accurate and checked before you send to %brandname%
         payments: You can also log payments and edit an individual's payment schedule using the 'Payments' card
 
+    parent_instructions:
+        tasks: Complete tour tasks for your passenger on this page, using the 'Tasks' section and adding information to the forms.
+        accuracy: All information must be accurate.
+        payments: You can also view the payment schedule and see payments logged by the organiser
+
     actions:
         back_ref: Back to
         view_all_passengers: View all passengers
@@ -48,7 +53,7 @@ passenger:
         add_dietary: Add Dietary Information
         add_passport: Add Passport Information
         add_emergency: Add Emergency Contact Information
-        no_tasks: has no tasks
+        no_tasks: is all set! All tasks are completed.
         send_message:  You are sending an email to all accepted passengers, are you sure you want to do that?
         send_activation: Send Activation
         send_activation_description: This will send an email to the Parents of all Passengers who haven't created their accounts.
