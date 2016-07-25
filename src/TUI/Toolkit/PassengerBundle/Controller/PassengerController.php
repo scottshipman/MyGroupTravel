@@ -207,8 +207,20 @@ class PassengerController extends Controller
             $em->flush();
 //            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('passenger.flash.save'));
 
+            // Figure out if an organizer
+            $flash_type = 'passenger.flash.save';
+            $securityContext = $this->container->get('security.authorization_checker');
+            if ($securityContext->isGranted('ROLE_CUSTOMER')) {
+                $user = $this->get('security.token_storage')->getToken()->getUser();
+                $permissions = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $user);
 
-            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('passenger.flash.save'));
+                if(in_array('organizer', $permissions)) {
+                    // Show organizer specific flash message
+                    $flash_type = 'passenger.flash.organizer_save';
+                }
+            }
+
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans($flash_type));
 
             $serializer = $this->container->get('jms_serializer');
             $passengerObjects = $serializer->serialize($newPassengers, 'json');
@@ -253,7 +265,19 @@ class PassengerController extends Controller
             ),
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Submit Sign-up Request'));
+        $form_label = 'Submit Sign-up Request';
+        // Figure out if an organizer
+        $securityContext = $this->container->get('security.authorization_checker');
+        if ($securityContext->isGranted('ROLE_CUSTOMER')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permissions = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $user);
+
+            if(in_array('organizer', $permissions)) {
+                $form_label = 'Add Passenger';
+            }
+        }
+
+        $form->add('submit', 'submit', array('label' => $form_label));
 
         return $form;
     }
@@ -271,12 +295,22 @@ class PassengerController extends Controller
         $em = $this->getDoctrine()->getManager();
         $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
 
+        $is_org = false;
+        $securityContext = $this->container->get('security.authorization_checker');
+        if ($securityContext->isGranted('ROLE_CUSTOMER')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permissions = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $user);
+            $is_org = in_array('organizer', $permissions);
+        }
+        
+
         return $this->render('PassengerBundle:Passenger:new.html.twig', array(
             'entity' => $entity,
             'locale' => $locale,
             'date_format' => $date_format,
             'tour' => $tour,
             'tourId' => $tourId,
+            'user_is_org' => $is_org,
             'form' => $form->createView(),
         ));
     }
@@ -592,6 +626,7 @@ class PassengerController extends Controller
             if ($permission == NULL || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
                 throw $this->createAccessDeniedException();
             }
+            $tour_organizer = in_array('organizer', $permission);
         }
 
         $em = $this->getDoctrine()->getManager();
@@ -634,6 +669,7 @@ class PassengerController extends Controller
         return $this->render('PassengerBundle:Passenger:dashboard.html.twig', array(
             'entity' => $tour, // just to re-use the tour menu which relies on a variable called entity
             'tour' => $tour,
+            'user_is_organzier' => $tour_organizer,
             'statusCounts' => $participantCounts,
             'brand' => $brand,
             'passengers' => $passengers,

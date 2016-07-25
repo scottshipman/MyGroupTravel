@@ -63,11 +63,14 @@ passenger:
         delete: Passenger deleted -
         restore: Passenger Restored -
         users_activation: An activation email has been sent to all unactivated users accepted on the tour
-
+        organizer_save: The passenger has been added to the Waitlist
 
     modals:
+        title: Sign Up
         message: As a parent, you can sign up your child/children for the tour below.
         dob: Date of Birth
+        organizer_title: Add Passenger
+        organizer_message: As an organiser, you can manually add a passenger for the tour below
 
     labels:
         export-manifest: Export Manifest
