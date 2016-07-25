@@ -285,9 +285,9 @@
                 e.preventDefault();
                 var entityId = $('.site-show').attr('entityId');
                 {% if user_is_organzier %}
-                    var popupTitle = 'Add Passenger';
+                    var popupTitle = '{{ 'passenger.modals.organizer_title'|trans() }}';
                 {% else %}
-                    var popupTitle = 'Sign Up';
+                    var popupTitle = '{{ 'passenger.modals.title'|trans() }}';
                 {% endif %}
                 toolkitStandardPopup(popupTitle, '/passenger/new/' + entityId);
 
