@@ -268,8 +268,8 @@
                 // prevent the link from creating a "#" on the URL
                 e.preventDefault();
                 if ($paymentFormDiv.get(0).tagName =='UL') {
-                    if (confirm('Are you sure you want to remove this payment? You must click Update for changes to be saved.')) {
-
+                    if (confirm( '{{ 'payment.settings.delete_payment_type'|trans() }}' )) {
+                        $paymentFormDiv.remove();
                     }
                 } else {
                     $paymentFormDiv.remove();
