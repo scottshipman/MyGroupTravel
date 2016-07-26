@@ -99,7 +99,7 @@ class PassportType extends AbstractType
                     'class' => 'dateOfIssue',
                 ),
                 'invalid_message' => 'Please enter a valid date',
-                'years' => range(date('Y') - 10, date('Y') - 1),
+                'years' => range(date('Y') - 10, date('Y')),
             ))
             ->add('passportDateOfExpiry', 'birthday', array(
                 'format' => $date_format,
