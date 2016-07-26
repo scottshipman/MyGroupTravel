@@ -620,6 +620,8 @@ class PassengerController extends Controller
     {
         // Check context permissions.
         $securityContext = $this->container->get('security.authorization_checker');
+        $tour_organizer = false;
+
         if (!$securityContext->isGranted('ROLE_BRAND')) {
             $user = $this->get('security.token_storage')->getToken()->getUser();
             $permission = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $user->getId());
