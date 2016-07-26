@@ -103,14 +103,14 @@ passenger:
         passport_info: Passport Details
         passport_number: Passport number
         passport_first_name: First name
-        passport_family_name: Family Name
-        passport_middle_name: Middle Name
+        passport_family_name: Family name
+        passport_middle_name: Middle name
         passport_gender: Gender
         passport_title: Title
-        passport_state_issue: Code of Issuing state (e.g. GBR)
+        passport_state_issue: Code of issuing state (e.g. GBR)
         passport_last_name: Last name
         passport_nationality: Nationality
-        passport_dob: Date Of Birth
+        passport_dob: Date of birth
         passport_doi: Date of issue
         passport_doe: Date of expiry
         emergency_info: Emergency Contact Information

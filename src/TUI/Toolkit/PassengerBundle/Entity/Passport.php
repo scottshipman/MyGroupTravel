@@ -93,8 +93,11 @@ class Passport
      * @Assert\Length(
      *      min = 3,
      *      max = 3,
-     *      minMessage = "Your Issuing State must be at least {{ limit }} characters long",
-     *      maxMessage = "Your Issuing State cannot be longer than {{ limit }} characters"
+     *      exactMessage = "Issuing state must be {{ limit }} characters long",
+     * )
+     * @Assert\Regex(
+     *     pattern = "(^[a-zA-Z]+$)",
+     *     message = "Issuing state can only contain letters A-Z"
      * )
      * @Encrypted
      */
