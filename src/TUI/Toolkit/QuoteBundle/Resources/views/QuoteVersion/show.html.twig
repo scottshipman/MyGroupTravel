@@ -574,6 +574,16 @@
                   }
               });
             {% endif %}
+
+               {% for failedEditId in app.session.flashbag.get('quote_edit_failed') %}
+                    {% if failedEditId ==  entity.id %}
+                        if (confirm('{% trans %}quote.flash.already_converted{% endtrans %}')) {
+                            window.location = '/manage/quote/{{ entity.id }}/clone';
+                        } else {
+                            window.location = '/manage/quote';
+                        }
+                    {% endif %}
+               {% endfor %}
         });
     </script>
 
