@@ -43,20 +43,8 @@
         {% endif %}
         <div class="mdl-card__supporting-text mdl-card--border">
             <label class="row-label">{% trans %}payment.labels.total_paid{% endtrans %}</label>
-            <p class="row-content green">{{ currency.htmlSymbol | raw  }}{{ payments.total }}</p>
+            <p class="row-content green">{{ currency.htmlSymbol | raw  }}{{ payments.total }} / {{ currency.htmlSymbol | raw }} {{ due.total }}</p>
         </div>
-    {% if passenger.status != 'waitlist' %}
-        <div class="mdl-card__supporting-text mdl-card--border">
-            <label class="row-label">{% trans %}payment.labels.total_due{% endtrans %}</label>
-            <p class="row-content blue">{{ currency.htmlSymbol | raw  }}{{ due.total }}</p>
-        </div>
-    {% endif %}
-        {% if overdue > 0 %}
-            <div class="mdl-card__supporting-text mdl-card--border">
-                <label class="row-label">{% trans %}payment.labels.past_due{% endtrans %}</label>
-                <p class="row-content red">{{ currency.htmlSymbol | raw  }}{{ overdue }}</p>
-            </div>
-        {% endif %}
         {% if payments.total >0  %}
             <span id="payment-history-link"><a href="" id="toggle-payment-history" class="payment-history-link" style="color: {{ brand.secondaryColor }};">{% trans %}payment.labels.payment_history{% endtrans %} <br /><i class="material-icons">expand_more</i></a></span>
             <div style="display:none;" id="payment-history">
