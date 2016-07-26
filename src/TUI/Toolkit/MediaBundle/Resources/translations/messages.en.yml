@@ -42,4 +42,7 @@ media:
           label: Click to upload
 
       dropzone:
+          activate_click: Click to upload <br />
           default_message: Drop files here,<br /> or click to upload
+          allowed_types: Allowed file types: %filetypes% <br />
+          max_filesize: Maximum filesize: %maxfilesize% <br />

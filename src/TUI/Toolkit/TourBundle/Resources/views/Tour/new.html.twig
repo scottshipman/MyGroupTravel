@@ -120,7 +120,7 @@
     {{ form_rest(form) }}
     {{ form_end(form) }}
     <div id="dropzone-dialog" style="display: none;">
-        {{ render(controller('MediaBundle:Media:createDropzoneForm', {'context':'tourassets', 'media_field_id':'tui_toolkit_tourbundle_tour_media', 'media_placeholder_image':FALSE, 'close_button':FALSE, 'auto_implementation':FALSE})) }}
+        {{ render(controller('MediaBundle:Media:createDropzoneForm', {'context':'tourassets', 'media_field_id':'tui_toolkit_tourbundle_tour_media', 'media_placeholder_image':TRUE, 'close_button':FALSE, 'auto_implementation':FALSE})) }}
     </div>
     {{ form_javascript(form) }}
     <ul class="mdl-card__actions record_actions">
