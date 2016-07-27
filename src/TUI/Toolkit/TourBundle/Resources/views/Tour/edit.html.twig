@@ -245,6 +245,12 @@
                 {},
                 ['success', 'addedfile', 'removedfile', 'thumbnail']
             );
+
+            // Set the default date of the return date picker to whatever has been selected as the departure
+            $('#tui_toolkit_tourbundle_tour_departureDate').on('change', function (e) {
+                $('#tui_toolkit_tourbundle_tour_returnDate').datepicker('option', 'defaultDate', $(this).val());
+            });
+
         });
         function addPaymentTaskForm($collectionHolder, $newLinkDiv) {
             // Get the data-prototype explained earlier
