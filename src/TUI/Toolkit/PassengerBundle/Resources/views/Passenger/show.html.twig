@@ -369,11 +369,23 @@
                     {{ brand.name }} {% trans %}tour.show.footer.intro_org{% endtrans %}
             </span>
             {% if entity.tourReference.salesAgent.media %}
-                <span class="tui-image-avatar"><img src="{{ ( entity.tourReference.salesAgent.media.getRelativePath ~ "/" ~ entity.tourReference.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.tourReference.salesAgent.username }}"></span>
+                <span class="tui-image-avatar">
+                    <a href="mailto:{{ entity.tourReference.salesAgent.email }}">
+                        <img src="{{ ( entity.tourReference.salesAgent.media.getRelativePath ~ "/" ~ entity.tourReference.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.tourReference.salesAgent.username }}">
+                    </a>
+                </span>
             {% elseif entity.tourReference.salesAgent.firstName and entity.tourReference.salesAgent.lastName %}
-                <span class="tui-text-avatar mdl-typography--headline">{{ entity.tourReference.salesAgent.firstName[:1] }}{{ entity.tourReference.salesAgent.lastName[:1] }}</span>
+                <span class="tui-text-avatar mdl-typography--headline">
+                    <a href="mailto:{{ entity.tourReference.salesAgent.email }}">
+                        {{ entity.tourReference.salesAgent.firstName[:1] }}{{ entity.tourReference.salesAgent.lastName[:1] }}
+                    </a>
+                </span>
             {% else %}
-                <span class="tui-text-avatar mdl-typography--headline">{{ entity.tourReference.salesAgent.username[:1] }}</span>
+                <span class="tui-text-avatar mdl-typography--headline">
+                    <a href="mailto:{{ entity.tourReference.salesAgent.email }}">
+                        {{ entity.tourReference.salesAgent.username[:1] }}
+                    </a>
+                </span>
             {% endif %}
             <span class="agent">
                 {% if entity.tourReference.salesAgent.displayName %}
@@ -391,11 +403,23 @@
                     {% trans %}tour.show.footer.intro{% endtrans %}
             </span>
             {% if entity.tourReference.organizer.media %}
-                <span class="tui-image-avatar"><img src="{{ ( entity.tourReference.organizer.media.getRelativePath ~ "/" ~ entity.tourReference.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.tourReference.organizer.username }}"></span>
+                <span class="tui-image-avatar">
+                    <a href="mailto:{{ entity.tourReference.organizer.email }}">
+                        <img src="{{ ( entity.tourReference.organizer.media.getRelativePath ~ "/" ~ entity.tourReference.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.tourReference.organizer.username }}">
+                    </a>
+                </span>
             {% elseif entity.tourReference.organizer.firstName and entity.tourReference.organizer.lastName %}
-                <span class="tui-text-avatar mdl-typography--headline">{{ entity.tourReference.organizer.firstName[:1] }}{{ entity.tourReference.organizer.lastName[:1] }}</span>
+                <span class="tui-text-avatar mdl-typography--headline">
+                    <a href="mailto:{{ entity.tourReference.organizer.email }}">
+                        {{ entity.tourReference.organizer.firstName[:1] }}{{ entity.tourReference.organizer.lastName[:1] }}
+                    </a>
+                </span>
             {% else %}
-                <span class="tui-text-avatar mdl-typography--headline">{{ entity.tourReference.organizer.username[:1] }}</span>
+                <span class="tui-text-avatar mdl-typography--headline">
+                    <a href="mailto:{{ entity.tourReference.organizer.email }}">
+                        {{ entity.tourReference.organizer.username[:1] }}
+                    </a>
+                </span>
             {% endif %}
             <span class="agent">
                 {% if entity.tourReference.organizer.displayName %}

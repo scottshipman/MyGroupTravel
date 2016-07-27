@@ -300,13 +300,21 @@
     {% if entity.quoteReference.salesAgent %}
         <span class="intro">{% trans %}quote.footer.salesAgent{% endtrans %}</span>
         {% if entity.quoteReference.salesAgent.media %}
-            <span class="tui-image-avatar"><img
+            <span class="tui-image-avatar"><a href="mailto:{{ entity.quoteReference.salesAgent.email }}"><img
                         src="{{ ( entity.quoteReference.salesAgent.media.getRelativePath ~ "/" ~ entity.quoteReference.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}"
-                        alt="{{ entity.quoteReference.salesAgent.username }}"></span>
+                        alt="{{ entity.quoteReference.salesAgent.username }}"></a></span>
         {% elseif entity.quoteReference.salesAgent.firstName and entity.quoteReference.salesAgent.lastName %}
-            <span class="tui-text-avatar mdl-typography--headline">{{ entity.quoteReference.salesAgent.firstName[:1] }}{{ entity.quoteReference.salesAgent.lastName[:1] }}</span>
+            <span class="tui-text-avatar mdl-typography--headline">
+                <a href="mailto:{{ entity.quoteReference.salesAgent.email }}">
+                    {{ entity.quoteReference.salesAgent.firstName[:1] }}{{ entity.quoteReference.salesAgent.lastName[:1] }}
+                </a>
+            </span>
         {% else %}
-            <span class="tui-text-avatar mdl-typography--headline">{{ entity.quoteReference.salesAgent.username[:1] }}</span>
+            <span class="tui-text-avatar mdl-typography--headline">
+                <a href="mailto:{{ entity.quoteReference.salesAgent.email }}">
+                    {{ entity.quoteReference.salesAgent.username[:1] }}
+                </a>
+            </span>
         {% endif %}
         <span class="agent">
             {% if entity.quoteReference.salesAgent.displayName %}
