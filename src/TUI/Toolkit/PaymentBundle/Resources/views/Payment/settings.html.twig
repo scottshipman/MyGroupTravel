@@ -123,6 +123,10 @@
 
         $( document ).ready(function() {
 
+            $("html, body").animate({
+                scrollTop: 0
+            }, 1000);
+
             //To expose the payment type description fields if there is already a value there
             $('.mdl-checkbox').each( function() {
                 if ($(this).next().children(":first").val().length > 0) {
