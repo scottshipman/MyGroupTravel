@@ -47,13 +47,15 @@
             </button>
             <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
                 for="view-passenger-menu-{{ passenger.id }}">
-                <li class="mdl-menu__item">
-                    <a class="caller-btn" href="{{ path('manage_passenger_show', {'id': passenger.id }) }}">{% trans %}tour.dashboard.view_passenger{% endtrans %}</a>
+                <span>
+                <li>
+                    <a class="mdl-menu__item caller-btn" href="{{ path('manage_passenger_show', {'id': passenger.id }) }}">{% trans %}tour.dashboard.view_passenger{% endtrans %}</a>
                 </li>
+                </span>
             </ul>
         {% endif %}
-    </div>
 
+    </div>
 </div>
 
 
