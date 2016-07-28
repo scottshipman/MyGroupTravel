@@ -67,6 +67,9 @@ payment:
         schedule: You can edit the schedule for an individual passenger if required.
         actions: Use the action menu next to each passenger to log a payment that you have received, and add a minus figure if you have issued a refund.
 
+    settings:
+          delete_payment_type: Are you sure you want to remove this payment? You must click Save for changes to be saved.
+
 brand_payment:
     form:
         message: "This payment is being logged for %iname% for the Tour: %tourname%."
