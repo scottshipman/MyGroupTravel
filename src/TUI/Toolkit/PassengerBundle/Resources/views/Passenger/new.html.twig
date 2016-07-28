@@ -3,7 +3,11 @@
 {% block body -%}
 
     <div class="signup-form">
-        <p style="text-align: center">{% trans %}passenger.modals.message{% endtrans %}</p>
+        {% if user_is_org  %}
+            <p style="text-align: center">{% trans %}passenger.modals.organizer_message{% endtrans %}</p>
+        {% else %}
+            <p style="text-align: center">{% trans %}passenger.modals.message{% endtrans %}</p>
+        {% endif %}
 
         <div class="errors">
             {{ form_errors(form) }}

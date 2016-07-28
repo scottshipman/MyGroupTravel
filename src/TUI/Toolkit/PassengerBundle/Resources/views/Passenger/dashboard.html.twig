@@ -284,7 +284,12 @@
             $(document).on('click', '#accept-tour', function (e) {
                 e.preventDefault();
                 var entityId = $('.site-show').attr('entityId');
-                toolkitStandardPopup("Sign Up", '/passenger/new/' + entityId);
+                {% if user_is_organzier %}
+                    var popupTitle = '{{ 'passenger.modals.organizer_title'|trans() }}';
+                {% else %}
+                    var popupTitle = '{{ 'passenger.modals.title'|trans() }}';
+                {% endif %}
+                toolkitStandardPopup(popupTitle, '/passenger/new/' + entityId);
 
             });
 
