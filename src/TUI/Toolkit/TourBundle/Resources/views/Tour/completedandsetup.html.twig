@@ -386,7 +386,7 @@
     {#</div>#}
     {#</div>#}
 
-
+    {% if passengerData.travellingUsers|length > 0 %}
     <h5 id="completed-title">{% trans %}tour.dashboard.completed{% endtrans %}</h5>
 
     {#Passport Data completed#}
@@ -475,6 +475,8 @@
         {% endfor %}
     {% endif %}
 {# {% endif %} #}
+
+{% endif %}
 
 <script>
     //Only allow users to download promo assets when there are some
