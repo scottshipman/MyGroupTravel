@@ -292,11 +292,23 @@
                     {{ brand.name }} {% trans %}tour.show.footer.intro_org{% endtrans %}
             </span>
         {% if tour.salesAgent.media %}
-            <span class="tui-image-avatar"><img src="{{ ( tour.salesAgent.media.getRelativePath ~ "/" ~ tour.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ tour.salesAgent.username }}"></span>
+            <span class="tui-image-avatar">
+                <a href="mailto:{{ tour.salesAgent.email }}">
+                    <img src="{{ ( tour.salesAgent.media.getRelativePath ~ "/" ~ tour.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ tour.salesAgent.username }}">
+                </a>
+            </span>
         {% elseif tour.salesAgent.firstName and tour.salesAgent.lastName %}
-            <span class="tui-text-avatar mdl-typography--headline">{{ tour.salesAgent.firstName[:1] }}{{ tour.salesAgent.lastName[:1] }}</span>
+            <span class="tui-text-avatar mdl-typography--headline">
+                <a href="mailto:{{ tour.salesAgent.email }}">
+                    {{ tour.salesAgent.firstName[:1] }}{{ tour.salesAgent.lastName[:1] }}
+                </a>
+            </span>
         {% else %}
-            <span class="tui-text-avatar mdl-typography--headline">{{ tour.salesAgent.username[:1] }}</span>
+            <span class="tui-text-avatar mdl-typography--headline">
+                <a href="mailto:{{ tour.salesAgent.email }}">
+                    {{ tour.salesAgent.username[:1] }}
+                </a>
+            </span>
         {% endif %}
         <span class="agent">
                 {% if tour.salesAgent.displayName %}

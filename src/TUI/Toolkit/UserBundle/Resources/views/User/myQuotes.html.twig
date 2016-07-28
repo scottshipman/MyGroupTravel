@@ -53,9 +53,17 @@
                                 <img src="{{ ( quote.quoteReference.salesAgent.media.getRelativePath ~ "/" ~ quote.quoteReference.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ quote.quoteReference.salesAgent.username }}">
                             </span>
                         {% elseif quote.quoteReference.salesAgent.firstName and tour.salesAgent.lastName %}
-                            <span class="tui-text-avatar mdl-typography--headline">{{ quote.quoteReference.salesAgent.firstName[:1] }}{{ quote.quoteReference.salesAgent.lastName[:1] }}</span>
+                            <span class="tui-text-avatar mdl-typography--headline">
+                                <a href="mailto:{{ quote.quoteReference.salesAgent.email }}">
+                                    {{ quote.quoteReference.salesAgent.firstName[:1] }}{{ quote.quoteReference.salesAgent.lastName[:1] }}
+                                </a>
+                            </span>
                         {% else %}
-                            <span class="tui-text-avatar mdl-typography--headline">{{ quote.quoteReference.salesAgent.username[:1] }}</span>
+                            <span class="tui-text-avatar mdl-typography--headline">
+                                <a href="mailto:{{ quote.quoteReference.salesAgent.email }}">
+                                    {{ quote.quoteReference.salesAgent.username[:1] }}
+                                </a>
+                            </span>
 
                         {% endif %}
                         {{ quote.quoteReference.salesAgent.firstName }} {{ tour.salesAgent.lastName }} <br /> <a style="text-decoration: none;" href="mailto:{{ quote.quoteReference.salesAgent.email }}">{{ quote.quoteReference.salesAgent.email }}</a><br />
@@ -66,9 +74,17 @@
                             <span class="tui-image-avatar">
                                     <img src="{{ ( quote.quoteReference.organizer.media.getRelativePath ~ "/" ~ quote.quoteReference.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ quote.quoteReference.organizer.username }}"></span>
                         {% elseif quote.quoteReference.organizer.firstName and quote.quoteReference.organizer.lastName %}
-                            <span class="tui-text-avatar mdl-typography--headline">{{ quote.quoteReference.organizer.firstName[:1] }}{{ quote.quoteReference.organizer.lastName[:1] }}</span>
+                            <span class="tui-text-avatar mdl-typography--headline">
+                                <a href="mailto:{{ quote.quoteReference.organizer.email }}">
+                                    {{ quote.quoteReference.organizer.firstName[:1] }}{{ quote.quoteReference.organizer.lastName[:1] }}
+                                </a>
+                            </span>
                         {% else %}
-                            <span class="tui-text-avatar mdl-typography--headline">{{ quote.quoteReference.organizer.username[:1] }}</span>
+                            <span class="tui-text-avatar mdl-typography--headline">
+                                <a href="mailto:{{ quote.quoteReference.organizer.email }}">
+                                    {{ quote.quoteReference.organizer.username[:1] }}
+                                </a>
+                            </span>
 
                         {% endif %}
                         {{ quote.quoteReference.organizer.firstName }} {{ quote.quoteReference.organizer.lastName }}  <br /> <a style="text-decoration: none;" href="mailto:{{ quote.quoteReference.organizer.email }}">{{ quote.quoteReference.organizer.email }}</a><br />
