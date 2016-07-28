@@ -49,10 +49,10 @@ passenger:
         move_waitlist: Move to Waitlist
         move_free: Move to Free
         view_passenger: View Passenger
-        add_medical: Add Medical Information
-        add_dietary: Add Dietary Information
-        add_passport: Add Passport Information
-        add_emergency: Add Emergency Contact Information
+        add_medical: Add medical information
+        add_dietary: Add dietary requirements
+        add_passport: Add passport information
+        add_emergency: Add emergency contact information
         no_tasks: is all set! All tasks are completed.
         send_message:  You are sending an email to all accepted passengers, are you sure you want to do that?
         send_activation: Send Activation
@@ -104,13 +104,13 @@ passenger:
         invite-text: Complete the form below to invite someone to help organise this tour.
         assistant-organizer: Assistant Organiser
         tasks: Tasks
-        medical_info: Medical Information
+        medical_info: Medical information
         doctor_name: Doctor's name
         doctor_number: Doctor's phone number
         conditions: Medical conditions and allergies
         medication: Medication
-        dietary_info: Dietary Requirements
-        passport_info: Passport Details
+        dietary_info: Dietary requirements
+        passport_info: Passport information
         passport_number: Passport number
         passport_first_name: First name
         passport_family_name: Family name
@@ -123,7 +123,7 @@ passenger:
         passport_dob: Date of birth
         passport_doi: Date of issue
         passport_doe: Date of expiry
-        emergency_info: Emergency Contact Information
+        emergency_info: Emergency contact information
         emergency_name: Name
         emergency_relationship: Relationship
         emergency_number: Telephone
