@@ -15,15 +15,7 @@
 {% endblock %}
 
 {% block page_title_menu %}
-    <button id="tour-title-drop" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-menu-drop mdl-button--raised mdl-button--colored ">
-        <i class="material-icons">arrow_drop_down</i>
-    </button>
     {% embed "TourBundle:Tour:tourMenu.html.twig" %}
-        {% if editable %}
-            {% block tour_dashboard_link %}
-                <li><a href="{{ path('manage_tour_show', { 'id': entity.id }) }}" class="mdl-menu__item">{% trans %}tour.title.index{% endtrans %}</a></li>
-            {% endblock %}
-        {% endif %}
     {% endembed %}
 {% endblock %}
 
@@ -39,6 +31,16 @@
     <div class="tour-show-wrapper">
 
     <div class="tour-show-left-column">
+        <div class="intro-text">
+            {% if entity.SetupComplete %}
+                <p>{{ 'tour.show.setup_instructions_title'|trans({'%firstname%' : app.user.firstname})|raw }}</p>
+                <p>{% trans %}tour.show.setup_instructions_tasks{% endtrans %}</p>
+            {% else %}
+                <p>{{ 'tour.not_setup.setup_instructions_title'|trans({'%firstname%' : app.user.firstname})|raw }}</p>
+                <p>{% trans %}tour.not_setup.setup_instructions_payment{% endtrans %}</p>
+                <p>{% trans %}tour.not_setup.setup_instructions_sharing{% endtrans %}</p>
+            {% endif %}
+        </div>
         <ul class="tour-show-submenu">
             <li><strong>{% trans %}tour.show.summary{% endtrans %}</strong></li>
             <li><label>{% trans %}tour.show.institution{% endtrans %}</label><strong>{{ entity.institution.name }}</strong></li>
@@ -59,7 +61,7 @@
                 {%  endif %}
             </li>
 
-            <li><label>{% trans %}tour.show.price{% endtrans %}</label><strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePerson }}</strong></li>
+            <li><label>{% trans %}tour.show.price{% endtrans %}</label><strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity|price }}</strong></li>
             {% if payment_tasks is not empty %}
                 <li>
                     <label>{% trans %}tour.show.schedule{% endtrans %}
@@ -150,11 +152,23 @@
                     {{ brand.name }} {% trans %}tour.show.footer.intro_org{% endtrans %}
             </span>
             {% if entity.salesAgent.media %}
-                <span class="tui-image-avatar"><img src="{{ ( entity.salesAgent.media.getRelativePath ~ "/" ~ entity.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.salesAgent.username }}"></span>
+                <span class="tui-image-avatar">
+                    <a href="mailto:{{ entity.salesAgent.email }}">
+                        <img src="{{ ( entity.salesAgent.media.getRelativePath ~ "/" ~ entity.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.salesAgent.username }}">
+                    </a>
+                </span>
             {% elseif entity.salesAgent.firstName and entity.salesAgent.lastName %}
-                <span class="tui-text-avatar mdl-typography--headline">{{ entity.salesAgent.firstName[:1] }}{{ entity.salesAgent.lastName[:1] }}</span>
+                <span class="tui-text-avatar mdl-typography--headline">
+                    <a href="mailto:{{ entity.salesAgent.email }}">
+                        {{ entity.salesAgent.firstName[:1] }}{{ entity.salesAgent.lastName[:1] }}
+                    </a>
+                </span>
             {% else %}
-                <span class="tui-text-avatar mdl-typography--headline">{{ entity.salesAgent.username[:1] }}</span>
+                <span class="tui-text-avatar mdl-typography--headline">
+                    <a href="mailto:{{ entity.salesAgent.email }}">
+                        {{ entity.salesAgent.username[:1] }}
+                    </a>
+                </span>
             {% endif %}
             <span class="agent">
                 {% if entity.salesAgent.displayName %}
@@ -172,11 +186,23 @@
                     {% trans %}tour.show.footer.intro{% endtrans %}
             </span>
             {% if entity.organizer.media %}
-                <span class="tui-image-avatar"><img src="{{ ( entity.organizer.media.getRelativePath ~ "/" ~ entity.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.organizer.username }}"></span>
+                <span class="tui-image-avatar">
+                    <a href="mailto:{{ entity.organizer.email }}">
+                        <img src="{{ ( entity.organizer.media.getRelativePath ~ "/" ~ entity.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.organizer.username }}">
+                    </a>
+                </span>
             {% elseif entity.organizer.firstName and entity.organizer.lastName %}
-                <span class="tui-text-avatar mdl-typography--headline">{{ entity.organizer.firstName[:1] }}{{ entity.organizer.lastName[:1] }}</span>
+                <span class="tui-text-avatar mdl-typography--headline">
+                    <a href="mailto:{{ entity.organizer.email }}">
+                        {{ entity.organizer.firstName[:1] }}{{ entity.organizer.lastName[:1] }}
+                    </a>
+                </span>
             {% else %}
-                <span class="tui-text-avatar mdl-typography--headline">{{ entity.organizer.username[:1] }}</span>
+                <span class="tui-text-avatar mdl-typography--headline">
+                    <a href="mailto:{{ entity.organizer.email }}">
+                        {{ entity.organizer.username[:1] }}
+                    </a>
+                </span>
             {% endif %}
             <span class="agent">
                 {% if entity.organizer.displayName %}
@@ -194,11 +220,8 @@
 {% block footer_right %}
     <div class="quote-info">
         <span class="quote-label">{% trans %}tour.show.footer.price{% endtrans %}</span>
-
         <span class="quote-price">
-            {% if entity.pricePerson %}
-                <strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePersonPublic }}</strong>
-            {% endif %}
+            <strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity|price }}</strong>
         </span>
     </div>
 {% endblock %}

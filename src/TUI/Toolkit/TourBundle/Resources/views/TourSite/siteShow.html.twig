@@ -9,31 +9,18 @@
 {% endblock %}
 
 {% block page_title %}
-    {% if "tour" | getRoles(entity.id) == "parent" %}
+    {% if "tour" | checkUserPermissions(entity.id, NULL, "ROLE_BRAND") %}
         <span>{% trans %}tour.title.site_view{% endtrans %}</span>
-
-    {% elseif "tour" | getRoles(entity.id) != "" or is_granted("ROLE_BRAND")%}
-            <span>{% trans %}tour.title.site_view{% endtrans %}</span>
+    {% endif %}
+    {% if editable %}
+        <p>{% trans %}tour.title.preview_warning{% endtrans %}</p>
     {% endif %}
 {% endblock %}
 
 
 {% block page_title_menu %}
-    {% if "tour" | getRoles(entity.id) == "parent" %}
-
-    {% elseif "tour" | getRoles(entity.id) != "" or is_granted("ROLE_BRAND")%}
-
-    <button id="tour-title-drop" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-menu-drop mdl-button--raised mdl-button--colored">
-        <i class="material-icons">arrow_drop_down</i>
-    </button>
     {% embed "TourBundle:Tour:tourMenu.html.twig" %}
-        {% if editable %}
-            {% block tour_dashboard_link %}
-                <li><a href="{{ path('manage_tour_show', { 'id': entity.id }) }}" class="mdl-menu__item">{% trans %}tour.title.index{% endtrans %}</a></li>
-            {% endblock %}
-        {% endif %}
     {% endembed %}
-    {% endif %}
 {% endblock %}
 
 {% block edit_link %}
@@ -134,7 +121,7 @@
                         </div>
                     {% endif %}
                     <div id="site-header-slideshow-content">
-                        {{ render(controller('ContentBlocksBundle:HeaderBlock:show', {'id':  entity.headerBlock.id  })) }}
+                        {{ render(controller('ContentBlocksBundle:HeaderBlock:show', {'id': entity.headerBlock.id, 'quoteVersion': entity.id, 'class': 'tour', 'skipPermissions': true})) }}
                     </div>
                 {% else %}
                     {% if editable %}
@@ -226,7 +213,7 @@
 
                                     {# render the actual content block #}
                                     <div id="previewable-content-blocks-{{ items[item].id }}">
-                                        {{ render(controller('ContentBlocksBundle:ContentBlock:show', {'id':  items[item].id  })) }}
+                                        {{ render(controller('ContentBlocksBundle:ContentBlock:show', {'id':  items[item].id, 'quoteVersion': entity.id, 'class': 'tour', 'skipPermissions': true})) }}
                                     </div>
 
                                     {# give a placeholder for the editable version #}
@@ -338,11 +325,23 @@
                     {{ brand.name }} {% trans %}tour.show.footer.intro_org{% endtrans %}
             </span>
             {% if entity.salesAgent.media %}
-                <span class="tui-image-avatar"><img src="{{ ( entity.salesAgent.media.getRelativePath ~ "/" ~ entity.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.salesAgent.username }}"></span>
+                <span class="tui-image-avatar">
+                    <a href="mailto:{{ entity.salesAgent.email }}">
+                        <img src="{{ ( entity.salesAgent.media.getRelativePath ~ "/" ~ entity.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.salesAgent.username }}">
+                    </a>
+                </span>
             {% elseif entity.salesAgent.firstName and entity.salesAgent.lastName %}
-                <span class="tui-text-avatar mdl-typography--headline">{{ entity.salesAgent.firstName[:1] }}{{ entity.salesAgent.lastName[:1] }}</span>
+                <span class="tui-text-avatar mdl-typography--headline">
+                    <a href="mailto:{{ entity.salesAgent.email }}">
+                        {{ entity.salesAgent.firstName[:1] }}{{ entity.salesAgent.lastName[:1] }}
+                    </a>
+                </span>
             {% else %}
-                <span class="tui-text-avatar mdl-typography--headline">{{ entity.salesAgent.username[:1] }}</span>
+                <span class="tui-text-avatar mdl-typography--headline">
+                    <a href="mailto:{{ entity.salesAgent.email }}">
+                        {{ entity.salesAgent.username[:1] }}
+                    </a>
+                </span>
             {% endif %}
             <span class="agent">
                 {% if entity.salesAgent.displayName %}
@@ -360,11 +359,23 @@
                     {% trans %}tour.show.footer.intro{% endtrans %}
             </span>
             {% if entity.organizer.media %}
-                <span class="tui-image-avatar"><img src="{{ ( entity.organizer.media.getRelativePath ~ "/" ~ entity.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.organizer.username }}"></span>
+                <span class="tui-image-avatar">
+                    <a href="mailto:{{ entity.organizer.email }}">
+                        <img src="{{ ( entity.organizer.media.getRelativePath ~ "/" ~ entity.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.organizer.username }}">
+                    </a>
+                </span>
             {% elseif entity.organizer.firstName and entity.organizer.lastName %}
-                <span class="tui-text-avatar mdl-typography--headline">{{ entity.organizer.firstName[:1] }}{{ entity.organizer.lastName[:1] }}</span>
+                <span class="tui-text-avatar mdl-typography--headline">
+                    <a href="mailto:{{ entity.organizer.email }}">
+                        {{ entity.organizer.firstName[:1] }}{{ entity.organizer.lastName[:1] }}
+                    </a>
+                </span>
             {% else %}
-                <span class="tui-text-avatar mdl-typography--headline">{{ entity.organizer.username[:1] }}</span>
+                <span class="tui-text-avatar mdl-typography--headline">
+                    <a href="mailto:{{ entity.organizer.email }}">
+                        {{ entity.organizer.username[:1] }}
+                    </a>
+                </span>
             {% endif %}
             <span class="agent">
                 {% if entity.organizer.displayName %}
@@ -382,11 +393,8 @@
 {% block footer_right %}
     <div class="quote-info">
         <span class="quote-label">{% trans %}tour.site_show.footer.price{% endtrans %}</span>
-
         <span class="quote-price">
-            {% if entity.pricePerson %}
-                <strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity.pricePersonPublic }}</strong>
-            {% endif %}
+            <strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity|price }}</strong>
         </span>
     </div>
 {% endblock %}

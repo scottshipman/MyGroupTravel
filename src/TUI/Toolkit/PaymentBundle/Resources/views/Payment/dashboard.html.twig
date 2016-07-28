@@ -1,7 +1,7 @@
 {% extends '::site-base.html.twig' %}
 {% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
 
-{% if tour.payingPlaces != null and tour.pricePersonPublic != null %}{% set totalDue = (tour.pricePersonPublic * tour.payingPlaces) %}{% else %}{% set totalDue = 0%}{% endif %}
+{% if tour.payingPlaces != null and tour|price != null %}{% set totalDue = (tour|price * tour.payingPlaces) %}{% else %}{% set totalDue = 0%}{% endif %}
 
 {% block title %}
     {% if is_granted("ROLE_BRAND") %}
@@ -16,13 +16,7 @@
 {% endblock %}
 
 {% block page_title_menu %}
-    <button id="tour-title-drop" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-menu-drop mdl-button--raised mdl-button--colored">
-        <i class="material-icons">arrow_drop_down</i>
-    </button>
     {% embed "TourBundle:Tour:tourMenu.html.twig" %}
-        {% block tour_dashboard_link %}
-            <li><a href="{{ path('manage_tour_show', { 'id': tour.id }) }}" class="mdl-menu__item">{% trans %}tour.title.index{% endtrans %}</a></li>
-        {% endblock %}
     {% endembed %}
 {% endblock %}
 
@@ -31,8 +25,11 @@
     <div class="tour-show-wrapper site-show" entityId="{{ tour.id }}">
 
         <div class="tour-show-left-column">
-
-            <h3>{{ tour.name|capitalize }}</h3>
+            <div class="intro-text">
+                <p>{% trans %}payment.introduction.title{% endtrans %}</p>
+                <p>{% trans %}payment.introduction.schedule{% endtrans %}</p>
+                <p>{% trans %}payment.introduction.actions{% endtrans %}</p>
+            </div>
             <div class="text-search">
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <input id="passenger-payment-filter" class="mdl-textfield__input" type="text" />
@@ -40,12 +37,33 @@
                 </div>
                 <a href="#all" style="float:right; text-decoration: none; color:{{ brand.secondaryColor }};" id="clear"><i class="material-icons md-18">undo</i> {% trans %} passenger.labels.show-everyone{% endtrans %}</a>
             </div>
+
             <ul class="tour-show-submenu">
                 <li><a href="{{ path('manage_payment_dashboard', { 'tourId': tour.id }) }}" style="text-decoration: none; color:{{ brand.secondaryColor }};"><strong>{% trans %}payment.labels.balances{% endtrans %}</strong></a></li>
                 <li><a href="{{ path('manage_payment_dashboard_edit_payments', { 'tourId': tour.id }) }}" style="text-decoration: none; color: inherit;"><strong>{% trans %}payment.labels.payment_settings{% endtrans %}</strong></a></li>
-                <li><a class = "refund" tour="{{ tour.id }}" href="" style="text-decoration: none; color: inherit;"><strong>{% trans %}payment.labels.issue_refund{% endtrans %}</strong></a></li>
-
             </ul>
+
+            {% if due.items|length > 0 %}
+                <div class="passenger-cta-card tour-edit mdl-card passenger-dashboard-cta-card payment-schedule-card">
+                    <div class="mdl-card__title">
+                        <h3 class="mdl-card__title-text">{% trans %}payment.labels.schedule{% endtrans %}</h3>
+                    </div>
+                    {% for item in due.items %}
+                        {#{% set overdue = overdue + item.overdueAmt %}#}
+                        {%  set color = 'blue' %}{%  set icon = 'event' %}
+                        {% if item.status == "paid" %}{%  set color = 'green' %}{%  set icon = 'done' %} {% endif %}
+                        {% if item.status ==  "overdue" %}{%  set color = 'red' %}{%  set icon = 'warning' %}{% endif %}
+                        <div class="mdl-card__supporting-text mdl-card--border">
+                            {# need logic here to add the right task status icon based on item.status #}
+                            {% if item.task is defined and item.task is not empty %}
+                                <label class="task-due-date payment-item"><i class="material-icons" style="color: {{ color }};">{{ icon }}</i>{{ item.task.name }}  {{ item.task.dueDate | date(format)}}</label>
+                            {% endif %}
+                            <p class="row-content indented">/ {{ tour.currency.htmlSymbol | raw  }}{{ item.total }}</p>
+                            <p class="row-content weighted">{{ tour.currency.htmlSymbol | raw  }}{{ item.credit }} </p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
 
         <div class="tour-show-right-column">
@@ -90,15 +108,6 @@
 
     <script>
         $(document).ready(function () {
-
-            // Payment popup
-            $(document).on('click', 'a.make-a-payment', function (e) {
-                var t = $(this);
-                e.preventDefault();
-                var passengerId = t.attr('passenger');
-                var tourId = t.attr('tour');
-                toolkitStandardPopup("Log A Payment", '/payment/tour/' + tourId + '/passenger/' + passengerId + '/new' );
-            });
 
             // Customize a passenger's payment schedule
             $(document).on('click', 'a.edit-payment-schedule', function (e) {
@@ -200,11 +209,23 @@
                     {{ brand.name }} {% trans %}tour.show.footer.intro_org{% endtrans %}
             </span>
             {% if tour.salesAgent.media %}
-                <span class="tui-image-avatar"><img src="{{ ( tour.salesAgent.media.getRelativePath ~ "/" ~ tour.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ tour.salesAgent.username }}"></span>
+                <span class="tui-image-avatar">
+                    <a href="mailto:{{ tour.salesAgent.email }}">
+                        <img src="{{ ( tour.salesAgent.media.getRelativePath ~ "/" ~ tour.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ tour.salesAgent.username }}">
+                    </a>
+                </span>
             {% elseif tour.salesAgent.firstName and tour.salesAgent.lastName %}
-                <span class="tui-text-avatar mdl-typography--headline">{{ tour.salesAgent.firstName[:1] }}{{ tour.salesAgent.lastName[:1] }}</span>
+                <span class="tui-text-avatar mdl-typography--headline">
+                    <a href="mailto:{{ tour.salesAgent.email }}">
+                        {{ tour.salesAgent.firstName[:1] }}{{ tour.salesAgent.lastName[:1] }}
+                    </a>
+                </span>
             {% else %}
-                <span class="tui-text-avatar mdl-typography--headline">{{ tour.salesAgent.username[:1] }}</span>
+                <span class="tui-text-avatar mdl-typography--headline">
+                    <a href="mailto:{{ tour.salesAgent.email }}">
+                        {{ tour.salesAgent.username[:1] }}
+                    </a>
+                </span>
             {% endif %}
             <span class="agent">
                 {% if tour.salesAgent.displayName %}
@@ -222,11 +243,23 @@
                     {% trans %}tour.show.footer.intro{% endtrans %}
             </span>
             {% if tour.organizer.media %}
-                <span class="tui-image-avatar"><img src="{{ ( tour.organizer.media.getRelativePath ~ "/" ~ tour.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ tour.organizer.username }}"></span>
+                <span class="tui-image-avatar">
+                    <a href="mailto:{{ tour.organizer.email }}">
+                        <img src="{{ ( tour.organizer.media.getRelativePath ~ "/" ~ tour.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ tour.organizer.username }}">
+                    </a>
+                </span>
             {% elseif tour.organizer.firstName and tour.organizer.lastName %}
-                <span class="tui-text-avatar mdl-typography--headline">{{ tour.organizer.firstName[:1] }}{{ tour.organizer.lastName[:1] }}</span>
+                <span class="tui-text-avatar mdl-typography--headline">
+                    <a href="mailto:{{ tour.organizer.email }}">
+                        {{ tour.organizer.firstName[:1] }}{{ tour.organizer.lastName[:1] }}
+                    </a>
+                </span>
             {% else %}
-                <span class="tui-text-avatar mdl-typography--headline">{{ tour.organizer.username[:1] }}</span>
+                <span class="tui-text-avatar mdl-typography--headline">
+                    <a href="mailto:{{ tour.organizer.email }}">
+                        {{ tour.organizer.username[:1] }}
+                    </a>
+                </span>
             {% endif %}
             <span class="agent">
                 {% if tour.organizer.displayName %}
@@ -244,11 +277,8 @@
 {% block footer_right %}
     <div class="quote-info">
         <span class="quote-label">{% trans %}tour.show.footer.price{% endtrans %}</span>
-
         <span class="quote-price">
-            {% if tour.pricePerson %}
-                <strong>{% if tour.currency %}{{ tour.currency.htmlSymbol | raw }}{% endif %}{{ tour.pricePersonPublic }}</strong>
-            {% endif %}
+            <strong>{% if tour.currency %}{{ tour.currency.htmlSymbol | raw }}{% endif %}{{ tour|price }}</strong>
         </span>
     </div>
 {% endblock %}

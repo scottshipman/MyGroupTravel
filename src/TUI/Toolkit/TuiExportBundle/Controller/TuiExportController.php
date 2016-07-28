@@ -24,22 +24,13 @@ class TuiExportController extends Controller
 
     public function generateCsvAction($type, $tourId)
     {
-        $permission = array();
-
-        //Check to see if the user is allowed to view the dashboard
-
-        $securityContext = $this->get('security.context');
-        $user = $securityContext->getToken()->getUser();
-        if ($user != 'anon.') {
-            $permission = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $user->getId());
-        }
-
+        // Check context permissions.
+        $securityContext = $this->container->get('security.authorization_checker');
         if (!$securityContext->isGranted('ROLE_BRAND')) {
-            if ($permission != null && !in_array('organizer', $permission) && !in_array('assistant', $permission)) {
-                throw $this->createAccessDeniedException('You are not authorized to view this data!');
-            }
-            elseif ($permission == null ) {
-                throw $this->createAccessDeniedException('You are not authorized to view this data!');
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permission = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $user->getId());
+            if ($permission == NULL || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+                throw $this->createAccessDeniedException();
             }
         }
 

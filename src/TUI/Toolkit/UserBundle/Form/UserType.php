@@ -26,84 +26,89 @@ class UserType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-//
-//      switch (true){
-//        case strstr($this->locale, 'en_GB'):
-//          $phoneFormat = PhoneNumberFormat::NATIONAL;
-//          $defaultRegion = 'GB';
-//          break;
-//        default:
-//          $phoneFormat = PhoneNumberFormat::NATIONAL;
-//          $defaultRegion = 'US';
-//          break;
-     // }
-
       // todo: Add logic so you cant add any role greater than your own
         $builder
-          ->add('honorific', 'choice', array(
+        ->add('honorific', 'choice', array(
             'required' => false,
             'placeholder' => 'Select',
             'label' => 'user.form.honorific',
             'translation_domain'  => 'messages',
-              'choices' => array(
+                'choices' => array(
                 'Mr.' => 'Mr.',
                 'Mrs.' => 'Mrs.',
                 'Ms.' => 'Ms.',
                 'Miss' => 'Miss',
                 'Dr.' => 'Dr.',
                 )
-              ))
-          ->add('firstName', 'text', array(
+            )
+        )
+        ->add('firstName', 'text', array(
             'label' => 'user.form.fname',
             'translation_domain'  => 'messages',
             'required' => true,
-
-              ))
-          ->add('lastName', 'text', array(
+            )
+        )
+        ->add('lastName', 'text', array(
             'label' => 'user.form.lname',
             'translation_domain'  => 'messages',
             'required' => true,
-              ))
-          ->add('displayName', 'text', array(
+            )
+        )
+        ->add('displayName', 'text', array(
             'label' => 'user.form.display_name',
             'translation_domain'  => 'messages',
             'required' => false,
-          ))
-          ->add('email', 'email', array(
+            )
+        )
+        ->add('email', 'email', array(
             'label' => 'user.form.email',
             'translation_domain'  => 'messages',
             'required'  => true,
+            )
+        )
+        ->add('phoneNumber', 'text', array(
+            'label' => 'user.form.phone',
+            'translation_domain'  => 'messages',
+            'required' => false,
+            )
+        )
+        ->add('media', 'hidden', array(
+            'required' => false,
+            'data_class' => 'TUI\Toolkit\MediaBundle\Entity\Media',
+            'attr' => array('class' => 'media-placeholder')
+            )
+        );
 
-          ))
-            ->add('phoneNumber', 'text', array(
-                'label' => 'user.form.phone',
-                'translation_domain'  => 'messages',
-                'required' => false,
-            ))
-//          ->add('phoneNumber', 'tel', array(
-//            'label' => 'user.form.phone',
-//            'translation_domain'  => 'messages',
-//            'required' => false,
-//            'default_region' => $defaultRegion,
-//            'format' => $phoneFormat
-//              ))
-           // ->add('username')
-/*            ->add('plainPassword', 'repeated', array(
-                'type' => 'password',
-                'options' => array('translation_domain' => 'FOSUserBundle'),
-                'first_options' => array('label' => 'form.new_password'),
-                'second_options' => array('label' => 'form.new_password_confirmation'),
-                'invalid_message' => 'fos_user.password.mismatch',
-                'required' => false,
-              ))*/
-            ->add('media', 'hidden', array(
-                'required' => false,
-                'data_class' => 'TUI\Toolkit\MediaBundle\Entity\Media',
-                'attr' => array(
-                  'class' => 'media-placeholder',
-                )
-            ))
-        ;
+        $user = $options['user'];
+        if (!empty($user)) {
+            $roles = $user->getRoles();
+
+            if (in_array('ROLE_SUPER_ADMIN', $roles)) {
+                $builder->add('roles', 'choice', array(
+                    'choices' => array(
+                        'ROLE_CUSTOMER' => 'CUSTOMER',
+                        'ROLE_BRAND' => 'BRAND',
+                        'ROLE_ADMIN' => 'ADMIN',
+                        'ROLE_SUPER_ADMIN' => 'SUPER_ADMIN',
+                    ),
+                    'multiple' => TRUE,
+                    'expanded' => TRUE,
+                    )
+                );
+            }
+            elseif (in_array('ROLE_ADMIN', $roles)) {
+                $builder->add('roles', 'choice', array(
+                    'choices' => array(
+                        'ROLE_CUSTOMER' => 'CUSTOMER',
+                        'ROLE_BRAND' => 'BRAND',
+                        'ROLE_ADMIN' => 'ADMIN',
+                    ),
+                    'multiple' => TRUE,
+                    'expanded' => TRUE,
+                    )
+                );
+            }
+        }
     }
 
     /**
@@ -112,7 +117,8 @@ class UserType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'TUI\Toolkit\UserBundle\Entity\User'
+            'data_class' => 'TUI\Toolkit\UserBundle\Entity\User',
+            'user' => null
         ));
     }
 

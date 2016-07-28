@@ -7,6 +7,17 @@
 
             <div class="tour-show-left-column" style="margin-top: 0;">
                 {#<div class="profile-details-card">#}
+
+                {% if ("tour" | checkUserPermissions(NULL, ["organizer", "assistant", "parent"])) %}
+                    <div class="intro-text">
+                        {% if ("tour" | checkUserPermissions(NULL, ["organizer", "assistant"])) %}
+                            {{ "user.profile.intro.organizer"|trans({'%name%': user.firstName})|raw }}
+                        {% elseif "tour" | checkUserPermissions(NULL, "parent") %}
+                            {{ "user.profile.intro.parent"|trans({'%name%': user.firstName})|raw }}
+                        {% endif %}
+                    </div>
+                {% endif %}
+
                     <ul class="tour-show-submenu">
                         <li><h2 class="mdl-card__title-text">{% trans %}user.profile.label.account_details{% endtrans %}</h2>
                         </li>
@@ -34,9 +45,14 @@
 
                     {#<p>{% trans %}user.profile.label.created{% endtrans %}: {{ user.created |date (format) }}</p>#}
 
-                    <p><a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+                    <p>
+                        <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
                           href="/user/{{ user.id }}/edit"><i class="fa fa-pencil"></i> {% trans %}
-                            user.actions.edit_profile{% endtrans %}</a></p>
+                            user.actions.edit_profile{% endtrans %}</a>
+                        <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+                           href="/logout"><i class="fa fa-sign-out"></i> {% trans %}
+                            user.actions.logout{% endtrans %}</a>
+                    </p>
                 {#</div>#}
                 {% if is_granted("ROLE_BRAND") %}
                     <div class="profile-tabs">

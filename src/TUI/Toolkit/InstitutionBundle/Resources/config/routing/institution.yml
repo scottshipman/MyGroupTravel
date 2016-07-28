@@ -39,7 +39,7 @@ manage_institution_delete:
     methods:  [POST, DELETE]
 
 manage_institution_quick_delete:
-    path:     /{id}/delete
+    path:     /{id}/quick_delete
     defaults: { _controller: "InstitutionBundle:Institution:quickdelete" }
     methods:  [POST, DELETE, GET]
 

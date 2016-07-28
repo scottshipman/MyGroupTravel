@@ -23,6 +23,21 @@ class HeaderBlockController extends Controller
      */
     public function createAction(Request $request, $quoteVersion = null, $class = null)
     {
+        // Check context permissions.
+        $permission_class = strtolower($class);
+        if ($permission_class == 'quoteversion') {
+            $permission_class = 'quote';
+        }
+
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permission = $this->get("permission.set_permission")->getPermission($quoteVersion, $permission_class, $user->getId());
+            if ($permission == NULL || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+                throw $this->createAccessDeniedException();
+            }
+        }
+
         $entity = new ContentBlock();
         $medias = array();
         $em = $this->getDoctrine()->getManager();
@@ -125,6 +140,21 @@ class HeaderBlockController extends Controller
      */
     public function newAction($quoteVersion, $class)
     {
+        // Check context permissions.
+        $permission_class = strtolower($class);
+        if ($permission_class == 'quoteversion') {
+            $permission_class = 'quote';
+        }
+
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permission = $this->get("permission.set_permission")->getPermission($quoteVersion, $permission_class, $user->getId());
+            if ($permission == NULL || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+                throw $this->createAccessDeniedException();
+            }
+        }
+
         $entity = new ContentBlock();
         $form = $this->createCreateForm($entity, $quoteVersion, $class);
 
@@ -140,7 +170,7 @@ class HeaderBlockController extends Controller
      * Finds and displays a ContentBlock entity.
      *
      */
-    public function showAction($id)
+    public function showAction($id, $quoteVersion = null, $class = null, $skipPermissions=false)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -150,6 +180,11 @@ class HeaderBlockController extends Controller
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Header Block entity.');
+        }
+
+        // Check context permissions.
+        if (!$skipPermissions) {
+            $this->get("permission.set_permission")->checkUserPermissions(TRUE, $class, $quoteVersion, ['organizer', 'assistant'], 'ROLE_BRAND');
         }
 
         return $this->render('ContentBlocksBundle:HeaderBlock:show.html.twig', array(
@@ -164,6 +199,21 @@ class HeaderBlockController extends Controller
      */
     public function editAction($id, $quoteVersion = null, $class = null)
     {
+        // Check context permissions.
+        $permission_class = strtolower($class);
+        if ($permission_class == 'quoteversion') {
+            $permission_class = 'quote';
+        }
+
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permission = $this->get("permission.set_permission")->getPermission($quoteVersion, $permission_class, $user->getId());
+            if ($permission == NULL || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+                throw $this->createAccessDeniedException();
+            }
+        }
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($id);
@@ -200,8 +250,11 @@ class HeaderBlockController extends Controller
      * Displays a form to edit an existing ContentBlock entity in Layout editor mode.
      *
      */
-    public function editLayoutAction($id)
+    public function editLayoutAction($id, $quoteVersion = null, $class = null)
     {
+        // Check context permissions.
+        $this->get("permission.set_permission")->checkUserPermissions(TRUE, $class, $quoteVersion, ['organizer', 'assistant'], 'ROLE_BRAND');
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($id);
@@ -222,7 +275,7 @@ class HeaderBlockController extends Controller
         }
 
         $entity->setMediaWrapper($collectionIds);
-        $editForm = $this->createEditLayoutForm($entity);
+        $editForm = $this->createEditLayoutForm($entity, $quoteVersion, $class);
 
         return $this->render('ContentBlocksBundle:ContentBlock:edit.html.twig', array(
             'entity' => $entity,
@@ -264,10 +317,10 @@ class HeaderBlockController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createEditLayoutForm(ContentBlock $entity)
+    private function createEditLayoutForm(ContentBlock $entity, $quoteVersion = null, $class = null)
     {
         $form = $this->createForm($this->get('form.type.contentblock'), $entity, array(
-            'action' => $this->generateUrl('manage_headerblock_layout_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('manage_headerblock_layout_update', array('id' => $entity->getId(), 'quoteVersion' => $quoteVersion, 'class' => $class)),
             'method' => 'POST',
             'attr' => array(
                 'id' => 'ajax_headerblock_layout_form'
@@ -286,6 +339,21 @@ class HeaderBlockController extends Controller
      */
     public function updateAction(Request $request, $id, $quoteVersion = null, $class = null)
     {
+        // Check context permissions.
+        $permission_class = strtolower($class);
+        if ($permission_class == 'quoteversion') {
+            $permission_class = 'quote';
+        }
+
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permission = $this->get("permission.set_permission")->getPermission($quoteVersion, $permission_class, $user->getId());
+            if ($permission == NULL || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+                throw $this->createAccessDeniedException();
+            }
+        }
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($id);
@@ -369,8 +437,11 @@ class HeaderBlockController extends Controller
      * Always returns response object not twigs.
      *
      */
-    public function updateLayoutAction(Request $request, $id)
+    public function updateLayoutAction(Request $request, $id, $quoteVersion = null, $class = null)
     {
+        // Check context permissions.
+        $this->get("permission.set_permission")->checkUserPermissions(TRUE, $class, $quoteVersion, ['organizer', 'assistant'], 'ROLE_BRAND');
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('ContentBlocksBundle:ContentBlock')->find($id);
@@ -379,7 +450,7 @@ class HeaderBlockController extends Controller
             throw  $this->createNotFoundException('Unable to find ContentBlock entity.');
         }
 
-        $editForm = $this->createEditLayoutForm($entity);
+        $editForm = $this->createEditLayoutForm($entity, $quoteVersion, $class);
         $editForm->handleRequest($request);
 
         $medias = array();

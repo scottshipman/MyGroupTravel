@@ -12,6 +12,8 @@ tour:
         back_list: Back to List
         back_dashboard: Back to Dashboard
         new_tour: New Tour
+        preview_warning: This is a preview, please use the promote/edit buttons to share or make changes
+
 
     page_title:
         edit: Edit Tour
@@ -44,7 +46,8 @@ tour:
         back_dashboard: Back to Tour Dashboard
         edit: Edit
         update: Update
-        create: Create
+        create: Create tour
+        convert_quote: Convert quote
         delete: Delete
         create_new: Create a New Tour
         password: Set Password
@@ -54,7 +57,7 @@ tour:
         go: Go
         create_new_paymentTask: Create New Entry
         promote: Promote
-        edit_mode: Switch to Edit Mode
+        edit_mode: Edit
         print: Print
         pdf: PDF
         download_promo: Download Documents
@@ -94,6 +97,10 @@ tour:
        next: Next
        personalize: Personalize your website
        promote: Promote Your Tour
+       setup_instructions_title: %firstname%, this is your Tour Set Up page. The information below is a summary of your tour.
+       setup_instructions_payment: Before you share your Tour Website, set a price to charge your passengers (they won't see your original tour price) and set the payment schedule if you would like.
+       setup_instructions_sharing: Next you will need to personalise your website, before sharing the link with your passengers
+
 
     show:
        summary: Tour Summary
@@ -112,6 +119,8 @@ tour:
             price: Price per person:
        expiry: Tour valid until
        payment_instructions: Payment Instructions
+       setup_instructions_title: %firstname%, this is your Tour Dashboard, where your tour summary is listed below
+       setup_instructions_tasks: Use your 'To do list' actions to make progress on the tour organisation and tasks. Your completed tasks are listed underneath
 
 
     contact_organizer:
@@ -141,10 +150,10 @@ tour:
         all_done: All Done!
         in_progress: In Progress
         passenger_tasks: Passenger Tasks
-        medical: Medical
-        dietary: Dietary
-        emergency: Emergency Contact
-        passport: Passport
+        medical: Medical information
+        dietary: Dietary requirements
+        emergency: Emergency contact information
+        passport: Passport information
         tasks: Tasks
         passenger_tasks: Passenger Tasks
         due: due by
@@ -156,21 +165,21 @@ tour:
         days_due: Days until Due
         payment_due: Days until Payment Due
         expiry: Days to expiry
-        passport_data: Collect Passport Data By
-        passenger_data: Collect Emergency Contact Data By
+        passport_data: Collect passport information by
+        passenger_data: Collect emergency contact information by
         collecting: Collected
         outstanding: Outstanding
-        medical_data: Collect Medical Data By
-        dietary_data: Collect Dietary Data By
+        medical_data: Collect medical information by
+        dietary_data: Collect dietary requirements by
         booking_form: Download Booking Form
         booking_form_copy: Download the booking form, complete it, and send it in with the correct deposit
         download: Download
         todo: To Do
         completed: Completed
-        completed_passport_data: Collect Passport Data
-        completed_passenger_data: Collect Emergency Contact Data
-        completed_medical_data: Collect Medical Data
-        completed_dietary_data: Collect Dietary Data
+        completed_passport_data: Collect passport information
+        completed_passenger_data: Collect emergency contact information
+        completed_medical_data: Collect medical information
+        completed_dietary_data: Collect dietary requirements
         sign_up: Sign Up
         passengers: Passengers
         views: Views
@@ -188,10 +197,11 @@ tour:
         departure: Days until departure
         registrations: Registrations
         passengers: Passengers
-        parent_price: Paid / Total Tour Price
+        parent_price: Paid
         view_passenger: View Passenger
         passenger_dashboard: Go to Passenger Dashboard
         task_dashboard: Go to Task Dashboard
+        sign_up_complete: paying passengers accepted
 
     edit:
         summary: Summary
@@ -220,6 +230,7 @@ tour:
     tour_summary:
         signup: Sign Me Up
         expired: Expired
+        departed: Departed
         departing: Departing:
         duration: Duration:
         display_name: Display Name:
@@ -298,11 +309,12 @@ tour:
     email:
         registration:
             subject: Toolkit Registration Confirmation
+            parent_subject: Activate your account
         password_reset:
             subject: Toolkit Password Reset
             action: Set Password
         setup:
-            subject: Set Up Your Tour
+            subject: Set Up Your
     form:
         honorific: Title
         fname: First Name
@@ -312,7 +324,7 @@ tour:
         media: Avatar
         password: Password
         contact_organizer:
-            message: Message to the organiser
+            label: Message to the organizer
         payment_task:
             value: Amount
             type: Payment Type
@@ -348,10 +360,10 @@ tour:
             display_name: Display Name
             board: Board Basis
             tour_number: Tour Number
-            passenger_date: Emergency Contact Due Date (MM-DD-YYYY)
-            passport_date: Passport Info Due Date (MM-DD-YYYY)
-            medical_date: Medical Info Due Date (MM-DD-YYYY)
-            dietary_date: Dietary Info Due Date (MM-DD-YYYY)
+            passenger_date: Emergency contact information due date (MM-DD-YYYY)
+            passport_date: Passport information due date (MM-DD-YYYY)
+            medical_date: Medical information due date (MM-DD-YYYY)
+            dietary_date: Dietary requirements due date (MM-DD-YYYY)
             trip_status: Trip Status
             quote_number: Quote Number
             transport_type: Transport Type

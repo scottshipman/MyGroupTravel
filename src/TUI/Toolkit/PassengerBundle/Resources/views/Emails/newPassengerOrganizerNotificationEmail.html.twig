@@ -355,17 +355,17 @@
                                                 <td valign="top" class="bodyContent">
                                                     <div><br>
                                                         <h2 class="h2">You Have New Notifications</h2>
-                                                        <p>You have new sign ups for your tour</p>
+                                                        <p>You have new sign ups for your tour {{ tour_name }}</p>
                                                         <h4><strong>Parent Information</strong></h4>
                                                         <p>{{ user.firstName }} {{ user.lastName }}</p>
                                                         <p>{{ user.Email }}</p>
 
                                                         <h4><strong>Passenger sign ups</strong></h4>
                                                         {% for passenger in newPassengers %}
-                                                            <p>{{ passenger.fName }} {{ passenger.lName }} has signed up.</p>
+                                                            <p>{{ passenger.fName }} {{ passenger.lName }}</p>
                                                         {% endfor %}
 
-                                                        <p>There are <strong>{{ remainingSpots }}</strong> places left to fill.</p>
+                                                        <p>Log in to manage your passengers</p>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -374,7 +374,7 @@
                                                     <table border="0" cellpadding="15" cellspacing="0" class="templateButton">
                                                         <tr>
                                                             <td valign="middle" class="templateButtonContent">
-                                                                <div><a href="{{ absolute_url('/tour/dashboard/' ~ tour.id ~ '/show') }}">Log in to your dashboard</a></div>
+                                                                <div><a href="{{ absolute_url('/tour/dashboard/' ~ tour.id ~ '/show') }}">Log in</a></div>
                                                             </td>
                                                         </tr>
                                                     </table>

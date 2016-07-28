@@ -471,3 +471,10 @@ fm_elfinder:
 #GtmBundle
 gtm:
     id: "%google_tag_manager%"
+
+# Data Encryption Using ambta_doctrine_sncrypt
+ambta_doctrine_encrypt:
+    secret_key:           "%ambta_doctrine_encrypt_secret_key%" # Your own random 256 bit key (32 characters) from param file
+    encryptor:            rijndael256 # use either rijndael256 or rijndael128
+    encryptor_class:      \Ambta\DoctrineEncryptBundle\Encryptors\Rijndael256Encryptor # or your own encryption class
+

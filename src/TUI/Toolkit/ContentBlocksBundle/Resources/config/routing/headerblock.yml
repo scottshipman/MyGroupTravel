@@ -1,34 +1,34 @@
 manage_headerblock_show:
-    path:     /header/show/{id}
+    path:     /{id}/show/{quoteVersion}/{class}
     defaults: { _controller: "ContentBlocksBundle:HeaderBlock:show" }
     methods:  GET
 
 manage_headerblock_edit:
-    path:   /{id}/header/edit/{quoteVersion}/{class}
+    path:   /{id}/edit/{quoteVersion}/{class}
     defaults: { _controller: "ContentBlocksBundle:HeaderBlock:edit" }
     methods:  [GET]
 
 manage_headerblock_layout_edit:
-    path:   /header/edit/layout-editor/{id}
+    path:   /{id}/edit/layout-editor/{quoteVersion}/{class}
     defaults: { _controller: "ContentBlocksBundle:HeaderBlock:editLayout" }
     methods:  [GET]
 
 manage_headerblock_create:
-    path:     /header/create/{quoteVersion}/{class}
+    path:     /create/{quoteVersion}/{class}
     defaults: { _controller: "ContentBlocksBundle:HeaderBlock:create" }
     methods:  POST
 
 manage_headerblock_update:
-    path:     /{id}/update/header/{quoteVersion}/{class}
+    path:     /{id}/update/{quoteVersion}/{class}
     defaults: { _controller: "ContentBlocksBundle:HeaderBlock:update" }
     methods:  [POST]
 
 manage_headerblock_layout_update:
-    path:     /update/header/layout-editor/{id}
+    path:     /{id}/update/layout-editor/{quoteVersion}/{class}
     defaults: { _controller: "ContentBlocksBundle:HeaderBlock:updateLayout" }
     methods:  [POST]
 
 manage_headerblock_new:
-    path:   /header/new/{quoteVersion}/{class}
+    path:   /new/{quoteVersion}/{class}
     defaults: { _controller: "ContentBlocksBundle:HeaderBlock:new" }
     methods:  [GET]

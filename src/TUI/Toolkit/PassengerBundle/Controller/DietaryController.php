@@ -38,15 +38,41 @@ class DietaryController extends Controller
      */
     public function createAction(Request $request)
     {
+        $reference = $request->request->get('tui_toolkit_passengerbundle_dietary')['passengerReference'];
+
+        if (empty($reference)) {
+            throw $this->createAccessDeniedException('passengerReference is missing from the request.');
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $passenger = $em->getRepository('PassengerBundle:Passenger')->find($reference);
+        $passengerId = $passenger->getId();
+        $tourId = $passenger->getTourReference()->getId();
+
+        // Check context permissions.
+        $this->get("permission.set_permission")->checkUserPermissionsMultiple(
+          TRUE,
+          array(
+            array(
+              'class' => 'passenger',
+              'object' => $passengerId,
+              'grants' => ['parent'],
+              'role_override' => 'ROLE_BRAND',
+            ),
+            array(
+              'class' => 'tour',
+              'object' => $tourId,
+              'grants' => ['organizer', 'assistant'],
+              'role_override' => 'ROLE_BRAND',
+            ),
+          )
+        );
+
         $entity = new Dietary();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-        $reference = $form['passengerReference']->getData();
-
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $passenger = $em->getRepository('PassengerBundle:Passenger')->find($reference);
             $entity->setPassengerReference($passenger);
             $em->persist($entity);
             $em->flush();
@@ -68,7 +94,7 @@ class DietaryController extends Controller
 
         $response = new Response($errors);
         $response->headers->set('Content-Type', 'application/json');
-        $response->setStatusCode('403');
+        $response->setStatusCode('400');
         return $response;
 
 
@@ -127,6 +153,30 @@ class DietaryController extends Controller
             throw $this->createNotFoundException('Unable to find Dietary entity.');
         }
 
+        $passengerId = $entity->getPassengerReference()->getId();
+        $tourId = $entity->getPassengerReference()->getTourReference()->getId();
+
+        // Check context permissions.
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $tour_permission = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $user->getId());
+            $passenger_permission = $this->get("permission.set_permission")->getPermission($passengerId, 'passenger', $user->getId());
+            $permission_pass = FALSE;
+
+            if ($passenger_permission != NULL && in_array('parent', $passenger_permission)) {
+                $permission_pass = TRUE;
+            }
+
+            if ($tour_permission != NULL && (in_array('organizer', $tour_permission) || in_array('assistant', $tour_permission))) {
+                $permission_pass = TRUE;
+            }
+
+            if (!$permission_pass) {
+                throw $this->createAccessDeniedException();
+            }
+        }
+
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('PassengerBundle:Dietary:show.html.twig', array(
@@ -147,6 +197,30 @@ class DietaryController extends Controller
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Dietary entity.');
+        }
+
+        $passengerId = $entity->getPassengerReference()->getId();
+        $tourId = $entity->getPassengerReference()->getTourReference()->getId();
+
+        // Check context permissions.
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $tour_permission = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $user->getId());
+            $passenger_permission = $this->get("permission.set_permission")->getPermission($passengerId, 'passenger', $user->getId());
+            $permission_pass = FALSE;
+
+            if ($passenger_permission != NULL && in_array('parent', $passenger_permission)) {
+                $permission_pass = TRUE;
+            }
+
+            if ($tour_permission != NULL && (in_array('organizer', $tour_permission) || in_array('assistant', $tour_permission))) {
+                $permission_pass = TRUE;
+            }
+
+            if (!$permission_pass) {
+                throw $this->createAccessDeniedException();
+            }
         }
 
         $editForm = $this->createEditForm($entity);
@@ -194,6 +268,30 @@ class DietaryController extends Controller
             throw $this->createNotFoundException('Unable to find Dietary entity.');
         }
 
+        $passengerId = $entity->getPassengerReference()->getId();
+        $tourId = $entity->getPassengerReference()->getTourReference()->getId();
+
+        // Check context permissions.
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $tour_permission = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $user->getId());
+            $passenger_permission = $this->get("permission.set_permission")->getPermission($passengerId, 'passenger', $user->getId());
+            $permission_pass = FALSE;
+
+            if ($passenger_permission != NULL && in_array('parent', $passenger_permission)) {
+                $permission_pass = TRUE;
+            }
+
+            if ($tour_permission != NULL && (in_array('organizer', $tour_permission) || in_array('assistant', $tour_permission))) {
+                $permission_pass = TRUE;
+            }
+
+            if (!$permission_pass) {
+                throw $this->createAccessDeniedException();
+            }
+        }
+
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
@@ -221,7 +319,7 @@ class DietaryController extends Controller
 
         $response = new Response($errors);
         $response->headers->set('Content-Type', 'application/json');
-        $response->setStatusCode('403');
+        $response->setStatusCode('400');
         return $response;
     }
     /**

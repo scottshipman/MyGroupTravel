@@ -61,6 +61,19 @@ class TourSiteController extends Controller
         ->getPermission($id, 'tour', $user->getId());
     }
 
+    if($quoteNumber===NULL) {
+      throw $this->createNotFoundException('Make sure there is a correct Quote number.');
+    }
+    else {
+      $quoteVersion = $em->getRepository('QuoteBundle:QuoteVersion')->findOneBy(array('quoteNumber' => $quoteNumber));
+
+      if (!$quoteVersion) {
+        throw $this->createNotFoundException('Unable to find Quote number provided.');
+      }
+      elseif ($entity->getQuoteNumber() != $quoteVersion->getQuoteNumber()) {
+        throw $this->createNotFoundException('Quote number doesn\'t match tour quote number.');
+      }
+    }
 
     //Get all brand stuff
     $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
@@ -193,10 +206,8 @@ class TourSiteController extends Controller
     } else {
     //send back to form page
       $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.no_match'));
-      return $this->redirect($this->generateUrl('tour_site_action_show', array('id' => $id)));
-  }
-
-
+      return $this->redirect($this->generateUrl('tour_site_show', array('id' => $id, 'quoteNumber' => $quoteNumber)));
+    }
   }
 
   /**
@@ -383,6 +394,15 @@ class TourSiteController extends Controller
    * Edit summary data on Site Show page using ajaxForm
    */
   public function editSummaryAction($id) {
+    // Check context permissions.
+    $securityContext = $this->container->get('security.authorization_checker');
+    if (!$securityContext->isGranted('ROLE_BRAND')) {
+      $user = $this->get('security.token_storage')->getToken()->getUser();
+      $permission = $this->get("permission.set_permission")->getPermission($id, 'tour', $user->getId());
+      if ($permission == null || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+        throw $this->createAccessDeniedException();
+      }
+    }
 
     $em = $this->getDoctrine()->getManager();
 
@@ -433,13 +453,22 @@ class TourSiteController extends Controller
    */
   public function updateSummaryAction(Request $request, $id)
   {
+    // Check context permissions.
+    $securityContext = $this->container->get('security.authorization_checker');
+    if (!$securityContext->isGranted('ROLE_BRAND')) {
+      $user = $this->get('security.token_storage')->getToken()->getUser();
+      $permission = $this->get("permission.set_permission")->getPermission($id, 'tour', $user->getId());
+      if ($permission == null || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+        throw $this->createAccessDeniedException();
+      }
+    }
+
     $date_format = $this->container->getParameter('date_format');
     $em = $this->getDoctrine()->getManager();
     $entity = $em->getRepository('TourBundle:Tour')->find($id);
     if (!$entity) {
       throw $this->createNotFoundException('Unable to find Tour entity.');
     }
-
 
     $editForm = $this->createSummaryEditForm($entity);
     $editForm->handleRequest($request);
@@ -468,6 +497,15 @@ class TourSiteController extends Controller
    *
    */
   public function updateTourDisplayNameAction($id) {
+    // Check context permissions.
+    $securityContext = $this->container->get('security.authorization_checker');
+    if (!$securityContext->isGranted('ROLE_BRAND')) {
+      $user = $this->get('security.token_storage')->getToken()->getUser();
+      $permission = $this->get("permission.set_permission")->getPermission($id, 'tour', $user->getId());
+      if ($permission == null || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+        throw $this->createAccessDeniedException();
+      }
+    }
 
     $value=htmlspecialchars($_POST['value']);
     $em = $this->getDoctrine()->getManager();

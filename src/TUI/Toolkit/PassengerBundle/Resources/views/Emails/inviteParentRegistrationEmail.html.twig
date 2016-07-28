@@ -6,7 +6,7 @@
     <!-- Facebook sharing information tags -->
     <meta property="og:title" content="Account Activation" />
 
-    <title>{{ 'passenger.emails.invite-organizer.new-user-subject' | trans }}</title>
+    <title>Account Activation</title>
     <style type="text/css">
         /* Client-specific Styles */
         #outlook a{padding:0;} /* Force Outlook to provide a "view in browser" button. */
@@ -345,19 +345,21 @@
                                         <table border="0" cellpadding="20" cellspacing="0" width="100%">
                                             <tr>
                                                 <td valign="top" class="bodyContent">
-                                                    <h2 class="h2">{{ 'passenger.emails.invite-organizer.new-user-subject' | trans }}</h2>
+                                                    <h2 class="h2">Activate your account</h2>
 
                                                     <div>
                                                         <p>Hi {{ user.firstName|capitalize }} {{ user.lastName|capitalize }},</p>
-                                                        <p>You have been added as an organiser to {{ tour.name }} by {{ currUser.firstName }} {{ currUser.lastName }}</p>
+                                                        <p>An account has been created for you for {{ brand.name }}'s Tour management application.</p>
 
-                                                        {% if message is not empty %}<p>Message from {{ currUser.firstName }} {{ currUser.lastName }}</p>
-                                                            {{ message }}
-                                                        {% endif %}
+                                                        <p>You will now be able to add the required information for your passenger in your own secure area:</p>
+                                                        <p>Medical Information</p>
+                                                        <p>Dietary Information</p>
+                                                        <p>Emergency Contact Information</p>
+                                                        <p>Passport Information</p>
+                                                        <p>You will also be able to keep track of payments that you have made towards the trip</p>
 
-                                                        <p>You will need to activate your account to manage the tour. </p>
-                                                        <p>Your login will be your email address: {{ user.email }}</p>
-                                                        <p>To finish activating your account, please click on the button below</p>
+                                                        <p>Your log in will be your email address: {{ user.email }}</p>
+                                                        <p>To finish activating your account please click the button below</p>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -366,7 +368,7 @@
                                                     <table border="0" cellpadding="15" cellspacing="0" class="templateButton">
                                                         <tr>
                                                             <td valign="middle" class="templateButtonContent">
-                                                                <div><a href="{{ absolute_url("/user/register/confirm/" ~ user.confirmationToken) }}">Activate account</a></div>
+                                                                <div><a href="{{ absolute_url("/user/register/confirm/" ~ user.confirmationToken) }}">Activate Account</a></div>
                                                             </td>
                                                         </tr>
                                                     </table>

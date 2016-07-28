@@ -23,7 +23,7 @@ class ContentBlockType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
       $securityContext = $this->securityContext;
-      if(strpos($options['action'], '/header/')===false) {
+      if(strpos($options['action'], '/headerblock/')===false) {
 
         $builder
           ->add('title', 'text', array(
@@ -49,11 +49,11 @@ class ContentBlockType extends AbstractType
             }
 
             // only show Layout Type , double wide and slideshow for Content Blocks, not Header Blocks
-            if(strpos($options['action'], '/header/')===false) {
+            if(strpos($options['action'], '/headerblock/')===false) {
               $builder
                 ->add('layoutType', 'entity', array(
                   'class' => 'ContentBlocksBundle:LayoutType',
-                  'data_class' => 'TUI\Toolkit\ContentBlocksBundle\Entity\LayoutType',
+               //   'data_class' => 'TUI\Toolkit\ContentBlocksBundle\Entity\LayoutType',
                   'choice_label' => 'name',
                   'expanded' => TRUE,
                   'multiple' => FALSE,
@@ -67,7 +67,7 @@ class ContentBlockType extends AbstractType
                   'required' => false,
                   'label' => 'This is a Slideshow',
                 ));
-              }
+            }
             $builder
               ->add('mediaWrapper', 'hidden', array(
                 'required' => false,
@@ -76,10 +76,10 @@ class ContentBlockType extends AbstractType
                     'class' => 'media-placeholder',
 //                    'multiple' => true
                 )
-            ))
+              ))
 
-            ->getForm()
-        ;
+                ->getForm()
+            ;
     }
 
     /**

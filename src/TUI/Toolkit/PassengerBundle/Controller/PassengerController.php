@@ -180,9 +180,10 @@ class PassengerController extends Controller
 
                 $parentEmail = $user->getEmail();
                 $tourName = $tour->getName();
-
+                $institution = $tour->getInstitution();
+                $organizer_name = $tour->getOrganizer() != null ? $tour->getOrganizer()->getLastName() . ' ' . $tour->getOrganizer()->getFirstName(): NULL;
                 $message = \Swift_Message::newInstance()
-                    ->setSubject($this->get('translator')->trans('passenger.emails.thank_you'))
+                    ->setSubject($this->get('translator')->trans('passenger.emails.thank_you') . ' ' . $tourName . ', ' . $institution)
                     ->setFrom($this->container->getParameter('user_system_email'))
                     ->setTo($parentEmail)
                     ->setBody(
@@ -196,6 +197,7 @@ class PassengerController extends Controller
                                 'newPassengers' => $newPassengers,
                                 'locale' => $locale,
                                 'date_format' => $date_format,
+                                'organizer_name' => $organizer_name,
                             )
                         ), 'text/html');
                 $this->get('mailer')->send($message);
@@ -205,8 +207,20 @@ class PassengerController extends Controller
             $em->flush();
 //            $this->get('session')->getFlashBag()->add('notice', $this->get('translator')->trans('passenger.flash.save'));
 
+            // Figure out if an organizer
+            $flash_type = 'passenger.flash.save';
+            $securityContext = $this->container->get('security.authorization_checker');
+            if ($securityContext->isGranted('ROLE_CUSTOMER')) {
+                $user = $this->get('security.token_storage')->getToken()->getUser();
+                $permissions = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $user);
 
-            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('passenger.flash.save'));
+                if(in_array('organizer', $permissions)) {
+                    // Show organizer specific flash message
+                    $flash_type = 'passenger.flash.organizer_save';
+                }
+            }
+
+            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans($flash_type));
 
             $serializer = $this->container->get('jms_serializer');
             $passengerObjects = $serializer->serialize($newPassengers, 'json');
@@ -226,7 +240,7 @@ class PassengerController extends Controller
 
         $response = new Response($errors);
         $response->headers->set('Content-Type', 'application/json');
-        $response->setStatusCode('403');
+        $response->setStatusCode('400');
         return $response;
 
     }
@@ -251,7 +265,19 @@ class PassengerController extends Controller
             ),
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Submit Sign-up Request'));
+        $form_label = 'Submit Sign-up Request';
+        // Figure out if an organizer
+        $securityContext = $this->container->get('security.authorization_checker');
+        if ($securityContext->isGranted('ROLE_CUSTOMER')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permissions = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $user);
+
+            if(in_array('organizer', $permissions)) {
+                $form_label = 'Add Passenger';
+            }
+        }
+
+        $form->add('submit', 'submit', array('label' => $form_label));
 
         return $form;
     }
@@ -269,12 +295,22 @@ class PassengerController extends Controller
         $em = $this->getDoctrine()->getManager();
         $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
 
+        $is_org = false;
+        $securityContext = $this->container->get('security.authorization_checker');
+        if ($securityContext->isGranted('ROLE_CUSTOMER')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permissions = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $user);
+            $is_org = in_array('organizer', $permissions);
+        }
+        
+
         return $this->render('PassengerBundle:Passenger:new.html.twig', array(
             'entity' => $entity,
             'locale' => $locale,
             'date_format' => $date_format,
             'tour' => $tour,
             'tourId' => $tourId,
+            'user_is_org' => $is_org,
             'form' => $form->createView(),
         ));
     }
@@ -293,6 +329,27 @@ class PassengerController extends Controller
             throw $this->createNotFoundException('Unable to find Passenger entity.');
         }
 
+        // Check context permissions.
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $tour_permission = $this->get("permission.set_permission")->getPermission($entity->getTourReference()->getId(), 'tour', $user->getId());
+            $passenger_permission = $this->get("permission.set_permission")->getPermission($id, 'passenger', $user->getId());
+            $permission_pass = FALSE;
+
+            if ($passenger_permission != NULL && in_array('parent', $passenger_permission)) {
+                $permission_pass = TRUE;
+            }
+
+            if ($tour_permission != NULL && (in_array('organizer', $tour_permission) || in_array('assistant', $tour_permission))) {
+                $permission_pass = TRUE;
+            }
+
+            if (!$permission_pass) {
+                throw $this->createAccessDeniedException();
+            }
+        }
+
         //Get the parent object of each passenger
         $parentId = $this->get("permission.set_permission")->getUser('parent', $id, 'passenger');
         $parent = $em->getRepository('TUIToolkitUserBundle:User')->find($parentId[1]);
@@ -307,28 +364,6 @@ class PassengerController extends Controller
                 $isOrganizer = $this->get('translator')->trans('passenger.labels.primary-organizer');
             }
 
-
-        // check permissions for who can see passenger
-        $currUser = $this->get('security.context')->getToken()->getUser();
-        $currRole =  $this->get("permission.set_permission")->getPermission($entity->getTourReference()->getId(), 'tour', $currUser);
-        if ($currRole == null) {
-            $tourid = $entity->getTourReference();
-            $currRole =  $this->get("permission.set_permission")->getPermission($entity->getTourReference()->getId(), 'passenger', $currUser);
-        }
-
-        // is brand or admin
-        if(!$this->get('security.context')->isGranted('ROLE_BRAND')){
-            // is organizer or assistant of tour
-            if($currRole != null && !in_array('assistant', $currRole) && !in_array('organizer', $currRole)) {
-                // is parent of this passenger
-                if(!$parentId[1] == $currUser->getId()) {
-                    throw $this->createAccessDeniedException('You are not authorized to manage this passenger!');
-                }
-            } elseif ($currRole == null){
-                throw $this->createAccessDeniedException('You are not authorized to manage this passenger!');
-
-            }
-        }
 
         //Get Number of possible tasks on the tour
         $possibleTasksCount = $this->get("passenger.actions")->getPossibleTourTasks($entity->getTourReference()->getId());
@@ -373,11 +408,31 @@ class PassengerController extends Controller
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-
         $entity = $em->getRepository('PassengerBundle:Passenger')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Passenger entity.');
+        }
+
+        // Check context permissions.
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $tour_permission = $this->get("permission.set_permission")->getPermission($entity->getTourReference()->getId(), 'tour', $user->getId());
+            $passenger_permission = $this->get("permission.set_permission")->getPermission($id, 'passenger', $user->getId());
+            $permission_pass = FALSE;
+
+            if ($passenger_permission != NULL && in_array('parent', $passenger_permission)) {
+                $permission_pass = TRUE;
+            }
+
+            if ($tour_permission != NULL && (in_array('organizer', $tour_permission) || in_array('assistant', $tour_permission))) {
+                $permission_pass = TRUE;
+            }
+
+            if (!$permission_pass) {
+                throw $this->createAccessDeniedException();
+            }
         }
 
         $editForm = $this->createEditForm($entity);
@@ -429,6 +484,27 @@ class PassengerController extends Controller
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Passenger entity.');
+        }
+
+        // Check context permissions.
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $tour_permission = $this->get("permission.set_permission")->getPermission($entity->getTourReference()->getId(), 'tour', $user->getId());
+            $passenger_permission = $this->get("permission.set_permission")->getPermission($id, 'passenger', $user->getId());
+            $permission_pass = FALSE;
+
+            if ($passenger_permission != NULL && in_array('parent', $passenger_permission)) {
+                $permission_pass = TRUE;
+            }
+
+            if ($tour_permission != NULL && (in_array('organizer', $tour_permission) || in_array('assistant', $tour_permission))) {
+                $permission_pass = TRUE;
+            }
+
+            if (!$permission_pass) {
+                throw $this->createAccessDeniedException();
+            }
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -485,8 +561,7 @@ class PassengerController extends Controller
 
         $response = new Response($errors);
         $response->headers->set('Content-Type', 'application/json');
-        $response->setStatusCode('403
-        ');
+        $response->setStatusCode('400');
         return $response;
 
     }
@@ -543,14 +618,17 @@ class PassengerController extends Controller
 
     public function getPassengerDashboardAction($tourId)
     {
-        //check permissions first
-        $currUser = $this->get('security.context')->getToken()->getUser();
-        $currRole =  $this->get("permission.set_permission")->getPermission($tourId, 'tour', $currUser);
+        // Check context permissions.
+        $securityContext = $this->container->get('security.authorization_checker');
+        $tour_organizer = false;
 
-        if(!$this->get('security.context')->isGranted('ROLE_BRAND')){
-            if(!in_array('assistant', $currRole) && !in_array('organizer', $currRole)) {
-                throw $this->createAccessDeniedException('You are not authorized to manage passengers for this tour!');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permission = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $user->getId());
+            if ($permission == NULL || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+                throw $this->createAccessDeniedException();
             }
+            $tour_organizer = in_array('organizer', $permission);
         }
 
         $em = $this->getDoctrine()->getManager();
@@ -593,6 +671,7 @@ class PassengerController extends Controller
         return $this->render('PassengerBundle:Passenger:dashboard.html.twig', array(
             'entity' => $tour, // just to re-use the tour menu which relies on a variable called entity
             'tour' => $tour,
+            'user_is_organzier' => $tour_organizer,
             'statusCounts' => $participantCounts,
             'brand' => $brand,
             'passengers' => $passengers,
@@ -778,6 +857,15 @@ class PassengerController extends Controller
 
     public function moveToAcceptedAction(Request $request, $tourId, $passengerId)
     {
+        // Check context permissions.
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permission = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $user->getId());
+            if ($permission == null || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+                throw $this->createAccessDeniedException();
+            }
+        }
 
         $em = $this->getDoctrine()->getManager();
         $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
@@ -828,6 +916,15 @@ class PassengerController extends Controller
 
     public function moveToWaitlistAction(Request $request, $tourId, $passengerId)
     {
+        // Check context permissions.
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permission = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $user->getId());
+            if ($permission == null || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+                throw $this->createAccessDeniedException();
+            }
+        }
 
         $em = $this->getDoctrine()->getManager();
         $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
@@ -879,6 +976,15 @@ class PassengerController extends Controller
 
     public function moveToFreeAction(Request $request, $tourId, $passengerId)
     {
+        // Check context permissions.
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permission = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $user->getId());
+            if ($permission == null || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+                throw $this->createAccessDeniedException();
+            }
+        }
 
         $em = $this->getDoctrine()->getManager();
         $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
@@ -936,6 +1042,16 @@ class PassengerController extends Controller
      */
     public function inviteOrganizerAction(Request $request, $tourId)
     {
+        // Check context permissions.
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permission = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $user->getId());
+            if ($permission == NULL || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+                throw $this->createAccessDeniedException();
+            }
+        }
+
         $form  = $this->createInviteForm($tourId);
 
         return $this->render('PassengerBundle:Passenger:inviteOrganizer.html.twig', array(
@@ -1007,6 +1123,16 @@ class PassengerController extends Controller
      */
     public function inviteOrganizerSubmitAction(Request $request, $tourId)
     {
+        // Check context permissions.
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permission = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $user->getId());
+            if ($permission == NULL || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+                throw $this->createAccessDeniedException();
+            }
+        }
+
         $em = $this->getDoctrine()->getManager();
 
         //get locale and date format for emails sent
@@ -1040,14 +1166,14 @@ class PassengerController extends Controller
         if($form->isValid()) {
 
             $data = $form->getData();
-
+            $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
+            $subject = $this->get('translator')->trans('passenger.emails.invite-organizer.new-user-subject') . ' ' . $tour->getName();
             // check for existing user acct first
             $exists = $em->getRepository('TUIToolkitUserBundle:User')->findBy(array('email' => $data['email']));
             if(!empty($exists)){
                 $user = array_shift($exists);
 
                 // if an assistant we need to create a new passenger record if they are already registered
-                $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
                 $newPassenger = new Passenger();
                 $newPassenger->setStatus("waitlist");
                 $newPassenger->setFree(false);
@@ -1084,7 +1210,7 @@ class PassengerController extends Controller
                 //send another email to the organizer just to confirm because they have already registered.
 
                 $message = \Swift_Message::newInstance()
-                    ->setSubject($this->get('translator')->trans('passenger.emails.notifications'))
+                    ->setSubject($subject)
                     ->setFrom($this->container->getParameter('user_system_email'))
                     ->setTo($user->getEmail())
                     ->setBody(
@@ -1134,8 +1260,7 @@ class PassengerController extends Controller
                 $newEmail = $user->getEmail();
 
                 $message = \Swift_Message::newInstance()
-                    ->setSubject($this->get('translator')
-                        ->trans('passenger.emails.invite-organizer.new-user-subject'))
+                    ->setSubject($subject)
                     ->setFrom($this->container->getParameter('user_system_email'))
                     ->setTo($newEmail)
                     ->setBody(
@@ -1202,7 +1327,7 @@ class PassengerController extends Controller
 
         $response = new Response($errors);
         $response->headers->set('Content-Type', 'application/json');
-        $response->setStatusCode('403');
+        $response->setStatusCode('400');
         return $response;
     }
 
@@ -1219,21 +1344,20 @@ class PassengerController extends Controller
  */
     public function parentRegisterConfirmationTriggerAction($id, $tourId)
     {
+        // Check context permissions.
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permission = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $user->getId());
+            if ($permission == null || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+                throw $this->createAccessDeniedException();
+            }
+        }
 
         $mailer = $this->container->get('mailer');
 
         $em = $this->getDoctrine()->getManager();
         $user = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
-
-        //check permissions first
-        $currUser = $this->get('security.context')->getToken()->getUser();
-        $currRole =  $this->get("permission.set_permission")->getPermission($tourId, 'tour', $currUser);
-
-        if(!$this->get('security.context')->isGranted('ROLE_BRAND')){
-            if(!in_array('assistant', $currRole) && !in_array('organizer', $currRole)) {
-                throw $this->createAccessDeniedException('You are not authorized to manage passengers for this tour!');
-            }
-        }
 
         // Create token
         $tokenGenerator = $this->container->get('fos_user.util.token_generator');
@@ -1253,14 +1377,16 @@ class PassengerController extends Controller
         if(!$brand) {
             $brand = $default_brand;
         }
+        $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
+        $subject = $tour->getName() . ', ' . $tour->getInstitution() . ' - ' . $this->get('translator')->trans('tour.email.registration.parent_subject');
 
         $message = \Swift_Message::newInstance()
-            ->setSubject($this->get('translator')->trans('user.email.registration.subject'))
+            ->setSubject($subject)
             ->setFrom($this->container->getParameter('user_system_email'))
             ->setTo($userEmail)
             ->setBody(
                 $this->renderView(
-                    'TUIToolkitUserBundle:Registration:register_email.html.twig',
+                    'PassengerBundle:Emails:inviteParentRegistrationEmail.html.twig',
                     array(
                         'brand' => $brand,
                         'user' => $user,
@@ -1274,13 +1400,21 @@ class PassengerController extends Controller
 
         $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('user.flash.registration_notification') . ' ' .$user->getEmail());
 
-//        return $this->redirect($this->generateUrl('user'));
         return $this->redirect($_SERVER['HTTP_REFERER']);
 
     }
 
     public function getActivateAllUsersAction($tourId)
     {
+        // Check context permissions.
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $permission = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $user->getId());
+            if ($permission == NULL || (!in_array('organizer', $permission) && !in_array('assistant', $permission))) {
+                throw $this->createAccessDeniedException();
+            }
+        }
 
         $em = $this->getDoctrine()->getManager();
         $mailer = $this->container->get('mailer');

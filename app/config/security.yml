@@ -34,26 +34,68 @@ security:
             security: true
 
     access_control:
+            - { path: ^/_ckeditor/upload, role: ROLE_CUSTOMER }
+            - { path: ^/_uploader, role: ROLE_CUSTOMER }
             - { path: ^/admin/, role: ROLE_ADMIN }
+            - { path: ^/ajax/institution, role: ROLE_BRAND }
+            - { path: ^/ajax/organizer, role: ROLE_BRAND }
+            - { path: ^/ajax, role: ROLE_CUSTOMER }
+            - { path: ^/brand_payment/.+/edit$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/brand_payment/.+/show$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/brand_payment, role: ROLE_BRAND }
+            - { path: ^/efconnect, role: ROLE_CUSTOMER }
+            - { path: ^/elfinder, role: ROLE_CUSTOMER }
+            - { path: ^/genemu_change_image, role: ROLE_SUPER_ADMIN }
+            - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+            - { path: ^/manage/contentblocks/$, role: ROLE_SUPER_ADMIN }
             - { path: ^/manage/contentblocks/, role: ROLE_CUSTOMER }
             - { path: ^/manage/headerblock/, role: ROLE_CUSTOMER }
             - { path: ^/manage/, role: ROLE_BRAND }
+            - { path: ^/passenger/$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/passenger/.+/delete$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/passenger/dietary/$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/passenger/dietary/.+/delete$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/passenger/dietary/new$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/passenger/emergency/$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/passenger/emergency/.+/delete$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/passenger/emergency/new$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/passenger/medical/$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/passenger/medical/.+/delete$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/passenger/medical/new$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/passenger/passport/$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/passenger/passport/.+/delete$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/passenger/passport/new$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/passenger/new/.+$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+            - { path: ^/passenger/create/.+$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+            - { path: ^/passenger/, role: ROLE_CUSTOMER }
+            - { path: ^/payment/$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/payment/.+/delete$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/payment/.+/edit$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/payment/.+/show$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/payment/, role: ROLE_CUSTOMER }
+            - { path: ^/paymenttask/, role: ROLE_SUPER_ADMIN }
+            - { path: ^/paymenttaskoverride/$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/paymenttaskoverride/.+/delete$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/paymenttaskoverride/create$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/paymenttaskoverride/new$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/paymenttaskoverride/, role: ROLE_CUSTOMER }
+            - { path: ^/permission, role: ROLE_SUPER_ADMIN }
+            - { path: ^/profile/, role: ROLE_CUSTOMER }
+            - { path: ^/tour/dashboard, role: ROLE_CUSTOMER }
+            - { path: ^/quote/view/summary/edit/.+$, role: ROLE_BRAND }
+            - { path: ^/quote/view/summary/update/.+$, role: ROLE_BRAND }
+            - { path: ^/register/$, role: ROLE_SUPER_ADMIN }
+            - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
+            - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+            - { path: ^/tour/view/summary/edit/.+$, role: ROLE_CUSTOMER }
+            - { path: ^/tour/view/summary/update/.+$, role: ROLE_CUSTOMER }
+            - { path: ^/tour/view/update/name/.+$, role: ROLE_CUSTOMER }
             - { path: ^/user/password-set/, role: ROLE_CUSTOMER }
             - { path: ^/user/password/reset, role: IS_AUTHENTICATED_ANONYMOUSLY }
             - { path: ^/user/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
             - { path: ^/user/add/, role: ROLE_CUSTOMER }
-            - { path: ^/user/[0-9]+/edit$, role: ROLE_CUSTOMER }
-            - { path: ^/user/[0-9]+/security, role: ROLE_CUSTOMER }
-            - { path: ^/user/[0-9]+/update$, role: ROLE_CUSTOMER }
+            - { path: ^/user/.+/edit$, role: ROLE_CUSTOMER }
+            - { path: ^/user/.+/security, role: ROLE_CUSTOMER }
+            - { path: ^/user/.+/update$, role: ROLE_CUSTOMER }
             - { path: ^/user/new, role: ROLE_BRAND }
             - { path: ^/user/, role: ROLE_BRAND }
-            - { path: ^/profile/, role: ROLE_CUSTOMER }
-            - { path: ^/tour/dashboard, role: ROLE_CUSTOMER }
-            - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-            - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
-            - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
-            - { path: ^/efconnect, role: ROLE_USER }
-            - { path: ^/elfinder, role: ROLE_USER }
-            - { path: ^/brand_payment, role: ROLE_BRAND }
-
-

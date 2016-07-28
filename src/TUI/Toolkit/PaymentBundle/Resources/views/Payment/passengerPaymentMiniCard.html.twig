@@ -35,7 +35,7 @@
         </div>
 
         {# only if an organizer or brand #}
-        {% if  is_granted("ROLE_BRAND") or "tour" | getRoles(tourId) == "organizer" or "tour" | getRoles(tourId) == "assistant"%}
+        {% if "tour" | checkUserPermissions(tourId, ["organizer", "assistant"], "ROLE_BRAND") %}
             <button style="position: absolute; right: 20px; color:grey; margin-top:10px;" id="payment-actions-menu-drop-{{ passenger.id }}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon title-button">
                 <i class="material-icons">more_vert</i>
             </button>

@@ -42,11 +42,15 @@
            <ul>
                <li>
                    <div class="profile-list-item item-1">
-                        {% if (tour.organizer.id == app.user.id) or (tour.salesAgent.id == app.user.id) %}
-                            {% if tour.currency %}{{ tour.currency.htmlSymbol | raw}}{% endif %}{% if tour.pricePerson %}{{ tour.pricePerson }}{% else %}{% trans %}user.profile.my_quotes.no_price{% endtrans %}{% endif %}<br /><label>{% trans %}user.profile.my_quotes.price{% endtrans %}</label>
-                        {% else %} {# show the Public price for passenger/parents#}
-                       {% if tour.currency %}{{ tour.currency.htmlSymbol | raw}}{% endif %}{% if tour.pricePersonPublic %}{{ tour.pricePersonPublic }}{% else %}{% trans %}user.profile.my_quotes.no_price{% endtrans %}{% endif %}<br /><label>{% trans %}user.profile.my_quotes.price{% endtrans %}</label>
+                        {% if tour.currency %}
+                            {{ tour.currency.htmlSymbol | raw}}
                         {% endif %}
+                        {% if tour|price %}
+                            {{ tour|price }}
+                        {% else %}
+                            {% trans %}user.profile.my_quotes.no_price{% endtrans %}
+                        {% endif %}<br />
+                        <label>{% trans %}user.profile.my_quotes.price{% endtrans %}</label>
                    </div>
                </li>
                <li>
@@ -61,11 +65,22 @@
                        {% if tour.organizer.id == app.user.id %}
                             {% if tour.salesAgent.media %}
                                 <span class="tui-image-avatar" style="float: left; margin-right: 5px;">
-                                    <img src="{{ ( tour.salesAgent.media.getRelativePath ~ "/" ~ tour.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ tour.salesAgent.username }}"></span>
+                                    <a href="mailto:{{ tour.salesAgent.email }}">
+                                        <img src="{{ ( tour.salesAgent.media.getRelativePath ~ "/" ~ tour.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ tour.salesAgent.username }}">
+                                    </a>
+                                </span>
                             {% elseif tour.salesAgent.firstName and tour.salesAgent.lastName %}
-                                <span class="tui-text-avatar mdl-typography--headline">{{ tour.salesAgent.firstName[:1] }}{{ tour.salesAgent.lastName[:1] }}</span>
+                                <span class="tui-text-avatar mdl-typography--headline">
+                                    <a href="mailto:{{ tour.salesAgent.email }}">
+                                        {{ tour.salesAgent.firstName[:1] }}{{ tour.salesAgent.lastName[:1] }}
+                                    </a>
+                                </span>
                             {% else %}
-                                <span class="tui-text-avatar mdl-typography--headline">{{ tour.salesAgent.username[:1] }}</span>
+                                <span class="tui-text-avatar mdl-typography--headline">
+                                    <a href="mailto:{{ tour.salesAgent.email }}">
+                                        {{ tour.salesAgent.username[:1] }}
+                                    </a>
+                                </span>
 
                             {% endif %}
                         {{ tour.salesAgent.firstName }} {{ tour.salesAgent.lastName }} <br /> <a style="text-decoration: none;" href="mailto:{{ tour.salesAgent.email }}">{{ tour.salesAgent.email }}</a><br />
@@ -78,9 +93,17 @@
                                 <span class="tui-image-avatar" style="float: left; margin-right: 5px;">
                                     <img src="{{ ( tour.organizer.media.getRelativePath ~ "/" ~ tour.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ tour.organizer.username }}"></span>
                             {% elseif tour.organizer.firstName and tour.organizer.lastName %}
-                                <span class="tui-text-avatar mdl-typography--headline">{{ tour.organizer.firstName[:1] }}{{ tour.organizer.lastName[:1] }}</span>
+                                <span class="tui-text-avatar mdl-typography--headline">
+                                    <a href="mailto:{{ tour.organizer.email }}">
+                                        {{ tour.organizer.firstName[:1] }}{{ tour.organizer.lastName[:1] }}
+                                    </a>
+                                </span>
                             {% else %}
-                                <span class="tui-text-avatar mdl-typography--headline">{{ tour.organizer.username[:1] }}</span>
+                                <span class="tui-text-avatar mdl-typography--headline">
+                                    <a href="mailto:{{ tour.organizer.email }}">
+                                        {{ tour.organizer.username[:1] }}
+                                    </a>
+                                </span>
 
                             {% endif %}
                              {{ tour.organizer.firstName }} {{ tour.organizer.lastName }}  <br /> <a style="text-decoration: none;" href="mailto:{{ tour.organizer.email }}">{{ tour.organizer.email }}</a><br />

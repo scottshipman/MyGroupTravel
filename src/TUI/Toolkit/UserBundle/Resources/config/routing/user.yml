@@ -58,10 +58,6 @@ user_restore:
     defaults: { _controller: "TUIToolkitUserBundle:User:restore" }
     methods:  [POST, PUT, GET]
 
-parent_add_child:
-  path: /add/child
-  defaults: { _controller: "TUIToolkitUserBundle:User:create" }
-
 user_registration_confirmation:
   path: /{id}/register-confirm-notification
   defaults: {_controller: "TUIToolkitUserBundle:User:registerConfirmationTrigger" }

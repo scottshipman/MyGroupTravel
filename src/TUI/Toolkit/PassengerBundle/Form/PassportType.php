@@ -70,6 +70,9 @@ class PassportType extends AbstractType
             ))
             ->add('passportIssuingState', 'text', array(
                 'required' => true,
+                'attr' => array(
+                    'maxlength' => '3',
+                ),
                 'label' => 'passenger.labels.passport_state_issue',
             ))
             ->add('passportNumber', 'text', array(
@@ -96,7 +99,7 @@ class PassportType extends AbstractType
                     'class' => 'dateOfIssue',
                 ),
                 'invalid_message' => 'Please enter a valid date',
-                'years' => range(date('Y') - 60, date('Y') - 1),
+                'years' => range(date('Y') - 10, date('Y')),
             ))
             ->add('passportDateOfExpiry', 'birthday', array(
                 'format' => $date_format,
@@ -105,7 +108,7 @@ class PassportType extends AbstractType
                     'class' => 'dateOfExpiry',
                 ),
                 'invalid_message' => 'Please enter a valid date',
-                'years' => range(date('Y'), date('Y') + 20),
+                'years' => range(date('Y'), date('Y') + 11),
             ))
             ->add('passengerReference', 'hidden', array(
                 'required' => true,

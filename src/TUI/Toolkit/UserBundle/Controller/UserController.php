@@ -323,7 +323,7 @@ class UserController extends Controller
 
         if ($existingUser != null) {
             if ($existingUser->getDeleted() != null) {
-                $form->addError(new FormError($this->get('translator')->trans('user.form.error.deleted')));
+                $form['email']->addError(new FormError($this->get('translator')->trans('user.form.error.deleted')));
 
             } else {
                 return new Response($existingUser);
@@ -366,27 +366,10 @@ class UserController extends Controller
     {
         $locale = $this->container->getParameter('locale');
         $form = $this->createForm(new UserType($locale), $entity, array(
+            'user' => $this->getUser(),
             'action' => $this->generateUrl('user_create'),
             'method' => 'POST',
         ));
-
-        // get current user's roles and add form elements
-
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
-            $form->add('enabled', 'checkbox', array(
-                'required' => false,
-            ))
-                ->add('roles', 'choice', array(
-                    'choices' => array('ROLE_CUSTOMER' => 'CUSTOMER', 'ROLE_BRAND' => 'BRAND', 'ROLE_ADMIN' => 'ADMIN',),
-                    'multiple' => true,
-                    'expanded' => TRUE,
-                ));
-        }
-
-        if ($this->get('security.context')->isGranted('ROLE_BRAND')) {
-            //what does Brand add?
-        }
-
 
         $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('user.actions.create')));
 
@@ -540,44 +523,10 @@ class UserController extends Controller
     {
         $locale = $this->container->getParameter('locale');
         $form = $this->createForm(new UserType($locale), $entity, array(
+            'user' => $this->getUser(),
             'action' => $this->generateUrl('user_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
-
-        // get current user's roles and add form elements
-
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
-            $form->add('enabled', 'checkbox', array(
-                'required' => FALSE,
-            ))
-                ->add('roles', 'choice', array(
-                    'choices' => array(
-                      //  'ROLE_USER' => 'User',
-                        'ROLE_CUSTOMER' => 'CUSTOMER',
-                        'ROLE_BRAND' => 'BRAND',
-                        'ROLE_ADMIN' => 'ADMIN',
-                    ),
-                    'multiple' => TRUE,
-                    'expanded' => TRUE,
-                ));
-        }
-
-        if ($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
-            $form->add('enabled', 'checkbox', array(
-                'required' => FALSE,
-            ))
-                ->add('roles', 'choice', array(
-                    'choices' => array(
-                     //   'ROLE_USER' => 'User',
-                        'ROLE_CUSTOMER' => 'CUSTOMER',
-                        'ROLE_BRAND' => 'BRAND',
-                        'ROLE_ADMIN' => 'ADMIN',
-                        'ROLE_SUPER_ADMIN' => 'SUPER_ADMIN',
-                    ),
-                    'multiple' => TRUE,
-                    'expanded' => TRUE,
-                ));
-        }
 
         $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('user.actions.update')));
 
@@ -1668,6 +1617,26 @@ class UserController extends Controller
     }
 
     public function getTourPassengersAction($tourId, $parentId){
+        // Check context permissions.
+        $securityContext = $this->container->get('security.authorization_checker');
+        if (!$securityContext->isGranted('ROLE_BRAND')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $tour_permission = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $user->getId());
+            $permission_pass = FALSE;
+
+            if ($user->getId() == $parentId) {
+                $permission_pass = TRUE;
+            }
+
+            if ($tour_permission != NULL && (in_array('organizer', $tour_permission) || in_array('assistant', $tour_permission))) {
+                $permission_pass = TRUE;
+            }
+
+            if (!$permission_pass) {
+                throw $this->createAccessDeniedException();
+            }
+        }
+
         $locale = $this->container->getParameter('locale');
         $em = $this->getDoctrine()->getManager();
         $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
@@ -1685,7 +1654,7 @@ class UserController extends Controller
         foreach ($passengers as $passenger) {
             $paxPrice = 0; $paxCredit = 0; $paxOverdue = 0;
             $object = $em->getRepository('PassengerBundle:Passenger')->find($passenger->getObject());
-            if ($object->getTourReference()->getId() == $tourId) {
+            if (!empty($object) && $object->getTourReference()->getId() == $tourId) {
                 $cashBalance = $this->get('payment.GetPayments')->getPassengersPaymentsPaid($object->getId());
                 // add payment details to object also
                 $payments = $this->get('payment.getPayments')->getPassengersPaymentTasks($object->getId());

@@ -2,7 +2,7 @@
 <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="payment-actions-menu-drop-{{ passenger.id }}">
     <span>
         {% if showViewLink is defined and showViewLink is sameas(TRUE) %}
-            <li><a href="{{ path('manage_passenger_show', { 'id': passenger.id }) }}" class="mdl-menu__item">{% trans %}passenger.actions.view_passenger{% endtrans %}</a></li>
+            <li><a href="{{ path('manage_passenger_show', { 'id': passenger.id }) }}" class="mdl-menu__item caller-btn" passenger="{{ passenger.id }}">{% trans %}passenger.actions.view_passenger{% endtrans %}</a></li>
         {% endif %}
 
         {% if passenger.free is sameas (false) %}

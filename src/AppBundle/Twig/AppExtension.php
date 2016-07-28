@@ -20,8 +20,9 @@ class AppExtension extends \Twig_Extension {
     public function getFilters() {
         return array(
             new \Twig_SimpleFilter('paxLabel', array($this, 'paxLabel')),
-            new \Twig_SimpleFilter('getRoles', array($this, 'getRoles')),
+            new \Twig_SimpleFilter('checkUserPermissions', array($this, 'checkUserPermissions')),
             new \Twig_SimpleFilter('getClass', array($this, 'getClass')),
+            new \Twig_SimpleFilter('price', array($this, 'getPrice')),
         );
     }
 
@@ -36,16 +37,20 @@ class AppExtension extends \Twig_Extension {
         }
     }
 
-    /*
-     * TWIG usage Ex: {% set role = 'tour' | getRoles(tour.id) %}
-     *            Ex2: {% if 'passenger' | getRoles(passenger.id)=='parent' %}
+    /**
+     * Check user permissions.
+     *
+     * TWIG usage Ex: {% set role = 'tour' | checkUserPermissions(tour.id, ["parent", "organizer", "assistant"], "ROLE_BRAND") %}
+     *            Ex2: {% if 'passenger' | checkUserPermissions(passenger.id, ["parent", "organizer", "assistant"], "ROLE_BRAND") %}
+     *
+     * @param $class
+     * @param $object
+     * @param $grants
+     * @param $role_override
+     * @return mixed
      */
-    public function getRoles($class, $objectId) {
-        $user = $this->container->get('security.context')->getToken()->getUser();
-
-        $roles = $this->container->get("permission.set_permission")->getPermission($objectId, $class, $user);
-        if ($roles == NULL) { $roles = array();}
-        return array_shift($roles);
+    public function checkUserPermissions($class, $object = NULL, $grants = NULL, $role_override = NULL) {
+        return $this->container->get("permission.set_permission")->checkUserPermissions(FALSE, $class, $object, $grants, $role_override);
     }
 
     public function getName()
@@ -56,5 +61,34 @@ class AppExtension extends \Twig_Extension {
     public function getClass($object)
     {
         return (new \ReflectionClass($object))->getShortName();
+    }
+
+    /**
+     * Get tour price.
+     *
+     * TWIG usage Ex: {{ entity|price }}
+     * TWIG usage Ex: {{ tour|price }}
+     *
+     * @param $entity
+     * @return $price_value
+     */
+    public function getPrice($entity) {
+        $entity_type = $this->getClass($entity);
+        $entity_pricePerson = $entity->getPricePerson();
+
+        if ($entity_type == 'Tour') {
+
+            $tour_pricePersonPublic = $entity->getPricePersonPublic();
+
+            if (empty($tour_pricePersonPublic)) {
+                return $entity_pricePerson;
+            }
+            else {
+                return $tour_pricePersonPublic;
+            }
+        }
+        elseif ($entity_type == 'QuoteVersion') {
+            return $entity_pricePerson;
+        }
     }
 }

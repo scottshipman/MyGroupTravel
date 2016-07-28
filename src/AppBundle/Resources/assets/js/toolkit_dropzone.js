@@ -15,7 +15,7 @@ Dropzone.autoDiscover = false;
 (function ($) {
   // Define a jquery function for dropzone.
   // This allows us to override default options.
-  $.fn.toolkitDropzone = function(media_field_id, options, existing_media, disabled_events, aspect_ratio) {
+  $.fn.toolkitDropzone = function(media_field_id, options, existing_media, disabled_events, context) {
     var dropzone_form = $(this);
     var dropzone_form_id = $(this).attr('id');
     var dropzone_form_close = $('.dropzone-form-close.' + dropzone_form_id);
@@ -24,23 +24,45 @@ Dropzone.autoDiscover = false;
     var media_placeholder_image = $('.media-placeholder-image.' + dropzone_form_id);
     var existing_media = existing_media || {};
     var disabled_events = disabled_events || [];
-    var aspect_ratio = aspect_ratio || 16 / 9;
+
+    switch(context) {
+      case 'user':
+        aspect_ratio=1;
+        break;
+      case 'passenger':
+        aspect_ratio=1;
+        break;
+      case 'brand':
+        aspect_ratio=NaN;
+        break;
+      case 'institution':
+        aspect_ratio=NaN;
+        break;
+      default:
+        aspect_ratio= 16/9;
+        break;
+    }
+
+
+
+
     var default_options = {
       maxFiles: 1,
       acceptedMimeTypes: 'image/jpeg,image/png,image/jpg',
       addRemoveLinks: true
     };
 
-    var mediaUpdate = function(new_media) {
-      var media = new_media ? new_media : existing_media;
-
+    var mediaUpdate = function(media, update_field_value) {
       if (media.id && media.path && media.filename) {
         $(media_placeholder_image).find('.edit').show();
         $(media_placeholder_image).find('.new').hide();
         $(media_placeholder_image).css({
           "background-image": "url(" + media.path + "/" + media.filename + ")"
         });
-        $(media_field).val(media.id);
+
+        if (update_field_value) {
+          $(media_field).val(media.id);
+        }
       }
       else {
         $(media_placeholder_image).find('.edit').hide();
@@ -48,12 +70,15 @@ Dropzone.autoDiscover = false;
         $(media_placeholder_image).css({
           "background-image": "none"
         });
-        $(media_field).val('');
+
+        if (update_field_value) {
+          $(media_field).val('');
+        }
       }
     };
 
     // Update media with existing.
-    mediaUpdate();
+    mediaUpdate(existing_media, false);
 
     // Implement dropzone.
     var dropzone = new Dropzone("#" + dropzone_form_id, jQuery.extend(default_options, options));
@@ -66,7 +91,8 @@ Dropzone.autoDiscover = false;
             id: response.id,
             path: response.relativepath,
             filename: response.filename
-          }
+          },
+          true
         );
         $(dropzone_form_errors).css({"display": "none"});
       });
@@ -86,7 +112,7 @@ Dropzone.autoDiscover = false;
         $(dropzone_form_close).css({"display": "block"});
 
         // Revert media to existing.
-        mediaUpdate();
+        mediaUpdate(existing_media, true);
       });
     }
 
@@ -162,7 +188,7 @@ Dropzone.autoDiscover = false;
         $uploadCrop.on('click', function() {
           $("#dialog").dialog("open");
           // get cropped image data
-          var blob = $img.cropper('getCroppedCanvas').toDataURL();
+          var blob = $img.cropper('getCroppedCanvas').toDataURL(mime_type);
           // transform it to Blob object
           var newFile = dataURItoBlob(blob, mime_type);
           // set 'cropped to true' (so that we don't get to that listener again)
@@ -186,8 +212,7 @@ Dropzone.autoDiscover = false;
       $(media_placeholder_image).css({"display": "none"});
       $(dropzone_form).css({"display": "block"});
       $(dropzone_form_close).css({"display": "block"});
-      existing_media = {};
-      mediaUpdate();
+      mediaUpdate({}, false);
     });
 
     $(dropzone_form_close).click(function() {

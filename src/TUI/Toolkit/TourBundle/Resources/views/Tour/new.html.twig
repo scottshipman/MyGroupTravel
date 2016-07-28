@@ -1,31 +1,360 @@
 {% extends '::base.html.twig' %}
-{% block title %{% trans %}tour.title.new{% endtrans %}{% endblock %}
-{% block page_title %}{% trans %}tour.page_title.new{% endtrans %}{% endblock %}
+
+{% if convert_quote %}
+    {% set title_label = 'Convert quote' %}
+{% else %}
+    {% set title_label = 'Create' %}
+{% endif %}
+
+{% block title %}{{ title_label }} {% trans %}tour.title.show{% endtrans %} {{ entity.name }}{% endblock %}
+{% block page_title %}{{ title_label }}
+    {% if entity.isComplete == false and entity.setupComplete == false %}
+        {% trans %}tour.title.show{% endtrans %} {{ entity.name }}
+    {% else %}
+        {% trans %}tour.title.show{% endtrans %} {{ entity.name }}
+    {% endif %}
+{% endblock %}
 
 {% block body -%}
+    {{ form_start(form) }}
+    {# Summary Section #}
+    <div class = "tour-edit mdl-card mdl-shadow--2dp">
+        <div class="mdl-card__supporting-text">
+            <h3 class="mdl-card__title">{% trans %}tour.edit.summary{% endtrans %}</h3>
+            {{ form_row(form.tripStatus) }}
+            {{ form_row(form.name) }}
+            {{ form_row(form.displayName) }}
+            {{ form_row(form.quoteNumber) }}
+            {{ form_row(form.tourReference) }}
+            {{ form_row(form.expiryDate) }}
+            {{ form_row(form.institution) }}
+            {{ form_row(form.organizer) }}
+            {{ form_row(form.salesAgent) }}
+            {{ form_row(form.secondaryContact) }}
+        </div>
+    </div>
+    {# Details Section #}
+    <div class = "tour-edit mdl-card mdl-shadow--2dp">
+        <div class="mdl-card__supporting-text">
+            <h3 class="mdl-card__title">{% trans %}tour.edit.details{% endtrans %}</h3>
+            {{ form_row(form.destination) }}
+            {{ form_row(form.departureDate) }}
+            {{ form_row(form.returnDate) }}
+            {{ form_row(form.duration) }}
+            {{ form_row(form.boardBasis) }}
+            {{ form_row(form.transportType) }}
+            {{ form_row(form.freePlaces) }}
+            {{ form_row(form.payingPlaces) }}
+            {{ form_row(form.currency) }}
+            {{ form_row(form.pricePerson) }}
+            <div class="form-row">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label is-dirty is-upgraded">
+                    <label class="mdl-label-mimic" for="tui_toolkit_tourbundle_tour_total"><span>Total</span></label>
+                    <input class="mdl-textfield__input" readonly="readonly" type="text" id="tui_toolkit_tourbundle_tour_total" name="tui_toolkit_tourbundle_tour_total">
+                </div>
+            </div>
+        </div>
+    </div>
+    {# Payment Tasks #}
+    <div class = "tour-edit mdl-card mdl-shadow--2dp">
+        <div class="mdl-card__supporting-text">
+            <h3 class="mdl-card__title">{% trans %}tour.edit.schedule{% endtrans %}</h3>
+            <div class="paymenttasks" data-prototype="{{ form_widget(form.paymentTasks.vars.prototype)|e }}">
+                {# iterate over each existing paymenttask and render its fields:  #}
+                {% for paymentTask in form.paymentTasks %}
+                    <ul class="payment_task" taskid = "{{ paymentTask.vars.value.id }}">
+                        <li>{{ form_widget(paymentTask.name) }}</li>
+                        <li>{{ form_widget(paymentTask.value) }}</li>
+                        <li>{{ form_widget(paymentTask.dueDate) }}</li>
+                    </ul>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {# Information Tasks #}
+    <div class = "tour-edit mdl-card mdl-shadow--2dp">
+        <div class="mdl-card__supporting-text">
+            <h3 class="mdl-card__title">{% trans %}tour.edit.deadlines{% endtrans %}</h3>
+            {{ form_row(form.passportDate) }}
+            {{ form_row(form.emergencyDate) }}
+            {{ form_row(form.medicalDate) }}
+            {{ form_row(form.dietaryDate) }}
+        </div>
+    </div>
+    {#Promotional Content#}
+    <div class = "tour-edit mdl-card mdl-shadow--2dp">
+        <div class="mdl-card__supporting-text">
+            <h3 class="mdl-card__title">{% trans %}tour.edit.promotional_content{% endtrans %}</h3>
+            <div class="media-wrapper">
+                <div class="existing-media-wrapper">
+                    {% if entity.media %}
+                        {% for media in collection %}
+                            <div class="existing-media-item promo-asset">
+                                {% if media.mimetype == "application/pdf" %}
+                                    <i style="color: red" class="fa fa-file-pdf-o fa-3x"></i>
+                                {% elseif media.mimetype == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" or media.mimetype == "application/vnd.ms-excel" %}
+                                    <i style="color: green" class="fa fa-file-excel-o fa-3x"></i>
+                                {% elseif media.mimetype == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" or media.mimetype == "application/msword" %}
+                                    <i style="color: blue" class="fa fa-file-word-o fa-3x"></i>
+                                {% elseif media.mimetype == "application/vnd.openxmlformats-officedocument.presentationml.presentation" or media.mimetype == "application/vnd.ms-powerpoint" %}
+                                    <i style="color: orange" class="fa fa-file-powerpoint-o fa-3x"></i>
+                                {% endif %}
+                                <a id="{{ media.id }}" href="{{ asset(".." ~ media.getRelativePath ~ "/" ~ media.getHashedFilename ) }}">{{ media.filename }}</a>
+                                <a class="existing-delete" style= "top: 5px; right: -10px;" href="#"><i class="fa fa-trash-o fa-2x"></i></a>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="none">{% trans %}tour.edit.no_assets{% endtrans %}</p>
+                    {% endif %}
+                </div>
+            </div>
+            <a id="promo-assets-upload" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+                <i class="fa fa-cloud-upload"></i> {% trans %}tour.edit.promo_assets{% endtrans %}
+            </a>
 
-    {{  form(form) }}
-
-
-    <ul class="record_actions">
+            <a id="promo-assets-closed" style="display: none;" class="accepted-quote mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="">
+                <i class="fa fa-cloud-upload"></i> {% trans %}tour.edit.cannot_upload{% endtrans %}
+            </a>
+        </div>
+    </div>
+    {{ form_rest(form) }}
+    {{ form_end(form) }}
+    <div id="dropzone-dialog" style="display: none;">
+        {{ render(controller('MediaBundle:Media:createDropzoneForm', {'context':'tourassets', 'media_field_id':'tui_toolkit_tourbundle_tour_media', 'media_placeholder_image':FALSE, 'close_button':FALSE, 'auto_implementation':FALSE})) }}
+    </div>
+    {{ form_javascript(form) }}
+    <ul class="mdl-card__actions record_actions">
         <li>
-            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
-               href="{{ path('manage_tour') }}">
-                <i class="fa fa-arrow-circle-left"></i>{% trans %}tour.actions.back{% endtrans %}
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="{{ path('manage_tour') }}">
+                <i class="fa fa-arrow-circle-left"></i> {% trans %}tour.actions.back_to_tours{% endtrans %}
             </a>
         </li>
     </ul>
-    {{ form_javascript(form) }}
+
     <script>
+
+        var $collectionHolder;
+
+        // setup an "add a tag" link
+        var $addPaymentTaskLink = $('<a href="#" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add_tag_link" title="{% trans %}tour.form.tour.add_payment{% endtrans %}"><i class="fa fa-plus"></i>{% trans %}tour.form.tour.add_payment{% endtrans %}</a>');
+        var $newLinkDiv = $('<div></div>').append($addPaymentTaskLink);
+
         $( document ).ready(function() {
-           $( ".hasDatepicker" ).datepicker( "option", "dateFormat", "{{ date_format }}" );
+            // set the total value
+            var price = $('#tui_toolkit_tourbundle_tour_pricePerson').val();
+            var paying = $('#tui_toolkit_tourbundle_tour_payingPlaces').val();
+            $('#tui_toolkit_tourbundle_tour_total').val(price * paying);
+
+            $( ".hasDatepicker" ).datepicker( "option", "dateFormat", "{{ date_format }}" );
             $( ".hasDatepicker" ).change(function(){
-                if ($(this).val()){
-                    $(this).parent().addClass('is-dirty');
-                } else if (!$(this).val()) {
-                    $(this).parent().removeClass('is-dirty');
+                $(this).parent().addClass('is-dirty');
+            });
+
+            // update total when price or paying changes
+            $('#tui_toolkit_tourbundle_tour_pricePerson, #tui_toolkit_tourbundle_tour_payingPlaces').change(function(){
+                var price = $('#tui_toolkit_tourbundle_tour_pricePerson').val();
+                var paying = $('#tui_toolkit_tourbundle_tour_payingPlaces').val();
+                $('#tui_toolkit_tourbundle_tour_total').val(price * paying);
+            });
+
+            // Get the div that holds the collection of payments
+            $collectionHolder = $('div.paymenttasks');
+
+            // add a delete link to all of the existing payment form ul elements
+            $collectionHolder.find('ul.payment_task').each(function() {
+                addPaymentTaskFormDeleteLink($(this), 'li');
+            });
+
+
+            // add the "add a Payment" anchor and li to the Payment div
+            $collectionHolder.append($newLinkDiv);
+
+            // count the current form inputs we have (e.g. 2), use that as the new
+            // index when inserting a new item (e.g. 2)
+            $collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+            $addPaymentTaskLink.on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+
+                // add a new tag form (see next code block)
+                addPaymentTaskForm($collectionHolder, $newLinkDiv);
+            });
+
+            $("#dropzone-form-primary").toolkitDropzone(
+                    "tui_toolkit_tourbundle_tour_media",
+                    {
+                        dictDefaultMessage: "{% trans %}media.dropzone.default_message{% endtrans %}",
+                        acceptedMimeTypes: 'application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation, application/pdf',
+                        init: function () {
+                            var value = $(".media-placeholder").val();
+                            var values = [];
+                            if (value != 0) {
+                                values = value.split(',').map(Number);
+                                if (values.length >= 10) {
+                                    $("#promo-assets-upload").css({"display": "none"});
+                                    $("#promo-assets-closed").css({"display": "inline-block"});
+                                }
+                            }
+                            this.on("success", function (file, response) {
+                                if ($(".media-placeholder").val().length > 0) {
+                                    var value = $(".media-placeholder").val();
+                                    var values = [];
+                                    if (value != 0) {
+                                        values = value.split(',').map(Number);
+                                        values.push(response.id);
+                                        if (values.length >= 10) {
+                                            $("#promo-assets-upload").css({"display": "none"});
+                                            $("#promo-assets-closed").css({"display": "inline-block"});
+                                        }
+                                    }
+                                    $(".media-placeholder").val(values);
+                                } else {
+                                    $(".media-placeholder").val(response.id);
+                                }
+                                $('.existing-media-wrapper').find('.none').hide();
+                                var type = response.mime_type;
+                                if (type == 'application/pdf') {
+                                    var iconColor = "red";
+                                    var faIcon = "fa-file-pdf-o";
+                                }
+                                else if (type == 'application/msword' || type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+                                    var iconColor = "blue";
+                                    var faIcon = "fa-file-word-o";
+                                }
+                                else if (type == 'application/vnd.ms-excel' || type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+                                    var iconColor = "green";
+                                    var faIcon = "fa-file-excel-o";
+                                }
+                                else if (type == 'application/vnd.ms-powerpoint' || type == 'application/vnd.openxmlformats-officedocument.presentationml.presentation') {
+                                    var iconColor = "orange";
+                                    var faIcon = "fa-file-powerpoint-o"
+                                }
+                                $('.existing-media-wrapper').append('<div style ="border-radius: 0px;" class="existing-media-item promo-asset">' +
+                                '<i style ="color:' + iconColor + ';' + '" class="fa ' + faIcon + ' fa-3x' + '"></i>' +
+                                '<a id="'+ response.id + '" href="' + response.relativepath + '/' + response.filename + '"></a>' +
+                                '<a class="existing-delete" style= "top: 5px; right: -10px;" href="#"><i class="fa fa-trash-o fa-2x"></i></a></div></br>');
+                                var id = '#' + response.id;
+                                $(id).html(response.original_filename);
+                                this.removeFile(file);
+                                $("#dialog").dialog('close');
+
+                            });
+                        }
+                    },
+                    {},
+                    ['success', 'addedfile', 'removedfile', 'thumbnail']
+            );
+
+            // Set the default date of the return date picker to whatever has been selected as the departure
+            $('#tui_toolkit_tourbundle_tour_departureDate').on('change', function (e) {
+                $('#tui_toolkit_tourbundle_tour_returnDate').datepicker('option', 'defaultDate', $(this).val());
+            });
+
+        });
+        function addPaymentTaskForm($collectionHolder, $newLinkDiv) {
+            // Get the data-prototype explained earlier
+            var prototype = $collectionHolder.data('prototype');
+
+            // get the new index
+            var index = $collectionHolder.data('index');
+
+            // Replace '__name__' in the prototype's HTML to
+            // instead be a number based on how many items we have
+            var newForm = prototype.replace(/__name__/g, index);
+
+            // increase the index with one for the next item
+            $collectionHolder.data('index', index + 1);
+
+            // Display the form in the page in an div, before the "Add a Payment" link div
+            var $newFormDiv = $('<div class="new_payment_task" task="' + index + '"></div>').append(newForm);
+            $newLinkDiv.before($newFormDiv);
+
+            // add a delete link to the new form
+            addPaymentTaskFormDeleteLink($newFormDiv, 'div');
+
+            //trigger date field popup
+            $("input[id*='_dueDate']").each(function() {
+                var $configs = $.extend({
+                    minDate: new Date(2010, 0, 1),
+                    maxDate: new Date(2030, 11, 31)
+                }, $.datepicker.regional['{{ locale }}'] ,{"dateFormat":"{{ date_format }}"});
+                $(this).datepicker($configs);
+            });
+            $( ".hasDatepicker" ).datepicker( "option", "dateFormat", "{{ date_format }}" );
+            $( ".hasDatepicker" ).change(function(){
+                $(this).parent().addClass('is-dirty');
+            });
+            doMDLpopup($newFormDiv);
+        }
+
+        function addPaymentTaskFormDeleteLink($paymentFormDiv, elem) {
+            var $removeFormA;
+            if (elem=='li'){
+                $removeFormA = $('<li><a href="#" title="Delete this Payment"><i class="fa fam-delete"></i></a></li>');
+                $paymentFormDiv.append($removeFormA);
+            } else {
+                $removeFormA = $('<div class="form-row"><a href="#" title="Delete this Payment"><i class="fa fam-delete"></i></a></div>');
+                $paymentFormDiv.children().first().append($removeFormA);
+            }
+
+
+            $removeFormA.on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+                if ($paymentFormDiv.get(0).tagName =='UL') {
+                    if (confirm('Are you sure you want to remove this payment? You must click Update for changes to be saved.')) {
+                        $paymentFormDiv.remove();
+                    }
+                } else {
+                    $paymentFormDiv.children().first().remove();
                 }
             });
+        }
+    </script>
+
+    {% if errors is defined %}
+        <script>
+            $(document).ready( function() {
+                {% for key, error in errors %}
+                console.log('{{ error }}');
+                $('#tui_toolkit_tourbundle_tour_{{ key }}').parent().after('<p class="errors" style="color:red;">{{ error }}</p>');
+                {% endfor %}
+            });
+        </script>
+    {% endif %}
+
+    <script>
+        $(document).on('click', '.existing-delete', function (e) {
+            e.preventDefault();
+            var remove = $(this).parent().find('a').attr('id');
+            var value = $(".media-placeholder").val();
+            var values = [];
+            values = value.split(',').map(Number);
+            values = jQuery.grep(values, function (v) {
+                if (values.length <= 10) {
+                    $("#promo-assets-upload").css({"display": "inline-block"});
+                    $("#promo-assets-closed").css({"display": "none"});
+                }
+                return v != remove;
+            });
+            $(".media-placeholder").val(values);
+            $(this).parent().remove();
         });
+
+        //Add new promo items popup because we can't render a dropzone form within another form
+        $(document).on('click', '#promo-assets-upload', function (e) {
+            e.preventDefault();
+            var div = $("#dropzone-dialog");
+            toolkitStaticPopup("{% trans %}tour.edit.promo_assets{% endtrans %}", "");
+            $("#dialog").append(div);
+            div.show();
+        });
+
+        {% if convert_quote %}
+            $(document).on('click', '#tui_toolkit_tourbundle_tour_submit', function () {
+                return confirm('{% trans %}quote.actions.confirm{% endtrans %}');
+            });
+        {% endif %}
     </script>
 {% endblock %}

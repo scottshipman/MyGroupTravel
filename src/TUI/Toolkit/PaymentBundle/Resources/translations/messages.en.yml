@@ -38,7 +38,7 @@ payment:
         payment_settings: Payment Settings
         balances: Passenger Balances
         Paid: Paid
-        total_paid: Total Paid
+        total_paid: Total Paid to Date
         total_due: Total Due
         past_due: Overdue
         payment_history: Payment History
@@ -59,7 +59,15 @@ payment:
             value: Value must be numeric only
 
         success:
-            message: This payment has been logged.
+            message:
+
+    introduction:
+        title: Set and edit your payment schedule in 'Payment settings' to show how much money you are due to collect.
+        schedule: You can edit the schedule for an individual passenger if required.
+        actions: Use the action menu next to each passenger to log a payment that you have received, and add a minus figure if you have issued a refund.
+
+    settings:
+        delete_payment_type: Are you sure you want to remove this payment? You must click Save for changes to be saved.
 
 brand_payment:
     form:

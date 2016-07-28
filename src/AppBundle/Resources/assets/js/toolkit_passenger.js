@@ -324,7 +324,6 @@ $(document).ready(function () {
         e.preventDefault();
         var passengerId = t.attr('passenger');
         var tourId = t.attr('tour');
-        //$("#loader").css("display", "block");
         toolkitStandardPopup("Log A Payment", '/payment/tour/' + tourId + '/passenger/' + passengerId + '/new' );
     });
 

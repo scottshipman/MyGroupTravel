@@ -50,7 +50,7 @@
             <div class="inner">
                 <div style="position: absolute; display: inline-block; right: 1em;">
                     {% if brand.media %}<img style="padding-right: 15px" src="{{ absolute_url(( brand.media.getRelativePath ~ "/" ~ brand.media.getHashedFilename ) | imagine_filter('publicPdfLogo') ) }}">{% endif %}
-                    {% if entity.institution.media %}<img src="{{ absolute_url(( entity.institution.media.getRelativePath ~ "/" ~ entity.institution.media.getHashedFilename ) | imagine_filter('thumbnail') ) }}">{% endif %}
+                    {% if entity.institution.media %}<img src="{{ absolute_url(( entity.institution.media.getRelativePath ~ "/" ~ entity.institution.media.getHashedFilename ) | imagine_filter('publicPdfLogo') ) }}">{% endif %}
                 </div>
 
                 {% if entity.institution %}
@@ -109,7 +109,7 @@
                         {% if entity.returnDate %}<li class="right"><span class="label">{% trans %}quote_site.quote_summary.returning{% endtrans %}</span> <strong>{{ entity.returnDate|date(format) }}</strong></li>{% endif %}
                         {% if entity.boardBasis %}<li class="right"><span class="label">{% trans %}quote_site.quote_summary.board_basis{% endtrans %}</span> <strong>{{ entity.boardBasis.name }}</strong></li>{% endif %}
                         {% if entity.transportType %}<li class="right"><span class="label">{% trans %}quote_site.quote_summary.transport{% endtrans %}</span> <strong>{{ entity.transportType.name }}</strong></li>{% endif %}
-                        {% if entity.pricePerson %}<li class="right"><span class="label">{% trans %}quote_site.quote_summary.price_person{% endtrans %}</span> <span class="quote-price"><strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{% if entity.pricePersonPublic %}{{ entity.pricePersonPublic }}{% else %}{{ entity.pricePerson }}{% endif %}</strong></span></li>{% endif %}
+                        {% if entity|price %}<li class="right"><span class="label">{% trans %}quote_site.quote_summary.price_person{% endtrans %}</span> <span class="quote-price"><strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity|price }}</strong></span></li>{% endif %}
                         {#{% if (entity.payingPlaces) or (entity.freePlaces) %}<li>#}
                             {#{%  if (entity.payingPlaces) and (entity.freePlaces) %}#}
                                 {#{{ 'quote_site.quote_summary.price_based_on_payingandfree'|trans({'%payingplaces%' : entity.payingPlaces, '%freeplaces%' : entity.freePlaces})|raw }}#}
@@ -153,7 +153,7 @@
                                     <div class="inner-wrapper move-cursor">
                                         {# render the actual content block #}
                                         <div id="previewable-content-blocks-{{ items[item].id }}">
-                                            {{ render(controller('ContentBlocksBundle:ContentBlock:show', {'id':  items[item].id  })) }}
+                                            {{ render(controller('ContentBlocksBundle:ContentBlock:show', {'id':  items[item].id, 'quoteVersion': entity.id, 'class': 'tour', 'skipPermissions': true})) }}
                                         </div>
 
                                     </div>
@@ -173,10 +173,13 @@
     <div class="sizer">
         <div class="mdl-mini-footer__right-section footer-right-section">
             {% block footer_right %}
-                <div class="quote-info"><span class="quote-label">{% trans %}quote.footer.price_person{% endtrans %}</span><span
-                            class="quote-price">{% if entity.pricePerson %}
-
-                <strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{% if entity.pricePersonPublic %}{{ entity.pricePersonPublic }}{% else %}{{ entity.pricePerson }}{% endif %}</strong></span>{% endif %}
+                <div class="quote-info">
+                    <span class="quote-label">{% trans %}quote.footer.price_person{% endtrans %}</span>
+                    <span class="quote-price">
+                        {% if entity|price %}
+                            <strong>{% if entity.currency %}{{ entity.currency.htmlSymbol | raw }}{% endif %}{{ entity|price }}</strong>
+                        {% endif %}
+                    </span>
                 </div>
             {% endblock %}
         </div>
@@ -185,13 +188,21 @@
                 {% if entity.salesAgent %}
                     <span class="intro">{% trans %}quote.footer.salesAgent{% endtrans %}</span>
                     {% if entity.salesAgent.media %}
-                        <span class="tui-image-avatar"><img
+                        <span class="tui-image-avatar"><a href="mailto:{{ entity.salesAgent.email }}"><img
                                     src="{{ ( entity.salesAgent.media.getRelativePath ~ "/" ~ entity.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}"
-                                    alt="{{ entity.salesAgent.username }}"></span>
+                                    alt="{{ entity.salesAgent.username }}"></a></span>
                     {% elseif entity.salesAgent.firstName and entity.salesAgent.lastName %}
-                        <span class="tui-text-avatar mdl-typography--headline">{{ entity.salesAgent.firstName[:1] }}{{ entity.salesAgent.lastName[:1] }}</span>
+                        <span class="tui-text-avatar mdl-typography--headline">
+                            <a href="mailto:{{ entity.salesAgent.email }}">
+                                {{ entity.salesAgent.firstName[:1] }}{{ entity.salesAgent.lastName[:1] }}
+                            </a>
+                        </span>
                     {% else %}
-                        <span class="tui-text-avatar mdl-typography--headline">{{ entity.salesAgent.username[:1] }}</span>
+                        <span class="tui-text-avatar mdl-typography--headline">
+                            <a href="mailto:{{ entity.salesAgent.email }}">
+                                {{ entity.salesAgent.username[:1] }}
+                            </a>
+                        </span>
                     {% endif %}
                     <span class="agent">
             {% if entity.salesAgent.displayName %}
