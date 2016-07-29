@@ -18,7 +18,11 @@
         </div>
         <div class="new">
             <i class="fa fa-picture-o fa-3x"></i>
-            <span>Click to upload</span>
+            <span>
+                {% trans %}media.dropzone.activate_click{% endtrans %}
+                {{ 'media.dropzone.allowed_types'|trans({'%filetypes%' : files_allowed})|raw }}
+                {{ 'media.dropzone.max_filesize'|trans({'%maxfilesize%' : files_maxsize})|raw }}
+            </span>
         </div>
     </div>
 {% endif %}

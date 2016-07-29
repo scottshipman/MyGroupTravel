@@ -133,8 +133,8 @@
 }
 
 #dropzone-dialog {
-  .dropzone-form {
-    display: block;
+  .dropzone-form,
+  .dropzone-form-primary {
     margin: auto;
   }
 

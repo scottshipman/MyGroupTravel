@@ -103,6 +103,9 @@ use TUI\Toolkit\MediaBundle\Form\MediaType;
   {
     $form = $this->createFormBuilder()->getForm();
 
+    $size = ini_get('upload_max_filesize');
+    $max_file_size = (!empty($size) ? $size : 'Unknown');
+
     $form->handleRequest($request);
     return $this->render('MediaBundle:Media:dropzone.html.twig', array(
       'context' => $context,
@@ -112,6 +115,8 @@ use TUI\Toolkit\MediaBundle\Form\MediaType;
       'media_placeholder_image' => $media_placeholder_image,
       'close_button' => $close_button,
       'auto_implementation' => $auto_implementation,
+      'files_allowed' => $this->getValidFileTypes($context),
+      'files_maxsize' => $max_file_size,
       'form' => $form->createView(),
     ));
   }
@@ -207,6 +212,40 @@ use TUI\Toolkit\MediaBundle\Form\MediaType;
     return array(
       'entity' => $entity,
     );
+  }
+
+  /**
+   * Gets all of the valid file types for a given file upload context
+   *
+   * @param $context
+   * @return string
+   */
+  private function getValidFileTypes($context)
+  {
+    // Functionality to get allowed file types and max upload for uploader
+    $uploader_config = $this->container->getParameter('oneup_uploader.config');
+    $allowed_types = array();
+    $complex_types = array(
+        'application/msword' => 'doc',
+        'application/vnd.ms-excel' => 'xls',
+        'application/vnd.ms-powerpoint' => 'ppt',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => 'docx',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' => 'xlsx',
+        'application/vnd.openxmlformats-officedocument.presentationml.presentation' => 'pptx',
+    );
+
+    foreach($uploader_config['mappings'][$context]['allowed_mimetypes'] as $type) {
+      if(array_key_exists($type, $complex_types)) {
+        $allowed_types[] = $complex_types[$type];
+      } else {
+        $type = substr($type, strrpos($type, '/') + 1);
+        $allowed_types[] = $type;
+      }
+    }
+
+    $result = implode(', ', $allowed_types);
+
+    return $result;
   }
 
 }
