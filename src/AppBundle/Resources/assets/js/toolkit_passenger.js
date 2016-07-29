@@ -246,7 +246,7 @@ function passengerSort(type) {
         $items = $items.sort(function(a, b) {
             var vA = $('.surname', a).text() + $('.forename', a).text();
             var vB = $('.surname', b).text() + $('.forename', a).text();
-            return (vA < vB) ? -1 : (vA > vB) ? 1 : 0;
+            return (vA.toLowerCase() < vB.toLowerCase()) ? -1 : (vA.toLowerCase() > vB.toLowerCase()) ? 1 : 0;
         });
     }
     else if (type == 'date') {
