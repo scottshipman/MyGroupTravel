@@ -18,11 +18,20 @@ Location = function (uri) {
      * @returns {*}
      */
     this.getQueryParam = function (key) {
-        var uri = window.location.href,
-            re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
 
-        if (uri.match(re)) {
-            return uri.match(re)[0].split('=')[1].replace('&', '');
+        if (key == 'search') {
+            var hash = this.getHash();
+
+            if (hash.includes('=')) {
+                var searchTerm = hash.split('=');
+
+                if (searchTerm[1].includes('&')) {
+                    var result = searchTerm[1].split('&');
+                    return result[0];
+                }
+
+                return searchTerm[1];
+            }
         }
     };
 
@@ -33,28 +42,15 @@ Location = function (uri) {
      * @param value
      */
     this.setQueryParam = function (key, value) {
-        var uri = window.location.href,
-            re = new RegExp("([?&])" + key + "=.*?(&|$)", "i"),
-            separator = uri.indexOf('?') !== -1 ? "&" : "?",
-            newUri = uri + separator + key + "=" + value;
 
-        if (uri.match(re)) {
-            // If the value is blank, this is the first parameter and there are other parameters.
-            if (value === '' && separator === '&') {
-                // Replace the value with ? and replace the first &
-                newUri = uri.replace(re, '?').replace('&', '');
-            }
-            else if (value === '') {
-                newUri = uri.replace(re, '');
-                console.log(newUri);
-            }
-            else {
-                // If there is a value replace it, otherwise remove this key.
-                newUri = uri.replace(re, '$1' + key + "=" + value + '$2')
-            }
+        var currentHash = this.getHash();
+
+        if (currentHash.includes('=')) {
+            currentHash = currentHash.split('=', 1);
+            window.location.hash = currentHash[0] + '=' + value;
+        } else {
+            window.location.hash = currentHash + '=' + value;
         }
-
-        window.history.pushState({}, '', newUri);
     };
 
     /**
@@ -63,9 +59,8 @@ Location = function (uri) {
      * @returns {string}
      */
     this.getHash = function () {
-        var re = new RegExp('#([^;]*)?');
 
-        return uri.match(re) ? uri.match(re)[0].replace('#', '') : '';
+        return window.location.hash;
     };
 
     /**
@@ -74,33 +69,15 @@ Location = function (uri) {
      * @param value
      */
     this.setHash = function (value) {
-        // Default the value to #value.
-        value = value !== '' ? '#' + value : value;
 
-        var re = new RegExp('#([^;]*)(?==)'),
-            newUri;
+        var currentHash = this.getHash();
 
-        // If there is currently a hash in the url.
-        if (uri.match(re)) {
-            newUri = uri.replace(re, value);
+        if (currentHash.includes('=')) {
+            currentHash = currentHash.split('=');
+            window.location.hash = (value + '=' + currentHash[1]);
+        } else {
+            window.location.hash = value;
         }
-        else {
-            // If there are query params.
-            console.log(uri);
-            console.log(uri.indexOf('?'));
-            if (uri.indexOf('?') !== -1) {
-                // Slide the hash into the middle.
-                var parts = uri.split('?');
-                newUri = parts[0] + value + '?' + parts[1];
-            }
-            else {
-                newUri = uri + value;
-            }
-        }
-
-        console.log(newUri);
-
-        window.history.pushState({}, '', newUri);
     };
 };
 
@@ -189,11 +166,11 @@ function filterPassengersByString($items, string) {
  * @param resetSearch = whether to reset the text search.
  */
 function filterPassengers(elemID, resetSearch) {
-    if (resetSearch === undefined || resetSearch) {
+    if (resetSearch) {
         $('#passenger-name-filter').val('');
 
         var location = new Location();
-            location.setQueryParam('search', '');
+        location.setQueryParam('search', '');
     }
 
     var config = getPassengerFilterConfig(),
@@ -258,8 +235,42 @@ function updateCounts(response, paxId) {
     location.reload(true);
 }
 
+function passengerSort(type) {
+
+    var $items = $('.passengers').add('.organizers');
+    $items.remove();
+
+    // Sort the elements
+    if (type == 'name') {
+        // Sort by surname then forename
+        $items = $items.sort(function(a, b) {
+            var vA = $('.surname', a).text() + $('.forename', a).text();
+            var vB = $('.surname', b).text() + $('.forename', a).text();
+            return (vA < vB) ? -1 : (vA > vB) ? 1 : 0;
+        });
+    }
+    else if (type == 'date') {
+        $items = $items.sort(function(a, b) {
+            var vA = $('.date', a).data('signup-date');
+            var vB = $('.date', b).data('signup-date');
+            return (vA < vB) ? -1 : (vA > vB) ? 1 : 0;
+        });
+    }
+    else {
+        // Do nothing.
+        return;
+    }
+
+    // Re-add the items in the new order.
+    $('.tour-show-right-column').append($items);
+}
+
 
 $(document).ready(function () {
+
+    // Sort passengers by name
+    passengerSort('name');
+
     // move passenger to new lists links
     $(document).on('click', 'a.move-to-accepted', function (e) {
         var t = $(this);
@@ -878,6 +889,10 @@ $(document).ready(function () {
         // Don't do this after every keypress, delay the search.
         clearTimeout(delayTimer);
         delayTimer = setTimeout(function() {
+            var search = $('#passenger-name-filter').val(),
+                location = new Location();
+
+            location.setQueryParam('search', search);
             filterPassengers(elemID, false);
         }, 100);
     });
@@ -940,8 +955,25 @@ $(document).ready(function () {
 
         var elemID = this.getAttribute('data-id'),
             location = new Location;
-            location.setHash(elemID);
 
-        filterPassengers(elemID);
+        // If the clear filter item has been clicked,
+        // remove the value of the search box
+        var reset = false;
+        if(elemID == 'showEveryone') {
+            reset = true;
+        }
+
+
+        location.setHash(elemID);
+
+        filterPassengers(elemID, reset);
+
+        if(elemId == 'showWaitlistPassengers') {
+            passengerSort('date');
+        } else {
+            passengerSort('name');
+        }
+
     });
+    
 });

@@ -38,6 +38,7 @@
                         <i style="vertical-align:middle;" class="material-icons">email</i> {% trans %}passenger.actions.send_activation{% endtrans %}
                     </a>
                 {% endif %}
+
                 <a id="accept-tour" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="#"><i class="fa fa-user-plus"></i>{% trans %}passenger.labels.add{% endtrans %}</a>
                 <a class="mdl-button mdl-button--raised mdl-button--colored passenger-dashboard-buttons" href="{{ path('passenger_export', { 'type': 'organizer', 'tourId': tour.id }) }}"><i class="fa fa-download"></i>{% trans %}passenger.labels.export-organizer{% endtrans %}</a>
                 {% if is_granted('ROLE_BRAND') %}
@@ -51,13 +52,13 @@
                     <label class="mdl-textfield__label" for="passenger-name-filter">Enter name or email...</label>
                 </div>
             </div>
-            <a href="" style="float:right; text-decoration: none; color: {{ brand.secondaryColor }} !important;" class="passenger-filter" id="clear-filters" data-id="showEveryone"><i class="material-icons md-18">undo</i> {% trans %} passenger.labels.show-everyone{% endtrans %}</a><br>
+            <a href="#" style="float:right; text-decoration: none; color: {{ brand.secondaryColor }} !important;" class="passenger-filter" id="clear-filters" data-id="showEveryone"><i class="material-icons md-18">undo</i> {% trans %} passenger.labels.show-everyone{% endtrans %}</a><br>
             <div class="list-header" style="color: {{ brand.secondaryColor }}"><i class="material-icons">flight_takeoff</i> {% trans %} passenger.labels.passengers_for{% endtrans %}</div>
             <ul class="tour-show-submenu list-indent">
-                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" data-id="showAllPassengers"><strong>{% trans %}passenger.labels.all-passengers{% endtrans %} <span id="allPassengers">({{ statusCounts.passenger.accepted + statusCounts.organizer.accepted + statusCounts.passenger.free + statusCounts.organizer.free }})</span></strong></a></li>
-                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" data-id="showAcceptedPassengers"><strong>{{ "accepted" | paxLabel }} <span id="acceptedPassengers">({{ statusCounts.passenger.accepted }})</span></strong></a></li>
-                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" data-id="showWaitlistPassengers"><strong>{{ "waitlist" | paxLabel }} <span id="waitlistPassengers">({{ statusCounts.passenger.waitlist }})</span></strong></a></li>
-                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="" data-id="showFreePassengers"><strong>{{ "free" | paxLabel }} <span id="freePassengers">({{ statusCounts.passenger.free}})</span></strong></a></li>
+                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="#" data-id="showAllPassengers"><strong>{% trans %}passenger.labels.all-passengers{% endtrans %} <span id="allPassengers">({{ statusCounts.passenger.accepted + statusCounts.organizer.accepted + statusCounts.passenger.free + statusCounts.organizer.free }})</span></strong></a></li>
+                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="#" data-id="showAcceptedPassengers"><strong>{{ "accepted" | paxLabel }} <span id="acceptedPassengers">({{ statusCounts.passenger.accepted }})</span></strong></a></li>
+                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="#" data-id="showWaitlistPassengers"><strong>{{ "waitlist" | paxLabel }} <span id="waitlistPassengers">({{ statusCounts.passenger.waitlist }})</span></strong></a></li>
+                <li><a class="passenger-filter" style="color: {{ brand.primaryColor }}; text-decoration: none;" href="#" data-id="showFreePassengers"><strong>{{ "free" | paxLabel }} <span id="freePassengers">({{ statusCounts.passenger.free}})</span></strong></a></li>
             </ul>
             <div class="list-header" style="color: {{ brand.secondaryColor }}"><i class="material-icons">group_add</i> {% trans %} passenger.labels.organizers_for{% endtrans %}</div>
             <ul class="tour-show-submenu list-indent">
@@ -207,10 +208,10 @@
                             {% else %}
                                 <span style="float: left; margin-right: 15px;"  class="tui-text-avatar mdl-typography--headline">{{ passenger[0].fName[:1] }}</span>
                             {% endif %}
-                            <p class="mini-card-title"><strong>{{ passenger[0].fName }}</strong></p>
-                            <p class="mini-card-title"><strong>{{ passenger[0].lName }}</strong></p>
-                            <p class="mini-card-title"><strong><a href="mailto:{{ passenger[1].email }}">{{ passenger[1].email }}</a></strong></p>
-                            <label style="display: block; margin-left: 63px; min-width: 100%;">{{ statusicon | raw }} {{ freeicon | raw }}{#{{ organizericon | raw }}#} {{ signedUp }}</label>
+                                <p class="mini-card-title forename"><strong>{{ passenger[0].fName }}</strong></p>
+                                <p class="mini-card-title surname"><strong>{{ passenger[0].lName }}</strong></p>
+                                <p class="mini-card-title email"><strong><a href="mailto:{{ passenger[1].email }}">{{ passenger[1].email }}</a></strong></p>
+                                <label data-signup-date="{{ passenger[0].signUpDate|date("Y-m-d") }}" class="date" style="display: block; margin-left: 63px; min-width: 100%;">{{ statusicon | raw }} {{ freeicon | raw }}{#{{ organizericon | raw }}#} {{ signedUp }}</label>
                             </div>
                             {% if  passenger[0].status != "Pending Invite"%}
                                 <button style="position: absolute; right: 20px; color:grey; margin-top:10px;" id="passenger-actions-menu-drop-{{ passenger[0].id }}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
@@ -226,7 +227,7 @@
                 <!-- render the organizers -->
                 {#{% embed "PassengerBundle:Passenger:organizerList.html.twig" %} {% endembed %}#}
 
-                <div style="clear: both; height: 150px;"></div>
+                {#<div style="clear: both; height: 150px;"></div>#}
         </div>
     </div>
 
@@ -292,22 +293,6 @@
                 toolkitStandardPopup(popupTitle, '/passenger/new/' + entityId);
 
             });
-
-            $(document).on('click', '.passenger-filter', function (e){
-                    e.preventDefault();
-
-                    //Scroll functionality if at tablet breakpoint
-                    if (parseInt($(window).width()) < 900) {
-                        var target = $('#passenger-card');
-                        $('html, body').animate({
-                            scrollTop: target.offset().top
-                        }, 1000);
-                    }
-
-                    var elemID = this.getAttribute('data-id');
-                    window.location.hash = elemID;
-                    filterPassengers(elemID);
-                });
 
                 // toggle invite form display
                 $(document).on('click', '.show-invite-form', function (e) {
