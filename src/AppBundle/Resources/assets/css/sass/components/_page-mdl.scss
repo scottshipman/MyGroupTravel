@@ -38,6 +38,7 @@ body {
   transition-timing-function: cubic-bezier(.4,0,.2,1);
   -webkit-transition-property: margin-left;
   transition-property: margin-left;
+  will-change: auto;
 
   .toolkit-fixed-drawer > & {
 

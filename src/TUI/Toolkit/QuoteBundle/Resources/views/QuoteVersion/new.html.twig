@@ -44,6 +44,12 @@
                 var label = $(this).prev();
                 label.html("{% trans %}quote.form.quote_version.welcomeMsg{% endtrans %}").css({"position": "static"});
             });
+
+            // Set the default date of the return date picker to whatever has been selected as the departure
+            $('#tui_toolkit_quotebundle_quoteversion_departureDate').on('change', function (e) {
+                $('#tui_toolkit_quotebundle_quoteversion_returnDate').datepicker('option', 'defaultDate', $(this).val());
+            });
+
         });
     </script>
 {% endblock %}

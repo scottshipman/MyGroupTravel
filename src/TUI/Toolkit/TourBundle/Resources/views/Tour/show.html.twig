@@ -152,11 +152,23 @@
                     {{ brand.name }} {% trans %}tour.show.footer.intro_org{% endtrans %}
             </span>
             {% if entity.salesAgent.media %}
-                <span class="tui-image-avatar"><img src="{{ ( entity.salesAgent.media.getRelativePath ~ "/" ~ entity.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.salesAgent.username }}"></span>
+                <span class="tui-image-avatar">
+                    <a href="mailto:{{ entity.salesAgent.email }}">
+                        <img src="{{ ( entity.salesAgent.media.getRelativePath ~ "/" ~ entity.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.salesAgent.username }}">
+                    </a>
+                </span>
             {% elseif entity.salesAgent.firstName and entity.salesAgent.lastName %}
-                <span class="tui-text-avatar mdl-typography--headline">{{ entity.salesAgent.firstName[:1] }}{{ entity.salesAgent.lastName[:1] }}</span>
+                <span class="tui-text-avatar mdl-typography--headline">
+                    <a href="mailto:{{ entity.salesAgent.email }}">
+                        {{ entity.salesAgent.firstName[:1] }}{{ entity.salesAgent.lastName[:1] }}
+                    </a>
+                </span>
             {% else %}
-                <span class="tui-text-avatar mdl-typography--headline">{{ entity.salesAgent.username[:1] }}</span>
+                <span class="tui-text-avatar mdl-typography--headline">
+                    <a href="mailto:{{ entity.salesAgent.email }}">
+                        {{ entity.salesAgent.username[:1] }}
+                    </a>
+                </span>
             {% endif %}
             <span class="agent">
                 {% if entity.salesAgent.displayName %}
@@ -174,11 +186,23 @@
                     {% trans %}tour.show.footer.intro{% endtrans %}
             </span>
             {% if entity.organizer.media %}
-                <span class="tui-image-avatar"><img src="{{ ( entity.organizer.media.getRelativePath ~ "/" ~ entity.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.organizer.username }}"></span>
+                <span class="tui-image-avatar">
+                    <a href="mailto:{{ entity.organizer.email }}">
+                        <img src="{{ ( entity.organizer.media.getRelativePath ~ "/" ~ entity.organizer.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ entity.organizer.username }}">
+                    </a>
+                </span>
             {% elseif entity.organizer.firstName and entity.organizer.lastName %}
-                <span class="tui-text-avatar mdl-typography--headline">{{ entity.organizer.firstName[:1] }}{{ entity.organizer.lastName[:1] }}</span>
+                <span class="tui-text-avatar mdl-typography--headline">
+                    <a href="mailto:{{ entity.organizer.email }}">
+                        {{ entity.organizer.firstName[:1] }}{{ entity.organizer.lastName[:1] }}
+                    </a>
+                </span>
             {% else %}
-                <span class="tui-text-avatar mdl-typography--headline">{{ entity.organizer.username[:1] }}</span>
+                <span class="tui-text-avatar mdl-typography--headline">
+                    <a href="mailto:{{ entity.organizer.email }}">
+                        {{ entity.organizer.username[:1] }}
+                    </a>
+                </span>
             {% endif %}
             <span class="agent">
                 {% if entity.organizer.displayName %}

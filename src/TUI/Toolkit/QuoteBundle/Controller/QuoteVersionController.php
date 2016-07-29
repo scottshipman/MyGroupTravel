@@ -1245,6 +1245,12 @@ class QuoteVersionController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find QuoteVersion entity while updating quote version.');
         }
+
+        if ($entity->getConverted()) {
+            $this->get('session')->getFlashBag()->add('quote_edit_failed', $id);
+            return $this->redirect($this->generateUrl('manage_quote_show', array('id' => $entity->getId())));
+        }
+
         if ($entity->getIsTemplate()) {
             $template = 'Template';
             $route = '_templates';

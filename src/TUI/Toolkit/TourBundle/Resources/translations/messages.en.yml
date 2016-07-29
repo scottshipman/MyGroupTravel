@@ -153,10 +153,10 @@ tour:
         all_done: All Done!
         in_progress: In Progress
         passenger_tasks: Passenger Tasks
-        medical: Medical
-        dietary: Dietary
-        emergency: Emergency Contact
-        passport: Passport
+        medical: Medical information
+        dietary: Dietary requirements
+        emergency: Emergency contact information
+        passport: Passport information
         tasks: Tasks
         passenger_tasks: Passenger Tasks
         due: due by
@@ -168,21 +168,21 @@ tour:
         days_due: Days until Due
         payment_due: Days until Payment Due
         expiry: Days to expiry
-        passport_data: Collect Passport Data By
-        passenger_data: Collect Emergency Contact Data By
+        passport_data: Collect passport information by
+        passenger_data: Collect emergency contact information by
         collecting: Collected
         outstanding: Outstanding
-        medical_data: Collect Medical Data By
-        dietary_data: Collect Dietary Data By
+        medical_data: Collect medical information by
+        dietary_data: Collect dietary requirements by
         booking_form: Download Booking Form
         booking_form_copy: Download the booking form, complete it, and send it in with the correct deposit
         download: Download
         todo: To Do
         completed: Completed
-        completed_passport_data: Collect Passport Data
-        completed_passenger_data: Collect Emergency Contact Data
-        completed_medical_data: Collect Medical Data
-        completed_dietary_data: Collect Dietary Data
+        completed_passport_data: Collect passport information
+        completed_passenger_data: Collect emergency contact information
+        completed_medical_data: Collect medical information
+        completed_dietary_data: Collect dietary requirements
         sign_up: Sign Up
         passengers: Passengers
         views: Views
@@ -364,10 +364,10 @@ tour:
             display_name: Display Name
             board: Board Basis
             tour_number: Tour Number
-            passenger_date: Emergency Contact Due Date (MM-DD-YYYY)
-            passport_date: Passport Info Due Date (MM-DD-YYYY)
-            medical_date: Medical Info Due Date (MM-DD-YYYY)
-            dietary_date: Dietary Info Due Date (MM-DD-YYYY)
+            passenger_date: Emergency contact information due date (MM-DD-YYYY)
+            passport_date: Passport information due date (MM-DD-YYYY)
+            medical_date: Medical information due date (MM-DD-YYYY)
+            dietary_date: Dietary requirements due date (MM-DD-YYYY)
             trip_status: Trip Status
             quote_number: Quote Number
             transport_type: Transport Type

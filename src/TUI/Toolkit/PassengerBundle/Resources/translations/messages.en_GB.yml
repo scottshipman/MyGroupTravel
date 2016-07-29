@@ -22,6 +22,11 @@ passenger:
         accuracy: All information must be accurate and checked before you send to %brandname%
         payments: You can also log payments and edit an individual's payment schedule using the 'Payments' card
 
+    parent_instructions:
+        tasks: Complete tour tasks for your passenger on this page, using the 'Tasks' section and adding information to the forms.
+        accuracy: All information must be accurate.
+        payments: You can also view the payment schedule and see payments logged by the organiser
+
     actions:
         back_ref: Back to
         view_all_passengers: View all passengers
@@ -44,11 +49,11 @@ passenger:
         move_waitlist: Move to Waitlist
         move_free: Move to Free
         view_passenger: View Passenger
-        add_medical: Add Medical Information
-        add_dietary: Add Dietary Information
-        add_passport: Add Passport Information
-        add_emergency: Add Emergency Contact Information
-        no_tasks: has no tasks
+        add_medical: Add medical information
+        add_dietary: Add dietary requirements
+        add_passport: Add passport information
+        add_emergency: Add emergency contact information
+        no_tasks: is all set! All tasks are completed.
         send_message:  You are sending an email to all accepted passengers, are you sure you want to do that?
         send_activation: Send Activation
         send_activation_description: This will send an email to the Parents of all Passengers who haven't created their accounts.
@@ -63,11 +68,14 @@ passenger:
         delete: Passenger deleted -
         restore: Passenger Restored -
         users_activation: An activation email has been sent to all unactivated users accepted on the tour
-
+        organizer_save: The passenger has been added to the Waitlist
 
     modals:
+        title: Sign Up
         message: As a parent, you can sign up your child/children for the tour below.
         dob: Date of Birth
+        organizer_title: Add Passenger
+        organizer_message: As an organiser, you can manually add a passenger for the tour below
 
     labels:
         export-manifest: Export Manifest
@@ -96,26 +104,26 @@ passenger:
         invite-text: Complete the form below to invite someone to help organise this tour.
         assistant-organizer: Assistant Organiser
         tasks: Tasks
-        medical_info: Medical Information
+        medical_info: Medical information
         doctor_name: Doctor's name
         doctor_number: Doctor's phone number
         conditions: Medical conditions and allergies
         medication: Medication
-        dietary_info: Dietary Requirements
-        passport_info: Passport Details
+        dietary_info: Dietary requirements
+        passport_info: Passport information
         passport_number: Passport number
         passport_first_name: First name
-        passport_family_name: Family Name
-        passport_middle_name: Middle Name
+        passport_family_name: Family name
+        passport_middle_name: Middle name
         passport_gender: Gender
         passport_title: Title
-        passport_state_issue: Code of Issuing state (e.g. GBR)
+        passport_state_issue: Code of issuing state (e.g. GBR)
         passport_last_name: Last name
         passport_nationality: Nationality
-        passport_dob: Date Of Birth
+        passport_dob: Date of birth
         passport_doi: Date of issue
         passport_doe: Date of expiry
-        emergency_info: Emergency Contact Information
+        emergency_info: Emergency contact information
         emergency_name: Name
         emergency_relationship: Relationship
         emergency_number: Telephone
