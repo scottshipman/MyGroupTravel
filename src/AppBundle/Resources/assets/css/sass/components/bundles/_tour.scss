@@ -237,6 +237,16 @@
   text-align:center;
 }
 
+.passenger-cta-card {
+  overflow: visible;
+}
+
+.title-card-small {
+  .mdl-card__title {
+    color: grey;
+  }
+}
+
 .information-tasks{
   .mdl-textfield {
     width: 500px;

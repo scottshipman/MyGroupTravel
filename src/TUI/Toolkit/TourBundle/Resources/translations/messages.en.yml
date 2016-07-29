@@ -135,6 +135,9 @@ tour:
         message_text: Message Text:
 
     dashboard:
+        introduction_title: %firstname%, use this page to monitor your tasks and collection of passenger information for all accepted passengers.
+        introduction_filters: View a summary of each passenger's task progress, and view specific task using the filters below.
+        introduction_passenger_view: Click on a passenger to view their individual page
         organizer_count_single: Organizer
         organizer_count_plural: Organizers
         status: Status
@@ -202,6 +205,7 @@ tour:
         passenger_dashboard: Go to Passenger Dashboard
         task_dashboard: Go to Task Dashboard
         sign_up_complete: paying passengers accepted
+        task_view_passenger: View Passenger
 
     edit:
         summary: Summary
