@@ -214,7 +214,7 @@ class PassengerController extends Controller
                 $user = $this->get('security.token_storage')->getToken()->getUser();
                 $permissions = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $user);
 
-                if(in_array('organizer', $permissions)) {
+                if(!empty($permissions) && in_array('organizer', $permissions)) {
                     // Show organizer specific flash message
                     $flash_type = 'passenger.flash.organizer_save';
                 }
@@ -272,7 +272,7 @@ class PassengerController extends Controller
             $user = $this->get('security.token_storage')->getToken()->getUser();
             $permissions = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $user);
 
-            if(in_array('organizer', $permissions)) {
+            if(!empty($permissions) && in_array('organizer', $permissions)) {
                 $form_label = 'Add Passenger';
             }
         }
@@ -300,7 +300,7 @@ class PassengerController extends Controller
         if ($securityContext->isGranted('ROLE_CUSTOMER')) {
             $user = $this->get('security.token_storage')->getToken()->getUser();
             $permissions = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $user);
-            $is_org = in_array('organizer', $permissions);
+            $is_org = (!empty($permissions) && in_array('organizer', $permissions));
         }
         
 
