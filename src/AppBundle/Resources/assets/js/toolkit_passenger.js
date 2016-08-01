@@ -243,17 +243,18 @@ function passengerSort(type) {
     // Sort the elements
     if (type == 'name') {
         // Sort by surname then forename
+        
         $items = $items.sort(function(a, b) {
             var vA = $('.surname', a).text() + $('.forename', a).text();
-            var vB = $('.surname', b).text() + $('.forename', a).text();
+            var vB = $('.surname', b).text() + $('.forename', b).text();
             return (vA.toLowerCase() < vB.toLowerCase()) ? -1 : (vA.toLowerCase() > vB.toLowerCase()) ? 1 : 0;
         });
     }
     else if (type == 'date') {
         $items = $items.sort(function(a, b) {
-            var vA = $('.date', a).data('signup-date');
-            var vB = $('.date', b).data('signup-date');
-            return (vA < vB) ? -1 : (vA > vB) ? 1 : 0;
+            var vA = $('.date', a).data('signup-date') + $('.surname', a).text() + $('.forename', a).text();
+            var vB = $('.date', b).data('signup-date') + $('.surname', b).text() + $('.forename', b).text();
+            return (vA.toLowerCase() < vB.toLowerCase()) ? -1 : (vA.toLowerCase() > vB.toLowerCase()) ? 1 : 0;
         });
     }
     else {
@@ -269,6 +270,7 @@ function passengerSort(type) {
 $(document).ready(function () {
 
     // Sort passengers by name
+    console.log('about to sort..');
     passengerSort('name');
 
     // move passenger to new lists links
@@ -905,42 +907,7 @@ $(document).ready(function () {
         location.setQueryParam('search', search);
     });
 
-    // Order the passengers
-    $('#passenger-order').change(function() {
-        var $items = $('.passengers').add('.organizers');
-        $items.remove();
-
-        // Sort the elements
-        if ($(this).val() == 'name') {
-            // Sort by surname then forename
-            $items = $items.sort(function(a, b) {
-                var vA = $('.surname', a).text() + $('.forename', a).text();
-                var vB = $('.surname', b).text() + $('.forename', a).text();
-                return (vA < vB) ? -1 : (vA > vB) ? 1 : 0;
-            });
-        }
-        else if ($(this).val() == 'date') {
-            $items = $items.sort(function(a, b) {
-                var vA = $('.date', a).data('signup-date');
-                var vB = $('.date', b).data('signup-date');
-                return (vA < vB) ? -1 : (vA > vB) ? 1 : 0;
-            });
-        }
-        else {
-            // Do nothing.
-            return;
-        }
-
-        // Re-add the items in the new order.
-        $('.tour-show-right-column').append($items);
-
-        // Update the url
-        var order = $(this).val(),
-            location = new Location;
-
-        location.setQueryParam('orderBy', order);
-    });
-
+    
     // Clicking a passenger filter.
     $('.passenger-filter').click(function (e) {
         e.preventDefault();
@@ -968,7 +935,7 @@ $(document).ready(function () {
 
         filterPassengers(elemID, reset);
 
-        if(elemId == 'showWaitlistPassengers') {
+        if(elemID == 'showWaitlistPassengers') {
             passengerSort('date');
         } else {
             passengerSort('name');
