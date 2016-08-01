@@ -226,19 +226,19 @@ $(document).ready(function () {
     function textChange(id) {
         switch(id) {
             case 'emergency':
-                $('#task-title').text('Emergency Contact Info');
+                $('#task-title').text("{% trans %}tour.dashboard.emergency{% endtrans %}");
                 $('#task-counter').text("{{ passengerData.completedPassengerData['emergency']|length }}/{{ passengerData.travellingUsers|length }}");
                 break;
             case 'medical':
-                $('#task-title').text('Medical Info');
+                $('#task-title').text("{% trans %}tour.dashboard.medical{% endtrans %}");
                 $('#task-counter').text("{{ passengerData.completedPassengerData['medical']|length }}/{{ passengerData.travellingUsers|length }}");
                 break;
             case 'passport':
-                $('#task-title').text('Passport Info');
+                $('#task-title').text("{% trans %}tour.dashboard.passport{% endtrans %}");
                 $('#task-counter').text("{{ passengerData.completedPassengerData['passport']|length }}/{{ passengerData.travellingUsers|length }}");
                 break;
             case 'dietary':
-                $('#task-title').text('Dietary Info');
+                $('#task-title').text("{% trans %}tour.dashboard.dietary{% endtrans %}");
                 $('#task-counter').text("{{ passengerData.completedPassengerData['dietary']|length }}/{{ passengerData.travellingUsers|length }}");
                 break;
             default:
