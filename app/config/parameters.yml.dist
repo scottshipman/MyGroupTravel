@@ -41,3 +41,6 @@ parameters:
 
     # Encryption of Data
     ambta_doctrine_encrypt_secret_key:
+
+    # Session timeout
+    toolkit_session_cookie_lifetime: 10800
