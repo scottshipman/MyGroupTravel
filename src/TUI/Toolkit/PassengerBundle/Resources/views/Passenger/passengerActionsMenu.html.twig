@@ -11,9 +11,9 @@
         {#Activation Email for Users#}
         {% if passengerStatus != "waitlist" %}
             {% if parent is defined and parent.enabled == false %}
-                <li><a href="{{ path('parent_user_registration_confirmation', { 'id': parent.id, 'tourId': tour.id }) }}" class="mdl-menu__item">{% trans %}passenger.actions.send_activation{% endtrans %}</a></li>
+                <li><a href="{{ path('parent_user_registration_confirmation', { 'id': parent.id, 'tourId': tour.id }) }}" class="mdl-menu__item caller-btn">{% trans %}passenger.actions.send_activation{% endtrans %}</a></li>
             {% elseif user is defined and user.enabled == false %}
-                <li><a href="{{ path('parent_user_registration_confirmation', { 'id': user.id, 'tourId': tour.id }) }}" class="mdl-menu__item">{% trans %}passenger.actions.send-notification{% endtrans %}</a></li>
+                <li><a href="{{ path('parent_user_registration_confirmation', { 'id': user.id, 'tourId': tour.id }) }}" class="mdl-menu__item caller-btn">{% trans %}passenger.actions.send-notification{% endtrans %}</a></li>
             {% endif %}
         {% endif %}
 

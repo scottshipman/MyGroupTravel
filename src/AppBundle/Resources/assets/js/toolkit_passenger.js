@@ -30,6 +30,12 @@ Location = function (uri) {
                     return result[0];
                 }
 
+                var verifySearch = searchTerm[0].split('&');
+
+                if (verifySearch[1] == 'title') {
+                    return '';
+                }
+                
                 return searchTerm[1];
             }
         }
@@ -166,13 +172,24 @@ function filterPassengersByString($items, string) {
  * @param resetSearch = whether to reset the text search.
  */
 function filterPassengers(elemID, resetSearch) {
-
+    
     elemID = elemID.replace('#', '');
+    
     
     if(elemID.contains('=')) {
         elemID = elemID.split('=');
         elemID = elemID[0];
     }
+
+    if(elemID.contains('&')) {
+        elemID = elemID.split('&');
+        elemID = elemID[0];
+    }
+
+    if(elemID == '') {
+        elemID = 'showEveryone';
+    }
+
     
     if (resetSearch) {
         $('#passenger-name-filter').val('');
