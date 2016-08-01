@@ -166,6 +166,9 @@ function filterPassengersByString($items, string) {
  * @param resetSearch = whether to reset the text search.
  */
 function filterPassengers(elemID, resetSearch) {
+
+    elemID = elemID.replace('#', '');
+
     if (resetSearch) {
         $('#passenger-name-filter').val('');
 
