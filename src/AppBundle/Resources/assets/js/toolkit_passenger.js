@@ -30,6 +30,12 @@ Location = function (uri) {
                     return result[0];
                 }
 
+                var verifySearch = searchTerm[0].split('&');
+
+                if (verifySearch[1] == 'title') {
+                    return '';
+                }
+
                 return searchTerm[1];
             }
         }
@@ -168,12 +174,23 @@ function filterPassengersByString($items, string) {
 function filterPassengers(elemID, resetSearch) {
 
     elemID = elemID.replace('#', '');
-    
-    if(elemID.contains('=')) {
+
+
+    if(elemID.indexOf('=') != -1) {
         elemID = elemID.split('=');
         elemID = elemID[0];
     }
-    
+
+    if(elemID.indexOf('&') != -1) {
+        elemID = elemID.split('&');
+        elemID = elemID[0];
+    }
+
+    if(elemID == '') {
+        elemID = 'showEveryone';
+    }
+
+
     if (resetSearch) {
         $('#passenger-name-filter').val('');
 
@@ -251,7 +268,7 @@ function passengerSort(type) {
     // Sort the elements
     if (type == 'name') {
         // Sort by surname then forename
-        
+
         $items = $items.sort(function(a, b) {
             var vA = $('.surname', a).text() + $('.forename', a).text();
             var vB = $('.surname', b).text() + $('.forename', b).text();
@@ -914,7 +931,7 @@ $(document).ready(function () {
         location.setQueryParam('search', search);
     });
 
-    
+
     // Clicking a passenger filter.
     $('.passenger-filter').click(function (e) {
         e.preventDefault();
@@ -949,5 +966,5 @@ $(document).ready(function () {
         }
 
     });
-    
+
 });
