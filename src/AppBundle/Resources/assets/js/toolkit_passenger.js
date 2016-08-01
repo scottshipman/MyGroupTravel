@@ -168,7 +168,12 @@ function filterPassengersByString($items, string) {
 function filterPassengers(elemID, resetSearch) {
 
     elemID = elemID.replace('#', '');
-
+    
+    if(elemID.contains('=')) {
+        elemID = elemID.split('=');
+        elemID = elemID[0];
+    }
+    
     if (resetSearch) {
         $('#passenger-name-filter').val('');
 
