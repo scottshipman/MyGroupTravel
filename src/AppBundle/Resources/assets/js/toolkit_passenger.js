@@ -270,7 +270,6 @@ function passengerSort(type) {
 $(document).ready(function () {
 
     // Sort passengers by name
-    console.log('about to sort..');
     passengerSort('name');
 
     // move passenger to new lists links
