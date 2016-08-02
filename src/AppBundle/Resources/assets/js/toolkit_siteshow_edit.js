@@ -45,7 +45,7 @@ $(document).ready(function () {
             });
         }
     });
-    $(".sortable-items").disableSelection();
+    // $(".sortable-items").disableSelection();
 
     // Toggle between preview and edit mode for content blocks and tabs
     $('#link-preview-edit').on('click', function (e) {
