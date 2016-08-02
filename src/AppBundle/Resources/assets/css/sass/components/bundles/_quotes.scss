@@ -556,3 +556,13 @@
   font-size: 24px;
 
 }
+
+.alternate-quotes-block {
+  overflow-x: auto;
+  td, th {
+    padding: 10px;
+    @include breakpoint_desktop() {
+      padding: 0;
+    }
+  }
+}
