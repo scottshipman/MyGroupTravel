@@ -155,7 +155,7 @@
                                         {% set size = 'half' %}
                                     {% endif %}
                                     <div id="content-blocks-{{ items[item].id }}" class="site-content-blocks site-content-blocks-item site-content-blocks-size-{{ size }}" blockId="{{ items[item].id }}">
-                                        <div class="inner-wrapper move-cursor">
+                                        <div class="inner-wrapper {% if editable %} move-cursor {% endif %}">
                                             {# render the actual content block #}
                                             <div id="previewable-content-blocks-{{ items[item].id }}">
                                                 {{ render(controller('ContentBlocksBundle:ContentBlock:show', {'id':  items[item].id, 'quoteVersion': entity.id, 'class': 'quote', 'skipPermissions': true})) }}
