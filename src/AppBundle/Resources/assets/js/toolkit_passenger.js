@@ -291,12 +291,22 @@ function passengerSort(type) {
     $('.tour-show-right-column').append($items);
 }
 
+function isAutoSort() {
+    var module = window.location.pathname;
+    if(module.substr(module.lastIndexOf('/') + 1) == 'passengers') {
+        return true;
+    }
+    return false;
+}
+
 
 $(document).ready(function () {
 
     // Sort passengers by name
-    passengerSort('name');
-
+    if(isAutoSort()) {
+        passengerSort('name');
+    }
+    
     // move passenger to new lists links
     $(document).on('click', 'a.move-to-accepted', function (e) {
         var t = $(this);
@@ -901,8 +911,11 @@ $(document).ready(function () {
         elemID = hash !== '' ? hash : 'showEveryone';
 
     $('#passenger-name-filter').val(search);
-    filterPassengers(elemID, false);
-
+    
+    if (isAutoSort()) {
+        filterPassengers(elemID, false);
+    }
+    
     // Filter passengers by search
     var delayTimer;
     $('#passenger-name-filter').keyup(function() {

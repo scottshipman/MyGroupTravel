@@ -33,7 +33,7 @@
                 {% if unactivatedCount > 0 %}
                     <a href="{{ path('activate_all_passengers', { 'tourId': tour.id }) }}"
                        title ="{% trans %}passenger.actions.send_activation_description{% endtrans %}"
-                       class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+                       class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored caller-btn"
                        onclick="return confirm('{% trans %}passenger.actions.send_message{% endtrans %}')">
                         <i style="vertical-align:middle;" class="material-icons">email</i> {% trans %}passenger.actions.send_activation{% endtrans %}
                     </a>
