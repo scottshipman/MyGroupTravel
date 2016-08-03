@@ -1471,6 +1471,7 @@ class UserController extends Controller
         return $this->render('TUIToolkitUserBundle:User:myQuotes.html.twig', array(
             'quotes' => $quotes,
             'locale' => $locale,
+            'brand' => $brand,
         ));
     }
 
