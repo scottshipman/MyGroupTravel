@@ -1,6 +1,4 @@
 {% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
-{#  {{ dump(quotes) }} #}
-
 {% for quote in quotes %}
 <div class="tour-edit mdl-card mdl-shadow--2dp quote-cards">
     {% set bgpath = '' %}
@@ -52,7 +50,7 @@
                             <span class="tui-image-avatar">
                                 <img src="{{ ( quote.quoteReference.salesAgent.media.getRelativePath ~ "/" ~ quote.quoteReference.salesAgent.media.getHashedFilename ) | imagine_filter('thumbnail') }}" alt="{{ quote.quoteReference.salesAgent.username }}">
                             </span>
-                        {% elseif quote.quoteReference.salesAgent.firstName and tour.salesAgent.lastName %}
+                        {% elseif quote.quoteReference.salesAgent.firstName and quote.quoteReference.salesAgent.lastName %}
                             <span class="tui-text-avatar mdl-typography--headline">
                                 <a href="mailto:{{ quote.quoteReference.salesAgent.email }}">
                                     {{ quote.quoteReference.salesAgent.firstName[:1] }}{{ quote.quoteReference.salesAgent.lastName[:1] }}
@@ -66,8 +64,8 @@
                             </span>
 
                         {% endif %}
-                        {{ quote.quoteReference.salesAgent.firstName }} {{ tour.salesAgent.lastName }} <br /> <a style="text-decoration: none;" href="mailto:{{ quote.quoteReference.salesAgent.email }}">{{ quote.quoteReference.salesAgent.email }}</a><br />
-                        <span style="margin-left:57px;"><tel>{{ quote.reference.salesAgent.phoneNumber }}</tel></span>
+                        {{ quote.quoteReference.salesAgent.firstName }} {{ quote.quoteReference.salesAgent.lastName }} <br /> <a style="text-decoration: none;" href="mailto:{{ quote.quoteReference.salesAgent.email }}">{{ quote.quoteReference.salesAgent.email }}</a><br />
+                        <span style="margin-left:57px;"><tel>{{ quote.quoteReference.salesAgent.phoneNumber }}</tel></span>
                         <label>{{ brand.name }} {% trans %}user.profile.my_quotes.contact{% endtrans %}</label>
                     {% elseif quote.quoteReference.organizer %}
                         {% if quote.quoteReference.organizer.media %}
