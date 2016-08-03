@@ -54,7 +54,8 @@ class PassengerService
             ));
             $qb->setParameter(2,  $status);
         }
-        $qb->orderBy('p.signUpDate', 'DESC');
+        $qb->orderBy('p.lName', 'DESC');
+        $qb->orderBy('p.fName', 'DESC');
         $query = $qb->getQuery();
         $result = $query->getResult();
 
