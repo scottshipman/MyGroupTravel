@@ -188,7 +188,7 @@
                                 {% set size = 'half' %}
                             {% endif %}
                             <div id="content-blocks-{{ items[item].id }}" class="site-content-blocks site-content-blocks-item site-content-blocks-size-{{ size }}" blockId="{{ items[item].id }}">
-                                <div class="inner-wrapper move-cursor">
+                                <div class="inner-wrapper {% if editable %} move-cursor {% endif %}">
                                     {% if editable %}
                                         <div class="site-content-block-actions status-preview-edit">
                                             {# probably render a controller here by passing in item as id and have block entity returned #}
