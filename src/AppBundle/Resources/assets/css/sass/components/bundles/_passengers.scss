@@ -99,7 +99,7 @@
     -o-transition: max-height 1s;
     transition: max-height 1s;
     overflow: hidden;
-    max-height: 500px !important;
+    max-height: 600px !important;
     //padding: 0;
     opacity: 1;
   }
@@ -219,6 +219,10 @@
 
   .mdl-selectfield {
     max-width: 100px;
+  }
+
+  .form-row {
+    display: inline;
   }
 }
 

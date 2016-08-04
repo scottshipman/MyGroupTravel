@@ -316,18 +316,7 @@ $(document).ready(function () {
 
         }).error(function (response) {
             $("#loader").hide();
-            var parsed = $.parseJSON(response.responseText);
-            $.each(parsed, function(i, item) {
-                console.log(i);
-                var field = '#tui_toolkit_passengerbundle_medical_' + i;
-                console.log(field);
-                if($(field).is('input')){
-                    $(field).parent().after('<p class="errors" style="color:red;">'+ item + '</p>');
-                }
-                else if($(field).is('div')){
-                    $(field).append('<p class="errors" style="color:red;">'+ item + '</p>');
-                }
-            });
+            ajaxFormErrors(response, '#tui_toolkit_passengerbundle_medical_');
         })
     });
 
@@ -363,7 +352,8 @@ $(document).ready(function () {
 
         }).error(function (response) {
             var attribute = 'tui_toolkit_passengerbundle_dietary_';
-            ajaxFormErrors(response, attribute);
+
+            //ajaxFormErrors(response, attribute);
         })
     });
 
@@ -677,7 +667,7 @@ $(document).ready(function () {
             contentType: "application/x-www-form-urlencoded",
         }).success(function (response) {
             var firstName = response[0];
-            var lastName = response[1]
+            var lastName = response[1];
             var dob = response[2];
             var gender = response[3];
             var passengerId =  response[4];
@@ -712,16 +702,10 @@ $(document).ready(function () {
             }
         }).error(function (response) {
             $("#loader").hide();
-            var parsed = $.parseJSON(response.responseText);
-            $.each(parsed, function(i, item) {
-                field= '#tui_toolkit_passengerbundle_passenger_' + i;
-                if($(field).is('input')){
-                    $(field).parent().after('<p class="errors" style="color:red;">'+ item + '</p>');
-                }
-                else if($(field).is('div')){
-                    $(field).append('<p class="errors" style="color:red;">'+ item + '</p>');
-                }
-            });
+            $('.form-row').css('display', 'block');
+            var field = '#tui_toolkit_passengerbundle_passenger_';
+            ajaxFormErrors(response, field);
+            // add here if need be
         })
     });
 
