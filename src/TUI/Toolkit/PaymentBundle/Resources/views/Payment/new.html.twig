@@ -1,11 +1,7 @@
 
 
 {% block body -%}
-    <style>
-        #ui-datepicker-div {
-            z-index: 200 !important;
-        }
-    </style>
+
     <p>{{ 'payment.form.message' | trans ({'%fname%': passenger.fname, '%lname%': passenger.lname, '%tourname%': tour.name }) }}</p>
 
     <div class="errors">

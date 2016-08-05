@@ -181,3 +181,7 @@ form[name=tui_toolkit_tourbundle_toursetup] {
     list-style: none;
   }
 }
+
+#ui-datepicker-div {
+  z-index: 200 !important;
+}
