@@ -279,7 +279,7 @@ $(document).ready(function () {
             $('.medical-conditions').html(response[2]);
             $('.medications').html(response[3]);
         }).error(function (response) {
-            var attribute = 'tui_toolkit_passengerbundle_medical_';
+            var attribute = '#tui_toolkit_passengerbundle_medical_';
             ajaxFormErrors(response, attribute);
         })
     });
@@ -316,7 +316,8 @@ $(document).ready(function () {
 
         }).error(function (response) {
             $("#loader").hide();
-            ajaxFormErrors(response, '#tui_toolkit_passengerbundle_medical_');
+            var attribute = '#tui_toolkit_passengerbundle_medical_';
+            ajaxFormErrors(response, attribute);
         })
     });
 
@@ -351,9 +352,8 @@ $(document).ready(function () {
             $('.dietary-description').html(response);
 
         }).error(function (response) {
-            var attribute = 'tui_toolkit_passengerbundle_dietary_';
-
-            //ajaxFormErrors(response, attribute);
+            var attribute = '#tui_toolkit_passengerbundle_dietary_';
+            ajaxFormErrors(response, attribute);
         })
     });
 
@@ -388,16 +388,8 @@ $(document).ready(function () {
 
         }).error(function (response) {
             $("#loader").hide();
-            var parsed = $.parseJSON(response.responseText);
-            $.each(parsed, function(i, item) {
-                var field = '#tui_toolkit_passengerbundle_dietary_' + i;
-                if($(field).is('input')){
-                    $(field).parent().after('<p class="errors" style="color:red;">'+ item + '</p>');
-                }
-                else if($(field).is('div')){
-                    $(field).append('<p class="errors" style="color:red;">'+ item + '</p>');
-                }
-            });
+            var field = '#tui_toolkit_passengerbundle_dietary_';
+            ajaxFormErrors(response, field);
         })
     });
 
@@ -466,7 +458,7 @@ $(document).ready(function () {
             $('.passport-dateOfExpiry').html(response[10]);
 
         }).error(function (response) {
-            var attribute = 'tui_toolkit_passengerbundle_passport_';
+            var attribute = '#tui_toolkit_passengerbundle_passport_';
             ajaxFormErrors(response, attribute);
         })
     });
@@ -500,16 +492,9 @@ $(document).ready(function () {
             });
         }).error(function (response) {
             $("#loader").hide();
-            var parsed = $.parseJSON(response.responseText);
-            $.each(parsed, function(i, item) {
-                var field = '#tui_toolkit_passengerbundle_passport_' + i;
-                if($(field).is('input')){
-                    $(field).parent().after('<p class="errors" style="color:red;">'+ item + '</p>');
-                }
-                else if($(field).is('div')){
-                    $(field).append('<p class="errors" style="color:red;">'+ item + '</p>');
-                }
-            });
+
+            var attribute = '#tui_toolkit_passengerbundle_passport_';
+            ajaxFormErrors(response, attribute);
         })
     });
 
@@ -571,7 +556,7 @@ $(document).ready(function () {
             $('.emergency-email').html(response[3]);
 
         }).error(function (response) {
-            var attribute = 'tui_toolkit_passengerbundle_emergency_';
+            var attribute = '#tui_toolkit_passengerbundle_emergency_';
             ajaxFormErrors(response, attribute);
         })
     });
@@ -611,16 +596,8 @@ $(document).ready(function () {
 
         }).error(function (response) {
             $("#loader").hide();
-            var parsed = $.parseJSON(response.responseText);
-            $.each(parsed, function(i, item) {
-                var field = '#tui_toolkit_passengerbundle_emergency_' + i;
-                if($(field).is('input')){
-                    $(field).parent().after('<p class="errors" style="color:red;">'+ item + '</p>');
-                }
-                else if($(field).is('div')){
-                    $(field).append('<p class="errors" style="color:red;">'+ item + '</p>');
-                }
-            });
+            var field = '#tui_toolkit_passengerbundle_emergency_';
+            ajaxFormErrors(response, field);
         })
     });
 
@@ -705,7 +682,6 @@ $(document).ready(function () {
             $('.form-row').css('display', 'block');
             var field = '#tui_toolkit_passengerbundle_passenger_';
             ajaxFormErrors(response, field);
-            // add here if need be
         })
     });
 

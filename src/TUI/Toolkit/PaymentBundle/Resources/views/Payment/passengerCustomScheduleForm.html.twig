@@ -2,10 +2,6 @@
 
 {% block body -%}
 
-    <div class="errors">
-         {{ form_errors(form) }}
-    </div>
-
      {{ form(form, {'attr': {'id': 'ajax_custom_schedule_form'}} ) }}
 
     <ul class="record_actions">
@@ -46,11 +42,9 @@
                     window.location.reload(true);
                 }).error(function (response) {
                     $("#loader").hide();
-                    var parsed = $.parseJSON(response.responseText);
-                    $.each(parsed, function(i, item) {
-                        field= '#form_' + i;
-                        $(field).parent().after('<p class="errors" style="color:red;">'+ item + '</p>');
-                    });
+
+                    var field = '#form_';
+                    ajaxFormErrors(response, field);
                 });
             });
 
