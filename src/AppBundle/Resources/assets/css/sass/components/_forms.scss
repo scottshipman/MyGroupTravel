@@ -174,7 +174,7 @@ form[name=tui_toolkit_tourbundle_toursetup] {
   float: left;
   margin: 0 0.3em;
 }
-
+/* @todo This will be removed soon - check for usage */
 .form-errors {
   color:red;
 
@@ -185,6 +185,8 @@ form[name=tui_toolkit_tourbundle_toursetup] {
 
 .form-row-errors {
   ul {
+    color: red;
+    list-style: none;
     padding: 0;
     margin-left: 0px;
   }

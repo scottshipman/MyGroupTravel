@@ -38,20 +38,21 @@ class PassengerType extends AbstractType
                 break;
         }
 
+        $blank_message = 'This value should not be blank.';
 
         $builder
             ->add('fName', 'text', array(
                 'required' => true,
                 'label' => 'passenger.form.invite.first',
                 'constraints' => new NotBlank(array(
-                    'message' => 'Please enter a First Name'
+                    'message' => $blank_message
                 )),
             ))
             ->add('lName', 'text', array(
                 'required' => true,
                 'label' => 'passenger.form.invite.last',
                 'constraints' => new NotBlank(array(
-                    'message' => 'Please enter a Last Name'
+                    'message' => $blank_message
                 )),
             ))
             ->add('dateOfBirth', 'birthday', array(

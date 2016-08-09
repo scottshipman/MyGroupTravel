@@ -89,30 +89,28 @@ class User extends BaseUser
 
     /**
      * @ORM\Column(type="string", nullable=true)
-     * @Assert\NotBlank(message="Please enter A Security Question.", groups={"Registration", "Profile"})
+     * @Assert\NotBlank(groups={"Registration", "Profile", "Activation"})
      * @Assert\Length(
      *     min=10,
      *     max=255,
      *     minMessage="The question is too short.",
      *     maxMessage="The question is too long.",
-     *     groups={"Registration", "Profile"}
+     *     groups={"Registration", "Profile", "Activation"}
      * )
      */
-
     protected $question = null;
 
     /**
      * @ORM\Column(type="string", nullable=true)
-     * @Assert\NotBlank(message="Please enter your Security Question Answer.", groups={"Registration", "Profile"})
+     * @Assert\NotBlank(groups={"Registration", "Profile", "Activation"})
      * @Assert\Length(
      *     min=5,
      *     max=255,
      *     minMessage="The answer is too short.",
      *     maxMessage="The answer is too long.",
-     *     groups={"Registration", "Profile"}
+     *     groups={"Registration", "Profile", "Activation"}
      * )
      */
-
     protected $answer = null;
 
   /**

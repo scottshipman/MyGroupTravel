@@ -45,6 +45,7 @@ class TourPassengerType extends AbstractType
                 break;
         }
 
+        $blank_message = 'This value should not be blank.';;
 
         $builder
             ->add('firstName', 'text', array(
@@ -53,7 +54,7 @@ class TourPassengerType extends AbstractType
                 'required' => true,
                 'mapped' => false,
                 'constraints' => new NotBlank(array(
-                    'message' => 'Please enter a Parent / Guardian First Name'
+                    'message' => $blank_message
                 )),
 
             ))
@@ -63,7 +64,7 @@ class TourPassengerType extends AbstractType
                 'required' => true,
                 'mapped' => false,
                 'constraints' => new NotBlank(array(
-                    'message' => 'Please enter a Parent / Guardian Last Name'
+                    'message' => $blank_message
                 )),
 
             ))
@@ -74,10 +75,10 @@ class TourPassengerType extends AbstractType
                 'mapped' => false,
                 'constraints' => array(
                     new Email(array(
-                    'message' => 'Please enter a valid Parent / Guardian email address'
+                    'message' => 'Please enter a valid email address.'
                     )),
                     new NotBlank(array(
-                        'message' => 'Please enter a Parent / Guardian email address'
+                        'message' => $blank_message
                     )),
                 ),
 

@@ -3,6 +3,7 @@
 namespace TUI\Toolkit\CurrencyBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Currency
@@ -25,6 +26,7 @@ class Currency
      * @var string
      *
      * @ORM\Column(name="code", type="string", length=32)
+     * @Assert\NotBlank()
      */
     private $code;
 
@@ -32,6 +34,7 @@ class Currency
      * @var string
      *
      * @ORM\Column(name="htmlSymbol", type="string", length=32)
+     * @Assert\NotBlank()
      */
     private $htmlSymbol;
 
@@ -39,6 +42,7 @@ class Currency
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $name;
 
