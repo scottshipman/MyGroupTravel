@@ -45,28 +45,20 @@ class TourPassengerType extends AbstractType
                 break;
         }
 
-        $blank_message = 'This value should not be blank.';;
-
         $builder
             ->add('firstName', 'text', array(
                 'label' => 'passenger.signupform.fname',
                 'translation_domain'  => 'messages',
                 'required' => true,
                 'mapped' => false,
-                'constraints' => new NotBlank(array(
-                    'message' => $blank_message
-                )),
-
+                'constraints' => new NotBlank()
             ))
             ->add('lastName', 'text', array(
                 'label' => 'passenger.signupform.lname',
                 'translation_domain'  => 'messages',
                 'required' => true,
                 'mapped' => false,
-                'constraints' => new NotBlank(array(
-                    'message' => $blank_message
-                )),
-
+                'constraints' => new NotBlank()
             ))
             ->add('email', 'email', array(
                 'label' => 'passenger.signupform.email',
@@ -77,11 +69,8 @@ class TourPassengerType extends AbstractType
                     new Email(array(
                     'message' => 'Please enter a valid email address.'
                     )),
-                    new NotBlank(array(
-                        'message' => $blank_message
-                    )),
+                    new NotBlank()
                 ),
-
             ))
             ->add('passengers', 'collection', array(
                 'type' => new PassengerType($this->locale, $this->tourId),
