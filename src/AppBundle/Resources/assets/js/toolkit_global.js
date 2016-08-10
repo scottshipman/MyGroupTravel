@@ -57,9 +57,9 @@ var ajaxFormErrors = function(response, attribute){
 
             if (field.is('input')){
                 field.parent().parent().addClass('form-row-errors');
-                field.parent().after('<p class="error" style="color:red;">'+ child + '</p>');
+                field.parent().after('<p class="error">'+ child + '</p>');
             } else if (field.is('div')) {
-                field.append('<p class="error" style="color:red;">'+ child + '</p>');
+                field.append('<p class="error">'+ child + '</p>');
             }
 
         });
