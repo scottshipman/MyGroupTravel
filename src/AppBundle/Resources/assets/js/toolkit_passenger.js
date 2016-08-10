@@ -1,3 +1,91 @@
+/**
+ * Helper functions for working with the current uri.
+ */
+var Location;
+Location = function (uri) {
+
+    /**
+     * Uri can be set by constructor but will default to the current uri.
+     *
+     * @type {string}
+     */
+    uri = uri !== undefined ? uri : window.location.href;
+
+    /**
+     * Get a query parameter by key.
+     *
+     * @param key
+     * @returns {*}
+     */
+    this.getQueryParam = function (key) {
+
+        if (key == 'search') {
+            var hash = this.getHash();
+
+            if (hash.includes('=')) {
+                var searchTerm = hash.split('=');
+
+                if (searchTerm[1].includes('&')) {
+                    var result = searchTerm[1].split('&');
+                    return result[0];
+                }
+
+                var verifySearch = searchTerm[0].split('&');
+
+                if (verifySearch[1] == 'title') {
+                    return '';
+                }
+
+                return searchTerm[1];
+            }
+        }
+    };
+
+    /**
+     * Set a query parameter by key.
+     *
+     * @param key
+     * @param value
+     */
+    this.setQueryParam = function (key, value) {
+
+        var currentHash = this.getHash();
+
+        if (currentHash.includes('=')) {
+            currentHash = currentHash.split('=', 1);
+            window.location.hash = currentHash[0] + '=' + value;
+        } else {
+            window.location.hash = currentHash + '=' + value;
+        }
+    };
+
+    /**
+     * Get the location hash.
+     *
+     * @returns {string}
+     */
+    this.getHash = function () {
+
+        return window.location.hash;
+    };
+
+    /**
+     * Set the location hash.
+     *
+     * @param value
+     */
+    this.setHash = function (value) {
+
+        var currentHash = this.getHash();
+
+        if (currentHash.includes('=')) {
+            currentHash = currentHash.split('=');
+            window.location.hash = (value + '=' + currentHash[1]);
+        } else {
+            window.location.hash = value;
+        }
+    };
+};
 
 /**
  * get the config for the passenger list.
@@ -79,15 +167,35 @@ function filterPassengersByString($items, string) {
 
 /**
  * filterPassengers
+ *
  * @param elemID = the elemID to filter by, reflects status
  * @param resetSearch = whether to reset the text search.
  */
 function filterPassengers(elemID, resetSearch) {
-    if (resetSearch === undefined || resetSearch) {
+
+    elemID = elemID.replace('#', '');
+
+
+    if(elemID.indexOf('=') != -1) {
+        elemID = elemID.split('=');
+        elemID = elemID[0];
+    }
+
+    if(elemID.indexOf('&') != -1) {
+        elemID = elemID.split('&');
+        elemID = elemID[0];
+    }
+
+    if(elemID == '') {
+        elemID = 'showEveryone';
+    }
+
+
+    if (resetSearch) {
         $('#passenger-name-filter').val('');
 
-        var parts = window.location.href.split('?');
-        window.history.pushState({}, "All Tour Passengers", parts[0]);
+        var location = new Location();
+        location.setQueryParam('search', '');
     }
 
     var config = getPassengerFilterConfig(),
@@ -152,8 +260,43 @@ function updateCounts(response, paxId) {
     location.reload(true);
 }
 
+function passengerSort(type) {
+
+    var $items = $('.passengers').add('.organizers');
+    $items.remove();
+
+    // Sort the elements
+    if (type == 'name') {
+        // Sort by surname then forename
+
+        $items = $items.sort(function(a, b) {
+            var vA = $('.surname', a).text() + $('.forename', a).text();
+            var vB = $('.surname', b).text() + $('.forename', b).text();
+            return (vA.toLowerCase() < vB.toLowerCase()) ? -1 : (vA.toLowerCase() > vB.toLowerCase()) ? 1 : 0;
+        });
+    }
+    else if (type == 'date') {
+        $items = $items.sort(function(a, b) {
+            var vA = $('.date', a).data('signup-date') + $('.surname', a).text() + $('.forename', a).text();
+            var vB = $('.date', b).data('signup-date') + $('.surname', b).text() + $('.forename', b).text();
+            return (vA.toLowerCase() < vB.toLowerCase()) ? -1 : (vA.toLowerCase() > vB.toLowerCase()) ? 1 : 0;
+        });
+    }
+    else {
+        // Do nothing.
+        return;
+    }
+
+    // Re-add the items in the new order.
+    $('.tour-show-right-column').append($items);
+}
+
 
 $(document).ready(function () {
+
+    // Sort passengers by name
+    passengerSort('name');
+
     // move passenger to new lists links
     $(document).on('click', 'a.move-to-accepted', function (e) {
         var t = $(this);
@@ -712,21 +855,13 @@ $(document).ready(function () {
     });
 
     // See if there is a name search.
-    var parts = window.location.href.split('?');
-    for (var i = 1; i < parts.length; i++) {
-        var query = parts[i].split('=');
-        if (query[0] == 'search') {
-            $('#passenger-name-filter').val(query[1]);
+    var location = new Location(),
+        hash = location.getHash(),
+        search = location.getQueryParam('search'),
+        elemID = hash !== '' ? hash : 'showEveryone';
 
-            if ($('.passenger-filter').filter('.active').length > 0) {
-                var elemID = $('.passenger-filter').filter('.active').attr('data-id');
-            } else {
-                elemID = 'showEveryone';
-            }
-
-            filterPassengers(elemID, false);
-        }
-    }
+    $('#passenger-name-filter').val(search);
+    filterPassengers(elemID, false);
 
     // Filter passengers by search
     var delayTimer;
@@ -740,6 +875,10 @@ $(document).ready(function () {
         // Don't do this after every keypress, delay the search.
         clearTimeout(delayTimer);
         delayTimer = setTimeout(function() {
+            var search = $('#passenger-name-filter').val(),
+                location = new Location();
+
+            location.setQueryParam('search', search);
             filterPassengers(elemID, false);
         }, 100);
     });
@@ -747,9 +886,45 @@ $(document).ready(function () {
     // On change track the search in the url.
     $('#passenger-name-filter').change(function() {
         var search = $('#passenger-name-filter').val(),
-            parts = window.location.href.split('?'),
-            href = search !== '' ? parts[0] + '?search=' + search : parts[0];
+            location = new Location();
 
-        window.history.pushState({}, "Search " + search, href);
+        location.setQueryParam('search', search);
     });
+
+
+    // Clicking a passenger filter.
+    $('.passenger-filter').click(function (e) {
+        e.preventDefault();
+
+        //Scroll functionality if at tablet breakpoint
+        if (parseInt($(window).width()) < 900) {
+            var target = $('#passenger-card');
+            $('html, body').animate({
+                scrollTop: target.offset().top
+            }, 1000);
+        }
+
+        var elemID = this.getAttribute('data-id'),
+            location = new Location;
+
+        // If the clear filter item has been clicked,
+        // remove the value of the search box
+        var reset = false;
+        if(elemID == 'showEveryone') {
+            reset = true;
+        }
+
+
+        location.setHash(elemID);
+
+        filterPassengers(elemID, reset);
+
+        if(elemID == 'showWaitlistPassengers') {
+            passengerSort('date');
+        } else {
+            passengerSort('name');
+        }
+
+    });
+
 });
