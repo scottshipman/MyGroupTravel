@@ -490,6 +490,9 @@ class PaymentController extends Controller
         $payments = $this->get("payment.getPayments")->getTourPaymentsPaid($tourId);
         $due = $this->get("payment.getPayments")->getTourPaymentsDue($tourId);
 
+        // Get counts of passengers to decide whether we show the payment schedule or not
+        $counts = $this->get('passenger.actions')->getParticipantCounts($passengers);
+
         //brand stuff
         $default_brand = $em->getRepository('BrandBundle:Brand')->findOneByName('ToolkitDefaultBrand');
 
@@ -510,6 +513,7 @@ class PaymentController extends Controller
             'due' => $due,
             'payments' => $payments,
             'locale' => $locale,
+            'counts' => $counts
         ));
     }
 

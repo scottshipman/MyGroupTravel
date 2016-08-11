@@ -43,7 +43,7 @@
                 <li><a href="{{ path('manage_payment_dashboard_edit_payments', { 'tourId': tour.id }) }}" style="text-decoration: none; color: inherit;"><strong>{% trans %}payment.labels.payment_settings{% endtrans %}</strong></a></li>
             </ul>
 
-            {% if due.items|length > 0 %}
+            {% if due.items|length > 0 and (counts.passenger.accepted > 0 or counts.passenger.free > 0) %}
                 <div class="passenger-cta-card tour-edit mdl-card passenger-dashboard-cta-card payment-schedule-card">
                     <div class="mdl-card__title">
                         <h3 class="mdl-card__title-text">{% trans %}payment.labels.schedule{% endtrans %}</h3>
