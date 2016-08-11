@@ -7,6 +7,7 @@
 namespace TUI\Toolkit\BrandBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Brand
@@ -29,6 +30,7 @@ class Brand
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=100)
+     * @Assert\NotBlank()
      */
     private $name;
 
@@ -36,6 +38,7 @@ class Brand
      * @var string
      *
      * @ORM\Column(name="division", type="string", length=100)
+     * @Assert\NotBlank()
      */
     private $division;
 
@@ -43,6 +46,7 @@ class Brand
      * @var string
      *
      * @ORM\Column(name="primaryColor", type="string", length=32)
+     * @Assert\NotBlank()
      */
     private $primaryColor;
 
@@ -50,6 +54,7 @@ class Brand
      * @var string
      *
      * @ORM\Column(name="secondaryColor", type="string", length=32)
+     * @Assert\NotBlank()
      */
     private $secondaryColor;
 
@@ -57,6 +62,7 @@ class Brand
      * @var string
      *
      * @ORM\Column(name="tertiaryColor", type="string", length=32)
+     * @Assert\NotBlank()
      */
     private $tertiaryColor;
 

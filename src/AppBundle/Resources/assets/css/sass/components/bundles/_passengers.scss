@@ -99,9 +99,10 @@
     -o-transition: max-height 1s;
     transition: max-height 1s;
     overflow: hidden;
-    max-height: 500px !important;
+    max-height: 600px !important;
     //padding: 0;
     opacity: 1;
+    margin-top: 20px;
   }
 }
 
@@ -151,7 +152,7 @@
     -o-transition: max-height 1s;
     transition: max-height 1s;
     overflow: hidden;
-    max-height: 1150px !important;
+    max-height: 1250px !important;
     //padding: 0;
     opacity: 1;
   }
@@ -184,6 +185,7 @@
     max-height: 5500px !important;
     //padding: 0;
     opacity: 1;
+    margin-top: 20px;
   }
 }
 
@@ -219,6 +221,10 @@
 
   .mdl-selectfield {
     max-width: 100px;
+  }
+
+  .form-row {
+    display: inline;
   }
 }
 
@@ -475,4 +481,8 @@ a.organizer-card {
 
 #passenger-close {
   top: 20px;
+}
+
+.sidebar-form-edit {
+  margin-right: 20px;
 }

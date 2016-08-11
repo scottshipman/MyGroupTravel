@@ -45,27 +45,20 @@ class TourPassengerType extends AbstractType
                 break;
         }
 
-
         $builder
             ->add('firstName', 'text', array(
                 'label' => 'passenger.signupform.fname',
                 'translation_domain'  => 'messages',
                 'required' => true,
                 'mapped' => false,
-                'constraints' => new NotBlank(array(
-                    'message' => 'Please enter a Parent / Guardian First Name'
-                )),
-
+                'constraints' => new NotBlank()
             ))
             ->add('lastName', 'text', array(
                 'label' => 'passenger.signupform.lname',
                 'translation_domain'  => 'messages',
                 'required' => true,
                 'mapped' => false,
-                'constraints' => new NotBlank(array(
-                    'message' => 'Please enter a Parent / Guardian Last Name'
-                )),
-
+                'constraints' => new NotBlank()
             ))
             ->add('email', 'email', array(
                 'label' => 'passenger.signupform.email',
@@ -74,13 +67,10 @@ class TourPassengerType extends AbstractType
                 'mapped' => false,
                 'constraints' => array(
                     new Email(array(
-                    'message' => 'Please enter a valid Parent / Guardian email address'
+                    'message' => 'Please enter a valid email address.'
                     )),
-                    new NotBlank(array(
-                        'message' => 'Please enter a Parent / Guardian email address'
-                    )),
+                    new NotBlank()
                 ),
-
             ))
             ->add('passengers', 'collection', array(
                 'type' => new PassengerType($this->locale, $this->tourId),

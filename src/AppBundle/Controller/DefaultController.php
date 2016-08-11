@@ -126,7 +126,11 @@ class DefaultController extends Controller
                         unset($path[3]);
                     }
 
-                    $path[1] = str_replace('data', '', $path[1]);
+                    if (isset($path[1])) {
+                        $path[1] = str_replace('data', '', $path[1]);
+                    }
+
+                    //$path[1] = str_replace('data', '', $path[1]);
                 }
                 $field = implode($path, '_');
                 $formattedErrors[$field] = $error->getMessage();

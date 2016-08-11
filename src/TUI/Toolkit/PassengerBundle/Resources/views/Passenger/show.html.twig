@@ -191,7 +191,7 @@
             {#Passenger Medical Information Card#}
             {% if entity.tourReference.medicalDate != null %}
                 {% if entity.medicalReference != null %}
-                    <div class="waitlist tour-edit mdl-card mdl-shadow--2dp">
+                    <div class="waitlist tour-edit mdl-card mdl-shadow--2dp passenger-edit-ajax-block">
                         <div class="mdl-card__title">
                             <h3 class="mdl-card__title-text"><i style="margin-right: 10px;"class="material-icons">local_hospital</i> {% trans %}passenger.labels.medical_info{% endtrans %}</h3>
                             <a style="position: absolute; right: 15px;" href="#"><i id="medical" class="material-icons" style="position: relative; display: inline-block; border-radius: 0px; border: none; padding: 0px">border_color</i></a>

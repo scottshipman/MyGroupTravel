@@ -5,9 +5,8 @@
 
    {{ form_start(form) }}
 
-        {{ form_errors(form) }}
     <div>{% trans %}user.form.resetting.securityprompt{% endtrans %}</div>
-        {{ form_widget(form.answerConfirm, {'label' : question }) }}
+        {{ form_row(form.answerConfirm, {'label' : question }) }}
         {{ form_row(form.plainPassword) }}
 
 

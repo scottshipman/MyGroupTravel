@@ -1,11 +1,8 @@
 {% block body -%}
 
-    <div class="medical-form">
-        <div class="errors">
-            {{ form_errors(edit_form) }}
-        </div>
-        {{ form(edit_form) }}
+    <div class="medical-form sidebar-form-edit">
 
+        {{ form(edit_form) }}
 
         {#<ul class="record_actions">#}
             {#<li>{{ form(delete_form) }}</li>#}

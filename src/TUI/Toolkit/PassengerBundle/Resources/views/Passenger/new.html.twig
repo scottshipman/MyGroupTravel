@@ -9,18 +9,14 @@
             <p style="text-align: center">{% trans %}passenger.modals.message{% endtrans %}</p>
         {% endif %}
 
-        <div class="errors">
-            {{ form_errors(form) }}
-        </div>
-
         {{ form_start(form) }}
 
         <div id="guardian-form">
             <h5>Parent/Guardian</h5>
             <span>Please provide contact information for parents or guardians of the passenger(s).</span>
-            {{ form_widget(form.firstName) }}
-            {{ form_widget(form.lastName) }}
-            {{ form_widget(form.email) }}
+            {{ form_row(form.firstName) }}
+            {{ form_row(form.lastName) }}
+            {{ form_row(form.email) }}
 
 
         </div>
@@ -31,10 +27,10 @@
             {#<div class = "tour-edit mdl-card mdl-shadow--2dp">#}
                 {#<div class="mdl-card__supporting-text">#}
                 <ul class="passenger_info" taskid = "{{ passenger.vars.value.id }}">
-                    <li>{{ form_widget(passenger.fName) }}</li>
-                    <li>{{ form_widget(passenger.lName) }}</li>
-                    <li>{{ form_widget(passenger.dateOfBirth) }}</li>
-                    <li>{{ form_widget(passenger.gender) }}</li>
+                    <li>{{ form_row(passenger.fName) }}</li>
+                    <li>{{ form_row(passenger.lName) }}</li>
+                    <li>{{ form_row(passenger.dateOfBirth) }}</li>
+                    <li>{{ form_row(passenger.gender) }}</li>
                 </ul>
             {% endfor %}
         </div>
@@ -107,12 +103,15 @@
                     window.location.reload(true);
                 }).error(function (response) {
                     $("#loader").hide();
+                    $('.error').remove();
+                    $('div').removeClass('form-row-errors');
                     var parsed = $.parseJSON(response.responseText);
-                    count = 0;
+                    var count = 0;
                     $.each(parsed, function(i, item) {
-                        field= '#tui_toolkit_passengerbundle_tourpassenger_' + i;
+                        var field = '#tui_toolkit_passengerbundle_tourpassenger_' + i;
                         if(count==0){ scrolling = field;}
-                        $(field).parent().after('<p class="errors" style="color:red;">'+ item + '</p>');
+                        $(field).parent().parent().addClass('form-row-errors');
+                        $(field).parent().after('<p class="error">'+ item + '</p>');
                         count++;
                     });
                     if (typeof scrolling != undefined){

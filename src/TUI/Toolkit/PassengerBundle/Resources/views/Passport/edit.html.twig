@@ -1,19 +1,16 @@
 {% block body -%}
-    <div class="passport-form">
-        <div class="errors">
-            {{ form_errors(edit_form) }}
-        </div>
+    <div class="passport-form sidebar-form-edit">
         {{ form_start(edit_form) }}
 
         {{ form_start(edit_form) }}
         <p style="color:red; margin-top: 10px; max-width: 375px;">It is important that the details provided here match exactly as per the passport</p>
-        {{ form_widget(edit_form.passportLastName) }}
-        {{ form_widget(edit_form.passportFirstName) }}
+        {{ form_row(edit_form.passportLastName) }}
+        {{ form_row(edit_form.passportFirstName) }}
         {{ form_widget(edit_form.passportMiddleName) }}
         {{ form_widget(edit_form.passportGender) }}
         {{ form_widget(edit_form.passportTitle) }}
-        {{ form_widget(edit_form.passportIssuingState) }}
-        {{ form_widget(edit_form.passportNumber) }}
+        {{ form_row(edit_form.passportIssuingState) }}
+        {{ form_row(edit_form.passportNumber) }}
         {{ form_widget(edit_form.passportNationality) }}
         <label style="display: block; color:rgba(0,0,0,.26);">{% trans %}passenger.labels.passport_dob{% endtrans %}</label>
         {{ form_widget(edit_form.passportDateOfBirth) }}

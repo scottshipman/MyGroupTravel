@@ -2,7 +2,6 @@
 
 {% block body -%}
     {{ form_start(form) }}
-    <div class="form-errors">{{ form_errors(form) }}</div>
     {{ form_rest(form) }}
     {{ form_end(form) }}
     <script>
@@ -26,11 +25,8 @@
                 },
                 error : function (response) {
                     $("#loader").hide();
-                    var parsed = $.parseJSON(response.responseText);
-                    $.each(parsed, function(i, item) {
-                        field = '#tui_toolkit_ajax_userbundle_user_' + i;
-                        $(field).parent().parent().prepend('<p style="color:red;">'+ i.toUpperCase() + ': ' + item + '</p>');
-                    });
+                    var field = '#tui_toolkit_ajax_userbundle_user_';
+                    ajaxFormErrors(response, field);
                 }
             })
         });

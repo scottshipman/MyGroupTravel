@@ -60,6 +60,7 @@ form {
 form > .form-row > ul > li {
   color: red;
   list-style: none;
+
 }
 
 .setup-form-list {
@@ -174,12 +175,16 @@ form[name=tui_toolkit_tourbundle_toursetup] {
   margin: 0 0.3em;
 }
 
-.form-errors {
-  color:red;
-
-  ul {
+.form-row-errors {
+  ul, p.error {
+    color: red;
     list-style: none;
+    padding: 0;
+    margin-left: 0px;
   }
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #ffe6e6;
 }
 
 #ui-datepicker-div {
