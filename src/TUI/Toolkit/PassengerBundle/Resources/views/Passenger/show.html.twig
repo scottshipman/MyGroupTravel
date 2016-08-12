@@ -133,11 +133,11 @@
                     {% endif %}
                 </div>
                 {% if entity.medicalReference == null and entity.tourReference.medicalDate != null%}
-                    <div class="mdl-card__supporting-text mdl-card--border">
+                    <div id="medical-new-card" class="mdl-card__supporting-text mdl-card--border">
                         <p class="mdl-card__title-text task-title"><i style="margin-right: 10px; color:grey; display: inline;"class="material-icons">local_hospital</i> {% trans %}passenger.actions.add_medical{% endtrans %}</p>
                         <label class="task-due-date">by {{ entity.tourReference.medicalDate|date(format) }}</label>
-                        <a href="#"><i id="medical" class="material-icons">add</i></a>
-                        <a href="#"><i id="medical-close" class="material-icons">close</i></a>
+                        <a href="#"><i class="medical material-icons">add</i></a>
+                        <a href="#"><i class="medical-close material-icons">close</i></a>
                         <div class="clear"></div>
                         {% if entity.medicalReference == null %}
                             {{ render(controller( 'PassengerBundle:Medical:new', {'passengerId' : entity.id} )) }}
@@ -190,17 +190,19 @@
 
             {#Passenger Medical Information Card#}
             {% if entity.tourReference.medicalDate != null %}
-                {% if entity.medicalReference != null %}
+                <div id="medical-edit-card" style="display: {{ (entity.medicalReference != null) ? 'inherit' : 'none' }};"> <!-- CONTAINER -->
                     <div class="waitlist tour-edit mdl-card mdl-shadow--2dp passenger-edit-ajax-block">
                         <div class="mdl-card__title">
                             <h3 class="mdl-card__title-text"><i style="margin-right: 10px;"class="material-icons">local_hospital</i> {% trans %}passenger.labels.medical_info{% endtrans %}</h3>
-                            <a style="position: absolute; right: 15px;" href="#"><i id="medical" class="material-icons" style="position: relative; display: inline-block; border-radius: 0px; border: none; padding: 0px">border_color</i></a>
-                            <a style="position: absolute; right: 15px;" href="#"><i id="medical-close" style="display: none; position: relative; border-radius: 0px; border: none; padding: 0px" class="material-icons">close</i></a>
+                            <a style="position: absolute; right: 15px;" href="#"><i class="medical material-icons" style="position: relative; display: inline-block; border-radius: 0px; border: none; padding: 0px">border_color</i></a>
+                            <a style="position: absolute; right: 15px;" href="#"><i style="display: none; position: relative; border-radius: 0px; border: none; padding: 0px" class="medical-close material-icons">close</i></a>
                         </div>
+                        <div id="medical-edit-container"> <!-- edit form container -->
                         {% if entity.medicalReference != null %}
                             {% set medicalId  = entity.medicalReference.id%}
-                            {{ render(controller( 'PassengerBundle:Medical:edit', {'id' : medicalId} )) }}
+                                {{ render(controller( 'PassengerBundle:Medical:edit', {'id' : medicalId} )) }}
                         {% endif %}
+                        </div> <!-- edit form container end -->
                         <div class="mdl-card__supporting-text mdl-card--border">
                             <label class="row-label">{% trans %}passenger.labels.doctor_name{% endtrans %}</label>
                                 <p class="doctor-name row-content">{% if entity.medicalReference != null %}{{ entity.medicalReference.doctorName }}{% endif %}</p>
@@ -222,7 +224,7 @@
                             <div class="clear"></div>
                         </div>
                     </div>
-                {% endif %}
+                </div> <!-- end of new container block thing -->
             {% endif %}
 
             {% if entity.tourReference.dietaryDate != null %}

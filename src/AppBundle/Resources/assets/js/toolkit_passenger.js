@@ -299,6 +299,12 @@ function isAutoSort() {
     return false;
 }
 
+function updateMarkup(route, element) {
+    $.get(route, function(data) {
+        $(element).html(data);
+    });
+}
+
 
 $(document).ready(function () {
 
@@ -374,28 +380,28 @@ $(document).ready(function () {
         toolkitStandardPopup("Log A Payment", '/payment/tour/' + tourId + '/passenger/' + passengerId + '/new' );
     });
 
-    $('#medical').click(function(e) {
+    $('.medical').click(function(e) {
         e.preventDefault();
         $('.medical-form').addClass('expanded');
-        $('#medical-close').css({
+        $('.medical-close').css({
             "color": "grey",
             "position": "absolute",
             "right": "15px",
             "display": "inline-block"
         });
-        $('#medical').css("display", "none");
+        $('.medical').css("display", "none");
     });
 
-    $('#medical-close').click(function(e) {
+    $('.medical-close').click(function(e) {
         e.preventDefault();
         $('.medical-form').removeClass('expanded');
-        $('#medical').css({
+        $('.medical').css({
             "color": "grey",
             "position": "absolute",
             "right": "15px",
             "display": "inline-block"
         });
-        $('#medical-close').css("display", "none");
+        $('.medical-close').css("display", "none");
     });
 
     $('#ajax_medical_form').on('submit', function(e) {
@@ -419,13 +425,13 @@ $(document).ready(function () {
             $("#loader").css("display", "none");
             //window.location.reload(true);
             $(".medical-form").removeClass('expanded');
-            $('#medical').css({
+            $('.medical').css({
                 "color": "grey",
                 "position": "absolute",
                 "right": "15px",
                 "display": "inline-block"
             });
-            $('#medical-close').css("display", "none");
+            $('.medical-close').css("display", "none");
 
             $('.doctor-name').html(response[0]);
             $('.doctors-number').html(response[1]);
@@ -456,16 +462,29 @@ $(document).ready(function () {
             data: $('#ajax_new_medical_form').serialize(),
             contentType: "application/x-www-form-urlencoded",
         }).success(function (response) {
-            $("#loader").css("display", "none");
-            window.location.reload(true);
-            $(".medical-form").removeClass('expanded');
-            $('#medical').css({
+            // Populate the medical edit form container
+            updateMarkup('/passenger/medical/'+ response['id'] + '/edit', '#medical-edit-container');
+
+            // Populate the "front" of the edit card
+            $('.doctor-name').html(response['name']);
+            $('.doctors-number').html(response['number']);
+            $('.medical-conditions').html(response['conditions']);
+            $('.medications').html(response['medications']);
+
+            // Display the edit card
+            $('#medical-edit-card').css('display', 'block');
+            $('#medical-new-card').remove();
+
+            $('.medical').css({
                 "color": "grey",
                 "position": "absolute",
                 "right": "15px",
                 "display": "inline-block"
             });
-            $('#medical-close').css("display", "none");
+
+            $('.medical-close').css("display", "none");
+
+            $("#loader").css("display", "none");
 
         }).error(function (response) {
             $("#loader").hide();
@@ -529,7 +548,8 @@ $(document).ready(function () {
             contentType: "application/x-www-form-urlencoded",
         }).success(function (response) {
             $("#loader").css("display", "none");
-            window.location.reload(true);
+            //window.location.reload(true);
+            updateMarkup('/passenger/100/show');
             $(".dietary-form").removeClass('expanded');
             $('#dietary').css({
                 "color": "grey",

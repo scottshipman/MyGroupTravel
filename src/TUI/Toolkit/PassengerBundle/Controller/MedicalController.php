@@ -81,22 +81,17 @@ class MedicalController extends Controller
             $em->persist($passenger);
             $em->flush();
 
-            $data = array(
-                $entity->getDoctorName(),
-                $entity->getDoctorNumber(),
-                $entity->getConditions(),
-                $entity->getMedications(),
-            );
 
-//            Decided to remove the ajax form from the create form
-//            $responseContent =  json_encode($data);
-//            return new Response($responseContent,
-//                Response::HTTP_OK,
-//                array('content-type' => 'application/json')
-//            );
+            //$this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('passenger.form.success.message.medical'));
 
-            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('passenger.form.success.message.medical'));
-            return $this->redirect($this->generateUrl('manage_passenger_show', array('id' => $passenger->getId())));
+
+            return new JsonResponse(array(
+                'id' => $entity->getId(),
+                'name' => $entity->getDoctorName(),
+                'number' => $entity->getDoctorNumber(),
+                'conditions' => $entity->getConditions(),
+                'medications' => $entity->getMedications()
+            ));
 
         }
 
