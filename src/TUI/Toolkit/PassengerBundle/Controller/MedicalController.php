@@ -81,17 +81,7 @@ class MedicalController extends Controller
             $em->persist($passenger);
             $em->flush();
 
-
-            //$this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('passenger.form.success.message.medical'));
-
-
-            return new JsonResponse(array(
-                'id' => $entity->getId(),
-                'name' => $entity->getDoctorName(),
-                'number' => $entity->getDoctorNumber(),
-                'conditions' => $entity->getConditions(),
-                'medications' => $entity->getMedications()
-            ));
+            return $this->createJsonResponse($entity);
 
         }
 
@@ -255,7 +245,7 @@ class MedicalController extends Controller
             'action' => $this->generateUrl('medical_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr'  => array (
-                'id' => 'ajax_medical_form'
+                'id' => 'ajax_medical_form',
             ),
         ));
 
@@ -312,23 +302,7 @@ class MedicalController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
-            $doctorNumber = $entity->getDoctorNumber();
-
-            $data = array(
-                $entity->getDoctorName(),
-                $doctorNumber,
-                $entity->getConditions(),
-                $entity->getMedications(),
-            );
-
-            $responseContent =  json_encode($data);
-            return new Response($responseContent,
-                Response::HTTP_OK,
-                array('content-type' => 'application/json')
-            );
-
-
-//            return $this->redirect($this->generateUrl('manage_passenger_show', array('id' => $passenger->getId())));
+            return $this->createJsonResponse($entity);
 
         }
 
@@ -383,4 +357,21 @@ class MedicalController extends Controller
             ->getForm()
         ;
     }
+
+    /**
+     * Given the entity, build a JSON response for the front end to use
+     * @param Medical $entity
+     * @return JsonResponse
+     */
+    private function createJsonResponse(Medical $entity)
+    {
+        return new JsonResponse(array(
+        'id' => $entity->getId(),
+        'name' => $entity->getDoctorName(),
+        'number' => $entity->getDoctorNumber(),
+        'conditions' => $entity->getConditions(),
+        'medications' => $entity->getMedications()
+    ));
+    }
+
 }

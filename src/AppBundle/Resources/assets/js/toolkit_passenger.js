@@ -380,32 +380,9 @@ $(document).ready(function () {
         toolkitStandardPopup("Log A Payment", '/payment/tour/' + tourId + '/passenger/' + passengerId + '/new' );
     });
 
-    $('.medical').click(function(e) {
-        e.preventDefault();
-        $('.medical-form').addClass('expanded');
-        $('.medical-close').css({
-            "color": "grey",
-            "position": "absolute",
-            "right": "15px",
-            "display": "inline-block"
-        });
-        $('.medical').css("display", "none");
-    });
 
-    $('.medical-close').click(function(e) {
-        e.preventDefault();
-        $('.medical-form').removeClass('expanded');
-        $('.medical').css({
-            "color": "grey",
-            "position": "absolute",
-            "right": "15px",
-            "display": "inline-block"
-        });
-        $('.medical-close').css("display", "none");
-    });
 
-    $('#ajax_medical_form').on('submit', function(e) {
-
+    $(document).on('submit', '#ajax_medical_form', function (e) {
         var formAction = $(this).attr('action');
         var form = $(this);
         $('.errors').remove();
@@ -423,7 +400,6 @@ $(document).ready(function () {
             contentType: "application/x-www-form-urlencoded",
         }).success(function (response) {
             $("#loader").css("display", "none");
-            //window.location.reload(true);
             $(".medical-form").removeClass('expanded');
             $('.medical').css({
                 "color": "grey",
@@ -433,18 +409,17 @@ $(document).ready(function () {
             });
             $('.medical-close').css("display", "none");
 
-            $('.doctor-name').html(response[0]);
-            $('.doctors-number').html(response[1]);
-            $('.medical-conditions').html(response[2]);
-            $('.medications').html(response[3]);
+            $('.doctor-name').html(response['name']);
+            $('.doctors-number').html(response['number']);
+            $('.medical-conditions').html(response['conditions']);
+            $('.medications').html(response['medications']);
         }).error(function (response) {
             var attribute = '#tui_toolkit_passengerbundle_medical_';
             ajaxFormErrors(response, attribute);
         })
     });
 
-
-    $('#ajax_new_medical_form').on('submit', function(e) {
+    $(document).on('submit', '#ajax_new_medical_form', function (e) {
 
         var formAction = $(this).attr('action');
         var form = $(this);
@@ -475,6 +450,7 @@ $(document).ready(function () {
             $('#medical-edit-card').css('display', 'block');
             $('#medical-new-card').remove();
 
+
             $('.medical').css({
                 "color": "grey",
                 "position": "absolute",
@@ -493,8 +469,33 @@ $(document).ready(function () {
         })
     });
 
-    $('#ajax_dietary_form').on('submit', function(e) {
+    $('.medical').click(function(e) {
+        e.preventDefault();
+        $('.medical-form').addClass('expanded');
+        $('.medical-close').css({
+            "color": "grey",
+            "position": "absolute",
+            "right": "15px",
+            "display": "inline-block"
+        });
+        $('.medical').css("display", "none");
+    });
 
+    $('.medical-close').click(function(e) {
+        e.preventDefault();
+        $('.medical-form').removeClass('expanded');
+        $('.medical').css({
+            "color": "grey",
+            "position": "absolute",
+            "right": "15px",
+            "display": "inline-block"
+        });
+        $('.medical-close').css("display", "none");
+    });
+
+
+
+    $(document).on('submit', '#ajax_dietary_form', function (e) {
         var formAction = $(this).attr('action');
         var form = $(this);
         $('.errors').remove();
@@ -512,16 +513,17 @@ $(document).ready(function () {
             contentType: "application/x-www-form-urlencoded",
         }).success(function (response) {
             $("#loader").css("display", "none");
-            //window.location.reload(true);
             $(".dietary-form").removeClass('expanded');
-            $('#dietary').css({
+            $('.dietary').css({
                 "color": "grey",
                 "position": "absolute",
                 "right": "15px",
                 "display": "inline-block"
             });
-            $('#dietary-close').css("display", "none");
-            $('.dietary-description').html(response);
+            $('.dietary-close').css("display", "none");
+
+            // Populate the "front" of the edit card
+            $('.dietary-description').html(response['description']);
 
         }).error(function (response) {
             var attribute = '#tui_toolkit_passengerbundle_dietary_';
@@ -529,8 +531,8 @@ $(document).ready(function () {
         })
     });
 
-    $('#ajax_new_dietary_form').on('submit', function(e) {
 
+    $(document).on('submit', '#ajax_new_dietary_form', function (e) {
         var formAction = $(this).attr('action');
         var form = $(this);
         $('.errors').remove();
@@ -547,50 +549,61 @@ $(document).ready(function () {
             data: $('#ajax_new_dietary_form').serialize(),
             contentType: "application/x-www-form-urlencoded",
         }).success(function (response) {
-            $("#loader").css("display", "none");
-            //window.location.reload(true);
-            updateMarkup('/passenger/100/show');
-            $(".dietary-form").removeClass('expanded');
-            $('#dietary').css({
-                "color": "grey",
-                "position": "absolute",
-                "right": "15px",
-                "display": "inline-block"
+
+            // Populate the dietary edit form container
+            updateMarkup('/passenger/dietary/'+ response['id'] + '/edit', '#dietary-edit-container');
+
+            // Populate the "front" of the edit card
+            $('.dietary-description').html(response['description']);
+
+            // Display the edit card
+            $('#dietary-edit-card').css('display', 'block');
+            $('#dietary-new-card').remove();
+
+            $('.dietary').css({
+                'color': 'grey',
+                'position': 'absolute',
+                'right': '15px',
+                'display': 'inline-block'
             });
-            $('#dietary-close').css("display", "none");
+
+            $('.dietary-close').css('display', 'none');
+
+            $('#loader').css('display', 'none');
 
         }).error(function (response) {
-            $("#loader").hide();
+            $('#loader').hide();
             var field = '#tui_toolkit_passengerbundle_dietary_';
             ajaxFormErrors(response, field);
         })
     });
 
-    $('#dietary').click(function(e) {
+    $('.dietary').click(function(e) {
         e.preventDefault();
         $('.dietary-form').addClass('expanded');
-        $('#dietary-close').css({
+        $('.dietary-close').css({
             "color": "grey",
             "position": "absolute",
             "right": "15px",
             "display": "inline-block"
         });
-        $('#dietary').css("display", "none");
+        $('.dietary').css("display", "none");
     });
 
-    $('#dietary-close').click(function(e) {
+    $('.dietary-close').click(function(e) {
         e.preventDefault();
         $('.dietary-form').removeClass('expanded');
-        $('#dietary').css({
+        $('.dietary').css({
             "color": "grey",
             "position": "absolute",
             "right": "15px",
             "display": "inline-block"
         });
-        $('#dietary-close').css("display", "none");
+        $('.dietary-close').css("display", "none");
     });
 
-    $('#ajax_passport_form').on('submit', function(e) {
+
+    $(document).on('submit', '#ajax_passport_form', function (e) {
 
         var formAction = $(this).attr('action');
         var form = $(this);
@@ -610,25 +623,26 @@ $(document).ready(function () {
         }).success(function (response) {
             $("#loader").css("display", "none");
             //window.location.reload(true);
-            $(".passport-form").removeClass('expanded');
-            $('#passport').css({
+            $('.passport-form').removeClass('expanded');
+            $('.passport').css({
                 "color": "grey",
                 "position": "absolute",
                 "right": "15px",
                 "display": "inline-block"
             });
-            $('#passport-close').css("display", "none");
-            $('.passport-lastName').html(response[0]);
-            $('.passport-firstName').html(response[1]);
-            $('.passport-middleName').html(response[2]);
-            $('.passport-gender').html(response[3]);
-            $('.passport-title').html(response[4]);
-            $('.passport-issuingState').html(response[5]);
-            $('.passport-number').html(response[6]);
-            $('.passport-nationality').html(response[7]);
-            $('.passport-dateOfBirth').html(response[8]);
-            $('.passport-dateOfIssue').html(response[9]);
-            $('.passport-dateOfExpiry').html(response[10]);
+
+            // Populate the "front" of the edit card
+            $('.passport-lastName').html(response['last_name']);
+            $('.passport-firstName').html(response['first_name']);
+            $('.passport-middleName').html(response['middle_name']);
+            $('.passport-gender').html(response['gender']);
+            $('.passport-title').html(response['title']);
+            $('.passport-issuingState').html(response['issuing_state']);
+            $('.passport-number').html(response['passport_number']);
+            $('.passport-nationality').html(response['nationality']);
+            $('.passport-dateOfBirth').html(response['date_of_birth']);
+            $('.passport-dateOfIssue').html(response['date_of_issue']);
+            $('.passport-dateOfExpiry').html(response['date_of_expiry']);
 
         }).error(function (response) {
             var attribute = '#tui_toolkit_passengerbundle_passport_';
@@ -636,7 +650,7 @@ $(document).ready(function () {
         })
     });
 
-    $('#ajax_new_passport_form').on('submit', function(e) {
+    $(document).on('submit', '#ajax_new_passport_form', function (e) {
 
         var formAction = $(this).attr('action');
         var form = $(this);
@@ -654,15 +668,38 @@ $(document).ready(function () {
             data: $('#ajax_new_passport_form').serialize(),
             contentType: "application/x-www-form-urlencoded",
         }).success(function (response) {
-            $("#loader").css("display", "none");
-            window.location.reload(true);
-            $(".passport-form").removeClass('expanded');
-            $('#passport').css({
-                "color": "grey",
-                "position": "absolute",
-                "right": "15px",
-                "display": "inline-block"
+
+            // Populate the passport edit form container
+            updateMarkup('/passenger/passport/'+ response['id'] + '/edit', '#passport-edit-container');
+
+            // Populate the "front" of the edit card
+            $('.passport-lastName').html(response['last_name']);
+            $('.passport-firstName').html(response['first_name']);
+            $('.passport-middleName').html(response['middle_name']);
+            $('.passport-gender').html(response['gender']);
+            $('.passport-title').html(response['title']);
+            $('.passport-issuingState').html(response['issuing_state']);
+            $('.passport-number').html(response['passport_number']);
+            $('.passport-nationality').html(response['nationality']);
+            $('.passport-dateOfBirth').html(response['date_of_birth']);
+            $('.passport-dateOfIssue').html(response['date_of_issue']);
+            $('.passport-dateOfExpiry').html(response['date_of_expiry']);
+
+            // Display the edit card
+            $('#passport-edit-card').css('display', 'block');
+            $('#passport-new-card').remove();
+
+            $('.passport').css({
+                'color': 'grey',
+                'position': 'absolute',
+                'right': '15px',
+                'display': 'inline-block'
             });
+
+            $('.passport-close').css('display', 'none');
+
+            $('#loader').css('display', 'none');
+
         }).error(function (response) {
             $("#loader").hide();
 
@@ -671,31 +708,31 @@ $(document).ready(function () {
         })
     });
 
-    $('#passport').click(function(e) {
+    $('.passport').click(function(e) {
         e.preventDefault();
         $('.passport-form').addClass('expanded');
-        $('#passport-close').css({
+        $('.passport-close').css({
             "color": "grey",
             "position": "absolute",
             "right": "15px",
             "display": "inline-block"
         });
-        $('#passport').css("display", "none");
+        $('.passport').css("display", "none");
     });
 
-    $('#passport-close').click(function(e) {
+    $('.passport-close').click(function(e) {
         e.preventDefault();
         $('.passport-form').removeClass('expanded');
-        $('#passport').css({
+        $('.passport').css({
             "color": "grey",
             "position": "absolute",
             "right": "15px",
             "display": "inline-block"
         });
-        $('#passport-close').css("display", "none");
+        $('.passport-close').css("display", "none");
     });
 
-    $('#ajax_emergency_form').on('submit', function(e) {
+    $(document).on('submit', '#ajax_emergency_form', function (e) {
 
         var formAction = $(this).attr('action');
         $('.errors').remove();
@@ -722,11 +759,12 @@ $(document).ready(function () {
                 "right": "15px",
                 "display": "inline-block"
             });
-            $('#emergency-close').css("display", "none");
-            $('.emergency-name').html(response[0]);
-            $('.emergency-relationship').html(response[1]);
-            $('.emergency-number').html(response[2]);
-            $('.emergency-email').html(response[3]);
+
+            // Populate the "front" of the edit card
+            $('.emergency-name').html(response['name']);
+            $('.emergency-relationship').html(response['relationship']);
+            $('.emergency-number').html(response['telephone']);
+            $('.emergency-email').html(response['email']);
 
         }).error(function (response) {
             var attribute = '#tui_toolkit_passengerbundle_emergency_';
@@ -734,7 +772,7 @@ $(document).ready(function () {
         })
     });
 
-    $('#ajax_new_emergency_form').on('submit', function(e) {
+    $(document).on('submit', '#ajax_new_emergency_form', function (e) {
 
         var formAction = $(this).attr('action');
         $('.errors').remove();
@@ -752,20 +790,29 @@ $(document).ready(function () {
             data: $('#ajax_new_emergency_form').serialize(),
             contentType: "application/x-www-form-urlencoded",
         }).success(function (response) {
-            $("#loader").css("display", "none");
-            window.location.reload(true);
-            $(".emergency-form").removeClass('expanded');
-            $('#emergency').css({
-                "color": "grey",
-                "position": "absolute",
-                "right": "15px",
-                "display": "inline-block"
+            // Populate the emergency edit form container
+            updateMarkup('/passenger/emergency/'+ response['id'] + '/edit', '#emergency-edit-container');
+
+            // Populate the "front" of the edit card
+            $('.emergency-name').html(response['name']);
+            $('.emergency-relationship').html(response['relationship']);
+            $('.emergency-number').html(response['telephone']);
+            $('.emergency-email').html(response['email']);
+
+            // Display the edit card
+            $('#emergency-edit-card').css('display', 'block');
+            $('#emergency-new-card').remove();
+
+            $('.emergency').css({
+                'color': 'grey',
+                'position': 'absolute',
+                'right': '15px',
+                'display': 'inline-block'
             });
-            $('#emergency-close').css("display", "none");
-            $('.emergency-name').html(response[0]);
-            $('.emergency-relationship').html(response[1]);
-            $('.emergency-number').html(response[2]);
-            $('.emergency-email').html(response[3]);
+
+            $('.emergency-close').css('display', 'none');
+
+            $('#loader').css('display', 'none');
 
         }).error(function (response) {
             $("#loader").hide();
@@ -774,28 +821,28 @@ $(document).ready(function () {
         })
     });
 
-    $('#emergency').click(function(e) {
+    $('.emergency').click(function(e) {
         e.preventDefault();
         $('.emergency-form').addClass('expanded');
-        $('#emergency-close').css({
+        $('.emergency-close').css({
             "color": "grey",
             "position": "absolute",
             "right": "15px",
             "display": "inline-block"
         });
-        $('#emergency').css("display", "none");
+        $('.emergency').css("display", "none");
     });
 
-    $('#emergency-close').click(function(e) {
+    $('.emergency-close').click(function(e) {
         e.preventDefault();
         $('.emergency-form').removeClass('expanded');
-        $('#emergency').css({
+        $('.emergency').css({
             "color": "grey",
             "position": "absolute",
             "right": "15px",
             "display": "inline-block"
         });
-        $('#emergency-close').css("display", "none");
+        $('.emergency-close').css("display", "none");
     });
 
     $('#ajax_passenger_edit_form').on('submit', function(e) {

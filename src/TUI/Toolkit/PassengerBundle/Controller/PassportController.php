@@ -81,10 +81,7 @@ class PassportController extends Controller
             $em->persist($passenger);
             $em->flush();
 
-            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('passenger.form.success.message.passport'));
-
-
-            return $this->redirect($this->generateUrl('manage_passenger_show', array('id' => $passenger->getId())));
+            return $this->createJsonResponse($entity);
 
         }
 
@@ -247,7 +244,7 @@ class PassportController extends Controller
             'action' => $this->generateUrl('passport_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr'  => array (
-                'id' => 'ajax_new_passport_form'
+                'id' => 'ajax_passport_form'
             ),
         ));
 
@@ -301,46 +298,10 @@ class PassportController extends Controller
 
         if ($editForm->isValid()) {
 
-            if ($locale == "en_GB") {
-                //formatted date of birth
-                $dateOfBirth = $entity->getPassportDateOfBirth()->format('d M Y');
-                //formatted date of issue
-                $dateOfIssue = $entity->getPassportDateOfIssue()->format('d M Y');
-                //formatted date of expiry
-                $dateOfExpiry = $entity->getPassportDateOfExpiry()->format('d M Y');
-            }else {
-                //formatted date of birth
-                $dateOfBirth = $entity->getPassportDateOfBirth()->format('M d Y');
-
-                $dateOfIssue = $entity->getPassportDateOfIssue()->format('M d Y');
-                //formatted date of expiry
-                $dateOfExpiry = $entity->getPassportDateOfExpiry()->format('M d Y');
-            }
-
-
-            $data = array(
-                $entity->getPassportLastName(),
-                $entity->getPassportFirstName(),
-                $entity->getPassportMiddleName(),
-                $entity->getPassportGender(),
-                $entity->getPassportTitle(),
-                $entity->getPassportIssuingState(),
-                $entity->getPassportNumber(),
-                $entity->getPassportNationality(),
-                $dateOfBirth,
-                $dateOfIssue,
-                $dateOfExpiry,
-        );
             $em->persist($entity);
             $em->flush();
 
-
-
-            $responseContent =  json_encode($data);
-            return new Response($responseContent,
-                Response::HTTP_OK,
-                array('content-type' => 'application/json')
-            );
+            return $this->createJsonResponse($entity);
 
         }
 
@@ -395,5 +356,44 @@ class PassportController extends Controller
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
+    }
+
+    /**
+     * Given the entity, build a JSON response for the front end to use
+     *
+     * @param Passport $entity
+     * @return JsonResponse
+     */
+    private function createJsonResponse(Passport $entity)
+    {
+        $locale = $this->container->getParameter('locale');
+
+        switch($locale) {
+            case 'en_GB':
+                $date_of_birth = $entity->getPassportDateOfBirth()->format('d M Y');
+                $date_of_issue = $entity->getPassportDateOfIssue()->format('d M Y');
+                $date_of_expiry = $entity->getPassportDateOfExpiry()->format('d M Y');
+                break;
+            default:
+                $date_of_birth = $entity->getPassportDateOfBirth()->format('M d Y');
+                $date_of_issue = $entity->getPassportDateOfIssue()->format('M d Y');
+                $date_of_expiry = $entity->getPassportDateOfExpiry()->format('M d Y');
+
+        }
+
+        return new JsonResponse(array(
+            'id' => $entity->getId(),
+            'last_name' => $entity->getPassportLastName(),
+            'first_name' => $entity->getPassportFirstName(),
+            'middle_name' => $entity->getPassportMiddleName(),
+            'gender' => $entity->getPassportGender(),
+            'title' => $entity->getPassportTitle(),
+            'issuing_state' => $entity->getPassportIssuingState(),
+            'passport_number' => $entity->getPassportNumber(),
+            'nationality' => $entity->getPassportNationality(),
+            'date_of_birth' => $date_of_birth,
+            'date_of_issue' => $date_of_issue,
+            'date_of_expiry' => $date_of_expiry
+        ));
     }
 }

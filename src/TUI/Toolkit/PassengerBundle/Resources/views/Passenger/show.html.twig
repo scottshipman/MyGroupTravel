@@ -145,11 +145,11 @@
                     </div>
                 {% endif %}
                 {% if entity.dietaryReference == null and entity.tourReference.dietaryDate != null%}
-                    <div class="mdl-card__supporting-text mdl-card--border">
+                    <div id="dietary-new-card" class="mdl-card__supporting-text mdl-card--border">
                         <p class="mdl-card__title-text task-title"><i style="margin-right: 10px; color:grey;"class="material-icons">local_dining</i> {% trans %}passenger.actions.add_dietary{% endtrans %}</p>
                         <label class="task-due-date">by {{ entity.tourReference.dietaryDate|date(format) }}</label>
-                        <a href="#"><i id="dietary" class="material-icons">add</i></a>
-                        <a href="#"><i id="dietary-close" class="material-icons">close</i></a>
+                        <a href="#"><i class="dietary material-icons">add</i></a>
+                        <a href="#"><i class="dietary-close material-icons">close</i></a>
                         <div class="clear"></div>
                         {% if entity.dietaryReference == null %}
                             {{ render(controller( 'PassengerBundle:Dietary:new' )) }}
@@ -157,11 +157,11 @@
                     </div>
                 {% endif %}
                 {% if entity.PassportReference == null and entity.tourReference.passportDate != null%}
-                    <div class="mdl-card__supporting-text mdl-card--border">
+                    <div id="passport-new-card" class="mdl-card__supporting-text mdl-card--border">
                         <p class="mdl-card__title-text task-title"><i style="margin-right: 10px; color:grey;"class="material-icons">person_outline</i> {% trans %}passenger.actions.add_passport{% endtrans %}</p>
                         <label class="task-due-date">by {{ entity.tourReference.passportDate|date(format) }}</label>
-                        <a href="#"><i id="passport" class="material-icons">add</i></a>
-                        <a href="#"><i id="passport-close" class="material-icons">close</i></a>
+                        <a href="#"><i class="passport material-icons">add</i></a>
+                        <a href="#"><i class="passport-close material-icons">close</i></a>
                         <div class="clear"></div>
                         {% if entity.passportReference == null %}
                             {{ render(controller( 'PassengerBundle:Passport:new' )) }}
@@ -169,11 +169,11 @@
                     </div>
                 {% endif %}
                 {% if entity.EmergencyReference == null and entity.tourReference.emergencyDate != null%}
-                    <div class="mdl-card__supporting-text mdl-card--border">
+                    <div id="emergency-new-card" class="mdl-card__supporting-text mdl-card--border">
                         <p class="mdl-card__title-text task-title"><i style="margin-right: 10px; color:grey;"class="material-icons">warning</i> {% trans %}passenger.actions.add_emergency{% endtrans %}</p>
                         <label class="task-due-date">by {{ entity.tourReference.emergencyDate|date(format) }}</label>
-                        <a href="#"><i id="emergency" class="material-icons">add</i></a>
-                        <a href="#"><i id="emergency-close" class="material-icons">close</i></a>
+                        <a href="#"><i class="emergency material-icons">add</i></a>
+                        <a href="#"><i class="emergency-close material-icons">close</i></a>
                         <div class="clear"></div>
                         {% if entity.emergencyReference == null %}
                             {{ render(controller( 'PassengerBundle:Emergency:new' )) }}
@@ -228,37 +228,41 @@
             {% endif %}
 
             {% if entity.tourReference.dietaryDate != null %}
-                {% if entity.dietaryReference != null %}
+              <div id="dietary-edit-card" style="display: {{ (entity.dietaryReference != null) ? 'inherit' : 'none' }};"> <!-- CONTAINER -->
                 <div class="waitlist tour-edit mdl-card mdl-shadow--2dp">
                     <div class="mdl-card__title">
                         <h3 class="mdl-card__title-text"><i style="margin-right: 10px;"class="material-icons">local_dining</i> {% trans %}passenger.labels.dietary_info{% endtrans %}</h3>
-                        <a style="position: absolute; right: 15px;" href="#"><i id="dietary" class="material-icons" style="position: relative; display: inline-block; border-radius: 0px; border: none; padding: 0px">border_color</i></a>
-                        <a style="position: absolute; right: 15px;" href="#"><i id="dietary-close" style="display: none; position: relative; border-radius: 0px; border: none; padding: 0px" class="material-icons">close</i></a>
+                        <a style="position: absolute; right: 15px;" href="#"><i class="dietary material-icons" style="position: relative; display: inline-block; border-radius: 0px; border: none; padding: 0px">border_color</i></a>
+                        <a style="position: absolute; right: 15px;" href="#"><i style="display: none; position: relative; border-radius: 0px; border: none; padding: 0px" class="dietary-close material-icons">close</i></a>
                     </div>
-                    {% if entity.dietaryReference != null %}
-                        {% set dietaryId  = entity.dietaryReference.id%}
-                        {{ render(controller( 'PassengerBundle:Dietary:edit', {'id' : dietaryId} )) }}
-                    {% endif %}
+                    <div id="dietary-edit-container">
+                        {% if entity.dietaryReference != null %}
+                            {% set dietaryId  = entity.dietaryReference.id%}
+                            {{ render(controller( 'PassengerBundle:Dietary:edit', {'id' : dietaryId} )) }}
+                        {% endif %}
+                    </div>
                     <div class="mdl-card__supporting-text mdl-card--border">
                         <p class="dietary-description">{% if entity.dietaryReference != null %}{{ entity.dietaryReference.description }}{% endif %}</p>
                     </div>
                 </div>
-                {% endif %}
+              </div>
             {% endif %}
 
             {#Passenger Passport Information Card#}
             {% if entity.tourReference.passportDate != null %}
-                {% if entity.passportReference != null %}
+                <div id="passport-edit-card" style="display: {{ (entity.passportReference != null) ? 'inherit' : 'none' }};"> <!-- CONTAINER -->
                     <div class="waitlist tour-edit mdl-card mdl-shadow--2dp">
                         <div class="mdl-card__title">
                             <h3 class="mdl-card__title-text"><i style="margin-right: 10px;"class="material-icons">person_outline</i> {% trans %}passenger.labels.passport_info{% endtrans %}</h3>
-                            <a style="position: absolute; right: 15px;" href="#"><i id="passport" class="material-icons" style="position: relative; display: inline-block; border-radius: 0px; border: none; padding: 0px">border_color</i></a>
-                            <a style="position: absolute; right: 15px;" href="#"><i id="passport-close" style="display: none; position: relative; border-radius: 0px; border: none; padding: 0px" class="material-icons">close</i></a>
+                            <a style="position: absolute; right: 15px;" href="#"><i class="passport material-icons" style="position: relative; display: inline-block; border-radius: 0px; border: none; padding: 0px">border_color</i></a>
+                            <a style="position: absolute; right: 15px;" href="#"><i style="display: none; position: relative; border-radius: 0px; border: none; padding: 0px" class="passport-close material-icons">close</i></a>
                         </div>
-                        {% if entity.PassportReference != null %}
-                            {% set passportId  = entity.passportReference.id%}
-                            {{ render(controller( 'PassengerBundle:Passport:edit', {'id' : passportId} )) }}
-                        {% endif %}
+                        <div id="passport-edit-container">
+                            {% if entity.PassportReference != null %}
+                                {% set passportId  = entity.passportReference.id%}
+                                {{ render(controller( 'PassengerBundle:Passport:edit', {'id' : passportId} )) }}
+                            {% endif %}
+                        </div>
                         <div class="mdl-card__supporting-text mdl-card--border">
                             <label class="row-label">{% trans %}passenger.labels.passport_family_name{% endtrans %}</label>
                             <p class="passport-lastName row-content">{% if entity.passportReference != null %}{{ entity.passportReference.passportLastName }}{% endif %}</p>
@@ -315,22 +319,23 @@
                             <div class="clear"></div>
                         </div>
                     </div>
-                {% endif %}
             {% endif %}
 
             {#Passenger Emergency Contact Information Card#}
             {% if entity.tourReference.emergencyDate != null%}
-                {% if entity.emergencyReference != null %}
+                <div id="emergency-edit-card" style="display: {{ (entity.emergencyReference != null) ? 'inherit' : 'none' }};"> <!-- CONTAINER -->
                     <div class="waitlist tour-edit mdl-card mdl-shadow--2dp">
                         <div class="mdl-card__title">
                             <h3 class="mdl-card__title-text"><i style="margin-right: 10px;"class="material-icons">warning</i> {% trans %}passenger.labels.emergency_info{% endtrans %}</h3>
-                            <a style="position: absolute; right: 15px;" href="#"><i id="emergency" class="material-icons" style="position: relative; display: inline-block; border-radius: 0px; border: none; padding: 0px">border_color</i></a>
-                            <a style="position: absolute; right: 15px;" href="#"><i id="emergency-close" style="display: none; position: relative; border-radius: 0px; border: none; padding: 0px" class="material-icons">close</i></a>
+                            <a style="position: absolute; right: 15px;" href="#"><i class="emergency material-icons" style="position: relative; display: inline-block; border-radius: 0px; border: none; padding: 0px">border_color</i></a>
+                            <a style="position: absolute; right: 15px;" href="#"><i style="display: none; position: relative; border-radius: 0px; border: none; padding: 0px" class="emergency-close material-icons">close</i></a>
                         </div>
-                        {% if entity.emergencyReference != null %}
-                            {% set emergencyId  = entity.emergencyReference.id%}
-                            {{ render(controller( 'PassengerBundle:Emergency:edit', {'id' : emergencyId} )) }}
-                        {% endif %}
+                        <div id="emergency-edit-container">
+                            {% if entity.emergencyReference != null %}
+                                {% set emergencyId  = entity.emergencyReference.id%}
+                                {{ render(controller( 'PassengerBundle:Emergency:edit', {'id' : emergencyId} )) }}
+                            {% endif %}
+                        </div>
                         <div class="mdl-card__supporting-text mdl-card--border">
                             <label class="row-label">{% trans %}passenger.labels.emergency_name{% endtrans %}</label>
                             <p class="emergency-name row-content">{% if entity.emergencyReference != null %}{{ entity.emergencyReference.emergencyName }}{% endif %}</p>
@@ -352,7 +357,7 @@
                             <div class="clear"></div>
                         </div>
                     </div>
-                {% endif %}
+                </div>
             {% endif %}
         </div>
 
