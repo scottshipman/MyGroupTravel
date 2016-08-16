@@ -52,7 +52,7 @@
                     $("#dialog").html("");
                     $("#dialog").dialog("close");
                     $(window).scrollTop(0);
-                    window.location.reload(true);
+                    pingDashboard().then(getSidebarContent).then(updateSidebar);
                 }).error(function (response) {
                     $("#loader").hide();
                     var parsed = $.parseJSON(response.responseText);
@@ -64,6 +64,42 @@
             });
 
         });
+
+        function pingDashboard() {
+
+            var url = '/tour/dashboard/{{ tour.id }}/show';
+
+            return $.ajax({
+                url: url,
+                type: 'GET',
+                headers: {
+                    "Pragma": "no-cache",
+                    "Expires": -1,
+                    "Cache-Control": "no-cache"
+                }
+            });
+        }
+
+        function getSidebarContent() {
+
+            var url = '/tour/dashboard/{{ tour.id }}/completed/setup';
+
+            return $.ajax({
+                url: url,
+                type: 'GET',
+                headers: {
+                    "Pragma": "no-cache",
+                    "Expires": -1,
+                    "Cache-Control": "no-cache"
+                }
+            });
+        }
+
+        function updateSidebar(content) {
+            $('#tour-completed-right-column').html(content);
+            $('#loader').hide();
+            // @todo add an alert here?
+        }
 
     </script>
 
