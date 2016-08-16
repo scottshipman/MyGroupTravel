@@ -128,9 +128,7 @@
             <div class="waitlist tour-edit mdl-card mdl-shadow--2dp passenger-task-card">
                 <div class="mdl-card__title">
                     <h3 class="mdl-card__title-text">{% trans %}passenger.labels.tasks{% endtrans %}</h3>
-                    {% if possibleTasksCount | length == 0 or possibleTasksCount | length == completedTasksCount | length %}
-                        <span class="tour-dashboard-cta" style="color:green; border-radius:25px; border: 1px solid green; padding: 2px;"><i class="material-icons">done</i></span>
-                    {% endif %}
+                    <span id="tasks-completed-tick" class="tour-dashboard-cta" style="color:green; border-radius:25px; border: 1px solid green; padding: 2px; display: {{ (possibleTasksCount | length == 0 or possibleTasksCount | length == completedTasksCount | length) ? 'inline' : 'none' }};"><i class="material-icons">done</i></span>
                 </div>
                 {% if entity.medicalReference == null and entity.tourReference.medicalDate != null%}
                     <div id="medical-new-card" class="mdl-card__supporting-text mdl-card--border">
@@ -180,12 +178,13 @@
                         {% endif %}
                     </div>
                 {% endif %}
-                {% if possibleTasksCount | length == 0 or possibleTasksCount | length == completedTasksCount | length %}
+
+                <div id="no-tasks-container" style="display: {{ (possibleTasksCount | length == 0 or possibleTasksCount | length == completedTasksCount | length) ? 'inherit' : 'none' }};">
                     <div class="mdl-card__supporting-text mdl-card--border expired-quote">
                         <p class="mdl-card__title-text no-tasks">{{ entity.fName|capitalize }} {% trans %}passenger.actions.no_tasks{% endtrans %}</p>
                         <div class="clear"></div>
                     </div>
-                {% endif %}
+                </div>
             </div>
 
             {#Passenger Medical Information Card#}
@@ -366,6 +365,11 @@
     {% javascripts '@toolkit_passenger' %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
+
+    <script>
+        var possible_tasks = {{ possibleTasksCount | length }};
+        var completed_tasks = {{ completedTasksCount | length }};
+    </script>
 
 {% endblock %}
 

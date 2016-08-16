@@ -76,7 +76,12 @@ class EmergencyController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            // @todo Figure out why MySQL "goes away" here
+
+            /*
+             * @todo TOOL-625 - on a local development copy of the system, "MySQL server has gone away" errors occur
+             * here, even when rolling back to a known working state. We need to confirm if this happens to other users
+             * and if so, what is causing the issue?
+             */
             $entity->setPassengerReference($passenger);
             $em->persist($entity);
             $em->flush();
