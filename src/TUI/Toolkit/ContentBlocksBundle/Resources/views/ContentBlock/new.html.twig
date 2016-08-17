@@ -23,20 +23,7 @@
     <script>
         // Wait for the DOM to be loaded
         $(document).ready(function() {
-            // Bind form and provide a simple callback function
-            $('#ajax_contentblocks_form').ajaxForm({
-                beforeSerialize: function() {
-                    if (typeof CKEDITOR !== 'undefined') {
-                        CKEDITOR.instances.tui_toolkit_contentblocksbundle_contentblock_body.updateElement();
-                    }
-                    $("#loader").css("display", "inline-block");
-                },
-                success: function(response) {
-                    $('#dialog').dialog( "close" );
-                    window.location.hash = 'site-content';
-                    window.location.reload(true);
-                }
-            })
+            // Submitting of this form is done in toolkit_siteshow_edit
 
             $(document).on('click', '.existing-delete', function (e) {
                 e.preventDefault();

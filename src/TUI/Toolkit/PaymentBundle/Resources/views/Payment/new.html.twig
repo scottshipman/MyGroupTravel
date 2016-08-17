@@ -48,12 +48,20 @@
                         "Cache-Control": "no-cache"
                     },
                     data: $('#ajax_new_payment_form').serialize(),
-                    contentType: "application/x-www-form-urlencoded",
+                    contentType: "application/x-www-form-urlencoded"
                 }).success(function (response) {
                     $("#dialog").html("");
                     $("#dialog").dialog("close");
                     $(window).scrollTop(0);
-                    window.location.reload(true);
+                    // @todo Perhaps add notification message?
+                    // update payment dashboard stuff
+                    var id = response['passenger']['id'];
+                    var markup = ''; // @todo - get markup from getPassengerPaymentMiniCardAction - no route as yet
+                    $('[passenger="'+id+'"]').html(markup);
+                    // now call the route to get the data for the person!
+
+                    //window.location.reload(true);
+                    $('#loader').css('display', 'none');
                 }).error(function (response) {
                     $("#loader").hide();
 
@@ -64,6 +72,42 @@
             });
 
         });
+
+        function pingDashboard() {
+
+            var url = '/tour/dashboard/{{ tour.id }}/show';
+
+            return $.ajax({
+                url: url,
+                type: 'GET',
+                headers: {
+                    "Pragma": "no-cache",
+                    "Expires": -1,
+                    "Cache-Control": "no-cache"
+                }
+            });
+        }
+
+        function getPassengerPayment() {
+
+            var url = '/tour/dashboard/{{ tour.id }}/completed/setup';
+
+            return $.ajax({
+                url: url,
+                type: 'GET',
+                headers: {
+                    "Pragma": "no-cache",
+                    "Expires": -1,
+                    "Cache-Control": "no-cache"
+                }
+            });
+        }
+
+        function updateSidebar(content) {
+            $('#tour-completed-right-column').html(content);
+            $('#loader').hide();
+            // @todo add an alert here?
+        }
 
     </script>
 

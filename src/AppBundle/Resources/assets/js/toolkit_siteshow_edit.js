@@ -222,14 +222,31 @@ $(document).ready(function () {
             $(".site-content-blocks-edit").hide();
             $(".sortable-items").sortable("disable");
             doMDLpopup($('#content-block-editForm-' + tabId)); // run the function to add appropriate MDL classes to form elements
+            var blockId;
             $('#newBlockIdForm').ajaxForm({
                 beforeSerialize: function () {
                     CKEDITOR.instances.tui_toolkit_contentblocksbundle_contentblock_body.updateElement();
                 },
                 success: function (response) {
+                    blockId = response;
                     $('#content-block-editForm-' + tabId).empty().hide();
                     $("#loader").css("display", "block");
-                    window.location.reload();
+                    // Get markup for block here
+                    $.ajax({
+                        url: '/manage/contentblocks/' + response + '/show/' + entityId + '/' + entityClass,
+                        headers: {
+                            "Pragma": "no-cache",
+                            "Expires": -1,
+                            "Cache-Control": "no-cache"
+                        }
+                    }).done(function (response) {
+                        // @todo Render the block some other way, this will get messy!
+                        $('.add-content-block-form').css('display', 'none');
+                        $('.site-content-blocks-edit, .item-edit').show();
+                        $('#tabs-drawer-' + tabId + ' .sortable-items').append(response);
+                        $('.sortable-items').sortable('enable');
+                        $('#loader').css('display', 'none');
+                    });
                 }
             });
         });
