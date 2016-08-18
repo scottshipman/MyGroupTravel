@@ -719,30 +719,42 @@ class UserController extends Controller
             if ($role = $setForm['role']->getData() ) {
                 // if an assistant, create a passenger record
                 $tour = $em->getRepository('TourBundle:Tour')->find($setForm['tour']->getData());
-                $newPassenger = new Passenger();
-                $newPassenger->setStatus("waitlist");
-                $newPassenger->setFree(false);
-                $newPassenger->setFName($user->getFirstName());
-                $newPassenger->setLName($user->getLastName());
-                $newPassenger->setTourReference($tour);
-                $newPassenger->setGender('undefined');
-                $newPassenger->setDateOfBirth(new \DateTime("1987-01-01"));
-                $newPassenger->setSignUpDate(new \DateTime("now"));
-                $newPassenger->setSelf(TRUE);
 
+                // TOOL-611 - We don't create a passenger entity if the user is already an organizer for the tour
+                $uid = $user->getId();
 
-                $em->persist($newPassenger);
-                $em->flush($newPassenger);
+                $organizer = $em->getRepository('PermissionBundle:Permission')->findBy(array(
+                    'user' => $uid,
+                    'class' => 'tour',
+                    'object' => $tour->getId(),
+                    'grants' => 'organizer'
+                ));
 
-                $newPermission = new Permission();
-                $newPermission->setUser($user);
-                $newPermission->setClass('passenger');
-                $newPermission->setGrants('parent');
-                $newPermission->setObject($newPassenger->getId());
+                if (empty($organizer)) {
+                    $newPassenger = new Passenger();
+                    $newPassenger->setStatus("waitlist");
+                    $newPassenger->setFree(false);
+                    $newPassenger->setFName($user->getFirstName());
+                    $newPassenger->setLName($user->getLastName());
+                    $newPassenger->setTourReference($tour);
+                    $newPassenger->setGender('undefined');
+                    $newPassenger->setDateOfBirth(new \DateTime("1987-01-01"));
+                    $newPassenger->setSignUpDate(new \DateTime("now"));
+                    $newPassenger->setSelf(TRUE);
 
+                    $em->persist($newPassenger);
+                    $em->flush($newPassenger);
 
-                $em->persist($newPermission);
-                $em->flush($newPermission);
+                    $newPermission = new Permission();
+                    $newPermission->setUser($user);
+                    $newPermission->setClass('passenger');
+                    $newPermission->setGrants('parent');
+                    $newPermission->setObject($newPassenger->getId());
+
+                    $em->persist($newPermission);
+                    $em->flush($newPermission);
+                }
+
                 // if an organizer, a passenger record exists so just add a message
                 $baseurl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
                 $tourUrl = $baseurl . "/tour/dashboard/" . $setForm['tour']->getData()  . "/passengers";
