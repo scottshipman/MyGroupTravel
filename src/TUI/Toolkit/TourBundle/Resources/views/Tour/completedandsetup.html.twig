@@ -158,12 +158,14 @@
                                 <label>{{ "accepted" | paxLabel }} of {{ entity.payingPlaces }}</label>
                             </div>
                         </li>
-                        <li>
-                            <div class="profile-list-item item-3 tour-dashboard four-column">
-                                <span class="date-span">{{ passengerData.free }}</span>
-                                <label>{{ "free" | paxLabel }} of {{ entity.freePlaces }}</label>
-                            </div>
-                        </li>
+                        {% if entity.freePlaces > 0 %}
+                            <li>
+                                <div class="profile-list-item item-3 tour-dashboard four-column">
+                                    <span class="date-span">{{ passengerData.free }}</span>
+                                    <label>{{ "free" | paxLabel }} of {{ entity.freePlaces }}</label>
+                                </div>
+                            </li>
+                        {% endif %}
                         <li>
                             <div class="profile-list-item item-4 tour-dashboard four-column">
                                 <span class="date-span">{{ passengerData.waitlist }}</span>
