@@ -109,7 +109,7 @@
 {% endblock form_label %}
 
 {% block form_row %}
-    <div class="form-row">
+    <div class="form-row{% if form_errors(form) %} form-row-errors{% endif %}">
         {# form_label(form) #}
         {{ form_widget(form) }}
         {{ form_errors(form) }}

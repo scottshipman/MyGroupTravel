@@ -644,6 +644,7 @@ class UserController extends Controller
      */
     private function createActivateUserForm(User $entity)
     {
+
         $form = $this->createForm(new ActivateUserType(), $entity, array(
             'action' => $this->generateUrl('activate_user_submit', array('id' => $entity->getId())),
             'method' => 'POST',
@@ -661,6 +662,7 @@ class UserController extends Controller
      */
     public function activateUserSubmitAction(Request $request, $id)
     {
+
         $em = $this->getDoctrine()->getManager();
 
         $user = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
@@ -677,6 +679,10 @@ class UserController extends Controller
         $user_manager = $this->get('fos_user.user_manager');
         $userObject = $user_manager->loadUserByUsername($user->getUsername());
         $encoder = $factory->getEncoder($userObject);
+
+        $token_test = $user->getConfirmationToken();
+
+
 
         if ($setForm->isValid()) {
 
@@ -747,9 +753,17 @@ class UserController extends Controller
             return $this->redirect($this->generateUrl('fos_user_profile_show'));
         }
 
+
+        $tourOrganizer = $this->get("permission.set_permission")->getObject('organizer', $user, 'tour');
+        $tourAssistant = $this->get("permission.set_permission")->getObject('assistant', $user, 'tour');
+
+
         return $this->render('TUIToolkitUserBundle:Registration:activation.html.twig', array(
             'user' => $user,
-            'form' => $setForm->createView(),
+            'token' => $token_test,
+            'isOrganizer' => is_array($tourOrganizer) ? array_shift($tourOrganizer): $tourOrganizer,
+            'isAssistant' => is_array($tourAssistant) ? array_shift($tourAssistant) : $tourAssistant,
+            'form' => $setForm->createView()
         ));
     }
 

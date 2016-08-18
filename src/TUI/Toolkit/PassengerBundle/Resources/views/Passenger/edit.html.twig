@@ -9,8 +9,8 @@
     {{ render(controller('MediaBundle:Media:createDropzoneForm', {'context':'passenger', 'media_field_id':'tui_toolkit_passengerbundle_passenger_media', 'existing_media':entity.media})) }}
 
     {{ form_start(edit_form) }}
-    {{ form_widget(edit_form.fName) }}
-    {{ form_widget(edit_form.lName) }}
+    {{ form_row(edit_form.fName) }}
+    {{ form_row(edit_form.lName) }}
     <label style="display: block; color:rgba(0,0,0,.26);">{% trans %}passenger.modals.dob{% endtrans %}</label>
     {{ form_widget(edit_form.dateOfBirth) }}
     {{ form_widget(edit_form.gender) }}

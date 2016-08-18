@@ -5,6 +5,8 @@ namespace TUI\Toolkit\UserBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\IsTrue;
 
 
 class ActivateUserType extends AbstractType
@@ -19,11 +21,16 @@ class ActivateUserType extends AbstractType
         $builder
           ->add('plainPassword', 'repeated', array(
             'type' => 'password',
-            'options' => array('translation_domain' => 'FOSUserBundle'),
+            'options' => array(
+                'translation_domain' => 'FOSUserBundle',
+            ),
             'first_options' => array('label' => 'form.new_password'),
             'second_options' => array('label' => 'form.new_password_confirmation'),
             'invalid_message' => 'fos_user.password.mismatch',
             'required' => true,
+            'constraints' => new NotBlank(array(
+                'groups' => 'Activation',
+            )),
           ))
           ->add('question', 'text', array(
             'label' => 'user.form.question',
@@ -37,7 +44,10 @@ class ActivateUserType extends AbstractType
           ))
           ->add('termsAgree', 'checkbox', array(
             'mapped' => FALSE,
-            'required' => TRUE,
+            'constraints' => new IsTrue(array(
+                'message' => 'user.activation.error.terms',
+                'groups' => 'Activation'
+            )),
           ))
             // Add these for when an Organizer is registering
             ->add('role', 'hidden', array(
@@ -55,7 +65,8 @@ class ActivateUserType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'TUI\Toolkit\UserBundle\Entity\User'
+            'data_class' => 'TUI\Toolkit\UserBundle\Entity\User',
+            'validation_groups' => array('Activation')
         ));
     }
 

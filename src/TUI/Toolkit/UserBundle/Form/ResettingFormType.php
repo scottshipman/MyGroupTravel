@@ -19,6 +19,7 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use TUI\Toolkit\UserBundle\EventListener\AddTermsFieldSubscriber;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ResettingFormType extends AbstractType
 {
@@ -33,6 +34,7 @@ class ResettingFormType extends AbstractType
           'translation_domain'  => 'messages',
           'required' => true,
           'mapped'  => false,
+          'constraints' => new NotBlank(),
         ))
         ->add('plainPassword', 'repeated', array(
           'type' => 'password',
@@ -41,6 +43,7 @@ class ResettingFormType extends AbstractType
           'second_options' => array('label' => 'form.new_password_confirmation'),
           'invalid_message' => 'fos_user.password.mismatch',
           'required' => true,
+          'constraints' => new NotBlank()
         ))
       ;
     }

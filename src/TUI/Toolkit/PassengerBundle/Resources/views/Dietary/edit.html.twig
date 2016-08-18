@@ -1,11 +1,7 @@
 {% block body -%}
 
-    <div class="dietary-form">
-        <div class="errors">
-            {{ form_errors(edit_form) }}
-        </div>
+    <div class="dietary-form sidebar-form-edit">
         {{ form(edit_form) }}
-
         {#<ul class="record_actions">#}
         {#<li>{{ form(delete_form) }}</li>#}
         {#</ul>#}

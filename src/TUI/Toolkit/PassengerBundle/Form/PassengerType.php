@@ -38,21 +38,16 @@ class PassengerType extends AbstractType
                 break;
         }
 
-
         $builder
             ->add('fName', 'text', array(
                 'required' => true,
                 'label' => 'passenger.form.invite.first',
-                'constraints' => new NotBlank(array(
-                    'message' => 'Please enter a First Name'
-                )),
+                'constraints' => new NotBlank()
             ))
             ->add('lName', 'text', array(
                 'required' => true,
                 'label' => 'passenger.form.invite.last',
-                'constraints' => new NotBlank(array(
-                    'message' => 'Please enter a Last Name'
-                )),
+                'constraints' => new NotBlank()
             ))
             ->add('dateOfBirth', 'birthday', array(
                 'format' => $date_format,
