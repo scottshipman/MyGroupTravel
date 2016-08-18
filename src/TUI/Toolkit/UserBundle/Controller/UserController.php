@@ -720,7 +720,7 @@ class UserController extends Controller
                 // if an assistant, create a passenger record
                 $tour = $em->getRepository('TourBundle:Tour')->find($setForm['tour']->getData());
 
-                // TOOL-611 - We don't create a passenger entity if the user is already an organizer for the tour
+                // TOOL-623 - We don't create a passenger entity if the user is already an organizer for the tour
                 $uid = $user->getId();
 
                 $organizer = $em->getRepository('PermissionBundle:Permission')->findBy(array(
