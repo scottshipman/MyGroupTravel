@@ -1029,47 +1029,54 @@ class TourController extends Controller
 
     public function changeOrganizer($organizer, $tour, $oldOrganizer){
         $em = $this->getDoctrine()->getManager();
-        $exists = FALSE;
-        $existingPermissions = $em->getRepository('PermissionBundle:Permission')->findBy(array('user' => $organizer, 'class' => 'passenger'));
-                foreach($existingPermissions as $existingPermission){
-                    $existingPassengers = $em->getRepository('PermissionBundle:Permission')->find($existingPermission->getObject());
-                    foreach($existingPassengers as $existingPassenger){
-                        if (($existingPassenger->getLName() == $organizer->getLastName())
-                            && $existingPassenger->getFName() == $organizer->getFirstName()
-                            && ($existingPassenger->getTour() == $tour->getId())) {
-                            // a passenger exists for this tour already for this user as best we can tell
-                            $exists = TRUE;
-                            $existingPassenger->setSelf(TRUE);
-                            $em->persist($existingPassenger);
-                            $em->flush();
-                        }
-                    }
+        $exists = false;
+
+        // get perms for new user just created class passenger
+        $existingPermissions = $em->getRepository('PermissionBundle:Permission')->findBy(array(
+            'user' => $organizer,
+            'class' => 'passenger'));
+
+        foreach($existingPermissions as $existingPermission){
+            $existingPassengers = $em->getRepository('PassengerBundle:Passenger')->findBy(array(
+                'id' => $existingPermission->getObject()
+            ));
+            foreach($existingPassengers as $existingPassenger){
+                if ($existingPassenger->getLName() == $organizer->getLastName()
+                    && $existingPassenger->getFName() == $organizer->getFirstName()
+                    && $existingPassenger->getTourReference()->getId() == $tour->getId()) {
+                    // a passenger exists for this tour already for this user as best we can tell
+                    $exists = true;
+                    $existingPassenger->setSelf(true);
+                    $em->persist($existingPassenger);
+                    $em->flush();
                 }
+            }
+        }
 
-                if ($exists == FALSE) {
-                    // no pax or perm record for this user and this tour so create both
+        if (!$exists) {
+            // no pax or perm record for this user and this tour so create both
 
-                    $newPassenger = new Passenger();
-                    //$newPassenger->setDateOfBirth(); // we dont know what this is here
-                    $newPassenger->setFName($organizer->getFirstName());
-                    //$newPassenger->setGender(); // we dont know what this is here
-                    $newPassenger->setLName($organizer->getLastName());
-                    $newPassenger->setStatus("waitlist");
-                    $newPassenger->setSignUpDate(new \DateTime());
-                    $newPassenger->setTourReference($tour);
-                    $newPassenger->setFree(FALSE);
-                    $newPassenger->setSelf(TRUE);
-                    $em->persist($newPassenger);
-                    $em->flush($newPassenger);
+            $newPassenger = new Passenger();
+            //$newPassenger->setDateOfBirth(); // we dont know what this is here
+            $newPassenger->setFName($organizer->getFirstName());
+            //$newPassenger->setGender(); // we dont know what this is here
+            $newPassenger->setLName($organizer->getLastName());
+            $newPassenger->setStatus("waitlist");
+            $newPassenger->setSignUpDate(new \DateTime());
+            $newPassenger->setTourReference($tour);
+            $newPassenger->setFree(FALSE);
+            $newPassenger->setSelf(TRUE);
+            $em->persist($newPassenger);
+            $em->flush($newPassenger);
 
-                    $paxpermission = new Permission();
-                    $paxpermission->setClass('passenger');
-                    $paxpermission->setObject($newPassenger->getId());
-                    $paxpermission->setGrants('parent');
-                    $paxpermission->setUser($organizer);
-                    $em->persist($paxpermission);
-                    $em->flush($paxpermission);
-                }
+            $paxpermission = new Permission();
+            $paxpermission->setClass('passenger');
+            $paxpermission->setObject($newPassenger->getId());
+            $paxpermission->setGrants('parent');
+            $paxpermission->setUser($organizer);
+            $em->persist($paxpermission);
+            $em->flush($paxpermission);
+        }
 //        // always create an Organizer permission for the tour
 //        $opermission = new Permission();
 //        $opermission->setClass('tour');
