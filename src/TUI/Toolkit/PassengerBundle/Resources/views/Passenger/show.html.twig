@@ -1,6 +1,8 @@
 {% extends '::site-base.html.twig' %}
 {% if 'en_GB' in locale %} {% set format = 'd M Y' %} {% else %} {% set format = 'M d Y' %} {% endif %}
-{% set age = date(entity.dateOfBirth).diff(date("now")) %}
+{% if entity.dateOfBirth is not null %}
+    {% set age = date(entity.dateOfBirth).diff(date("now")) %}
+{% endif %}
 
 {% block title %}
     {% if is_granted("ROLE_BRAND") %}

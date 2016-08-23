@@ -62,7 +62,7 @@ class Passenger
 
 
     /**
-     * @var datetime
+     * @var \DateTime
      *
      * @Assert\Date()
      * @ORM\Column(name="dob", type="date", nullable=true)
@@ -71,7 +71,7 @@ class Passenger
     protected $dateOfBirth;
 
     /**
-     * @var datetime
+     * @var \DateTime
      *
      * @ORM\Column(name="signup", type="date", nullable=false)
      */
@@ -210,7 +210,10 @@ class Passenger
     }
 
     /**
-     * @param  $dateOfBirth
+     * Set the Passenger date of birth
+     *
+     * @param $dateOfBirth
+     * @return mixed
      */
     public function setDateOfBirth($dateOfBirth)
     {
@@ -220,10 +223,22 @@ class Passenger
     }
 
     /**
-     * @return dateOfBirth
+     * Get the Passenger date of birth
+     *
+     * TOOL-622 - If the Passenger's date of birth is before 21st Dec 1800, we know that we have faked it
+     * in order to allow us to create Passenger entities with the same first and last name and tour ID.
+     * @todo Remove this when a better solution to the problem is found
+     * @return null|\DateTime
      */
     public function getDateOfBirth()
     {
+        $fake_end = strtotime('21-12-1800');
+        $dob = !empty($this->dateOfBirth) ? $this->dateOfBirth->getTimestamp() : null;
+
+        if (!empty($dob) && $dob <= $fake_end) {
+            return null;
+        }
+
         return $this->dateOfBirth;
     }
 

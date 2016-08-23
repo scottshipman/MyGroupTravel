@@ -1181,7 +1181,18 @@ class PassengerController extends Controller
                 $newPassenger->setLName($data['lastname']);
                 $newPassenger->setTourReference($tour);
                 $newPassenger->setGender('undefined');
-                $newPassenger->setDateOfBirth(new \DateTime("1987-01-01"));
+
+                /*
+                 * Tool 622 - we create a random birthday date that is quite clearly not real to allow us to get around
+                 * the Passenger entity uniqueness constraint that uses first name, last name and date of birth as the
+                 * unique identifier.
+                 */
+                $min_date = strtotime('01-01-1500');
+                $max_date = strtotime('21-12-1800');
+                $random_date = mt_rand($min_date, $max_date);
+                $birthday = new \DateTime(date('Y-m-d', $random_date));
+
+                $newPassenger->setDateOfBirth($birthday);
                 $newPassenger->setSignUpDate(new \DateTime("now"));
                 $newPassenger->setSelf(true);
 
