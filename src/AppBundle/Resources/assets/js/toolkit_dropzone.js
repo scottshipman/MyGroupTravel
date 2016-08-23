@@ -178,11 +178,8 @@ Dropzone.autoDiscover = false;
         // read uploaded file (triggers code above)
         reader.readAsDataURL(file);
 
-        $("#dialog").html($cropperDiv);
-        $("#dialog").dialog("option", "title", "Crop Image");
-        $("#dialog").dialog("open");
-        var dialogtop = $(".ui-dialog").position().top - 200;
-        $(".ui-dialog").css('top', dialogtop + 'px');
+        // TOOL-603 - generate popup in the usual way
+        toolkitStaticPopup('Crop Image', $cropperDiv);
 
         // listener for 'Crop and Upload' button in modal
         $uploadCrop.on('click', function() {
