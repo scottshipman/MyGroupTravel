@@ -776,6 +776,32 @@ class QuoteVersionController extends Controller
         }
 
         if ($form->isValid()) {
+
+            // TOOL-617 - copied from cloneUpdateAction
+            //make sure there isnt a soft-deleted version of the quote ref first
+            // a sql error occurs because doctrine cant enforce constraint on soft-deleted item but SQL will
+            $filters = $em->getFilters();
+            $filters->disable('softdeleteable');
+            $qn = $form->getData()->getQuoteNumber();
+            $query = $em->createQuery(
+                'select q
+                from QuoteBundle:QuoteVersion q
+                where q.quoteNumber = :qn')
+                ->setParameter('qn', $qn);
+            $deletedQuotes= $query->getResult();
+
+            if ($deletedQuotes) {
+                $filters->enable('softdeleteable');
+                $this->get('ras_flash_alert.alert_reporter')->addError(
+                    $this->get('translator')->trans('quote.flash.soft_delete') . ' <br>QuoteNumber: ' . $deletedQuotes[0]->getQuoteNumber() . ' - id # :' . $deletedQuotes[0]->getId() );
+                $date_format = $this->container->getParameter('date_format');
+                return $this->render('QuoteBundle:QuoteVersion:new.html.twig', array(
+                    'entity' => $entity,
+                    'form' => $form->createView(),
+                    'date_format' => $date_format,
+                ));
+            }
+
             $em->persist($entity);
             $em->flush();
             // Create organizer permission
@@ -1444,6 +1470,21 @@ class QuoteVersionController extends Controller
             $route = '';
         }
 
+        // TOOL-617 - copied from createAction
+        //handling ajax request for organizer
+        $o_data = $cloneform->getData()->getQuoteReference()->getOrganizer();
+        if (preg_match('/<+(.*?)>/', $o_data, $o_matches)) {
+            $email = $o_matches[1];
+            $entities = $em->getRepository('TUIToolkitUserBundle:User')
+                ->findByEmail($email);
+            if (NULL !== $entities) {
+                $organizer = array_shift($entities);
+                $cloneform->getData()->getQuoteReference()->setOrganizer($organizer);
+            }
+        }else {
+            $cloneform['quoteReference']['organizer']->addError(new FormError($this->get('translator')->trans('quote.exception.organizer')));
+        }
+
         //handling ajax request for SalesAgent same as we did with organizer
         $a_data = $cloneform->getData()->getQuoteReference()->getSalesAgent();
         if (preg_match('/<+(.*?)>/', $a_data, $a_matches)) {
@@ -1492,22 +1533,20 @@ class QuoteVersionController extends Controller
         }
 
         //Handling the request for institution a little different than we did for the other 2.
-        $institutionParts = explode(' - ', $cloneform->getData()
-            ->getQuoteReference()
-            ->getInstitution());
-        $institutionEntities = $em->getRepository('InstitutionBundle:Institution')
-            ->findBy(
-                array(
-                    'name' => $institutionParts[0],
-                    'city' => isset($institutionParts[1]) ? $institutionParts[1] : ''
-                )
+        $institutionParts = explode(' - ', $cloneform->getData()->getQuoteReference()->getInstitution());
+        if (count($institutionParts) == 2 ) {
+            $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findBy(
+                array('name' => $institutionParts[0], 'city' => $institutionParts[1])
             );
-        if (NULL !== $institutionEntities) {
-            $institution = array_shift($institutionEntities);
-            $cloneform->getData()
-                ->getQuoteReference()
-                ->setInstitution($institution);
+            if (null !== $institutionEntities) {
+                $institution = array_shift($institutionEntities);
+                $cloneform->getData()->getQuoteReference()->setInstitution($institution);
+            }
+        }else {
+            $cloneform['quoteReference']['institution']->addError(new FormError($this->get('translator')->trans('quote.exception.institution')));
         }
+
+
         //}
 
         // clone the content blocks, but first load the original entity since we never did that - only used form values
