@@ -195,7 +195,7 @@ var contentBlocksRefresh = function(id, hash) {
         // TOOL-625 Skipping because of complexity
         window.location.reload(true);
     });
-}
+};
 
 // Do lots of MDL stuff when a jQuery modal is opened
 var doMDLpopup = function(t) {
