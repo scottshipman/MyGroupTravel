@@ -53,62 +53,15 @@
                     $("#dialog").html("");
                     $("#dialog").dialog("close");
                     $(window).scrollTop(0);
-                    // @todo Perhaps add notification message?
-                    // update payment dashboard stuff
-                    var id = response['passenger']['id'];
-                    var markup = ''; // @todo - get markup from getPassengerPaymentMiniCardAction - no route as yet
-                    $('[passenger="'+id+'"]').html(markup);
-                    // now call the route to get the data for the person!
-
-                    //window.location.reload(true);
-                    $('#loader').css('display', 'none');
+                    // TOOL-625 Ignored because events get wiped out when DOM updated
+                    window.location.reload(true);
                 }).error(function (response) {
                     $("#loader").hide();
-
                     var field= '#tui_toolkit_paymentbundle_payment_';
                     ajaxFormErrors(response, field);
-
                 });
             });
-
         });
-
-        function pingDashboard() {
-
-            var url = '/tour/dashboard/{{ tour.id }}/show';
-
-            return $.ajax({
-                url: url,
-                type: 'GET',
-                headers: {
-                    "Pragma": "no-cache",
-                    "Expires": -1,
-                    "Cache-Control": "no-cache"
-                }
-            });
-        }
-
-        function getPassengerPayment() {
-
-            var url = '/tour/dashboard/{{ tour.id }}/completed/setup';
-
-            return $.ajax({
-                url: url,
-                type: 'GET',
-                headers: {
-                    "Pragma": "no-cache",
-                    "Expires": -1,
-                    "Cache-Control": "no-cache"
-                }
-            });
-        }
-
-        function updateSidebar(content) {
-            $('#tour-completed-right-column').html(content);
-            $('#loader').hide();
-            // @todo add an alert here?
-        }
-
     </script>
 
 {% endblock %}

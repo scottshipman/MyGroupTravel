@@ -451,8 +451,6 @@
                            "Cache-Control": "no-cache"
                        }
                    }).done(function (data) {
-                       // @todo Figure out if this can be removed
-
                        var lock_text;
                        var lock_button;
                        if (data.locked) {
@@ -466,10 +464,8 @@
                            $('#locked-warning').hide();
                            $('#quote-edit-section').show();
                        }
-
                        $('#quoteLock > span').text(lock_text);
                        $('#quoteLock > i').removeClass().addClass('fa ' + lock_button);
-
                        $('#loader').hide();
                    });
                });
