@@ -156,6 +156,7 @@ $(document).ready(function () {
                         $("#loader").css("display", "block");
                         $('#site-header-editForm').empty();
                         $('#site-header-editForm').hide();
+                        // TOOL 625 - cannot easily be changed
                         window.location.reload(true);
                     }else {
                         // redraw the area by loading a twig file

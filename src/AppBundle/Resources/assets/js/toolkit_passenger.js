@@ -817,7 +817,6 @@ $(document).ready(function () {
             var gender = response[3];
             var passengerId =  response[4];
             $("#loader").css("display", "none");
-            //window.location.reload(true);
             $(".passenger-edit-form").removeClass('expanded');
             $('#passenger-edit-actions-menu-drop-' + passengerId).css({
                 "color": "grey",

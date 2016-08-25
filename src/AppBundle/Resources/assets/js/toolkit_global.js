@@ -192,6 +192,7 @@ var contentBlocksRefresh = function(id, hash) {
         } else {
             window.location.hash = 'site-content';
         };
+        // TOOL-625 Skipping because of complexity
         window.location.reload(true);
     });
 }
