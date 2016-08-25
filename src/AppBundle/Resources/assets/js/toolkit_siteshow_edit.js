@@ -41,7 +41,7 @@ $(document).ready(function () {
                 type: 'POST',
                 url: '/manage/contentblocks/update/' + entityId + '/' + entityClass
             }).done(function() {
-                window.location.reload(true);
+                $('#loader').css('display', 'none');
             });
         }
     });
@@ -114,7 +114,7 @@ $(document).ready(function () {
                         $("#loader").css("display", "block");
                         $('#site-header-editForm').empty();
                         $('#site-header-editForm').hide();
-                        window.location.reload(true);
+                        $('#loader').css('display', 'none');
                     }else {
                         $('#site-header-slideshow-content').load('/manage/headerblock/' + blockId + '/show/' + entityId + '/' + entityClass, function () {
                             $('#site-header-editForm').empty();
@@ -222,31 +222,14 @@ $(document).ready(function () {
             $(".site-content-blocks-edit").hide();
             $(".sortable-items").sortable("disable");
             doMDLpopup($('#content-block-editForm-' + tabId)); // run the function to add appropriate MDL classes to form elements
-            var blockId;
             $('#newBlockIdForm').ajaxForm({
                 beforeSerialize: function () {
                     CKEDITOR.instances.tui_toolkit_contentblocksbundle_contentblock_body.updateElement();
                 },
                 success: function (response) {
-                    blockId = response;
-                    $('#content-block-editForm-' + tabId).empty().hide();
-                    $("#loader").css("display", "block");
-                    // Get markup for block here
-                    $.ajax({
-                        url: '/manage/contentblocks/' + response + '/show/' + entityId + '/' + entityClass,
-                        headers: {
-                            "Pragma": "no-cache",
-                            "Expires": -1,
-                            "Cache-Control": "no-cache"
-                        }
-                    }).done(function (response) {
-                        // @todo Render the block some other way, this will get messy!
-                        $('.add-content-block-form').css('display', 'none');
-                        $('.site-content-blocks-edit, .item-edit').show();
-                        $('#tabs-drawer-' + tabId + ' .sortable-items').append(response);
-                        $('.sortable-items').sortable('enable');
-                        $('#loader').css('display', 'none');
-                    });
+                    $('#loader').css('display', 'block');
+                    // TOOL-625 Cannot easily replace this as markup is complex
+                    window.location.reload(true);
                 }
             });
         });
