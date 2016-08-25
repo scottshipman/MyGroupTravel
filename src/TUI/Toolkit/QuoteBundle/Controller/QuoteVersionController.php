@@ -2,6 +2,7 @@
 
 namespace TUI\Toolkit\QuoteBundle\Controller;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -1733,9 +1734,12 @@ class QuoteVersionController extends Controller
         $quoteVersion->setLocked($status);
         $em->persist($quoteVersion);
         $em->flush();
-        // $this->get('ras_flash_alert.alert_reporter')->addSuccess('Quote Lock has been toggled ');
 
-        return new Response(json_encode((array)$quoteVersion));
+        $response = array(
+            'locked' => $quoteVersion->getLocked()
+        );
+
+        return new JsonResponse($response);
 
     }
 
