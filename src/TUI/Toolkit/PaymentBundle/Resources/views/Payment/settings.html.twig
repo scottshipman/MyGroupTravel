@@ -207,9 +207,6 @@
                     contentType: "application/x-www-form-urlencoded"
                 }).success(function (response) {
                     $('#loader').css('display', 'none');
-                    // update #adjusted-price to show new total
-
-                    //window.location.reload(true);
                 }).error(function (response) {
                     $("#loader").hide();
                     var parsed = $.parseJSON(response.responseText);
