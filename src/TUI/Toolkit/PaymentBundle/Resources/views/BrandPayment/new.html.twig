@@ -52,7 +52,7 @@
                     $("#dialog").html("");
                     $("#dialog").dialog("close");
                     $(window).scrollTop(0);
-                    pingDashboard().then(getSidebarContent).then(updateSidebar);
+                    pingDashboard().then(getSidebarContent).then(updateSidebar).then(getPaymentListContent).then(updatePaymentList);
                 }).error(function (response) {
                     $("#loader").hide();
                     var parsed = $.parseJSON(response.responseText);
@@ -97,8 +97,24 @@
 
         function updateSidebar(content) {
             $('#tour-completed-right-column').html(content);
+        }
+
+        function getPaymentListContent() {
+            // payment-task-list
+            return $.ajax({
+                url: window.location.href,
+                type: 'GET',
+                headers: {
+                    "Pragma": "no-cache",
+                    "Expires": -1,
+                    "Cache-Control": "no-cache"
+                }
+            });
+        }
+
+        function updatePaymentList(content) {
+            $('#payment-task-list').replaceWith($(content).find('#payment-task-list'));
             $('#loader').hide();
-            // @todo add an alert here?
         }
 
     </script>
