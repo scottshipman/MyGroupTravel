@@ -301,7 +301,8 @@ function isAutoSort() {
 
 function updateMarkup(route, element) {
     $.get(route, function(data) {
-        $(element).html(data);
+        $(element).replaceWith(data);
+        componentHandler.upgradeDom();
     });
 }
 
@@ -319,7 +320,7 @@ $(document).ready(function () {
     if(isAutoSort()) {
         passengerSort('name');
     }
-    
+
     // move passenger to new lists links
     $(document).on('click', 'a.move-to-accepted', function (e) {
         var t = $(this);
@@ -412,7 +413,7 @@ $(document).ready(function () {
                 'Cache-Control': 'no-cache'
             },
             data: $('#' + this.id).serialize(),
-            contentType: 'application/x-www-form-urlencoded',
+            contentType: 'application/x-www-form-urlencoded'
         }).success(function (response) {
 
             // Update the markup for the edit form
@@ -610,7 +611,7 @@ $(document).ready(function () {
                 'Cache-Control': 'no-cache'
             },
             data: $('#' + this.id).serialize(),
-            contentType: 'application/x-www-form-urlencoded',
+            contentType: 'application/x-www-form-urlencoded'
         }).success(function (response) {
 
             // Update the markup for the edit form
@@ -717,7 +718,7 @@ $(document).ready(function () {
                 'Cache-Control': 'no-cache'
             },
             data: $('#' + this.id).serialize(),
-            contentType: 'application/x-www-form-urlencoded',
+            contentType: 'application/x-www-form-urlencoded'
         }).success(function (response) {
 
             // Update the markup for the edit form
@@ -885,11 +886,11 @@ $(document).ready(function () {
         elemID = hash !== '' ? hash : 'showEveryone';
 
     $('#passenger-name-filter').val(search);
-    
+
     if (isAutoSort()) {
         filterPassengers(elemID, false);
     }
-    
+
     // Filter passengers by search
     var delayTimer;
     $('#passenger-name-filter').keyup(function() {
