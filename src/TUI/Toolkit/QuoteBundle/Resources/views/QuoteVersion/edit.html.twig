@@ -82,6 +82,13 @@
             $('#tui_toolkit_quotebundle_quoteversion_departureDate').on('change', function (e) {
                 $('#tui_toolkit_quotebundle_quoteversion_returnDate').datepicker('option', 'defaultDate', $(this).val());
             });
+
+            // If the convert to template checkbox is ticked, we warn the user that their quote will be removed
+            $(document).on('click', '#tui_toolkit_quotebundle_quoteversion_submit', function () {
+                if ($('#tui_toolkit_quotebundle_quoteversion_isTemplate').is(':checked')) {
+                    return confirm('{% trans %}quote.actions.confirm_template_conversion{% endtrans %}');
+                }
+            });
         });
     </script>
 {% endblock %}
