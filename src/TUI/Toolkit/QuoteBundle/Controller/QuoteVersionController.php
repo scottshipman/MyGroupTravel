@@ -157,6 +157,12 @@ class QuoteVersionController extends Controller
                 return $action;
             }
         );
+
+        $lockAction->setRouteParameters(array(
+            'id',
+            'redirect' => 'quotes'
+        ));
+
         $grid->addRowAction($lockAction);
 
         //set default filter value
@@ -634,6 +640,8 @@ class QuoteVersionController extends Controller
         $showAction = new RowAction('View', 'manage_quote_show');
         $grid->addRowAction($showAction);
         $cloneAction = new RowAction('Create quote from template', 'manage_quote_clone');
+        $previewAction = new RowAction('Preview', 'quote_site_action_show');
+        $grid->addRowAction($previewAction);
         $grid->addRowAction($cloneAction);
         $convertAction = new RowAction('Duplicate template', 'manage_quote_clonetemplate');
         $grid->addRowAction($convertAction);
@@ -653,6 +661,27 @@ class QuoteVersionController extends Controller
             }
         );
         $grid->addRowAction($deleteAction);
+
+        $lockAction = new RowAction('Lock', 'manage_quoteversion_lock_nonajax');
+        $lockAction->setRole('ROLE_BRAND');
+        $lockAction->manipulateRender(
+            function ($action, $row) {
+                if ($row->getField('locked')) {
+                    $action->setRole('ROLE_ADMIN');
+                    $action->setTitle('Unlock');
+                    $row->setColor('#ddd');
+                    $row->setClass('locked');
+                }
+                return $action;
+            }
+        );
+
+        $lockAction->setRouteParameters(array(
+            'id',
+            'redirect' => 'templates'
+        ));
+
+        $grid->addRowAction($lockAction);
 
         // templates shouldnt have these fields or filters:
         // reference
@@ -1807,8 +1836,11 @@ class QuoteVersionController extends Controller
     }
 
     /**
-     * Toggles lock status Quote entity without ajax.
+     * Toggles the lock status for a Quote entity without ajax.
      *
+     * @param Request $request
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function lockNonajaxAction(Request $request, $id)
     {
@@ -1831,7 +1863,18 @@ class QuoteVersionController extends Controller
         $em->flush();
         $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('quote.flash.lock'));
 
-        return $this->redirect($this->generateUrl('manage_quote'));
+        switch ($request->query->get('redirect')) {
+            case 'quotes':
+                $redirect = 'manage_quote';
+                break;
+            case 'templates':
+                $redirect = 'manage_quote_templates';
+                break;
+            default:
+                $redirect = 'manage_quote';
+        }
+
+        return $this->redirect($this->generateUrl($redirect));
 
     }
 
