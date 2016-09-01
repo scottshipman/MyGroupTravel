@@ -45,6 +45,7 @@ quote:
         is_locked: This quote is locked
         save: Save Quote
         confirm: Are you sure? This action cannot be undone.
+        confirm_template_conversion: Are you sure? This action cannot be undone (converting a quote to a template will delete this existing quote)
 
 
     table:

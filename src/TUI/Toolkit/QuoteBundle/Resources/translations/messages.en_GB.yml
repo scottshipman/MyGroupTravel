@@ -53,6 +53,7 @@ quote:
         generate_quote_link: Generate quote link
         convert_to_tour: Convert to tour
         delete_warning: Are you sure you want to remove this item? Warning: this can not be undone.
+        confirm_template_conversion: Are you sure? This action cannot be undone (converting a quote to a template will delete this existing quote)
 
 
     table:
