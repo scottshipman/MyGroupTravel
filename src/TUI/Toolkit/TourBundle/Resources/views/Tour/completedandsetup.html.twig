@@ -177,6 +177,44 @@
             </div>
     {% endif %}
 
+    {# Add passengers to free / waitlist task #}
+    {% if passengerData.free + passengerData.accepted == 0 %}
+        <div class="tour-edit mdl-card mdl-shadow--2dp">
+            <a class ="dashboard-titles" href="{{ path('manage_passenger_dashboard', { 'tourId': entity.id }) }}" title="{% trans %}tour.dashboard.passenger_dashboard{% endtrans %}">
+                <div class="mdl-card__title">
+                    <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.assign_passengers{% endtrans %}</h3>
+                    <span class="tour-dashboard-cta"><i class="material-icons">arrow_forward</i></span>
+                </div>
+            </a>
+            <div id="assign-progress" class="mdl-progress mdl-js-progress" style="width: 100%;"></div>
+            <div class="mdl-card__supporting-text mdl-card--border profile-tour-details">
+                <ul>
+                    <li>
+                        <div class="profile-list-item item-1 tour-dashboard three-column">
+                            <span class="date-span">{{ passengerData.waitlist }}</span>
+                            <label>{{ "waitlist" | paxLabel }}</label>
+                        </div>
+                    </li>
+                    {% if entity.freePlaces > 0 %}
+                        <li>
+                            <div class="profile-list-item item-2 tour-dashboard three-column">
+                                <span class="date-span">{{ passengerData.free }}</span>
+                                <label>{{ "free" | paxLabel }} of {{ entity.freePlaces }}</label>
+                            </div>
+                        </li>
+                    {% endif %}
+                    <li>
+                        <div class="profile-list-item item-3 tour-dashboard three-column">
+                            <span class="date-span">{{ passengerData.accepted }}</span>
+                            <label>{{ "accepted" | paxLabel }} of {{ entity.payingPlaces }}</label>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+
+
 
     {% if entity.paymentTasks is not empty  %}
         {% for paymentTask in entity.paymentTasks if paymentTask.paidDate == null %}
@@ -447,6 +485,16 @@
                     <span style="color:green; border-radius:25px; border: 1px solid green; padding:10px; position:absolute; right:20px;" class="tour-dashboard-cta"><i class="material-icons">done</i></span>
                 </div>
             </div>
+    {% endif %}
+
+    {# Assign Passengers to Free / Accepted #}
+    {% if passengerData.free + passengerData.accepted > 0 %}
+        <div class="tour-edit mdl-card mdl-shadow--2dp completed-task expired-quote">
+            <div class="mdl-card__title">
+                <h3 class="mdl-card__title-text">{% trans %}tour.dashboard.assign_passengers{% endtrans %}</h3>
+                <span style="color:green; border-radius:25px; border: 1px solid green; padding:10px; position:absolute; right:20px;" class="tour-dashboard-cta"><i class="material-icons">done</i></span>
+            </div>
+        </div>
     {% endif %}
 
     {#Completed Payment Tasks#}

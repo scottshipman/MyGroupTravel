@@ -31,10 +31,8 @@
                 <p>{% trans %} passenger.labels.welcome_invite_organisers {% endtrans %}</p>
                 <p>{% trans %} passenger.labels.welcome_parent_activation {% endtrans %}</p>
                 {% if unactivatedCount > 0 %}
-                    <a href="{{ path('activate_all_passengers', { 'tourId': tour.id }) }}"
-                       title ="{% trans %}passenger.actions.send_activation_description{% endtrans %}"
-                       class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored caller-btn"
-                       onclick="return confirm('{% trans %}passenger.actions.send_message{% endtrans %}')">
+                    <a id="send-activations" title ="{% trans %}passenger.actions.send_activation_description{% endtrans %}"
+                       class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored caller-btn">
                         <i style="vertical-align:middle;" class="material-icons">email</i> {% trans %}passenger.actions.send_activation{% endtrans %}
                     </a>
                 {% endif %}
@@ -280,6 +278,23 @@
                     // Copy to Clipboard
                     $('#copy-button').attr('brandPrimaryColor', '{{ brand.primaryColor }}').click(copyToClipboard);
                 });
+
+            // TOOL-561 - create a modal to explain email sending
+            $(document).on('click', '#send-activations', function (e) {
+                e.preventDefault();
+                // Markup for our confirmation modal
+                var activationModalMarkup = '<h3>{% trans %}passenger.modals.send_activation.warning{% endtrans %}</h3>' +
+                                '<ul><li>{% trans %}passenger.modals.send_activation.no_account{% endtrans %}</li>' +
+                                '<li>{% trans %}passenger.modals.send_activation.existing_account{% endtrans %}</li></ul>' +
+                                '<a id="confirm-activation-send" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored caller-btn pull-right" ' +
+                                'href="{{ path('activate_all_passengers', { 'tourId': tour.id }) }}">Send</a>';
+                // Show the modal
+                toolkitStaticPopup('{% trans %}passenger.modals.send_activation.title{% endtrans %}', activationModalMarkup);
+            });
+
+            $(document).on('click', '#confirm-activation-send', function (e) {
+                $('#loader').show();
+            });
 
             // Tour Sign Up popup
             $(document).on('click', '#accept-tour', function (e) {

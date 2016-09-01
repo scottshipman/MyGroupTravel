@@ -206,6 +206,7 @@ tour:
         task_dashboard: Go to Task Dashboard
         sign_up_complete: paying passengers accepted
         task_view_passenger: View Passenger
+        assign_passengers: Assign passengers to free / accepted
 
     edit:
         summary: Summary
