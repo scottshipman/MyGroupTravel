@@ -202,15 +202,18 @@ class TourType extends AbstractType
             'label' => 'tour.form.tour.dietary_date',
             'format' => $date_format,
           ))
-            ->add('media', 'hidden', array(
-                'required' => false,
-//                'data_class' => 'TUI\Toolkit\MediaBundle\Entity\Media',
-                'attr' => array(
-                    'class' => 'media-placeholder',
-//                    'multiple' => true
+          ->add('media', 'hidden', array(
+              'required' => false,
+              // 'data_class' => 'TUI\Toolkit\MediaBundle\Entity\Media',
+              'attr' => array(
+                  'class' => 'media-placeholder',
+                  // 'multiple' => true
                 )
             ))
-
+          ->add('slug', 'text', array(
+              'required'  => false,
+              'label' => 'tour.form.tour_summary.slug',
+          ))
         ;
     }
 

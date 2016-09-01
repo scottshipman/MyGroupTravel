@@ -351,6 +351,7 @@ tour:
             price: Price per Person
             placeholder: Select
             welcomeMsg: Summary Message
+            slug: Custom URL (slug)
         tour:
             placeholder: Select
             name: Tour Name

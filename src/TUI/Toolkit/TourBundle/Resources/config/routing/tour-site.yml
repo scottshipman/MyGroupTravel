@@ -14,6 +14,10 @@ tour_site_validate:
     defaults: { _controller: "TourBundle:TourSite:siteValidate" }
     methods: [POST]
 
+tour_site_show_slug:
+    path:     /{slug}
+    defaults: { _controller: "TourBundle:TourSite:siteShow" }
+
 tour_site_show:
     path:     /{id}/{quoteNumber}
     defaults: { _controller: "TourBundle:TourSite:siteShow" }
