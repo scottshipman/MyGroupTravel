@@ -100,6 +100,8 @@
                 }).success(function (response) {
                     $("#loader").show();
                     $(window).scrollTop(0);
+                    // TOOL-625 Cannot easily replace this - new passenger dialog doesn't function correctly after
+                    // ajax based update
                     window.location.reload(true);
                 }).error(function (response) {
                     $("#loader").hide();

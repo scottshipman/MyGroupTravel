@@ -246,10 +246,10 @@
   a {
     color: grey;
 
-    #medical,
-    #passport,
-    #emergency,
-    #dietary {
+    .medical,
+    .passport,
+    .emergency,
+    .dietary {
       float:right;
       border-radius: 25px;
       border: 1px solid grey;
@@ -257,10 +257,10 @@
       color:grey;
     }
 
-    #medical-close,
-    #passport-close,
-    #emergency-close,
-    #dietary-close {
+    .medical-close,
+    .passport-close,
+    .emergency-close,
+    .dietary-close {
       display: none;
       border-radius: 25px;
       border: 1px solid grey;

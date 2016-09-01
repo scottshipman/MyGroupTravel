@@ -41,7 +41,7 @@ $(document).ready(function () {
                 type: 'POST',
                 url: '/manage/contentblocks/update/' + entityId + '/' + entityClass
             }).done(function() {
-                window.location.reload(true);
+                $('#loader').css('display', 'none');
             });
         }
     });
@@ -114,7 +114,7 @@ $(document).ready(function () {
                         $("#loader").css("display", "block");
                         $('#site-header-editForm').empty();
                         $('#site-header-editForm').hide();
-                        window.location.reload(true);
+                        $('#loader').css('display', 'none');
                     }else {
                         $('#site-header-slideshow-content').load('/manage/headerblock/' + blockId + '/show/' + entityId + '/' + entityClass, function () {
                             $('#site-header-editForm').empty();
@@ -156,6 +156,7 @@ $(document).ready(function () {
                         $("#loader").css("display", "block");
                         $('#site-header-editForm').empty();
                         $('#site-header-editForm').hide();
+                        // TOOL 625 - cannot easily be changed
                         window.location.reload(true);
                     }else {
                         // redraw the area by loading a twig file
@@ -227,9 +228,9 @@ $(document).ready(function () {
                     CKEDITOR.instances.tui_toolkit_contentblocksbundle_contentblock_body.updateElement();
                 },
                 success: function (response) {
-                    $('#content-block-editForm-' + tabId).empty().hide();
-                    $("#loader").css("display", "block");
-                    window.location.reload();
+                    $('#loader').css('display', 'block');
+                    // TOOL-625 Cannot easily replace this as markup is complex
+                    window.location.reload(true);
                 }
             });
         });

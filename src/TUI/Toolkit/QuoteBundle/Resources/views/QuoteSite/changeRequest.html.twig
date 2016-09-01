@@ -49,12 +49,12 @@
                     "Cache-Control": "no-cache"
                 },
                 data: $('#ajax_change_quote_form').serialize(),
-                contentType: "application/x-www-form-urlencoded",
+                contentType: "application/x-www-form-urlencoded"
             }).success(function (response) {
                 $("#dialog").html("");
                 $("#dialog").dialog("close");
                 $(window).scrollTop(0);
-                window.location.reload(true);
+                $('#loader').css('display', 'none');
             }).error(function (response) {
                 $("#loader").hide();
                 var parsed = $.parseJSON(response.responseText);

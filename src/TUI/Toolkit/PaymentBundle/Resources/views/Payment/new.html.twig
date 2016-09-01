@@ -48,23 +48,20 @@
                         "Cache-Control": "no-cache"
                     },
                     data: $('#ajax_new_payment_form').serialize(),
-                    contentType: "application/x-www-form-urlencoded",
+                    contentType: "application/x-www-form-urlencoded"
                 }).success(function (response) {
                     $("#dialog").html("");
                     $("#dialog").dialog("close");
                     $(window).scrollTop(0);
+                    // TOOL-625 Ignored because events get wiped out when DOM updated
                     window.location.reload(true);
                 }).error(function (response) {
                     $("#loader").hide();
-
                     var field= '#tui_toolkit_paymentbundle_payment_';
                     ajaxFormErrors(response, field);
-
                 });
             });
-
         });
-
     </script>
 
 {% endblock %}

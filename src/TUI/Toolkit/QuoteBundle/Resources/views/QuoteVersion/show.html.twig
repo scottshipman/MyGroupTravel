@@ -62,9 +62,7 @@
 {% block body -%}
 <div id="quote-version-{{ entity.id }}" class="site-show" page-type="show" entityId="{{ entity.id }}" entityType="quote" entityClass="QuoteVersion" entityPath="quoteversion"></div>
 
-{% if (entity.locked is sameas(true)) %}
-        <h3 style="color: red;">{% trans %}quote.actions.is_locked{% endtrans %}</h3>
-    {% endif %}
+    <h3 id="locked-warning" style="color: red; display: {{ (entity.locked ? 'inline' : 'none') }}">{% trans %}quote.actions.is_locked{% endtrans %}</h3>
 
     <ul class="record_actions quote-actions{% if entity.quoteReference.institution %}{% if entity.quoteReference.institution.media %} has-logo{% endif %}{% endif %}">
         {% if entity.quoteReference.institution %}
@@ -119,11 +117,11 @@
         <li>
         {% if (entity.locked is sameas(false)) %}
             <a id="quoteLock" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-            <i class="fa fa-lock"></i> {% trans %}quote.actions.lock{% endtrans %}
+            <i class="fa fa-lock"></i> <span>{% trans %}quote.actions.lock{% endtrans %}</span>
         {% else %}
             {% if is_granted("ROLE_ADMIN") %}
                 <a id="quoteLock" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-                <i class="fa fa-unlock"></i> {% trans %}quote.actions.unlock{% endtrans %}
+                <i class="fa fa-unlock"></i> <span>{% trans %}quote.actions.unlock{% endtrans %}</span>
             {% endif %}
         {% endif %}
             </a>
@@ -221,85 +219,85 @@
         </tbody>
     </table>
 
-{% if entity.locked == 0%}
-    {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
-        <hr>
-        <h3>{% trans %}quote.show.header_content.header_content_title{% endtrans %}</h3>
 
-            {% if entity.headerBlock %}
-                <div id="header-block-content-item" blockId="{{ entity.headerBlock.id }}">
-                    <a id="edit-header-block" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-                        <i class="fa fa-pencil-square-o"></i> {% trans %}quote.show.header_content.edit{% endtrans %}
-                    </a>
-                </div>
-            {% else %}
-                <div id="site-header-slideshow-content">
-                    <a id="add-header-content" href="#" class="status-preview-edit mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
-                        <i class="fa fa-plus-circle"></i> {% trans %}quote.actions.add_header{% endtrans %}
-                    </a>
-                </div>
-                {#<a id="add-headerBlock" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">#}
-                    {#<i class="fa fa-plus-circle"></i> {% trans %}quote.show.header_content.add{% endtrans %}#}
-                {#</a>#}
-                {#<div id="headerblock-form"></div>#}
-            {% endif %}
-        <div id="site-header-editForm" style="display:none; width: 100%; margin-top: 5px;"></div>
-    {% endif %}
-    <hr>
+    <div id="quote-edit-section" style="display: {{ (entity.locked ? 'none' : 'inherit') }}">
+        {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
+            <hr>
+            <h3>{% trans %}quote.show.header_content.header_content_title{% endtrans %}</h3>
 
-    {# RENDER THE CONTENT BLOCKS HERE #}
-
-   {# {{ dump(entity) }} #}
-
-    <h3>{% trans %}quote.show.tour_information.tour_information_title{% endtrans %}</h3>
-
-    {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
-        <a id="add-new-tab" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
-            <i class="fa fa-plus-circle"></i>  {% trans %}quote.show.tour_information.add_tab{% endtrans %}
-        </a>
-    {% endif %}
-
-    <a id="site-content"></a>
-    <div id="content-blocks-wrapper" class="content-blocks-wrapper sortable-tabs">
-        {%  for tab, data in entity.content %}
-        <div id="{{ tab }}" class="content-blocks-tab">
-            <span class="content-blocks tab-label{{ cursor }}">
-                <i class="content-block-tab-handle fa fa-arrows{{ editable }}"></i>
-                <h4 id="tab-label-{{ tab }}" class="editable-tab">{{ data[0] }}</h4>
-                {% if data[1] | length < 1 %}
-                    <span class="tab-delete icon-label{{ editable }}"><i class="content-block-tab-actions fa fa-trash-o"></i> {% trans %}quote.show.tour_information.delete_tab{% endtrans %}</span>
+                {% if entity.headerBlock %}
+                    <div id="header-block-content-item" blockId="{{ entity.headerBlock.id }}">
+                        <a id="edit-header-block" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+                            <i class="fa fa-pencil-square-o"></i> {% trans %}quote.show.header_content.edit{% endtrans %}
+                        </a>
+                    </div>
+                {% else %}
+                    <div id="site-header-slideshow-content">
+                        <a id="add-header-content" href="#" class="status-preview-edit mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                            <i class="fa fa-plus-circle"></i> {% trans %}quote.actions.add_header{% endtrans %}
+                        </a>
+                    </div>
+                    {#<a id="add-headerBlock" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">#}
+                        {#<i class="fa fa-plus-circle"></i> {% trans %}quote.show.header_content.add{% endtrans %}#}
+                    {#</a>#}
+                    {#<div id="headerblock-form"></div>#}
                 {% endif %}
-                <span class="tab-new icon-label{{ editable }}"><i class="content-block-tab-actions fa fa-plus-circle"></i> {% trans %}quote.show.tour_information.add_content{% endtrans %}</span>
-            </span>
+            <div id="site-header-editForm" style="display:none; width: 100%; margin-top: 5px;"></div>
+        {% endif %}
+        <hr>
+
+        {# RENDER THE CONTENT BLOCKS HERE #}
+
+       {# {{ dump(entity) }} #}
+
+        <h3>{% trans %}quote.show.tour_information.tour_information_title{% endtrans %}</h3>
+
+        {% if (entity.converted is sameas(false)) and (entity.quoteReference.converted is sameas(false)) %}
+            <a id="add-new-tab" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="#">
+                <i class="fa fa-plus-circle"></i>  {% trans %}quote.show.tour_information.add_tab{% endtrans %}
+            </a>
+        {% endif %}
+
+        <a id="site-content"></a>
+        <div id="content-blocks-wrapper" class="content-blocks-wrapper sortable-tabs">
+            {%  for tab, data in entity.content %}
+            <div id="{{ tab }}" class="content-blocks-tab">
+                <span class="content-blocks tab-label{{ cursor }}">
+                    <i class="content-block-tab-handle fa fa-arrows{{ editable }}"></i>
+                    <h4 id="tab-label-{{ tab }}" class="editable-tab">{{ data[0] }}</h4>
+                    {% if data[1] | length < 1 %}
+                        <span class="tab-delete icon-label{{ editable }}"><i class="content-block-tab-actions fa fa-trash-o"></i> {% trans %}quote.show.tour_information.delete_tab{% endtrans %}</span>
+                    {% endif %}
+                    <span class="tab-new icon-label{{ editable }}"><i class="content-block-tab-actions fa fa-plus-circle"></i> {% trans %}quote.show.tour_information.add_content{% endtrans %}</span>
+                </span>
 
 
 
-            <div id="tabs-drawer-{{ tab }}" class="sortable-items content-blocks-drawer">
-                    {%  for item in data[1] %}
-                        {% if items[item] != null %}
-                            <div id="content-blocks-{{ item }}" class="content-blocks content-blocks-item {% if items[item].locked %}content-block-locked{% endif %}{{ cursor }}">
-                                <i class="fa fa-arrows{{ editable }}"></i> {{ items[item].title }}
-                                {# probably render a controller here by passing in item as id and have block entity returned #}
-                                <div id="content-block-actions-{{ item }}" class="content-block-actions {% if items[item].locked %}content-block-locked{% endif %}{{ editable }}">
-                                    <i class="item-edit content-block-item-action fa fa-pencil-square-o" itemid = "{{ item }}" title="Edit"></i>
-                                    <i class="item-delete content-block-item-action fa fa-trash-o" title="Delete" blockID="{{ item }}"></i>
-                                    {#
-                                    {% if items[item].hidden %}
-                                        <i class="item-hide content-block-item-action fa fa-ban"></i>{% else %}<i class="item-hide content-block-item-action fa fa-eye"></i>
-                                    {% endif %}
-                                    #}
+                <div id="tabs-drawer-{{ tab }}" class="sortable-items content-blocks-drawer">
+                        {%  for item in data[1] %}
+                            {% if items[item] != null %}
+                                <div id="content-blocks-{{ item }}" class="content-blocks content-blocks-item {% if items[item].locked %}content-block-locked{% endif %}{{ cursor }}">
+                                    <i class="fa fa-arrows{{ editable }}"></i> {{ items[item].title }}
+                                    {# probably render a controller here by passing in item as id and have block entity returned #}
+                                    <div id="content-block-actions-{{ item }}" class="content-block-actions {% if items[item].locked %}content-block-locked{% endif %}{{ editable }}">
+                                        <i class="item-edit content-block-item-action fa fa-pencil-square-o" itemid = "{{ item }}" title="Edit"></i>
+                                        <i class="item-delete content-block-item-action fa fa-trash-o" title="Delete" blockID="{{ item }}"></i>
+                                        {#
+                                        {% if items[item].hidden %}
+                                            <i class="item-hide content-block-item-action fa fa-ban"></i>{% else %}<i class="item-hide content-block-item-action fa fa-eye"></i>
+                                        {% endif %}
+                                        #}
+                                     </div>
                                  </div>
-                             </div>
-                            <div id="editable-content-blocks-{{ item }}" style="display:none; border: 1px dotted grey;padding:3em;"></div>
-                        {% endif %}
-                       {% endfor %}
+                                <div id="editable-content-blocks-{{ item }}" style="display:none; border: 1px dotted grey;padding:3em;"></div>
+                            {% endif %}
+                           {% endfor %}
 
+                 </div>
              </div>
+               {% endfor %}
          </div>
-           {% endfor %}
-     </div>
-
-{% endif %}
+    </div> <!-- end of edit section -->
         {% javascripts '@toolkit_siteshow' %}
             <script type="text/javascript" src="{{ asset_url }}"></script>
         {% endjavascripts %}
@@ -453,7 +451,22 @@
                            "Cache-Control": "no-cache"
                        }
                    }).done(function (data) {
-                       window.location.reload(true);
+                       var lock_text;
+                       var lock_button;
+                       if (data.locked) {
+                           lock_text = 'Unlock';
+                           lock_button = 'fa-unlock';
+                           $('#locked-warning').show();
+                           $('#quote-edit-section').hide();
+                       } else {
+                           lock_text = 'Lock';
+                           lock_button = 'fa-lock';
+                           $('#locked-warning').hide();
+                           $('#quote-edit-section').show();
+                       }
+                       $('#quoteLock > span').text(lock_text);
+                       $('#quoteLock > i').removeClass().addClass('fa ' + lock_button);
+                       $('#loader').hide();
                    });
                });
 

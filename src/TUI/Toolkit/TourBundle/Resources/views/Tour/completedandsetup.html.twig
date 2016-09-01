@@ -21,7 +21,7 @@
     {% else %}
         {% set emergencyPercent = (passengerData.completedPassengerData['emergency']|length/passengerData.travellingUsers|length) * 100  %}
     {% endif %}
-    {% if emergencyDtg.days < 1 %} {%  set emergecyDtgFinal = 0  %} {% else %} {% set emergencyDtgFinal = emergencyDtg.days %}{% endif %}
+    {% if emergencyDtg.days < 1 %} {%  set emergencyDtgFinal = 0  %} {% else %} {% set emergencyDtgFinal = emergencyDtg.days %}{% endif %}
 {% endif %}
 
 {% if entity.medicalDate is defined and entity.medicalDate != null%}

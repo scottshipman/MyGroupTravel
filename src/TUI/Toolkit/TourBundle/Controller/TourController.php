@@ -1752,7 +1752,11 @@ class TourController extends Controller
             $entity->setSetupComplete(true);
             $em->flush();
             $permission = $this->get("permission.set_permission")->setPermission($entity->getId(), 'tour', $entity->getOrganizer(), 'organizer');
-            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.save') . $entity->getName());
+
+            // TOOL-625 - Don't show flash messages if the tour was updated by an AJAX request
+            if (!$request->isXmlHttpRequest()) {
+                $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('tour.flash.save') . $entity->getName());
+            }
 
             $serializer = $this->container->get('jms_serializer');
             $serialized = $serializer->serialize($entity, 'json');
