@@ -67,7 +67,7 @@ passenger:
         save: "Thanks for signing up. A copy of the form has been emailed to you, and the tour organiser will be in touch."
         delete: Passenger deleted -
         restore: Passenger Restored -
-        users_activation: An activation email has been sent to all unactivated users accepted on the tour
+        users_activation: An email has been sent to all users accepted on the tour
         organizer_save: The passenger has been added to the Waitlist
 
     modals:
@@ -76,6 +76,11 @@ passenger:
         dob: Date of Birth
         organizer_title: Add Passenger
         organizer_message: As an organiser, you can manually add a passenger for the tour below
+        send_activation:
+            title: Important
+            warning: An email will be sent to all travellers (accepted, free and organisers)
+            no_account: Users without an existing user account will be sent an activation email to sign up
+            existing_account: Users with an existing account will be sent a link to sign into this tour
 
     labels:
         export-manifest: Export Manifest

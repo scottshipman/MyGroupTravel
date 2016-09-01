@@ -90,10 +90,31 @@ user:
 
     email:
         registration:
-            subject: Toolkit Registration Confirmation
+            subject: %tour%, %institution% - Activate your account
+            header: Activate your account
+            greeting: Hi %firstname% %lastname%,
+            account_created: An account has been created for you for %brandname%'s Tour management application.
+            add_information: You will now be able to add the required information for your passenger, in your own secure area':'
+            medical: Medical information
+            passport: Passport information
+            dietary: Dietary information
+            emergency: Emergency contact information
+            track_payments: You will also be able to keep track of payments that you have made towards the trip.
+            login: Your login will be your email address':' %useremail%
+            activate: To finish activating your account please click on the button below.
+            activate_account: Activate account
+            url_paste: You can also paste the link below straight into your browser window
+        login:
+            subject: %tour%, %institution% - Log in to your account
+            header: Log in to your account
+            welcome: Welcome back to %brandname%'s Tour management application.
+            login_link: To log in, click on the button below
+            login_label: Login
+
         password_reset:
             subject: Password Reset
             action: Set Password
+
     form:
         honorific: Title
         fname: First Name

@@ -1460,32 +1460,45 @@ class PassengerController extends Controller
         $parents = array_unique($parents);
 
         foreach ($parents as $parent) {
-            if($parent->isEnabled() == false) {
-
+            // TOOL-561 - no user account exists yet so generate a token for them
+            if (!$parent->isEnabled()) {
                 $tokenGenerator = $this->container->get('fos_user.util.token_generator');
-
-                //Get some user info
                 $parent->setConfirmationToken($tokenGenerator->generateToken());
-                $userEmail = $parent->getEmail();
 
-                $message = \Swift_Message::newInstance()
-                    ->setSubject($this->get('translator')->trans('user.email.registration.subject'))
-                    ->setFrom($this->container->getParameter('user_system_email'))
-                    ->setTo($userEmail)
-                    ->setBody(
-                        $this->renderView(
-                            'TUIToolkitUserBundle:Registration:register_email.html.twig',
-                            array(
-                                'brand' => $brand,
-                                'user' => $parent,
-                            )
-                        ), 'text/html');
-
-                $em->persist($parent);
-                $em->flush();
-
-                $mailer->send($message);
+                $subject = 'user.email.registration.subject';
+                $view = 'TUIToolkitUserBundle:Registration:register_email.html.twig';
+            } else {
+                $subject = 'user.email.login.subject';
+                $view = 'TUIToolkitUserBundle:Registration:register_login_email.html.twig';
             }
+
+            $userEmail = $parent->getEmail();
+            $message = \Swift_Message::newInstance()
+                ->setSubject($this->get('translator')->trans(
+                    $subject,
+                    array(
+                        '%tour%' => $tour->getName(),
+                        '%institution%' => $tour->getInstitution()
+                    )
+                )
+                )
+                ->setFrom($this->container->getParameter('user_system_email'))
+                ->setTo($userEmail)
+                ->setBody(
+                    $this->renderView(
+                        $view,
+                        array(
+                            'brand' => $brand,
+                            'user' => $parent,
+                            'tour_id' => $tour->getId()
+                        )
+                    ), 'text/html');
+
+            $em->persist($parent);
+            $em->flush();
+
+            $mailer->send($message);
+
         }
 
         $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('passenger.flash.users_activation'));
