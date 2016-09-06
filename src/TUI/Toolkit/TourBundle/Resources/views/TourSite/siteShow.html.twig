@@ -283,7 +283,14 @@
                 // Promote Popup
                 $(document).on('click', '#promote-tour', function (e) {
                     e.preventDefault();
-                    var shareValue = "{{ url('tour_site_show', { 'id': entity.id, 'quoteNumber' : entity.quoteNumber }) }}";
+
+                    var shareValue;
+                    {% if entity.slug is not empty %}
+                        shareValue = "{{ url('tour_site_show_slug', { 'slug': entity.slug }) }}";
+                    {% else %}
+                        shareValue = "{{ url('tour_site_show', { 'id': entity.id, 'quoteNumber' : entity.quoteNumber }) }}";
+                    {% endif %}
+
                     var link_html = '<h3>Share this Tour with others</h3>' +
                                       '<div><p>To send this tour to others, copy the URL below.</p></div>' +
                                       '<div class="input"><input style="width:70%; padding:.25em; margin:1em;" type="text" id="share_url" name="share_url" value="' + shareValue + '" readonly="readonly">' +
