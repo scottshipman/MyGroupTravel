@@ -133,6 +133,7 @@
                 type: 'POST',
                 url: '/manage/contentblocks/update/'+ quoteID + '/tour'
             }).done(function() {
+                // TOOL-625 Skipping because of complexity
                 window.location.reload(true);
             });
 

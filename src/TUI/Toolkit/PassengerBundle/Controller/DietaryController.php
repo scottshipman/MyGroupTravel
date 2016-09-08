@@ -81,9 +81,7 @@ class DietaryController extends Controller
             $em->persist($passenger);
             $em->flush();
 
-            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('passenger.form.success.message.dietary'));
-
-            return $this->redirect($this->generateUrl('manage_passenger_show', array('id' => $passenger->getId())));
+            return $this->createJsonResponse($entity);
         }
 
         $errors = $this->get("app.form.validation")->getErrorMessages($form);
@@ -299,15 +297,7 @@ class DietaryController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
-            $data = $entity->getDescription();
-
-            $responseContent =  json_encode($data);
-            return new Response($responseContent,
-                Response::HTTP_OK,
-                array('content-type' => 'application/json')
-            );
-
-//            return $this->redirect($this->generateUrl('dietary_edit', array('id' => $id)));
+            return $this->createJsonResponse($entity);
         }
 
 
@@ -361,5 +351,19 @@ class DietaryController extends Controller
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
+    }
+
+    /**
+     * Given the entity, build a JSON response for the front end to use
+     *
+     * @param $entity
+     * @return JsonResponse
+     */
+    private function createJsonResponse(Dietary $entity)
+    {
+        return new JsonResponse(array(
+            'id' => $entity->getId(),
+            'description' => $entity->getDescription()
+        ));
     }
 }

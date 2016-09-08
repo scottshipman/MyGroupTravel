@@ -76,6 +76,12 @@ class EmergencyController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
+
+            /*
+             * @todo TOOL-625 - on a local development copy of the system, "MySQL server has gone away" errors occur
+             * here, even when rolling back to a known working state. We need to confirm if this happens to other users
+             * and if so, what is causing the issue?
+             */
             $entity->setPassengerReference($passenger);
             $em->persist($entity);
             $em->flush();
@@ -85,9 +91,7 @@ class EmergencyController extends Controller
             $em->flush();
 
 
-            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('passenger.form.success.message.emergency'));
-
-            return $this->redirect($this->generateUrl('manage_passenger_show', array('id' => $passenger->getId())));
+            return $this->createJsonResponse($entity);
 
         }
 
@@ -304,22 +308,7 @@ class EmergencyController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
-            $emergencyNumber = $entity->getEmergencyNumber();
-//            $emergencyNumberFormatted = $emergencyNumber->getNationalNumber();
-
-            $data = array(
-                $entity->getEmergencyName(),
-                $entity->getEmergencyRelationship(),
-                $emergencyNumber,
-                $entity->getEmergencyEmail(),
-            );
-
-            $responseContent =  json_encode($data);
-            return new Response($responseContent,
-                Response::HTTP_OK,
-                array('content-type' => 'application/json')
-            );
-
+            return $this->createJsonResponse($entity);
 
         }
 
@@ -395,5 +384,22 @@ class EmergencyController extends Controller
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
+    }
+
+    /**
+     * Given the entity, build a JSON response for the front end to use
+     *
+     * @param Emergency $entity
+     * @return JsonResponse
+     */
+    private function createJsonResponse(Emergency $entity)
+    {
+        return new JsonResponse(array(
+            'id' => $entity->getId(),
+            'name' => $entity->getEmergencyName(),
+            'relationship' => $entity->getEmergencyRelationship(),
+            'telephone' => $entity->getEmergencyNumber(),
+            'email' => $entity->getEmergencyEmail()
+        ));
     }
 }

@@ -2,6 +2,7 @@
 
 namespace TUI\Toolkit\QuoteBundle\Controller;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -157,6 +158,12 @@ class QuoteVersionController extends Controller
                 return $action;
             }
         );
+
+        $lockAction->setRouteParameters(array(
+            'id',
+            'redirect' => 'quotes'
+        ));
+
         $grid->addRowAction($lockAction);
 
         //set default filter value
@@ -634,6 +641,8 @@ class QuoteVersionController extends Controller
         $showAction = new RowAction('View', 'manage_quote_show');
         $grid->addRowAction($showAction);
         $cloneAction = new RowAction('Create quote from template', 'manage_quote_clone');
+        $previewAction = new RowAction('Preview', 'quote_site_action_show');
+        $grid->addRowAction($previewAction);
         $grid->addRowAction($cloneAction);
         $convertAction = new RowAction('Duplicate template', 'manage_quote_clonetemplate');
         $grid->addRowAction($convertAction);
@@ -653,6 +662,27 @@ class QuoteVersionController extends Controller
             }
         );
         $grid->addRowAction($deleteAction);
+
+        $lockAction = new RowAction('Lock', 'manage_quoteversion_lock_nonajax');
+        $lockAction->setRole('ROLE_BRAND');
+        $lockAction->manipulateRender(
+            function ($action, $row) {
+                if ($row->getField('locked')) {
+                    $action->setRole('ROLE_ADMIN');
+                    $action->setTitle('Unlock');
+                    $row->setColor('#ddd');
+                    $row->setClass('locked');
+                }
+                return $action;
+            }
+        );
+
+        $lockAction->setRouteParameters(array(
+            'id',
+            'redirect' => 'templates'
+        ));
+
+        $grid->addRowAction($lockAction);
 
         // templates shouldnt have these fields or filters:
         // reference
@@ -776,6 +806,32 @@ class QuoteVersionController extends Controller
         }
 
         if ($form->isValid()) {
+
+            // TOOL-617 - copied from cloneUpdateAction
+            //make sure there isnt a soft-deleted version of the quote ref first
+            // a sql error occurs because doctrine cant enforce constraint on soft-deleted item but SQL will
+            $filters = $em->getFilters();
+            $filters->disable('softdeleteable');
+            $qn = $form->getData()->getQuoteNumber();
+            $query = $em->createQuery(
+                'select q
+                from QuoteBundle:QuoteVersion q
+                where q.quoteNumber = :qn')
+                ->setParameter('qn', $qn);
+            $deletedQuotes= $query->getResult();
+
+            if ($deletedQuotes) {
+                $filters->enable('softdeleteable');
+                $this->get('ras_flash_alert.alert_reporter')->addError(
+                    $this->get('translator')->trans('quote.flash.soft_delete') . ' <br>QuoteNumber: ' . $deletedQuotes[0]->getQuoteNumber() . ' - id # :' . $deletedQuotes[0]->getId() );
+                $date_format = $this->container->getParameter('date_format');
+                return $this->render('QuoteBundle:QuoteVersion:new.html.twig', array(
+                    'entity' => $entity,
+                    'form' => $form->createView(),
+                    'date_format' => $date_format,
+                ));
+            }
+
             $em->persist($entity);
             $em->flush();
             // Create organizer permission
@@ -1444,6 +1500,21 @@ class QuoteVersionController extends Controller
             $route = '';
         }
 
+        // TOOL-617 - copied from createAction
+        //handling ajax request for organizer
+        $o_data = $cloneform->getData()->getQuoteReference()->getOrganizer();
+        if (preg_match('/<+(.*?)>/', $o_data, $o_matches)) {
+            $email = $o_matches[1];
+            $entities = $em->getRepository('TUIToolkitUserBundle:User')
+                ->findByEmail($email);
+            if (NULL !== $entities) {
+                $organizer = array_shift($entities);
+                $cloneform->getData()->getQuoteReference()->setOrganizer($organizer);
+            }
+        }else {
+            $cloneform['quoteReference']['organizer']->addError(new FormError($this->get('translator')->trans('quote.exception.organizer')));
+        }
+
         //handling ajax request for SalesAgent same as we did with organizer
         $a_data = $cloneform->getData()->getQuoteReference()->getSalesAgent();
         if (preg_match('/<+(.*?)>/', $a_data, $a_matches)) {
@@ -1492,22 +1563,20 @@ class QuoteVersionController extends Controller
         }
 
         //Handling the request for institution a little different than we did for the other 2.
-        $institutionParts = explode(' - ', $cloneform->getData()
-            ->getQuoteReference()
-            ->getInstitution());
-        $institutionEntities = $em->getRepository('InstitutionBundle:Institution')
-            ->findBy(
-                array(
-                    'name' => $institutionParts[0],
-                    'city' => isset($institutionParts[1]) ? $institutionParts[1] : ''
-                )
+        $institutionParts = explode(' - ', $cloneform->getData()->getQuoteReference()->getInstitution());
+        if (count($institutionParts) == 2 ) {
+            $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findBy(
+                array('name' => $institutionParts[0], 'city' => $institutionParts[1])
             );
-        if (NULL !== $institutionEntities) {
-            $institution = array_shift($institutionEntities);
-            $cloneform->getData()
-                ->getQuoteReference()
-                ->setInstitution($institution);
+            if (null !== $institutionEntities) {
+                $institution = array_shift($institutionEntities);
+                $cloneform->getData()->getQuoteReference()->setInstitution($institution);
+            }
+        }else {
+            $cloneform['quoteReference']['institution']->addError(new FormError($this->get('translator')->trans('quote.exception.institution')));
         }
+
+
         //}
 
         // clone the content blocks, but first load the original entity since we never did that - only used form values
@@ -1733,9 +1802,12 @@ class QuoteVersionController extends Controller
         $quoteVersion->setLocked($status);
         $em->persist($quoteVersion);
         $em->flush();
-        // $this->get('ras_flash_alert.alert_reporter')->addSuccess('Quote Lock has been toggled ');
 
-        return new Response(json_encode((array)$quoteVersion));
+        $response = array(
+            'locked' => $quoteVersion->getLocked()
+        );
+
+        return new JsonResponse($response);
 
     }
 
@@ -1768,8 +1840,11 @@ class QuoteVersionController extends Controller
     }
 
     /**
-     * Toggles lock status Quote entity without ajax.
+     * Toggles the lock status for a Quote entity without ajax.
      *
+     * @param Request $request
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function lockNonajaxAction(Request $request, $id)
     {
@@ -1792,7 +1867,18 @@ class QuoteVersionController extends Controller
         $em->flush();
         $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('quote.flash.lock'));
 
-        return $this->redirect($this->generateUrl('manage_quote'));
+        switch ($request->query->get('redirect')) {
+            case 'quotes':
+                $redirect = 'manage_quote';
+                break;
+            case 'templates':
+                $redirect = 'manage_quote_templates';
+                break;
+            default:
+                $redirect = 'manage_quote';
+        }
+
+        return $this->redirect($this->generateUrl($redirect));
 
     }
 

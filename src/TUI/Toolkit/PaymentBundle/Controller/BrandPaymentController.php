@@ -52,7 +52,7 @@ class BrandPaymentController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('payment.flash.save'));
+            //$this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('payment.flash.save'));
 
             $serializer = $this->container->get('jms_serializer');
             $paymentSerialized = $serializer->serialize($entity, 'json');

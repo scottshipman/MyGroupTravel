@@ -204,6 +204,8 @@ tour:
         passenger_dashboard: Go to Passenger Dashboard
         task_dashboard: Go to Task Dashboard
         sign_up_complete: paying passengers accepted
+        task_view_passenger: View Passenger
+        assign_passengers: Assign passengers to free / accepted
 
     edit:
         summary: Summary
@@ -351,6 +353,7 @@ tour:
             price: Price per Person
             placeholder: Select
             welcomeMsg: Summary Message
+            slug: Custom URL (slug)
         tour:
             placeholder: Select
             name: Tour Name

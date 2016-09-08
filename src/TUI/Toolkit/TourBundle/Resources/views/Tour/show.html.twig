@@ -74,7 +74,7 @@
 
                     {% for schedule in payment_schedule %}
                         {# render(controller('TourBundle:PaymentTask:showList', { 'id': payment.id } )) #}
-                        <ul class="payment-task-list">
+                        <ul id="payment-task-list" class="payment-task-list">
                             <li style="display:block">
                                 <strong>{{ schedule.item.name }}</strong>
                                 <label style="display:inline;">{% trans %}tour.page_title.payment_task.show.duedate{% endtrans %}</label>
@@ -95,7 +95,7 @@
 
     </div>
 
-    <div class="tour-show-right-column">
+    <div id="tour-completed-right-column" class="tour-show-right-column">
 
     {% if entity.SetupComplete == true and entity.isComplete == true %}
 

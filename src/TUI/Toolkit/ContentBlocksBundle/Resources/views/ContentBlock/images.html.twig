@@ -14,10 +14,12 @@
                         {% endfor %}
                     {% endfor %}
                 {% else %}
-                    {% if entity.doubleWidth == false %}
-                        <img class="block-image-stacked" src="{{ ( entity.mediaWrapper[0].media[0].getRelativePath ~ "/" ~ entity.mediaWrapper[0].media[0].getHashedFilename ) | imagine_filter('smallBlock') }}">
-                    {% elseif entity.doubleWidth == true %}
-                        <img class="block-image-stacked" src="{{ ( entity.mediaWrapper[0].media[0].getRelativePath ~ "/" ~ entity.mediaWrapper[0].media[0].getHashedFilename ) | imagine_filter('largeBlock') }}">
+                    {% if entity.mediaWrapper|length > 0 %}
+                        {% if entity.doubleWidth == false %}
+                            <img class="block-image-stacked" src="{{ ( entity.mediaWrapper[0].media[0].getRelativePath ~ "/" ~ entity.mediaWrapper[0].media[0].getHashedFilename ) | imagine_filter('smallBlock') }}">
+                        {% elseif entity.doubleWidth == true %}
+                            <img class="block-image-stacked" src="{{ ( entity.mediaWrapper[0].media[0].getRelativePath ~ "/" ~ entity.mediaWrapper[0].media[0].getHashedFilename ) | imagine_filter('largeBlock') }}">
+                        {% endif %}
                     {% endif %}
                 {% endif %}
             </div>
@@ -42,10 +44,12 @@
                         {% endfor %}
                     {% endfor %}
                 {% else %}
-                    {% if entity.doubleWidth == false %}
-                        <img class="block-image-stacked" src="{{ ( entity.mediaWrapper[0].media[0].getRelativePath ~ "/" ~ entity.mediaWrapper[0].media[0].getHashedFilename ) | imagine_filter('smallBlock') }}">
-                    {% elseif entity.doubleWidth == true %}
-                        <img class="block-image-stacked" src="{{ ( entity.mediaWrapper[0].media[0].getRelativePath ~ "/" ~ entity.mediaWrapper[0].media[0].getHashedFilename ) | imagine_filter('largeBlock') }}">
+                    {% if entity.mediaWrapper|length > 0 %}
+                        {% if entity.doubleWidth == false %}
+                            <img class="block-image-stacked" src="{{ ( entity.mediaWrapper[0].media[0].getRelativePath ~ "/" ~ entity.mediaWrapper[0].media[0].getHashedFilename ) | imagine_filter('smallBlock') }}">
+                        {% elseif entity.doubleWidth == true %}
+                            <img class="block-image-stacked" src="{{ ( entity.mediaWrapper[0].media[0].getRelativePath ~ "/" ~ entity.mediaWrapper[0].media[0].getHashedFilename ) | imagine_filter('largeBlock') }}">
+                        {% endif %}
                     {% endif %}
                 {% endif %}
             </div>

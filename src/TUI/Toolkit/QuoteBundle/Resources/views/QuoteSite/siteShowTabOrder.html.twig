@@ -134,6 +134,7 @@
                 type: 'POST',
                 url: '/manage/contentblocks/update/'+ quoteID + '/QuoteVersion'
             }).done(function() {
+                // TOOL-625 Skipping because of complexity
                 window.location.reload(true);
             });
 

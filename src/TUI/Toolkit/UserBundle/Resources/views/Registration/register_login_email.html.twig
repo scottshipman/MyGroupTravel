@@ -345,11 +345,11 @@
                                         <table border="0" cellpadding="20" cellspacing="0" width="100%">
                                             <tr>
                                                 <td valign="top" class="bodyContent">
-                                                    <h2 class="h2">{% trans %}user.email.registration.header{% endtrans %}</h2>
+                                                    <h2 class="h2">{% trans %}user.email.login.header{% endtrans %}</h2>
 
                                                     <div>
                                                         <p>{{ 'user.email.registration.greeting'|trans({'%firstname%' : user.firstName|capitalize, '%lastname%' : user.lastName|capitalize})|raw }}</p>
-                                                        <p>{{ 'user.email.registration.account_created'|trans({'%brandname%' : brand.name})|raw }}</p>
+                                                        <p>{{ 'user.email.login.welcome'|trans({'%brandname%' : brand.name})|raw }}</p>
                                                         <p>{% trans %}user.email.registration.add_information{% endtrans %}</p>
                                                         <ul>
                                                             <li>{% trans %}user.email.registration.medical{% endtrans %}</li>
@@ -359,8 +359,7 @@
                                                         </ul>
                                                         <p>{% trans %}user.email.registration.track_payments{% endtrans %}</p>
 
-                                                        <p>{{ 'user.email.registration.login'|trans({'%useremail%' : user.email})|raw }}</p>
-                                                        <p>{% trans %}user.email.registration.activate{% endtrans %}</p>
+                                                        <p>{% trans %}user.email.login.login_link{% endtrans %}</p>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -369,7 +368,8 @@
                                                     <table border="0" cellpadding="15" cellspacing="0" class="templateButton">
                                                         <tr>
                                                             <td valign="middle" class="templateButtonContent">
-                                                                <div><a href="{{ absolute_url("/user/register/confirm/" ~ user.confirmationToken) }}">{% trans %}user.email.registration.activate_account{% endtrans %}</a></div>
+                                                                <div><a href="{{ url('manage_parent_passenger_dashboard', {'tourId': tour_id, 'parentId': user.id}) }}">
+                                                                        {% trans %}user.email.login.login_label{% endtrans %}</a></div>
                                                             </td>
                                                         </tr>
                                                     </table>
@@ -379,7 +379,8 @@
                                                 <td valign="top" class="bodyContent">
                                                     <div>
                                                         {% trans %}user.email.registration.url_paste{% endtrans %}<br>
-                                                        <a href="{{ absolute_url("/user/register/confirm/" ~ user.confirmationToken) }}">{{ absolute_url("/user/register/confirm/" ~ user.confirmationToken) }}</a>
+                                                        <a href="{{ url('manage_parent_passenger_dashboard', {'tourId': tour_id, 'parentId': user.id}) }}">
+                                                            {{ url('manage_parent_passenger_dashboard', {'tourId': tour_id, 'parentId': user.id}) }}</a>
                                                     </div>
                                                 </td>
                                             </tr>

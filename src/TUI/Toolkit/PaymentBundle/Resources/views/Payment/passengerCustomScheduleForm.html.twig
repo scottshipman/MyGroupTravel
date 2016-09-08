@@ -39,6 +39,7 @@
                     $("#dialog").html("");
                     $("#dialog").dialog("close");
                     $(window).scrollTop(0);
+                    // TOOL 625 - cannot easily remove this reload event
                     window.location.reload(true);
                 }).error(function (response) {
                     $("#loader").hide();

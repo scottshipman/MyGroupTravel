@@ -1181,7 +1181,18 @@ class PassengerController extends Controller
                 $newPassenger->setLName($data['lastname']);
                 $newPassenger->setTourReference($tour);
                 $newPassenger->setGender('undefined');
-                $newPassenger->setDateOfBirth(new \DateTime("1987-01-01"));
+
+                /*
+                 * Tool 622 - we create a random birthday date that is quite clearly not real to allow us to get around
+                 * the Passenger entity uniqueness constraint that uses first name, last name and date of birth as the
+                 * unique identifier.
+                 */
+                $min_date = strtotime('01-01-1500');
+                $max_date = strtotime('21-12-1800');
+                $random_date = mt_rand($min_date, $max_date);
+                $birthday = new \DateTime(date('Y-m-d', $random_date));
+
+                $newPassenger->setDateOfBirth($birthday);
                 $newPassenger->setSignUpDate(new \DateTime("now"));
                 $newPassenger->setSelf(true);
 
@@ -1435,41 +1446,60 @@ class PassengerController extends Controller
 
         $acceptedUsers = $this->get('passenger.actions')->getPassengersByStatus('accepted', $tourId);
 
+        $parents = array();
+
         foreach ($acceptedUsers as $acceptedUser) {
 
             $object = $acceptedUser->getId();
             $user = $this->get("permission.set_permission")->getUser('parent', $object, 'passenger');
             $user = array_shift($user);
             $user = $em->getRepository('TUIToolkitUserBundle:User')->find($user);
-
-            if($user->isEnabled() == false) {
-
-                $tokenGenerator = $this->container->get('fos_user.util.token_generator');
-
-                //Get some user info
-                $user->setConfirmationToken($tokenGenerator->generateToken());
-                $userEmail = $user->getEmail();
-
-                $message = \Swift_Message::newInstance()
-                    ->setSubject($this->get('translator')->trans('user.email.registration.subject'))
-                    ->setFrom($this->container->getParameter('user_system_email'))
-                    ->setTo($userEmail)
-                    ->setBody(
-                        $this->renderView(
-                            'TUIToolkitUserBundle:Registration:register_email.html.twig',
-                            array(
-                                'brand' => $brand,
-                                'user' => $user,
-                            )
-                        ), 'text/html');
-
-                $em->persist($user);
-                $em->flush();
-
-                $mailer->send($message);
-            }
+            $parents[] = $user;
         }
 
+        $parents = array_unique($parents);
+
+        foreach ($parents as $parent) {
+            // TOOL-561 - no user account exists yet so generate a token for them
+            if (!$parent->isEnabled()) {
+                $tokenGenerator = $this->container->get('fos_user.util.token_generator');
+                $parent->setConfirmationToken($tokenGenerator->generateToken());
+
+                $subject = 'user.email.registration.subject';
+                $view = 'TUIToolkitUserBundle:Registration:register_email.html.twig';
+            } else {
+                $subject = 'user.email.login.subject';
+                $view = 'TUIToolkitUserBundle:Registration:register_login_email.html.twig';
+            }
+
+            $userEmail = $parent->getEmail();
+            $message = \Swift_Message::newInstance()
+                ->setSubject($this->get('translator')->trans(
+                    $subject,
+                    array(
+                        '%tour%' => $tour->getName(),
+                        '%institution%' => $tour->getInstitution()
+                    )
+                )
+                )
+                ->setFrom($this->container->getParameter('user_system_email'))
+                ->setTo($userEmail)
+                ->setBody(
+                    $this->renderView(
+                        $view,
+                        array(
+                            'brand' => $brand,
+                            'user' => $parent,
+                            'tour_id' => $tour->getId()
+                        )
+                    ), 'text/html');
+
+            $em->persist($parent);
+            $em->flush();
+
+            $mailer->send($message);
+
+        }
 
         $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('passenger.flash.users_activation'));
 

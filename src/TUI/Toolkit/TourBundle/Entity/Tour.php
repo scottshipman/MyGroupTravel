@@ -16,7 +16,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Table(name="tour", uniqueConstraints={@ORM\UniqueConstraint(name="unique_quoteNumber", columns={"quoteNumber"})})
  * @ORM\Entity
  * @UniqueEntity(fields={"quoteNumber"}, message="This Quote Number already exists on another Tour.", ignoreNull=true)
- *
+ * @UniqueEntity(fields={"slug"}, message="This slug already exists on another Tour", ignoreNull=true)
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
  * @GRID\Source(columns="id, institution_full, institution.name, institution.city, name, quoteNumber, tripStatus.name, created, destination, quoteReference.id, organizer_full, salesAgent_full, salesAgent_name, salesAgent.firstName, salesAgent.lastName,  salesAgent.email, secondaryContact.firstName, secondaryContact.lastName, secondaryContact.email, organizer.firstName, organizer.lastName, organizer.email, views, registrations, deleted, locked,  tourReference, duration, displayName, expiryDate, transportType.name, boardBasis.name, freePlaces, payingPlaces, departureDate, returnDate, pricePerson,  pricePersonPublic, currency.name, status, emergencyDate, passportDate, medicalDate, dietaryDate, cashPayment, cashPaymentDescription, bankTransferPayment, bankTransferPaymentDescription, onlinePayment, onlinePaymentDescription, otherPayment, otherPaymentDescription", filterable=false, sortable=true)
  * @GRID\Column(id="organizer_full", type="join", columns = {"organizer.firstName", "organizer.lastName", "organizer.email"}, title="Organizer", export=false, filterable=false, operatorsVisible=false)
@@ -25,7 +25,6 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @GRID\Column(id="institution_full", type="join", columns = {"institution.name", "institution.city"}, title="Institution", export=false, filterable=false, operatorsVisible=false)
  *
  */
-
 class Tour
 {
     /**
@@ -476,6 +475,12 @@ class Tour
      */
     private $otherPaymentDescription;
 
+    /**
+     * @var string
+     * @ORM\Column(name="slug", type="string", length=255, nullable=true)
+     * @GRID\Column(visible=false, filterable=false, operatorsVisible=false, export=false)
+     */
+    private $slug;
 
     public function __construct()
     {
@@ -1750,6 +1755,30 @@ class Tour
     {
         $this->waitList = $waitList;
 
+        return $this;
+    }
+
+    /**
+     * Get the slug for this tour
+     *
+     * @return string
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * Set the slug for this tour
+     *
+     * @param $slug
+     * @return $this
+     */
+    public function setSlug($slug)
+    {
+        if (empty($this->getSlug())) {
+            $this->slug = preg_replace('/[^a-z0-9]/', '-', strtolower(trim(strip_tags($slug))));
+        }
         return $this;
     }
 
