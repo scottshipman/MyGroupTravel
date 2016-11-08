@@ -98,6 +98,7 @@ tour:
        setup_instructions_title: %firstname%, this is your Tour Set Up page. The information below is a summary of your tour.
        setup_instructions_payment: Before you share your Tour Website, set a price to charge your passengers (they won't see your original tour price) and set the payment schedule if you would like.
        setup_instructions_sharing: Next you will need to personalise your website, before sharing the link with your passengers
+       confirm_submit: Are you sure you have completed your tour payment settings? Click OK to skip this step or Cancel to finish your tour set up.
 
     show:
        summary: Tour Summary
