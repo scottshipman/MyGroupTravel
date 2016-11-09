@@ -51,7 +51,7 @@ class TuiExportController extends Controller
                 'Passport Number',
                 'Nationality',
                 'Date of Birth',
-                'ADP Code',
+                'APD Code',
                 'Passport Expiry Date',
                 'Passport Holder',
                 'Country of Residence',
@@ -151,7 +151,7 @@ class TuiExportController extends Controller
                 $departure_date = $tour->getDepartureDate();
                 $age = $dob->diff($departure_date)->y;
             }
-            $item['ADP Code'] = (!empty($age) && $age < 16) ? 'CHILD - ACCOMPANIED' : '';
+            $item['APD Code'] = (!empty($age) && $age < 16) ? 'CHILD - ACCOMPANIED' : '';
             if(isset($passport) && get_class($passport->getPassportDateOfExpiry()) == "DateTime"){$pped = $passport->getPassportDateOfExpiry()->format($format);} else {$pped = '';}
             $item['Passport Expiry Date'] = $pped;
             $item['Passport Holder'] = '';
