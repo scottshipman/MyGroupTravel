@@ -1500,19 +1500,22 @@ class QuoteVersionController extends Controller
             $route = '';
         }
 
-        // TOOL-617 - copied from createAction
-        //handling ajax request for organizer
-        $o_data = $cloneform->getData()->getQuoteReference()->getOrganizer();
-        if (preg_match('/<+(.*?)>/', $o_data, $o_matches)) {
-            $email = $o_matches[1];
-            $entities = $em->getRepository('TUIToolkitUserBundle:User')
-                ->findByEmail($email);
-            if (NULL !== $entities) {
-                $organizer = array_shift($entities);
-                $cloneform->getData()->getQuoteReference()->setOrganizer($organizer);
+        // TOOL-676 - only check for Organizer if not a template (quote templates can't have Organizers)
+        if ($template !== 'Template') {
+            // TOOL-617 - copied from createAction
+            //handling ajax request for organizer
+            $o_data = $cloneform->getData()->getQuoteReference()->getOrganizer();
+            if (preg_match('/<+(.*?)>/', $o_data, $o_matches)) {
+                $email = $o_matches[1];
+                $entities = $em->getRepository('TUIToolkitUserBundle:User')
+                    ->findByEmail($email);
+                if (NULL !== $entities) {
+                    $organizer = array_shift($entities);
+                    $cloneform->getData()->getQuoteReference()->setOrganizer($organizer);
+                }
+            }else {
+                $cloneform['quoteReference']['organizer']->addError(new FormError($this->get('translator')->trans('quote.exception.organizer')));
             }
-        }else {
-            $cloneform['quoteReference']['organizer']->addError(new FormError($this->get('translator')->trans('quote.exception.organizer')));
         }
 
         //handling ajax request for SalesAgent same as we did with organizer
@@ -1562,20 +1565,22 @@ class QuoteVersionController extends Controller
             }
         }
 
-        //Handling the request for institution a little different than we did for the other 2.
-        $institutionParts = explode(' - ', $cloneform->getData()->getQuoteReference()->getInstitution());
-        if (count($institutionParts) == 2 ) {
-            $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findBy(
-                array('name' => $institutionParts[0], 'city' => $institutionParts[1])
-            );
-            if (null !== $institutionEntities) {
-                $institution = array_shift($institutionEntities);
-                $cloneform->getData()->getQuoteReference()->setInstitution($institution);
+        // TOOL-676 - only check for Institution if not a template (quote templates can't have Institutions)
+        if ($template !== 'Template') {
+            //Handling the request for institution a little different than we did for the other 2.
+            $institutionParts = explode(' - ', $cloneform->getData()->getQuoteReference()->getInstitution());
+            if (count($institutionParts) == 2 ) {
+                $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findBy(
+                    array('name' => $institutionParts[0], 'city' => $institutionParts[1])
+                );
+                if (null !== $institutionEntities) {
+                    $institution = array_shift($institutionEntities);
+                    $cloneform->getData()->getQuoteReference()->setInstitution($institution);
+                }
+            }else {
+                $cloneform['quoteReference']['institution']->addError(new FormError($this->get('translator')->trans('quote.exception.institution')));
             }
-        }else {
-            $cloneform['quoteReference']['institution']->addError(new FormError($this->get('translator')->trans('quote.exception.institution')));
         }
-
 
         //}
 
