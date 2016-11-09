@@ -1086,8 +1086,14 @@ class UserController extends Controller
             $brand = $default_brand;
         }
 
+        /**
+         * TOOL-677
+         * We don't know the tour or institution for non-brand roles at this point, and brand roles don't have these at
+         * all anyway so we use a different translation. This fixes an issue where non-brand (e.g parents) could get an
+         * email with a nonsensical subject too.
+         */
         $message = \Swift_Message::newInstance()
-            ->setSubject($this->get('translator')->trans('user.email.registration.subject'))
+            ->setSubject($this->get('translator')->trans('user.email.registration.activate_subject'))
             ->setFrom($this->container->getParameter('user_system_email'))
             ->setTo($userEmail)
             ->setBody(
