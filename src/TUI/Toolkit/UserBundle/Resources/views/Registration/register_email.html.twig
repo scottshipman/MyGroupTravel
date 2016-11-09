@@ -350,15 +350,16 @@
                                                     <div>
                                                         <p>{{ 'user.email.registration.greeting'|trans({'%firstname%' : user.firstName|capitalize, '%lastname%' : user.lastName|capitalize})|raw }}</p>
                                                         <p>{{ 'user.email.registration.account_created'|trans({'%brandname%' : brand.name})|raw }}</p>
-                                                        <p>{% trans %}user.email.registration.add_information{% endtrans %}</p>
-                                                        <ul>
-                                                            <li>{% trans %}user.email.registration.medical{% endtrans %}</li>
-                                                            <li>{% trans %}user.email.registration.passport{% endtrans %}</li>
-                                                            <li>{% trans %}user.email.registration.dietary{% endtrans %}</li>
-                                                            <li>{% trans %}user.email.registration.emergency{% endtrans %}</li>
-                                                        </ul>
-                                                        <p>{% trans %}user.email.registration.track_payments{% endtrans %}</p>
-
+                                                        {% if 'ROLE_CUSTOMER' in user.roles %}
+                                                            <p>{% trans %}user.email.registration.add_information{% endtrans %}</p>
+                                                            <ul>
+                                                                <li>{% trans %}user.email.registration.medical{% endtrans %}</li>
+                                                                <li>{% trans %}user.email.registration.passport{% endtrans %}</li>
+                                                                <li>{% trans %}user.email.registration.dietary{% endtrans %}</li>
+                                                                <li>{% trans %}user.email.registration.emergency{% endtrans %}</li>
+                                                            </ul>
+                                                            <p>{% trans %}user.email.registration.track_payments{% endtrans %}</p>
+                                                        {% endif %}
                                                         <p>{{ 'user.email.registration.login'|trans({'%useremail%' : user.email})|raw }}</p>
                                                         <p>{% trans %}user.email.registration.activate{% endtrans %}</p>
                                                     </div>
