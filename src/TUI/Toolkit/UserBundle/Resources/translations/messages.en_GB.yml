@@ -93,6 +93,7 @@ user:
     email:
         registration:
             subject: %tour%, %institution% - Activate your account
+            activate_subject: Activate your account
             header: Activate your account
             greeting: Hi %firstname% %lastname%,
             account_created: An account has been created for you for %brandname%'s Tour management application.
