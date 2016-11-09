@@ -150,6 +150,8 @@ class TuiExportController extends Controller
                 $dob = new \DateTime($ppid);
                 $departure_date = $tour->getDepartureDate();
                 $age = $dob->diff($departure_date)->y;
+            } else {
+                $age = null;
             }
             $item['APD Code'] = (!empty($age) && $age < 16) ? 'CHILD - ACCOMPANIED' : '';
             if(isset($passport) && get_class($passport->getPassportDateOfExpiry()) == "DateTime"){$pped = $passport->getPassportDateOfExpiry()->format($format);} else {$pped = '';}
