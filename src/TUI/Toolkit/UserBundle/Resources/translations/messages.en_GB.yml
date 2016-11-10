@@ -96,7 +96,7 @@ user:
             activate_subject: Activate your account
             header: Activate your account
             greeting: Hi %firstname% %lastname%,
-            account_created: An account has been created for you for %brandname%'s Tour management application.
+            account_created: An account has been created for you for %brandname%'s Toolkit.
             add_information: "You will now be able to add the required information for your passenger, in your own secure area:"
             medical: Medical information
             passport: Passport information
@@ -110,7 +110,7 @@ user:
         login:
             subject: %tour%, %institution% - Log in to your account
             header: Log in to your account
-            welcome: Welcome back to %brandname%'s Tour management application.
+            welcome: Welcome back to %brandname%'s Toolkit.
             login_link: To log in, click on the button below
             login_label: Login
 
