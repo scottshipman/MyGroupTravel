@@ -139,6 +139,11 @@
             e.preventDefault();
             toolkitStandardPopup("Log A Payment", '{{ path('brand_payment_new', {'tourId': entity.id}) }}' );
         });
+
+        // TOOL-678 Scroll to the top of the page
+        $('html, body').animate({
+            scrollTop: 0
+        }, 1);
     });
 </script>
 
