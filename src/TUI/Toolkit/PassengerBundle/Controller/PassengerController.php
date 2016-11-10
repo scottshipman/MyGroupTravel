@@ -181,7 +181,7 @@ class PassengerController extends Controller
                 $parentEmail = $user->getEmail();
                 $tourName = $tour->getName();
                 $institution = $tour->getInstitution();
-                $organizer_name = $tour->getOrganizer() != null ? $tour->getOrganizer()->getLastName() . ' ' . $tour->getOrganizer()->getFirstName(): NULL;
+                $organizer_name = $tour->getOrganizer() != null ? $tour->getOrganizer()->getFirstName() . ' ' . $tour->getOrganizer()->getLastName(): NULL;
                 $message = \Swift_Message::newInstance()
                     ->setSubject($this->get('translator')->trans('passenger.emails.thank_you') . ' ' . $tourName . ', ' . $institution)
                     ->setFrom($this->container->getParameter('user_system_email'))
