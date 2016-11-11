@@ -1587,9 +1587,16 @@ class QuoteVersionController extends Controller
                 $institutionEntities = $em->getRepository('InstitutionBundle:Institution')->findBy(
                     array('name' => $institutionParts[0], 'city' => $institutionParts[1])
                 );
-                if (null !== $institutionEntities) {
+                /**
+                 * TOOL-663
+                 * institutionEntities will never be null, it will always be an array that is empty if no institution is
+                 * found. Even if it did come back as null, empty() will take care of that too.
+                 */
+                if (!empty($institutionEntities)) {
                     $institution = array_shift($institutionEntities);
                     $cloneform->getData()->getQuoteReference()->setInstitution($institution);
+                } else {
+                    $cloneform['quoteReference']['institution']->addError(new FormError($this->get('translator')->trans('quote.exception.institution')));
                 }
             }else {
                 $cloneform['quoteReference']['institution']->addError(new FormError($this->get('translator')->trans('quote.exception.institution')));
