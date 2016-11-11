@@ -1,0 +1,4 @@
+#PassengerBundle/Resources/translations/validators.en_GB.yml
+passenger:
+    passport:
+        expiry_after_issue: Date of expiry must be after the date of issue
