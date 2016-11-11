@@ -102,6 +102,11 @@
         {% else %}
             <div class="brand_logo_login">
                 {{ render(controller('BrandBundle:Default:index')) }}
+                <div class="toolkit_logo_login">
+                    {% image '@AppBundle/Resources/public/images/toolkit.png' %}
+                    <img src="{{ asset_url | imagine_filter('publicLogo') }}" alt="Toolkit" />
+                    {% endimage %}
+                </div>
             </div>
         {% endif %}
 
