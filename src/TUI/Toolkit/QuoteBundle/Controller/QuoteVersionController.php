@@ -1387,11 +1387,18 @@ class QuoteVersionController extends Controller
                             'city' => $institutionParts[1]
                         )
                     );
-                if (NULL !== $institutionEntities) {
+                /**
+                 * TOOL-663
+                 * institutionEntities will never be null, it will always be an array that is empty if no institution is
+                 * found. Even if it did come back as null, empty() will take care of that too.
+                 */
+                if (!empty($institutionEntities)) {
                     $institution = array_shift($institutionEntities);
                     $editForm->getData()
                         ->getQuoteReference()
                         ->setInstitution($institution);
+                } else {
+                    $editForm['quoteReference']['institution']->addError(new FormError($this->get('translator')->trans('quote.exception.institution')));
                 }
             }else {
                 $editForm['quoteReference']['institution']->addError(new FormError($this->get('translator')->trans('quote.exception.institution')));
