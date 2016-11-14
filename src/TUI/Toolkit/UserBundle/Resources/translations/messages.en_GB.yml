@@ -89,6 +89,7 @@ user:
 
     exception:
         access: You do not have the ability to edit this User's information.
+        locked: This account is locked
 
     email:
         registration:
