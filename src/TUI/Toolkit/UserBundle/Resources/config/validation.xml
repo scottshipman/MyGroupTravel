@@ -73,6 +73,19 @@
                     <value>ChangePassword</value>
                 </option>
             </constraint>
+            <constraint name="Regex">
+                <option name="pattern">/^\S*(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])(?=\S*[\W_])(?=\S{8,})\S*$/</option>
+                <option name="match">true</option>
+                <option name="message">user.password.complexity</option>
+                <option name="groups">
+                    <value>Activation</value>
+                    <value>Registration</value>
+                    <value>Profile</value>
+                    <value>ResetPassword</value>
+                    <value>ChangePassword</value>
+                    <value>Default</value>
+                </option>
+            </constraint>
         </property>
     </class>
 
