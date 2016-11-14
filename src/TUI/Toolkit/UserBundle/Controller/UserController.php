@@ -810,7 +810,7 @@ class UserController extends Controller
          * rather than an AccessDenied Exception as this redirects to the login screen with no explanation.
          */
         if ($entity[0]->isLocked()) {
-            throw $this->createNotFoundException($this->get('translator')->trans('user.exception.locked'));
+            throw new HttpException(403, $this->get('translator')->trans('user.exception.locked'));
         }
 
         $setForm = $this->createResetPasswordForm($entity[0]);
