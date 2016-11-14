@@ -108,6 +108,13 @@ class UserType extends AbstractType
                     )
                 );
             }
+
+            $builder->add('locked', 'checkbox', array(
+                    'label' => 'user.form.login_disabled',
+                    'translation_domain'  => 'messages',
+                    'required' => false,
+                )
+            );
         }
     }
 
