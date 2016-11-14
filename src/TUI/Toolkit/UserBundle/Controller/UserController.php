@@ -619,6 +619,16 @@ class UserController extends Controller
         if(true===$entity[0]->isEnabled()){
             throw new HttpException(400, 'This activation link is no longer valid because the account is already activated.');
         }
+
+        /*
+         * TOOL-664
+         * Prevent activating an account if it is locked. We throw a standard HttpException with error code 403
+         * rather than an AccessDenied Exception as this redirects to the login screen with no explanation.
+         */
+        if ($entity[0]->isLocked()) {
+            throw new HttpException(403, $this->get('translator')->trans('user.exception.locked'));
+        }
+
         $setForm = $this->createActivateUserForm($entity[0]);
 
         // Check if the User is an Organizer or Assistant to do funcky stuff
@@ -793,6 +803,16 @@ class UserController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('This Password Reset token is no longer valid.');
         }
+
+        /*
+         * TOOL-664
+         * Prevent resetting an account password if it is locked. We throw a standard HttpException with error code 403
+         * rather than an AccessDenied Exception as this redirects to the login screen with no explanation.
+         */
+        if ($entity[0]->isLocked()) {
+            throw $this->createNotFoundException($this->get('translator')->trans('user.exception.locked'));
+        }
+
         $setForm = $this->createResetPasswordForm($entity[0]);
         $question = $entity[0]->getQuestion();
 
