@@ -101,6 +101,12 @@ class UserType extends AbstractType
                             'translation_domain' => 'messages',
                             'required' => false,
                         )
+                    )
+                    ->add('locked', 'checkbox', array(
+                            'label' => 'user.form.login_disabled',
+                            'translation_domain' => 'messages',
+                            'required' => false,
+                        )
                     );
             } elseif (in_array('ROLE_ADMIN', $roles)) {
                 $builder->add('roles', 'choice', array(
@@ -114,13 +120,6 @@ class UserType extends AbstractType
                     )
                 );
             }
-
-            $builder->add('locked', 'checkbox', array(
-                    'label' => 'user.form.login_disabled',
-                    'translation_domain' => 'messages',
-                    'required' => false,
-                )
-            );
         }
     }
 
