@@ -111,10 +111,10 @@ class UserType extends AbstractType
             }
 
             if (in_array('ROLE_ADMIN', $roles) || in_array('ROLE_SUPER_ADMIN', $roles)) {
+                // @todo Change the label to be translatable - there is some issue with checkbox label translation
                 $builder->add('locked', 'checkbox', array(
-                        'label' => 'user.form.locked',
-                        'translation_domain' => 'messages',
-                        'required' => false,
+                        'label' => 'Locked',
+                        'required' => false
                     )
                 );
             }
