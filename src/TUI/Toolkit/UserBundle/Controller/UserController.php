@@ -133,10 +133,19 @@ class UserController extends Controller
         $resetAction->setRole('ROLE_ADMIN');
         $resetAction->setConfirm(true);
         $grid->addRowAction($resetAction);
-        $lockAction = new RowAction('Lock', 'user_security_lock');
+        $lockAction = new RowAction('Lock', 'user_lock');
         $lockAction->setRole('ROLE_ADMIN');
-        $lockAction->setConfirm(true);
         $grid->addRowAction($lockAction);
+        $lockAction->manipulateRender(
+            function ($action, $row) {
+                if ($row->getField('locked')) {
+                    $action->setRole('ROLE_ADMIN');
+                    $action->setTitle('Unlock');
+                    $row->setClass('locked');
+                }
+                return $action;
+            }
+        );
         $deleteAction = new RowAction('Delete', 'user_quick_delete');
         $deleteAction->setRole('ROLE_ADMIN');
         $deleteAction->setConfirm(true);
@@ -1909,7 +1918,7 @@ class UserController extends Controller
      *
      * @param Request $request
      * @param $id
-     * @return JsonResponse|AccessDeniedException
+     * @return RedirectResponse
      */
     public function lockAction(Request $request, $id)
     {
@@ -1929,11 +1938,12 @@ class UserController extends Controller
         $em->persist($entity);
         $em->flush();
 
-        $response = array(
-            'locked' => $entity->isLocked()
-        );
+        $message = $entity->isLocked() ? 'user.flash.locked' : 'user.flash.unlocked';
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans($message, array(
+            '%email%' => $entity->getEmailCanonical()
+        )));
 
-        return new JsonResponse($response);
+        return $this->redirect($this->generateUrl('user'));
     }
 
 }
