@@ -76,6 +76,7 @@ user:
         column:
             title:
                 last_login: Last Login
+                locked: Locked
 
     tabs:
         deleted: Deleted Users
