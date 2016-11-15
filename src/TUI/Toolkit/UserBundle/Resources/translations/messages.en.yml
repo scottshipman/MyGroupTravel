@@ -71,7 +71,7 @@ user:
             title:
                 role: Role
                 email: Email
-                enabled: Enabled
+                enabled: Activated
                 lname: Last Name
         column:
             title:
