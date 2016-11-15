@@ -146,6 +146,7 @@ user:
             deleted: This user exists and has been deleted. Please contact an administrator to re-enable this user.
         delete:
             prompt: "Are you sure you wish to delete this user?"
+        locked: Locked
 
     profile:
         label:
