@@ -25,7 +25,7 @@ use TUI\Toolkit\UserBundle\Controller\UserController;
  * )
  * @ORM\Table(name="fos_user",uniqueConstraints={@ORM\UniqueConstraint(name="email", columns={"email"})})
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
- * @GRID\Source(columns="id, lastName, firstName, fullname, displayName, email, enabled, roles, rolesString, created, lastLogin", filterable=false, sortable=true, exportable=true,)
+ * @GRID\Source(columns="id, lastName, firstName, fullname, displayName, email, enabled, roles, rolesString, created, lastLogin, locked", filterable=false, sortable=true, exportable=true,)
  * @GRID\Column(id="fullname", type="join", title="Name", columns={"firstName", "lastName"}, filterable=false, operatorsVisible=false)
  */
 class User extends BaseUser
