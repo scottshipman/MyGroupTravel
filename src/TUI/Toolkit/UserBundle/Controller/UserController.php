@@ -1924,14 +1924,14 @@ class UserController extends Controller
     public function lockAction(Request $request, $id)
     {
         if (!$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
-            throw $this->createAccessDeniedException('You do not have permission to lock or unlock this user');
+            throw $this->createAccessDeniedException($this->get('translator')->trans('user.exception.access'));
         }
 
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find User entity in order to lock it.');
+            throw $this->createNotFoundException($this->get('translator')->trans('user.exception.not_found'));
         }
 
         $status = $entity->isLocked() ? false : true;
