@@ -95,28 +95,26 @@ class UserType extends AbstractType
                             'multiple' => TRUE,
                             'expanded' => TRUE,
                         )
-                    )
-                    ->add('locked', 'checkbox', array(
-                            'label' => 'user.form.login_disabled',
-                            'translation_domain' => 'messages',
-                            'required' => false,
-                        )
-                    )
-                    ->add('locked', 'checkbox', array(
-                            'label' => 'user.form.login_disabled',
-                            'translation_domain' => 'messages',
-                            'required' => false,
-                        )
                     );
             } elseif (in_array('ROLE_ADMIN', $roles)) {
-                $builder->add('roles', 'choice', array(
-                        'choices' => array(
-                            'ROLE_CUSTOMER' => 'CUSTOMER',
-                            'ROLE_BRAND' => 'BRAND',
-                            'ROLE_ADMIN' => 'ADMIN',
-                        ),
-                        'multiple' => TRUE,
-                        'expanded' => TRUE,
+                $builder
+                    ->add('roles', 'choice', array(
+                            'choices' => array(
+                                'ROLE_CUSTOMER' => 'CUSTOMER',
+                                'ROLE_BRAND' => 'BRAND',
+                                'ROLE_ADMIN' => 'ADMIN',
+                            ),
+                            'multiple' => TRUE,
+                            'expanded' => TRUE,
+                        )
+                    );
+            }
+
+            if (in_array('ROLE_ADMIN', $roles) || in_array('ROLE_SUPER_ADMIN', $roles)) {
+                $builder->add('locked', 'checkbox', array(
+                        'label' => 'user.form.locked',
+                        'translation_domain' => 'messages',
+                        'required' => false,
                     )
                 );
             }
