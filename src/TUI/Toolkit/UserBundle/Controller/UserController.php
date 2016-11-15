@@ -44,6 +44,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher,
   Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken,
   Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use TUI\Toolkit\UserBundle\TUIToolkitUserBundle;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * User controller.
@@ -132,6 +133,10 @@ class UserController extends Controller
         $resetAction->setRole('ROLE_ADMIN');
         $resetAction->setConfirm(true);
         $grid->addRowAction($resetAction);
+        $lockAction = new RowAction('Lock', 'user_security_lock');
+        $lockAction->setRole('ROLE_ADMIN');
+        $lockAction->setConfirm(true);
+        $grid->addRowAction($lockAction);
         $deleteAction = new RowAction('Delete', 'user_quick_delete');
         $deleteAction->setRole('ROLE_ADMIN');
         $deleteAction->setConfirm(true);
@@ -1897,6 +1902,38 @@ class UserController extends Controller
         'message' => $msg,
       ));
 
+    }
+
+    /**
+     * Lock or unlock a User entity
+     *
+     * @param Request $request
+     * @param $id
+     * @return JsonResponse|AccessDeniedException
+     */
+    public function lockAction(Request $request, $id)
+    {
+        if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException('You do not have permission to lock or unlock this user');
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find User entity in order to lock it.');
+        }
+
+        $status = $entity->isLocked() ? false : true;
+        $entity->setLocked($status);
+        $em->persist($entity);
+        $em->flush();
+
+        $response = array(
+            'locked' => $entity->isLocked()
+        );
+
+        return new JsonResponse($response);
     }
 
 }
