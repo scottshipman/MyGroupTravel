@@ -59,6 +59,8 @@ user:
         cant_delete: Unable to delete this user because they are associated with Quotes or Tours
         registration_notification: A Notification was sent to
         register-organizer: Your Account has been created. <br>If you also plan on travelling, you can edit your Passenger details on the tour's Passenger Dashboard at the url
+        locked: The user %email% was locked
+        unlocked: The user %email% was unlocked
 
 
     grid:
