@@ -1923,7 +1923,7 @@ class UserController extends Controller
      */
     public function lockAction(Request $request, $id)
     {
-        if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
+        if (!$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
             throw $this->createAccessDeniedException('You do not have permission to lock or unlock this user');
         }
 
