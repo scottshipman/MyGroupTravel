@@ -1414,6 +1414,38 @@ class QuoteVersionController extends Controller
 
         // Handling if the Save as New Revision button was clicked
         if ($_POST['tui_toolkit_quotebundle_quoteversion']['revision'] == 'revision') {
+
+            /*
+             * TOOL-674 - Copied deleted quote duplication detection code
+             *
+             * Make sure there isn't a soft-deleted version of the quote reference first.
+             * An SQL error occurs because Doctrine can't enforce constraints on soft-deleted items, but SQL will.
+             */
+            $filters = $em->getFilters();
+            $filters->disable('softdeleteable');
+            $qn = $editForm->getData()->getQuoteNumber();
+            $query = $em->createQuery(
+                'select q
+                from QuoteBundle:QuoteVersion q
+                where q.quoteNumber = :qn')
+                ->setParameter('qn', $qn);
+            $deletedQuotes= $query->getResult();
+
+            if ($deletedQuotes) {
+                $filters->enable('softdeleteable');
+                $this->get('ras_flash_alert.alert_reporter')->addError(
+                    $this->get('translator')
+                        ->trans('quote.flash.soft_delete') . ' <br>QuoteNumber: ' . $deletedQuotes[0]->getQuoteNumber() . ' - id # :' . $deletedQuotes[0]->getId() );
+
+                return $this->render('QuoteBundle:QuoteVersion:edit.html.twig', array(
+                    'entity' => $entity,
+                    'edit_form' => $editForm->createView(),
+                    'delete_form' => $deleteForm->createView(),
+                    'template' => $template,
+                    'date_format' => $date_format,
+                ));
+            }
+
             // this is a save as new revision call so duplicate the quoteversion
             $new_entity = clone($entity);
             $new_entity->setVersion($entity->getVersion() + 1);
