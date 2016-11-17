@@ -1415,74 +1415,79 @@ class QuoteVersionController extends Controller
         // Handling if the Save as New Revision button was clicked
         if ($_POST['tui_toolkit_quotebundle_quoteversion']['revision'] == 'revision') {
 
-            /*
-             * TOOL-674 - Copied deleted quote duplication detection code
-             *
-             * Make sure there isn't a soft-deleted version of the quote reference first.
-             * An SQL error occurs because Doctrine can't enforce constraints on soft-deleted items, but SQL will.
-             */
-            $filters = $em->getFilters();
-            $filters->disable('softdeleteable');
-            $qn = $editForm->getData()->getQuoteNumber();
-            $query = $em->createQuery(
-                'select q
-                from QuoteBundle:QuoteVersion q
-                where q.quoteNumber = :qn')
-                ->setParameter('qn', $qn);
-            $deletedQuotes= $query->getResult();
+            if ($editForm->isValid()) {
+                // this is a save as new revision call so duplicate the quoteversion
+                $new_entity = clone($entity);
+                $new_entity->setVersion($entity->getVersion() + 1);
 
-            if ($deletedQuotes) {
-                $filters->enable('softdeleteable');
-                $this->get('ras_flash_alert.alert_reporter')->addError(
-                    $this->get('translator')
-                        ->trans('quote.flash.soft_delete') . ' <br>QuoteNumber: ' . $deletedQuotes[0]->getQuoteNumber() . ' - id # :' . $deletedQuotes[0]->getId() );
+                /*
+                 * TOOL-674
+                 * I'll leave this manual validation of the quote number because I assume isValid() would allow us to
+                 * use the current number due to the fact that we are on an edit form and we'd probably then end up with
+                 * SQL errors further on.
+                 */
+                $uniqueEntity = new UniqueEntity('quoteNumber');
+                $message = $this->get('translator')->trans('quote.exception.duplicate_quotenumber');
+                $uniqueEntity->message = $message;
+                $errors = $this->get('validator')->validate($new_entity, $uniqueEntity);
 
-                return $this->render('QuoteBundle:QuoteVersion:edit.html.twig', array(
-                    'entity' => $entity,
-                    'edit_form' => $editForm->createView(),
-                    'delete_form' => $deleteForm->createView(),
-                    'template' => $template,
-                    'date_format' => $date_format,
-                ));
-            }
+                if (count($errors) == 0) {
+                    /*
+                     * TOOL-674 - Copied deleted quote duplication detection code
+                     *
+                     * Make sure there isn't a soft-deleted version of the quote reference first.
+                     * An SQL error occurs because Doctrine can't enforce constraints on soft-deleted items, but SQL will.
+                     */
+                    $filters = $em->getFilters();
+                    $filters->disable('softdeleteable');
+                    $qn = $editForm->getData()->getQuoteNumber();
+                    $query = $em->createQuery(
+                        'select q
+                         from QuoteBundle:QuoteVersion q
+                         where q.quoteNumber = :qn')
+                        ->setParameter('qn', $qn);
+                    $deletedQuotes= $query->getResult();
 
-            // this is a save as new revision call so duplicate the quoteversion
-            $new_entity = clone($entity);
-            $new_entity->setVersion($entity->getVersion() + 1);
+                    if ($deletedQuotes) {
+                        $filters->enable('softdeleteable');
+                        $this->get('ras_flash_alert.alert_reporter')->addError(
+                            $this->get('translator')
+                                ->trans('quote.flash.soft_delete') . ' <br>QuoteNumber: ' . $deletedQuotes[0]->getQuoteNumber() . ' - id # :' . $deletedQuotes[0]->getId() );
 
-            // Validate the quoteNumber field is unique
-            $uniqueEntity = new UniqueEntity('quoteNumber');
-            $message = $this->get('translator')->trans('quote.exception.duplicate_quotenumber');
-            $uniqueEntity->message = $message;
-            $errors = $this->get('validator')->validate(
-                $new_entity,
-                $uniqueEntity
-            );
-            if (count($errors) == 0) {
+                        return $this->render('QuoteBundle:QuoteVersion:edit.html.twig', array(
+                            'entity' => $entity,
+                            'edit_form' => $editForm->createView(),
+                            'delete_form' => $deleteForm->createView(),
+                            'template' => $template,
+                            'date_format' => $date_format,
+                        ));
+                    }
 
-                // clone the content blocks
-                $new_entity->setContent($this->cloneContentBlocks($entity->getContent()));
+                    // clone the content blocks
+                    $new_entity->setContent($this->cloneContentBlocks($entity->getContent()));
 
-                // And clone the Header block if it has one
-                if ($entity->getHeaderBlock()) {
-                    $headerBlock = $entity->getHeaderBlock()->getId();
-                    $new_entity->setHeaderBlock($this->cloneHeaderBlock($headerBlock));
+                    // And clone the Header block if it has one
+                    if ($entity->getHeaderBlock()) {
+                        $headerBlock = $entity->getHeaderBlock()->getId();
+                        $new_entity->setHeaderBlock($this->cloneHeaderBlock($headerBlock));
+                    }
+
+                    $new_entity->setId(null);
+                    $new_entity->setViews(0);
+                    $new_entity->setShareViews(0);
+                    $newCreate = new \DateTime();
+                    $new_entity->setCreated($newCreate);
+                    $em->detach($entity);
+                    $em->persist($new_entity);
+                    $em->flush($new_entity);
+                    $permission = $this->get("permission.set_permission")->setPermission($new_entity->getQuoteReference()->getId(), 'quote', $new_entity->getQuoteReference()->getOrganizer(), 'organizer');
+                    $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('quote.flash.save') . ' ' . $new_entity->getName());
+                    return $this->redirect($this->generateUrl('manage_quote' . $route));
                 }
-
-
-                $new_entity->setId(null);
-                $new_entity->setViews(0);
-                $new_entity->setShareViews(0);
-                $newCreate = new \DateTime();
-                $new_entity->setCreated($newCreate);
-                $em->detach($entity);
-                $em->persist($new_entity);
-                $em->flush($new_entity);
-                $permission = $this->get("permission.set_permission")->setPermission($new_entity->getQuoteReference()->getId(), 'quote', $new_entity->getQuoteReference()->getOrganizer(), 'organizer');
-                $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans('quote.flash.save') . ' ' . $new_entity->getName());
-                return $this->redirect($this->generateUrl('manage_quote' . $route));
+                // If we get here, manual quote uniqueness failed, so we warn the user of this issue
+                $this->get('ras_flash_alert.alert_reporter')->addError($message);
             }
-            $this->get('ras_flash_alert.alert_reporter')->addError($message);
+
             return $this->render('QuoteBundle:QuoteVersion:edit.html.twig', array(
                 'entity' => $entity,
                 'edit_form' => $editForm->createView(),
