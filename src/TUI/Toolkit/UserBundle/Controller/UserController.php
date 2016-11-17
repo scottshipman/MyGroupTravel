@@ -44,6 +44,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher,
   Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken,
   Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use TUI\Toolkit\UserBundle\TUIToolkitUserBundle;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * User controller.
@@ -132,6 +133,19 @@ class UserController extends Controller
         $resetAction->setRole('ROLE_ADMIN');
         $resetAction->setConfirm(true);
         $grid->addRowAction($resetAction);
+        $lockAction = new RowAction('Lock', 'user_lock');
+        $lockAction->setRole('ROLE_ADMIN');
+        $grid->addRowAction($lockAction);
+        $lockAction->manipulateRender(
+            function ($action, $row) {
+                if ($row->getField('locked')) {
+                    $action->setRole('ROLE_ADMIN');
+                    $action->setTitle('Unlock');
+                    $row->setClass('locked');
+                }
+                return $action;
+            }
+        );
         $deleteAction = new RowAction('Delete', 'user_quick_delete');
         $deleteAction->setRole('ROLE_ADMIN');
         $deleteAction->setConfirm(true);
@@ -161,8 +175,9 @@ class UserController extends Controller
             $column->setFormat('d-M-Y');
         }
 
-
-
+        // TOOL-664 - Allow Locked column header to be translated
+        $column = $grid->getColumn('locked');
+        $column->setTitle($this->get('translator')->trans('user.grid.column.title.locked'));
 
         // Set the default order of the grid
         $grid->setDefaultOrder('id', 'ASC');
@@ -619,6 +634,16 @@ class UserController extends Controller
         if(true===$entity[0]->isEnabled()){
             throw new HttpException(400, 'This activation link is no longer valid because the account is already activated.');
         }
+
+        /*
+         * TOOL-664
+         * Prevent activating an account if it is locked. We throw a standard HttpException with error code 403
+         * rather than an AccessDenied Exception as this redirects to the login screen with no explanation.
+         */
+        if ($entity[0]->isLocked()) {
+            throw new HttpException(403, $this->get('translator')->trans('user.exception.locked'));
+        }
+
         $setForm = $this->createActivateUserForm($entity[0]);
 
         // Check if the User is an Organizer or Assistant to do funcky stuff
@@ -793,6 +818,16 @@ class UserController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('This Password Reset token is no longer valid.');
         }
+
+        /*
+         * TOOL-664
+         * Prevent resetting an account password if it is locked. We throw a standard HttpException with error code 403
+         * rather than an AccessDenied Exception as this redirects to the login screen with no explanation.
+         */
+        if ($entity[0]->isLocked()) {
+            throw new HttpException(403, $this->get('translator')->trans('user.exception.locked'));
+        }
+
         $setForm = $this->createResetPasswordForm($entity[0]);
         $question = $entity[0]->getQuestion();
 
@@ -1877,6 +1912,39 @@ class UserController extends Controller
         'message' => $msg,
       ));
 
+    }
+
+    /**
+     * Lock or unlock a User entity
+     *
+     * @param Request $request
+     * @param $id
+     * @return RedirectResponse
+     */
+    public function lockAction(Request $request, $id)
+    {
+        if (!$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException($this->get('translator')->trans('user.exception.access'));
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('TUIToolkitUserBundle:User')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException($this->get('translator')->trans('user.exception.not_found'));
+        }
+
+        $status = $entity->isLocked() ? false : true;
+        $entity->setLocked($status);
+        $em->persist($entity);
+        $em->flush();
+
+        $message = $entity->isLocked() ? 'user.flash.locked' : 'user.flash.unlocked';
+        $this->get('ras_flash_alert.alert_reporter')->addSuccess($this->get('translator')->trans($message, array(
+            '%email%' => $entity->getEmailCanonical()
+        )));
+
+        return $this->redirect($this->generateUrl('user'));
     }
 
 }

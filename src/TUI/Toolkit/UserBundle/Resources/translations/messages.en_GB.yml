@@ -59,6 +59,8 @@ user:
         cant_delete: Unable to delete this user because they are associated with Quotes or Tours
         registration_notification: A Notification was sent to
         register-organizer: Your Account has been created. <br>If you also plan on travelling, you can edit your Passenger details on the tour's Passenger Dashboard at the url
+        locked: The user %email% was locked
+        unlocked: The user %email% was unlocked
 
 
     grid:
@@ -71,11 +73,12 @@ user:
             title:
                 role: Role
                 email: Email
-                enabled: Enabled
+                enabled: Activated
                 lname: Last Name
         column:
             title:
                 last_login: Last Login
+                locked: Locked
 
     tabs:
         deleted: Deleted Users
@@ -89,6 +92,8 @@ user:
 
     exception:
         access: You do not have the ability to edit this User's information.
+        locked: This account is locked
+        not_found: Unable to find User entity in order to lock it
 
     email:
         registration:
@@ -141,6 +146,7 @@ user:
             deleted: This user exists and has been deleted. Please contact an administrator to re-enable this user.
         delete:
             prompt: "Are you sure you wish to delete this user?"
+        locked: Locked
 
     profile:
         label:
