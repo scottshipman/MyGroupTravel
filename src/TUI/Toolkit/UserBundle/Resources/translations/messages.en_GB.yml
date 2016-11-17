@@ -52,9 +52,9 @@ user:
             edit: Edit
 
     flash:
-        save: User Saved -
-        delete: User deleted -
-        restore: User Restored -
+        save: User Saved:&nbsp;
+        delete: User deleted:&nbsp;
+        restore: User Restored:&nbsp;
         password: Password updated for
         cant_delete: Unable to delete this user because they are associated with Quotes or Tours
         registration_notification: A Notification was sent to
