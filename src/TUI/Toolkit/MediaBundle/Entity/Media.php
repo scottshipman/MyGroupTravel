@@ -72,12 +72,16 @@ class Media
      */
     private $mediaWrappers;
 
-
-  public function __toString() {
-    if(null !== $this->filename){
-      return $this->filename;
-    } else {return '';}
-  }
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        if ($this->id !== null) {
+            return strval($this->id);
+        }
+        return '';
+    }
 
     /**
      * Set id
