@@ -11,11 +11,11 @@
         {{ form_row(form.passportIssuingState) }}
         {{ form_row(form.passportNumber) }}
         {{ form_widget(form.passportNationality) }}
-        <label style="display: block; color:rgba(0,0,0,.26);">{% trans %}passenger.labels.passport_dob{% endtrans %}</label>
+        <label class="date-label">{% trans %}passenger.labels.passport_dob{% endtrans %}</label>
         {{ form_widget(form.passportDateOfBirth) }}
-        <label style="display: block; color:rgba(0,0,0,.26);">{% trans %}passenger.labels.passport_doi{% endtrans %}</label>
+        <label class="date-label">{% trans %}passenger.labels.passport_doi{% endtrans %}</label>
         {{ form_widget(form.passportDateOfIssue) }}
-        <label style="display: block; color:rgba(0,0,0,.26);">{% trans %}passenger.labels.passport_doe{% endtrans %}</label>
+        <label class="date-label">{% trans %}passenger.labels.passport_doe{% endtrans %}</label>
         {{ form_widget(form.passportDateOfExpiry) }}
         {{ form_rest(form) }}
         {{ form_end(form) }}
