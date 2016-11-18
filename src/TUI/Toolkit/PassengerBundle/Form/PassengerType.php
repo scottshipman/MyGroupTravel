@@ -29,12 +29,10 @@ class PassengerType extends AbstractType
     {
         switch (true) {
             case strstr($this->locale, 'en_GB'):
-                $date_label = '(DD-MM-YYYY)';
-                $date_format = 'dd-MM-yyyy';
+                $date_format = 'dd MM yyyy';
                 break;
             default:
-                $date_label = '(MM-DD-YYYY)';
-                $date_format = 'MM-dd-yyyy';
+                $date_format = 'MM dd yyyy';
                 break;
         }
 
