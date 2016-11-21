@@ -2,3 +2,4 @@
 passenger:
     passport:
         expiry_after_issue: Date of expiry must be after the date of issue
+        issue_before_expiry: Date of issue must be before the date of expiry

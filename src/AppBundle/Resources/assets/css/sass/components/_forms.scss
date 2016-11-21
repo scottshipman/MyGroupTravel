@@ -194,3 +194,10 @@ form[name=tui_toolkit_tourbundle_toursetup] {
 .mdl-textfield__label {
   color: $text_dark_grey;
 }
+
+.dateOfExpiry,
+.dateOfIssue {
+  .error {
+    color: red;
+  }
+}

@@ -154,6 +154,9 @@ class Passport
                 $context->buildViolation('passenger.passport.expiry_after_issue')
                     ->atPath('passportDateOfExpiry')
                     ->addViolation();
+                $context->buildViolation('passenger.passport.issue_before_expiry')
+                    ->atPath('passportDateOfIssue')
+                    ->addViolation();
             }
         }
     }
