@@ -190,3 +190,10 @@ form[name=tui_toolkit_tourbundle_toursetup] {
 #ui-datepicker-div {
   z-index: 200 !important;
 }
+
+.dateOfExpiry,
+.dateOfIssue {
+  .error {
+    color: red;
+  }
+}
