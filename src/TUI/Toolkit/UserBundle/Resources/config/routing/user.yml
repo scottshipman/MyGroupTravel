@@ -91,3 +91,7 @@ user_security_submit:
   path: /{id}/security/submit
   defaults: {_controller: "TUIToolkitUserBundle:User:securitySubmit" }
   methods:  [POST]
+
+user_lock:
+  path: /{id}/lock
+  defaults: {_controller: "TUIToolkitUserBundle:User:lock" }

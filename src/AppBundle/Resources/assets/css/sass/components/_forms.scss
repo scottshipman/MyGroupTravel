@@ -191,6 +191,10 @@ form[name=tui_toolkit_tourbundle_toursetup] {
   z-index: 200 !important;
 }
 
+.mdl-textfield__label {
+  color: $text_dark_grey;
+}
+
 .dateOfExpiry,
 .dateOfIssue {
   .error {

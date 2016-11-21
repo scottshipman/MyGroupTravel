@@ -13,12 +13,12 @@ class UserType extends AbstractType
 {
 
 
-  private $locale;
+    private $locale;
 
-  public function __construct($locale)
-  {
-    $this->locale = $locale;
-  }
+    public function __construct($locale)
+    {
+        $this->locale = $locale;
+    }
 
     /**
      * @param FormBuilderInterface $builder
@@ -26,85 +26,95 @@ class UserType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-      // todo: Add logic so you cant add any role greater than your own
+        // todo: Add logic so you cant add any role greater than your own
         $builder
-        ->add('honorific', 'choice', array(
-            'required' => false,
-            'placeholder' => 'Select',
-            'label' => 'user.form.honorific',
-            'translation_domain'  => 'messages',
-                'choices' => array(
-                'Mr.' => 'Mr.',
-                'Mrs.' => 'Mrs.',
-                'Ms.' => 'Ms.',
-                'Miss' => 'Miss',
-                'Dr.' => 'Dr.',
+            ->add('honorific', 'choice', array(
+                    'required' => false,
+                    'placeholder' => 'Select',
+                    'label' => 'user.form.honorific',
+                    'translation_domain' => 'messages',
+                    'choices' => array(
+                        'Mr.' => 'Mr.',
+                        'Mrs.' => 'Mrs.',
+                        'Ms.' => 'Ms.',
+                        'Miss' => 'Miss',
+                        'Dr.' => 'Dr.',
+                    )
                 )
             )
-        )
-        ->add('firstName', 'text', array(
-            'label' => 'user.form.fname',
-            'translation_domain'  => 'messages',
-            'required' => true,
+            ->add('firstName', 'text', array(
+                    'label' => 'user.form.fname',
+                    'translation_domain' => 'messages',
+                    'required' => true,
+                )
             )
-        )
-        ->add('lastName', 'text', array(
-            'label' => 'user.form.lname',
-            'translation_domain'  => 'messages',
-            'required' => true,
+            ->add('lastName', 'text', array(
+                    'label' => 'user.form.lname',
+                    'translation_domain' => 'messages',
+                    'required' => true,
+                )
             )
-        )
-        ->add('displayName', 'text', array(
-            'label' => 'user.form.display_name',
-            'translation_domain'  => 'messages',
-            'required' => false,
+            ->add('displayName', 'text', array(
+                    'label' => 'user.form.display_name',
+                    'translation_domain' => 'messages',
+                    'required' => false,
+                )
             )
-        )
-        ->add('email', 'email', array(
-            'label' => 'user.form.email',
-            'translation_domain'  => 'messages',
-            'required'  => true,
+            ->add('email', 'email', array(
+                    'label' => 'user.form.email',
+                    'translation_domain' => 'messages',
+                    'required' => true,
+                )
             )
-        )
-        ->add('phoneNumber', 'text', array(
-            'label' => 'user.form.phone',
-            'translation_domain'  => 'messages',
-            'required' => false,
+            ->add('phoneNumber', 'text', array(
+                    'label' => 'user.form.phone',
+                    'translation_domain' => 'messages',
+                    'required' => false,
+                )
             )
-        )
-        ->add('media', 'hidden', array(
-            'required' => false,
-            'data_class' => 'TUI\Toolkit\MediaBundle\Entity\Media',
-            'attr' => array('class' => 'media-placeholder')
-            )
-        );
+            ->add('media', 'hidden', array(
+                    'required' => false,
+                    'data_class' => 'TUI\Toolkit\MediaBundle\Entity\Media',
+                    'attr' => array('class' => 'media-placeholder')
+                )
+            );
 
         $user = $options['user'];
         if (!empty($user)) {
             $roles = $user->getRoles();
 
             if (in_array('ROLE_SUPER_ADMIN', $roles)) {
-                $builder->add('roles', 'choice', array(
-                    'choices' => array(
-                        'ROLE_CUSTOMER' => 'CUSTOMER',
-                        'ROLE_BRAND' => 'BRAND',
-                        'ROLE_ADMIN' => 'ADMIN',
-                        'ROLE_SUPER_ADMIN' => 'SUPER_ADMIN',
-                    ),
-                    'multiple' => TRUE,
-                    'expanded' => TRUE,
-                    )
-                );
+                $builder
+                    ->add('roles', 'choice', array(
+                            'choices' => array(
+                                'ROLE_CUSTOMER' => 'CUSTOMER',
+                                'ROLE_BRAND' => 'BRAND',
+                                'ROLE_ADMIN' => 'ADMIN',
+                                'ROLE_SUPER_ADMIN' => 'SUPER_ADMIN',
+                            ),
+                            'multiple' => TRUE,
+                            'expanded' => TRUE,
+                        )
+                    );
+            } elseif (in_array('ROLE_ADMIN', $roles)) {
+                $builder
+                    ->add('roles', 'choice', array(
+                            'choices' => array(
+                                'ROLE_CUSTOMER' => 'CUSTOMER',
+                                'ROLE_BRAND' => 'BRAND',
+                                'ROLE_ADMIN' => 'ADMIN',
+                            ),
+                            'multiple' => TRUE,
+                            'expanded' => TRUE,
+                        )
+                    );
             }
-            elseif (in_array('ROLE_ADMIN', $roles)) {
-                $builder->add('roles', 'choice', array(
-                    'choices' => array(
-                        'ROLE_CUSTOMER' => 'CUSTOMER',
-                        'ROLE_BRAND' => 'BRAND',
-                        'ROLE_ADMIN' => 'ADMIN',
-                    ),
-                    'multiple' => TRUE,
-                    'expanded' => TRUE,
+
+            if (in_array('ROLE_ADMIN', $roles) || in_array('ROLE_SUPER_ADMIN', $roles)) {
+                // @todo Change the label to be translatable - there is some issue with checkbox label translation
+                $builder->add('locked', 'checkbox', array(
+                        'label' => 'Locked',
+                        'required' => false
                     )
                 );
             }
