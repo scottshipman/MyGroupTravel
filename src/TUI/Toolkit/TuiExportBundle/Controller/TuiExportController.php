@@ -46,6 +46,7 @@ class TuiExportController extends Controller
                 'Gender',
                 'Title',
                 'Child Fare',
+                'Dietary Requirements',
                 'Dietary Request Code',
                 'Code of Issuing State',
                 'Passport Number',
@@ -140,6 +141,7 @@ class TuiExportController extends Controller
             $item['Gender'] = isset($passport) ? $passport->getPassportGender() : '';
             $item['Title'] = isset($passport) ? $passport->getPassportTitle() : '';
             $item['Child Fare'] = 'N';
+            $item['Dietary Requirements'] = (!empty($passenger->getDietaryReference()) ? $passenger->getDietaryReference()->getDescription() : '' );
             $item['Dietary Request Code'] = '';
             $item['Code of Issuing State'] = isset($passport) ? $passport->getPassportIssuingState() : '';
             $item['Passport Number'] = isset($passport) ? $passport->getPassportNumber() : '';
