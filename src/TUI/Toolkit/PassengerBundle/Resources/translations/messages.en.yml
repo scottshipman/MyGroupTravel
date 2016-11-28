@@ -159,6 +159,8 @@ passenger:
             message: Message
             gender: Gender
             age: Age
+            error:
+                organizer_exists: Email address already in use by an existing organizer or assistant organizer
 
         error:
             message:

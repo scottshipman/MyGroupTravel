@@ -52,13 +52,15 @@ user:
             edit: Edit
 
     flash:
-        save: User Saved -
-        delete: User deleted -
-        restore: User Restored -
+        save: User Saved:&nbsp;
+        delete: User deleted:&nbsp;
+        restore: User Restored:&nbsp;
         password: Password updated for
         cant_delete: Unable to delete this user because they are associated with Quotes or Tours
         registration_notification: A Notification was sent to
         register-organizer: Your Account has been created. <br>If you also plan on travelling, you can edit your Passenger details on the tour's Passenger Dashboard at the url
+        locked: The user %email% was locked
+        unlocked: The user %email% was unlocked
 
     grid:
         no_result: There are no Users to show. Please check your filter settings and try again.
@@ -69,11 +71,12 @@ user:
             title:
                 role: Role
                 email: Email
-                enabled: Enabled
+                enabled: Activated
                 lname: Last Name
         column:
             title:
                 last_login: Last Login
+                locked: Locked
 
     tabs:
         deleted: Deleted Users
@@ -87,13 +90,16 @@ user:
 
     exception:
         access: You do not have the ability to edit this User's information.
+        locked: This account is locked
+        not_found: Unable to find User entity in order to lock it
 
     email:
         registration:
             subject: %tour%, %institution% - Activate your account
+            activate_subject: Activate your account
             header: Activate your account
             greeting: Hi %firstname% %lastname%,
-            account_created: An account has been created for you for %brandname%'s Tour management application.
+            account_created: An account has been created for you for %brandname%'s Toolkit.
             add_information: You will now be able to add the required information for your passenger, in your own secure area':'
             medical: Medical information
             passport: Passport information
@@ -107,7 +113,7 @@ user:
         login:
             subject: %tour%, %institution% - Log in to your account
             header: Log in to your account
-            welcome: Welcome back to %brandname%'s Tour management application.
+            welcome: Welcome back to %brandname%'s Toolkit.
             login_link: To log in, click on the button below
             login_label: Login
 
@@ -138,6 +144,7 @@ user:
             deleted: This user exists and has been deleted. Please contact an administrator to re-enable this user.
         delete:
             prompt: "Are you sure you wish to delete this user?"
+        locked: Locked
 
     profile:
         label:

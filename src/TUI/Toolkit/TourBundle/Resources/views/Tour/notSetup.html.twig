@@ -170,6 +170,14 @@
             });
         });
 
+        $(document).keypress(function(e) {
+            if(e.which == 13 && (e.target.type !== 'textarea')) {
+                e.preventDefault();
+                if (confirm('{% trans %}tour.not_setup.confirm_submit{% endtrans %}')) {
+                    $('#ajax_tour_setup_form').submit();
+                }
+            }
+        });
 
     });
     function addPaymentTaskForm($collectionHolder, $newLinkDiv) {

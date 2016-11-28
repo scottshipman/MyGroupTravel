@@ -87,6 +87,15 @@
                 var editBlock = $("#editable-content-blocks-" + blockID);
                 var previewBlock = $("#previewable-content-blocks-" + blockID);
                 // Match routing path "/manage/contentblocks/{id}/show/{objectID}/{class}"
+
+                /*
+                 TOOL-665 - previewBlock does not match anything when in non-preview mode (shock!) which means the rest
+                 of this code block will not actually work. So, we resort to a workaround that might look familiar...
+                 */
+                if (previewBlock.length < 1) {
+                    window.location.reload(true);
+                }
+
                 //TODO path below cannot hardcode QuoteVersion - must be able to accept any Class type
                 previewBlock.load('/manage/contentblocks/' + blockID + '/show/' + objectID + '/' + classtype, function () {
                     editBlock.html('');
@@ -123,6 +132,15 @@
                 var editBlock = $("#editable-content-blocks-" + blockId);
                 var previewBlock = $("#previewable-content-blocks-" + blockId);
                 // Match routing path "/manage/contentblocks/{id}/show/{quoteVersion}/{class}"
+
+                /*
+                 TOOL-665 - previewBlock does not match anything when in non-preview mode (shock!) which means the rest
+                 of this code block will not actually work. So, we resort to a workaround that might look familiar...
+                 */
+                if (previewBlock.length < 1) {
+                    window.location.reload(true);
+                }
+
                 previewBlock.load('/manage/contentblocks/' + blockId + '/show/' + entityId + '/' + entityClass, function () {
                     $("#loader").css("display", "none");
                     $('.item-edit').show(); // re-show ALL edit buttons for all content blocks

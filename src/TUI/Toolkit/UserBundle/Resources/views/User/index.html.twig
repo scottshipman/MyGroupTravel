@@ -24,6 +24,10 @@
         <script>
             $(document).ready(function () {
                 $('#grid_usergrid > div.grid_footer > div.exports').css({"display": "block"});
+
+                $('.fam-lock, .fam-unlock').parent().on('click', function() {
+                    $('#loader').show();
+                });
             });
         </script>
     {% endif %}

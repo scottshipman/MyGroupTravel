@@ -29,12 +29,10 @@ class PassengerType extends AbstractType
     {
         switch (true) {
             case strstr($this->locale, 'en_GB'):
-                $date_label = '(DD-MM-YYYY)';
-                $date_format = 'dd-MM-yyyy';
+                $date_format = 'dd MM yyyy';
                 break;
             default:
-                $date_label = '(MM-DD-YYYY)';
-                $date_format = 'MM-dd-yyyy';
+                $date_format = 'MM dd yyyy';
                 break;
         }
 
@@ -55,7 +53,7 @@ class PassengerType extends AbstractType
                 'attr' => array(
                     'class' => 'dateOfBirth',
                 ),
-                'years' => range(date('Y') - 30, date('Y') - 1),
+                'years' => range(date('Y') - 1, date('Y') - 100),
                 'invalid_message' => 'Please enter a valid date'
             ))
             ->add('gender', 'choice', array(

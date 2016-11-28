@@ -13,6 +13,7 @@ use Symfony\Component\Form\Form;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Collection;
+use Symfony\Component\Form\FormError;
 
 
 use TUI\Toolkit\PassengerBundle\Entity\Passenger;
@@ -181,7 +182,7 @@ class PassengerController extends Controller
                 $parentEmail = $user->getEmail();
                 $tourName = $tour->getName();
                 $institution = $tour->getInstitution();
-                $organizer_name = $tour->getOrganizer() != null ? $tour->getOrganizer()->getLastName() . ' ' . $tour->getOrganizer()->getFirstName(): NULL;
+                $organizer_name = $tour->getOrganizer() != null ? $tour->getOrganizer()->getFirstName() . ' ' . $tour->getOrganizer()->getLastName(): NULL;
                 $message = \Swift_Message::newInstance()
                     ->setSubject($this->get('translator')->trans('passenger.emails.thank_you') . ' ' . $tourName . ', ' . $institution)
                     ->setFrom($this->container->getParameter('user_system_email'))
@@ -1163,6 +1164,19 @@ class PassengerController extends Controller
 
         $form = $this->createInviteForm($tourId);
         $form->handleRequest($request);
+
+        // TOOL-622 Check if the submitted email is already tied to a user
+        $email = $form->get('email')->getData();
+        $exists = $em->getRepository('TUIToolkitUserBundle:User')->findBy(array('email' => $email));
+        if (!empty($exists)) {
+            // An user exists with the email address provided, check if they are an organiser / assistant organiser
+            $roles = $this->get("permission.set_permission")->getPermission($tourId, 'tour', $exists[0]->getId());
+            if ((!empty($roles)) && (in_array('organizer', $roles) || in_array('assistant', $roles))) {
+                // User is an organiser of some description, so throw an error on the form
+                $form->get('email')->addError(new FormError($this->get('translator')->trans('passenger.form.invite.error.organizer_exists')));
+            }
+        }
+
         if($form->isValid()) {
 
             $data = $form->getData();

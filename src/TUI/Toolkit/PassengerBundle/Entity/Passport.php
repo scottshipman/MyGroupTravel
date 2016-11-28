@@ -11,6 +11,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use APY\DataGridBundle\Grid\Mapping as GRID;
 use Doctrine\Common\Collections\ArrayCollection;
 use Ambta\DoctrineEncryptBundle\Configuration\Encrypted;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * Passport
@@ -142,6 +143,23 @@ class Passport
      * @ORM\JoinColumn(name="passenger", referencedColumnName="id")
      */
     protected $passengerReference;
+
+    /**
+     * @Assert\Callback
+     */
+    public function validateExpiryDate(ExecutionContextInterface $context)
+    {
+        if (!empty($this->getPassportDateOfExpiry() && !empty($this->getPassportDateOfIssue()))) {
+            if ($this->getPassportDateOfExpiry() <= $this->getPassportDateOfIssue()) {
+                $context->buildViolation('passenger.passport.expiry_after_issue')
+                    ->atPath('passportDateOfExpiry')
+                    ->addViolation();
+                $context->buildViolation('passenger.passport.issue_before_expiry')
+                    ->atPath('passportDateOfIssue')
+                    ->addViolation();
+            }
+        }
+    }
 
     /**
      * Get id

@@ -46,11 +46,13 @@ class TuiExportController extends Controller
                 'Gender',
                 'Title',
                 'Child Fare',
+                'Dietary Requirements',
                 'Dietary Request Code',
                 'Code of Issuing State',
                 'Passport Number',
                 'Nationality',
                 'Date of Birth',
+                'APD Code',
                 'Passport Expiry Date',
                 'Passport Holder',
                 'Country of Residence',
@@ -129,6 +131,7 @@ class TuiExportController extends Controller
         $items=array();
         $em = $this->getDoctrine()->getManager();
         $passengers = $em->getRepository('PassengerBundle:Passenger')->findBy(array('tourReference' => $tourId));
+        $tour = $em->getRepository('TourBundle:Tour')->find($tourId);
         foreach($passengers as $passenger){
             $item=array(); $passport=null;
             if($passenger->getPassportReference() != NULL){$passport = $em->getRepository('PassengerBundle:Passport')->find($passenger->getPassportReference()->getId());}
@@ -138,12 +141,21 @@ class TuiExportController extends Controller
             $item['Gender'] = isset($passport) ? $passport->getPassportGender() : '';
             $item['Title'] = isset($passport) ? $passport->getPassportTitle() : '';
             $item['Child Fare'] = 'N';
+            $item['Dietary Requirements'] = (!empty($passenger->getDietaryReference()) ? $passenger->getDietaryReference()->getDescription() : '' );
             $item['Dietary Request Code'] = '';
             $item['Code of Issuing State'] = isset($passport) ? $passport->getPassportIssuingState() : '';
             $item['Passport Number'] = isset($passport) ? $passport->getPassportNumber() : '';
             $item['Nationality'] = isset($passport) ? $passport->getPassportNationality() : '';
             if(isset($passport) && get_class($passport->getPassportDateOfBirth()) == "DateTime"){$ppid = $passport->getPassportDateOfBirth()->format($format);} else {$ppid = '';}
             $item['Date of Birth'] = $ppid;
+            if (!empty($ppid)) {
+                $dob = new \DateTime($ppid);
+                $departure_date = $tour->getDepartureDate();
+                $age = $dob->diff($departure_date)->y;
+            } else {
+                $age = null;
+            }
+            $item['APD Code'] = (!empty($age) && $age < 16) ? 'CHILD - ACCOMPANIED' : '';
             if(isset($passport) && get_class($passport->getPassportDateOfExpiry()) == "DateTime"){$pped = $passport->getPassportDateOfExpiry()->format($format);} else {$pped = '';}
             $item['Passport Expiry Date'] = $pped;
             $item['Passport Holder'] = '';

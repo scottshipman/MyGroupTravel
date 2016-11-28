@@ -11,7 +11,7 @@
     {{ form_start(edit_form) }}
     {{ form_row(edit_form.fName) }}
     {{ form_row(edit_form.lName) }}
-    <label style="display: block; color:rgba(0,0,0,.26);">{% trans %}passenger.modals.dob{% endtrans %}</label>
+    <label class="date-label">{% trans %}passenger.modals.dob{% endtrans %}</label>
     {{ form_widget(edit_form.dateOfBirth) }}
     {{ form_widget(edit_form.gender) }}
     <div style="display: none">{{ form_widget(edit_form.tourReference) }}</div>
