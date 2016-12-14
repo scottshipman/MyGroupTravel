@@ -22,10 +22,10 @@ Location = function (uri) {
         if (key == 'search') {
             var hash = this.getHash();
 
-            if (hash.includes('=')) {
+            if (hash.indexOf('=') >= 0) {
                 var searchTerm = hash.split('=');
 
-                if (searchTerm[1].includes('&')) {
+                if (searchTerm[1].indexOf('&') >= 0) {
                     var result = searchTerm[1].split('&');
                     return result[0];
                 }
@@ -51,7 +51,7 @@ Location = function (uri) {
 
         var currentHash = this.getHash();
 
-        if (currentHash.includes('=')) {
+        if (currentHash.indexOf('=') >= 0) {
             currentHash = currentHash.split('=', 1);
             window.location.hash = currentHash[0] + '=' + value;
         } else {
@@ -78,7 +78,7 @@ Location = function (uri) {
 
         var currentHash = this.getHash();
 
-        if (currentHash.includes('=')) {
+        if (currentHash.indexOf('=') >= 0) {
             currentHash = currentHash.split('=');
             window.location.hash = (value + '=' + currentHash[1]);
         } else {
