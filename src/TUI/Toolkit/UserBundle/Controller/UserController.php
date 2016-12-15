@@ -178,6 +178,7 @@ class UserController extends Controller
         // TOOL-664 - Allow Locked column header to be translated
         $column = $grid->getColumn('locked');
         $column->setTitle($this->get('translator')->trans('user.grid.column.title.locked'));
+        $column->setClass('grid-column-userlocked');
 
         // Set the default order of the grid
         $grid->setDefaultOrder('id', 'ASC');
