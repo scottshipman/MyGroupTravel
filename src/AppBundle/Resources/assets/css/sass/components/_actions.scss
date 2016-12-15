@@ -42,6 +42,26 @@ table {
 
   }
 
+  .grid-column-userlocked {
+
+    .grid_boolean_true {
+
+      &:before {
+        content: '\f023';
+      }
+
+    }
+
+    .grid_boolean_false {
+
+      &:before {
+        content: '\f09c';
+      }
+
+    }
+
+  }
+
 }
 
 .grid-row-actions,
