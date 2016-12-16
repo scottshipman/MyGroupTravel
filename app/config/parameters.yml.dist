@@ -42,5 +42,10 @@ parameters:
     # Encryption of Data
     ambta_doctrine_encrypt_secret_key:
 
-    # Session timeout
-    toolkit_session_cookie_lifetime: 10800
+    # Max length of any session (8 hours)
+    toolkit_session_cookie_lifetime: 28800
+    # Max length of inactive session, refreshed on every request (3 hours)
+    toolkit_session_gc_maxlifetime: 10800
+    # Probability that Garbage Collection will run on a request (75%)
+    toolkit_session_gc_probability: 3
+    toolkit_session_gc_divisor: 4
