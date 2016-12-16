@@ -1245,6 +1245,10 @@ class UserController extends Controller
             ));
         }
 
+        if ($user->isLocked()) {
+            throw new HttpException(403, $this->get('translator')->trans('user.exception.locked'));
+        }
+
         if ($user->isPasswordRequestNonExpired($this->container->getParameter('fos_user.resetting.token_ttl'))) {
             return $this->render('TUIToolkitUserBundle:Resetting:passwordAlreadyRequested.html.twig');
         }
