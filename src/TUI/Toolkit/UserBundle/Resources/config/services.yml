@@ -7,3 +7,9 @@ services:
           class: TUI\Toolkit\UserBundle\Form\ResettingFormType
           tags:
               - { name: form.type, alias: tui_user_resetting }
+
+  tui_toolkit_user.ajax.authentication.listener:
+          class: TUI\Toolkit\UserBundle\EventListener\AjaxAuthenticationListener
+          arguments: ['@service_container']
+          tags:
+              - { name: kernel.event_listener, event: kernel.exception, method: onCoreException, priority: 1000 }

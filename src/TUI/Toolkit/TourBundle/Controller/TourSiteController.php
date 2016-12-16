@@ -273,6 +273,7 @@ class TourSiteController extends Controller
         // if no quoteNumber supplied in URL, then prompt for quoteNumber first
         $securityContext = $this->get('security.context');
         $user = $securityContext->getToken()->getUser();
+        $permission = array();
         if ($user != 'anon.') {
             $permission = $this->get("permission.set_permission")
                 ->getPermission($id, 'tour', $user->getId());

@@ -203,7 +203,7 @@ class ContentBlockController extends Controller
 
         // if the content block is rendered in PDF, set a flag
         // cant find a better way to know other than redirect url at the moment
-        if (strpos($_SERVER['REDIRECT_URL'], '/print/') === false) {
+        if (!empty($_SERVER['REDIRECT_URL']) && strpos($_SERVER['REDIRECT_URL'], '/print/') === false) {
             $print = false;
         } else {
             $print = true;

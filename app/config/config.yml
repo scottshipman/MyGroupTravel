@@ -32,6 +32,9 @@ framework:
         # handler_id set to null will use default session handler from php.ini
         handler_id:  ~
         cookie_lifetime: %toolkit_session_cookie_lifetime%
+        gc_maxlifetime: %toolkit_session_gc_maxlifetime%
+        gc_probability: %toolkit_session_gc_probability%
+        gc_divisor: %toolkit_session_gc_divisor%
     fragments:       ~
     http_method_override: true
     translator: ~

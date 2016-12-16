@@ -170,6 +170,18 @@
         $(this).attr('href', href + '?ref=' + pageURL + '&title=' + pageTitle);
     });
 
+    // If AJAX requests get an authentication error, redirect to the login screen.
+    $(document).ajaxError(function (event, jqXHR) {
+        if (jqXHR.status === 403) {
+            var login_url = jqXHR.responseJSON.route;
+            if (typeof login_url === 'undefined' || login_url.length === 0) {
+                // We didn't get a login URL so we guess it.
+                login_url = 'https://' + window.location.host + '/login';
+            }
+            document.location.replace(login_url);
+        }
+    });
+
 })(jQuery);
 
 // Event handler for copy to clipboard button
