@@ -3,4 +3,4 @@ user:
         error:
             terms: You must accept the terms of use
     password:
-        complexity: Password should be at least 8 characters long and contain at least 1 uppercase character, 1 lowercase character, a number and a punctuation character (spaces are not allowed)
+        complexity: 'Password should be at least 8 characters long and contain at least 3 of the following: 1 uppercase character, 1 lowercase character, a number or a punctuation character (spaces are not allowed)'

@@ -140,7 +140,14 @@
             toolkitStandardPopup("Log A Payment", '{{ path('brand_payment_new', {'tourId': entity.id}) }}' );
         });
 
-        // TOOL-678 Scroll to the top of the page
+        // TOOL-678 Scroll to the top of the page on save button press.
+        $('#tui_toolkit_tourbundle_toursetup_submit').on('click', function() {
+            $('html, body').animate({
+                scrollTop: 0
+            }, 1);
+        });
+
+        // TOOL-678 Scroll to the top of the page on page load (keeping in, just in case!)
         $('html, body').animate({
             scrollTop: 0
         }, 1);
