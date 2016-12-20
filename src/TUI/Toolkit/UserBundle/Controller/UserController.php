@@ -178,6 +178,7 @@ class UserController extends Controller
         // TOOL-664 - Allow Locked column header to be translated
         $column = $grid->getColumn('locked');
         $column->setTitle($this->get('translator')->trans('user.grid.column.title.locked'));
+        $column->setClass('grid-column-userlocked');
 
         // Set the default order of the grid
         $grid->setDefaultOrder('id', 'ASC');
@@ -1253,6 +1254,10 @@ class UserController extends Controller
             return $this->render('TUIToolkitUserBundle:Resetting:request.html.twig', array(
                 'invalid_username' => $username
             ));
+        }
+
+        if ($user->isLocked()) {
+            throw new HttpException(403, $this->get('translator')->trans('user.exception.locked'));
         }
 
         if ($user->isPasswordRequestNonExpired($this->container->getParameter('fos_user.resetting.token_ttl'))) {
