@@ -1234,28 +1234,59 @@ class PassengerController extends Controller
 
                 //send another email to the organizer just to confirm because they have already registered.
 
-                $message = \Swift_Message::newInstance()
-                    ->setSubject($subject)
-                    ->setFrom($this->container->getParameter('user_system_email'))
-                    ->setTo($user->getEmail())
-                    ->setBody(
-                        $this->renderView(
-                            'PassengerBundle:Emails:activatedPassengerOrganizerNotificationEmail.html.twig',
-                            array(
-                                'brand' => $brand,
-                                'tour' => $tour,
-                                'user' => $user,
-                                'tour_name' => $tour->getName(),
-                                'locale' => $locale,
-                                'date_format' => $date_format,
-                                'note' => $data['message'],
-                                'inviter' => $currUser
-                            )
-                        ), 'text/html');
-                $this->get('mailer')->send($message);
+                /**
+                 * TOOL-622
+                 * The assumption above is incorrect - the user already exists, but they are not necessarily activated.
+                 * Only send this email if the user is activated, otherwise we generate an activation code and send the
+                 * activation email.
+                 */
+                if ($user->isEnabled()) {
+                    $message = \Swift_Message::newInstance()
+                        ->setSubject($subject)
+                        ->setFrom($this->container->getParameter('user_system_email'))
+                        ->setTo($user->getEmail())
+                        ->setBody(
+                            $this->renderView(
+                                'PassengerBundle:Emails:activatedPassengerOrganizerNotificationEmail.html.twig',
+                                array(
+                                    'brand' => $brand,
+                                    'tour' => $tour,
+                                    'user' => $user,
+                                    'tour_name' => $tour->getName(),
+                                    'locale' => $locale,
+                                    'date_format' => $date_format,
+                                    'note' => $data['message'],
+                                    'inviter' => $currUser
+                                )
+                            ), 'text/html');
+                    $this->get('mailer')->send($message);
+                } else {
+                    // The user is not activated yet so we generate an activation token here.
+                    $tokenGenerator = $this->container->get('fos_user.util.token_generator');
+                    $user->setConfirmationToken($tokenGenerator->generateToken());
+                    $em->persist($user);
+                    $em->flush();
 
-
+                    $message = \Swift_Message::newInstance()
+                        ->setSubject($subject)
+                        ->setFrom($this->container->getParameter('user_system_email'))
+                        ->setTo($user->getEmail())
+                        ->setBody(
+                            $this->renderView(
+                                'PassengerBundle:Emails:inviteOrganizerRegistrationEmail.html.twig',
+                                array(
+                                    'brand' => $brand,
+                                    'tour' => $tour,
+                                    'user' => $user,
+                                    'currUser' => $currUser,
+                                    'organizer' => $organizer,
+                                    'message' => $data['message'],
+                                )
+                            ), 'text/html');
+                    $this->get('mailer')->send($message);
+                }
             } else {
+                // User did not exist.
                 $user = new User();
                 $user->setUsername($data['email']);
                 $user->setPassword('');
