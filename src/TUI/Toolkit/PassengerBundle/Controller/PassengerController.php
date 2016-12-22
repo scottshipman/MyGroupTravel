@@ -1184,6 +1184,17 @@ class PassengerController extends Controller
             $subject = $this->get('translator')->trans('passenger.emails.invite-organizer.new-user-subject') . ' ' . $tour->getName();
             // check for existing user acct first
             $exists = $em->getRepository('TUIToolkitUserBundle:User')->findBy(array('email' => $data['email']));
+
+            /**
+             * TOOL-622
+             * Regardless of whether a user exists, the first and last name entered into this form should be used as
+             * the name of the Organiser added, otherwise there is no point of having those fields..
+             */
+            $addressee = [
+                'firstName' => $data['firstname'],
+                'lastName' => $data['lastname']
+            ];
+
             if(!empty($exists)){
                 $user = array_shift($exists);
 
@@ -1252,6 +1263,7 @@ class PassengerController extends Controller
                                     'brand' => $brand,
                                     'tour' => $tour,
                                     'user' => $user,
+                                    'addressee' => $addressee,
                                     'tour_name' => $tour->getName(),
                                     'locale' => $locale,
                                     'date_format' => $date_format,
@@ -1278,6 +1290,7 @@ class PassengerController extends Controller
                                     'brand' => $brand,
                                     'tour' => $tour,
                                     'user' => $user,
+                                    'addressee' => $addressee,
                                     'currUser' => $currUser,
                                     'organizer' => $organizer,
                                     'message' => $data['message'],
@@ -1326,6 +1339,7 @@ class PassengerController extends Controller
                                 'brand' => $brand,
                                 'tour' => $tour,
                                 'user' => $user,
+                                'addressee' => $addressee,
                                 'currUser' => $currUser,
                                 'organizer' => $organizer,
                                 'message' => $data['message'],
@@ -1355,6 +1369,7 @@ class PassengerController extends Controller
                             'brand' => $brand,
                             'tour' => $tour,
                             'user' => $user,
+                            'addressee' => $addressee,
                             'currUser' => $currUser,
                             'organizer' => $organizer,
                             'message' => $data['message'],
