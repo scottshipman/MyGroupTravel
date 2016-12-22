@@ -348,7 +348,7 @@
                                                     <h2 class="h2">{{ 'passenger.emails.invite-organizer.new-user-subject' | trans }}</h2>
 
                                                     <div>
-                                                        <p>Hi {{ user.firstName|capitalize }} {{ user.lastName|capitalize }},</p>
+                                                        <p>Hi {{ addressee.firstName|capitalize }} {{ addressee.lastName|capitalize }},</p>
                                                         <p>You have been added as an organiser to {{ tour.name }} by {{ currUser.firstName }} {{ currUser.lastName }}</p>
 
                                                         {% if message is not empty %}<p>Message from {{ currUser.firstName }} {{ currUser.lastName }}</p>
