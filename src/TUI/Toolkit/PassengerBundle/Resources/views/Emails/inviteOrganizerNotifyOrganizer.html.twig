@@ -351,7 +351,7 @@
                                                         <p>There is a pending invite for a new user to help manage the tour activities.</p>
                                                         <p>Tour: <a title="Tour: {{ tour.name }}" href=="{{ absolute_url("/user/register/confirm/" ~ user.confirmationToken) }}"> {{ tour.name }}</a> </p>
                                                         <h4><strong>Invited User</strong></h4>
-                                                        <p>{{ user.firstName }} {{ user.lastName }}<br />
+                                                        <p>{{ addressee.firstName|capitalize }} {{ addressee.lastName|capitalize }}<br />
                                                         {{ user.Email }}</p>
                                                         <h4><strong>Invited By</strong></h4>
                                                         <p>{{ currUser.firstName }} {{ currUser.lastName }}<br />
