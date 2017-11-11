@@ -1,4 +1,4 @@
-# The Toolkit
+# My Group Travel
 _A Symfony 2 Thing_
 
 ## Getting Started with local development
